@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,7 +96,7 @@ public final class RoutingLogic {
             if (cart instanceof INeedsFuel)
                 return cart;
         }
-        EntityMinecart loco = train.getLocomotive();
+        EntityMinecart loco = train.getHeadLocomotive();
         return loco == null ? cart : loco;
     }
 

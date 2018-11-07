@@ -15,7 +15,6 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +43,7 @@ public final class Train implements Iterable<EntityMinecart> {
     private final LinkedList<UUID> carts = new LinkedList<>();
     private final List<UUID> safeCarts = Collections.unmodifiableList(carts);
     private final Set<UUID> locks = new HashSet<>();
-    private final World world;
+    private @Nullable World world;
     private TrainState state;
     private boolean dirty = true;
 
@@ -52,43 +51,41 @@ public final class Train implements Iterable<EntityMinecart> {
         this(UUID.randomUUID(),
                 TrainState.NORMAL,
                 Collections.singleton(cart.getPersistentID()),
-                Collections.emptySet(),
-                cart.world);
-        buildTrain(cart);
+                Collections.emptySet());
+        this.world = cart.world;
+        rebuild(cart);
     }
 
-    Train(UUID id, TrainState state, Collection<UUID> carts, Set<UUID> locks, World world) {
+    Train(UUID id, TrainState state, Collection<UUID> carts, Set<UUID> locks) {
         this.uuid = id;
         this.state = state;
         this.carts.addAll(carts);
         this.locks.addAll(locks);
-        this.world = world;
-        if (Game.DEVELOPMENT_ENVIRONMENT && TrainManager.forWorld(world).trains().containsKey(id)) {
-            throw new RuntimeException("Duplicate trains, things will be broken!");
-        }
     }
 
-    public static Map<UUID, Train> getTrainMap(World world) {
-        return TrainManager.forWorld(world).trains();
+    private static TrainManager getManager(World world) {
+        return TrainManager.forWorld(world);
     }
 
     public static Train getTrain(EntityMinecart cart) {
-        Map<UUID, Train> trainMap = getTrainMap(cart.world);
-        Train train = trainMap.get(getTrainUUID(cart));
-        if (train != null && (!train.containsCart(cart) || !train.isValid(cart.world) || train.isEmpty())) {
-            train.buildTrain(cart);
+        TrainManager manager = getManager(cart.world);
+        Train train = manager.get(getTrainUUID(cart));
+        if (train != null) {
+            if ((!train.contains(cart) || !train.isValid() || train.isEmpty())) {
+                train.rebuild(cart);
+            }
         }
         if (train == null) {
             train = new Train(cart);
-            trainMap.put(train.getUUID(), train);
+            manager.add(train);
         }
         return train;
     }
 
-    private static @Nullable Train getTrainUnsafe(@Nullable EntityMinecart cart) {
+    private static Optional<Train> getTrainUnsafe(@Nullable EntityMinecart cart) {
         if (cart == null)
-            return null;
-        return getTrainMap(cart.world).get(getTrainUUID(cart));
+            return Optional.empty();
+        return Optional.ofNullable(getManager(cart.world).get(getTrainUUID(cart)));
     }
 
     public static @Nullable UUID getTrainUUID(EntityMinecart cart) {
@@ -108,29 +105,18 @@ public final class Train implements Iterable<EntityMinecart> {
         return train1 != null && Objects.equals(train1, train2);
     }
 
-    public static Train getLongestTrain(EntityMinecart cart1, EntityMinecart cart2) {
-        Train train1 = getTrain(cart1);
-        Train train2 = getTrain(cart2);
+    private static Optional<Train> getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
+        Optional<Train> train1 = getTrainUnsafe(cart1);
+        Optional<Train> train2 = getTrainUnsafe(cart2);
 
-        if (train1 == train2)
+        if (train1.equals(train2))
             return train1;
-        if (train1.size() >= train2.size())
-            return train1;
-        return train2;
-    }
-
-    private static @Nullable Train getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
-        Train train1 = getTrainUnsafe(cart1);
-        Train train2 = getTrainUnsafe(cart2);
-
-        if (train1 == train2)
-            return train1;
-        if (train1 == null)
+        if (!train1.isPresent())
             return train2;
-        if (train2 == null)
+        if (!train2.isPresent())
             return train1;
 
-        if (train1.size() >= train2.size())
+        if (train1.get().size() >= train2.get().size())
             return train1;
         return train2;
     }
@@ -144,56 +130,53 @@ public final class Train implements Iterable<EntityMinecart> {
         NBTPlugin.writeUUID(cart.getEntityData(), TRAIN_NBT, trainId);
     }
 
-    public Stream<EntityMinecart> stream() {
-        return carts.stream()
-                .map(cart -> CartTools.getCartFromUUID(world, cart))
-                .filter(Objects::nonNull);
+    void setWorld(World world) {
+        this.world = world;
     }
 
-    @Override
-    public Iterator<EntityMinecart> iterator() {
-        return stream().iterator();
+    private @Nullable EntityMinecart getCart(UUID cartID) {
+        if (world == null)
+            return null;
+        return CartTools.getCartFromUUID(world, cartID);
     }
 
-    private void buildTrain(EntityMinecart first) {
-        resetTrain();
-        buildTrain(null, first);
+    public void rebuild(EntityMinecart first) {
+        forEach(Train::removeTrainTag);
+        carts.clear();
+        rebuild(null, first);
+        markDirty();
     }
 
-    private void buildTrain(@Nullable EntityMinecart prev, EntityMinecart next) {
-        addLinkInternal(prev, next);
+    private void rebuild(@Nullable EntityMinecart prev, EntityMinecart next) {
+        addLink(prev, next);
 
         LinkageManager lm = LinkageManager.INSTANCE;
         EntityMinecart linkA = lm.getLinkedCartA(next);
         EntityMinecart linkB = lm.getLinkedCartB(next);
 
-        if (linkA != null && linkA != prev && !containsCart(linkA))
-            buildTrain(next, linkA);
+        if (linkA != null && linkA != prev && !contains(linkA))
+            rebuild(next, linkA);
 
-        if (linkB != null && linkB != prev && !containsCart(linkB))
-            buildTrain(next, linkB);
+        if (linkB != null && linkB != prev && !contains(linkB))
+            rebuild(next, linkB);
     }
 
-    private boolean isValid(World world) {
-        return carts.stream().allMatch(id -> isCartValid(world, id));
+    private boolean isValid() {
+        return carts.stream().allMatch(this::isCartValid);
     }
 
-    private boolean isCartValid(World world, UUID cartId) {
-        EntityMinecart cart = CartTools.getCartFromUUID(world, cartId);
+    private boolean isCartValid(UUID cartID) {
+        EntityMinecart cart = getCart(cartID);
         return cart != null && uuid.equals(getTrainUUID(cart));
     }
 
     public static void repairTrain(EntityMinecart cart1, EntityMinecart cart2) {
-        Train train = getLongestTrainUnsafe(cart1, cart2);
-        if (train != null)
-            train.buildTrain(cart1);
+        getLongestTrainUnsafe(cart1, cart2).ifPresent(t -> t.rebuild(cart1));
     }
 
     public static void deleteTrain(EntityMinecart cart) {
-        Train train = getTrainMap(cart.world).remove(getTrainUUID(cart));
+        getManager(cart.world).remove(getTrainUUID(cart)).ifPresent(Train::resetTrain);
         removeTrainTag(cart);
-        if (train != null)
-            train.resetTrain();
     }
 
     private void resetTrain() {
@@ -207,51 +190,24 @@ public final class Train implements Iterable<EntityMinecart> {
         return uuid;
     }
 
-    public void rebuild(EntityMinecart cart) {
-        buildTrain(cart);
-    }
-
-    private void addLinkInternal(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
+    private void addLink(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
         if (cartBase == null || carts.getFirst() == cartBase.getPersistentID())
             carts.addFirst(cartNew.getPersistentID());
         else if (carts.getLast() == cartBase.getPersistentID())
             carts.addLast(cartNew.getPersistentID());
         else
             return;
-        Train train = getTrainUnsafe(cartNew);
-        if (train != this && train != null)
-            train.removeCartInternal(cartNew);
+        deleteTrain(cartNew);
         addTrainTag(cartNew);
         markDirty();
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    private boolean removeCartInternal(EntityMinecart cart) {
-        boolean removed = removeCartId(cart.getPersistentID());
-        if (removed && uuid.equals(getTrainUUID(cart))) {
-            removeTrainTag(cart);
-        }
-        return removed;
-    }
-
-    private boolean removeCartId(UUID cart) {
-        boolean removed = carts.remove(cart);
-        if (removed) {
-            if (carts.isEmpty()) {
-                getTrainMap(world).remove(getUUID());
-                TrainManager.forWorld(world).data.markDirty();
-                resetTrain();
-            }
-            markDirty();
-        }
-        return removed;
     }
 
     public boolean isPassenger(Entity entity) {
         return stream().anyMatch(c -> c.isPassenger(entity));
     }
 
-    public boolean containsCart(@Nullable EntityMinecart cart) {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    public boolean contains(@Nullable EntityMinecart cart) {
         return cart != null && carts.contains(cart.getPersistentID());
     }
 
@@ -266,16 +222,34 @@ public final class Train implements Iterable<EntityMinecart> {
         return ends;
     }
 
-    public @Nullable EntityLocomotive getLocomotive() {
-        LinkageManager lm = LinkageManager.INSTANCE;
-        return (EntityLocomotive) getEnds().stream()
-                .map(id -> CartTools.getCartFromUUID(world, id))
-                .filter(cart -> cart instanceof EntityLocomotive)
+    public @Nullable EntityLocomotive getHeadLocomotive() {
+        return getEnds().stream()
+                .map(this::getCart)
+                .flatMap(Streams.toType(EntityLocomotive.class))
                 .findFirst().orElse(null);
     }
 
+    public Stream<EntityMinecart> stream() {
+        return carts.stream()
+                .map(this::getCart)
+                .filter(Objects::nonNull);
+    }
+
+    public <T extends EntityMinecart> Stream<T> stream(Class<T> cartClass) {
+        return stream().flatMap(Streams.toType(cartClass));
+    }
+
+    @Override
+    public Iterator<EntityMinecart> iterator() {
+        return stream().iterator();
+    }
+
+    public int getNumRunningLocomotives() {
+        return (int) stream(EntityLocomotive.class).filter(EntityLocomotive::isRunning).count();
+    }
+
     public <T extends EntityMinecart> List<T> getCarts(Class<T> cartClass) {
-        return stream().flatMap(Streams.toType(cartClass)).collect(Collectors.toList());
+        return stream(cartClass).collect(Collectors.toList());
     }
 
     public List<UUID> getUUIDs() {
@@ -283,24 +257,20 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public @Nullable IItemHandler getItemHandler() {
-        List<IItemHandlerModifiable> cartHandlers = new ArrayList<>();
-        for (EntityMinecart cart : this) {
-            IItemHandler itemHandler = InvTools.getItemHandler(cart);
-            if (itemHandler instanceof IItemHandlerModifiable)
-                cartHandlers.add((IItemHandlerModifiable) itemHandler);
-        }
+        List<IItemHandlerModifiable> cartHandlers = stream()
+                .map(InvTools::getItemHandler)
+                .flatMap(Streams.toType(IItemHandlerModifiable.class))
+                .collect(Collectors.toList());
         if (cartHandlers.isEmpty())
             return null;
         return new CombinedInvWrapper(cartHandlers.toArray(new IItemHandlerModifiable[0]));
     }
 
     public @Nullable IFluidHandler getFluidHandler() {
-        List<IFluidHandler> cartHandlers = new ArrayList<>();
-        for (EntityMinecart cart : this) {
-            IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
-            if (fluidHandler != null)
-                cartHandlers.add(fluidHandler);
-        }
+        List<IFluidHandler> cartHandlers = stream()
+                .map(FluidTools::getFluidHandler)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
         if (cartHandlers.isEmpty())
             return null;
         return new FluidHandlerConcatenate(cartHandlers);
@@ -314,15 +284,6 @@ public final class Train implements Iterable<EntityMinecart> {
         return carts.isEmpty();
     }
 
-    public int getNumRunningLocomotives() {
-        int count = 0;
-        for (EntityMinecart cart : this) {
-            if (cart instanceof EntityLocomotive && ((EntityLocomotive) cart).isRunning())
-                count++;
-        }
-        return count;
-    }
-
     public void refreshMaxSpeed() {
         setMaxSpeed(getMaxSpeed());
     }
@@ -334,7 +295,7 @@ public final class Train implements Iterable<EntityMinecart> {
             float baseSpeed = c.getMaxCartSpeedOnRail();
             if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
                 IBatteryCart battery = c.getCapability(CapabilitiesCharge.CART_BATTERY, null);
-                if (battery.getType() != IBatteryCart.Type.USER) {
+                if (battery != null && battery.getType() != IBatteryCart.Type.USER) {
                     baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);
                 }
             }
@@ -394,22 +355,22 @@ public final class Train implements Iterable<EntityMinecart> {
             return false;
         }
         Train other = (Train) obj;
-        return world.provider.getDimension() == other.world.provider.getDimension() && uuid.equals(other.uuid);
+        return uuid.equals(other.uuid);
     }
 
     @Override
     public int hashCode() {
-        return world.provider.getDimension() ^ uuid.hashCode();
+        return uuid.hashCode();
     }
 
-    static @Nullable Train readFromNBT(NBTTagCompound tag, World world) {
+    static @Nullable Train readFromNBT(NBTTagCompound tag) {
         UUID id = NBTPlugin.readUUID(tag, "id");
         if (id == null)
             return null;
         TrainState state = NBTPlugin.readEnumOrdinal(tag, "state", TrainState.values(), TrainState.NORMAL);
         List<UUID> carts = NBTPlugin.getNBTList(tag, "carts", NBTTagCompound.class).stream().map(NBTUtil::getUUIDFromTag).collect(Collectors.toList());
         Set<UUID> locks = NBTPlugin.getNBTList(tag, "locks", NBTTagCompound.class).stream().map(NBTUtil::getUUIDFromTag).collect(Collectors.toSet());
-        return new Train(id, state, carts, locks, world);
+        return new Train(id, state, carts, locks);
     }
 
     void writeToNBT(NBTTagCompound tag) {

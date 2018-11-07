@@ -332,7 +332,7 @@ public final class LinkageHandler {
         if (event.getEntity() instanceof EntityMinecart) {
             EntityMinecart cart = (EntityMinecart) event.getEntity();
             Train train = Train.getTrain(cart);
-            if (train.getCarts(EntityCartWorldspike.class).stream().anyMatch(EntityCartWorldspike::hasActiveTicket)) {
+            if (train.stream(EntityCartWorldspike.class).anyMatch(EntityCartWorldspike::hasActiveTicket)) {
                 event.setCanUpdate(true);
             }
         }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -38,8 +38,7 @@ public class ModuleTrain extends RailcraftModulePayload {
                     @SubscribeEvent(priority = EventPriority.HIGHEST)
                     public void onLinking(CartLinkEvent.Link event) {
                         EntityMinecart cart = event.getCartOne();
-                        Train train = Train.getLongestTrain(cart, event.getCartTwo());
-                        train.rebuild(cart);
+                        Train.repairTrain(cart, event.getCartTwo());
                     }
 
                     @SubscribeEvent(priority = EventPriority.HIGHEST)

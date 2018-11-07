@@ -19,9 +19,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -32,41 +34,56 @@ public final class TrainManager {
     static final Map<World, TrainManager> instances = new MapMaker().weakKeys().makeMap();
 
     final World world;
-    final SaveData data;
+    final TrainSaveData data;
 
     public static TrainManager forWorld(World world) {
         return instances.computeIfAbsent(world, TrainManager::new);
     }
 
     public static void clear() {
-        instances.values().forEach(i -> i.data.trains.clear());
+        instances.values().forEach(i -> i.data.clear());
     }
 
     TrainManager(World world) {
         this.world = world;
-        this.data = SaveData.forWorld(world);
+        this.data = TrainSaveData.forWorld(world);
     }
 
-    public Map<UUID, Train> trains() {
-        return data.trains;
+    public @Nullable Train get(@Nullable UUID trainID) {
+        Train train = data.trains.get(trainID);
+        if (train != null)
+            train.setWorld(world);
+        return train;
     }
 
-    public static final class SaveData extends WorldSavedData {
+    public @Nullable Train add(Train train) {
+        Train old = data.trains.put(train.getUUID(), train);
+        if (old != train)
+            data.markDirty();
+        return old;
+    }
+
+    public Optional<Train> remove(@Nullable UUID trainID) {
+        Train old = data.trains.remove(trainID);
+        if (old != null)
+            data.markDirty();
+        return Optional.ofNullable(old);
+    }
+
+    public static final class TrainSaveData extends WorldSavedData {
         Map<UUID, Train> trains = new HashMap<>();
-        World world;
 
-        static SaveData forWorld(World world) {
+        static TrainSaveData forWorld(World world) {
             MapStorage storage = world.getPerWorldStorage();
-            SaveData saveData = (SaveData) storage.getOrLoadData(SaveData.class, "railcraft.trains");
-            if (saveData == null) {
-                saveData = new SaveData("railcraft.trains");
-                storage.setData("railcraft.trains", saveData);
+            TrainSaveData data = (TrainSaveData) storage.getOrLoadData(TrainSaveData.class, "railcraft.trains");
+            if (data == null) {
+                data = new TrainSaveData("railcraft.trains");
+                storage.setData("railcraft.trains", data);
             }
-            saveData.world = world;
-            return saveData;
+            return data;
         }
 
-        public SaveData(String name) {
+        public TrainSaveData(String name) {
             super(name);
         }
 
@@ -74,7 +91,7 @@ public final class TrainManager {
         public void readFromNBT(NBTTagCompound nbt) {
             trains.clear();
             for (NBTTagCompound each : NBTPlugin.getNBTList(nbt, "trains", NBTTagCompound.class)) {
-                Train train = Train.readFromNBT(each, world);
+                Train train = Train.readFromNBT(each);
                 if (train != null)
                     trains.put(train.getUUID(), train);
             }
@@ -98,6 +115,11 @@ public final class TrainManager {
         @Override
         public boolean isDirty() {
             return super.isDirty() || trains.values().stream().anyMatch(Train::isDirty);
+        }
+
+        public void clear() {
+            trains.clear();
+            markDirty();
         }
     }
 }
