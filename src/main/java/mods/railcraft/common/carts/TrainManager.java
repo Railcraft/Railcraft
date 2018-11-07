@@ -27,22 +27,28 @@ import java.util.UUID;
 /**
  *
  */
-final class TrainManager {
+public final class TrainManager {
 
     static final Map<World, TrainManager> instances = new MapMaker().weakKeys().makeMap();
 
-    final Map<UUID, Train> trains;
     final World world;
     final SaveData data;
 
-    static TrainManager getInstance(World world) {
+    public static TrainManager forWorld(World world) {
         return instances.computeIfAbsent(world, TrainManager::new);
+    }
+
+    public static void clear() {
+        instances.values().forEach(i -> i.data.trains.clear());
     }
 
     TrainManager(World world) {
         this.world = world;
         this.data = SaveData.forWorld(world);
-        this.trains = new HashMap<>(data.trains);
+    }
+
+    public Map<UUID, Train> trains() {
+        return data.trains;
     }
 
     public static final class SaveData extends WorldSavedData {
@@ -77,7 +83,7 @@ final class TrainManager {
 
         @Override
         public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-            Game.log(Level.INFO, "Saving Train data...");
+            Game.log(Level.INFO, "Saving {0} Trains...", trains.size());
             NBTTagList listTag = new NBTTagList();
             for (Train train : trains.values()) {
                 NBTTagCompound tag = new NBTTagCompound();

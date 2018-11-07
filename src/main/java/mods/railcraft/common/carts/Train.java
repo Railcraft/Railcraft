@@ -54,7 +54,7 @@ public final class Train implements Iterable<EntityMinecart> {
                 Collections.singleton(cart.getPersistentID()),
                 Collections.emptySet(),
                 cart.world);
-        buildTrain(null, cart);
+        buildTrain(cart);
     }
 
     Train(UUID id, TrainState state, Collection<UUID> carts, Set<UUID> locks, World world) {
@@ -63,13 +63,13 @@ public final class Train implements Iterable<EntityMinecart> {
         this.carts.addAll(carts);
         this.locks.addAll(locks);
         this.world = world;
-        if (Game.DEVELOPMENT_ENVIRONMENT && TrainManager.getInstance(world).trains.containsKey(id)) {
+        if (Game.DEVELOPMENT_ENVIRONMENT && TrainManager.forWorld(world).trains().containsKey(id)) {
             throw new RuntimeException("Duplicate trains, things will be broken!");
         }
     }
 
     public static Map<UUID, Train> getTrainMap(World world) {
-        return TrainManager.getInstance(world).trains;
+        return TrainManager.forWorld(world).trains();
     }
 
     public static Train getTrain(EntityMinecart cart) {
@@ -239,6 +239,7 @@ public final class Train implements Iterable<EntityMinecart> {
         if (removed) {
             if (carts.isEmpty()) {
                 getTrainMap(world).remove(getUUID());
+                TrainManager.forWorld(world).data.markDirty();
                 resetTrain();
             }
             markDirty();

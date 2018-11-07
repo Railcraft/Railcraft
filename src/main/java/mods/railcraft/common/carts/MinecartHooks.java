@@ -443,8 +443,9 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     public void onEntityRemoved(Entity entityIn) {
         // Fix links for killed carts
         // Unloaded entities are not "isDead"
-        if (entityIn.isDead && entityIn instanceof EntityMinecart) {
+        if (!entityIn.isEntityAlive() && entityIn instanceof EntityMinecart) {
             LinkageManager.INSTANCE.breakLinks((EntityMinecart) entityIn);
+            Train.deleteTrain((EntityMinecart) entityIn);
         }
     }
 

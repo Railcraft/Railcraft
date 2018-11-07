@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.signals.*;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.carts.CartTools;
+import mods.railcraft.common.carts.TrainManager;
 import mods.railcraft.common.items.ItemMagnifyingGlass;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -53,6 +54,7 @@ public class CommandDebug extends SubCommand {
     public CommandDebug() {
         super("debug");
         addChildCommand(new CommandDebugTile());
+        addChildCommand(new CommandTrain());
         addChildCommand(new CommandCartNumber());
     }
 
@@ -119,6 +121,29 @@ public class CommandDebug extends SubCommand {
         }
         for (String s : debug) {
             printLine(sender, s);
+        }
+    }
+
+    static final class CommandTrain extends SubCommand {
+        CommandTrain() {
+            super("train");
+            setPermLevel(PermLevel.ADMIN);
+            addChildCommand(new Clear());
+        }
+
+        static final class Clear extends SubCommand {
+            Clear() {
+                super("clear");
+            }
+
+            @Override
+            public void executeSubCommand(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+                if (!(sender instanceof EntityLivingBase) || args.length != 0) {
+                    CommandHelpers.throwWrongUsage(sender, this);
+                }
+
+                TrainManager.clear();
+            }
         }
     }
 
