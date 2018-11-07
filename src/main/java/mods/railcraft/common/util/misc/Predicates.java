@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -27,8 +28,22 @@ import java.util.function.Predicate;
  */
 public final class Predicates {
     @SafeVarargs
-    public static <T> Predicate<T> and(Predicate<T>... predicates) {
-        return Arrays.stream(predicates).reduce(alwaysTrue(), Predicate::and);
+    public static <T> Predicate<T> and(Predicate<? super T>... predicates) {
+        return new AndPredicate<>(predicates);
+    }
+
+    private static class AndPredicate<T> implements Predicate<T> {
+        private final List<? extends Predicate<? super T>> components;
+
+        @SafeVarargs
+        private AndPredicate(Predicate<? super T>... predicates) {
+            this.components = Arrays.asList(predicates);
+        }
+
+        @Override
+        public boolean test(T t) {
+            return components.stream().allMatch(p -> p.test(t));
+        }
     }
 
     public static <T> Predicate<T> instanceOf(Class<? extends T> clazz) {

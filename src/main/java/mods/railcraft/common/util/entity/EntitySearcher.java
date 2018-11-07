@@ -26,6 +26,18 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
+ * The EntitySearcher is a utility class for searching for entities in the world.
+ *
+ * It is based on similar principles to newer Java APIs, such as Streams, such that a search request is
+ * very nearly a grammatically correct sentence.
+ *
+ * Example:
+ * {@code EntitySearcher.findMinecarts().around(pos).outTo(0.5).and(EntityMinecart::isBeingRidden).in(world)}
+ *
+ * This results in a flexible and robust design capable of being adapted to any use case.
+ * A much superior solution to the old wall of utility functions,
+ * most of which were only ever used in one place in the code.
+ *
  * Created by CovertJaguar on 8/29/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -51,7 +63,7 @@ public class EntitySearcher {
     public static class SearchParameters<T extends Entity> {
         private final Class<T> entityClass;
         private AABBFactory box = AABBFactory.start();
-        private Predicate<Entity> filter = RCEntitySelectors.LIVING;
+        private Predicate<T> filter = RCEntitySelectors.LIVING::test;
 
         public SearchParameters(Class<T> entityClass) {
             this.entityClass = entityClass;
@@ -88,23 +100,23 @@ public class EntitySearcher {
             return this;
         }
 
-        public SearchParameters<T> outTo(float distance) {
+        public SearchParameters<T> outTo(double distance) {
             box.grow(distance);
             return this;
         }
 
-        public SearchParameters<T> upTo(float distance) {
+        public SearchParameters<T> upTo(double distance) {
             box.upTo(distance);
             return this;
         }
 
-        public SearchParameters<T> and(Predicate<Entity> filter) {
+        public SearchParameters<T> and(Predicate<? super T> filter) {
             this.filter.and(filter);
             return this;
         }
 
         @SafeVarargs
-        public final SearchParameters<T> and(Predicate<Entity>... filters) {
+        public final SearchParameters<T> and(Predicate<? super T>... filters) {
             if (!ArrayUtils.isEmpty(filters))
                 filter.and(Predicates.and(filters));
             return this;
