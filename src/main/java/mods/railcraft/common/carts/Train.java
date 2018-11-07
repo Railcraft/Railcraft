@@ -10,6 +10,8 @@
 package mods.railcraft.common.carts;
 
 import com.google.common.collect.Lists;
+import mods.railcraft.api.charge.CapabilitiesCharge;
+import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin.EnumNBTType;
@@ -357,13 +359,12 @@ public final class Train implements Iterable<EntityMinecart> {
         int numLocomotives = getNumRunningLocomotives();
         for (EntityMinecart c : this) {
             float baseSpeed = c.getMaxCartSpeedOnRail();
-            //TODO remove this nonsense, if we keep it leave it somewhere else
-//            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
-//                ICartBattery battery = c.getCapability(CapabilitiesCharge.CART_BATTERY, null);
-//                if (battery.getType() != ICartBattery.Type.USER) {
-//                    baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);
-//                }
-//            }
+            if (numLocomotives > 0 && !(c instanceof CartBaseEnergy) && c.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
+                IBatteryCart battery = c.getCapability(CapabilitiesCharge.CART_BATTERY, null);
+                if (battery.getType() != IBatteryCart.Type.USER) {
+                    baseSpeed = Math.min(0.2F, 0.03F + (numLocomotives - 1) * 0.075F);
+                }
+            }
             speed = Math.min(speed, baseSpeed);
         }
         return speed;
