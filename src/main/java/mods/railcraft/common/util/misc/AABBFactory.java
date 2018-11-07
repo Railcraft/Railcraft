@@ -254,8 +254,8 @@ public class AABBFactory {
 
     public boolean isUndefined() {
         return minX == maxX
-                && minY == maxY
-                && minZ == maxZ;
+                || minY == maxY
+                || minZ == maxZ;
     }
 
     @Override
