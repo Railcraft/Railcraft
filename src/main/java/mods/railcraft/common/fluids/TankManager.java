@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -73,7 +73,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
     }
 
     public void readTanksFromNBT(NBTTagCompound data) {
-        List<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "tanks", NBTPlugin.EnumNBTType.COMPOUND);
+        List<NBTTagCompound> tagList = NBTPlugin.getNBTList(data, "tanks", NBTTagCompound.class);
         for (NBTTagCompound tag : tagList) {
             int slot = tag.getByte("tank");
             if (slot >= 0 && slot < tanks.size())

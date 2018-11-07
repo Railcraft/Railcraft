@@ -73,7 +73,7 @@ public final class BatterySaveData extends WorldSavedData {
     public void readFromNBT(NBTTagCompound nbt) {
         if (RailcraftConfig.printChargeDebug())
             Game.log(Level.INFO, "Loading Charge Battery data...");
-        List<NBTTagCompound> list = NBTPlugin.getNBTList(nbt, "batteries", NBTPlugin.EnumNBTType.COMPOUND);
+        List<NBTTagCompound> list = NBTPlugin.getNBTList(nbt, "batteries", NBTTagCompound.class);
         for (NBTTagCompound entry : list) {
             BlockPos pos = NBTPlugin.readBlockPos(entry, "pos");
             if (pos != null)

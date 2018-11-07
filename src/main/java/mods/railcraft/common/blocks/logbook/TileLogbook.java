@@ -86,13 +86,13 @@ public class TileLogbook extends RailcraftTickingTileEntity {
 
         LocalDate monthAgo = LocalDate.now().minusMonths(1);
 
-        List<NBTTagCompound> logList = NBTPlugin.getNBTList(data, "entries", NBTPlugin.EnumNBTType.COMPOUND);
+        List<NBTTagCompound> logList = NBTPlugin.getNBTList(data, "entries", NBTTagCompound.class);
         for (NBTTagCompound dateEntry : logList) {
             try {
                 LocalDate date = LocalDate.parse(dateEntry.getString("date"));
                 if (date.isBefore(monthAgo))
                     continue;
-                List<NBTTagCompound> playerList = NBTPlugin.getNBTList(dateEntry, "players", NBTPlugin.EnumNBTType.COMPOUND);
+                List<NBTTagCompound> playerList = NBTPlugin.getNBTList(dateEntry, "players", NBTTagCompound.class);
                 Set<GameProfile> players = playerList.stream().map(NBTPlugin::readGameProfileTag).collect(Collectors.toSet());
                 log.putAll(date, players);
             } catch (DateTimeParseException ignored) {

@@ -9,12 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.Lists;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.plugins.forge.NBTPlugin.EnumNBTType;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
@@ -33,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -43,31 +41,29 @@ public final class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_NBT = "rcTrain";
 
     private final UUID uuid;
-    private final Deque<UUID> carts;
-    private final Collection<UUID> locks;
+    private final LinkedList<UUID> carts = new LinkedList<>();
+    private final List<UUID> safeCarts = Collections.unmodifiableList(carts);
+    private final Set<UUID> locks = new HashSet<>();
     private final World world;
-    private final TrainInfo info;
-    private final Collection<UUID> safeCarts;
-
-    private static Deque<UUID> makeCarts(EntityMinecart cart) {
-        Deque<UUID> ret = new ArrayDeque<>();
-        ret.add(cart.getPersistentID());
-        return ret;
-    }
+    private TrainState state;
+    private boolean dirty = true;
 
     Train(EntityMinecart cart) {
-        this(new TrainInfo(UUID.randomUUID(), TrainState.NORMAL, makeCarts(cart), new HashSet<>()), cart.world);
+        this(UUID.randomUUID(),
+                TrainState.NORMAL,
+                Collections.singleton(cart.getPersistentID()),
+                Collections.emptySet(),
+                cart.world);
         buildTrain(null, cart);
     }
 
-    Train(TrainInfo info, World world) {
-        this.info = info;
-        this.uuid = info.id;
-        this.carts = info.carts;
-        this.locks = info.locks;
+    Train(UUID id, TrainState state, Collection<UUID> carts, Set<UUID> locks, World world) {
+        this.uuid = id;
+        this.state = state;
+        this.carts.addAll(carts);
+        this.locks.addAll(locks);
         this.world = world;
-        safeCarts = Collections.unmodifiableCollection(carts);
-        if (Game.DEVELOPMENT_ENVIRONMENT && TrainManager.getInstance(world).trains.containsKey(info.id)) {
+        if (Game.DEVELOPMENT_ENVIRONMENT && TrainManager.getInstance(world).trains.containsKey(id)) {
             throw new RuntimeException("Duplicate trains, things will be broken!");
         }
     }
@@ -148,27 +144,15 @@ public final class Train implements Iterable<EntityMinecart> {
         NBTPlugin.writeUUID(cart.getEntityData(), TRAIN_NBT, trainId);
     }
 
-//    @Nullable
-//    public static Train getTrain(@Nullable UUID cartUUID) {
-//        if (cartUUID == null)
-//            return null;
-//        EntityMinecart cart = CartTools.getCartFromUUID(cartUUID);
-//        if (cart == null)
-//            return null;
-//        return getTrain(cart);
-//    }
-
     public Stream<EntityMinecart> stream() {
-        return StreamSupport.stream(spliterator(), false);
+        return carts.stream()
+                .map(cart -> CartTools.getCartFromUUID(world, cart))
+                .filter(Objects::nonNull);
     }
 
     @Override
     public Iterator<EntityMinecart> iterator() {
-        LinkageManager lm = LinkageManager.INSTANCE;
-        return carts.stream()
-                .map(cart -> CartTools.getCartFromUUID(world, cart))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList()).iterator();
+        return stream().iterator();
     }
 
     private void buildTrain(EntityMinecart first) {
@@ -205,28 +189,18 @@ public final class Train implements Iterable<EntityMinecart> {
             train.buildTrain(cart1);
     }
 
-    protected void deleteTrain() {
-        resetTrain();
-        getTrainMap(world).remove(getUUID());
-    }
-
     public static void deleteTrain(EntityMinecart cart) {
         Train train = getTrainMap(cart.world).remove(getTrainUUID(cart));
         removeTrainTag(cart);
         if (train != null)
-            train.deleteTrain();
+            train.resetTrain();
     }
 
-    protected void resetTrain() {
-        LinkageManager lm = LinkageManager.INSTANCE;
-        for (UUID id : carts) {
-            EntityMinecart cart = CartTools.getCartFromUUID(world, id);
-            if (cart != null) {
-                removeTrainTag(cart);
-            }
-        }
+    private void resetTrain() {
+        forEach(Train::removeTrainTag);
         carts.clear();
         locks.clear();
+        markDirty();
     }
 
     public UUID getUUID() {
@@ -248,6 +222,7 @@ public final class Train implements Iterable<EntityMinecart> {
         if (train != this && train != null)
             train.removeCartInternal(cartNew);
         addTrainTag(cartNew);
+        markDirty();
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -263,8 +238,10 @@ public final class Train implements Iterable<EntityMinecart> {
         boolean removed = carts.remove(cart);
         if (removed) {
             if (carts.isEmpty()) {
-                deleteTrain();
+                getTrainMap(world).remove(getUUID());
+                resetTrain();
             }
+            markDirty();
         }
         return removed;
     }
@@ -296,16 +273,11 @@ public final class Train implements Iterable<EntityMinecart> {
                 .findFirst().orElse(null);
     }
 
-    public <T extends EntityMinecart> Collection<T> getCarts(Class<T> cartClass) {
-        List<T> list = Lists.newArrayList();
-        for (EntityMinecart cart : this) {
-            if (cartClass.isInstance(cart))
-                list.add(cartClass.cast(cart));
-        }
-        return list;
+    public <T extends EntityMinecart> List<T> getCarts(Class<T> cartClass) {
+        return stream().flatMap(Streams.toType(cartClass)).collect(Collectors.toList());
     }
 
-    public Collection<UUID> getUUIDs() {
+    public List<UUID> getUUIDs() {
         return safeCarts;
     }
 
@@ -382,22 +354,27 @@ public final class Train implements Iterable<EntityMinecart> {
 
     public void addLock(UUID lock) {
         locks.add(lock);
+        markDirty();
     }
 
     public void removeLock(UUID lock) {
         locks.remove(lock);
+        markDirty();
     }
 
     public boolean isIdle() {
-        return info.state == TrainState.IDLE || isTrainLockedDown();
+        return state == TrainState.IDLE || isTrainLockedDown();
     }
 
     public boolean isStopped() {
-        return info.state == TrainState.STOPPED;
+        return state == TrainState.STOPPED;
     }
 
     public void setTrainState(TrainState state) {
-        info.state = state;
+        if (this.state != state) {
+            this.state = state;
+            markDirty();
+        }
     }
 
     public enum TrainState {
@@ -424,58 +401,41 @@ public final class Train implements Iterable<EntityMinecart> {
         return world.provider.getDimension() ^ uuid.hashCode();
     }
 
-    TrainInfo getInfo() {
-        return info;
+    static @Nullable Train readFromNBT(NBTTagCompound tag, World world) {
+        UUID id = NBTPlugin.readUUID(tag, "id");
+        if (id == null)
+            return null;
+        TrainState state = NBTPlugin.readEnumOrdinal(tag, "state", TrainState.values(), TrainState.NORMAL);
+        List<UUID> carts = NBTPlugin.getNBTList(tag, "carts", NBTTagCompound.class).stream().map(NBTUtil::getUUIDFromTag).collect(Collectors.toList());
+        Set<UUID> locks = NBTPlugin.getNBTList(tag, "locks", NBTTagCompound.class).stream().map(NBTUtil::getUUIDFromTag).collect(Collectors.toSet());
+        return new Train(id, state, carts, locks, world);
     }
 
-    static final class TrainInfo {
-
-        UUID id;
-        TrainState state;
-        Deque<UUID> carts;
-        Set<UUID> locks;
-
-        TrainInfo() {
+    void writeToNBT(NBTTagCompound tag) {
+        NBTPlugin.writeUUID(tag, "id", uuid);
+        NBTPlugin.writeEnumOrdinal(tag, "state", state);
+        NBTTagList listTag = new NBTTagList();
+        for (UUID uuid : carts) {
+            listTag.appendTag(NBTUtil.createUUIDTag(uuid));
         }
+        tag.setTag("carts", listTag);
 
-        TrainInfo(UUID id, TrainState state, Deque<UUID> carts, Set<UUID> locks) {
-            this.id = id;
-            this.state = state;
-            this.carts = carts;
-            this.locks = locks;
+        NBTTagList locks = new NBTTagList();
+        for (UUID uuid : this.locks) {
+            locks.appendTag(NBTUtil.createUUIDTag(uuid));
         }
+        tag.setTag("locks", locks);
+    }
 
-        void readFromNBT(NBTTagCompound tag) {
-            id = NBTPlugin.readUUID(tag, "id");
-            state = NBTPlugin.readEnumOrdinal(tag, "state", TrainState.values(), TrainState.NORMAL);
-            carts = new ArrayDeque<>();
-            for (NBTTagCompound each : NBTPlugin.<NBTTagCompound>getNBTList(tag, "carts", EnumNBTType.COMPOUND)) {
-                carts.add(NBTUtil.getUUIDFromTag(each));
-            }
-            locks = new HashSet<>();
-            for (NBTTagCompound each : NBTPlugin.<NBTTagCompound>getNBTList(tag, "locks", EnumNBTType.COMPOUND)) {
-                locks.add(NBTUtil.getUUIDFromTag(each));
-            }
-        }
+    void markDirty() {
+        setDirty(true);
+    }
 
-        void writeToNBT(NBTTagCompound tag) {
-            NBTPlugin.writeUUID(tag, "id", id);
-            NBTPlugin.writeEnumOrdinal(tag, "state", state);
-            NBTTagList listTag = new NBTTagList();
-            for (UUID uuid : carts) {
-                listTag.appendTag(NBTUtil.createUUIDTag(uuid));
-            }
-            tag.setTag("carts", listTag);
+    boolean isDirty() {
+        return dirty;
+    }
 
-            NBTTagList locks = new NBTTagList();
-            for (UUID uuid : this.locks) {
-                locks.appendTag(NBTUtil.createUUIDTag(uuid));
-            }
-            tag.setTag("locks", locks);
-        }
-
-        Train build(World world) {
-            return new Train(this, world);
-        }
+    void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 }

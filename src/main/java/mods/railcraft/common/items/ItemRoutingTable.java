@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -76,7 +76,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         if (!nbt.hasKey("pages"))
             return false;
         else {
-            List<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTPlugin.EnumNBTType.LIST);
+            List<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTTagList.class);
             for (NBTTagList pageNBT : pages) {
                 List<NBTTagString> page = NBTPlugin.asList(pageNBT);
                 if (page.size() > RailcraftConstants.BOOK_LINES_PER_PAGE)
@@ -106,7 +106,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         if (nbt == null)
             return null;
         Deque<String> contents = new LinkedList<String>();
-        List<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTPlugin.EnumNBTType.LIST);
+        List<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTTagList.class);
         for (NBTTagList page : pages) {
             List<NBTTagString> lines = NBTPlugin.asList(page);
             for (NBTTagString line : lines) {
@@ -125,7 +125,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         if (nbt == null)
             return null;
 
-        List<NBTTagList> pagesList = NBTPlugin.getNBTList(nbt, "pages", NBTPlugin.EnumNBTType.LIST);
+        List<NBTTagList> pagesList = NBTPlugin.getNBTList(nbt, "pages", NBTTagList.class);
         List<List<String>> contents = new ArrayList<>();
         for (NBTTagList pageNBT : pagesList) {
             List<NBTTagString> pageList = NBTPlugin.asList(pageNBT);

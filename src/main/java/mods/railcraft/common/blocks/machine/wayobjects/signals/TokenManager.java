@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -62,19 +62,19 @@ public class TokenManager {
 
         @Override
         public void readFromNBT(NBTTagCompound data) {
-            List<NBTTagCompound> tokenRingList = NBTPlugin.getNBTList(data, "tokenRings", NBTPlugin.EnumNBTType.COMPOUND);
+            List<NBTTagCompound> tokenRingList = NBTPlugin.getNBTList(data, "tokenRings", NBTTagCompound.class);
             for (NBTTagCompound entry : tokenRingList) {
                 UUID uuid = NBTPlugin.readUUID(entry, "uuid");
                 if (uuid != null) {
                     TokenRing tokenRing = new TokenRing(this, uuid);
                     tokenRings.put(uuid, tokenRing);
-                    List<NBTTagCompound> signalList = NBTPlugin.getNBTList(entry, "signals", NBTPlugin.EnumNBTType.COMPOUND);
+                    List<NBTTagCompound> signalList = NBTPlugin.getNBTList(entry, "signals", NBTTagCompound.class);
                     Set<BlockPos> signalPositions = signalList.stream()
                             .map(signal -> NBTPlugin.readBlockPos(signal, "pos"))
                             .filter(Objects::nonNull)
                             .collect(Collectors.toSet());
                     tokenRing.loadSignals(signalPositions);
-                    List<NBTTagCompound> cartList = NBTPlugin.getNBTList(entry, "carts", NBTPlugin.EnumNBTType.COMPOUND);
+                    List<NBTTagCompound> cartList = NBTPlugin.getNBTList(entry, "carts", NBTTagCompound.class);
                     Set<UUID> carts = cartList.stream()
                             .map(signal -> NBTPlugin.readUUID(signal, "cart"))
                             .filter(Objects::nonNull)

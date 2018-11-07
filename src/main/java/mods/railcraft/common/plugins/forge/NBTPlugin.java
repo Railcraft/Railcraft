@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,14 +12,9 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.ForwardingList;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.jetbrains.annotations.Nullable;
 
@@ -166,9 +161,9 @@ public final class NBTPlugin {
 
     }
 
-    public static <T extends NBTBase> List<T> getNBTList(NBTTagCompound nbt, String tag, EnumNBTType type) {
-        NBTTagList nbtList = nbt.getTagList(tag, type.ordinal());
-        return new NBTList<>(nbtList);
+    public static <T extends NBTBase> List<T> getNBTList(NBTTagCompound nbt, String tag, Class<T> type) {
+        NBTTagList nbtList = nbt.getTagList(tag, EnumNBTType.fromClass(type).ordinal());
+        return NBTList.make(nbtList);
     }
 
     public static <T extends NBTBase> List<T> asList(NBTTagList list) {
@@ -177,10 +172,14 @@ public final class NBTPlugin {
 
     private static final class NBTList<T extends NBTBase> extends ForwardingList<T> {
 
+        static <T extends NBTBase> NBTList<T> make(NBTTagList nbtList) {
+            return new NBTList<>(nbtList);
+        }
+
         private final List<T> backingList;
 
         @SuppressWarnings("unchecked")
-        NBTList(NBTTagList nbtList) {
+        private NBTList(NBTTagList nbtList) {
             backingList = (List<T>) nbtList.tagList;
         }
 
