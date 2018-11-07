@@ -68,7 +68,6 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
                 'T', "ingotCopper");
     }
 
-    @SuppressWarnings("unused")
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         EntityPlayer player = event.getEntityPlayer();

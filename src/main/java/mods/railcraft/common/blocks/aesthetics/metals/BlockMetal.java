@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -185,22 +185,5 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
     @Override
     public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
         return getVariant(world, pos).getBlockDef().isFlammable(world, pos, face);
-    }
-
-    @Override
-    public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
-        switch (getVariant(state)) {
-            case BLOCK_COPPER:
-            case BLOCK_LEAD:
-            case BLOCK_STEEL:
-            case BLOCK_TIN:
-            case BLOCK_SILVER:
-            case BLOCK_BRONZE:
-            case BLOCK_NICKEL:
-            case BLOCK_INVAR:
-                return SoundType.METAL;
-
-        }
-        return super.getSoundType(state, world, pos, entity);
     }
 }
