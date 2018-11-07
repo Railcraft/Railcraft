@@ -311,7 +311,7 @@ public class ChargeNetwork implements Charge.INetwork {
         private void tick() {
             sortBatteries();
 
-            removeCharge(totalLosses * RailcraftConfig.chargeLossMultiplier());
+            removeCharge(getLosses());
 
             // balance the charge in all the rechargeable batteries in the grid
             Set<BatteryBlock> rechargeable = batteries.stream()
@@ -372,7 +372,7 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         public double getLosses() {
-            return totalLosses;
+            return totalLosses * RailcraftConfig.chargeLossMultiplier();
         }
 
         public double getAverageUsagePerTick() {

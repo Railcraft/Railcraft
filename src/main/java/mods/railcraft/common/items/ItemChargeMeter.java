@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.charge.*;
 import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -114,7 +115,7 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
                     else {
                         // TODO: Handle all battery states better
                         boolean infiniteBat = node.getBattery().getState() == IBatteryBlock.State.INFINITE;
-                        sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeSpec().getLosses(), node.getBattery().getEfficiency() * 100.0);
+                        sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeSpec().getLosses() * RailcraftConfig.chargeLossMultiplier(), node.getBattery().getEfficiency() * 100.0);
                     }
                 });
                 returnValue = EnumActionResult.SUCCESS;
