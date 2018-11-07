@@ -1,3 +1,12 @@
+12.0.0-alpha-5:
+    FIX: Various minor bug fixes.
+    API: New and improved Charge API!
+    API: Various tweaks to cart APIs.
+
+12.0.0-alpha-4:
+    NEW: Various improvements to Command and Spawner Carts. (contribution by liach)
+    NEW: One-Way Gated Track returns as a sub-mode of the Gate Track. (contribution by liach)
+
 12.0.0-alpha-1:
     INFO: Minecraft 1.12.2 update with feature ports from 1.7.10.
     NEW: Restored Coke Oven, Blast Furnace, Steam Oven, Steam Boiler, Water Tank, Rock Crusher, Iron/Steel Tanks, Force Track Emitter,
