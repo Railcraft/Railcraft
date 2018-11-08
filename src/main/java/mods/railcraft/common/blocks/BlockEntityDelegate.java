@@ -178,7 +178,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+//    @SideOnly(Side.CLIENT) TODO Server crash hotfix, wait for Forge PR 5127
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
