@@ -214,7 +214,6 @@ public final class FluidTools {
         return false;
     }
 
-    @Deprecated
     public static boolean fillContainers(IFluidHandler source, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
         ItemStack input = inv.getStackInSlot(inputSlot);
         //need an empty container
@@ -260,7 +259,6 @@ public final class FluidTools {
         return true;
     }
 
-    @Deprecated
     private static boolean hasPlaceToPutContainer(ItemStack output, ItemStack container) {
         return isEmpty(output) || isEmpty(container) || output.getCount() < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
     }
@@ -269,8 +267,7 @@ public final class FluidTools {
      * We can assume that if null is passed for the container that the container
      * was consumed by the process and we should just remove the input container.
      */
-    @Deprecated
-    private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, @Nullable ItemStack container) {
+    private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, ItemStack container) {
         if (isEmpty(container)) {
             inv.decrStackSize(inputSlot, 1);
             return;

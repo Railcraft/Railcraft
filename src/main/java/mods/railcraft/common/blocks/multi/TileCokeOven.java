@@ -170,7 +170,7 @@ public final class TileCokeOven extends TileMultiBlockOven implements ISidedInve
         super.update();
 
         if (Game.isHost(getWorld()))
-            if (isMaster()) {
+            if (isStructureValid() && isMaster()) {
                 if (clock > finishedAt + COOK_STEP_LENGTH + 5)
                     if (cookTime <= 0)
                         setCooking(false);

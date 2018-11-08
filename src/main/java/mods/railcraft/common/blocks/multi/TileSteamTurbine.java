@@ -158,44 +158,42 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
 
         if (Game.isHost(world)) {
             if (isStructureValid()) {
-                if (isMaster())
+                if (isMaster()) {
                     addToNet();
-            } else
-                dropFromNet();
-
-            if (isMaster()) {
-                boolean addedEnergy = false;
-                if (energy < IC2_OUTPUT) {
-                    FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
+                    boolean addedEnergy = false;
+                    if (energy < IC2_OUTPUT) {
+                        FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
 //                if(steam != null) System.out.println("steam=" + steam.amount);
-                    if (steam != null && steam.amount >= STEAM_USAGE) {
-                        ItemStack rotor = inv.getStackInSlot(0);
-                        if (RailcraftItems.TURBINE_ROTOR.isEqual(rotor) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
-                            addedEnergy = true;
-                            energy += IC2_OUTPUT;
-                            tankSteam.drainInternal(STEAM_USAGE, true);
-                            tankWater.fillInternal(waterFilter, true);
+                        if (steam != null && steam.amount >= STEAM_USAGE) {
+                            ItemStack rotor = inv.getStackInSlot(0);
+                            if (RailcraftItems.TURBINE_ROTOR.isEqual(rotor) /*&& rotor.getItemDamage() < rotor.getMaxDamage() - 5*/) {
+                                addedEnergy = true;
+                                energy += IC2_OUTPUT;
+                                tankSteam.drainInternal(STEAM_USAGE, true);
+                                tankWater.fillInternal(waterFilter, true);
 
-                            inv.setInventorySlotContents(0, ((ItemTurbineRotor) rotor.getItem()).useRotor(rotor));
+                                inv.setInventorySlotContents(0, ((ItemTurbineRotor) rotor.getItem()).useRotor(rotor));
+                            }
                         }
                     }
-                }
 
-                output = (float) ((output * 49D + (addedEnergy ? 100D : 0D)) / 50D);
+                    output = (float) ((output * 49D + (addedEnergy ? 100D : 0D)) / 50D);
 
 //                System.out.println("output=" + output);
 //                System.out.println("addedEnergy=" + addedEnergy);
-                if (clock % 4 == 0) {
-                    gaugeState = (byte) getOutput();
-                    WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, gaugeState);
-                }
+                    if (clock % 4 == 0) {
+                        gaugeState = (byte) getOutput();
+                        WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, gaugeState);
+                    }
 
-                IBatteryBlock battery = getBattery();
-                if (battery.needsCharging()) {
-                    battery.addCharge(energy);
-                    energy = 0;
+                    IBatteryBlock battery = getBattery();
+                    if (battery.needsCharging()) {
+                        battery.addCharge(energy);
+                        energy = 0;
+                    }
                 }
-            }
+            } else
+                dropFromNet();
         }
 
         TankManager tMan = getTankManager();

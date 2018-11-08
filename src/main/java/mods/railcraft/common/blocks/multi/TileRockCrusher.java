@@ -235,52 +235,51 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                             && e.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
                         useCharge(KILLING_POWER_COST);
                 });
-            }
 
-            if (isMaster()) {
-                if (clock % 16 == 0)
-                    processActions();
+                if (isMaster()) {
+                    if (clock % 16 == 0)
+                        processActions();
 
-                if (paused)
-                    return;
+                    if (paused)
+                        return;
 
-                ItemStack input = InvTools.emptyStack();
-                ICrusherRecipe recipe = null;
-                for (IInvSlot slot : InventoryIterator.getVanilla(invInput)) {
-                    input = slot.getStack();
-                    if (!InvTools.isEmpty(input)) {
-                        recipe = RockCrusherCraftingManager.getInstance().getRecipe(input);
-                        if (recipe == null)
-                            recipe = RockCrusherCraftingManager.NULL_RECIPE;
-                        break;
+                    ItemStack input = InvTools.emptyStack();
+                    ICrusherRecipe recipe = null;
+                    for (IInvSlot slot : InventoryIterator.getVanilla(invInput)) {
+                        input = slot.getStack();
+                        if (!InvTools.isEmpty(input)) {
+                            recipe = RockCrusherCraftingManager.getInstance().getRecipe(input);
+                            if (recipe == null)
+                                recipe = RockCrusherCraftingManager.NULL_RECIPE;
+                            break;
+                        }
                     }
-                }
 
-                if (recipe != null)
-                    if (processTime >= PROCESS_TIME) {
-                        isWorking = false;
-                        InventoryCopy tempInv = new InventoryCopy(invOutput);
-                        List<ItemStack> outputs = recipe.pollOutputs(random);
-                        boolean hasRoom = outputs.stream()
-                                .map(output -> InvTools.moveItemStack(output, tempInv))
-                                .allMatch(InvTools::isEmpty);
+                    if (recipe != null)
+                        if (processTime >= PROCESS_TIME) {
+                            isWorking = false;
+                            InventoryCopy tempInv = new InventoryCopy(invOutput);
+                            List<ItemStack> outputs = recipe.pollOutputs(random);
+                            boolean hasRoom = outputs.stream()
+                                    .map(output -> InvTools.moveItemStack(output, tempInv))
+                                    .allMatch(InvTools::isEmpty);
 
-                        if (hasRoom) {
-                            for (ItemStack output : outputs) {
-                                InvTools.moveItemStack(output, invOutput);
+                            if (hasRoom) {
+                                for (ItemStack output : outputs) {
+                                    InvTools.moveItemStack(output, invOutput);
+                                }
+
+                                InvTools.removeOneItem(invInput, input);
+
+                                SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
+
+                                processTime = 0;
                             }
-
-                            InvTools.removeOneItem(invInput, input);
-
-                            SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
-
-                            processTime = 0;
-                        }
-                    } else {
-                        isWorking = true;
-                        if (Charge.distribution.network(world).access(pos).useCharge(CRUSHING_POWER_COST_PER_TICK)) {
-                            processTime++;
-                        }
+                        } else {
+                            isWorking = true;
+                            if (Charge.distribution.network(world).access(pos).useCharge(CRUSHING_POWER_COST_PER_TICK)) {
+                                processTime++;
+                            }
 //                        if (!node().isNull()) { //TODO: no charge
 
 
@@ -291,10 +290,11 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 //                            }
 //                        } else
 //                            processTime++;
+                        }
+                    else {
+                        processTime = 0;
+                        isWorking = false;
                     }
-                else {
-                    processTime = 0;
-                    isWorking = false;
                 }
             }
         }

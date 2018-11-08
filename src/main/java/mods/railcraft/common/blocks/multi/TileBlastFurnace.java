@@ -222,7 +222,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
     public void update() {
         super.update();
 
-        if (Game.isClient(getWorld()))
+        if (Game.isClient(getWorld()) || !isStructureValid())
             return;
 
         TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();

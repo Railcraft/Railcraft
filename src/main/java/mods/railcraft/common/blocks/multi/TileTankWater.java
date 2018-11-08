@@ -136,7 +136,7 @@ public class TileTankWater extends TileTank {
         super.update();
 
         if (Game.isHost(getWorld())) {
-            if (isMaster()) {
+            if (isStructureValid() && isMaster()) {
                 if (world.provider.getDimension() != -1 && clock % REFILL_INTERVAL == 0) {
                     float rate = REFILL_RATE;
                     Biome biome = world.getBiome(getPos());
