@@ -174,13 +174,14 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         JSONModelRenderer.INSTANCE.registerModel(TESRManipulatorFluid.PIPE_MODEL);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
-        // Remove the vanilla EntityMinecartMobSpawner renderer!
-        Minecraft.getMinecraft().getRenderManager().entityRenderMap.remove(EntityMinecartMobSpawner.class);
         RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
     }
 
     @Override
     public void finalizeClient() {
+        // Remove the vanilla EntityMinecartMobSpawner renderer!
+        Minecraft.getMinecraft().getRenderManager().entityRenderMap.remove(EntityMinecartMobSpawner.class);
+
         SoundRegistry.setupBlockSounds();
 
         MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);
