@@ -44,7 +44,7 @@ import java.io.File;
         acceptedMinecraftVersions = Railcraft.MC_VERSION,
         guiFactory = "mods.railcraft.client.core.RailcraftGuiConfigFactory",
         updateJSON = "http://www.railcraft.info/railcraft_versions",
-        dependencies = "required-after:forge@[14.23.4.2761,);"
+        dependencies = "required-after:forge@[14.23.5.2772,);"
                 + "after:buildcraftcore@[7.99.17,);"
                 + "after:buildcraftenergy;"
                 + "after:buildcraftbuilders;"
