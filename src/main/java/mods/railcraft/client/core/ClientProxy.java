@@ -175,7 +175,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTunnelBore.class, RenderTunnelBore::new);
         // Remove the vanilla EntityMinecartMobSpawner renderer!
-        RenderingRegistry.registerEntityRenderingHandler(EntityMinecartMobSpawner.class, rm -> null);
+        Minecraft.getMinecraft().getRenderManager().entityRenderMap.remove(EntityMinecartMobSpawner.class);
         RenderingRegistry.registerEntityRenderingHandler(EntityMinecart.class, RenderCart::new);
     }
 
