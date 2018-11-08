@@ -37,6 +37,8 @@ public final class TrainManager {
     final TrainSaveData data;
 
     public static TrainManager forWorld(World world) {
+        if (Game.isClient(world))
+            throw new RuntimeException("Don't access trains on the client! It won't work!");
         return instances.computeIfAbsent(world, TrainManager::new);
     }
 

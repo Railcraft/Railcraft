@@ -148,7 +148,15 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     private void rebuild(@Nullable EntityMinecart prev, EntityMinecart next) {
-        addLink(prev, next);
+        if (prev == null || carts.getFirst() == prev.getPersistentID())
+            carts.addFirst(next.getPersistentID());
+        else if (carts.getLast() == prev.getPersistentID())
+            carts.addLast(next.getPersistentID());
+        else
+            throw new RuntimeException("Something went horribly wrong in the linkage code!");
+
+        deleteTrain(next);
+        addTrainTag(next);
 
         LinkageManager lm = LinkageManager.INSTANCE;
         EntityMinecart linkA = lm.getLinkedCartA(next);
@@ -190,18 +198,6 @@ public final class Train implements Iterable<EntityMinecart> {
         return uuid;
     }
 
-    private void addLink(@Nullable EntityMinecart cartBase, EntityMinecart cartNew) {
-        if (cartBase == null || carts.getFirst() == cartBase.getPersistentID())
-            carts.addFirst(cartNew.getPersistentID());
-        else if (carts.getLast() == cartBase.getPersistentID())
-            carts.addLast(cartNew.getPersistentID());
-        else
-            return;
-        deleteTrain(cartNew);
-        addTrainTag(cartNew);
-        markDirty();
-    }
-
     public boolean isPassenger(Entity entity) {
         return stream().anyMatch(c -> c.isPassenger(entity));
     }
@@ -217,8 +213,10 @@ public final class Train implements Iterable<EntityMinecart> {
 
     public Collection<UUID> getEnds() {
         Set<UUID> ends = new HashSet<>();
-        ends.add(carts.getFirst());
-        ends.add(carts.getLast());
+        if (!carts.isEmpty()) {
+            ends.add(carts.getFirst());
+            ends.add(carts.getLast());
+        }
         return ends;
     }
 
@@ -230,7 +228,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public Stream<EntityMinecart> stream() {
-        return carts.stream()
+        return safeCarts.stream()
                 .map(this::getCart)
                 .filter(Objects::nonNull);
     }
