@@ -28,7 +28,9 @@ import java.util.function.Function;
  *
  * Example:
  *
- * return TileManager.forTile(this::getTileClass, state, worldIn, pos).retrieve(ITileNonSolid.class, t -> t.getShape(face)).orElseGet(() -> super.getBlockFaceShape(worldIn, state, pos, face));
+ * {@code return TileManager.forTile(this::getTileClass, state, worldIn, pos)
+ * .retrieve(ITileNonSolid.class, t -> t.getShape(face))
+ * .orElseGet(() -> super.getBlockFaceShape(worldIn, state, pos, face));}
  *
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
  *

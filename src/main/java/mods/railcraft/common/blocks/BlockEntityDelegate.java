@@ -42,9 +42,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 
-/**
- *
- */
 public abstract class BlockEntityDelegate extends BlockContainerRailcraft implements IPostConnection {
 
     protected BlockEntityDelegate(Material materialIn) {
@@ -170,14 +167,14 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+                .retrieve(ITileShaped.class, t -> t.getBoundingBox(world, pos)).orElse(super.getBoundingBox(state, world, pos));
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+                .retrieve(ITileShaped.class, t -> t.getCollisionBoundingBox(world, pos)).orElse(super.getCollisionBoundingBox(state, world, pos));
     }
 
     @Override
@@ -185,7 +182,7 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
         return TileManager.forTile(this::getTileClass, state, world, pos)
-                .retrieve(ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElse(Block.FULL_BLOCK_AABB);
+                .retrieve(ITileShaped.class, t -> t.getSelectedBoundingBox(world, pos)).orElse(super.getSelectedBoundingBox(state, world, pos));
     }
 
     @Override
