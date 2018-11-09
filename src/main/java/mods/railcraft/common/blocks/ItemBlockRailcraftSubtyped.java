@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
@@ -20,28 +19,25 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraftSubtyped extends ItemBlockRailcraft {
+public class ItemBlockRailcraftSubtyped<B extends Block & IRailcraftBlock> extends ItemBlockRailcraft<B> {
 
-    public ItemBlockRailcraftSubtyped(Block block) {
+    public ItemBlockRailcraftSubtyped(B block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
-        return ((IRailcraftBlock) block).getVariantEnum();
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
+        return block.getVariantEnum();
     }
 
-    @Nullable
     @Override
-    public IVariantEnum[] getVariants() {
-        return ((IRailcraftObject) block).getVariants();
+    public @Nullable IVariantEnum[] getVariants() {
+        return block.getVariants();
     }
 
-    @Nullable
-    public IVariantEnum getVariant(ItemStack stack) {
+    public @Nullable IVariantEnum getVariant(ItemStack stack) {
         int damage = stack.getItemDamage();
         IVariantEnum[] variants = getVariants();
         if (variants == null || damage < 0 || damage >= variants.length) {

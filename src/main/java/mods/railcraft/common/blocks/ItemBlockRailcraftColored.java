@@ -15,9 +15,9 @@ import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlockRailcraftColored extends ItemBlockRailcraftSubtyped {
+public class ItemBlockRailcraftColored<B extends Block & IRailcraftBlock> extends ItemBlockRailcraftSubtyped<B> {
 
-    public ItemBlockRailcraftColored(Block block) {
+    public ItemBlockRailcraftColored(B block) {
         super(block);
     }
 

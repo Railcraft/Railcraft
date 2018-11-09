@@ -18,13 +18,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlockEntityDelegate extends ItemBlockRailcraftSubtyped {
+public class ItemBlockEntityDelegate<B extends BlockEntityDelegate> extends ItemBlockRailcraftSubtyped<B> {
 
-    protected final BlockEntityDelegate entityDelegate;
-
-    public ItemBlockEntityDelegate(Block block) {
+    public ItemBlockEntityDelegate(B block) {
         super(block);
-        this.entityDelegate = (BlockEntityDelegate) block;
     }
 
     @Override
@@ -32,7 +29,7 @@ public class ItemBlockEntityDelegate extends ItemBlockRailcraftSubtyped {
     public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side, EntityPlayer player, ItemStack stack) {
         if (!super.canPlaceBlockOnSide(worldIn, pos, side, player, stack))
             return false;
-        if (!entityDelegate.needsSupport())
+        if (!block.needsSupport())
             return true;
         Block block = worldIn.getBlockState(pos).getBlock();
         if (!block.isReplaceable(worldIn, pos)) {

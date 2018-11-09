@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,21 +22,30 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraft extends ItemBlock implements ColorPlugin.IColoredItem, IRailcraftItemBlock {
+public class ItemBlockRailcraft<B extends Block & IRailcraftBlock> extends ItemBlock implements ColorPlugin.IColoredItem, IRailcraftItemBlock {
 
-    public ItemBlockRailcraft(Block block) {
+    protected final B block;
+
+    public ItemBlockRailcraft(B block) {
         super(block);
+        this.block = block;
     }
 
     @Override
     public void finalizeDefinition() {
         if (block instanceof ColorPlugin.IColoredBlock)
             ColorPlugin.instance.register(this, this);
+    }
+
+    @Override
+    public B getBlock() {
+        return block;
     }
 
     @Override
