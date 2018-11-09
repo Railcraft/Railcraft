@@ -43,6 +43,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by CovertJaguar on 7/23/2016 for Railcraft.
@@ -142,8 +143,8 @@ public class ChargeNetwork implements Charge.INetwork {
         ChargeNode oldNode = nodes.put(pos, node);
 
         // update the battery in the save data tracker
-        if (node.chargeBattery != null)
-            batterySaveData.initBattery(node.chargeBattery);
+        if (node.chargeBattery.isPresent())
+            batterySaveData.initBattery(node.chargeBattery.get());
         else
             batterySaveData.removeBattery(pos);
 
@@ -178,12 +179,17 @@ public class ChargeNetwork implements Charge.INetwork {
         return false;
     }
 
+    private boolean needsNode(BlockPos pos, IChargeBlock.ChargeSpec chargeSpec) {
+        ChargeNode node = nodes.get(pos);
+        return node == null || !node.isValid() || !Objects.equals(node.chargeSpec, chargeSpec);
+    }
+
     private @Nullable IChargeBlock.ChargeSpec getChargeDef(IBlockState state, BlockPos pos) {
         World worldObj = world.get();
         if (worldObj == null)
             return null;
         if (state.getBlock() instanceof IChargeBlock) {
-            return ((IChargeBlock) state.getBlock()).getChargeDef(network, state, worldObj, pos);
+            return ((IChargeBlock) state.getBlock()).getChargeSpec(network, state, worldObj, pos);
         }
         return null;
     }
@@ -220,11 +226,6 @@ public class ChargeNetwork implements Charge.INetwork {
         return node == null ? NULL_NODE : node;
     }
 
-    private boolean needsNode(BlockPos pos, IChargeBlock.ChargeSpec chargeSpec) {
-        ChargeNode node = nodes.get(pos);
-        return node == null || !node.isValid() || node.chargeSpec != chargeSpec;
-    }
-
     public class ChargeGrid extends ForwardingSet<ChargeNode> {
         private final Set<ChargeNode> chargeNodes = new HashSet<>();
         private final List<BatteryBlock> batteries = new ArrayList<>();
@@ -245,9 +246,9 @@ public class ChargeNetwork implements Charge.INetwork {
                 totalLosses += chargeNode.chargeSpec.getLosses();
             chargeNode.chargeGrid = this;
             batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
-            if (chargeNode.chargeBattery != null) {
+            if (chargeNode.chargeBattery.isPresent()) {
                 batteries.removeIf(b -> b.getPos().equals(chargeNode.pos));
-                batteries.add(chargeNode.chargeBattery);
+                batteries.add(chargeNode.chargeBattery.get());
                 sortBatteries();
             } else {
                 batterySaveData.removeBattery(chargeNode.pos);
@@ -256,7 +257,8 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         private void sortBatteries() {
-            batteries.sort(Comparator.comparing(BatteryBlock::getState));
+            batteries.sort(Comparator.comparing(BatteryBlock::getState)
+                    .thenComparing(Comparator.comparing(BatteryBlock::getEfficiency).reversed()));
         }
 
         @Override
@@ -314,21 +316,15 @@ public class ChargeNetwork implements Charge.INetwork {
             removeCharge(getLosses());
 
             // balance the charge in all the rechargeable batteries in the grid
-            Set<BatteryBlock> rechargeable = batteries.stream()
-                    .unordered()
-                    .filter(b -> {
-                        switch (b.getState()) {
-                            case DISABLED:
-                            case DISPOSABLE:
-                                return false;
-                        }
-                        return true;
-                    })
-                    .collect(Collectors.toSet());
+            Set<BatteryBlock> rechargeable = batteries(IBatteryBlock.State.RECHARGEABLE).collect(Collectors.toSet());
 
             double capacity = rechargeable.stream().mapToDouble(BatteryBlock::getCapacity).sum();
             if (capacity > 0.0) {
-                final double charge = rechargeable.stream().mapToDouble(BatteryBlock::getCharge).sum();
+                double charge = rechargeable.stream().mapToDouble(BatteryBlock::getCharge).sum();
+                final double neededCharge = capacity - charge;
+                if (neededCharge > 0) {
+                    charge += removeCharge(batteries(IBatteryBlock.State.SOURCE).collect(Collectors.toList()), neededCharge);
+                }
                 final double chargeLevel = charge / capacity;
                 rechargeable.forEach(bat -> {
                     bat.setCharge(chargeLevel * bat.getCapacity());
@@ -343,24 +339,33 @@ public class ChargeNetwork implements Charge.INetwork {
             chargeUsedThisTick = 0.0;
         }
 
+        private Stream<BatteryBlock> batteries(IBatteryBlock.State... state) {
+            List<IBatteryBlock.State> list = Arrays.asList(state);
+            return batteries.stream().filter(b -> list.contains(b.getState()));
+        }
+
+        private Stream<BatteryBlock> activeBatteries() {
+            return batteries(IBatteryBlock.State.SOURCE, IBatteryBlock.State.RECHARGEABLE, IBatteryBlock.State.DISPOSABLE);
+        }
+
         public double getCharge() {
-            return batteries.stream().mapToDouble(BatteryBlock::getCharge).sum();
+            return activeBatteries().mapToDouble(BatteryBlock::getCharge).sum();
         }
 
         public double getCapacity() {
-            return batteries.stream().mapToDouble(BatteryBlock::getCapacity).sum();
+            return activeBatteries().mapToDouble(BatteryBlock::getCapacity).sum();
         }
 
         public double getAvailableCharge() {
-            return batteries.stream().mapToDouble(BatteryBlock::getAvailableCharge).sum();
+            return activeBatteries().mapToDouble(BatteryBlock::getAvailableCharge).sum();
         }
 
         public double getPotentialDraw() {
-            return batteries.stream().mapToDouble(BatteryBlock::getPotentialDraw).sum();
+            return activeBatteries().mapToDouble(BatteryBlock::getPotentialDraw).sum();
         }
 
         public double getEfficiency() {
-            return batteries.stream().mapToDouble(BatteryBlock::getEfficiency).average().orElse(1.0);
+            return activeBatteries().mapToDouble(BatteryBlock::getEfficiency).average().orElse(1.0);
         }
 
         public int getComparatorOutput() {
@@ -407,9 +412,8 @@ public class ChargeNetwork implements Charge.INetwork {
          * @return true if charge could be removed in full
          */
         public boolean useCharge(double amount) {
-            double efficiency = getEfficiency();
-            if (getAvailableCharge() >= amount / efficiency) {
-                removeCharge(amount, efficiency);
+            if (hasCapacity(amount)) {
+                removeCharge(activeBatteries().collect(Collectors.toList()), amount);
                 return true;
             }
             return false;
@@ -424,7 +428,7 @@ public class ChargeNetwork implements Charge.INetwork {
          * @return true if the grid can provide the power
          */
         public boolean hasCapacity(double amount) {
-            return getAvailableCharge() >= amount / getEfficiency();
+            return getAvailableCharge() >= amount;
         }
 
         /**
@@ -434,7 +438,7 @@ public class ChargeNetwork implements Charge.INetwork {
          * @return charge removed
          */
         public double removeCharge(double desiredAmount) {
-            return removeCharge(desiredAmount, getEfficiency());
+            return removeCharge(activeBatteries().collect(Collectors.toList()), desiredAmount);
         }
 
         /**
@@ -443,18 +447,17 @@ public class ChargeNetwork implements Charge.INetwork {
          *
          * @return charge removed
          */
-        private double removeCharge(double desiredAmount, double efficiency) {
-            final double amountToDraw = desiredAmount / efficiency;
-            double amountNeeded = amountToDraw;
+        private double removeCharge(List<BatteryBlock> batteries, double desiredAmount) {
+            double amountNeeded = desiredAmount;
             for (BatteryBlock battery : batteries) {
                 amountNeeded -= battery.removeCharge(amountNeeded);
                 batterySaveData.updateBatteryRecord(battery);
                 if (amountNeeded <= 0.0)
                     break;
             }
-            double chargeRemoved = amountToDraw - amountNeeded;
+            double chargeRemoved = desiredAmount - amountNeeded;
             chargeUsedThisTick += chargeRemoved;
-            return chargeRemoved * efficiency;
+            return chargeRemoved;
         }
 
         @Override
@@ -507,7 +510,7 @@ public class ChargeNetwork implements Charge.INetwork {
     }
 
     public class ChargeNode implements Charge.IAccess {
-        protected final @Nullable BatteryBlock chargeBattery;
+        protected final Optional<BatteryBlock> chargeBattery;
         private final BlockPos pos;
         private final IChargeBlock.ChargeSpec chargeSpec;
         private ChargeGrid chargeGrid = NULL_GRID;
@@ -518,7 +521,8 @@ public class ChargeNetwork implements Charge.INetwork {
         private ChargeNode(BlockPos pos, IChargeBlock.ChargeSpec chargeSpec) {
             this.pos = pos;
             this.chargeSpec = chargeSpec;
-            this.chargeBattery = chargeSpec.getBatterySpec() == null ? null : new BatteryBlock(pos, chargeSpec.getBatterySpec());
+            this.chargeBattery = chargeSpec.getBatterySpec() == null ?
+                    Optional.empty() : Optional.of(new BatteryBlock(pos, chargeSpec.getBatterySpec()));
         }
 
         public IChargeBlock.ChargeSpec getChargeSpec() {
@@ -695,7 +699,7 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         @Override
-        public @Nullable BatteryBlock getBattery() {
+        public Optional<BatteryBlock> getBattery() {
             return chargeBattery;
         }
 
@@ -707,8 +711,8 @@ public class ChargeNetwork implements Charge.INetwork {
         @Override
         public String toString() {
             String string = String.format("ChargeNode{%s}|%s", pos, chargeSpec.toString());
-            if (chargeBattery != null)
-                string += "|State: " + chargeBattery.getState();
+            if (chargeBattery.isPresent())
+                string += "|State: " + chargeBattery.get().getState();
             return string;
         }
     }
@@ -719,8 +723,8 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         @Override
-        public @Nullable BatteryBlock getBattery() {
-            return null;
+        public Optional<BatteryBlock> getBattery() {
+            return Optional.empty();
         }
 
         @Override

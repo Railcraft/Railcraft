@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.client.render.carts.LocomotiveRenderType;
-import mods.railcraft.common.blocks.charge.BlockChargeBattery;
+import mods.railcraft.common.blocks.charge.BlockBattery;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.ItemGear;
 import mods.railcraft.common.items.Metal;
@@ -40,7 +40,7 @@ public class ItemLocoElectric extends ItemLocomotive {
                 "GMG",
                 'L', Blocks.REDSTONE_LAMP,
                 'D', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR,
-                'B', BlockChargeBattery.RECHARGEABLE_BATTERY_ORE_TAG,
+                'B', BlockBattery.RECHARGEABLE_BATTERY_ORE_TAG,
                 'M', Items.MINECART,
                 'G', RailcraftItems.GEAR, ItemGear.EnumGear.STEEL,
                 'T', RailcraftItems.PLATE, Metal.STEEL);

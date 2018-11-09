@@ -13,6 +13,7 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ForwardingList;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -43,8 +44,12 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         return delegate;
     }
 
-    public boolean add(String line) {
-        return add(new ToolTipLine(line));
+    public void add(String line) {
+        add(new ToolTipLine(line));
+    }
+
+    public void add(String line, TextFormatting format) {
+        add(new ToolTipLine(line, format));
     }
 
     public void set(ToolTip other) {

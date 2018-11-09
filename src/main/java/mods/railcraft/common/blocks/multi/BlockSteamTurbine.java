@@ -54,7 +54,7 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
     }
 
     @Override
-    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

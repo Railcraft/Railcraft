@@ -12,9 +12,9 @@ package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
-import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
-import mods.railcraft.common.blocks.IVariantEnumBlock;
+import mods.railcraft.common.blocks.BlockRailcraft;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -27,10 +27,17 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockChargeSubtyped<V extends Enum<V> & IVariantEnumBlock<V>> extends BlockRailcraftSubtyped<V> implements IChargeBlock {
+public abstract class BlockCharge extends BlockRailcraft implements IChargeBlock {
 
-    protected BlockChargeSubtyped() {
-        super(Material.CIRCUITS);
+    protected BlockCharge(Material material) {
+        super(material);
+    }
+
+    protected BlockCharge(Material material, MapColor mapColor) {
+        super(material, mapColor);
+    }
+
+    {
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
     }

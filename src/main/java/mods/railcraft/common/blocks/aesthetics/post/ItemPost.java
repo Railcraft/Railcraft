@@ -1,19 +1,18 @@
-/*******************************************************************************
- * Copyright (c) CovertJaguar, 2011-2016
- * http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,16 +21,16 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemPost extends ItemBlockRailcraft {
+public class ItemPost extends ItemBlockRailcraft<BlockPost> {
 
-    public ItemPost(Block block) {
+    public ItemPost(BlockPost block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);
@@ -62,7 +61,7 @@ public class ItemPost extends ItemBlockRailcraft {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
         if (stack.getItemDamage() == EnumPost.EMBLEM.ordinal() && stack.hasTagCompound()) {
             NBTTagCompound nbt = stack.getTagCompound();
             NBTTagString emblemIdent = (NBTTagString) nbt.getTag("emblem");
@@ -72,7 +71,7 @@ public class ItemPost extends ItemBlockRailcraft {
 
             Emblem emblem = EmblemToolsClient.packageManager.getEmblem(emblemIdent.getString());
             if (emblem != null)
-                info.add(TextFormatting.GRAY + emblem.displayName);
+                tooltip.add(TextFormatting.GRAY + emblem.displayName);
         }
     }
 }

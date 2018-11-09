@@ -92,6 +92,8 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
 
     @Override
     public final float getMaxCartSpeedOnRail() {
+        if (Game.isClient(world))
+            return super.getMaxCartSpeedOnRail();
         int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
         if (numLocomotives == 0)
             return super.getMaxCartSpeedOnRail();

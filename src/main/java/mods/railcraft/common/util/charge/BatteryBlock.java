@@ -109,7 +109,7 @@ public class BatteryBlock implements IBatteryBlock {
      * @return The amount of charge that can be withdraw from the battery right now
      */
     public double getAvailableCharge() {
-        return MathHelper.clamp(getMaxDraw() - chargeDrawnThisTick, 0.0, getCharge());
+        return MathHelper.clamp(getMaxDraw() - chargeDrawnThisTick, 0.0, getCharge() * getEfficiency());
     }
 
     @Override
@@ -129,6 +129,7 @@ public class BatteryBlock implements IBatteryBlock {
                 return request;
             }
         },
+        SOURCE,
         RECHARGEABLE,
         DISPOSABLE,
         DISABLED {
@@ -165,16 +166,11 @@ public class BatteryBlock implements IBatteryBlock {
             return battery.getBatterySpec().getMaxDraw();
         }
 
-        public double removeCharge(BatteryBlock battery, double request) {
-            double availableCharge = battery.getAvailableCharge();
-            if (availableCharge >= request) {
-                battery.charge -= request;
-                battery.chargeDrawnThisTick += request;
-                return request;
-            }
-            battery.charge -= availableCharge;
-            battery.chargeDrawnThisTick += availableCharge;
-            return availableCharge;
+        public double removeCharge(BatteryBlock battery, double desiredAmount) {
+            double amountToDraw = Math.min(desiredAmount, battery.getAvailableCharge());
+            battery.charge -= amountToDraw / battery.getEfficiency();
+            battery.chargeDrawnThisTick += amountToDraw;
+            return amountToDraw;
         }
     }
 }

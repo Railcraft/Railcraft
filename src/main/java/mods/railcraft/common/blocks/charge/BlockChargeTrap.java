@@ -11,8 +11,6 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.charge.IChargeBlock;
-import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -24,7 +22,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -48,7 +45,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
+public class BlockChargeTrap extends BlockCharge {
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
     private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.025);
@@ -59,8 +56,6 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
         setDefaultState(defaultState);
         setResistance(10F);
         setHardness(5F);
-        setSoundType(SoundType.METAL);
-        setTickRandomly(true);
     }
 
     @Override
@@ -83,7 +78,7 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
     }
 
     @Override
-    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;
@@ -125,25 +120,6 @@ public class BlockChargeTrap extends BlockRailcraft implements IChargeBlock {
         if (stateIn.getValue(REDSTONE))
             Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 10);
     }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(worldIn, pos, state);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-        deregisterNode(worldIn, pos);
-    }
-
     /**
      * Called When an Entity Collided with the Block
      */

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,7 +26,7 @@ public class ItemPlate extends ItemMetal {
         RailcraftItems plate = RailcraftItems.PLATE;
 
         for (Metal m : getMetalBiMap().values()) {
-            RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(plate.getStack(4, m),
+            RailcraftCraftingManager.rollingMachine().addRecipe(plate.getStack(4, m),
                     "II",
                     "II",
                     'I', m.getOreTag(Form.INGOT));

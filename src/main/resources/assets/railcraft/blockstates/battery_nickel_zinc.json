@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "railcraft:battery",
+    "textures": {
+      "top": "railcraft:blocks/battery_nickel_iron_top",
+      "bottom": "railcraft:blocks/battery_nickel_iron_bottom",
+      "side_a": "railcraft:blocks/battery_nickel_iron_side_a",
+      "side_b": "railcraft:blocks/battery_nickel_iron_side_b"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}]
+  }
+}

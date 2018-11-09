@@ -183,6 +183,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public static void deleteTrain(EntityMinecart cart) {
+//        Game.log(Level.WARN, "Thread: " + Thread.currentThread().getName());
         getManager(cart.world).remove(getTrainUUID(cart)).ifPresent(Train::resetTrain);
         removeTrainTag(cart);
     }

@@ -17,15 +17,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Optional;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileCharge extends TileMachineBase {
 
     public IBatteryBlock getBattery() {
-        IBatteryBlock battery = Charge.distribution.network(world).access(pos).getBattery();
-        assert battery != null;
-        return battery;
+        Optional<? extends IBatteryBlock> battery = Charge.distribution.network(world).access(pos).getBattery();
+        assert battery.isPresent();
+        return battery.get();
     }
 
     private int prevComparatorOutput;

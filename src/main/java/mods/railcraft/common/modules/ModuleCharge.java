@@ -30,18 +30,20 @@ public class ModuleCharge extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(ChargeManager.DISTRIBUTION);
 
                 add(
-                        RailcraftItems.CHARGE,
-                        RailcraftItems.CHARGE_METER,
-                        RailcraftItems.TURBINE_ROTOR,
-                        RailcraftItems.TURBINE_BLADE,
-                        RailcraftItems.TURBINE_DISK,
-//                        RailcraftBlocks.track,
+                        RailcraftBlocks.BATTERY_NICKEL_IRON,
+                        RailcraftBlocks.BATTERY_NICKEL_ZINC,
+                        RailcraftBlocks.BATTERY_ZINC_CARBON,
+                        RailcraftBlocks.BATTERY_ZINC_SILVER,
                         RailcraftBlocks.CHARGE_FEEDER,
                         RailcraftBlocks.CHARGE_TRAP,
-                        RailcraftBlocks.CHARGE_BATTERY,
-                        RailcraftBlocks.STEAM_TURBINE,
                         RailcraftBlocks.FRAME,
-                        RailcraftBlocks.WIRE
+                        RailcraftBlocks.STEAM_TURBINE,
+                        RailcraftBlocks.WIRE,
+                        RailcraftItems.CHARGE,
+                        RailcraftItems.CHARGE_METER,
+                        RailcraftItems.TURBINE_BLADE,
+                        RailcraftItems.TURBINE_DISK,
+                        RailcraftItems.TURBINE_ROTOR
                 );
             }
 

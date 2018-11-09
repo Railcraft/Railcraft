@@ -28,11 +28,11 @@ import java.util.List;
  */
 public enum FeederVariant implements IEnumMachine<FeederVariant> {
 
-    IC2(ModuleIC2.class, "ic2", TileChargeFeederIC2.class, new IBatteryBlock.Spec(IBatteryBlock.State.RECHARGEABLE, 1024.0, 512.0, 0.65)),
+    IC2(ModuleIC2.class, "ic2", TileChargeFeederIC2.class, new IBatteryBlock.Spec(IBatteryBlock.State.SOURCE, 1024.0, 512.0, 1.0)),
     ADMIN(ModuleCharge.class, "admin", TileChargeFeederAdmin.class, new IBatteryBlock.Spec(IBatteryBlock.State.INFINITE, 4000.0, 4000.0, 1.0)),
     ;
 
-    private static final List<FeederVariant> creativeList = new ArrayList<FeederVariant>();
+    private static final List<FeederVariant> creativeList = new ArrayList<>();
     public static final FeederVariant[] VALUES = values();
     private final IChargeBlock.ChargeSpec chargeSpec;
 

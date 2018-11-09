@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.item.crafting.Ingredient;
@@ -93,7 +94,12 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 .time(300)
                 .buildAndRegister();
 
-//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//        RailcraftCraftingManager.rollingMachine().addRecipe(
+//                getStack(SPOOL_LARGE),
+//                "C",
+//                'C', "blockConductiveIron");
+//
+//        RailcraftCraftingManager.rollingMachine().addRecipe(
 //                getStack(SPOOL_LARGE),
 //                "C",
 //                'C', "blockCopper");
@@ -107,69 +113,40 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'T', RailcraftItems.CHARGE, TERMINAL,
                 'P', "plateTin");
 
-        Ingredient plateNickel = new OreIngredient("plateNickel");
+        RailcraftCraftingManager.rollingMachine().addRecipe(
+                getStack(ELECTRODE_NICKEL),
+                " P ",
+                " P ",
+                " P ",
+                'P', "plateNickel");
 
-        //TODO configure time
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
-                .output(getStack(ELECTRODE_NICKEL))
-                .ingredients(
-                        plateNickel,
-                        plateNickel,
-                        plateNickel
-                )
-                .width(1)
-                .height(3)
-                .time(150)
-                .buildAndRegister();
+        RailcraftCraftingManager.rollingMachine().addRecipe(
+                getStack(ELECTRODE_IRON),
+                " P ",
+                " P ",
+                " P ",
+                'P', "plateIron");
 
-//        RailcraftCraftingManager.rollingMachine.addRecipe(
-//                getStack(ELECTRODE_NICKEL),
-//                "P",
-//                "P",
-//                "P",
-//                'P', "plateNickel");
+        RailcraftCraftingManager.rollingMachine().addRecipe(
+                getStack(ELECTRODE_ZINC),
+                " P ",
+                " P ",
+                " P ",
+                'P', "plateZinc");
 
-        Ingredient plateIron = new OreIngredient("plateIron");
+        RailcraftCraftingManager.rollingMachine().addRecipe(
+                getStack(ELECTRODE_CARBON),
+                " P ",
+                " P ",
+                " P ",
+                'P', "coal");
 
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
-                .output(getStack(ELECTRODE_IRON))
-                .ingredients(
-                        plateIron,
-                        plateIron,
-                        plateIron
-                )
-                .height(3)
-                .width(1)
-                .time(150)
-                .buildAndRegister();
-
-//        RailcraftCraftingManager.rollingMachine.addRecipe(
-//                getStack(ELECTRODE_IRON),
-//                "P",
-//                "P",
-//                "P",
-//                'P', "plateIron");
-
-        Ingredient plateZinc = new OreIngredient("plateZinc");
-
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
-                .output(getStack(ELECTRODE_ZINC))
-                .ingredients(
-                        plateZinc,
-                        plateZinc,
-                        plateZinc
-                )
-                .height(3)
-                .width(1)
-                .time(150)
-                .buildAndRegister();
-
-//        RailcraftCraftingManager.rollingMachine.addRecipe(
-//                getStack(ELECTRODE_ZINC),
-//                "P",
-//                "P",
-//                "P",
-//                'P', "plateZinc");
+        RailcraftCraftingManager.rollingMachine().addRecipe(
+                getStack(ELECTRODE_SILVER),
+                " P ",
+                " P ",
+                " P ",
+                'P', "plateSilver");
     }
 
     public enum EnumCharge implements IVariantEnum {
@@ -182,9 +159,12 @@ public class ItemCharge extends ItemRailcraftSubtyped {
         MOTOR("blockCopper"),
         ELECTRODE_NICKEL("plateNickel"),
         ELECTRODE_IRON("plateIron"),
-        ELECTRODE_ZINC("plateZinc"),;
+        ELECTRODE_ZINC("plateZinc"),
+        ELECTRODE_CARBON("coal"),
+        ELECTRODE_SILVER("plateSilver"),
+        ;
         public static EnumCharge[] VALUES = values();
-        private Object alternate;
+        private final Object alternate;
 
         EnumCharge(Object alt) {
             this.alternate = alt;

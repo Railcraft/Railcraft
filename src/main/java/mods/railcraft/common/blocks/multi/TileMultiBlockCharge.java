@@ -10,10 +10,11 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.charge.IBatteryBlock;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by CovertJaguar on 10/31/2018 for Railcraft.
@@ -26,9 +27,9 @@ public abstract class TileMultiBlockCharge extends TileMultiBlock {
     }
 
     public IBatteryBlock getBattery() {
-        IBatteryBlock battery = Charge.distribution.network(world).access(pos).getBattery();
-        assert battery != null;
-        return battery;
+        Optional<? extends IBatteryBlock> battery = Charge.distribution.network(world).access(pos).getBattery();
+        assert battery.isPresent();
+        return battery.get();
     }
 
     private int prevComparatorOutput;
@@ -48,7 +49,7 @@ public abstract class TileMultiBlockCharge extends TileMultiBlock {
     protected void onPatternLock(MultiBlockPattern pattern) {
         super.onPatternLock(pattern);
         if (isMaster) {
-            getBattery().setState(IBatteryBlock.State.RECHARGEABLE);
+            getBattery().setState(IBatteryBlock.State.SOURCE);
         } else {
             getBattery().setState(IBatteryBlock.State.DISABLED);
         }

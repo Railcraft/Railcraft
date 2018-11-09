@@ -61,7 +61,6 @@ import mods.railcraft.common.blocks.tracks.flex.ItemTrackStateless;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
-import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
@@ -86,6 +85,10 @@ import java.util.function.Supplier;
 public enum RailcraftBlocks implements IRailcraftBlockContainer {
     ACTUATOR("actuator", BlockMachineActuator.class, ItemMachineActuator::new),
     ANVIL_STEEL("anvil", BlockRCAnvil.class, ItemAnvil::new),
+    BATTERY_NICKEL_IRON("battery_nickel_iron", BlockBatteryNickelIron.class, ItemBattery::new),
+    BATTERY_NICKEL_ZINC("battery_nickel_zinc", BlockBatteryNickelZinc.class, ItemBattery::new),
+    BATTERY_ZINC_CARBON("battery_zinc_carbon", BlockBatteryZincCarbon.class, ItemBattery::new),
+    BATTERY_ZINC_SILVER("battery_zinc_silver", BlockBatteryZincSilver.class, ItemBattery::new),
     BRICK_ABYSSAL("brick_abyssal", BlockBrick.class, () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new),
     BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),
     BRICK_BLEACHED_BONE("brick_bleachedbone", BlockBrick.class, () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
@@ -100,10 +103,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BRICK_RED_NETHER("brick_red_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDNETHER), ItemBrick::new),
     BRICK_RED_SANDY("brick_red_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDSANDY), ItemBrick::new),
     BRICK_SANDY("brick_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
-    //    BATTERY_NICKEL_IRON("battery_nickel_iron", BlockBatteryNickelIron.class, ItemChargeBattery::new),
-//    BATTERY_NICKEL_ZINC("battery_nickel_zinc", BlockChargeBattery.class, ItemChargeBattery::new),
-//    BATTERY_ZINC_CARBON("battery_zinc_carbon", BlockChargeBattery.class, ItemChargeBattery::new),
-//    BATTERY_ZINC_SILVER("battery_zinc_silver", BlockChargeBattery.class, ItemChargeBattery::new),
     CHARGE_FEEDER("charge_feeder", BlockChargeFeeder.class, ItemMachine::new),
     CHARGE_TRAP("charge_trap", BlockChargeTrap.class, ItemBlockRailcraft::new),
     DETECTOR("detector", BlockDetector.class, ItemDetector::new),
@@ -151,7 +150,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     CHEST_VOID("chest_void", BlockChestVoid.class, ItemBlockEntityDelegate::new),
     // multiblocks
     COKE_OVEN("coke_oven", BlockCokeOvenRegular.class, ItemBlockCustomModel::new),
-    COKE_OVEN_RED("coke_oven_red", BlockCokeOven.class, ItemBlockCustomModel::new),
+    COKE_OVEN_RED("coke_oven_red", BlockCokeOvenRed.class, ItemBlockCustomModel::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, ItemBlockCustomModel::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, ItemBlockEntityDelegate::new),
     STEAM_OVEN("steam_oven", BlockSteamOven.class, ItemBlockCustomModel::new),
@@ -172,7 +171,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     ;
 
     public static final RailcraftBlocks[] VALUES = values();
-    private final BlockDef<? extends IRailcraftBlock, ?> def;
+    private final BlockDef<? extends IRailcraftBlock, ? extends IRailcraftItemBlock> def;
     private final Class<? extends IVariantEnum> variantClass;
 
     <B extends Block & IRailcraftBlock, I extends ItemBlock & IRailcraftItemBlock>
@@ -209,10 +208,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
                         @Nullable Supplier<?> altRecipeObject) {
             super(obj, tag, altRecipeObject);
             this.blockClass = blockClass;
-            if (blockSupplier != null)
-                this.blockSupplier = blockSupplier;
-            else
-                this.blockSupplier = defaultSupplier();
+            this.blockSupplier = blockSupplier == null ? defaultSupplier() : blockSupplier;
             this.itemSupplier = itemSupplier;
         }
 
@@ -276,16 +272,18 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         def.register();
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Override
     public void defineRecipes() {
-        def.block().ifPresent(IRailcraftObject::defineRecipes);
-        def.item().ifPresent(IRailcraftObject::defineRecipes);
+        def.block().ifPresent(o -> o.defineRecipes());
+        def.item().ifPresent(o -> o.defineRecipes());
     }
 
+    @SuppressWarnings("Convert2MethodRef")
     @Override
     public void finalizeDefinition() {
-        def.block().ifPresent(IRailcraftObject::finalizeDefinition);
-        def.item().ifPresent(IRailcraftObject::finalizeDefinition);
+        def.block().ifPresent(o -> o.finalizeDefinition());
+        def.item().ifPresent(o -> o.finalizeDefinition());
     }
 
     public boolean isEqual(IVariantEnum variant, @Nullable ItemStack stack) {

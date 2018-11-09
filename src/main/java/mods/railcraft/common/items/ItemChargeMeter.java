@@ -16,6 +16,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.charge.BatteryBlock;
 import mods.railcraft.common.util.charge.ChargeNetwork;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -33,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -109,13 +111,22 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
                 sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
                 node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {
                     ChargeNetwork.ChargeGrid grid = node.getGrid();
-                    sendChat(player, "gui.railcraft.charge.meter.network", grid.size(), grid.isInfinite() ? "INF" : grid.getCharge(), grid.getAverageUsagePerTick(), grid.getAvailableCharge(), grid.getLosses(), grid.getEfficiency() * 100.0);
-                    if (node.getBattery() == null)
+                    sendChat(player, "gui.railcraft.charge.meter.network", grid.size(),
+                            grid.isInfinite() ? "INF" : grid.getCharge(), grid.getAverageUsagePerTick(),
+                            grid.getAvailableCharge(), grid.getLosses(), grid.getEfficiency() * 100.0);
+
+                    @Nullable BatteryBlock battery = node.getBattery().orElse(null);
+                    if (battery == null)
                         sendChat(player, "gui.railcraft.charge.meter.node", avg, node.getChargeSpec().getLosses());
                     else {
                         // TODO: Handle all battery states better
-                        boolean infiniteBat = node.getBattery().getState() == IBatteryBlock.State.INFINITE;
-                        sendChat(player, "gui.railcraft.charge.meter.producer", infiniteBat ? "INF" : node.getBattery().getCharge(), infiniteBat ? "INF" : 0.0, node.getBattery().getAvailableCharge(), node.getChargeSpec().getLosses() * RailcraftConfig.chargeLossMultiplier(), node.getBattery().getEfficiency() * 100.0);
+                        boolean infiniteBat = battery.getState() == IBatteryBlock.State.INFINITE;
+                        sendChat(player, "gui.railcraft.charge.meter.producer",
+                                infiniteBat ? "INF" : battery.getCharge(),
+                                infiniteBat ? "INF" : 0.0,
+                                battery.getAvailableCharge(),
+                                node.getChargeSpec().getLosses() * RailcraftConfig.chargeLossMultiplier(),
+                                battery.getEfficiency() * 100.0);
                     }
                 });
                 returnValue = EnumActionResult.SUCCESS;

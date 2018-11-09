@@ -18,6 +18,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -28,22 +30,17 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
     public LocomotivePaintingRecipe(ItemStack locomotive) {
         super(locomotive.getItem().getRegistryName().getPath() + "_painting");
         this.locomotive = locomotive;
-        InvTools.addNBTTag(locomotive, "gregfix", "get the hell off my lawn!");
+        InvTools.addTagString(locomotive, "gregfix", "get the hell off my lawn!");
     }
 
     private boolean isDye(ItemStack stack) {
         return getDye(stack) != null;
     }
 
-    @Nullable
-    private EnumColor getDye(ItemStack stack) {
+    private @Nullable EnumColor getDye(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return null;
-        for (EnumColor color : EnumColor.VALUES) {
-            if (InvTools.isItemEqual(stack, color.getDyesStacks()))
-                return color;
-        }
-        return null;
+        return Arrays.stream(EnumColor.VALUES).filter(color -> InvTools.isItemEqual(stack, color.getDyesStacks())).findFirst().orElse(null);
     }
 
     private boolean isLocomotive(ItemStack loco) {

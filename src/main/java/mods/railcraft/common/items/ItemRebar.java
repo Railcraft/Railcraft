@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,12 +16,9 @@ import net.minecraft.item.ItemStack;
 
 public class ItemRebar extends ItemRailcraft {
 
-    public ItemRebar() {
-    }
-
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(new ItemStack(this, 4),
+        RailcraftCraftingManager.rollingMachine().addRecipe(new ItemStack(this, 4),
                 "  I",
                 " I ",
                 "I  ",

@@ -14,9 +14,11 @@
       <w>biome</w>
       <w>biomes</w>
       <w>bleachedbone</w>
+      <w>blockname</w>
       <w>blockquote</w>
       <w>blockrailbase</w>
       <w>blockstate</w>
+      <w>bonemeal</w>
       <w>borehead</w>
       <w>boxable</w>
       <w>buildcraft</w>
@@ -31,6 +33,7 @@
       <w>cooldown</w>
       <w>coord</w>
       <w>coords</w>
+      <w>craftable</w>
       <w>crafter</w>
       <w>cullface</w>
       <w>decoupler</w>
@@ -48,6 +51,7 @@
       <w>frostbound</w>
       <w>glowstone</w>
       <w>gradle</w>
+      <w>gregfix</w>
       <w>harvestable</w>
       <w>ident</w>
       <w>invs</w>
@@ -102,6 +106,7 @@
       <w>spawner</w>
       <w>spigotmc</w>
       <w>stonebrick</w>
+      <w>subblocks</w>
       <w>submodel</w>
       <w>subtyped</w>
       <w>tameable</w>
@@ -112,6 +117,7 @@
       <w>thaumium</w>
       <w>tintindex</w>
       <w>trackman</w>
+      <w>tungstensteel</w>
       <w>uncrafted</w>
       <w>uncrafting</w>
       <w>undercutter</w>
@@ -127,6 +133,7 @@
       <w>worldgen</w>
       <w>worldlogic</w>
       <w>worldspike</w>
+      <w>worldspikes</w>
     </words>
   </dictionary>
 </component>

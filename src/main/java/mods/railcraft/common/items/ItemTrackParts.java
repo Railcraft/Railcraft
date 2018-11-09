@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ public class ItemTrackParts extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        IRollingMachineCraftingManager cm = RailcraftCraftingManager.getRollingMachineCraftings();
+        IRollingMachineCraftingManager cm = RailcraftCraftingManager.rollingMachine();
         cm.addShapelessRecipe(getStack(), "ingotBronze");
         cm.addShapelessRecipe(getStack(), "ingotIron");
         cm.addShapelessRecipe(getStack(2), "ingotSteel");

@@ -32,10 +32,10 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.util.Strings;
 
 import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class RailcraftConfig {
     public static final ItemMap<Float> worldspikeFuelStandard = new ItemMap<>();
@@ -107,7 +107,7 @@ public class RailcraftConfig {
     private static int maxTankSize;
     private static int locomotiveHorsepower;
     private static int creosoteTorchOutput;
-    private static int coalcokeTorchOutput;
+    private static int coalCokeTorchOutput;
     private static int villagerID;
     private static String[] enchantments;
     private static int vanillaOreGenChance = 100;
@@ -211,9 +211,8 @@ public class RailcraftConfig {
     private static void loadEnchantment() {
         configMain.addCustomCategoryComment(CAT_ENCHANTMENTS, "Enchantments can be disabled here.\n");
         List<RailcraftEnchantments> enchantmentsList = Arrays.asList(RailcraftEnchantments.VALUES);
-        List<String> enchantmentNames = enchantmentsList.stream().map(RailcraftEnchantments::getTag).collect(Collectors.toList());
         enchantments = configMain.getStringList(CAT_ENCHANTMENTS, "enchantments",
-                enchantmentNames.toArray(new String[enchantmentNames.size()]), "Enabled enchantments.");
+                enchantmentsList.stream().map(RailcraftEnchantments::getTag).toArray(String[]::new), "Enabled enchantments.");
     }
 
     private static void loadWorldspikeSettings() {
@@ -338,7 +337,7 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
-        coalcokeTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "coalcoke.torches", 0, 8, 32, "set the output of the coalcoke and stick recipe for torches, setting to 0 will disable'\nmin=0, default=8, max=32");
+        coalCokeTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "coalcoke.torches", 0, 8, 32, "set the output of the coalcoke and stick recipe for torches, setting to 0 will disable'\nmin=0, default=8, max=32");
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "vanilla.furnace", true, "change to '{t}=false' to disable the Furnace Minecart recipe");
@@ -700,7 +699,7 @@ public class RailcraftConfig {
     }
 
     public static int coalCokeTorchOutput() {
-        return coalcokeTorchOutput;
+        return coalCokeTorchOutput;
     }
 
     public static boolean isRoutingOpsOnly() {
@@ -956,10 +955,10 @@ public class RailcraftConfig {
     private static List<Integer> getIntegerList(String cat, String tag, int maxEntries) {
         Property prop = configMain.get(cat, tag, "");
         String value = prop.getString();
-        if (value.equals(""))
+        if (Strings.isEmpty(value))
             return Collections.emptyList();
         String[] tokens = value.split(",");
-        List<Integer> list = new ArrayList<Integer>(maxEntries);
+        List<Integer> list = new ArrayList<>(maxEntries);
         int count = 0;
         for (String token : tokens) {
             list.add(Integer.valueOf(token));

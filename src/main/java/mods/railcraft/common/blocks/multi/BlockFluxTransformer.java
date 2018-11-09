@@ -33,7 +33,7 @@ import java.util.Random;
 public final class BlockFluxTransformer extends BlockMultiBlockCharge {
 
     public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.5,
-            new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 0.65));
+            new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 1.0));
 
     public BlockFluxTransformer() {
         super(Material.IRON);
@@ -48,7 +48,7 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge {
     }
 
     @Override
-    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;

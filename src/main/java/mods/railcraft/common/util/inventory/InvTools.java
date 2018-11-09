@@ -232,15 +232,35 @@ public abstract class InvTools {
         return nbt;
     }
 
-    public static void addNBTTag(ItemStack stack, String key, String value) {
+    public static void addTagString(ItemStack stack, String key, String value) {
         NBTTagCompound nbt = getItemData(stack);
         nbt.setString(key, value);
     }
 
     @SuppressWarnings("unused")
-    public static void addNBTTag(ItemStack stack, String key, int value) {
+    public static void addTagInt(ItemStack stack, String key, int value) {
         NBTTagCompound nbt = getItemData(stack);
         nbt.setInteger(key, value);
+    }
+
+    public static void addTagBoolean(ItemStack stack, String key, boolean value) {
+        NBTTagCompound nbt = getItemData(stack);
+        nbt.setBoolean(key, value);
+    }
+
+    public static boolean getTagBoolean(ItemStack stack, String key) {
+        NBTTagCompound nbt = getItemData(stack);
+        return nbt.getBoolean(key);
+    }
+
+    public static void addTagDouble(ItemStack stack, String key, double value) {
+        NBTTagCompound nbt = getItemData(stack);
+        nbt.setDouble(key, value);
+    }
+
+    public static double getTagDouble(ItemStack stack, String key) {
+        NBTTagCompound nbt = getItemData(stack);
+        return nbt.getDouble(key);
     }
 
     public static ItemStack depleteItem(ItemStack stack) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
+import java.util.Arrays;
 import java.util.IllegalFormatException;
 import java.util.Map;
 
@@ -36,6 +37,18 @@ public final class LocalizationPlugin {
 
     public static String translateFast(String tag) {
         return I18n.translateToLocal(tag);
+    }
+
+    public static String translate(String tag, ILocalizedObject... args) {
+        String text = translate(tag);
+
+        Object[] objects = Arrays.stream(args).map(a -> translateFast(a.getLocalizationTag())).toArray();
+
+        try {
+            return String.format(text, objects);
+        } catch (IllegalFormatException ex) {
+            return "Format error: " + text;
+        }
     }
 
     public static String translate(String tag, Object... args) {
@@ -65,7 +78,7 @@ public final class LocalizationPlugin {
         String s = "generic";
         if (entry != null) {
             String domain = requireNonNull(entry.getRegistryName()).getNamespace();
-            if (domain.equals("minecraft")) {
+            if ("minecraft".equals(domain)) {
                 s = entry.getName();
             } else {
                 s = domain + '.' + entry.getName();

@@ -15,7 +15,6 @@ import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
-import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
@@ -28,7 +27,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.EnumTools;
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -58,7 +56,7 @@ import java.util.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockWire extends BlockRailcraft implements IPostConnection, IChargeBlock {
+public class BlockWire extends BlockCharge implements IPostConnection {
 
     public static final PropertyEnum<Addon> ADDON = PropertyEnum.create("addon", Addon.class);
     public static final PropertyEnum<Connection> DOWN = PropertyEnum.create("down", Connection.class);
@@ -88,8 +86,6 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
         setDefaultState(defaultState);
         setResistance(1F);
         setHardness(1F);
-        setSoundType(SoundType.METAL);
-        setTickRandomly(true);
     }
 
     @Override
@@ -102,7 +98,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
 
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(
+        RailcraftCraftingManager.rollingMachine().addRecipe(
                 getStack(8, null),
                 "LPL",
                 "PCP",
@@ -111,7 +107,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
                 'P', Items.PAPER,
                 'L', "ingotLead");
 
-        RailcraftCraftingManager.getRollingMachineCraftings().addRecipe(
+        RailcraftCraftingManager.rollingMachine().addRecipe(
                 getStack(8, null),
                 "LPL",
                 "PCP",
@@ -122,7 +118,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     }
 
     @Override
-    public ChargeSpec getChargeDef(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
+    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
         switch (network) {
             case distribution:
                 return CHARGE_DEF;
@@ -165,7 +161,7 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
             IBlockState neighborState = WorldPlugin.getBlockState(worldIn, pos.offset(side));
             Block neighborBlock = neighborState.getBlock();
             if (neighborBlock instanceof IChargeBlock) {
-                ChargeSpec chargeSpec = ((IChargeBlock) neighborBlock).getChargeDef(Charge.distribution, neighborState, worldIn, neighborPos);
+                ChargeSpec chargeSpec = ((IChargeBlock) neighborBlock).getChargeSpec(Charge.distribution, neighborState, worldIn, neighborPos);
                 if (chargeSpec != null) {
                     IChargeBlock.ConnectType connectType = chargeSpec.getConnectType();
                     if (connectionMatcher.get(side).contains(connectType)) {
@@ -283,24 +279,6 @@ public class BlockWire extends BlockRailcraft implements IPostConnection, ICharg
     public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
         return getAddon(blockState).resistance * 0.6F;
-    }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(worldIn, pos, state);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-        deregisterNode(worldIn, pos);
     }
 
     public enum Addon implements IStringSerializable {
