@@ -142,15 +142,10 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         super.drawGradientRect(x1, y1, x2, y2, c1, c2);
     }
 
-    @Nullable
-    private Slot getSlotAtPosition(int par1, int par2) {
-        for (int var3 = 0; var3 < inventorySlots.inventorySlots.size(); ++var3) {
-            Slot var4 = inventorySlots.inventorySlots.get(var3);
-
-            if (isMouseOverSlot(var4, par1, par2))
-                return var4;
-        }
-        return null;
+    private @Nullable Slot getSlotAtPosition(int par1, int par2) {
+        return inventorySlots.inventorySlots.stream()
+                .filter(var4 -> isMouseOverSlot(var4, par1, par2))
+                .findFirst().orElse(null);
     }
 
     /**
@@ -170,13 +165,11 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
         int mX = mouseX - guiLeft;
         int mY = mouseY - guiTop;
 
-        for (Widget element : container.getWidgets()) {
-            if (element.hidden)
-                continue;
-            if (!element.isMouseOver(mX, mY))
-                continue;
-            if (element.mouseClicked(mX, mY, button))
-                return;
+        if (container.getWidgets().stream()
+                .filter(element -> !element.hidden)
+                .filter(element -> element.isMouseOver(mX, mY))
+                .anyMatch(element -> element.mouseClicked(mX, mY, button))) {
+            return;
         }
         super.mouseClicked(mouseX, mouseY, button);
     }
@@ -204,7 +197,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     }
 
     private void drawToolTips(ToolTip toolTips, int mouseX, int mouseY) {
-        if (toolTips.size() > 0) {
+        if (!toolTips.isEmpty()) {
             int left = guiLeft;
             int top = guiTop;
             int length = 0;
@@ -241,16 +234,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
             drawGradientRect(x - 3, y + var14 + 2, x + length + 3, y + var14 + 3, var17, var17);
 
             for (ToolTipLine tip : toolTips) {
-                String line = tip.text;
-
-                line = line.replace('\u00A0', ' ');
-
-                if (tip.format == null)
-                    line = "\u00a77" + line;
-                else
-                    line = tip.format + line;
-
-                fontRenderer.drawStringWithShadow(line, x, y, -1);
+                fontRenderer.drawStringWithShadow(tip.toString(), x, y, -1);
 
                 y += 10 + tip.getSpacing();
             }

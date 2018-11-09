@@ -75,7 +75,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     public List<String> convertToStrings() {
         return stream()
-                .map(line -> line.text)
+                .map(ToolTipLine::toString)
                 .collect(Collectors.toList());
     }
 

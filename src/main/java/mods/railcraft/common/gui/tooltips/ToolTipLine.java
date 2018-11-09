@@ -1,39 +1,36 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.tooltips;
 
 import net.minecraft.util.text.TextFormatting;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ToolTipLine {
 
     public String text;
-    @Nullable
     public TextFormatting format;
     public int spacing;
 
-    public ToolTipLine(String text, @Nullable TextFormatting format) {
+    public ToolTipLine(String text, TextFormatting format) {
         this.text = text;
         this.format = format;
     }
 
     public ToolTipLine(String text) {
-        this(text, null);
+        this(text, TextFormatting.GRAY);
     }
 
     public ToolTipLine() {
-        this("", null);
+        this("", TextFormatting.GRAY);
     }
 
     public void setSpacing(int spacing) {
@@ -44,4 +41,14 @@ public class ToolTipLine {
         return spacing;
     }
 
+    @Override
+    public String toString() {
+        String line;
+        if (format != null)
+            line = format + text;
+        else
+            line = text;
+        line = line.replace('\u00A0', ' ');
+        return line;
+    }
 }
