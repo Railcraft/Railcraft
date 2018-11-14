@@ -56,7 +56,7 @@ mcPassword=ILoveNotch
 
 Initial Setup from the Command Line:
 ```
-gradlew setupDecompWorkspace eclipse
+gradlew setupDecompWorkspace
 ```
 
 The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](https://github.com/CovertJaguar/Railcraft-Localization) files reside in their own repositories and are pulled automatically into the main repo as git submodules. You will however need to run the following commands:
@@ -64,6 +64,16 @@ The [API](https://github.com/CovertJaguar/Railcraft-API) and [Localization](http
 git submodule init
 git submodule update
 ```
+
+For more information on setting up an Intellij modding environement see cpw's video:
+https://youtu.be/G2aPT36kf60
+
+To build, run:
+```
+gradlew build
+```
+
+More information [here](https://github.com/Railcraft/Railcraft/wiki/Running-instructions-for-Minecraft-1.12.2).
 
 ## License
 
