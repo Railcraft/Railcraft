@@ -41,6 +41,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Map;
 import java.util.Random;
 
 public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChargeBlock, ColorPlugin.IColoredBlock {
@@ -48,7 +49,7 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public static final int DEFAULT_SHADE = EnumColor.LIGHT_BLUE.getHexColor();
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.1);
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.1);
 
     public BlockForceTrackEmitter() {
         super(Material.IRON);
@@ -82,13 +83,8 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CHARGE_SPECS;
     }
 
     @Override

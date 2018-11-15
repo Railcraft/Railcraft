@@ -30,13 +30,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Map;
+
 import static net.minecraft.util.EnumFacing.Axis.X;
 import static net.minecraft.util.EnumFacing.Axis.Z;
 
 @SuppressWarnings("unused")
 public class BlockEngravingBench extends BlockEntityDelegate implements IChargeBlock {
-
-    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.1);
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.1);
     public static final PropertyEnum<Axis> AXIS = PropertyEnum.create("axis", Axis.class, X, Z);
 
     public BlockEngravingBench() {
@@ -52,13 +53,8 @@ public class BlockEngravingBench extends BlockEntityDelegate implements IChargeB
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CHARGE_SPECS;
     }
 
     @Override

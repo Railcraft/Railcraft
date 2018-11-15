@@ -31,8 +31,8 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemBattery extends ItemBlockRailcraft<BlockBattery> {
-    public ItemBattery(BlockBattery block) {
+public class ItemBattery<B extends BlockBattery> extends ItemBlockRailcraft<B> {
+    public ItemBattery(B block) {
         super(block);
     }
 

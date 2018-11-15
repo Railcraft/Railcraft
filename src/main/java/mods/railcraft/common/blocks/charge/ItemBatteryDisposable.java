@@ -8,21 +8,16 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
-
-import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.charge.IChargeBlock;
-
-import java.util.Collections;
-import java.util.Map;
+package mods.railcraft.common.blocks.charge;
 
 /**
- * Created by CovertJaguar on 6/14/2017 for Railcraft.
+ * Created by CovertJaguar on 11/9/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITileCharge {
-    default Map<Charge, IChargeBlock.ChargeSpec> getChargeSpec() {
-        return Collections.emptyMap();
+public class ItemBatteryDisposable extends ItemBattery<BlockBatteryDisposable> {
+    public ItemBatteryDisposable(BlockBatteryDisposable block) {
+        super(block);
+        setHasSubtypes(true);
     }
 }

@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -30,7 +31,7 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlock {
-    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.TRACK, 0.01);
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.TRACK, 0.01);
 
     public BlockTrackFlexElectric(TrackType trackType) {
         super(trackType);
@@ -73,12 +74,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CHARGE_SPECS;
     }
 }

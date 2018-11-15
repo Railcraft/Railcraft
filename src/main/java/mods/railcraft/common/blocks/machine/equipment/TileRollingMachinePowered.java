@@ -36,7 +36,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static mods.railcraft.common.util.inventory.InvTools.inc;
@@ -49,7 +51,8 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 @net.minecraftforge.fml.common.Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
 public class TileRollingMachinePowered extends TileRollingMachine implements ISidedInventory, ITileInventory, IHasWork, ITileCharge {
-    private static final IChargeBlock.ChargeSpec CHARGE_DEF = new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, 0.1);
+    private static final Map<Charge, IChargeBlock.ChargeSpec> CHARGE_SPECS = Collections.singletonMap(Charge.distribution,
+            new IChargeBlock.ChargeSpec(IChargeBlock.ConnectType.BLOCK, 0.1));
     private static final int CHARGE_PER_TICK = 10;
     private final AdjacentInventoryCache cache = new AdjacentInventoryCache(tileCache, null, InventorySorter.SIZE_DESCENDING);
     private final Set<Object> actions = new HashSet<>();
@@ -60,13 +63,8 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     }
 
     @Override
-    public IChargeBlock.ChargeSpec getChargeDef(Charge network) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, IChargeBlock.ChargeSpec> getChargeSpec() {
+        return CHARGE_SPECS;
     }
 
     @Override

@@ -63,12 +63,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
-    public static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.TRACK, 0.01);
+    // TODO: Move to rail network
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
     public static final PropertyBool TICKING = PropertyBool.create("ticking");
     public static final IUnlistedProperty<TrackType> TRACK_TYPE = UnlistedProperty.create("track_type", TrackType.class);
@@ -525,12 +524,10 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return getTrackType(world, pos).isElectric() ? CHARGE_DEF : null;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        if (getTrackType(world, pos).isElectric())
+            return CHARGE_SPECS;
+        else
+            return Collections.emptyMap();
     }
 }

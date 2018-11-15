@@ -119,20 +119,16 @@ public class ChargeNetwork implements Charge.INetwork {
         if (worldObj == null)
             return;
         IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-        if (state.getBlock() instanceof IChargeBlock) {
-            IChargeBlock.ChargeSpec chargeSpec = getChargeDef(state, pos);
-            if (chargeSpec != null) {
-                CONNECTION_MAPS.get(chargeSpec.getConnectType()).forEach((k, v) -> {
-                    BlockPos otherPos = pos.add(k);
-                    IBlockState otherState = WorldPlugin.getBlockState(worldObj, otherPos);
-                    if (otherState.getBlock() instanceof IChargeBlock) {
-                        IChargeBlock.ChargeSpec other = getChargeDef(otherState, otherPos);
-                        if (other != null && CONNECTION_MAPS.get(other.getConnectType()).get(pos.subtract(otherPos)).contains(chargeSpec.getConnectType())) {
-                            action.accept(otherPos, otherState);
-                        }
-                    }
-                });
-            }
+        IChargeBlock.ChargeSpec chargeSpec = getChargeSpec(state, pos);
+        if (chargeSpec != null) {
+            CONNECTION_MAPS.get(chargeSpec.getConnectType()).forEach((k, v) -> {
+                BlockPos otherPos = pos.add(k);
+                IBlockState otherState = WorldPlugin.getBlockState(worldObj, otherPos);
+                IChargeBlock.ChargeSpec other = getChargeSpec(otherState, otherPos);
+                if (other != null && CONNECTION_MAPS.get(other.getConnectType()).get(pos.subtract(otherPos)).contains(chargeSpec.getConnectType())) {
+                    action.accept(otherPos, otherState);
+                }
+            });
         }
     }
 
@@ -170,7 +166,7 @@ public class ChargeNetwork implements Charge.INetwork {
 
     @Override
     public boolean addNode(BlockPos pos, IBlockState state) {
-        IChargeBlock.ChargeSpec chargeSpec = getChargeDef(state, pos);
+        IChargeBlock.ChargeSpec chargeSpec = getChargeSpec(state, pos);
         if (chargeSpec != null && needsNode(pos, chargeSpec)) {
             printDebug("Registering Node: {0}->{1}", pos, chargeSpec);
             queue.put(pos, new ChargeNode(pos, chargeSpec));
@@ -184,12 +180,12 @@ public class ChargeNetwork implements Charge.INetwork {
         return node == null || !node.isValid() || !Objects.equals(node.chargeSpec, chargeSpec);
     }
 
-    private @Nullable IChargeBlock.ChargeSpec getChargeDef(IBlockState state, BlockPos pos) {
+    private @Nullable IChargeBlock.ChargeSpec getChargeSpec(IBlockState state, BlockPos pos) {
         World worldObj = world.get();
         if (worldObj == null)
             return null;
         if (state.getBlock() instanceof IChargeBlock) {
-            return ((IChargeBlock) state.getBlock()).getChargeSpec(network, state, worldObj, pos);
+            return ((IChargeBlock) state.getBlock()).getChargeSpecs(state, worldObj, pos).get(network);
         }
         return null;
     }
@@ -214,7 +210,7 @@ public class ChargeNetwork implements Charge.INetwork {
             World worldObj = world.get();
             if (worldObj != null) {
                 IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
-                IChargeBlock.ChargeSpec chargeSpec = getChargeDef(state, pos);
+                IChargeBlock.ChargeSpec chargeSpec = getChargeSpec(state, pos);
                 if (chargeSpec != null) {
                     node = new ChargeNode(pos, chargeSpec);
                     addNodeImpl(pos, node);

@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -48,7 +49,7 @@ import java.util.Random;
 public class BlockChargeTrap extends BlockCharge {
     public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.025);
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.025);
 
     public BlockChargeTrap() {
         super(Material.IRON);
@@ -78,13 +79,8 @@ public class BlockChargeTrap extends BlockCharge {
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CHARGE_SPECS;
     }
 
     /**
@@ -120,6 +116,7 @@ public class BlockChargeTrap extends BlockCharge {
         if (stateIn.getValue(REDSTONE))
             Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 10);
     }
+
     /**
      * Called When an Entity Collided with the Block
      */

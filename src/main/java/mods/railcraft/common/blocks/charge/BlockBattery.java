@@ -25,6 +25,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
@@ -66,12 +68,7 @@ public abstract class BlockBattery extends BlockCharge {
     protected abstract IChargeBlock.ChargeSpec getChargeSpec(IBlockState state);
 
     @Override
-    public @Nullable IChargeBlock.ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return getChargeSpec(state);
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return Collections.singletonMap(Charge.distribution, getChargeSpec(state));
     }
 }

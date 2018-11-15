@@ -68,7 +68,7 @@ public class BlockWire extends BlockCharge implements IPostConnection {
     @SuppressWarnings("unchecked")
     public static final PropertyEnum<Connection>[] connectionProperties = new PropertyEnum[]{DOWN, UP, NORTH, SOUTH, WEST, EAST};
     private static final EnumMap<EnumFacing, EnumSet<IChargeBlock.ConnectType>> connectionMatcher = new EnumMap<>(EnumFacing.class);
-    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.WIRE, 0.02);
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.WIRE, 0.02);
 
     static {
         for (EnumFacing side : EnumFacing.VALUES) {
@@ -118,13 +118,8 @@ public class BlockWire extends BlockCharge implements IPostConnection {
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CHARGE_SPECS;
     }
 
     @SideOnly(Side.CLIENT)
@@ -161,7 +156,7 @@ public class BlockWire extends BlockCharge implements IPostConnection {
             IBlockState neighborState = WorldPlugin.getBlockState(worldIn, pos.offset(side));
             Block neighborBlock = neighborState.getBlock();
             if (neighborBlock instanceof IChargeBlock) {
-                ChargeSpec chargeSpec = ((IChargeBlock) neighborBlock).getChargeSpec(Charge.distribution, neighborState, worldIn, neighborPos);
+                ChargeSpec chargeSpec = ((IChargeBlock) neighborBlock).getChargeSpecs(neighborState, worldIn, neighborPos).get(Charge.distribution);
                 if (chargeSpec != null) {
                     IChargeBlock.ConnectType connectType = chargeSpec.getConnectType();
                     if (connectionMatcher.get(side).contains(connectType)) {

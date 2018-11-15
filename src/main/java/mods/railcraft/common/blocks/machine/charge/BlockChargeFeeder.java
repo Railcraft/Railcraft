@@ -35,6 +35,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Collections;
+import java.util.Map;
+
 /**
  * Created by CovertJaguar on 7/22/2016 for Railcraft.
  *
@@ -70,13 +73,9 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return getVariant(state).getChargeSpec();
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        // TODO: Redesign for bridging distribution/rail networks.
+        return Collections.singletonMap(Charge.distribution, getVariant(state).getChargeSpec());
     }
 
     /**

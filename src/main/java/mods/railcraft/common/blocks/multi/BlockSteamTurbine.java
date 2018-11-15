@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -42,8 +43,9 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
     public static final IProperty<Texture> TEXTURE = PropertyEnum.create("texture", Texture.class);
-    private static final ChargeSpec CHARGE_DEF = new ChargeSpec(ConnectType.BLOCK, 0.0,
-            new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, TileSteamTurbine.IC2_OUTPUT, TileSteamTurbine.IC2_OUTPUT, 1.0));
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.0,
+            new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED,
+                    TileSteamTurbine.IC2_OUTPUT, TileSteamTurbine.IC2_OUTPUT, 1.0));
 
     public BlockSteamTurbine() {
         super(Material.IRON);
@@ -54,13 +56,8 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
     }
 
     @Override
-    public ChargeSpec getChargeSpec(Charge network, IBlockState state, IBlockAccess world, BlockPos pos) {
-        switch (network) {
-            case distribution:
-                return CHARGE_DEF;
-            default:
-                return null;
-        }
+    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CHARGE_SPECS;
     }
 
     @Override
