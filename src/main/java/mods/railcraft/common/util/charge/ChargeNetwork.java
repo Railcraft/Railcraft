@@ -652,7 +652,7 @@ public class ChargeNetwork implements Charge.INetwork {
                     );
                     for (Map.Entry<EntityEquipmentSlot, IChargeProtectionItem> e : protections.entrySet()) {
                         if (remainingDamage > 0.1) {
-                            IChargeProtectionItem.ZepResult result = e.getValue().zap(livingEntity.getItemStackFromSlot(e.getKey()), livingEntity, remainingDamage);
+                            IChargeProtectionItem.ZapResult result = e.getValue().zap(livingEntity.getItemStackFromSlot(e.getKey()), livingEntity, remainingDamage);
                             entity.setItemStackToSlot(e.getKey(), result.stack);
                             remainingDamage -= result.damagePrevented;
                         } else break;
