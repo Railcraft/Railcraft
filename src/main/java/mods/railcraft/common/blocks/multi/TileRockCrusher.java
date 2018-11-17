@@ -16,7 +16,6 @@ import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -34,7 +33,6 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -237,7 +235,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 });
             }
 
-            if (isMaster()) {
+            if (isValidMaster()) {
                 if (clock % 16 == 0)
                     processActions();
 

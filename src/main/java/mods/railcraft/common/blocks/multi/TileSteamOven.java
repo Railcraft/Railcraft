@@ -166,7 +166,7 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
             return;
         }
 
-        if (isMaster()) {
+        if (isValidMaster()) {
             if (clock % COOK_STEP == 0) {
                 setCooking(false);
                 if (!paused)

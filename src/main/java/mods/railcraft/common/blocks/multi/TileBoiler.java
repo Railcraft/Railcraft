@@ -93,7 +93,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
             @Override
             public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
-                if (!isMaster()) return 0;
+                if (!isValidMaster()) return 0;
                 onFillWater();
                 return super.fillInternal(resource, doFill);
             }

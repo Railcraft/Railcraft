@@ -148,7 +148,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase
             }
         }
 
-        if (!tile.isMaster() || tile.isInvalid())
+        if (!tile.isValidMaster() || tile.isInvalid())
             return;
         int height = getTankHeight(tile);
         float yOffset = height / 2f;

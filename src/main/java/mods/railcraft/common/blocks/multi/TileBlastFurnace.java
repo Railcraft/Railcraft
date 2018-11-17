@@ -228,7 +228,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         if (mBlock != null)
             InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, FUEL_FILTER);
 
-        if (isMaster()) {
+        if (isValidMaster()) {
             updateMaster();
         }
     }

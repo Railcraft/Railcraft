@@ -155,13 +155,8 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
         super.update();
 
         if (Game.isHost(world)) {
-            if (isStructureValid()) {
-                if (isMaster())
-                    addToNet();
-            } else
-                dropFromNet();
-
-            if (isMaster()) {
+            if (isValidMaster()) {
+                addToNet();
                 boolean addedEnergy = false;
                 if (energy < IC2_OUTPUT) {
                     FluidStack steam = tankSteam.drainInternal(STEAM_USAGE, false);
@@ -193,7 +188,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
                     battery.addCharge(energy);
                     energy = 0;
                 }
-            }
+            } else dropFromNet();
         }
 
         TankManager tMan = getTankManager();
