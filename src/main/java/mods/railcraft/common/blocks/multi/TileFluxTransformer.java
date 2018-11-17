@@ -16,7 +16,6 @@ import mods.railcraft.api.charge.IBattery;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -73,11 +72,6 @@ public final class TileFluxTransformer extends TileMultiBlockCharge implements I
     @Override
     protected void setWorldCreate(World worldIn) {
         setWorld(worldIn);
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        return false;
     }
 
     @Override

@@ -18,7 +18,6 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTurbineRotor;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.buildcraft.triggers.INeedsMaintenance;
@@ -34,7 +33,6 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -244,16 +242,6 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
     public void onBlockRemoval() {
         super.onBlockRemoval();
         InvTools.dropInventory(inv, world, getPos());
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TURBINE, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     public boolean hasEnergy() {

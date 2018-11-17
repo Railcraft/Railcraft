@@ -18,7 +18,6 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
@@ -33,7 +32,6 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -272,16 +270,6 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
     @Override
     public EnumFacing[] getValidRotations() {
         return Plane.HORIZONTAL.facings();
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
-        if (masterBlock != null) {
-            GuiHandler.openGui(EnumGui.STEAN_OVEN, player, world, masterBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override

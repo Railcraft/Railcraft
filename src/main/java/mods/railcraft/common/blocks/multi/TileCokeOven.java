@@ -19,7 +19,6 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -231,16 +230,6 @@ public final class TileCokeOven extends TileMultiBlockOven implements ISidedInve
                 if (clock % FluidTools.BUCKET_FILL_TIME == 0)
                     FluidTools.fillContainers(getTankManager(), this, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT, Fluids.CREOSOTE.get());
             }
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
-        if (mBlock != null && isStructureValid()) {
-            GuiHandler.openGui(EnumGui.COKE_OVEN, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override

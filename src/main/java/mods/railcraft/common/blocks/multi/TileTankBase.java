@@ -20,7 +20,6 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.StandaloneInventory;
@@ -415,16 +414,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
         // Prevents players from getting inside tanks using boats
         return heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override

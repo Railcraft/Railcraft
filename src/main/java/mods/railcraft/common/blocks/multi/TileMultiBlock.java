@@ -461,7 +461,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     }
 
     @Override
-    public boolean openGui(EntityPlayer player) {
+    public final boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
 
         if (masterBlock != null && isStructureValid() && masterBlock.getGui() != null) {

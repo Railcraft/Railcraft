@@ -18,14 +18,12 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotWaterOrEmpty;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -181,16 +179,6 @@ public class TileTankWater extends TileTank {
             if (!tMan.isEmpty())
                 tMan.push(tileCache, Predicates.notInstanceOf(getClass()), LIQUID_OUTPUTS, 0, OUTPUT_RATE);
         }
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.TANK, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
     }
 
     @Override

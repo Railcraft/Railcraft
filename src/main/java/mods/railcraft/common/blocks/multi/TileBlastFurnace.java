@@ -15,7 +15,6 @@ import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -28,7 +27,6 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -367,16 +365,6 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
     void resetCooking() {
         cookTime = 0;
         setCooking(false);
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock masterBlock = getMasterBlock();
-        if (masterBlock != null) {
-            GuiHandler.openGui(EnumGui.BLAST_FURNACE, player, world, masterBlock.getX(), masterBlock.getY(), masterBlock.getZ());
-            return true;
-        }
-        return false;
     }
 
     @Override

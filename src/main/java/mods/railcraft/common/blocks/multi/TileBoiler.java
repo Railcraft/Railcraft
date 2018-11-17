@@ -245,12 +245,6 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     public abstract Predicate<TileEntity> getOutputFilter();
 
     @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
-        return mBlock != null && mBlock.openGui(player);
-    }
-
-    @Override
     protected int getMaxRecursionDepth() {
         return 20;
     }

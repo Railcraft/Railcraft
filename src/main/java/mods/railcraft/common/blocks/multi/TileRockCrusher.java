@@ -301,16 +301,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     }
 
     @Override
-    public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, world, mBlock.getPos());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         data.setInteger("processTime", processTime);
