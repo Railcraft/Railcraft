@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -89,23 +88,18 @@ public class ItemFluidContainer extends ItemRailcraft {
     }
 
     private boolean tryPlaceContainedLiquid(World world, BlockPos pos) {
-        Fluid fl = fluid.get();
-        if (fl == null)
-            return false;
-        Block fluidBlock = fl.getBlock();
-        if (fluidBlock == null)
-            return false;
+        return fluid.map(Fluid::getBlock).map(b -> {
+            Material material = WorldPlugin.getBlockMaterial(world, pos);
 
-        Material material = WorldPlugin.getBlockMaterial(world, pos);
+            if (!world.isAirBlock(pos) && material.isSolid())
+                return false;
 
-        if (!world.isAirBlock(pos) && material.isSolid())
-            return false;
+            if (!world.isRemote && !material.isSolid() && !material.isLiquid())
+                world.destroyBlock(pos, true);
 
-        if (!world.isRemote && !material.isSolid() && !material.isLiquid())
-            world.destroyBlock(pos, true);
-
-        world.setBlockState(pos, fluidBlock.getDefaultState().withProperty(BlockFluidBase.LEVEL, fluidBlock instanceof BlockFluidFinite ? 15 : 0));
-        return true;
+            world.setBlockState(pos, b.getDefaultState().withProperty(BlockFluidBase.LEVEL, b instanceof BlockFluidFinite ? 15 : 0));
+            return true;
+        }).orElse(false);
     }
 
     @Override

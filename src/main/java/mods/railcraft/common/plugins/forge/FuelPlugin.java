@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,12 +13,12 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.logging.log4j.util.Strings;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -51,12 +51,9 @@ public class FuelPlugin {
         try {
             Item item = stack.getItem();
 
-            Block block = InvTools.getBlockFromStack(stack);
-            if (block != null) {
-                String name = block.getTranslationKey();
-                if (name != null && name.contains("blockScaffold"))
-                    return 0;
-            }
+            String name = InvTools.getBlockStateFromStack(stack).getBlock().getTranslationKey();
+            if (!Strings.isEmpty(name) && name.contains("blockScaffold"))
+                return 0;
 
 //            if (itemID == Item.coal.itemID && stack.getItemDamage() == 0)
 //                return 1600;
@@ -65,11 +62,11 @@ public class FuelPlugin {
                 return 1000;
 
             FluidStack liquid = FluidItemHelper.getFluidStackInContainer(stack);
-            if (liquid != null && Fluids.LAVA.get() == liquid.getFluid())
+            if (liquid != null && Fluids.LAVA.is(liquid.getFluid()))
                 return liquid.amount;
 
-            String name = stack.getItem().getTranslationKey();
-            if (name != null && name.contains("itemScrap"))
+            name = stack.getItem().getTranslationKey();
+            if (!Strings.isEmpty(name) && name.contains("itemScrap"))
                 return 0;
 
             return TileEntityFurnace.getItemBurnTime(stack);

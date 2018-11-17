@@ -55,7 +55,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -392,29 +391,14 @@ public class ModuleCore extends RailcraftModulePayload {
 
             private void addLiquidFuels() {
                 int bioHeat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
-                Fluid ethanol = Fluids.BIOETHANOL.get();
-                if (ethanol != null)
-                    FluidFuelManager.addFuel(ethanol, bioHeat); // Biofuel
+                Fluids.BIOETHANOL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
+                Fluids.BIOFUEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
+                Fluids.IC2BIOGAS.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
 
-                Fluid biofuel = Fluids.BIOFUEL.get();
-                if (biofuel != null)
-                    FluidFuelManager.addFuel(biofuel, bioHeat); // Biofuel
-
-                Fluid fuel = Fluids.FUEL.get();
-                if (fuel != null)
-                    FluidFuelManager.addFuel(fuel, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())); // Fuel
-
-                Fluid coal = Fluids.COAL.get();
-                if (coal != null)
-                    FluidFuelManager.addFuel(coal, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())); // Liquefaction Coal
-
-                Fluid pyrotheum = Fluids.PYROTHEUM.get();
-                if (pyrotheum != null)
-                    FluidFuelManager.addFuel(pyrotheum, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())); // Blazing Pyrotheum
-
-                Fluid creosote = Fluids.CREOSOTE.get();
-                if (creosote != null)
-                    FluidFuelManager.addFuel(creosote, 4800); // Creosote
+                Fluids.FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.COAL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.PYROTHEUM.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.CREOSOTE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (4800 * RailcraftConfig.boilerFuelMultiplier())));
             }
         });
     }

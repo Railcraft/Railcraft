@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,8 +43,7 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
     }
 
     @SideOnly(Side.CLIENT)
-    @Nullable
-    default StateMapperBase getStateMapper() {
+    default @Nullable StateMapperBase getStateMapper() {
         return null;
     }
 
@@ -62,13 +61,15 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
     }
 
     @SideOnly(Side.CLIENT)
-    default ResourceLocation getBlockTexture() {
-        return this.getRegistryName();
+    default @Nullable ResourceLocation getBlockTexture() {
+        return getRegistryName();
     }
 
     @SideOnly(Side.CLIENT)
     default void registerTextures(TextureMap textureMap) {
-        TextureAtlasSheet.unstitchIcons(textureMap, getBlockTexture(), getTextureDimensions());
+        ResourceLocation texture = getBlockTexture();
+        if (texture != null)
+            TextureAtlasSheet.unstitchIcons(textureMap, texture, getTextureDimensions());
         IVariantEnum[] variants = getVariants();
         if (variants != null) {
             for (IVariantEnum variant : variants) {
@@ -80,7 +81,6 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
         }
     }
 
-    @SideOnly(Side.CLIENT)
     default Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(1, 1);
     }

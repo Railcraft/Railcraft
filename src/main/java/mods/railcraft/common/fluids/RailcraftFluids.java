@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -24,48 +25,44 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.function.Function;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public enum RailcraftFluids {
 
-    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 320, 1500, false) {
-        @Override
-        Block makeBlock(Fluid fluid) {
-            return new BlockRailcraftFluid(fluid, Material.WATER) {
-                @Override
-                public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-                    super.onEntityCollision(worldIn, pos, state, entityIn);
-                    if (entityIn instanceof EntityLivingBase && RailcraftPotions.CREOSOTE.isEnabled()) {
-                        EntityLivingBase living = (EntityLivingBase) entityIn;
-                        Potion potion = RailcraftPotions.CREOSOTE.get();
-                        if (!living.isPotionActive(potion)) {
-                            living.addPotionEffect(new PotionEffect(potion, 100, 0));
-                        }
+    CREOSOTE("fluid.creosote", Fluids.CREOSOTE, 800, 320, 1500, false, f -> {
+        return new BlockRailcraftFluid(f, Material.WATER) {
+            @Override
+            public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+                super.onEntityCollision(worldIn, pos, state, entityIn);
+                if (entityIn instanceof EntityLivingBase && RailcraftPotions.CREOSOTE.isEnabled()) {
+                    EntityLivingBase living = (EntityLivingBase) entityIn;
+                    Potion potion = RailcraftPotions.CREOSOTE.get();
+                    if (!living.isPotionActive(potion)) {
+                        living.addPotionEffect(new PotionEffect(potion, 100, 0));
                     }
                 }
-            }.setFlammable(true).setFlammability(10).setParticleColor(0xcc / 255f, 0xa3 / 255f, 0x00 / 255f);
-        }
-    },
-    STEAM("fluid.steam", Fluids.STEAM, -1000, 400, 500, true) {
-        @Override
-        Block makeBlock(Fluid fluid) {
-            return new BlockRailcraftFluidFinite(fluid, new MaterialLiquid(MapColor.AIR)).setNoFlow().setParticleColor(0xf2 / 255f, 0xf2 / 255f, 0xf2 / 255f);
-        }
-    };
+            }
+        }.setFlammable(true).setFlammability(10).setParticleColor(0xcc / 255f, 0xa3 / 255f, 0x00 / 255f);
+    }),
+    STEAM("fluid.steam", Fluids.STEAM, -1000, 400, 500, true,
+            f -> new BlockRailcraftFluidFinite(f, new MaterialLiquid(MapColor.AIR)).setParticleColor(0xf2 / 255f, 0xf2 / 255f, 0xf2 / 255f)
+    );
     public static final RailcraftFluids[] VALUES = values();
     private final String tag;
     private final String name;
@@ -76,10 +73,34 @@ public enum RailcraftFluids {
     private final boolean isGaseous;
     final ModelResourceLocation location;
     private Fluid railcraftFluid;
-    private Block railcraftBlock;
-    private ItemBlock railcraftItem;
+    private final Def<? extends IRailcraftBlock> def;
 
-    RailcraftFluids(String tag, Fluids standardFluid, int density, int temperature, int viscosity, boolean isGaseous) {
+    private class Def<B extends BlockFluidBase & IRailcraftBlock> {
+        private final Function<Fluid, B> blockSupplier;
+        private B block;
+        private ItemBlockRailcraft<B> item;
+
+        public Def(Function<Fluid, B> blockSupplier) {
+            this.blockSupplier = blockSupplier;
+        }
+
+        private void initBlock() {
+            Fluid fluid;
+            if (block == null && RailcraftConfig.isBlockEnabled(tag) && (fluid = standardFluid.get()) != null) {
+                block = blockSupplier.apply(fluid);
+                block.setRegistryName(name);
+                block.setTranslationKey("railcraft." + tag);
+                item = new ItemBlockRailcraft<>(block);
+                item.setRegistryName(name);
+                RailcraftRegistry.register(def.block, def.item);
+                railcraftFluid.setBlock(def.block);
+            }
+        }
+    }
+
+    <B extends BlockFluidBase & IRailcraftBlock>
+    RailcraftFluids(String tag, Fluids standardFluid, int density, int temperature, int viscosity, boolean isGaseous,
+                    Function<Fluid, B> blockSupplier) {
         this.tag = tag;
         this.standardFluid = standardFluid;
         this.density = density;
@@ -87,7 +108,9 @@ public enum RailcraftFluids {
         this.viscosity = viscosity;
         this.isGaseous = isGaseous;
         this.name = name().toLowerCase();
-        this.location = new ModelResourceLocation(Railcraft.MOD_ID + ":fluids", this.name);
+        this.location = new ModelResourceLocation(Railcraft.MOD_ID + ":fluids", name);
+        this.def = new Def<>(blockSupplier);
+
     }
 
     public static void preInitFluids() {
@@ -104,7 +127,7 @@ public enum RailcraftFluids {
 
     private void init() {
         initFluid();
-        initBlock();
+        def.initBlock();
         checkStandardFluidBlock();
         if (FMLCommonHandler.instance().getSidedDelegate().getSide().isClient())
             initClient();
@@ -112,7 +135,7 @@ public enum RailcraftFluids {
 
     private void postInit() {
         checkStandardFluidBlock();
-        if (standardFluid.get() == null && RailcraftConfig.isFluidEnabled(standardFluid.getTag()))
+        if (!standardFluid.isPresent() && RailcraftConfig.isFluidEnabled(standardFluid.getTag()))
             throw new MissingFluidException(standardFluid.getTag());
     }
 
@@ -134,10 +157,10 @@ public enum RailcraftFluids {
 
     @SideOnly(Side.CLIENT)
     private void initClient() {
-        if (railcraftBlock != null && railcraftItem != null) {
-            ModelBakery.registerItemVariants(railcraftItem);
-            ModelLoader.setCustomMeshDefinition(railcraftItem, (stack) -> location);
-            ModelLoader.setCustomStateMapper(railcraftBlock, new StateMapperBase() {
+        if (def.block != null && def.item != null) {
+            ModelBakery.registerItemVariants(def.item);
+            ModelLoader.setCustomMeshDefinition(def.item, (stack) -> location);
+            ModelLoader.setCustomStateMapper(def.block, new StateMapperBase() {
                 @Override
                 protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
                     return location;
@@ -146,30 +169,15 @@ public enum RailcraftFluids {
         }
     }
 
-    abstract Block makeBlock(Fluid fluid);
-
-    private void initBlock() {
-        Fluid fluid;
-        if (railcraftBlock == null && RailcraftConfig.isBlockEnabled(tag) && (fluid = standardFluid.get()) != null) {
-            railcraftBlock = makeBlock(fluid);
-            railcraftBlock.setRegistryName(name);
-            railcraftBlock.setTranslationKey("railcraft." + tag);
-            railcraftItem = new ItemBlockRailcraft(railcraftBlock);
-            railcraftItem.setRegistryName(name);
-            RailcraftRegistry.register(railcraftBlock, railcraftItem);
-            railcraftFluid.setBlock(railcraftBlock);
-        }
-    }
-
     private void checkStandardFluidBlock() {
-        if (railcraftBlock == null)
+        if (def.block == null)
             return;
         Fluid fluid = standardFluid.get();
         if (fluid == null)
             return;
         Block fluidBlock = fluid.getBlock();
         if (fluidBlock == null)
-            fluid.setBlock(railcraftBlock);
+            fluid.setBlock(def.block);
 //        } else {
 //            GameRegistry.UniqueIdentifier blockID = GameRegistry.findUniqueIdentifierFor(fluidBlock);
 //            Game.log(Level.WARN, "Pre-existing {0} fluid block detected, deferring to {1}:{2}, "
@@ -178,8 +186,8 @@ public enum RailcraftFluids {
 //        }
     }
 
-    public Block getBlock() {
-        return railcraftBlock;
+    public BlockFluidBase getBlock() {
+        return def.block;
     }
 
     public static class MissingFluidException extends RuntimeException {

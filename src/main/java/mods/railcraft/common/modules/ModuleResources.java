@@ -59,7 +59,7 @@ public class ModuleResources extends RailcraftModulePayload {
 
             @Override
             public void init() {
-                if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
+                if (Fluids.CREOSOTE.isPresent() && RailcraftConfig.creosoteTorchOutput() > 0) {
                     FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
                     CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                             "C",
@@ -74,7 +74,6 @@ public class ModuleResources extends RailcraftModulePayload {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
-                        boolean ic2 = Mod.IC2.isLoaded();
                         RailcraftCraftingManager.getBlastFurnaceCraftings().addRecipe(Ingredient.fromItem(ItemDust.getItemFromBlock(Blocks.IRON_BLOCK)), 11520, EnumMetal.BLOCK_STEEL.getStack(), RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.SLAG));
                     }
 

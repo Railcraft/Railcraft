@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,13 +19,17 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum Fluids {
 
-    WATER, LAVA, FUEL, BIOFUEL, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
+    WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
     private final String tag;
 
     Fluids() {
@@ -54,8 +58,7 @@ public enum Fluids {
         return fluidStack != null && fluidStack.amount > 0;
     }
 
-    @Nullable
-    public static FluidStack copy(@Nullable FluidStack fluidStack) {
+    public static @Nullable FluidStack copy(@Nullable FluidStack fluidStack) {
         return fluidStack == null ? null : fluidStack.copy();
     }
 
@@ -63,49 +66,69 @@ public enum Fluids {
         return tag;
     }
 
-    @Nullable
-    public Fluid get() {
+    public @Nullable Fluid get() {
         return FluidRegistry.getFluid(tag);
+    }
+
+    public Optional<Fluid> object() {
+        return Optional.ofNullable(get());
+    }
+
+    public boolean isPresent() {
+        return get() != null;
+    }
+
+    public void ifPresent(Consumer<Fluid> consumer) {
+        Fluid fluid = get();
+        if (fluid != null)
+            consumer.accept(fluid);
+    }
+
+    public <U> Optional<U> map(Function<Fluid, ? extends U> mapper) {
+        Objects.requireNonNull(mapper);
+        if (!isPresent())
+            return Optional.empty();
+        else {
+            return Optional.ofNullable(mapper.apply(get()));
+        }
     }
 
     /**
      * Gets a FluidStack filled with qty milliBuckets worth of Fluid.
      */
-    @Nullable
-    public FluidStack get(int qty) {
+    public @Nullable FluidStack get(int qty) {
         return FluidRegistry.getFluidStack(tag, qty);
     }
 
     /**
      * Gets a FluidStack filled with n buckets worth of Fluid.
      */
-    @Nullable
-    public FluidStack getB(int n) {
+    public @Nullable FluidStack getB(int n) {
         return FluidRegistry.getFluidStack(tag, n * FluidTools.BUCKET_VOLUME);
     }
 
     /**
      * Gets a FluidStack filled with one buckets worth of Fluid.
      */
-    @Nullable
-    public FluidStack getBucket() {
+    public @Nullable FluidStack getBucket() {
         return FluidRegistry.getFluidStack(tag, FluidTools.BUCKET_VOLUME);
     }
 
     public boolean is(@Nullable Fluid fluid) {
-        return get() == fluid;
+        return fluid != null && get() == fluid;
     }
 
     public boolean is(@Nullable FluidStack fluidStack) {
-        return fluidStack != null && get() == fluidStack.getFluid();
+        return fluidStack != null && is(fluidStack.getFluid());
     }
 
     public boolean is(@Nullable Block fluidBlock) {
-        return fluidBlock != null && get() == FluidTools.getFluid(fluidBlock);
+        return fluidBlock != null && is(FluidTools.getFluid(fluidBlock));
     }
 
     public boolean isContained(ItemStack containerStack) {
-        return !InvTools.isEmpty(containerStack) && FluidItemHelper.containsFluid(containerStack, get());
+        Fluid fluid = get();
+        return fluid != null && !InvTools.isEmpty(containerStack) && FluidItemHelper.containsFluid(containerStack, fluid);
     }
 
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,7 +79,7 @@ public class ModuleForestry extends RailcraftModulePayload {
                         '#', RailcraftItems.CONCRETE,
                         'r', RailcraftItems.REBAR);
 
-                if (Fluids.CREOSOTE.get() != null && RailcraftConfig.creosoteTorchOutput() > 0) {
+                if (Fluids.CREOSOTE.isPresent() && RailcraftConfig.creosoteTorchOutput() > 0) {
                     ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                             "#",
                             "|",
