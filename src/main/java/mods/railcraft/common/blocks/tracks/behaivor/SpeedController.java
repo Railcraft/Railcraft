@@ -13,6 +13,7 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.MinecartHooks;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.util.misc.Game;
@@ -39,11 +40,7 @@ public enum SpeedController {
         private boolean isDerailing(EntityMinecart cart) {
             if (CartToolsAPI.getCartSpeedUncapped(cart) > 0.35F && MiscTools.RANDOM.nextInt(500) == 250)
                 return true;
-            for (EntityMinecart c : Train.getTrain(cart)) {
-                if (MinecartHooks.INSTANCE.isDerailed(c))
-                    return true;
-            }
-            return false;
+            return Train.getTrain(cart).stream().anyMatch(MinecartHooks.INSTANCE::isDerailed);
         }
 
         @Override
@@ -52,13 +49,13 @@ public enum SpeedController {
             if (cart != null && Game.isHost(cart.world)) {
                 BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(state);
                 if (TrackShapeHelper.isLevelStraight(shape) && isDerailing(cart)) {
-                    cart.getEntityData().setByte("derail", (byte) 100);
+                    cart.getEntityData().setByte(CartConstants.TAG_DERAIL, (byte) 100);
                     if (Math.abs(cart.motionX) > Math.abs(cart.motionZ))
                         cart.motionZ = cart.motionX;
                     else
                         cart.motionX = cart.motionZ;
 
-                    // TODO make derail
+                    // TODO make derail ( is this not good enough? -CJ )
                     switch (shape) {
                         case NORTH_SOUTH:
                             return BlockRailBase.EnumRailDirection.EAST_WEST;

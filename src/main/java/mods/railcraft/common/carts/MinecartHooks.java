@@ -76,7 +76,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     private static final int MAX_INTERACT_DIST_SQ = 5 * 5;
 
     public boolean isDerailed(EntityMinecart cart) {
-        return cart.getEntityData().getInteger("derail") > 0;
+        return cart.getEntityData().getInteger(CartConstants.TAG_DERAIL) > 0;
     }
 
     public boolean canMount(EntityMinecart cart) {
@@ -299,13 +299,14 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
             data.setByte("elevator", elevator);
         }
 
-        byte derail = data.getByte("derail");
+        byte derail = data.getByte(CartConstants.TAG_DERAIL);
         if (derail > 0) {
             derail--;
             data.setByte("derail", derail);
-            if (derail == 0) {
-                cart.setCanUseRail(true);
-            }
+            // nothing ever sets it to false, so why set it true here?
+//            if (derail == 0) {
+//                cart.setCanUseRail(true);
+//            }
         }
 
         if (data.getBoolean("explode")) {
@@ -414,18 +415,21 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         }
         if (cart.canBeRidden()) {
             //TODO: this will interfere with carts that multiple players can ride, re-evaluate
-//            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
-//                event.setCanceled(true);
-//                return;
-//            }
+            // Don't try to ride carts being ridden by someone else
+            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
+                event.setCanceled(true);
+                return;
+            }
+            // Don't try to ride a cart if we are riding something else already
             if (player.getRidingEntity() != null && player.getRidingEntity() != cart) {
                 event.setCanceled(true);
                 return;
             }
-//            if (player.getRidingEntity() != cart && player.isOnLadder()) {
-//                event.setCanceled(true);
-//                return;
-//            }
+            // This prevents players from spam clicking to instantly climb elevators stacked with carts
+            if (player.getRidingEntity() != cart && player.isOnLadder()) {
+                event.setCanceled(true);
+                return;
+            }
         }
         if (!player.canEntityBeSeen(cart)) {
             event.setCanceled(true);

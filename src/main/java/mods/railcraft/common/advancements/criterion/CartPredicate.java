@@ -13,6 +13,7 @@ package mods.railcraft.common.advancements.criterion;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.LinkageHandler;
 import mods.railcraft.common.carts.MinecartHooks;
@@ -88,7 +89,7 @@ public final class CartPredicate {
         Boolean highSpeed = JsonTools.nullableBoolean(object, "high_speed");
         Boolean launched = JsonTools.nullableBoolean(object, "launched");
         Boolean elevator = JsonTools.nullableBoolean(object, "elevator");
-        Boolean derail = JsonTools.nullableBoolean(object, "derail");
+        Boolean derail = JsonTools.nullableBoolean(object, CartConstants.TAG_DERAIL);
         Boolean canMount = JsonTools.nullableBoolean(object, "canMount");
         Boolean checksOwner = JsonTools.nullableBoolean(object, "check_owner");
         MinMaxBounds speed = MinMaxBounds.deserialize(object.get("speed"));
