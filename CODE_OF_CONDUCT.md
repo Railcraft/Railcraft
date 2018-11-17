@@ -2,7 +2,7 @@
 
 ## The Golden Rule
 
-“So then, in everything treat others the same way you want them to treat you, for this is [the essence of] the Law and the [writings of the] Prophets.
+“So then, in everything treat others the same way you want them to treat you, for this is [the essence of] the Law and the [writings of the] Prophets."
 
 MATTHEW 7:12 AMP
 
