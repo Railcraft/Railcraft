@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.misc;
 
+import com.google.common.collect.Lists;
 import mods.railcraft.common.util.collections.StackKey;
 import net.minecraft.item.ItemStack;
 
@@ -31,12 +32,11 @@ public final class Predicates {
     }
 
     private static class AndPredicate<T> implements Predicate<T> {
-        private final List<Predicate<? super T>> components = new ArrayList<>();
+        private final List<Predicate<? super T>> components;
 
         @SafeVarargs
         private AndPredicate(Predicate<? super T> predicate, Predicate<? super T>... predicates) {
-            components.add(predicate);
-            components.addAll(Arrays.asList(predicates));
+            components = Lists.asList(predicate, predicates);
         }
 
         @Override
