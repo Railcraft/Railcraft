@@ -312,15 +312,15 @@ public class RailcraftConfig {
 
         boolean minecartTankCustomize = get(CAT_TWEAKS_CARTS + ".tank", "useCustomValues", false, "change to '{t}=true' to adjust the Tank Cart's capacity and fill rate");
 
-        int capacity = get(CAT_TWEAKS_CARTS + ".tank", "capacity", 4, 32, 64, "change the value to your desired Tank Cart capacity in buckets, min=4, default=32, max=64, ignored if 'tweaks.minecarts.tank.useCustomValues=false'");
+        int capacity = get(CAT_TWEAKS_CARTS + ".tank", "capacity", 4, 32, 512, "change the value to your desired Tank Cart capacity in buckets, min=4, default=32, max=512, ignored if 'tweaks.minecarts.tank.useCustomValues=false'");
         if (minecartTankCustomize)
             minecartTankCapacity = capacity;
 
-        int fillrate = get(CAT_TWEAKS_CARTS + ".tank", "fillrate", 4, 32, 64,
-                "change the value to your desired Tank Cart fill rate in milli-buckets per tick, min=4, default=32, max=64\n"
+        int fillRate = get(CAT_TWEAKS_CARTS + ".tank", "fillrate", 4, 32, 2048,
+                "change the value to your desired Tank Cart fill rate in milli-buckets per tick, min=4, default=32, max=2048\n"
                         + "there are 1000 milli-buckets in a bucket, ignored if 'tweaks.minecarts.tank.useCustomValues=false'");
         if (minecartTankCustomize)
-            minecartTankFillRate = fillrate;
+            minecartTankFillRate = fillRate;
     }
 
     private static void loadRecipeOption() {
