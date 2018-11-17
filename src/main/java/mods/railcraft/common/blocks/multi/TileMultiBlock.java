@@ -431,8 +431,8 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     }
 
     @Override
-    public final boolean isMaster() {
-        return isMaster;
+    public final boolean isValidMaster() {
+        return isMaster && isStructureValid();
     }
 
     public final void setMaster(boolean m) {
