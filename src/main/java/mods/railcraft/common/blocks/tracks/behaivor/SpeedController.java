@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.MinecartHooks;
 import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -46,8 +47,9 @@ public enum SpeedController {
         }
 
         @Override
+        // FIXME: Client and Server sync is not maintained here. Could result in strange behavior.
         public @Nullable BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
-            if (cart != null) {
+            if (cart != null && Game.isHost(cart.world)) {
                 BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(state);
                 if (TrackShapeHelper.isLevelStraight(shape) && isDerailing(cart)) {
                     cart.getEntityData().setByte("derail", (byte) 100);
