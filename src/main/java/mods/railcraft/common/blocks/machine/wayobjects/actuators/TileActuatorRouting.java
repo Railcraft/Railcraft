@@ -16,7 +16,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -43,7 +43,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 public class TileActuatorRouting extends TileActuatorSecured implements IRouter, ITileRouting {
 
-    private final StandaloneInventory inv = new StandaloneInventory(1, this);
+    private final InventoryAdvanced inv = new InventoryAdvanced(1).callbackTile(this);
     private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
     private @Nullable RoutingLogic logic;
 
@@ -78,7 +78,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
                         player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
                         player.inventory.markDirty();
                     }
-                    if (Game.isHost(theWorld())) {
+                    if (Game.isHost(world)) {
                         if (isLogicValid())
                             return true;
                     } else

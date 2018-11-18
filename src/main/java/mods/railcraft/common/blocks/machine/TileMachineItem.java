@@ -10,9 +10,8 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.interfaces.ITileInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -22,22 +21,22 @@ import javax.annotation.Nullable;
 
 public abstract class TileMachineItem extends TileMachineBase implements ITileInventory {
 
-    private StandaloneInventory inv;
+    private InventoryAdvanced inv;
 
     protected TileMachineItem() {
-        inv = new StandaloneInventory(0, (IInventory) this);
+        inv = new InventoryAdvanced(0).callbackInv(this);
     }
 
     protected TileMachineItem(int invSize) {
-        inv = new StandaloneInventory(invSize, (IInventory) this);
+        inv = new InventoryAdvanced(invSize).callbackInv(this);
     }
 
     protected void setInventorySize(int invSize) {
-        this.inv = new StandaloneInventory(invSize, (IInventory) this);
+        this.inv = new InventoryAdvanced(invSize).callbackInv(this);
     }
 
     @Override
-    public StandaloneInventory getInventory() {
+    public InventoryAdvanced getInventory() {
         return inv;
     }
 

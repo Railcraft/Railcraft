@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,19 +13,18 @@ import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
 public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
     private static final DataParameter<ItemStack> FILTER = DataManagerPlugin.create(DataSerializers.ITEM_STACK);
-    private final PhantomInventory invFilter = new PhantomInventory(1, this);
+    private final InventoryAdvanced invFilter = new InventoryAdvanced(1).callbackInv(this).phantom();
 
     protected CartBaseFiltered(World world) {
         super(world);
@@ -54,7 +53,6 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         return cart;
     }
 
-    @Nullable
     public ItemStack getFilteredCartItem(@Nullable ItemStack filter) {
         ItemStack stack = getCartType().getStack();
         if (InvTools.isEmpty(stack))
@@ -69,7 +67,6 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         setFilter(filter);
     }
 
-    @Nullable
     @Override
     public ItemStack createCartItem(EntityMinecart cart) {
         ItemStack stack = getFilteredCartItem(getFilterItem());
@@ -106,7 +103,7 @@ public abstract class CartBaseFiltered extends CartBaseContainer implements IMin
         return dataManager.get(FILTER);
     }
 
-    public PhantomInventory getFilterInv() {
+    public InventoryAdvanced getFilterInv() {
         return invFilter;
     }
 

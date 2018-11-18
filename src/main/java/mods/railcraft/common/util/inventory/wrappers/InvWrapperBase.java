@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,7 +26,7 @@ import java.util.Iterator;
 public abstract class InvWrapperBase implements IInventory, IInventoryObject, IInventoryComposite {
 
     private final IInventory inv;
-    private boolean checkItems;
+    protected boolean checkItems;
 
     protected InvWrapperBase(IInventory inv) {
         this(inv, true);

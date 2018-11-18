@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.function.Predicate;
@@ -46,7 +47,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         modeHasWork.put(EnumTransferMode.ALL, tile -> {
             IInventoryComposite dest = tile.getDestination();
 
-            return tile.getSource().stackStream().filter(StackFilters.matchesAny(tile.getItemFilters()))
+            return tile.getSource().streamStacks().filter(StackFilters.matchesAny(tile.getItemFilters()))
                     .anyMatch(stack -> InvTools.acceptsItemStack(stack, dest));
         });
 
@@ -89,13 +90,13 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
     protected final InventoryComposite chests = InventoryComposite.make();
     protected final Multiset<StackKey> transferredItems = HashMultiset.create();
     protected final InventoryMapper invBuffer;
-    private final PhantomInventory invFilters = new PhantomInventory(9, this);
+    private final InventoryAdvanced invFilters = new InventoryAdvanced(9).callbackInv(this).phantom();
     private final MultiButtonController<EnumTransferMode> transferModeController = MultiButtonController.create(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
-    protected AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !getClass().isInstance(tile), InventorySorter.SIZE_DESCENDING);
+    protected final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !getClass().isInstance(tile), InventorySorter.SIZE_DESCENDING);
 
     TileItemManipulator() {
         setInventorySize(9);
-        invBuffer = InventoryMapper.make(getInventory(), false);
+        invBuffer = InventoryMapper.make(getInventory()).ignoreItemChecks();
     }
 
     public abstract IInventoryComposite getSource();
@@ -106,7 +107,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         return transferModeController;
     }
 
-    public final PhantomInventory getItemFilters() {
+    public final InventoryAdvanced getItemFilters() {
         return invFilters;
     }
 

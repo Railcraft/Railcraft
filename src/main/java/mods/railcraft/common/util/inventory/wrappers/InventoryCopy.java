@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.util.inventory.wrappers;
 
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.inventory.IInventory;
@@ -26,11 +26,11 @@ import net.minecraft.item.ItemStack;
  */
 public class InventoryCopy extends InvWrapperBase {
 
-    private StandaloneInventory copy;
+    private final InventoryAdvanced copy;
 
     public InventoryCopy(IInventory original) {
         super(original);
-        this.copy = new StandaloneInventory(original.getSizeInventory());
+        this.copy = new InventoryAdvanced(original.getSizeInventory());
         for (IInvSlot slot : InventoryIterator.getVanilla(original)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack)) {

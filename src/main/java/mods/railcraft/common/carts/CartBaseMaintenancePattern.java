@@ -11,7 +11,7 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CartBaseMaintenancePattern extends CartBaseMaintenance implements ISidedInventory {
-    protected final StandaloneInventory patternInv = new StandaloneInventory(6, this);
+    protected final InventoryAdvanced patternInv = new InventoryAdvanced(6).callbackInv(this);
 
     protected CartBaseMaintenancePattern(World world) {
         super(world);

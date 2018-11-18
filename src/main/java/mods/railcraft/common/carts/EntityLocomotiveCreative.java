@@ -34,7 +34,7 @@ public class EntityLocomotiveCreative extends EntityLocomotive implements ISided
 
     private static final int SLOT_TICKET = 0;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 1);
-    private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2, false);
+    private final IInventory invTicket = new InventoryMapper(this, SLOT_TICKET, 2).ignoreItemChecks();
 
     @SuppressWarnings("unused")
     public EntityLocomotiveCreative(World world) {

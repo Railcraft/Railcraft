@@ -22,7 +22,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Timer;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -64,13 +64,13 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     private static final List<MultiBlockPattern> patterns = buildPatterns();
     protected final StandardTank tank = new StandardTank(64 * FluidTools.BUCKET_VOLUME, this);
     protected final TankManager tankManager = new TankManager();
-    private final StandaloneInventory inv;
+    private final InventoryAdvanced inv;
     private final Timer networkTimer = new Timer();
     private FluidStack previousFluidStack;
 
     protected TileTankBase() {
         super(patterns);
-        inv = new StandaloneInventory(2, "gui.tank.iron", this);
+        inv = new InventoryAdvanced(2, "gui.tank.iron").callbackTile(this);
         tankManager.add(tank);
     }
 

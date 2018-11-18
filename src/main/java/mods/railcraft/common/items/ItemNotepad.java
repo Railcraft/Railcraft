@@ -21,7 +21,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -121,7 +121,6 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
         }
     }
 
-
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
         EnumMap<Contents, NBTTagCompound> contents = new EnumMap<>(Contents.class);
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
@@ -203,17 +202,15 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
                     ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.empty");
                 } else {
                     PasteMode pasteMode = getPasteMode(stack);
-                    boolean pasted = false;
-                    for (Map.Entry<Contents, NBTTagCompound> entry : getContents(stack).entrySet()) {
-                        if (pasteMode.allows(entry.getKey()))
-                            pasted |= entry.getKey().paste(tileEntity, entry.getValue());
-                    }
+                    boolean pasted = getContents(stack).entrySet().stream()
+                            .filter(entry -> pasteMode.allows(entry.getKey()))
+                            .map(entry -> entry.getKey().paste(tileEntity, entry.getValue()))
+                            .reduce(false, (a, b) -> a || b);
                     if (pasted) {
                         if (tileEntity instanceof IWorldNameable)
                             ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste", tileEntity.getDisplayName());
                     } else
-                        //TODO: Fix in 1.8 to use getDisplayName
-                        ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste.fail");
+                        ChatPlugin.sendLocalizedChatFromServer(player, "item.railcraft.tool.notepad.action.paste.fail", tileEntity.getDisplayName());
                 }
             }
         }
@@ -230,7 +227,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
             @Override
             NBTTagCompound copy(Object target) {
                 if (target instanceof TileManipulatorCart) {
-                    PhantomInventory cartFilters = ((TileManipulatorCart) target).getCartFilters();
+                    InventoryAdvanced cartFilters = ((TileManipulatorCart) target).getCartFilters();
                     NBTTagCompound nbt = new NBTTagCompound();
                     cartFilters.writeToNBT("inv", nbt);
                     return nbt;
@@ -251,7 +248,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
             @Override
             NBTTagCompound copy(Object target) {
                 if (target instanceof TileItemManipulator) {
-                    PhantomInventory itemFilters = ((TileItemManipulator) target).getItemFilters();
+                    InventoryAdvanced itemFilters = ((TileItemManipulator) target).getItemFilters();
                     NBTTagCompound nbt = new NBTTagCompound();
                     itemFilters.writeToNBT("inv", nbt);
                     return nbt;
@@ -272,7 +269,7 @@ public class ItemNotepad extends ItemRailcraft implements IActivationBlockingIte
             @Override
             NBTTagCompound copy(Object target) {
                 if (target instanceof TileFluidManipulator) {
-                    PhantomInventory itemFilters = ((TileFluidManipulator) target).getFluidFilter();
+                    InventoryAdvanced itemFilters = ((TileFluidManipulator) target).getFluidFilter();
                     NBTTagCompound nbt = new NBTTagCompound();
                     itemFilters.writeToNBT("inv", nbt);
                     return nbt;

@@ -103,6 +103,12 @@ public class Detector implements IGuiReturnHandler {
         return tile.getWorld();
     }
 
+    public final World theWorldAsserted() {
+        World world = tile.getWorld();
+        assert world != null;
+        return world;
+    }
+
     @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
     }

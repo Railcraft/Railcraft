@@ -16,7 +16,6 @@ import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -53,7 +52,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return isEmpty(tryAddStack(stack));
     }
 
-    public @Nullable ItemStack tryAddStack(ItemStack stack) {
+    public ItemStack tryAddStack(ItemStack stack) {
         return addStack(stack, false);
     }
 
@@ -62,11 +61,11 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      *
      * @return The remainder
      */
-    public @Nullable ItemStack addStack(ItemStack stack) {
+    public ItemStack addStack(ItemStack stack) {
         return addStack(stack, true);
     }
 
-    protected abstract @Nullable ItemStack addStack(ItemStack stack, boolean doAdd);
+    protected abstract ItemStack addStack(ItemStack stack, boolean doAdd);
 
     /**
      * Returns true if an item matching the filter can be removed from the
@@ -80,7 +79,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
      * Returns the item that would be returned if an item matching the filter
      * was removed. Does not modify the inventory.
      */
-    public @Nullable ItemStack tryRemoveItem(Predicate<ItemStack> filter) {
+    public ItemStack tryRemoveItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack)) {
@@ -95,7 +94,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
     /**
      * Removed an item matching the filter.
      */
-    public @Nullable ItemStack removeItem(Predicate<ItemStack> filter) {
+    public ItemStack removeItem(Predicate<ItemStack> filter) {
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && slot.canTakeStackFromSlot(stack) && filter.test(stack))
@@ -116,7 +115,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
 
     protected abstract List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove);
 
-    public @Nullable ItemStack moveItem(IInventoryObject dest, Predicate<ItemStack> filter) {
+    public ItemStack moveItem(IInventoryObject dest, Predicate<ItemStack> filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();

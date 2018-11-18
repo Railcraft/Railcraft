@@ -19,7 +19,7 @@ import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.ai.EntityAIMoveToBlock;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchBlock;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -63,15 +63,15 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 16);
 
     private VillagerRegistry.VillagerProfession profession = ForgeRegistries.VILLAGER_PROFESSIONS.getValue(new ResourceLocation("minecraft:farmer"));
-    private final PhantomInventory recipeSlots = new PhantomInventory(9);
+    private final InventoryAdvanced recipeSlots = new InventoryAdvanced(9).callbackInv(this).phantom();
     private final InventoryMapper invInput;
     private final InventoryMapper invOutput;
     protected EnumFacing direction = EnumFacing.NORTH;
 
     public TileTradeStation() {
         super(16);
-        invInput = new InventoryMapper(this, 0, 10);
-        invOutput = new InventoryMapper(this, 10, 6, false);
+        invInput = InventoryMapper.make(this, 0, 10);
+        invOutput = new InventoryMapper(this, 10, 6).ignoreItemChecks();
     }
 
     public IInventory getRecipeSlots() {

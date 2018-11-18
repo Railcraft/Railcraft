@@ -11,9 +11,8 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.blocks.interfaces.ITileInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,18 +26,18 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class TileSmartItem extends RailcraftTileEntity implements ISmartTile, ITileInventory {
 
-    private final StandaloneInventory inv;
+    private final InventoryAdvanced inv;
 
     protected TileSmartItem() {
-        inv = new StandaloneInventory(0, (IInventory) this);
+        inv = new InventoryAdvanced(0).callbackInv(this);
     }
 
     protected TileSmartItem(int invSize) {
-        inv = new StandaloneInventory(invSize, (IInventory) this);
+        inv = new InventoryAdvanced(invSize).callbackInv(this);
     }
 
     @Override
-    public StandaloneInventory getInventory() {
+    public InventoryAdvanced getInventory() {
         return inv;
     }
 

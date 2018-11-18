@@ -87,6 +87,7 @@
       <w>overclocker</w>
       <w>ownable</w>
       <w>pearlized</w>
+      <w>perpetuum</w>
       <w>pickaxe</w>
       <w>placedby</w>
       <w>populator</w>
@@ -119,6 +120,7 @@
       <w>tessellator</w>
       <w>thaumcraft</w>
       <w>thaumium</w>
+      <w>tileentity</w>
       <w>tintindex</w>
       <w>trackman</w>
       <w>tungstensteel</w>
@@ -138,6 +140,7 @@
       <w>worldlogic</w>
       <w>worldspike</w>
       <w>worldspikes</w>
+      <w>wyes</w>
     </words>
   </dictionary>
 </component>

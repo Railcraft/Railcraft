@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -43,7 +43,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     protected static final int SLOT_OUTPUT = 2;
     protected static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
     protected static final int CAPACITY = FluidTools.BUCKET_VOLUME * 32;
-    protected final PhantomInventory invFilter = new PhantomInventory(1);
+    protected final InventoryAdvanced invFilter = new InventoryAdvanced(1).callbackInv(this).phantom();
     //        protected final IInventory invInput = new InventoryMapper(this, SLOT_INPUT, 1);
 //        protected final IInventory invInput = new InventoryMapper(this, SLOT_PROCESSING, 1);
 //        protected final IInventory invInput = new InventoryMapper(this, SLOT_OUTPUT, 1);
@@ -54,35 +54,32 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     protected TileFluidManipulator() {
         setInventorySize(3);
         tankManager.add(tank);
-        tank.setFilter(fluidStack -> FluidTools.matches(this.getFilterFluid(), fluidStack));
+        tank.setFilter(fluidStack -> FluidTools.matches(getFilterFluid(), fluidStack));
     }
 
     public TankManager getTankManager() {
         return tankManager;
     }
 
-    public PhantomInventory getFluidFilter() {
+    public InventoryAdvanced getFluidFilter() {
         return invFilter;
     }
 
-    @Nullable
-    public FluidStack getFilterFluid() {
+    public @Nullable FluidStack getFilterFluid() {
         if (!invFilter.getStackInSlot(0).isEmpty()) {
             return FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
         }
         return null;
     }
 
-    @Nullable
-    public FluidStack getFluidHandled() {
+    public @Nullable FluidStack getFluidHandled() {
         FluidStack fluid = getFilterFluid();
         if (fluid != null)
             return fluid;
         return tank.getFluid();
     }
 
-    @Nullable
-    protected AdvancedFluidHandler getFluidHandler(EntityMinecart cart, EnumFacing facing) {
+    protected @Nullable AdvancedFluidHandler getFluidHandler(EntityMinecart cart, EnumFacing facing) {
         IFluidHandler fluidHandler = cart.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
         if (fluidHandler == null)
             return null;

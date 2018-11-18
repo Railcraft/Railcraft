@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
-import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -44,11 +43,11 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         throw new RuntimeException("Invalid Inventory Object");
     }
 
-    public Iterable<ItemStack> getStacks() {
-        return () -> Iterators.transform(Iterators.filter(iterator(), s -> s != null && s.hasStack()), s -> s != null ? s.getStack() : null);
+    public Stream<T> stream() {
+        return Streams.stream(this);
     }
 
-    public Stream<ItemStack> getStackStream() {
-        return StreamSupport.stream(getStacks().spliterator(), false);
+    public Stream<ItemStack> streamStacks() {
+        return stream().filter(IInvSlot::hasStack).map(IInvSlot::getStack);
     }
 }

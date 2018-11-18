@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
@@ -34,10 +33,8 @@ public class DetectorAdvanced extends DetectorFilter {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            for (ItemStack filter : getFilters().getStacks()) {
-                if (CartTools.doesCartMatchFilter(filter, cart)) {
-                    return FULL_POWER;
-                }
+            if (getFilters().streamStacks().anyMatch(filter -> CartTools.doesCartMatchFilter(filter, cart))) {
+                return FULL_POWER;
             }
         }
         return NO_POWER;

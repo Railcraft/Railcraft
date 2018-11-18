@@ -66,7 +66,7 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
 
     public static InventoryManifest create(IInventoryComposite invs) {
         InventoryManifest manifest = new InventoryManifest();
-        invs.stackStream().forEach(stack -> {
+        invs.streamStacks().forEach(stack -> {
             StackKey key = StackKey.make(stack);
             manifest.compute(key, (k, v) -> compute(k, v, stack));
         });
@@ -86,7 +86,7 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
         InventoryManifest manifest = new InventoryManifest();
         for (StackKey filterKey : keys) {
             Predicate<ItemStack> filter = StackFilters.matches(filterKey.get());
-            invs.stackStream().filter(filter).forEach(stack -> manifest.compute(filterKey, (k, v) -> compute(k, v, stack)));
+            invs.streamStacks().filter(filter).forEach(stack -> manifest.compute(filterKey, (k, v) -> compute(k, v, stack)));
         }
         return manifest;
     }

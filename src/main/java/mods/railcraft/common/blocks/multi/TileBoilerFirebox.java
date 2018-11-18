@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -22,7 +22,6 @@ import mods.railcraft.common.util.steam.ISteamUser;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,12 +51,12 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     protected static final int SLOT_LIQUID_OUTPUT = 1;
     public final SteamBoiler boiler;
     private boolean wasLit;
-    protected final StandaloneInventory inventory;
+    protected final InventoryAdvanced inventory;
     protected final InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
-    protected final InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_LIQUID_OUTPUT, 1, false);
+    protected final InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_LIQUID_OUTPUT, 1).ignoreItemChecks();
 
     protected TileBoilerFirebox(int invSize) {
-        inventory = new StandaloneInventory(invSize, (IInventory) this);
+        inventory = new InventoryAdvanced(invSize).callbackInv(this);
         boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setTile(this);
     }

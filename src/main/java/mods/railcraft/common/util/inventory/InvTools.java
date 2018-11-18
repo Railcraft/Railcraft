@@ -352,13 +352,7 @@ public abstract class InvTools {
     }
 
     public static boolean isInventoryEmpty(IInventoryComposite inv) {
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.getRailcraft(inventoryObject)) {
-                if (slot.hasStack())
-                    return false;
-            }
-        }
-        return true;
+        return inv.streamStacks().findAny().isPresent();
     }
 
     public static boolean isInventoryFull(IInventoryComposite inv) {
@@ -373,29 +367,6 @@ public abstract class InvTools {
             }
         }
         return false;
-    }
-
-    /**
-     * Usually used during train transfers.
-     *
-     * @param inv The inventory to be filled
-     * @return A predicate, to be combined with original one to request items
-     */
-    public static Predicate<ItemStack> getFillingChecker(IInventoryComposite inv) {
-        Collection<ItemStack> stacksPossible = new ArrayList<>();
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.getRailcraft(inventoryObject)) {
-                if (!slot.hasStack()) {
-                    return Predicates.alwaysTrue();
-                } else {
-                    ItemStack stack = slot.getStack();
-                    if (stack.getCount() < stack.getMaxStackSize()) {
-                        stacksPossible.add(stack);
-                    }
-                }
-            }
-        }
-        return stacksPossible.isEmpty() ? Predicates.alwaysFalse() : StackFilters.anyOf(stacksPossible);
     }
 
     public static int countMaxItemStackSize(IInventoryComposite inv) {
@@ -423,7 +394,7 @@ public abstract class InvTools {
     public static int countItems(IInventoryComposite inv, Predicate<ItemStack> filter) {
         int count = 0;
         for (IInventoryObject inventoryObject : inv) {
-            count += InventoryIterator.getRailcraft(inventoryObject).getStackStream()
+            count += InventoryIterator.getRailcraft(inventoryObject).streamStacks()
                     .filter(filter)
                     .mapToInt(InvTools::sizeOf)
                     .sum();
@@ -463,10 +434,9 @@ public abstract class InvTools {
     public static int countStacks(IInventoryComposite inv, Predicate<ItemStack> filter) {
         int count = 0;
         for (IInventoryObject inventoryObject : inv) {
-            for (ItemStack stack : InventoryIterator.getRailcraft(inventoryObject).getStacks()) {
-                if (filter.test(stack))
-                    count++;
-            }
+            count += InventoryIterator.getRailcraft(inventoryObject).streamStacks()
+                    .filter(filter)
+                    .count();
         }
         return count;
     }
@@ -738,7 +708,6 @@ public abstract class InvTools {
      * @return Null if itemStack was completely moved, a new itemStack with
      * remaining stackSize if part or none of the stack was moved.
      */
-    @SuppressWarnings("unused")
     public static ItemStack moveItemStack(ItemStack stack, IInventoryComposite dest) {
         for (IInventoryObject inv : dest) {
             InventoryManipulator<?> im = InventoryManipulator.get(inv);
@@ -994,19 +963,6 @@ public abstract class InvTools {
         return !(isEmpty(stack) || block == null) && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() == block;
     }
 
-    /**
-     * @deprecated As of MC 1.12, replaced by
-     * {@link #getBlockStateFromStack(ItemStack)} }
-     */
-    @Deprecated
-    public static @Nullable Block getBlockFromStack(ItemStack stack) {
-        return GameData.getBlockItemMap().inverse().get(stack.getItem());
-//        if (stack.getItem() instanceof ItemBlock)
-//            return ((ItemBlock) stack.getItem()).getBlock();
-//        return null;
-    }
-
-    @SuppressWarnings("deprecation")
     public static IBlockState getBlockStateFromStack(ItemStack stack) {
         if (isEmpty(stack))
             return Blocks.AIR.getDefaultState();
@@ -1035,21 +991,18 @@ public abstract class InvTools {
     /**
      * @see Container#calcRedstoneFromInventory(IInventory)
      */
-    public static int calcRedstoneFromInventory(@Nullable InventoryComposite inv) {
+    public static int calcRedstoneFromInventory(@Nullable IInventoryComposite inv) {
         if (inv == null)
             return 0;
-        int numStacks = 0;
-        float average = 0.0F;
-
+        double average = 0.0F;
         for (IInventoryObject inventoryObject : inv) {
             int stackLimit = inventoryObject.getBackingObject() instanceof IInventory ? ((IInventory) inventoryObject.getBackingObject()).getInventoryStackLimit() : 64;
-            for (ItemStack stack : InventoryIterator.getRailcraft(inventoryObject).getStacks()) {
-                average += (float) sizeOf(stack) / (float) Math.min(stackLimit, stack.getMaxStackSize());
-                numStacks++;
-            }
+            average += InventoryIterator.getRailcraft(inventoryObject).streamStacks()
+                    .mapToDouble(s -> (double) sizeOf(s) / (double) Math.min(stackLimit, s.getMaxStackSize()))
+                    .sum();
         }
 
-        average = average / (float) inv.slotCount();
-        return MathHelper.floor(average * 14.0F) + (numStacks > 0 ? 1 : 0);
+        average = average / (double) inv.slotCount();
+        return MathHelper.floor(average * 14.0F) + (isInventoryEmpty(inv) ? 0 : 1);
     }
 }

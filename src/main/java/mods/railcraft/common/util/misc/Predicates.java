@@ -12,6 +12,8 @@ package mods.railcraft.common.util.misc;
 
 import com.google.common.collect.Lists;
 import mods.railcraft.common.util.collections.StackKey;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 import java.util.*;
@@ -53,14 +55,17 @@ public final class Predicates {
         return Predicates.<T>instanceOf(clazz).negate();
     }
 
-    public static <T> Predicate<T> distinct(Function<? super T, Object> keyFunction) {
-        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+    public static <T, O> Predicate<T> distinct(Function<? super T, O> keyFunction) {
+        Map<O, Boolean> seen = new ConcurrentHashMap<>();
         return t -> seen.putIfAbsent(keyFunction.apply(t), Boolean.TRUE) == null;
     }
 
     public static Predicate<ItemStack> distinctStack() {
-        Map<StackKey, Boolean> seen = new HashMap<>();
-        return stack -> seen.putIfAbsent(StackKey.make(stack), Boolean.TRUE) == null;
+        return distinct(StackKey::make);
+    }
+
+    public static Predicate<IBlockState> realBlock() {
+        return state -> state != null && state.getBlock() != Blocks.AIR;
     }
 
     public static <T> Predicate<T> alwaysTrue() {

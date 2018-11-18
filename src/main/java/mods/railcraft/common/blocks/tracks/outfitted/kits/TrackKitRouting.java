@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -34,7 +34,7 @@ import java.io.IOException;
 
 public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered, ITrackKitRouting {
 
-    private final StandaloneInventory inv = new StandaloneInventory(1);
+    private final InventoryAdvanced inv = new InventoryAdvanced(1);
     private boolean powered;
 
     @Override
@@ -69,10 +69,8 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
     public void onMinecartPass(EntityMinecart cart) {
         if (!isPowered())
             return;
-        if (inv.getStackInSlot(0) == null)
-            return;
         ItemStack stack = inv.getStackInSlot(0);
-        if (cart instanceof IRoutableCart && stack != null)
+        if (cart instanceof IRoutableCart && !InvTools.isEmpty(stack))
             ((IRoutableCart) cart).setDestination(stack);
     }
 

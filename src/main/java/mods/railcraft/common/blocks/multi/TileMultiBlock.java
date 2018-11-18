@@ -96,7 +96,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
 
     protected void onPatternChanged() {
         if (!isMaster && this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), world, getPos());
+            InvTools.dropInventory(InventoryMapper.make((IInventory) this), world, getPos());
     }
 
     public final char getPatternMarker() {

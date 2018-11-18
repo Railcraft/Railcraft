@@ -18,7 +18,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -53,7 +52,7 @@ public interface ISmartTile extends ITile {
      */
     default void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory(new InventoryMapper((IInventory) this), tile().getWorld(), tile().getPos());
+            InvTools.dropInventory((IInventory) this, tile().getWorld(), tile().getPos());
     }
 
     default boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {

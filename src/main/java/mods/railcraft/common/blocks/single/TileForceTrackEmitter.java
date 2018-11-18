@@ -270,7 +270,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         return false;
     }
 
-    @SuppressWarnings("unused")
     public int getNumberOfTracks() {
         return numTracks;
     }

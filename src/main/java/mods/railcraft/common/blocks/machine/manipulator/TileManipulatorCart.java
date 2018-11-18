@@ -28,7 +28,7 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -52,7 +52,7 @@ import java.io.IOException;
 public abstract class TileManipulatorCart extends TileManipulator implements IHasCart, IHasWork, IGuiReturnHandler, ITileRedstoneEmitter {
     public static final float STOP_VELOCITY = 0.02f;
     public static final int PAUSE_DELAY = 4;
-    private final PhantomInventory invCarts = new PhantomInventory(2, this);
+    private final InventoryAdvanced invCarts = new InventoryAdvanced(2).callbackInv(this).phantom();
     private final MultiButtonController<EnumRedstoneMode> redstoneModeController = MultiButtonController.create(0, getValidRedstoneModes());
     protected @Nullable EntityMinecart currentCart;
     private boolean powered;
@@ -148,7 +148,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         }
     }
 
-    public final PhantomInventory getCartFilters() {
+    public final InventoryAdvanced getCartFilters() {
         return invCarts;
     }
 

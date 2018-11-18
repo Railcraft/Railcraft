@@ -70,8 +70,8 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
     private final TankManager tankManager = new TankManager();
     private final FilteredTank tank;
-    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 9);
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9, false);
+    private final InventoryMapper invInput = InventoryMapper.make(this, SLOT_INPUT, 9);
+    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9).ignoreItemChecks();
 
     static {
         char[][][] map = {

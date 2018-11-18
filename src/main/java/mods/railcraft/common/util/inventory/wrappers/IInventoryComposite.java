@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.item.ItemStack;
 
@@ -32,14 +33,14 @@ public interface IInventoryComposite extends Iterable<IInventoryObject> {
     }
 
     default void forEachStack(Consumer<ItemStack> action) {
-        forEach(inv -> {
-            for (ItemStack stack : InventoryIterator.getRailcraft(inv).getStacks()) {
-                action.accept(stack);
-            }
-        });
+        forEach(inv -> streamStacks().forEach(action));
     }
 
-    default Stream<ItemStack> stackStream() {
-        return stream().flatMap(inv -> InventoryIterator.getRailcraft(inv).getStackStream());
+    default Stream<IInvSlot> streamSlots() {
+        return stream().flatMap(inv -> InventoryIterator.getRailcraft(inv).stream());
+    }
+
+    default Stream<ItemStack> streamStacks() {
+        return stream().flatMap(inv -> InventoryIterator.getRailcraft(inv).streamStacks());
     }
 }

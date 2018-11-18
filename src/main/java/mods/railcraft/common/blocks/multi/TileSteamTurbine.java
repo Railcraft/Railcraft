@@ -28,7 +28,7 @@ import mods.railcraft.common.plugins.ic2.IMultiEmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2EmitterDelegate;
 import mods.railcraft.common.plugins.ic2.TileIC2MultiEmitterDelegate;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.steam.ISteamUser;
@@ -62,7 +62,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
     private static final int WATER_OUTPUT = 4;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
-    private final StandaloneInventory inv = new StandaloneInventory(1, this);
+    private final InventoryAdvanced inv = new InventoryAdvanced(1).callbackTile(this);
     public float output;
     private final FluidStack waterFilter = Fluids.WATER.get(2);
     protected final FilteredTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this);
@@ -303,7 +303,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
     @Override
     public double getOfferedEnergy() {
         if (hasEnergy())
-            return IC2_OUTPUT; //Keep seperate for independent balancing
+            return IC2_OUTPUT; //Keep separate for independent balancing
         return 0;
     }
 
@@ -341,7 +341,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
         return ret;
     }
 
-    public StandaloneInventory getInventory() {
+    public InventoryAdvanced getInventory() {
         TileSteamTurbine mBlock = (TileSteamTurbine) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv;

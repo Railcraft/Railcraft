@@ -24,12 +24,16 @@ import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.*;
+import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.BallastRegistry;
+import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -65,7 +69,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 
 public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart {
     public static final float SPEED = 0.03F;
@@ -166,9 +169,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
-    public final InventoryMapper invFuel = new InventoryMapper(this, 1, 6);
-    public final InventoryMapper invBallast = new InventoryMapper(this, 7, 9);
-    public final InventoryMapper invRails = new InventoryMapper(this, 16, 9);
+    public final InventoryMapper invFuel = InventoryMapper.make(this, 1, 6).withFilters(StandardStackFilters.FUEL);
+    public final InventoryMapper invBallast = InventoryMapper.make(this, 7, 9).withFilters(StandardStackFilters.BALLAST);
+    public final InventoryMapper invRails = InventoryMapper.make(this, 16, 9).withFilters(StandardStackFilters.TRACK);
     //    protected static final int WATCHER_ID_BURN_TIME = 22;
     protected int delay;
     protected boolean placeRail;
@@ -211,6 +214,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         };
         hasInit = true;
         setSize(LENGTH, HEIGHT);
+        invMappers = Arrays.asList(invFuel, invBallast, invRails);
     }
 
     public static void addMineableBlock(Block block) {
@@ -667,12 +671,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected void stockBallast() {
-        Predicate<ItemStack> filler = InvTools.getFillingChecker(invBallast);
-        if (filler != Predicates.<ItemStack>alwaysFalse()) {
-            ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StandardStackFilters.BALLAST.and(filler));
-            if (!InvTools.isEmpty(stack))
-                InvTools.moveItemStack(stack, invBallast);
-        }
+        ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invBallast));
+        if (!InvTools.isEmpty(stack))
+            InvTools.moveItemStack(stack, invBallast);
     }
 
     protected boolean placeBallast(BlockPos targetPos) {
@@ -709,12 +710,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected void stockTracks() {
-        Predicate<ItemStack> filler = InvTools.getFillingChecker(invRails);
-        if (filler != Predicates.<ItemStack>alwaysFalse()) {
-            ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StandardStackFilters.TRACK.and(filler));
-            if (!InvTools.isEmpty(stack))
-                InvTools.moveItemStack(stack, invRails);
-        }
+        ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invRails));
+        if (!InvTools.isEmpty(stack))
+            InvTools.moveItemStack(stack, invRails);
     }
 
     protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
@@ -1030,12 +1028,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected void stockFuel() {
-        Predicate<ItemStack> filler = InvTools.getFillingChecker(invFuel);
-        if (filler != Predicates.<ItemStack>alwaysFalse()) {
-            ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StandardStackFilters.FUEL.and(filler));
-            if (!InvTools.isEmpty(stack))
-                InvTools.moveItemStack(stack, invFuel);
-        }
+        ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invFuel));
+        if (!InvTools.isEmpty(stack))
+            InvTools.moveItemStack(stack, invFuel);
     }
 
     protected void addFuel() {

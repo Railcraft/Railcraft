@@ -69,7 +69,7 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return uuid;
     }
 
-//    @Nullable
+    //    @Nullable
     public IBlockState getBlockState() {
         if (isInvalid()) {
             if (Game.DEVELOPMENT_ENVIRONMENT) {
@@ -248,6 +248,11 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
 
     @Override
     public final @Nullable World theWorld() {
+        return world;
+    }
+
+    public final World theWorldAsserted() {
+        assert world != null;
         return world;
     }
 

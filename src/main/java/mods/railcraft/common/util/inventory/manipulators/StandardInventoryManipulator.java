@@ -115,7 +115,6 @@ public class StandardInventoryManipulator extends InventoryManipulator<IExtInvSl
     }
 
     @Override
-
     protected List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove) {
         int amountNeeded = maxAmount;
         List<ItemStack> outputList = new ArrayList<>();

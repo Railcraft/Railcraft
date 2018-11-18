@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,8 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Predicate;
 
 /**
  * Wrapper class used to specify part of an existing inventory to be treated as
@@ -25,44 +29,52 @@ public class InventoryMapper extends InvWrapperBase {
     private final int start;
     private final int size;
     private int stackSizeLimit = -1;
+    private Predicate<ItemStack> filter = StandardStackFilters.ALL;
 
-    public static InventoryMapper make(IInventory inv, boolean checkItems) {
-        return new InventoryMapper(inv, 0, inv.getSizeInventory(), checkItems);
+    public static InventoryMapper make(IInventory inv) {
+        return new InventoryMapper(inv, 0, inv.getSizeInventory());
     }
 
     public static InventoryMapper make(IInventory inv, int start, int size) {
-        return new InventoryMapper(inv, start, size, true);
-    }
-
-    public static InventoryMapper make(IInventory inv, int start, int size, boolean checkItems) {
-        return new InventoryMapper(inv, start, size, checkItems);
-    }
-
-    public InventoryMapper(IInventory inv) {
-        this(inv, 0, inv.getSizeInventory(), true);
-    }
-
-    public InventoryMapper(IInventory inv, boolean checkItems) {
-        this(inv, 0, inv.getSizeInventory(), checkItems);
+        return new InventoryMapper(inv, start, size);
     }
 
     /**
      * Creates a new InventoryMapper
      *
-     * @param inv   The backing inventory
-     * @param start The starting index
-     * @param size  The size of the new inventory, take care not to exceed the
-     *              end of the backing inventory
+     * @param inv        The backing inventory
+     * @param start      The starting index
+     * @param size       The size of the new inventory, take care not to exceed the
+     *                   end of the backing inventory
      */
     public InventoryMapper(IInventory inv, int start, int size) {
-        this(inv, start, size, true);
-    }
-
-    public InventoryMapper(IInventory inv, int start, int size, boolean checkItems) {
-        super(inv, checkItems);
+        super(inv);
         this.inv = inv;
         this.start = start;
         this.size = size;
+    }
+
+    /**
+     * If called the inventory will ignore isItemValidForSlot checks.
+     */
+    public InventoryMapper ignoreItemChecks() {
+        checkItems = false;
+        return this;
+    }
+
+    @SafeVarargs
+    public final InventoryMapper withFilters(Predicate<ItemStack>... filters) {
+        this.filter = Predicates.and(filter, filters);
+        return this;
+    }
+
+    public Predicate<ItemStack> filter() {
+        return filter;
+    }
+
+    public InventoryMapper withStackSizeLimit(int limit) {
+        stackSizeLimit = limit;
+        return this;
     }
 
     @Override
@@ -72,21 +84,20 @@ public class InventoryMapper extends InvWrapperBase {
 
     @Override
     public ItemStack getStackInSlot(int slot) {
+        validSlot(slot);
         return inv.getStackInSlot(start + slot);
     }
 
     @Override
     public ItemStack decrStackSize(int slot, int amount) {
+        validSlot(slot);
         return inv.decrStackSize(start + slot, amount);
     }
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack itemstack) {
+        validSlot(slot);
         inv.setInventorySlotContents(start + slot, itemstack);
-    }
-
-    public void setStackSizeLimit(int limit) {
-        stackSizeLimit = limit;
     }
 
     @Override
@@ -96,7 +107,16 @@ public class InventoryMapper extends InvWrapperBase {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return !checkItems() || inv.isItemValidForSlot(start + slot, stack);
+        validSlot(slot);
+        return !checkItems() || (filter.test(stack) && inv.isItemValidForSlot(start + slot, stack));
+    }
+
+    public boolean containsSlot(int absoluteIndex) {
+        return absoluteIndex >= start && absoluteIndex < start + size;
+    }
+
+    private void validSlot(int slot) {
+        if (slot < 0 || slot >= size) throw new IllegalArgumentException("Slot index out of bounds.");
     }
 
 }

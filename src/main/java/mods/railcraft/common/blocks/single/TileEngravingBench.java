@@ -56,7 +56,7 @@ public class TileEngravingBench extends TileSmartItemTicking implements ISidedIn
     private static final int SLOT_INPUT = 0;
     private static final int SLOT_RESULT = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1, false);
+    private final InventoryMapper invResult = new InventoryMapper(this, SLOT_RESULT, 1).ignoreItemChecks();
     //    public final FEEnergyIndicator rfIndicator;
     private int progress;
     public boolean paused, startCrafting, isCrafting, flippedAxis;

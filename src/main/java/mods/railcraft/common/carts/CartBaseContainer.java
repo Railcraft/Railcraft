@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +43,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * It also contains some generic code that most carts will find useful.
@@ -53,6 +56,8 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected @Nullable EnumFacing travelDirection;
     protected @Nullable EnumFacing verticalTravelDirection;
+    @SuppressWarnings("CanBeFinal")
+    protected List<InventoryMapper> invMappers = new ArrayList<>();
 
     protected CartBaseContainer(World world) {
         super(world);
@@ -80,7 +85,6 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         loadFromNBT(compound);
     }
 
-
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
@@ -94,7 +98,6 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     public boolean doInteract(EntityPlayer player, EnumHand hand) {
         return true;
     }
-
 
     @Override
     public final ItemStack getCartItem() {
@@ -223,6 +226,11 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Override
     public Object getBackingObject() {
         return this;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return invMappers.stream().filter(m -> m.containsSlot(index)).anyMatch(m -> m.filter().test(stack));
     }
 
     /**

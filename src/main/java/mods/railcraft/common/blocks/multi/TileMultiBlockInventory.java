@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.interfaces.ITileInventory;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,11 +28,11 @@ import java.util.List;
  */
 public abstract class TileMultiBlockInventory extends TileMultiBlock implements ITileInventory {
 
-    protected final StandaloneInventory inv;
+    protected final InventoryAdvanced inv;
 
     protected TileMultiBlockInventory(int invSize, List<? extends MultiBlockPattern> patterns) {
         super(patterns);
-        inv = new StandaloneInventory(invSize, (IInventory) this);
+        inv = new InventoryAdvanced(invSize).callbackInv(this);
     }
 
     @Override
@@ -40,7 +40,7 @@ public abstract class TileMultiBlockInventory extends TileMultiBlock implements 
         TileMultiBlockInventory mBlock = (TileMultiBlockInventory) getMasterBlock();
         if (mBlock != null)
             return mBlock.inv;
-        return StandaloneInventory.ZERO_SIZE_INV;
+        return InventoryAdvanced.ZERO_SIZE_INV;
     }
 
     @Override

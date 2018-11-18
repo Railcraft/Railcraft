@@ -21,7 +21,6 @@ import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.fuel.INeedsFuel;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.IWorldspike;
@@ -49,7 +48,6 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
-    private final InventoryMapper invWrapper = new InventoryMapper(this);
     protected @Nullable Ticket ticket;
     private Set<ChunkPos> chunks = Collections.emptySet();
     private long fuel;

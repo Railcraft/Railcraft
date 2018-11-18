@@ -77,7 +77,7 @@ public final class StackFilters {
      * Matches against the provided Inventory. If the Item class extends IFilterItem then it will pass the check to the item.
      */
     public static Predicate<ItemStack> matchesAny(final IInventoryComposite inv) {
-        return stack -> inv.stackStream().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
+        return stack -> inv.streamStacks().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
     }
 
     /**
@@ -138,5 +138,12 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> containedIn(final IInventoryComposite inv) {
         return stack -> InvTools.containsItem(inv, stack);
+    }
+
+    /**
+     * Matches if the Inventory contains the given ItemStack.
+     */
+    public static Predicate<ItemStack> roomIn(final IInventoryComposite inv) {
+        return stack -> InvTools.isRoomForStack(stack, inv);
     }
 }

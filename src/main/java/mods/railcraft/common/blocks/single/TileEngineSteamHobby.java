@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,8 +17,8 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -27,20 +27,17 @@ import mods.railcraft.common.util.steam.SolidFuelProvider;
 import mods.railcraft.common.util.steam.SteamBoiler;
 import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
@@ -60,16 +57,16 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
     private static final int[] NO_SLOTS = new int[0];
     public final SteamBoiler boiler;
-    private StandaloneInventory inv = new StandaloneInventory(3, (IInventory) this);
-    private InventoryMapper invFuel = InventoryMapper.make(inv, SLOT_FUEL, 1);
-    private InventoryMapper invOutput = InventoryMapper.make(inv, SLOT_LIQUID_OUTPUT, 1);
+    private final InventoryAdvanced inv = new InventoryAdvanced(3).callbackInv(this);
+    private final InventoryMapper invFuel = InventoryMapper.make(inv, SLOT_FUEL, 1);
+    private final InventoryMapper invOutput = InventoryMapper.make(inv, SLOT_LIQUID_OUTPUT, 1);
     private boolean explode;
 
     public TileEngineSteamHobby() {
         FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
             @Override
-            public int fillInternal(FluidStack resource, boolean doFill) {
-                TileEngineSteamHobby.this.onFillWater();
+            public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
+                onFillWater();
                 return super.fillInternal(resource, doFill);
             }
         };
@@ -262,7 +259,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public void clear() {
-        for (int i = 0; i < this.getSizeInventory(); i++) {
+        for (int i = 0; i < getSizeInventory(); i++) {
             setInventorySlotContents(i, ItemStack.EMPTY);
         }
     }

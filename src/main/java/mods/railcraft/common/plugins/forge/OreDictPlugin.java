@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,9 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
+import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
@@ -80,25 +79,13 @@ public final class OreDictPlugin {
         return OreDictionary.doesOreNameExist(name);
     }
 
-    @Deprecated
-    public static Set<Block> getOreBlocks() {
-        String[] names = OreDictionary.getOreNames();
-        return Arrays.stream(names)
-                .filter(n -> n.startsWith("ore"))
-                .flatMap(n -> OreDictionary.getOres(n).stream())
-                .filter(stack -> stack.getItem() instanceof ItemBlock)
-                .map(InvTools::getBlockFromStack)
-                .collect(Collectors.toSet());
-    }
-
     public static Set<IBlockState> getOreBlockStates() {
         String[] names = OreDictionary.getOreNames();
         return Arrays.stream(names)
                 .filter(n -> n.startsWith("ore"))
                 .flatMap(n -> OreDictionary.getOres(n).stream())
-                .filter(stack -> stack.getItem() instanceof ItemBlock)
                 .map(InvTools::getBlockStateFromStack)
-                .filter(state -> state.getBlock() != Blocks.AIR)
+                .filter(Predicates.realBlock())
                 .collect(Collectors.toSet());
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,25 +34,24 @@ public class WorldGenGeode extends WorldGenerator {
     private static final int DISTANCE_ORE_SQ = 5 * 5;
     private static final int DISTANCE_INNER_SQ = 4 * 4;
     private final IBlockState geodeStone;
-    //TODO block state
-    public final Set<Block> ores = new HashSet<Block>();
-    public final Set<Block> banned = new HashSet<Block>();
+    public final Set<IBlockState> replaceable = new HashSet<>();
+    public final Set<Block> banned = new HashSet<>();
     private final Block blockOre;
 
     public WorldGenGeode(IBlockState geodeStone) {
         this.geodeStone = geodeStone;
 
-        ores.add(Blocks.COAL_ORE);
-        ores.add(Blocks.IRON_ORE);
-        ores.add(Blocks.GOLD_ORE);
-        ores.add(Blocks.DIAMOND_ORE);
-        ores.add(Blocks.EMERALD_ORE);
-        ores.add(Blocks.LAPIS_ORE);
-        ores.add(Blocks.QUARTZ_ORE);
-        ores.add(Blocks.REDSTONE_ORE);
-        ores.add(Blocks.LIT_REDSTONE_ORE);
+        add(Blocks.COAL_ORE);
+        add(Blocks.IRON_ORE);
+        add(Blocks.GOLD_ORE);
+        add(Blocks.DIAMOND_ORE);
+        add(Blocks.EMERALD_ORE);
+        add(Blocks.LAPIS_ORE);
+        add(Blocks.QUARTZ_ORE);
+        add(Blocks.REDSTONE_ORE);
+        add(Blocks.LIT_REDSTONE_ORE);
 
-        ores.addAll(OreDictPlugin.getOreBlocks());
+        replaceable.addAll(OreDictPlugin.getOreBlockStates());
 
         blockOre = RailcraftBlocks.ORE.block();
 
@@ -62,6 +61,10 @@ public class WorldGenGeode extends WorldGenerator {
         banned.add(Blocks.END_PORTAL_FRAME);
         banned.add(Blocks.STONE_BRICK_STAIRS);
         banned.add(Blocks.STONE_STAIRS);
+    }
+
+    private void add(Block block) {
+        replaceable.addAll(block.getBlockState().getValidStates());
     }
 
     @Override
@@ -128,7 +131,7 @@ public class WorldGenGeode extends WorldGenerator {
             return true;
         if (existingState.getMaterial() == Material.GROUND)
             return true;
-        return ores.contains(existing);
+        return replaceable.contains(existingState);
     }
 
 }

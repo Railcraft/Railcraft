@@ -48,9 +48,9 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private final TankManager tankManager = new TankManager();
     private final FilteredTank tank = new FilteredTank(RailcraftConfig.getTankCartCapacity());
-    private final InventoryMapper invLiquids = new InventoryMapper(this, false);
-    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1, false);
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1, false);
+    private final InventoryMapper invLiquids = InventoryMapper.make(this).ignoreItemChecks();
+    //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1).ignoreItemChecks();
+//    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
     private int update = MiscTools.RANDOM.nextInt();
 
     public EntityCartTank(World world) {
@@ -62,7 +62,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     {
-        tank.setFilter(fluidStack -> FluidTools.matches(this.getFilterFluid(), fluidStack));
+        tank.setFilter(fluidStack -> FluidTools.matches(getFilterFluid(), fluidStack));
         tank.setUpdateCallback(tank -> setFluidStack(tank.getFluid()));
         tankManager.add(tank);
     }

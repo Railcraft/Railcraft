@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
-import mods.railcraft.common.util.inventory.PhantomInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
@@ -16,13 +17,13 @@ import net.minecraft.nbt.NBTTagCompound;
  */
 public abstract class DetectorFilter extends Detector {
 
-    private final PhantomInventory invFilters;
+    private final InventoryAdvanced invFilters;
 
-    public DetectorFilter(int invSize) {
-        invFilters = new PhantomInventory(invSize);
+    protected DetectorFilter(int invSize) {
+        invFilters = new InventoryAdvanced(invSize).callbackTile(this::getTile).phantom();
     }
 
-    public PhantomInventory getFilters() {
+    public InventoryAdvanced getFilters() {
         return invFilters;
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -19,7 +20,7 @@ import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -33,6 +34,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,18 +49,13 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 public class DetectorRouting extends DetectorSecured implements IRouter, ITileRouting {
 
     private final MultiButtonController<RoutingButtonState> routingController = MultiButtonController.create(0, RoutingButtonState.values());
-    private RoutingLogic logic;
-    private final StandaloneInventory inv = new StandaloneInventory(1, null, new StandaloneInventory.Callback() {
+    private @Nullable RoutingLogic logic;
+    private final InventoryAdvanced inv = new InventoryAdvanced(1).callback(new InventoryAdvanced.CallbackTile(this::getTile) {
         @Override
-        public void markDirty() {
+        public void onInventoryChanged(IInventory invBasic) {
+            super.onInventoryChanged(invBasic);
             logic = null;
-            tile.markDirty();
-            tile.sendUpdateToClient();
-        }
-
-        @Override
-        public String getName() {
-            return tile.getName();
+            tile().ifPresent(RailcraftTileEntity::sendUpdateToClient);
         }
 
     });
@@ -86,7 +83,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
         }
         ItemStack current = player.inventory.getCurrentItem();
         if (!InvTools.isEmpty(current) && current.getItem() instanceof ItemRoutingTable)
-            if (inv.getStackInSlot(0) == null) {
+            if (InvTools.isEmpty(inv.getStackInSlot(0))) {
                 ItemStack copy = current.copy();
                 setSize(copy, 1);
                 inv.setInventorySlotContents(0, copy);
@@ -156,10 +153,10 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     }
 
     private void checkPower() {
-        EnumFacing front = ((BlockDetector) tile.getBlockType()).byIndex(theWorld(), tile.getPos());
+        EnumFacing front = ((BlockDetector) tile.getBlockType()).byIndex(theWorldAsserted(), tile.getPos());
         for (EnumFacing side : EnumFacing.VALUES) {
             if (side == front) continue;
-            if (PowerPlugin.isBlockBeingPowered(theWorld(), getTile().getPos(), side)) {
+            if (PowerPlugin.isBlockBeingPowered(theWorldAsserted(), getTile().getPos(), side)) {
                 powered = true;
                 return;
             }

@@ -129,15 +129,14 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
         patterns.add(new MultiBlockPattern(map2));
     }
 
-    private final InventoryMapper invInput = new InventoryMapper(this, 0, 9, false);
-    private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9, false);
+    private final InventoryMapper invInput = new InventoryMapper(this, 0, 9).ignoreItemChecks();
+    private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9).ignoreItemChecks();
     private final Set<Object> actions = new HashSet<>();
     private int processTime;
     private final Random random = new Random();
     private boolean isWorking;
     private boolean paused;
 
-    @SuppressWarnings("unused")
     public TileRockCrusher() {
         super(18, patterns);
     }

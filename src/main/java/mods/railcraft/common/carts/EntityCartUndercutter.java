@@ -160,18 +160,13 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             return;
 
         if (safeToReplace(pos)) {
-            Block stockBlock = InvTools.getBlockFromStack(stock);
+            IBlockState stockBlock = InvTools.getBlockStateFromStack(stock, world, pos);
             //noinspection deprecation
             List<ItemStack> drops = oldState.getBlock().getDrops(world, pos, oldState, 0);
             ItemBlock item = (ItemBlock) stock.getItem();
-            int newMeta = 0;
-            if (item.getHasSubtypes())
-                newMeta = item.getMetadata(stock.getItemDamage());
-            IBlockState newState;
-            //noinspection deprecation
-            if (stockBlock != null && WorldPlugin.setBlockState(world, pos, (newState = stockBlock.getStateFromMeta(newMeta)))) {
+            if (stockBlock != null && WorldPlugin.setBlockState(world, pos, stockBlock)) {
                 //noinspection deprecation
-                SoundHelper.playBlockSound(world, pos, stockBlock.getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, newState);
+                SoundHelper.playBlockSound(world, pos, stockBlock.getBlock().getSoundType().getPlaceSound(), SoundCategory.NEUTRAL, (1f + 1.0F) / 2.0F, 1f * 0.8F, stockBlock);
                 decrStackSize(slotStock, 1);
                 for (ItemStack stack : drops) {
                     CartToolsAPI.transferHelper().offerOrDropItem(this, stack);
@@ -190,9 +185,8 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             int existMeta = OreDictionary.WILDCARD_VALUE;
             if (existItem.getHasSubtypes())
                 existMeta = existItem.getMetadata(stack.getItemDamage());
-            //TODO wrong
-            Block stackBlock = InvTools.getBlockFromStack(stack);
-            return (stackBlock == state.getBlock() && (existMeta == OreDictionary.WILDCARD_VALUE || state.getBlock().getMetaFromState(state) == existMeta)) || (stackBlock == Blocks.DIRT && stackBlock == Blocks.GRASS);
+            IBlockState stackBlock = InvTools.getBlockStateFromStack(stack);
+            return (state.equals(stackBlock) || (state.getBlock() == stackBlock.getBlock() && existMeta == OreDictionary.WILDCARD_VALUE)) || (state.getBlock() == Blocks.DIRT && stackBlock.getBlock() == Blocks.GRASS);
         }
         return false;
     }

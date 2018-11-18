@@ -44,7 +44,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
     TRACK {
         @Override
         protected boolean testType(ItemStack stack) {
-            return stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockFromStack(stack)));
+            return stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockStateFromStack(stack)));
         }
 
     },

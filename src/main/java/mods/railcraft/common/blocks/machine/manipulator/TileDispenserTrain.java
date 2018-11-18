@@ -20,8 +20,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryManifest;
-import mods.railcraft.common.util.inventory.PhantomInventory;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
@@ -36,15 +35,13 @@ public class TileDispenserTrain extends TileDispenserCart {
 
     public static final int PATTERN_SIZE = 9;
     public static final int BUFFER_SIZE = 18;
-    private final PhantomInventory invPattern = new PhantomInventory(PATTERN_SIZE, this);
-    private final InventoryMapper invStock;
+    private final InventoryAdvanced invPattern = new InventoryAdvanced(PATTERN_SIZE).callbackInv(this).phantom();
     private byte patternIndex;
     private boolean spawningTrain;
     private EntityMinecart lastCart;
 
     public TileDispenserTrain() {
         setInventorySize(BUFFER_SIZE);
-        invStock = new InventoryMapper(this);
     }
 
     @Override
@@ -52,7 +49,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         return ManipulatorVariant.DISPENSER_TRAIN;
     }
 
-    public PhantomInventory getPattern() {
+    public InventoryAdvanced getPattern() {
         return invPattern;
     }
 
@@ -76,14 +73,14 @@ public class TileDispenserTrain extends TileDispenserCart {
             return false;
         }
         Predicate<ItemStack> filter = new MinecartItemType(spawn);
-        if (InvTools.countItems(invStock, filter) == 0) {
+        if (InvTools.countItems(this, filter) == 0) {
             resetSpawnSequence();
             return false;
         }
         BlockPos offset = getPos().offset(facing);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
                 && EntitySearcher.findMinecarts().around(getPos().offset(facing)).in(world).isEmpty()) {
-            ItemStack cartItem = InvTools.removeOneItem(invStock, filter);
+            ItemStack cartItem = InvTools.removeOneItem(this, filter);
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
@@ -94,7 +91,7 @@ public class TileDispenserTrain extends TileDispenserCart {
                         resetSpawnSequence();
                     return true;
                 } else
-                    InvTools.moveItemStack(cartItem, invStock);
+                    InvTools.moveItemStack(cartItem, this);
             }
         }
         return false;

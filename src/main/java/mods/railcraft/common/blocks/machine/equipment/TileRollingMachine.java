@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,7 @@ import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.StandaloneInventory;
+import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryConcatenator;
@@ -36,11 +36,11 @@ public abstract class TileRollingMachine extends TileMachineBase {
     private final RollingContainer matrixListener = new RollingContainer();
     protected final InventoryCrafting craftMatrix = new InventoryCrafting(matrixListener, 3, 3);
 
-    protected final StandaloneInventory invResult = new StandaloneInventory(1, "invResult", this);
+    protected final InventoryAdvanced invResult = new InventoryAdvanced(1).callbackTile(this);
     protected final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
     public boolean useLast;
     protected boolean isWorking, paused;
-    private @Nullable IRollingMachineRecipe currentRecipe = null;
+    private @Nullable IRollingMachineRecipe currentRecipe;
     private ItemStack currentRecipeOutput = ItemStack.EMPTY;
     private int progress;
     private int processTime = PROCESS_TIME;
@@ -105,7 +105,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
         return craftMatrix;
     }
 
-    public StandaloneInventory getInvResult() {
+    public InventoryAdvanced getInvResult() {
         return invResult;
     }
 
@@ -199,12 +199,9 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return false;
         if (useLast)
             return true;
-        for (int i = 0; i < craftMatrix.getSizeInventory(); i++) {
-            ItemStack slot = craftMatrix.getStackInSlot(i);
-            if (!InvTools.isEmpty(slot) && sizeOf(slot) <= 1)
-                return false;
-        }
-        return true;
+        return InventoryIterator.getVanilla(craftMatrix).streamStacks()
+                .filter(InvTools::nonEmpty)
+                .anyMatch(s -> sizeOf(s) > 1);
     }
 
     @Override
