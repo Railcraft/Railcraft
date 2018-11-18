@@ -341,7 +341,7 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         private Stream<BatteryBlock> activeBatteries() {
-            return batteries(IBatteryBlock.State.SOURCE, IBatteryBlock.State.RECHARGEABLE, IBatteryBlock.State.DISPOSABLE);
+            return batteries.stream().filter(b -> b.getState() != IBatteryBlock.State.DISABLED);
         }
 
         public double getCharge() {
