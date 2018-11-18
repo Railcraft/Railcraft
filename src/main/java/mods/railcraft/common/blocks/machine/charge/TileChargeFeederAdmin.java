@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.util.charge.BatteryBlock;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -30,7 +31,7 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public void update() {
         super.update();
-        if (clock % 8 == 0)
+        if (Game.isHost(world) && clock % 8 == 0)
             updateBatteryState(getBlockState());
     }
 

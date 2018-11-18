@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
+import mods.railcraft.api.core.ClientAccessException;
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -45,6 +46,7 @@ public final class Game {
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
         try {
+            //noinspection JavaReflectionMemberAccess
             worldObjFound = Entity.class.getDeclaredField("worldObj") != null;
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
@@ -68,13 +70,16 @@ public final class Game {
         return world.isRemote;
     }
 
+    public static void notClient(final World world) {
+        if (isClient(world)) throw new ClientAccessException();
+    }
+
     public static MinecraftServer getServer() {
         return FMLCommonHandler.instance().getMinecraftServerInstance();
     }
 
     @SideOnly(Side.CLIENT)
-    @Nullable
-    public static WorldClient getWorld() {
+    public static @Nullable WorldClient getWorld() {
         return FMLClientHandler.instance().getWorldClient();
     }
 
@@ -87,7 +92,7 @@ public final class Game {
         return new MessageFormatMessage(msg, args);
     }
 
-    public static void log(Level level, String msg, Object... args) {
+    public static void log(Level level, @Nullable String msg, Object... args) {
         if (msg != null)
             log(level, getMessage(msg, args));
     }

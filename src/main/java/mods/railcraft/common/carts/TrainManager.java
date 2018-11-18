@@ -37,8 +37,7 @@ public final class TrainManager {
     final TrainSaveData data;
 
     public static TrainManager forWorld(World world) {
-        if (Game.isClient(world))
-            throw new RuntimeException("Don't access trains on the client! It won't work!");
+        Game.notClient(world);
         return instances.computeIfAbsent(world, TrainManager::new);
     }
 
@@ -73,7 +72,7 @@ public final class TrainManager {
     }
 
     public static final class TrainSaveData extends WorldSavedData {
-        Map<UUID, Train> trains = new HashMap<>();
+        final Map<UUID, Train> trains = new HashMap<>();
 
         static TrainSaveData forWorld(World world) {
             MapStorage storage = world.getPerWorldStorage();

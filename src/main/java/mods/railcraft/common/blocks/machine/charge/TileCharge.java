@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.charge;
 import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +39,7 @@ public abstract class TileCharge extends TileMachineBase {
     @Override
     public void update() {
         super.update();
-        if (clock % 16 == 0) {
+        if (Game.isHost(world) && clock % 16 == 0) {
             int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
             if (prevComparatorOutput != newComparatorOutput)
                 world.updateComparatorOutputLevel(pos, getBlockType());

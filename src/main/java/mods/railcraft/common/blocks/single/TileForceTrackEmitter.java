@@ -216,8 +216,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             state = previous.whenNoCharge(this);
         } else {
             double draw = getMaintenanceCost(numTracks);
-            Charge.IAccess node = Charge.distribution.network(world).access(pos);
-            if (node.useCharge(draw)) {
+            if (Charge.distribution.network(world).access(pos).useCharge(draw)) {
                 state = previous.afterUseCharge(this);
             } else {
                 state = previous.whenNoCharge(this);

@@ -12,6 +12,7 @@ package mods.railcraft.common.util.charge;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -46,6 +47,7 @@ public enum ChargeManager implements Charge.IManager {
 
     @Override
     public Charge.INetwork network(World world) {
+        Game.notClient(world);
         return networks.computeIfAbsent(world, (w) -> new ChargeNetwork(type, w));
     }
 }
