@@ -34,7 +34,7 @@ public class ItemForceTrackEmitter extends ItemBlockEntityDelegate<BlockForceTra
 
     @Override
     public IItemColor colorHandler() {
-        return (stack, index) -> index == 1 ? getColor(stack) : ColorPlugin.NONE_MULTIPLIER;
+        return (stack, index) -> getColor(stack);
     }
 
     public static ItemStack setColor(ItemStack stack, int color) {

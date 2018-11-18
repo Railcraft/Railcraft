@@ -233,8 +233,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY,
-                                  float hitZ) {
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (super.blockActivated(player, hand, side, hitX, hitY, hitZ))
             return true;
         if (player.isSneaking())
@@ -283,6 +282,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     public void setColor(int color) {
         this.color = color;
         clearTracks();
+        markBlockForUpdate();
     }
 
     public static double getMaintenanceCost(int tracks) {

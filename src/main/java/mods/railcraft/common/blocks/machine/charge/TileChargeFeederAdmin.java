@@ -48,7 +48,8 @@ public class TileChargeFeederAdmin extends TileCharge {
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(state, placer, stack);
-        updateBatteryState(state);
+        if (Game.isHost(world))
+            updateBatteryState(state);
     }
 
     @Override

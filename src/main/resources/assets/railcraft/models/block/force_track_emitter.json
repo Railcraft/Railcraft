@@ -5,24 +5,24 @@
       "from": [0, 0, 0],
       "to": [16, 16, 16],
       "faces": {
-        "down": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0, "cullface": "down"},
-        "up": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0, "cullface": "up"},
-        "north": {"uv": [0, 0, 16, 16], "texture": "#front", "tintindex": 0, "cullface": "north"},
-        "south": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0, "cullface": "south"},
-        "west": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0, "cullface": "west"},
-        "east": {"uv": [0, 0, 16, 16], "texture": "#side", "tintindex": 0, "cullface": "east"}
+        "down": {"texture": "#side", "cullface": "down"},
+        "up": {"texture": "#side", "cullface": "up"},
+        "north": {"texture": "#front", "cullface": "north"},
+        "south": {"texture": "#side", "cullface": "south"},
+        "west": {"texture": "#side", "cullface": "west"},
+        "east": {"texture": "#side", "cullface": "east"}
       }
     },
     {
       "from": [0, 0, 0],
       "to": [16, 16, 16],
       "faces": {
-        "down": {"uv": [0, 0, 16, 16], "texture": "#colored_side", "tintindex": 1, "cullface": "down"},
-        "up": {"uv": [0, 0, 16, 16], "texture": "#colored_side", "tintindex": 1, "cullface": "up"},
-        "north": {"uv": [0, 0, 16, 16], "texture": "#colored_front", "tintindex": 1, "cullface": "north"},
-        "south": {"uv": [0, 0, 16, 16], "texture": "#colored_side", "tintindex": 1, "cullface": "south"},
-        "west": {"uv": [0, 0, 16, 16], "texture": "#colored_side", "tintindex": 1, "cullface": "west"},
-        "east": {"uv": [0, 0, 16, 16], "texture": "#colored_side", "tintindex": 1, "cullface": "east"}
+        "down": {"texture": "#colored_side", "tintindex": 0, "cullface": "down"},
+        "up": {"texture": "#colored_side", "tintindex": 0, "cullface": "up"},
+        "north": {"texture": "#colored_front", "tintindex": 0, "cullface": "north"},
+        "south": {"texture": "#colored_side", "tintindex": 0, "cullface": "south"},
+        "west": {"texture": "#colored_side", "tintindex": 0, "cullface": "west"},
+        "east": {"texture": "#colored_side", "tintindex": 0, "cullface": "east"}
       }
     }
   ]

@@ -104,16 +104,10 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
 
     @Override
     public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> {
-            if (tintIndex != 1) {
-                return ColorPlugin.NONE_MULTIPLIER;
-            }
-            if (worldIn != null && pos != null) {
-                return WorldPlugin.getTileEntity(worldIn, pos, TileForceTrackEmitter.class).map(TileForceTrackEmitter::getColor)
+        return (state, worldIn, pos, tintIndex) ->
+                WorldPlugin.getTileEntity(worldIn, pos, TileForceTrackEmitter.class)
+                        .map(TileForceTrackEmitter::getColor)
                         .orElse(DEFAULT_SHADE);
-            }
-            return DEFAULT_SHADE;
-        };
     }
 
     @Override

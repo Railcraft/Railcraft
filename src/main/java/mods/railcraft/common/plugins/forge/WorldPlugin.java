@@ -59,7 +59,9 @@ public class WorldPlugin {
         return Optional.ofNullable(getBlockTile(world, pos));
     }
 
-    public static <T> Optional<T> getTileEntity(IBlockAccess world, BlockPos pos, Class<T> tileClass) {
+    public static <T> Optional<T> getTileEntity(@Nullable IBlockAccess world, @Nullable BlockPos pos, Class<T> tileClass) {
+        if (world == null || pos == null)
+            return Optional.empty();
         TileEntity tileEntity = getBlockTile(world, pos);
         if (tileClass.isInstance(tileEntity))
             return Optional.of(tileClass.cast(tileEntity));
@@ -177,7 +179,7 @@ public class WorldPlugin {
 
     public static void notifyBlockOfStateChange(World world, BlockPos pos, Block block) {
         if (world != null && block != null)
-            world.notifyNeighborsOfStateChange(pos, block,true);
+            world.notifyNeighborsOfStateChange(pos, block, true);
     }
 
     public static void notifyBlocksOfNeighborChange(World world, BlockPos pos, Block block) {
