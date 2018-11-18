@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,7 +21,6 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
@@ -36,7 +35,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
@@ -59,11 +57,6 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, SHAPE);
-    }
-
-    @Override
     public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
         return TrackTypes.IRON.getTrackType();
     }
@@ -76,16 +69,6 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
     @Override
     protected IBlockState updateDir(World worldIn, BlockPos pos, IBlockState state, boolean initialPlacement) {
         return state; // Get the hell off my tile entity!
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
     }
 
     @Override
@@ -118,16 +101,6 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
     }
 
     @Override
-    public EnumRailDirection getRailDirection(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileTrackForce) {
-            TileTrackForce track = (TileTrackForce) tile;
-            return track.getDirection();
-        }
-        return EnumRailDirection.NORTH_SOUTH;
-    }
-
-    @Override
     public float getRailMaxSpeed(World world, EntityMinecart cart, BlockPos pos) {
         return 0.6F;
     }
@@ -152,17 +125,6 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
     @Override
     public TileEntity createTileEntity(World world, IBlockState state) {
         return new TileTrackForce();
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-        if (tile instanceof TileTrackForce) {
-            TileTrackForce track = (TileTrackForce) tile;
-            return state.withProperty(SHAPE, track.getDirection());
-        }
-        return state;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,11 +15,9 @@ import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing.Axis;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 /**
@@ -29,11 +27,9 @@ import java.io.IOException;
  */
 public final class TileTrackForce extends RailcraftTileEntity {
 
-    @Nullable
-    private TileForceTrackEmitter emitter = null;
-    private int index = 0;
+    private @Nullable TileForceTrackEmitter emitter;
+    private int index;
     private int color = BlockForceTrackEmitter.DEFAULT_SHADE;
-    private boolean eastWest = false;
 
     int getColor() {
         return color;
@@ -51,17 +47,12 @@ public final class TileTrackForce extends RailcraftTileEntity {
         }
     }
 
-    EnumRailDirection getDirection() {
-        return eastWest ? EnumRailDirection.EAST_WEST : EnumRailDirection.NORTH_SOUTH;
-    }
-
     public void setEmitter(@Nullable TileForceTrackEmitter emitter) {
         this.emitter = emitter;
         if (emitter != null) {
             setOwner(emitter.getOwner());
             this.color = emitter.getColor();
             this.index = emitter.getNumberOfTracks();
-            this.eastWest = emitter.getFacing().getAxis() == Axis.X;
         }
     }
 
@@ -69,20 +60,17 @@ public final class TileTrackForce extends RailcraftTileEntity {
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeInt(color);
-        data.writeBoolean(eastWest);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         color = data.readInt();
-        eastWest = data.readBoolean();
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setBoolean("eastWest", eastWest);
         data.setInteger("color", color);
         data.setInteger("index", index);
         return data;
@@ -91,7 +79,6 @@ public final class TileTrackForce extends RailcraftTileEntity {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        eastWest = data.getBoolean("eastWest");
         color = data.getInteger("color");
         index = data.getInteger("index");
     }
