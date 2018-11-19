@@ -10,14 +10,17 @@
 
 package mods.railcraft.common.util.inventory.filters;
 
+import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.block.Block;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -145,5 +148,24 @@ public final class StackFilters {
      */
     public static Predicate<ItemStack> roomIn(final IInventoryComposite inv) {
         return stack -> InvTools.isRoomForStack(stack, inv);
+    }
+
+    /**
+     * Matches if the Inventory contains the given ItemStack.
+     */
+    public static Predicate<ItemStack> isCart(@Nullable final EntityMinecart cart) {
+        return stack -> {
+            if (InvTools.isEmpty(stack))
+                return false;
+            if (cart == null)
+                return false;
+            if (cart instanceof IMinecart) {
+                if (stack.hasDisplayName())
+                    return ((IMinecart) cart).doesCartMatchFilter(stack, cart) && stack.getDisplayName().equals(cart.getCartItem().getDisplayName());
+                return ((IMinecart) cart).doesCartMatchFilter(stack, cart);
+            }
+            ItemStack cartItem = cart.getCartItem();
+            return !InvTools.isEmpty(stack) && InvTools.isCartItemEqual(stack, cartItem, true);
+        };
     }
 }

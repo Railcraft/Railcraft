@@ -1,8 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.aesthetics.concrete;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
-import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.fluids.FluidTools;
@@ -38,7 +47,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 @RailcraftBlockMetadata(variant = EnumColor.class)
-public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> implements IRailcraftBlock, ColorPlugin.IColoredBlock {
+public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> implements ColorPlugin.IColoredBlock {
 
     public BlockReinforcedConcrete() {
         super(Material.ROCK, MapColor.STONE);

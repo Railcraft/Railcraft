@@ -11,8 +11,8 @@ package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.common.blocks.detector.DetectorFilter;
 import mods.railcraft.common.blocks.detector.EnumDetector;
-import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -33,7 +33,7 @@ public class DetectorAdvanced extends DetectorFilter {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         for (EntityMinecart cart : carts) {
-            if (getFilters().streamStacks().anyMatch(filter -> CartTools.doesCartMatchFilter(filter, cart))) {
+            if (getFilters().streamStacks().anyMatch(StackFilters.isCart(cart))) {
                 return FULL_POWER;
             }
         }

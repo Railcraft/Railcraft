@@ -13,7 +13,6 @@ import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.interfaces.ITileRedstoneEmitter;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
 import mods.railcraft.common.gui.buttons.MultiButtonController;
@@ -29,6 +28,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -44,6 +44,7 @@ import net.minecraft.util.text.TextFormatting;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -83,8 +84,10 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
             return false;
         ItemStack minecartSlot1 = getCartFilters().getStackInSlot(0);
         ItemStack minecartSlot2 = getCartFilters().getStackInSlot(1);
-        if (!InvTools.isEmpty(minecartSlot1) || !InvTools.isEmpty(minecartSlot2))
-            return CartTools.doesCartMatchFilter(minecartSlot1, cart) || CartTools.doesCartMatchFilter(minecartSlot2, cart);
+        if (!InvTools.isEmpty(minecartSlot1) || !InvTools.isEmpty(minecartSlot2)) {
+            Predicate<ItemStack> matcher = StackFilters.isCart(cart);
+            return matcher.test(minecartSlot1) || matcher.test(minecartSlot2);
+        }
         return true;
     }
 

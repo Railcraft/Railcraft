@@ -11,7 +11,6 @@ package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IMinecartItem;
@@ -93,28 +92,6 @@ public final class CartTools {
                 return cart;
             }
         return null;
-    }
-
-    /**
-     * Will return true if the cart matches the provided filter item.
-     *
-     * @param stack the Filter
-     * @param cart  the Cart
-     * @return true if the item matches the cart
-     * @see IMinecart
-     */
-    public static boolean doesCartMatchFilter(@Nullable ItemStack stack, @Nullable EntityMinecart cart) {
-        if (InvTools.isEmpty(stack))
-            return false;
-        if (cart == null)
-            return false;
-        if (cart instanceof IMinecart) {
-            if (stack.hasDisplayName())
-                return ((IMinecart) cart).doesCartMatchFilter(stack, cart) && stack.getDisplayName().equals(cart.getCartItem().getDisplayName());
-            return ((IMinecart) cart).doesCartMatchFilter(stack, cart);
-        }
-        ItemStack cartItem = cart.getCartItem();
-        return !InvTools.isEmpty(stack) && InvTools.isCartItemEqual(stack, cartItem, true);
     }
 
     public static void explodeCart(EntityMinecart cart) {
