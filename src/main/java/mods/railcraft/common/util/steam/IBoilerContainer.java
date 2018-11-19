@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.util.steam;
 
-import mods.railcraft.common.util.fuel.INeedsFuel;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import net.minecraftforge.fluids.FluidStack;

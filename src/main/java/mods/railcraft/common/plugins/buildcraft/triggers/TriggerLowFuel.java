@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@
 package mods.railcraft.common.plugins.buildcraft.triggers;
 
 import buildcraft.api.statements.IStatementParameter;
-import mods.railcraft.common.util.fuel.INeedsFuel;
+import mods.railcraft.api.fuel.INeedsFuel;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
