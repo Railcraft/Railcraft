@@ -10,7 +10,6 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.charge.BatteryVariant;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.inventory.InvTools;
