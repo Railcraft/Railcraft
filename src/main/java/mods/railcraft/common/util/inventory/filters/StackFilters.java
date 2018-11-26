@@ -136,6 +136,18 @@ public final class StackFilters {
         return stack -> OreDictPlugin.isOreType(oreTag, stack);
     }
 
+    public static Predicate<ItemStack> ofSize(final int size) {
+        return stack -> InvTools.sizeOf(stack) == size;
+    }
+
+    public static Predicate<ItemStack> singleton() {
+        return stack -> InvTools.sizeOf(stack) == 1;
+    }
+
+    public static Predicate<ItemStack> nonEmpty() {
+        return InvTools::nonEmpty;
+    }
+
     /**
      * Matches if the Inventory contains the given ItemStack.
      */
@@ -144,14 +156,14 @@ public final class StackFilters {
     }
 
     /**
-     * Matches if the Inventory contains the given ItemStack.
+     * Matches if the Inventory has room and accepts the given ItemStack
      */
     public static Predicate<ItemStack> roomIn(final IInventoryComposite inv) {
         return stack -> InvTools.isRoomForStack(stack, inv);
     }
 
     /**
-     * Matches if the Inventory contains the given ItemStack.
+     * Matches if the ItemStack matches the given cart.
      */
     public static Predicate<ItemStack> isCart(@Nullable final EntityMinecart cart) {
         return stack -> {

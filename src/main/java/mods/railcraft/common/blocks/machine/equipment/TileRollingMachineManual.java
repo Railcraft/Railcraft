@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,8 +12,7 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
+import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -32,13 +31,13 @@ public class TileRollingMachineManual extends TileRollingMachine {
 
     @Override
     public void onGuiClosed(EntityPlayer player) {
-        for (IExtInvSlot slot : InventoryIterator.getVanilla(getInventory())) {
-            ItemStack stack = slot.getStack();
-            if (!InvTools.isEmpty(stack)) {
-                slot.setStack(ItemStack.EMPTY);
-                player.dropItem(stack, false);
-            }
-        }
+        InventoryIterator.getVanilla(getInventory()).stream()
+                .filter(IInvSlot::hasStack)
+                .forEach(slot -> {
+                    ItemStack stack = slot.getStack();
+                    slot.clear();
+                    player.dropItem(stack, false);
+                });
     }
 
     @Override
