@@ -740,29 +740,20 @@ public abstract class InvTools {
      * @param dest  The IInventory
      * @return true if room for stack
      */
-    @Contract("null,_ -> false;")
-    public static boolean acceptsItemStack(@Nullable ItemStack stack, IInventoryComposite dest) {
+    public static boolean acceptsItemStack(ItemStack stack, IInventoryComposite dest) {
         if (isEmpty(stack))
             return false;
-        ItemStack newStack = stack.copy();
-        setSize(newStack, 1);
-        for (IInventoryObject inv : dest) {
-            for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
-                if (slot.canPutStackInSlot(stack))
-                    return true;
-            }
-        }
-        return false;
+        ItemStack newStack = copyOne(stack);
+        return dest.streamSlots().anyMatch(slot -> slot.canPutStackInSlot(newStack));
     }
 
     /**
-     * Checks if inventory will accept the ItemStack.
+     * Checks if inventory will accept any item from the list.
      *
      * @param stacks The ItemStacks
      * @param dest   The IInventory
      * @return true if room for stack
      */
-    @Contract("null,_ -> false;")
     public static boolean acceptsAnyItemStack(List<ItemStack> stacks, IInventoryComposite dest) {
         return stacks.stream().anyMatch(stack -> acceptsItemStack(stack, dest));
     }
