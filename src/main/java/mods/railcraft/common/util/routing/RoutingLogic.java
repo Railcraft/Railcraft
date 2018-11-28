@@ -20,6 +20,7 @@ import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -85,6 +86,10 @@ public final class RoutingLogic {
     }
 
     private EntityMinecart getRoutableCart(EntityMinecart cart) {
+        // FIXME Train: Will this cause desync?
+        // Note that this doesn't actually change the behavior as link information has never been available on the client.
+        if (Game.isClient(cart.world))
+            return cart;
         Train train = Train.getTrain(cart);
         if (train.size() == 1)
             return cart;
