@@ -28,6 +28,7 @@ public class CommandTrack extends SubCommand {
     public CommandTrack() {
         super("track");
         SubCommand commandTrackMessage = new CommandTrackMessage("message", TrackKitMessenger::setTitle).addAlias("msg");
+        commandTrackMessage.addChildCommand(new CommandTrackMessage("title", TrackKitMessenger::setTitle));
         commandTrackMessage.addChildCommand(new CommandTrackMessage("subtitle", TrackKitMessenger::setSubtitle).addAlias("sub"));
         commandTrackMessage.addChildCommand(new CommandTrackMessage("actionbar", TrackKitMessenger::setActionbar).addAlias("bar"));
         addChildCommand(commandTrackMessage);
