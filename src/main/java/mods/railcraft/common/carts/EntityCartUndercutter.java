@@ -186,7 +186,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             if (existItem.getHasSubtypes())
                 existMeta = existItem.getMetadata(stack.getItemDamage());
             IBlockState stackBlock = InvTools.getBlockStateFromStack(stack);
-            return (state.equals(stackBlock) || (state.getBlock() == stackBlock.getBlock() && existMeta == OreDictionary.WILDCARD_VALUE)) || (state.getBlock() == Blocks.DIRT && stackBlock.getBlock() == Blocks.GRASS);
+            return (state.equals(stackBlock) || (state.getBlock() == stackBlock.getBlock() && existMeta == OreDictionary.WILDCARD_VALUE)) || (state.getBlock() == Blocks.GRASS && stackBlock.getBlock() == Blocks.DIRT);
         }
         return false;
     }
