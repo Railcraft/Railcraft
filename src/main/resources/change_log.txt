@@ -1,3 +1,14 @@
+12.0.0-alpha-7:
+    COMPAT: Add fuel values for IC2 Biogas.
+    CONFIG: Loosen up limits on Tank Cart values.
+    FIX: Fix multiblock crashes.
+    FIX: Various bug and crash fixes.
+    API: More Charge tweaks.
+
+12.0.0-alpha-6:
+    FIX: Fix Train serialization.
+    FIX: Various minor bug fixes.
+
 12.0.0-alpha-5:
     FIX: Various minor bug fixes.
     API: New and improved Charge API!
