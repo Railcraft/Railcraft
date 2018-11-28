@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,8 +67,9 @@ public abstract class SubCommand implements IModCommand {
         return children;
     }
 
-    public void addAlias(String alias) {
+    public SubCommand addAlias(String alias) {
         aliases.add(alias);
+        return this;
     }
 
     @Override

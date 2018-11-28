@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,22 +20,19 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketTitle;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentUtils;
 
 import java.lang.ref.WeakReference;
 
 public class TrackKitMessenger extends TrackKitPowered {
 
-    private ITextComponent title;
-    private ITextComponent subtitle;
-    private boolean subtitleSet;
+    private ITextComponent title = new TextComponentString("");
+    private ITextComponent subtitle = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.standard");
+    private ITextComponent actionbar = new TextComponentString("");
+    private boolean setup;
     private WeakReference<EntityMinecart> lastCart;
     private Timer timer = new Timer();
-
-    public TrackKitMessenger() {
-        this.title = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.default");
-        this.subtitle = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.default");
-    }
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -62,37 +59,53 @@ public class TrackKitMessenger extends TrackKitPowered {
         super.writeToNBT(data);
         data.setString("title", ITextComponent.Serializer.componentToJson(title));
         data.setString("subtitle", ITextComponent.Serializer.componentToJson(subtitle));
-        data.setBoolean("subtitleSet", subtitleSet);
+        data.setString("actionbar", ITextComponent.Serializer.componentToJson(actionbar));
+        data.setBoolean("setup", setup);
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        subtitleSet = data.getBoolean("subtitleSet");
+        setup = data.getBoolean("subtitleSet") || data.getBoolean("setup");
         try {
             title = ITextComponent.Serializer.jsonToComponent(data.getString("title"));
             subtitle = ITextComponent.Serializer.jsonToComponent(data.getString("subtitle"));
+            actionbar = ITextComponent.Serializer.jsonToComponent(data.getString("actionbar"));
         } catch (JsonParseException ignored) {
         }
     }
 
     public ITextComponent getTitle() {
-        return title;
+        if (setup)
+            return title;
+        return ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.title.default");
     }
 
     public ITextComponent getSubtitle() {
-        return subtitle;
+        if (setup)
+            return subtitle;
+        return ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.default");
+    }
+
+    public ITextComponent getActionbar() {
+        if (setup)
+            return actionbar;
+        return ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.actionbar.default");
     }
 
     public void setTitle(ITextComponent title) {
         this.title = title;
-        if (!subtitleSet)
-            this.subtitle = ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.standard");
+        setup = true;
     }
 
     public void setSubtitle(ITextComponent subtitle) {
         this.subtitle = subtitle;
-        subtitleSet = true;
+        setup = true;
+    }
+
+    public void setActionbar(ITextComponent actionbar) {
+        this.actionbar = actionbar;
+        setup = true;
     }
 
     public void setTitle(ICommandSender setter, ITextComponent title) {
@@ -105,12 +118,19 @@ public class TrackKitMessenger extends TrackKitPowered {
         setter.sendMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.subtitle.set"));
     }
 
+    public void setActionbar(ICommandSender setter, ITextComponent actionbar) {
+        setActionbar(actionbar);
+        setter.sendMessage(ChatPlugin.translateMessage("gui.railcraft.track_kit.messenger.actionbar.set"));
+    }
+
     protected void sendMessage(EntityMinecart cart) {
         cart.getRecursivePassengersByType(EntityPlayerMP.class).forEach(e -> {
             try {
-                SPacketTitle pkt = new SPacketTitle(SPacketTitle.Type.SUBTITLE, TextComponentUtils.processComponent(cart, subtitle, e));
+                SPacketTitle pkt = new SPacketTitle(SPacketTitle.Type.ACTIONBAR, TextComponentUtils.processComponent(cart, getActionbar(), e));
                 e.connection.sendPacket(pkt);
-                pkt = new SPacketTitle(SPacketTitle.Type.TITLE, TextComponentUtils.processComponent(cart, title, e));
+                pkt = new SPacketTitle(SPacketTitle.Type.SUBTITLE, TextComponentUtils.processComponent(cart, getSubtitle(), e));
+                e.connection.sendPacket(pkt);
+                pkt = new SPacketTitle(SPacketTitle.Type.TITLE, TextComponentUtils.processComponent(cart, getTitle(), e));
                 e.connection.sendPacket(pkt);
             } catch (CommandException ignored) {
             }
