@@ -19,6 +19,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 
+import java.util.Objects;
+
 /**
  * Commands for tracks.
  * Created by CovertJaguar on 3/12/2015.
@@ -53,9 +55,9 @@ public class CommandTrack extends SubCommand {
 
             TrackKitMessenger track = TrackTools.getTrackInstance(CommandHelpers.getWorld(sender), pos, TrackKitMessenger.class);
             if (track != null) {
-                String message = CommandBase.buildString(argsQueue.toArgArray(), 0);
+                String message = CommandBase.buildString(argsQueue.toArray(), 0);
                 try {
-                    consumer.accept(track, sender, ITextComponent.Serializer.jsonToComponent(message));
+                    consumer.accept(track, sender, Objects.requireNonNull(ITextComponent.Serializer.jsonToComponent(message)));
                 } catch (JsonParseException ex) {
                     throw CommandHelpers.toSyntaxException(ex);
                 }

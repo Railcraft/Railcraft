@@ -22,14 +22,8 @@ import java.util.Collection;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ArgDeque extends ArrayDeque<String> {
-    public ArgDeque() {
-    }
 
-    public ArgDeque(int numElements) {
-        super(numElements);
-    }
-
-    public ArgDeque(Collection<? extends String> c) {
+    private ArgDeque(Collection<? extends String> c) {
         super(c);
     }
 
@@ -37,7 +31,8 @@ public class ArgDeque extends ArrayDeque<String> {
         return new ArgDeque(Arrays.asList(args));
     }
 
-    public String[] toArgArray() {
+    @Override
+    public String[] toArray() {
         return toArray(new String[size()]);
     }
 
