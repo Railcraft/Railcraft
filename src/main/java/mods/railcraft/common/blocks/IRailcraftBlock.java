@@ -27,6 +27,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 /**
  * Created by CovertJaguar on 7/16/2016 for Railcraft.
  *
@@ -49,6 +51,7 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
 
     @SideOnly(Side.CLIENT)
     @Override
+    @OverridingMethodsMustInvokeSuper
     default void initializeClient() {
         StateMapperBase stateMapper = getStateMapper();
         if (stateMapper != null)

@@ -123,36 +123,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
             }
         });
 
-//        Set<IRailcraftObjectContainer<IRailcraftItemSimple>> items = new HashSet<>();
-//        items.addAll(Arrays.asList(RailcraftItems.VALUES));
-//        items.addAll(Arrays.asList(RailcraftCarts.VALUES));
-//        for (IRailcraftObjectContainer<IRailcraftItemSimple> itemContainer : items) {
-//            itemContainer.getObject().ifPresent(IRailcraftItemSimple::initializeClient);
-//        }
-
         RailcraftObjects.processItems(IRailcraftItemSimple::initializeClient);
-
-//        for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
-//            ItemBlock item = blockContainer.item();
-//            blockContainer.getObject().ifPresent(block -> {
-//                block.initializeClient();
-//                if (item != null) {
-//                    ((IRailcraftObject) item).initializeClient();
-//                    IVariantEnum[] variants = block.getVariants();
-//                    if (variants != null) {
-//                        for (IVariantEnum variant : variants) {
-//                            ItemStack stack = blockContainer.getStack(variant);
-//                            if (stack != null)
-//                                block.registerItemModel(stack, variant);
-//                        }
-//                    } else {
-//                        ItemStack stack = blockContainer.getStack();
-//                        if (stack != null)
-//                            block.registerItemModel(stack, null);
-//                    }
-//                }
-//            });
-//        }
 
         RailcraftObjects.processBlocks(
                 (block, item) -> {

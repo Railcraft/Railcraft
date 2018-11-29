@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,8 +22,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * All Railcraft Items and Blocks should implement this.
@@ -33,8 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRailcraftRegistryEntry<T>, IIngredientSource {
     T getObject();
 
-    @Nullable
-    default Object getRecipeObject(@Nullable IVariantEnum variant) {
+    default @Nullable Object getRecipeObject(@Nullable IVariantEnum variant) {
         return getStack(1, variant);
     }
 
@@ -72,8 +72,7 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
         throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
     }
 
-    @Nullable
-    default ItemStack getWildcard() {
+    default @Nullable ItemStack getWildcard() {
         Object obj = getObject();
         if (obj instanceof Item)
             return new ItemStack((Item) obj, 1, OreDictionary.WILDCARD_VALUE);
@@ -103,13 +102,11 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
             throw new RuntimeException("Incorrect Variant object used.");
     }
 
-    @Nullable
-    default Class<? extends IVariantEnum> getVariantEnum() {
+    default @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return null;
     }
 
-    @Nullable
-    default IVariantEnum[] getVariants() {
+    default @Nullable IVariantEnum[] getVariants() {
         Class<? extends IVariantEnum> variantEnum = getVariantEnum();
         if (variantEnum != null) {
             return variantEnum.getEnumConstants();
@@ -118,7 +115,7 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
     }
 
     default String getPath() {
-        return getRegistryName().getPath();
+        return Objects.requireNonNull(getRegistryName()).getPath();
     }
 
     @Override

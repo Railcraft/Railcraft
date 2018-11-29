@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,6 +26,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jetbrains.annotations.Contract;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 /**
@@ -48,7 +49,8 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
     BROWN(0x835432, "dyeBrown", "brown"),
     GREEN(0x5E7C16, "dyeGreen", "green"),
     RED(0xB02E26, "dyeRed", "red"),
-    BLACK(0x1D1D21, "dyeBlack", "black"),;
+    BLACK(0x1D1D21, "dyeBlack", "black"),
+    ;
     public static final EnumColor[] VALUES = values();
     public static final EnumColor[] VALUES_INVERTED = values();
     public static final String DEFAULT_COLOR_TAG = "color";
@@ -145,12 +147,9 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         if (InvTools.isEmpty(stack))
             return null;
         int[] ids = OreDictionary.getOreIDs(stack);
-        for (EnumColor color : VALUES) {
-            if (Ints.contains(ids, OreDictionary.getOreID(color.oreTagDyeName))) {
-                return color;
-            }
-        }
-        return null;
+        return Arrays.stream(VALUES)
+                .filter(color -> Ints.contains(ids, OreDictionary.getOreID(color.oreTagDyeName)))
+                .findAny().orElse(null);
     }
 
     public EnumDyeColor getDye() {

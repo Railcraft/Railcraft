@@ -1,15 +1,18 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.emblems;
 
 import mods.railcraft.client.util.textures.Texture;
 import net.minecraft.util.ResourceLocation;
+
+import javax.annotation.Nullable;
 
 /**
  *
@@ -21,6 +24,7 @@ public interface IEmblemPackageManager {
     
     ResourceLocation getEmblemTextureLocation(String ident);
 
+    @Nullable
     Emblem getEmblem(String ident);
 
 }

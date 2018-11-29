@@ -18,8 +18,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -43,7 +41,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         public Definition(IRailcraftObjectContainer<?> obj, String tag, @Nullable Supplier<?> altRecipeObject) {
             this.tag = tag;
             this.altRecipeObject = altRecipeObject;
-            registryName = new ResourceLocation(obj.getNamespace() + ":" + tag);
+            registryName = new ResourceLocation(obj.getNamespace(), tag);
             conditions.add(c -> !modules.isEmpty(), () -> "it has no module");
         }
     }
@@ -62,14 +60,6 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
      * Register the item. Call {@link IRailcraftObject#initializeDefinition()} in this part!
      */
     default void register() {
-    }
-
-    /**
-     * To be called in batch by the client proxy.
-     */
-    @SideOnly(Side.CLIENT)
-    default void initializeClient() {
-        getObject().ifPresent(IRailcraftObject::initializeClient);
     }
 
     /**
@@ -100,6 +90,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         }).orElse(false);
     }
 
+    @SuppressWarnings("SameReturnValue")
     default String getNamespace() {
         return RailcraftConstants.RESOURCE_DOMAIN;
     }
