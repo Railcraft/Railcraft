@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,6 @@ public class PacketPairRequest extends RailcraftPacket {
     private PacketType packetType;
 
     public PacketPairRequest(EntityPlayerMP player, PacketType type) {
-        super();
         this.player = player;
         this.packetType = type;
     }

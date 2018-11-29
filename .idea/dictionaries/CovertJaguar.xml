@@ -2,9 +2,11 @@
   <dictionary name="CovertJaguar">
     <words>
       <w>AABB</w>
+      <w>BDcraft</w>
       <w>Mozilla</w>
       <w>aabb</w>
       <w>addon</w>
+      <w>addons</w>
       <w>aint</w>
       <w>alumentum</w>
       <w>andesite</w>
@@ -37,6 +39,7 @@
       <w>coords</w>
       <w>craftable</w>
       <w>crafter</w>
+      <w>craftings</w>
       <w>cullface</w>
       <w>decoupler</w>
       <w>decr</w>
@@ -68,6 +71,7 @@
       <w>liach</w>
       <w>lockdown</w>
       <w>macerator</w>
+      <w>maint</w>
       <w>maxdraw</w>
       <w>mfsu</w>
       <w>mineable</w>
@@ -115,6 +119,7 @@
       <w>submodel</w>
       <w>subtyped</w>
       <w>tameable</w>
+      <w>tarberry</w>
       <w>teleport</w>
       <w>teleported</w>
       <w>tessellator</w>
@@ -123,6 +128,7 @@
       <w>tileentity</w>
       <w>tintindex</w>
       <w>trackman</w>
+      <w>trackside</w>
       <w>tungstensteel</w>
       <w>uncrafted</w>
       <w>uncrafting</w>

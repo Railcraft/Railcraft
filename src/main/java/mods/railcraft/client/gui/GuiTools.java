@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -66,6 +66,7 @@ public final class GuiTools {
 
     public static void drawStringCenteredAtPos(FontRenderer fr, String s, int x, int y, int color, boolean shadow) {
         int sWidth = fr.getStringWidth(s);
+        //noinspection IntegerDivisionInFloatingPointContext
         fr.drawString(s, x - sWidth / 2, y, color, shadow);
     }
 

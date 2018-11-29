@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,13 +19,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiLocomotiveElectric extends GuiLocomotive {
 
-    private final EntityLocomotiveElectric loco;
-    private final EntityPlayer player;
-
     public GuiLocomotiveElectric(InventoryPlayer inv, EntityLocomotiveElectric loco) {
         super(inv, loco, ContainerLocomotiveElectric.make(inv, loco), "electric", "gui_locomotive_electric.png", 161, false);
-        this.loco = loco;
-        this.player = inv.player;
+        EntityLocomotiveElectric loco1 = loco;
+        EntityPlayer player = inv.player;
     }
 
 }

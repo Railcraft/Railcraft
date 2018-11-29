@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiDispenserCart extends TileGui {
 
-    private final TileDispenserCart tile;
     private final InventoryPlayer inv;
 
     public GuiDispenserCart(InventoryPlayer inv, TileDispenserCart tile) {
@@ -24,7 +23,7 @@ public class GuiDispenserCart extends TileGui {
         xSize = 176;
         ySize = 140;
         this.inv = inv;
-        this.tile = tile;
+        TileDispenserCart tile1 = tile;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 public class GuiBoxAnalogController extends GuiBasic {
 
     private final TileBoxAnalog tile;
-    private static final Pattern patternRange = Pattern.compile("(\\d+)-(\\d+)|(\\d+)");
+    private static final Pattern PATTERN_RANGE = Pattern.compile("(\\d+)-(\\d+)|(\\d+)");
     //When doing Pattern.matcher, these are the groups:           ^ 1    ^ 2    ^ 3
 
     private final EnumMap<SignalAspect, BitSet> aspects = new EnumMap<SignalAspect, BitSet>(SignalAspect.class);
@@ -65,36 +65,36 @@ public class GuiBoxAnalogController extends GuiBasic {
     }
 
     private String rangeToString(BitSet b) {
-        String s = "";
+        StringBuilder s = new StringBuilder();
         int start = -1;
         for (int i = 0; i < 16; i++) {
             if (b.get(i)) {
                 if (start == -1) {
-                    s += i;
+                    s.append(i);
                     start = i;
                 }
             } else if (start != -1) {
                 if (i - 1 == start)
-                    s += ",";
+                    s.append(",");
                 else
-                    s += "-" + (i - 1) + ",";
+                    s.append("-").append(i - 1).append(",");
                 start = -1;
             }
         }
         if (start != -1 && start != 15) {
-            s += "-15";
+            s.append("-15");
             start = 15;
         }
 
-        if (s.isEmpty() || start == 15)
-            return s;
+        if ((s.length() == 0) || start == 15)
+            return s.toString();
         else
             return s.substring(0, s.length() - 1);    //Remove trailing comma
     }
 
     private void parseRegex(String regex, BitSet bits) {
         bits.clear();
-        Matcher m = patternRange.matcher(regex);
+        Matcher m = PATTERN_RANGE.matcher(regex);
         while (m.find()) {
             if (m.groupCount() >= 3 && m.group(3) != null) {
                 int i = Integer.parseInt(m.group(3));

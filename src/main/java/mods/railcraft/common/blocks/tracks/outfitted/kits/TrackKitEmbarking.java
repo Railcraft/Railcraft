@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -95,7 +95,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
             box = box.grow(a, a, a);
             List<EntityLivingBase> entities = theWorldAsserted().getEntitiesWithinAABB(EntityLivingBase.class, box);
 
-            if (entities.size() > 0) {
+            if (!entities.isEmpty()) {
                 EntityLivingBase entity = entities.get(MiscTools.RANDOM.nextInt(entities.size()));
 
                 if (entity instanceof EntityPlayer) {

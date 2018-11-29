@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,6 @@ public class GuiRouting extends TileGui {
     private final IRouter router;
     private GuiMultiButton lockButton;
     private GuiMultiButton routingButton;
-    private final EntityPlayer player;
     private final RailcraftTileEntity tile;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
@@ -44,7 +43,7 @@ public class GuiRouting extends TileGui {
         ySize = 160;
         this.tile = tile;
         this.router = router;
-        this.player = inv.player;
+        EntityPlayer player = inv.player;
         lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + ownerName);
         unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + ownerName);
         notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + ownerName);

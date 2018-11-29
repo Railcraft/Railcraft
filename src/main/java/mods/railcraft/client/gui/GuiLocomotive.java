@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,7 +36,6 @@ import java.util.Map;
 public abstract class GuiLocomotive extends EntityGui {
 
     private final EntityLocomotive loco;
-    private final EntityPlayer player;
     private final String typeTag;
     private Map<LocoMode, GuiToggleButtonSmall> modeButtons = new LinkedHashMap<>();
     private List<GuiToggleButtonSmall> speedButtons = new ArrayList<>();
@@ -50,7 +49,7 @@ public abstract class GuiLocomotive extends EntityGui {
         super(loco, container, RailcraftConstants.GUI_TEXTURE_FOLDER + guiName);
         ySize = guiHeight;
         this.loco = loco;
-        this.player = inv.player;
+        EntityPlayer player = inv.player;
         this.typeTag = typeTag;
         loco.clientMode = loco.getMode();
         loco.clientSpeed = loco.getSpeed();

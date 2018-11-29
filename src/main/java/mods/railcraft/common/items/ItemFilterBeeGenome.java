@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -48,9 +48,6 @@ import java.util.List;
  */
 public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
     private static String WILDCARD = "item.railcraft.filter.bee.genome.tips.wildcard";
-
-    public ItemFilterBeeGenome() {
-    }
 
     @Override
     public void finalizeDefinition() {

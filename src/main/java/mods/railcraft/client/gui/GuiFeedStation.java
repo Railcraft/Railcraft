@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,13 +18,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 public class GuiFeedStation extends TileGui {
 
     private final String feed = LocalizationPlugin.translate("gui.railcraft.feed.station.feed");
-    private final TileFeedStation tile;
 
     public GuiFeedStation(InventoryPlayer playerInv, TileFeedStation tile) {
         super(tile, new ContainerFeedStation(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
         xSize = 176;
         ySize = 140;
-        this.tile = tile;
+        TileFeedStation tile1 = tile;
     }
 
     @Override

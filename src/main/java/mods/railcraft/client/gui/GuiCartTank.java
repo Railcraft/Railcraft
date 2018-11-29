@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,12 +24,11 @@ public class GuiCartTank extends EntityGui
 {
 
     private final String label;
-    private final EntityCartTank cart;
 
     public GuiCartTank(InventoryPlayer inv, EntityCartTank cart)
     {
         super(cart, new ContainerCartTank(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_tank.png");
-        this.cart = cart;
+        EntityCartTank cart1 = cart;
         label = cart.getName();
     }
 

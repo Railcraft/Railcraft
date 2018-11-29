@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Owned Code" pattern="src:mods.railcraft..*||test[railcraft_test]:*..*" />
+</component>

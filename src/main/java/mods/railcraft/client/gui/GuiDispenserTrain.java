@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,13 +16,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiDispenserTrain extends TileGui {
 
-    private final TileDispenserTrain tile;
-
     public GuiDispenserTrain(InventoryPlayer inv, TileDispenserTrain tile) {
         super(tile, new ContainerDispenserTrain(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_dispenser_train.png");
         xSize = 176;
         ySize = 198;
-        this.tile = tile;
+        TileDispenserTrain tile1 = tile;
     }
 
     @Override

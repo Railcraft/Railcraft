@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -253,7 +253,7 @@ public class GuiBook extends GuiScreen {
         switch (key) {
             case Keyboard.KEY_BACK: {
                 String currentLine = getLine(currLine);
-                if (currentLine.length() > 0 && currChar > 0)
+                if (!currentLine.isEmpty() && currChar > 0)
                     setLine(currPage, currLine, currentLine.substring(0, currChar - 1) + currentLine.substring(currChar--));
                 else if (currLine > 0 && currChar == 0 && getLine(currLine - 1).length() == 0) {
                     List<String> page = getPage(currPage);
@@ -349,14 +349,14 @@ public class GuiBook extends GuiScreen {
     private void keyTypedInTitle(char c, int key) {
         switch (key) {
             case Keyboard.KEY_BACK:
-                if (bookTitle.length() > 0) {
+                if (!bookTitle.isEmpty()) {
                     bookTitle = bookTitle.substring(0, bookTitle.length() - 1);
                     updateButtons();
                 }
 
                 return;
             case Keyboard.KEY_RETURN:
-                if (bookTitle.length() > 0) {
+                if (!bookTitle.isEmpty()) {
                     sendBookToServer();
                     mc.displayGuiScreen(null);
                 }
@@ -364,7 +364,7 @@ public class GuiBook extends GuiScreen {
                 return;
             default:
                 if (bookTitle.length() < 16 && ChatAllowedCharacters.isAllowedCharacter(c)) {
-                    this.bookTitle = bookTitle + Character.toString(c);
+                    this.bookTitle = bookTitle + c;
                     updateButtons();
                     this.bookModified = true;
                 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.modules.ModuleAutomation;
 import mods.railcraft.common.modules.ModuleFactory;
-import mods.railcraft.common.modules.ModuleSteam;
 import mods.railcraft.common.modules.ModuleStructures;
 import net.minecraft.util.Tuple;
 

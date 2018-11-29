@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -127,7 +127,7 @@ public class ItemTicket extends ItemRailcraft {
             }
 
             String dest = getDestination(stack);
-            if (!dest.equals("")) {
+            if (!"".equals(dest)) {
                 list.add(TextFormatting.WHITE + LocalizationPlugin.translate("gui.railcraft.routing.ticket.tips.dest"));
                 list.add(TextFormatting.GRAY + dest);
             }

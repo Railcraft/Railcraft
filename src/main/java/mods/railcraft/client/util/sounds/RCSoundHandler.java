@@ -1,12 +1,12 @@
-/*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.util.sounds;
 
 import mods.railcraft.common.core.Railcraft;
@@ -14,13 +14,11 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import mods.railcraft.common.util.sounds.SoundRegistry;
 import net.minecraft.block.SoundType;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**

@@ -298,7 +298,7 @@ public final class CraftingPlugin {
 
                 return new FluidStack(fluid, amount, nbt);
             } catch (NBTException e) {
-                throw new JsonSyntaxException("Invalid NBT Entry: " + e.toString());
+                throw new JsonSyntaxException("Invalid NBT Entry: " + e);
             }
         }
 

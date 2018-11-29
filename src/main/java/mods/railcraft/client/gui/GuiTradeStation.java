@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,6 @@ import static mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType
 
 public class GuiTradeStation extends TileGui {
 
-    private final String label;
     private final TileTradeStation tile;
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<VillagerRegistry.VillagerProfession>();
     private final EntityVillager villager;
@@ -46,7 +45,7 @@ public class GuiTradeStation extends TileGui {
 
         this.tile = tile;
 
-        label = tile.getName();
+        String label = tile.getName();
 
         villager = new EntityVillager(tile.getWorld());
 

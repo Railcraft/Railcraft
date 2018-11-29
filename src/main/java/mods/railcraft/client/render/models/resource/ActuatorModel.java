@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
 
@@ -104,10 +103,8 @@ public class ActuatorModel implements IModel {
             VertexFormat format,
             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
             Map<IBlockState, ModelResourceLocation> modelLocations) {
-        Set<ModelResourceLocation> locations = new HashSet<>();
-        locations.addAll(modelLocations.values());
         Map<ModelResourceLocation, IBakedModel> models = new HashMap<>();
-        for (ModelResourceLocation modelLocation : locations) {
+        for (ModelResourceLocation modelLocation : modelLocations.values()) {
             IModel model = ModelManager.getModel(modelLocation);
             models.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }

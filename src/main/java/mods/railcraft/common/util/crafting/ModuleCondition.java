@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.util.crafting;
 
 import com.google.gson.JsonObject;
@@ -26,12 +36,6 @@ public final class ModuleCondition implements BooleanSupplier {
     }
 
     public static final class Factory implements IConditionFactory {
-
-        /**
-         * Invoked by forge via reflection.
-         */
-        public Factory() {
-        }
 
         @Override
         public BooleanSupplier parse(JsonContext context, JsonObject json) {

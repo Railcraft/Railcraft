@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,8 +20,6 @@ import net.minecraft.init.Items;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemFilterBlank extends ItemRailcraft {
-    public ItemFilterBlank() {
-    }
 
     @Override
     public void defineRecipes() {

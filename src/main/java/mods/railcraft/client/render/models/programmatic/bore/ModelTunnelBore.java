@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,6 +28,7 @@ public class ModelTunnelBore extends ModelBase
     private boolean active;
     private boolean renderBoreHead;
 
+    @SuppressWarnings("IntegerDivisionInFloatingPointContext")
     public ModelTunnelBore()
     {
         base = new ModelRenderer(this, 0, 0).setTextureSize(256, 256);

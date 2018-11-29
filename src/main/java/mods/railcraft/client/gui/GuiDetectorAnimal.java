@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,12 +21,11 @@ import net.minecraft.client.gui.GuiButton;
 public class GuiDetectorAnimal extends GuiBasic {
 
     private final TileDetector tile;
-    private final DetectorAnimal detector;
 
     protected GuiDetectorAnimal(TileDetector tile) {
         super(LocalizationPlugin.translate(tile.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_long.png", 256, 88);
         this.tile = tile;
-        this.detector = (DetectorAnimal) tile.getDetector();
+        DetectorAnimal detector = (DetectorAnimal) tile.getDetector();
     }
 
     @Override

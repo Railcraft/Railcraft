@@ -32,7 +32,7 @@
     <inspection_tool class="FieldNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
       <extension name="ConstantNamingConvention" enabled="true">
         <option name="m_regex" value="[A-Z][A-Z_\d]*" />
-        <option name="m_minLength" value="3" />
+        <option name="m_minLength" value="2" />
         <option name="m_maxLength" value="32" />
       </extension>
       <extension name="EnumeratedConstantNamingConvention" enabled="false">
@@ -88,6 +88,10 @@
     <inspection_tool class="RedundantImplements" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreSerializable" value="false" />
       <option name="ignoreCloneable" value="false" />
+    </inspection_tool>
+    <inspection_tool class="RefusedBequest" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="ignoreEmptySuperMethods" value="false" />
+      <option name="onlyReportWhenAnnotated" value="true" />
     </inspection_tool>
     <inspection_tool class="SameParameterValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="SameReturnValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" />

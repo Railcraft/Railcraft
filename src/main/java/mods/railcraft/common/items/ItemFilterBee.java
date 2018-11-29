@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,9 +22,6 @@ import net.minecraftforge.fml.common.Optional;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemFilterBee extends ItemRailcraft implements IFilterItem {
-
-    public ItemFilterBee() {
-    }
 
     @Override
     public void finalizeDefinition() {

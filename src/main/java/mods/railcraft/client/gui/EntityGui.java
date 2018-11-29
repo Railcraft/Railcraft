@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,11 +20,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public abstract class EntityGui extends GuiContainerRailcraft {
 
-    private final Entity entity;
-
     public EntityGui(Entity entity, RailcraftContainer container, String texture) {
         super(container, texture);
-        this.entity = entity;
+        Entity entity1 = entity;
     }
 
 //    @Override

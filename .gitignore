@@ -32,7 +32,6 @@ bin/
 classes/
 .settings
 .metadata
-.project
 *.launch
 /libs/
 **/Thumbs.db

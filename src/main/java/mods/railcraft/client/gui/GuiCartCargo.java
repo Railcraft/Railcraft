@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,11 +22,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 public class GuiCartCargo extends EntityGui {
 
     private final String label;
-    private final EntityCartCargo cart;
 
     public GuiCartCargo(InventoryPlayer inv, EntityCartCargo cart) {
         super(cart, new ContainerCartCargo(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_cargo.png");
-        this.cart = cart;
+        EntityCartCargo cart1 = cart;
         label = cart.getName();
     }
 

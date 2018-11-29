@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,9 +14,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
 public class ItemConcrete extends ItemRailcraft {
-
-    public ItemConcrete() {
-    }
 
     @Override
     public void defineRecipes() {

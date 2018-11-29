@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -149,7 +149,7 @@ public class GuiTicket extends GuiScreen {
             default:
                 switch (key) {
                     case Keyboard.KEY_BACK:
-                        if (dest.length() > 0) {
+                        if (!dest.isEmpty()) {
                             dest = dest.substring(0, dest.length() - 1);
                             modified = true;
                         }

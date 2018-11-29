@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.plugins.jei.blastfurnace;
 
 import com.google.common.collect.Lists;
@@ -5,10 +15,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.Minecraft;
 
-import java.awt.*;
 import java.util.Collections;
 
 public class BlastFurnaceRecipeWrapper implements IRecipeWrapper {

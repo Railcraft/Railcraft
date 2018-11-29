@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,11 +19,10 @@ public class GuiManipulatorCartItem extends GuiManipulatorCart {
 
     private final String FILTER_LABEL = LocalizationPlugin.translate("gui.railcraft.filters");
     private final String BUFFER_LABEL = LocalizationPlugin.translate("gui.railcraft.manipulator.buffer");
-    private final TileItemManipulator tile;
 
     public GuiManipulatorCartItem(InventoryPlayer inv, TileItemManipulator tile) {
         super(tile, new ContainerManipulatorCartItem(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
-        this.tile = tile;
+        TileItemManipulator tile1 = tile;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,12 +23,11 @@ import net.minecraft.util.text.translation.I18n;
 public class GuiCartTrackRelayer extends EntityGui {
 
     private final String label;
-    private EntityCartTrackRelayer cart;
 
     public GuiCartTrackRelayer(InventoryPlayer inv, EntityCartTrackRelayer cart) {
         super(cart, new ContainerCartTrackRelayer(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_relayer.png");
         label = cart.getName();
-        this.cart = cart;
+        EntityCartTrackRelayer cart1 = cart;
     }
 
     @Override

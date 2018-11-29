@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,9 +28,6 @@ public class WorldGenSaltpeter extends WorldGenerator {
      */
     private final IBlockState mineableBlock = EnumOre.SALTPETER.getDefaultState();
     private final IBlockState logicBlock = RailcraftBlocks.WORLD_LOGIC.getDefaultState();
-
-    public WorldGenSaltpeter() {
-    }
 
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {

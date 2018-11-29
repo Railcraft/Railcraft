@@ -17,7 +17,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiSteamTurbine extends TileGui {
 
-    private final String label;
     private final TileSteamTurbine tile;
 
     public GuiSteamTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
@@ -25,7 +24,7 @@ public class GuiSteamTurbine extends TileGui {
         xSize = 176;
         ySize = 140;
 
-        label = LocalizationPlugin.translate("gui.railcraft.steam.turbine");
+        String label = LocalizationPlugin.translate("gui.railcraft.steam.turbine");
         this.tile = tile;
     }
 

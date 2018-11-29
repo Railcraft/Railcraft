@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -62,7 +62,7 @@ public class BlockItemParser {
         try {
             Set<T> set = new HashSet<T>();
             for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
-                if (line.equals(""))
+                if ("".equals(line))
                     continue;
                 set.add(keyParser.apply(line));
                 Game.log(Level.DEBUG, logMessage, line);

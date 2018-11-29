@@ -93,7 +93,7 @@ public final class Railcraft {
     public void processIMCRequests(FMLInterModComms.IMCEvent event) {
         Splitter splitter = Splitter.on("@").trimResults();
         for (FMLInterModComms.IMCMessage mess : event.getMessages()) {
-            if (mess.key.equals("ballast")) {
+            if ("ballast".equals(mess.key)) {
                 String[] tokens = Iterables.toArray(splitter.split(mess.getStringValue()), String.class);
                 if (tokens.length != 2) {
                     Game.log(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
@@ -107,7 +107,7 @@ public final class Railcraft {
                 }
                 BallastRegistry.registerBallast(Block.getBlockFromName(blockName), metadata);
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
-            } else if (mess.key.equals("fluid-fuel")) {
+            } else if ("fluid-fuel".equals(mess.key)) {
                 FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());
                 int fuel = mess.getNBTValue().getInteger("Fuel");
                 if (fuel == 0) {
@@ -116,9 +116,9 @@ public final class Railcraft {
                 }
                 FluidFuelManager.addFuel(fluidStack, fuel);
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getNBTValue()));
-            } else if (mess.key.equals("rock-crusher")) {
+            } else if ("rock-crusher".equals(mess.key)) {
                 throw new UnsupportedOperationException("rock crusher");
-            } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {
+            } else if ("high-speed-explosion-excluded-entities".equals(mess.key)) {
                 NBTTagCompound nbt = mess.getNBTValue();
                 if (nbt.hasKey("entities")) {
                     String entities = nbt.getString("entities");

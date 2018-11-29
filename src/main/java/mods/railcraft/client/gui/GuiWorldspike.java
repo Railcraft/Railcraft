@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,14 +19,13 @@ import net.minecraft.util.text.translation.I18n;
 
 public class GuiWorldspike extends TileGui {
 
-    private final TileWorldspike tile;
     private final ContainerWorldspike container;
 
     public GuiWorldspike(InventoryPlayer playerInv, TileWorldspike worldspike) {
         super(worldspike, new ContainerWorldspike(playerInv, worldspike), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
         xSize = 176;
         ySize = 140;
-        this.tile = worldspike;
+        TileWorldspike tile = worldspike;
         container = (ContainerWorldspike) inventorySlots;
     }
 

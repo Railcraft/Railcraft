@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,8 +27,6 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemFilterOreDictionary extends ItemFilterSimple {
-    public ItemFilterOreDictionary() {
-    }
 
     @Override
     public void defineRecipes() {

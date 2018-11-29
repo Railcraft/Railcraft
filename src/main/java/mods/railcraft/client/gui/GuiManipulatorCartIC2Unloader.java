@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,7 +23,6 @@ import net.minecraft.tileentity.TileEntity;
 
 public class GuiManipulatorCartIC2Unloader extends TileGui {
 
-    private final String label;
     private final String button1Label = LocalizationPlugin.translate("gui.railcraft.energy.unloader.wait");
     //    private final String BUTTON1 = "Wait till Empty";
     private TileIC2Unloader tile;
@@ -31,7 +30,7 @@ public class GuiManipulatorCartIC2Unloader extends TileGui {
     public GuiManipulatorCartIC2Unloader(InventoryPlayer inv, TileIC2Unloader tile) {
         super(tile, new ContainerEnergyLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy_loader.png");
         this.tile = tile;
-        label = tile.getName();
+        String label = tile.getName();
     }
 
     @Override

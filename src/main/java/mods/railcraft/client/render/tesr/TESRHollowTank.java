@@ -29,9 +29,6 @@ import org.lwjgl.opengl.GL11;
  */
 public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase> {
 
-    public TESRHollowTank() {
-    }
-
     private float getVerticalScaleSide(TileTankBase tile) {
         int y = tile.getPatternPosition().getY();
         if (!RailcraftConfig.allowTankStacking())
