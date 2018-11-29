@@ -123,7 +123,8 @@ public class BlockChargeTrap extends BlockCharge {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.BLOCK, 10F);
+        if (Game.isHost(world))
+            Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.BLOCK, 10F);
     }
 
     @Override
