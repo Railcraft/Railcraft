@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.ISubtypedBlock;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -23,7 +23,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -43,8 +42,8 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = EnumColor.class, propertyName = "color")
-public abstract class BlockTankMetal extends BlockMultiBlock implements ColorPlugin.IColoredBlock, ISubtypedBlock<EnumColor> {
+@BlockMetaVariant(EnumColor.class)
+public abstract class BlockTankMetal<T extends TileTankBase> extends BlockMultiBlock<T> implements ColorPlugin.IColorHandlerBlock, ISubtypedBlock<EnumColor> {
     private VariantData<EnumColor> variantData;
 
     protected BlockTankMetal(Material material) {
@@ -83,11 +82,6 @@ public abstract class BlockTankMetal extends BlockMultiBlock implements ColorPlu
     }
 
     @Override
-    public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
-    }
-
-    @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, getVariantProperty());
     }
@@ -116,7 +110,7 @@ public abstract class BlockTankMetal extends BlockMultiBlock implements ColorPlu
     }
 
     @Override
-    public IBlockColor colorHandler() {
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) -> getVariant(state).getHexColor();
     }
 

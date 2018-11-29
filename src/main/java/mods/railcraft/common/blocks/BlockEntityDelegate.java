@@ -14,7 +14,6 @@ import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.common.blocks.interfaces.*;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
@@ -23,10 +22,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -36,13 +32,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 
-public abstract class BlockEntityDelegate extends BlockContainerRailcraft implements IPostConnection {
+public abstract class BlockEntityDelegate<T extends RailcraftTileEntity & ISmartTile> extends BlockContainerRailcraft<T> implements IPostConnection {
 
     protected BlockEntityDelegate(Material materialIn) {
         super(materialIn);
@@ -58,8 +53,6 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
         this.fullBlock = true;
         lightOpacity = 255;
     }
-
-    public abstract Class<? extends TileEntity> getTileClass(IBlockState state);
 
     @Override
     public int damageDropped(IBlockState state) {
@@ -123,25 +116,11 @@ public abstract class BlockEntityDelegate extends BlockContainerRailcraft implem
     }
 
     @Override
-    @OverridingMethodsMustInvokeSuper
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).ifPresent(t -> t.onBlockPlacedBy(state, placer, stack));
-    }
-
-    @Override
     @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos fromPos) {
+        super.neighborChanged(state, worldIn, pos, neighborBlock, fromPos);
         if (needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {
             WorldPlugin.destroyBlock(worldIn, pos, true);
-            return;
-        }
-
-        try {
-            WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).ifPresent(t -> t.onNeighborBlockChange(state, neighborBlock, fromPos));
-        } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockMachine.onNeighborBlockChange()");
-            if (Game.DEVELOPMENT_ENVIRONMENT)
-                throw error;
         }
     }
 

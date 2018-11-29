@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.common.blocks.machine.BlockMachine;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -40,7 +40,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = ActuatorVariant.class)
+@BlockMetaVariant(ActuatorVariant.class)
 public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
     public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
     public static final PropertyEnum<ISwitchActuator.ArrowDirection> RED_FLAG = PropertyEnum.create("red_flag", ISwitchActuator.ArrowDirection.class);

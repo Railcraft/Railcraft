@@ -68,6 +68,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     //TODO: recipe??
     @Override
     public void finalizeDefinition() {
+        IMaterialBlock.super.finalizeDefinition();
         List<Materials> mats = Materials.getValidMats();
         for (Materials mat : mats) {
             ItemStack stack = getStack(mat);
@@ -147,6 +148,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(InvTools::nonEmpty).collect(Collectors.toList()));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         return MatTools.getDrops(world, pos, state, fortune);
@@ -189,6 +191,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
         return new TileMaterial();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         return MatTools.getBlockHardness(state, worldIn, pos);

@@ -10,6 +10,7 @@
 package mods.railcraft.common.items;
 
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -21,8 +22,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -89,10 +90,10 @@ public class ItemTicket extends ItemRailcraft {
 
     public static GameProfile getOwner(ItemStack ticket) {
         if (InvTools.isEmpty(ticket) || !(ticket.getItem() instanceof ItemTicket))
-            return new GameProfile(null, "[Unknown]");
+            return new GameProfile(null, RailcraftConstantsAPI.UNKNOWN_PLAYER);
         NBTTagCompound nbt = ticket.getTagCompound();
         if (nbt == null)
-            return new GameProfile(null, "[Unknown]");
+            return new GameProfile(null, RailcraftConstantsAPI.UNKNOWN_PLAYER);
         return PlayerPlugin.readOwnerFromNBT(nbt);
     }
 

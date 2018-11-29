@@ -10,6 +10,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -29,7 +30,6 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public final class PlayerPlugin {
-    public static final String UNKNOWN_PLAYER_NAME = "[Unknown]";
 
     public static void writeOwnerToNBT(NBTTagCompound nbt, GameProfile owner) {
         if (owner.getName() != null)
@@ -39,7 +39,7 @@ public final class PlayerPlugin {
     }
 
     public static GameProfile readOwnerFromNBT(NBTTagCompound nbt) {
-        String ownerName = UNKNOWN_PLAYER_NAME;
+        String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
         if (nbt.hasKey("owner"))
             ownerName = nbt.getString("owner");
         UUID ownerUUID = null;
@@ -68,7 +68,7 @@ public final class PlayerPlugin {
         String username = gameProfile.getName();
         if (!Strings.isEmpty(username))
             return username;
-        return UNKNOWN_PLAYER_NAME;
+        return RailcraftConstantsAPI.UNKNOWN_PLAYER;
     }
 
     @SuppressWarnings("unused")
@@ -78,7 +78,7 @@ public final class PlayerPlugin {
             if (player != null)
                 return player.getDisplayNameString();
         }
-        return UNKNOWN_PLAYER_NAME;
+        return RailcraftConstantsAPI.UNKNOWN_PLAYER;
     }
 
     public static boolean isOwnerOrOp(GameProfile owner, EntityPlayer player) {

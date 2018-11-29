@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.materials.slab;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.items.RailcraftItems;
@@ -50,7 +51,6 @@ import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.common.property.Properties;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
@@ -62,19 +62,18 @@ import java.util.stream.Collectors;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMaterialBlock {
+@BlockMetaTile(TileSlab.class)
+public class BlockRailcraftSlab extends BlockContainerRailcraft<TileSlab> implements IMaterialBlock {
 
     public static final IUnlistedProperty<Materials> TOP_MATERIAL = Properties.toUnlisted(PropertyEnum.create("top_material", Materials.class));
     public static final IUnlistedProperty<Materials> BOTTOM_MATERIAL = Properties.toUnlisted(PropertyEnum.create("bottom_material", Materials.class));
-    public static int currentRenderPass;
-    static BlockRailcraftSlab block;
 
     public BlockRailcraftSlab() {
         super(Material.ROCK);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
         useNeighborBrightness = true;
-        GameRegistry.registerTileEntity(TileSlab.class, "RCSlabTile");
+        RailcraftRegistry.register(TileSlab.class, "RCSlabTile");
     }
 
     @Override
@@ -90,6 +89,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
 
     @Override
     public void finalizeDefinition() {
+        super.finalizeDefinition();
         for (Materials mat : Materials.getValidMats()) {
             RailcraftRegistry.register(this, mat, getStack(1, mat));
 
@@ -155,6 +155,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         TileSlab tile = getSlabTile(worldIn, pos);
@@ -178,6 +179,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         list.addAll(Materials.getCreativeList().stream().map(this::getStack).filter(InvTools::nonEmpty).collect(Collectors.toList()));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -208,11 +210,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         return world.setBlockToAir(pos);
     }
 
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return true;
-    }
-
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
@@ -253,13 +251,13 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
     @SideOnly(Side.CLIENT)
     @Override
     public boolean addHitEffects(IBlockState state, World worldObj, RayTraceResult target, ParticleManager manager) {
-        return ParticleHelper.addHitEffects(worldObj, block, target, manager, null);
+        return ParticleHelper.addHitEffects(worldObj, this, target, manager, null);
     }
 
     @Override
     public boolean addDestroyEffects(World world, BlockPos pos, ParticleManager manager) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        return ParticleHelper.addDestroyEffects(world, block, pos, state, manager, null);
+        return ParticleHelper.addDestroyEffects(world, this, pos, state, manager, null);
     }
 
     @Override
@@ -272,6 +270,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         return SoundType.STONE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         TileSlab slab = getSlabTile(source, pos);
@@ -289,6 +288,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
      * or not to render the shared face of two adjacent blocks and also whether
      * the player can attach torches, redstone wire, etc to this block.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
@@ -298,6 +298,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
      * If this block doesn't render as an ordinary block it will return False
      * (examples: signs, buttons, stairs, etc)
      */
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
@@ -308,7 +309,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
      * the adjacent block is at the given coordinates. Args: blockAccess, x, y,
      * z, side
      */
-    @SuppressWarnings("SimplifiableIfStatement")
+    @SuppressWarnings({"SimplifiableIfStatement", "deprecation"})
     @SideOnly(Side.CLIENT)
     @Override
     public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
@@ -358,6 +359,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         TileSlab tile = getSlabTile(world, pos);
@@ -380,10 +382,5 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft implements IMate
             return tile.isTopSlab();
         }
         return false;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileSlab();
     }
 }

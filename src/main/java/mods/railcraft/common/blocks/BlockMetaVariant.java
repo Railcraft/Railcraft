@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.machine;
+package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
 
@@ -22,8 +22,8 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface RailcraftBlockMetadata {
-    Class<? extends IVariantEnum> variant();
+public @interface BlockMetaVariant {
+    Class<? extends IVariantEnum> value();
 
     String propertyName() default "variant";
 }

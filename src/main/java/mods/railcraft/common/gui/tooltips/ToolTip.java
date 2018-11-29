@@ -40,7 +40,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
     }
 
     @Override
-    protected final List<ToolTipLine> delegate() {
+    protected List<ToolTipLine> delegate() {
         return delegate;
     }
 
@@ -52,7 +52,9 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         add(new ToolTipLine(line, format));
     }
 
-    public void set(ToolTip other) {
+    public void set(@Nullable ToolTip other) {
+        if (other == null || other.isEmpty())
+            return;
         clear();
         delegate.addAll(other.delegate);
     }
@@ -90,9 +92,9 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         return toolTip;
     }
 
-    public static @Nullable ToolTip buildToolTip(String tipTag, String... vars) {
+    public static ToolTip buildToolTip(String tipTag, String... vars) {
         if (!LocalizationPlugin.hasTag(tipTag))
-            return null;
+            return new ToolTip();
         try {
             ToolTip toolTip = new ToolTip(750);
             String text = LocalizationPlugin.translate(tipTag);
@@ -110,4 +112,14 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
         }
     }
 
+//    private static ToolTip EMPTY = new ToolTip() {
+//        @Override
+//        protected List<ToolTipLine> delegate() {
+//            return Collections.emptyList();
+//        }
+//    };
+//
+//    public static ToolTip empty() {
+//        return EMPTY;
+//    }
 }

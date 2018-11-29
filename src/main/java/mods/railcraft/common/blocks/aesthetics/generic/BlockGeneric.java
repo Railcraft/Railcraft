@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.generic;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -42,7 +42,7 @@ import java.util.Random;
 
 import static mods.railcraft.common.blocks.aesthetics.metals.EnumMetal.*;
 
-@RailcraftBlockMetadata(variant = EnumGeneric.class)
+@BlockMetaVariant(EnumGeneric.class)
 public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     public BlockGeneric() {
@@ -91,8 +91,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         return state;
     }
 
-    @Nullable
-    public static BlockGeneric getBlock() {
+    public static @Nullable BlockGeneric getBlock() {
         return (BlockGeneric) RailcraftBlocks.GENERIC.block();
     }
 
@@ -121,6 +120,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         return getVariant(WorldPlugin.getBlockState(world, pos));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         return getVariant(blockState).getHardness();
@@ -131,6 +131,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         return state.getValue(getVariantProperty()).ordinal();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
         getVariant(state).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);
@@ -170,7 +171,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         return getVariant(world, pos).getResistance() * 3f / 5f;
     }
 

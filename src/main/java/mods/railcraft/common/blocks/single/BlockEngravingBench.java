@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -20,7 +21,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumHand;
@@ -36,7 +36,8 @@ import static net.minecraft.util.EnumFacing.Axis.X;
 import static net.minecraft.util.EnumFacing.Axis.Z;
 
 @SuppressWarnings("unused")
-public class BlockEngravingBench extends BlockEntityDelegate implements IChargeBlock {
+@BlockMetaTile(TileEngravingBench.class)
+public class BlockEngravingBench extends BlockEntityDelegate<TileEngravingBench> implements IChargeBlock {
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.1);
     public static final PropertyEnum<Axis> AXIS = PropertyEnum.create("axis", Axis.class, X, Z);
 
@@ -78,16 +79,6 @@ public class BlockEngravingBench extends BlockEntityDelegate implements IChargeB
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(AXIS, (meta & 1) == 0 ? X : Z);
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileEngravingBench.class;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileEngravingBench();
     }
 
     @Override

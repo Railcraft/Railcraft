@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,12 +10,13 @@
 package mods.railcraft.common.carts;
 
 import com.mojang.authlib.GameProfile;
-import mods.railcraft.client.render.carts.LocomotiveModelRenderer;
-import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.client.emblems.Emblem;
 import mods.railcraft.client.emblems.EmblemToolsClient;
+import mods.railcraft.client.render.carts.LocomotiveModelRenderer;
+import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -24,7 +25,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.crafting.LocomotivePaintingRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
@@ -34,6 +34,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -41,7 +42,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem, IFilterItem {
+public class ItemLocomotive extends ItemCart implements ColorPlugin.IColorHandlerItem, IFilterItem {
 
     private final LocomotiveRenderType renderType;
     private final EnumColor defaultPrimary;
@@ -55,7 +56,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         this.defaultPrimary = primary;
         this.defaultSecondary = secondary;
         this.sample = new ItemStack(this, 1, 0);
-        setItemColorData(this.sample, primary, secondary);
+        setItemColorData(sample, primary, secondary);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 
     @Override
     public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
+        ColorPlugin.instance.register(this);
     }
 
     @Override
@@ -84,7 +85,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
-        return this.sample.copy();
+        return sample.copy();
     }
 
     //    @Override
@@ -103,8 +104,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 //        return 3;
 //    }
     @Override
-    @SideOnly(Side.CLIENT)
-    public IItemColor colorHandler() {
+    public ColorPlugin.IColorFunctionItem colorHandler() {
         return (stack, tintIndex) -> {
             switch (tintIndex) {
                 case 0:
@@ -135,18 +135,14 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, world, info, adv);
         GameProfile owner = getOwner(stack);
-        if (owner.getName() != null && !owner.getName().equals("[Unknown]")) {
+        if (owner.getName() != null && !RailcraftConstantsAPI.UNKNOWN_PLAYER.equalsIgnoreCase(owner.getName())) {
             String format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.owner");
             info.add(String.format(format, owner.getName()));
         }
 
         String model = getModel(stack);
         LocomotiveModelRenderer renderer = renderType.getRenderer(model);
-        String modelName;
-        if (renderer != null)
-            modelName = renderer.getDisplayName();
-        else
-            modelName = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.model.default");
+        String modelName = renderer.getDisplayName();
         String format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.model");
         info.add(String.format(format, modelName));
 
@@ -163,7 +159,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
         info.add(String.format(format, whistle < 0 ? "???" : String.format("%.2f", whistle)));
 
         String emblemIdent = getEmblem(stack);
-        if (emblemIdent != null && !emblemIdent.isEmpty() && EmblemToolsClient.packageManager != null) {
+        if (!Strings.isEmpty(emblemIdent) && EmblemToolsClient.packageManager != null) {
             Emblem emblem = EmblemToolsClient.packageManager.getEmblem(emblemIdent);
             if (emblem != null) {
                 format = LocalizationPlugin.translate("gui.railcraft.locomotive.tips.item.emblem");
@@ -201,7 +197,7 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
     public static GameProfile getOwner(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null)
-            return new GameProfile(null, "[Unknown]");
+            return new GameProfile(null, RailcraftConstantsAPI.UNKNOWN_PLAYER);
         return PlayerPlugin.readOwnerFromNBT(nbt);
     }
 
@@ -231,18 +227,12 @@ public class ItemLocomotive extends ItemCart implements ColorPlugin.IColoredItem
 
     public static EnumColor getPrimaryColor(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt == null || !nbt.hasKey("primaryColor")) {
-            return ((ItemLocomotive) stack.getItem()).defaultPrimary;
-        }
-        return EnumColor.readFromNBT(nbt, "primaryColor");
+        return EnumColor.readFromNBT(nbt, "primaryColor").orElse(((ItemLocomotive) stack.getItem()).defaultPrimary);
     }
 
     public static EnumColor getSecondaryColor(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt == null || !nbt.hasKey("secondaryColor")) {
-            return ((ItemLocomotive) stack.getItem()).defaultSecondary;
-        }
-        return EnumColor.readFromNBT(nbt, "secondaryColor");
+        return EnumColor.readFromNBT(nbt, "secondaryColor").orElse(((ItemLocomotive) stack.getItem()).defaultSecondary);
     }
 
 }

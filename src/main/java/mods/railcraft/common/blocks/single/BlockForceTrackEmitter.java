@@ -12,27 +12,27 @@ package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
-import mods.railcraft.common.blocks.BlockEntityDelegate;
+import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -44,9 +44,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Map;
 import java.util.Random;
 
-public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChargeBlock, ColorPlugin.IColoredBlock {
+@BlockMetaTile(TileForceTrackEmitter.class)
+public class BlockForceTrackEmitter extends BlockContainerRailcraft<TileForceTrackEmitter> implements IChargeBlock, ColorPlugin.IColorHandlerBlock {
 
-    public static final int DEFAULT_SHADE = EnumColor.LIGHT_BLUE.getHexColor();
+    public static final EnumColor DEFAULT_COLOR = EnumColor.LIGHT_BLUE;
     public static final PropertyBool POWERED = PropertyBool.create("powered");
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.1);
@@ -68,18 +69,18 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileForceTrackEmitter.class;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileForceTrackEmitter();
-    }
-
-    @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return getTileEntity(state, worldIn, pos)
+                .map(tile ->
+                        state.withProperty(BlockForceTrackEmitter.FACING, tile.facing)
+                                .withProperty(BlockForceTrackEmitter.POWERED, tile.powered && tile.state.appearPowered))
+                .orElse(state);
     }
 
     @Override
@@ -88,26 +89,38 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     @Override
-    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileForceTrackEmitter) {
-            TileForceTrackEmitter emitter = (TileForceTrackEmitter) tile;
-            int rcColor = EnumColor.fromDye(color).getHexColor();
-            if (rcColor != emitter.getColor()) {
-                emitter.setColor(rcColor);
-                return true;
-            }
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if (super.onBlockActivated(worldIn, pos, state, player, hand, facing, hitX, hitY, hitZ))
+            return true;
+        if (player.isSneaking())
             return false;
-        }
-        return false;
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
+            return false;
+        return getTileEntity(state, worldIn, pos)
+                .map(tile -> EnumColor.dyeColorOf(heldItem)
+                        .filter(tile::setColor)
+                        .map(c -> {
+                            if (!player.capabilities.isCreativeMode)
+                                player.setHeldItem(hand, InvTools.depleteItem(heldItem));
+                            return true;
+                        })
+                        .orElse(false))
+                .orElse(false);
     }
 
     @Override
-    public IBlockColor colorHandler() {
+    public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
+        return getTileEntity(world, pos)
+                .map(tile -> tile.setColor(EnumColor.fromDye(color)))
+                .orElse(false);
+    }
+
+    @Override
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) ->
-                WorldPlugin.getTileEntity(worldIn, pos, TileForceTrackEmitter.class)
-                        .map(TileForceTrackEmitter::getColor)
-                        .orElse(DEFAULT_SHADE);
+                getTileEntity(state, worldIn, pos)
+                        .map(TileForceTrackEmitter::getColor).orElse(DEFAULT_COLOR).getHexColor();
     }
 
     @Override
@@ -123,12 +136,10 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     }
 
     private ItemStack getItem(IBlockAccess world, BlockPos pos) {
-        int color = DEFAULT_SHADE;
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-        if (tile instanceof TileForceTrackEmitter) {
-            color = ((TileForceTrackEmitter) tile).getColor();
-        }
-        return ItemForceTrackEmitter.setColor(new ItemStack(this), color);
+        return getTileEntity(world, pos)
+                .map(TileForceTrackEmitter::getColor)
+                .orElse(DEFAULT_COLOR)
+                .setItemColor(new ItemStack(this));
     }
 
     @Override
@@ -164,5 +175,6 @@ public class BlockForceTrackEmitter extends BlockEntityDelegate implements IChar
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         super.breakBlock(worldIn, pos, state);
         deregisterNode(worldIn, pos);
+        getTileEntity(state, worldIn, pos).ifPresent(TileForceTrackEmitter::clearTracks);
     }
 }

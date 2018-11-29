@@ -10,17 +10,35 @@
 
 package mods.railcraft.common.blocks.interfaces;
 
+import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 9/12/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITile {
+public interface ITile extends IOwnable {
     default RailcraftTileEntity tile() {
         return (RailcraftTileEntity) this;
     }
 
     void markBlockForUpdate();
+
+    void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack);
+
+    void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos);
+
+    default void notifyBlocksOfNeighborChange() {
+        if (tile().hasWorld())
+            WorldPlugin.notifyBlocksOfNeighborChange(tile().getWorld(), tile().getPos(), tile().getBlockType());
+    }
+
 }

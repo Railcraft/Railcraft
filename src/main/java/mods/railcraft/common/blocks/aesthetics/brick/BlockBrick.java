@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
-@RailcraftBlockMetadata(variant = BrickVariant.class)
+@BlockMetaVariant(BrickVariant.class)
 public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     private final BrickTheme theme;
 
@@ -119,6 +119,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @SuppressWarnings("deprecation")
     @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return theme.getMapColor();

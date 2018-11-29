@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,6 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +30,7 @@ import java.util.Arrays;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockTrackFlexAbandoned extends BlockTrackFlex implements ColorPlugin.IColoredBlock {
+public class BlockTrackFlexAbandoned extends BlockTrackFlex implements ColorPlugin.IColorHandlerBlock {
 
     public static final PropertyBool GRASS = PropertyBool.create("grass");
 
@@ -46,6 +45,7 @@ public class BlockTrackFlexAbandoned extends BlockTrackFlex implements ColorPlug
         return new BlockStateContainer(this, getShapeProperty(), GRASS);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         boolean grass = Arrays.stream(EnumFacing.HORIZONTALS).anyMatch(s -> WorldPlugin.isBlockAt(worldIn, pos.offset(s), Blocks.TALLGRASS));
@@ -54,12 +54,7 @@ public class BlockTrackFlexAbandoned extends BlockTrackFlex implements ColorPlug
     }
 
     @Override
-    public IBlockColor colorHandler() {
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) -> worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
-    }
-
-    @Override
-    public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
     }
 }

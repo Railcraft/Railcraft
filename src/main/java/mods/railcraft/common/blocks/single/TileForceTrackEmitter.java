@@ -13,7 +13,7 @@ import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.tracks.IOutfittedTrackTile;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
-import mods.railcraft.common.blocks.TileSmartItemTicking;
+import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
@@ -24,7 +24,6 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -37,7 +36,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,25 +46,25 @@ import static mods.railcraft.common.blocks.RailcraftBlocks.TRACK_FORCE;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileForceTrackEmitter extends TileSmartItemTicking implements ITileRotate, IMagnifiable {
+public class TileForceTrackEmitter extends RailcraftTickingTileEntity implements ITileRotate, IMagnifiable {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;
-    private static final int TICKS_PER_ACTION = 4;
+    private static final int TICKS_PER_ACTION = 2;
     // TODO the neighbor update from force tracks is probably good enough
     static final int TICKS_PER_REFRESH = 64;
     public static final int MAX_TRACKS = 64;
-    private boolean powered;
+    boolean powered;
     EnumFacing facing = EnumFacing.NORTH;
     int numTracks;
-    private State state = State.RETRACTED;
-    private int color = BlockForceTrackEmitter.DEFAULT_SHADE;
+    State state = State.RETRACTED;
+    private EnumColor color = BlockForceTrackEmitter.DEFAULT_COLOR;
     /**
      * Field to prevent recursive removing of tracks when a track is broken by the emitter
      */
     boolean removingTrack;
 
-    private enum State {
+    enum State {
 
         /**
          * A state when the track is fully built and ready for carts.
@@ -185,7 +183,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         if (entityLiving != null)
             facing = entityLiving.getHorizontalFacing().getOpposite();
         checkRedstone();
-        this.color = ItemForceTrackEmitter.getColor(stack);
+        this.color = EnumColor.fromItemStack(stack).orElse(BlockForceTrackEmitter.DEFAULT_COLOR);
     }
 
     private void checkRedstone() {
@@ -194,14 +192,8 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         boolean p = PowerPlugin.isBlockBeingPowered(world, getPos());
         if (powered != p) {
             powered = p;
-            sendUpdateToClient();
+            markBlockForUpdate();
         }
-    }
-
-    @Override
-    public void onBlockRemoval() {
-        super.onBlockRemoval();
-        clearTracks();
     }
 
     @Override
@@ -225,31 +217,13 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
 
         if (state != previous) {
             state.onTransition(this);
+            if (previous.appearPowered != state.appearPowered)
+                markBlockForUpdate();
         }
     }
 
     private void spawnParticles(BlockPos pos) {
-        EffectManager.instance.forceTrackSpawnEffect(world, pos, color);
-    }
-
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (super.blockActivated(player, hand, side, hitX, hitY, hitZ))
-            return true;
-        if (player.isSneaking())
-            return false;
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
-            return false;
-        EnumColor color = EnumColor.dyeColorOf(heldItem);
-        if (color == null || color.getHexColor() == this.color) {
-            return false;
-        }
-        if (!player.capabilities.isCreativeMode)
-            player.setHeldItem(hand, InvTools.depleteItem(heldItem));
-        setColor(color.getHexColor());
-        markDirty();
-        return true;
+        EffectManager.instance.forceTrackSpawnEffect(world, pos, color.getHexColor());
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -274,14 +248,18 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         return numTracks;
     }
 
-    public int getColor() {
+    public EnumColor getColor() {
         return color;
     }
 
-    public void setColor(int color) {
-        this.color = color;
-        clearTracks();
-        markBlockForUpdate();
+    public boolean setColor(EnumColor color) {
+        if (this.color != color) {
+            this.color = color;
+            clearTracks();
+            markBlockForUpdate();
+            return true;
+        }
+        return false;
     }
 
     public static double getMaintenanceCost(int tracks) {
@@ -366,7 +344,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         data.setByte("facing", (byte) facing.ordinal());
         data.setInteger("numTracks", numTracks);
         data.setString("state", state.name());
-        data.setInteger("color", color);
+        color.writeToNBT(data);
         return data;
     }
 
@@ -377,7 +355,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         facing = EnumFacing.byIndex(data.getByte("facing"));
         numTracks = data.getInteger("numTracks");
         state = State.valueOf(data.getString("state"));
-        color = data.getInteger("color");
+        color = EnumColor.readFromNBT(data).orElse(BlockForceTrackEmitter.DEFAULT_COLOR);
     }
 
     @Override
@@ -385,7 +363,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
         super.writePacketData(data);
         data.writeBoolean(powered);
         data.writeByte((byte) facing.ordinal());
-        data.writeInt(color);
+        data.writeEnum(color);
         data.writeEnum(state);
     }
 
@@ -406,11 +384,7 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
             update = true;
         }
 
-        int color = data.readInt();
-        if (color != this.color) {
-            this.color = color;
-            update = true;
-        }
+        setColor(data.readEnum(EnumColor.VALUES));
 
         State state = data.readEnum(State.VALUES);
         if (state != this.state) {
@@ -425,11 +399,6 @@ public class TileForceTrackEmitter extends TileSmartItemTicking implements ITile
     @Override
     public EnumFacing getFacing() {
         return facing;
-    }
-
-    @Override
-    public IBlockState getActualState(IBlockState base) {
-        return base.withProperty(BlockForceTrackEmitter.FACING, facing).withProperty(BlockForceTrackEmitter.POWERED, powered && state.appearPowered);
     }
 
 }

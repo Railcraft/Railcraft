@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.forge;
 
 import com.google.common.collect.ForwardingList;
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
@@ -27,8 +28,7 @@ import java.util.UUID;
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public final class NBTPlugin {
-    @Nullable
-    public static NBTTagCompound makeGameProfileTag(@Nullable GameProfile profile) {
+    public static @Nullable NBTTagCompound makeGameProfileTag(@Nullable GameProfile profile) {
         if (profile == null || (profile.getName() == null && profile.getId() == null))
             return null;
         NBTTagCompound nbt = new NBTTagCompound();
@@ -39,9 +39,9 @@ public final class NBTPlugin {
     public static GameProfile readGameProfileTag(NBTTagCompound data) {
         if (data.hasKey("Name")) {
             GameProfile ret = NBTUtil.readGameProfileFromNBT(data);
-            return ret == null ? new GameProfile(null, PlayerPlugin.UNKNOWN_PLAYER_NAME) : ret;
+            return ret == null ? new GameProfile(null, RailcraftConstantsAPI.UNKNOWN_PLAYER) : ret;
         }
-        String ownerName = PlayerPlugin.UNKNOWN_PLAYER_NAME;
+        String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
         if (data.hasKey("name"))
             ownerName = data.getString("name");
         UUID ownerUUID = null;
@@ -82,8 +82,7 @@ public final class NBTPlugin {
         data.setTag(tag, nbtTag);
     }
 
-    @Nullable
-    public static UUID readUUID(NBTTagCompound data, String tag) {
+    public static @Nullable UUID readUUID(NBTTagCompound data, String tag) {
         if (data.hasKey(tag)) {
             NBTTagCompound nbtTag = data.getCompoundTag(tag);
             if (nbtTag.hasKey("most")) {
@@ -99,8 +98,7 @@ public final class NBTPlugin {
         data.setIntArray(tag, new int[]{pos.getX(), pos.getY(), pos.getZ()});
     }
 
-    @Nullable
-    public static BlockPos readBlockPos(NBTTagCompound data, String tag) {
+    public static @Nullable BlockPos readBlockPos(NBTTagCompound data, String tag) {
         if (data.hasKey(tag)) {
             if (data.hasKey(tag, NBT.TAG_INT_ARRAY)) {
                 int[] c = data.getIntArray(tag);

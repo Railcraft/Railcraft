@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -33,10 +34,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Map;
 import java.util.Random;
 
-/**
- *
- */
-public final class BlockRockCrusher extends BlockMultiBlockInventory implements IChargeBlock {
+@BlockMetaTile(TileRockCrusher.class)
+public final class BlockRockCrusher extends BlockMultiBlockInventory<TileRockCrusher> implements IChargeBlock {
 
     public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.025);
@@ -60,18 +59,8 @@ public final class BlockRockCrusher extends BlockMultiBlockInventory implements 
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
-        return new TileRockCrusher();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public Class<TileRockCrusher> getTileClass(IBlockState state) {
-        return TileRockCrusher.class;
     }
 
     @Override

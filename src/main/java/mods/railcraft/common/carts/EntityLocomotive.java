@@ -179,7 +179,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         ItemStack item = getCartItemBase();
         if (isSecure() && CartToolsAPI.doesCartHaveOwner(this))
             ItemLocomotive.setOwnerData(item, CartToolsAPI.getCartOwner(this));
-        ItemLocomotive.setItemColorData(item, getPrimaryColor(), getSecondaryColor());
+        ItemLocomotive.setItemColorData(item, getPrimaryDyeColor(), getSecondaryDyeColor());
         ItemLocomotive.setItemWhistleData(item, whistlePitch);
         ItemLocomotive.setModel(item, getModel());
         ItemLocomotive.setEmblem(item, getEmblem());
@@ -592,8 +592,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         data.setByte("locoMode", (byte) getMode().ordinal());
         data.setByte("locoSpeed", (byte) getSpeed().ordinal());
 
-        EnumColor.fromDye(getPrimaryColor()).writeToNBT(data, "primaryColor");
-        EnumColor.fromDye(getSecondaryColor()).writeToNBT(data, "secondaryColor");
+        EnumColor.fromDye(getPrimaryDyeColor()).writeToNBT(data, "primaryColor");
+        EnumColor.fromDye(getSecondaryDyeColor()).writeToNBT(data, "secondaryColor");
 
         data.setFloat("whistlePitch", whistlePitch);
 
@@ -620,8 +620,8 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         setMode(LocoMode.VALUES[data.getByte("locoMode")]);
         setSpeed(NBTPlugin.readEnumOrdinal(data, "locoSpeed", LocoSpeed.VALUES, LocoSpeed.NORMAL));
 
-        setPrimaryColor(EnumColor.readFromNBT(data, "primaryColor").getDye());
-        setSecondaryColor(EnumColor.readFromNBT(data, "secondaryColor").getDye());
+        setPrimaryColor(EnumColor.readFromNBT(data, "primaryColor").orElse(EnumColor.BLACK).getDye());
+        setSecondaryColor(EnumColor.readFromNBT(data, "secondaryColor").orElse(EnumColor.RED).getDye());
 
         whistlePitch = data.getFloat("whistlePitch");
 
@@ -734,18 +734,26 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     public abstract LocomotiveRenderType getRenderType();
 
+    public final EnumColor getPrimaryColor() {
+        return dataManager.get(PRIMARY_COLOR);
+    }
+
     @Override
-    public final EnumDyeColor getPrimaryColor() {
-        return dataManager.get(PRIMARY_COLOR).getDye();
+    public final EnumDyeColor getPrimaryDyeColor() {
+        return getPrimaryColor().getDye();
     }
 
     public final void setPrimaryColor(EnumDyeColor color) {
         dataManager.set(PRIMARY_COLOR, EnumColor.fromDye(color));
     }
 
+    public final EnumColor getSecondaryColor() {
+        return dataManager.get(SECONDARY_COLOR);
+    }
+
     @Override
-    public final EnumDyeColor getSecondaryColor() {
-        return dataManager.get(SECONDARY_COLOR).getDye();
+    public final EnumDyeColor getSecondaryDyeColor() {
+        return getSecondaryColor().getDye();
     }
 
     public final void setSecondaryColor(EnumDyeColor color) {

@@ -13,14 +13,12 @@ import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -28,7 +26,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraft<B extends Block & IRailcraftBlock> extends ItemBlock implements ColorPlugin.IColoredItem, IRailcraftItemBlock {
+public class ItemBlockRailcraft<B extends Block & IRailcraftBlock> extends ItemBlock implements ColorPlugin.IColorHandlerItem, IRailcraftItemBlock {
 
     protected final B block;
 
@@ -39,8 +37,8 @@ public class ItemBlockRailcraft<B extends Block & IRailcraftBlock> extends ItemB
 
     @Override
     public void finalizeDefinition() {
-        if (block instanceof ColorPlugin.IColoredBlock)
-            ColorPlugin.instance.register(this, this);
+        if (block instanceof ColorPlugin.IColorHandlerBlock)
+            ColorPlugin.instance.register(this);
     }
 
     @Override
@@ -54,9 +52,8 @@ public class ItemBlockRailcraft<B extends Block & IRailcraftBlock> extends ItemB
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IItemColor colorHandler() {
-        return (stack, tintIndex) -> EnumColor.fromItemStack(stack).getHexColor();
+    public ColorPlugin.IColorFunctionItem colorHandler() {
+        return (stack, tintIndex) -> EnumColor.fromItemStack(stack).orElse(EnumColor.WHITE).getHexColor();
     }
 
     @Override

@@ -73,7 +73,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
 
     @Override
     public String getLocalizationTag() {
-        return getDetector().getType().getTag().replace('_','.') + ".name";
+        return getDetector().getType().getTag().replace('_', '.') + ".name";
     }
 
     public List<EntityMinecart> getCarts() {
@@ -84,8 +84,10 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
         return detector.blockActivated(player);
     }
 
-    public void onNeighborBlockChange(Block block) {
-        detector.onNeighborBlockChange(block);
+    @Override
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, neighborBlock, neighborPos);
+        detector.onNeighborBlockChange(state.getBlock());
     }
 
     @Override
@@ -157,9 +159,7 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
                     powerDelay = CartConstants.DETECTED_POWER_OUTPUT_FADE;
                 sendUpdateToClient();
                 world.notifyNeighborsOfStateChange(getPos(), getBlockType(), true);
-                IBlockState state = getBlockState();
-                if (state != null)
-                    WorldPlugin.notifyBlocksOfNeighborChangeOnSide(world, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));
+                WorldPlugin.notifyBlocksOfNeighborChangeOnSide(world, getPos(), getBlockType(), getBlockState().getValue(BlockDetector.FRONT));
             }
         }
     }

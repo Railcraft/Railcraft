@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -21,7 +21,7 @@ import net.minecraft.init.Items;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = SignalBoxVariant.class)
+@BlockMetaVariant(SignalBoxVariant.class)
 public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<SignalBoxVariant> {
 
     @Override

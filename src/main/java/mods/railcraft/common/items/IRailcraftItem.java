@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -35,20 +36,18 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
         return stack.getTranslationKey() + ".tips";
     }
 
-    @Nullable
     @SideOnly(Side.CLIENT)
     default ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag flag) {
         String tipTag = getTooltipTag(stack);
         if (LocalizationPlugin.hasTag(tipTag))
             return ToolTip.buildToolTip(tipTag);
-        return null;
+        return new ToolTip();
     }
 
     @SideOnly(Side.CLIENT)
     default void addToolTips(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag flag) {
         ToolTip toolTip = getToolTip(stack, world, flag);
-        if (toolTip != null)
-            info.addAll(toolTip.convertToStrings());
+        info.addAll(toolTip.convertToStrings());
     }
 
     @Override
@@ -63,8 +62,7 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
         return getObject();
     }
 
-    @Nullable
-    default String getOreTag(@Nullable IVariantEnum variant) {
+    default @Nullable String getOreTag(@Nullable IVariantEnum variant) {
         return null;
     }
 

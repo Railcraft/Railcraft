@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -21,20 +22,16 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- *
- */
-public class BlockTankIronGauge extends BlockTankIron {
+@BlockMetaTile(TileTankIronGauge.class)
+public class BlockTankIronGauge extends BlockTankIron<TileTankIronGauge> {
 
     public static final PropertyEnum<BlockStrengthGlass.Position> POSITION = PropertyEnum.create("position", BlockStrengthGlass.Position.class);
 
@@ -60,16 +57,6 @@ public class BlockTankIronGauge extends BlockTankIron {
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, getVariantProperty(), POSITION);
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileTankIronGauge.class;
-    }
-
-    @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
-        return new TileTankIronGauge();
     }
 
     @Override

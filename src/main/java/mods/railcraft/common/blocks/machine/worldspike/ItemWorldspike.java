@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,9 +44,7 @@ public class ItemWorldspike extends ItemMachine {
         return tips;
     }
 
-    private ToolTip addFuelInfo(@Nullable ToolTip toolTip, ItemStack stack) {
-        if (toolTip == null)
-            toolTip = new ToolTip();
+    private ToolTip addFuelInfo(ToolTip toolTip, ItemStack stack) {
         long fuel = ItemCartWorldspike.getFuel(stack);
         double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
         String format = LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining");

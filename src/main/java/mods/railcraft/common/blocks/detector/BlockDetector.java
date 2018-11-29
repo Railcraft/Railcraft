@@ -11,14 +11,14 @@ package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -51,8 +51,9 @@ import java.util.List;
 
 import static net.minecraft.util.EnumFacing.NORTH;
 
-@RailcraftBlockMetadata(variant = EnumDetector.class)
-public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector> {
+@BlockMetaTile(TileDetector.class)
+@BlockMetaVariant(EnumDetector.class)
+public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector, EnumDetector> {
 
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);
     public static final PropertyBool POWERED = PropertyBool.create("powered");
@@ -171,6 +172,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     @Override
     public void finalizeDefinition() {
+        super.finalizeDefinition();
         if (BrickTheme.INFERNAL.getBlock() != null)
             CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumDetector.LOCOMOTIVE.ordinal()),
                     "XXX",
@@ -201,6 +203,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return new BlockStateContainer(this, getVariantProperty(), FRONT, POWERED);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = super.getActualState(state, worldIn, pos);
@@ -214,14 +217,12 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileDetector) {
-            TileDetector detector = (TileDetector) tile;
-            return detector.getDetector().getType().getStack();
-        }
-        return super.getPickBlock(state, target, world, pos, player);
+        return getTileEntity(state, world, pos)
+                .map(t -> t.getDetector().getType().getStack())
+                .orElseGet(() -> super.getPickBlock(state, target, world, pos, player));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isBlockNormalCube(IBlockState state) {
         return false;
@@ -233,6 +234,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return true;
@@ -243,6 +245,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return getMetaFromState(state);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         TileEntity tile = world.getTileEntity(pos);
@@ -271,17 +274,9 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileDetector();
-    }
-
-    @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
         setFront(worldIn, pos, MiscTools.getSideFacingPlayer(pos, placer));
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileDetector) {
-            ((TileDetector) tile).onBlockPlacedBy(state, placer, stack);
-        }
     }
 
     @Override
@@ -293,15 +288,6 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
             return false;
         TileEntity tile = worldIn.getTileEntity(pos);
         return tile instanceof TileDetector && ((TileDetector) tile).blockActivated(playerIn);
-    }
-
-    @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos neighborPos) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileDetector) {
-            TileDetector detector = (TileDetector) tile;
-            detector.onNeighborBlockChange(blockIn);
-        }
     }
 
     @Override
@@ -326,6 +312,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return EnumFacing.VALUES;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         TileEntity tile = worldIn.getTileEntity(pos);
@@ -334,6 +321,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
         return super.getBlockHardness(state, worldIn, pos);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean canProvidePower(IBlockState state) {
         return true;
@@ -346,6 +334,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
      * World, X, Y, Z, side. Note that the side is reversed - eg it is 1 (up)
      * when checking the bottom of the block.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         TileEntity t = worldIn.getTileEntity(pos);
@@ -362,6 +351,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<EnumDetector>
      * specified side. Args: World, X, Y, Z, side. Note that the side is
      * reversed - eg it is 1 (up) when checking the bottom of the block.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public int getStrongPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         return getWeakPower(state, worldIn, pos, side);

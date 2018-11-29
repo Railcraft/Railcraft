@@ -10,19 +10,17 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMetaTile;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- *
- */
-public abstract class BlockCokeOven extends BlockMultiBlockInventory {
+@BlockMetaTile(TileCokeOven.class)
+public abstract class BlockCokeOven extends BlockMultiBlockInventory<TileCokeOven> {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
@@ -37,18 +35,8 @@ public abstract class BlockCokeOven extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
-        return new TileCokeOven();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public Class<TileCokeOven> getTileClass(IBlockState state) {
-        return TileCokeOven.class;
     }
 
     @Override

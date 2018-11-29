@@ -124,15 +124,24 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
         ItemStack heldItem = player.getHeldItem(hand);
         if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
             return false;
-        EnumColor color = EnumColor.dyeColorOf(heldItem);
-        if (color == null || color == this.color) {
+        return EnumColor.dyeColorOf(heldItem).map(color -> {
+            if (setColor(color)) {
+                if (!player.capabilities.isCreativeMode)
+                    player.setHeldItem(hand, InvTools.depleteItem(heldItem));
+                return true;
+            }
             return false;
+        }).orElse(false);
+    }
+
+    public boolean setColor(EnumColor color) {
+        if (color != this.color) {
+            this.color = color;
+            markBlockForUpdate();
+            markDirty();
+            return true;
         }
-        if (!player.capabilities.isCreativeMode)
-            player.setHeldItem(hand, InvTools.depleteItem(heldItem));
-        this.color = color;
-        markDirty();
-        return true;
+        return false;
     }
 
     @Override

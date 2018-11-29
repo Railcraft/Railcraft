@@ -54,8 +54,7 @@ public class ItemOveralls extends ItemRailcraftArmor implements IChargeProtectio
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, world, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getTranslationKey() + ".tips");
-        if (tip != null)
-            info.addAll(tip.convertToStrings());
+        info.addAll(tip.convertToStrings());
     }
 
     @Override

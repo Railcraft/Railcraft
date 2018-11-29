@@ -35,8 +35,7 @@ public class ChargeNetworkIndicator extends IndicatorController {
     @Override
     protected void refreshToolTip() {
         ToolTip newTip = ToolTip.buildToolTip("gui.railcraft.charge.network.usage", "{percent}=" + String.format("%.0f%%", chargePercent * 100.0));
-        if (newTip != null)
-            getToolTip().set(newTip);
+        getToolTip().set(newTip);
     }
 
     @Override

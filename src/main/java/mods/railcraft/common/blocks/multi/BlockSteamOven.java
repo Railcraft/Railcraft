@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.multi.TileSteamOven.Icon;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -23,17 +24,13 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- *
- */
-public class BlockSteamOven extends BlockMultiBlockInventory {
+@BlockMetaTile(TileSteamOven.class)
+public class BlockSteamOven extends BlockMultiBlockInventory<TileSteamOven> {
 
     public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final IProperty<TileSteamOven.Icon> ICON = PropertyEnum.create("icon", TileSteamOven.Icon.class);
@@ -43,16 +40,6 @@ public class BlockSteamOven extends BlockMultiBlockInventory {
         setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ICON, Icon.DEFAULT));
         setSoundType(SoundType.METAL);
         setHarvestLevel("pickaxe", 1);
-    }
-
-    @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
-        return new TileSteamOven();
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileSteamOven.class;
     }
 
     @Override

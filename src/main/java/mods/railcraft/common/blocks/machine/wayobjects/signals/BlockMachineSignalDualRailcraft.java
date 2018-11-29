@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,7 +26,7 @@ import net.minecraft.world.IBlockAccess;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = SignalDualVariant.class)
+@BlockMetaVariant(SignalDualVariant.class)
 public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDualVariant> {
     public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BLOCK_BOUNDS).build();
 

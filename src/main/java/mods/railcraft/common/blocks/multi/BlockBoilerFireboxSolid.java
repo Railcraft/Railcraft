@@ -10,37 +10,23 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
 
-/**
- *
- */
-public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox {
+@BlockMetaTile(TileBoilerFireboxSolid.class)
+public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox<TileBoilerFireboxSolid> {
 
     public BlockBoilerFireboxSolid() {
         setHarvestLevel("pickaxe", 0);
     }
 
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
-        return new TileBoilerFireboxSolid();
-    }
-
-    @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(3, 1);
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileBoilerFireboxSolid.class;
     }
 
     @Override

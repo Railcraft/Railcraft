@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.material.Material;
@@ -20,14 +21,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- *
- */
-public final class BlockBlastFurnace extends BlockMultiBlockInventory {
+@BlockMetaTile(TileBlastFurnace.class)
+public final class BlockBlastFurnace extends BlockMultiBlockInventory<TileBlastFurnace> {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
@@ -42,18 +40,8 @@ public final class BlockBlastFurnace extends BlockMultiBlockInventory {
     }
 
     @Override
-    public TileMultiBlockInventory createTileEntity(World world, IBlockState state) {
-        return new TileBlastFurnace();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public Class<TileBlastFurnace> getTileClass(IBlockState state) {
-        return TileBlastFurnace.class;
     }
 
     @Override

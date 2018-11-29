@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@ package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -38,14 +39,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Random;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockRitual extends BlockContainerRailcraft {
+@BlockMetaTile(TileRitual.class)
+public class BlockRitual extends BlockContainerRailcraft<TileRitual> {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
     public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -9.0).shiftY(0.0625F * 12.0).build();
 
@@ -63,13 +65,13 @@ public class BlockRitual extends BlockContainerRailcraft {
         RailcraftRegistry.register(TileRitual.class, "ritual");
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().ignore(CRACKED).build();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return BOUNDING_BOX;
@@ -78,6 +80,7 @@ public class BlockRitual extends BlockContainerRailcraft {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(CRACKED, meta != 0);
@@ -158,24 +161,22 @@ public class BlockRitual extends BlockContainerRailcraft {
         return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return null;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileRitual();
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = EnumOreMetalPoor.class)
+@BlockMetaVariant(EnumOreMetalPoor.class)
 public class BlockOreMetalPoor extends BlockOreMetalBase<EnumOreMetalPoor> {
     public BlockOreMetalPoor() {
         setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumOreMetalPoor.COPPER));

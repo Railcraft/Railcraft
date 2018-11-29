@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.tracks;
 
+import mods.railcraft.common.blocks.IRailcraftBlockTile;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,19 +21,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BlockTrackTile extends BlockTrack {
+public abstract class BlockTrackTile<T extends RailcraftTileEntity> extends BlockTrack implements IRailcraftBlockTile<T> {
 
-    private ThreadLocal<Boolean> lastClearResult = new ThreadLocal<>();
+    private final ThreadLocal<Boolean> lastClearResult = new ThreadLocal<>();
 
     protected BlockTrackTile() {
-    }
-
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return true;
     }
 
     @Override

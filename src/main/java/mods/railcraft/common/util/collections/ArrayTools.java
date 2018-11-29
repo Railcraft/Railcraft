@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,10 @@
 
 package mods.railcraft.common.util.collections;
 
+import mods.railcraft.common.util.misc.Code;
+
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -24,21 +27,11 @@ public final class ArrayTools {
         return index >= 0 && index < length;
     }
 
-    @SuppressWarnings("unchecked")
     @SafeVarargs
     public static <T> T[] flatten(T[]... arrays) {
-        int len = 0;
-        for (T[] array : arrays) {
-            len += array.length;
-        }
-        // throws exception if the arg is broke
-        T[] result = (T[]) Array.newInstance(arrays[0].getClass().getComponentType(), len);
-        int now = 0;
-        for (T[] array : arrays) {
-            System.arraycopy(array, 0, result, now, array.length);
-            now += array.length;
-        }
-        return result;
+        return Arrays.stream(arrays)
+                .flatMap(Arrays::stream)
+                .toArray(len -> Code.cast(Array.newInstance(arrays[0].getClass().getComponentType(), len)));
     }
 
     public static <T, R> R[] transform(T[] original, Function<? super T, ? extends R> transformer, IntFunction<? extends R[]> arrayInitializer) {

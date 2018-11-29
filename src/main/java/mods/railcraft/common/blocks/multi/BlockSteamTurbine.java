@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -35,10 +36,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Map;
 import java.util.Random;
 
-/**
- *
- */
-public final class BlockSteamTurbine extends BlockMultiBlockCharge {
+@BlockMetaTile(TileSteamTurbine.class)
+public final class BlockSteamTurbine extends BlockMultiBlockCharge<TileSteamTurbine> {
 
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
@@ -66,18 +65,8 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge {
     }
 
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
-        return new TileSteamTurbine();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public Class<TileSteamTurbine> getTileClass(IBlockState state) {
-        return TileSteamTurbine.class;
     }
 
     @Override

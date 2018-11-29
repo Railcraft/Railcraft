@@ -324,9 +324,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
             this.tips = new ToolTip(150);
             tips.add(new ToolTipLine(label, TextFormatting.WHITE));
             tips.add(new ToolTipLine(LocalizationPlugin.translate(this.locTag + ".name"), TextFormatting.DARK_GREEN));
-            ToolTip desc = ToolTip.buildToolTip(this.locTag + ".tips");
-            if (desc != null)
-                tips.addAll(desc);
+            tips.addAll(ToolTip.buildToolTip(this.locTag + ".tips"));
         }
 
         @Override
@@ -362,9 +360,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
             this.tips = new ToolTip(150);
             tips.add(new ToolTipLine(label, TextFormatting.WHITE));
             tips.add(new ToolTipLine(LocalizationPlugin.translate(this.locTag + ".name"), TextFormatting.DARK_GREEN));
-            ToolTip desc = ToolTip.buildToolTip(this.locTag + ".tips");
-            if (desc != null)
-                tips.addAll(desc);
+            tips.addAll(ToolTip.buildToolTip(this.locTag + ".tips"));
         }
 
         @Override

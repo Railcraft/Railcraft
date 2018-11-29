@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -149,8 +149,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
         if (stack.getItemDamage() >= stack.getMaxDamage() - 5)
             tipTag = getTranslationKey() + ".tips.empty";
         ToolTip tip = ToolTip.buildToolTip(tipTag);
-        if (tip != null)
-            info.addAll(tip.convertToStrings());
+        info.addAll(tip.convertToStrings());
     }
 
     @Override

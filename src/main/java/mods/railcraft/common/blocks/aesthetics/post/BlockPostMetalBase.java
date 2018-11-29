@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.interfaces.IBlockColored;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
@@ -21,7 +22,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
@@ -41,7 +41,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockPostMetalBase extends BlockPostBase implements ColorPlugin.IColoredBlock {
+public abstract class BlockPostMetalBase extends BlockPostBase implements ColorPlugin.IColorHandlerBlock, IBlockColored {
 
     public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
 
@@ -60,11 +60,6 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
             if (!stack.isEmpty())
                 RailcraftRegistry.register(this, color, stack);
         }
-    }
-
-    @Override
-    public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
     }
 
     @Override
@@ -110,6 +105,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
         return state;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         state = state.withProperty(NORTH, PostConnectionHelper.connect(worldIn, pos, state, EnumFacing.NORTH));
@@ -127,12 +123,13 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
         return state;
     }
 
+    @Override
     public EnumColor getColor(IBlockState state) {
         return state.getValue(COLOR);
     }
 
     @Override
-    public IBlockColor colorHandler() {
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) -> getColor(state).getHexColor();
     }
 
@@ -148,7 +145,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
         return true;
     }
 
-
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> list = new ArrayList<>();
@@ -176,6 +173,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @SuppressWarnings("deprecation")
     @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getColor(state).getMapColor();
@@ -184,6 +182,7 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
 
     public IBlockState getStateFromMeta(int meta) {

@@ -14,6 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
 import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
@@ -56,6 +57,14 @@ public interface IRailcraftBlock extends IRailcraftObject<Block> {
         StateMapperBase stateMapper = getStateMapper();
         if (stateMapper != null)
             ModelLoader.setCustomStateMapper(getObject(), stateMapper);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    default void finalizeDefinition() {
+        if (getObject() instanceof ColorPlugin.IColorHandlerBlock) {
+            ColorPlugin.instance.register(getObject(), (ColorPlugin.IColorHandlerBlock) getObject());
+        }
     }
 
     @SideOnly(Side.CLIENT)

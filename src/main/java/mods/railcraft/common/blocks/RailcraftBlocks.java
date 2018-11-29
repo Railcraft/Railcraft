@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
 import mods.railcraft.common.blocks.aesthetics.concrete.BlockReinforcedConcrete;
-import mods.railcraft.common.blocks.aesthetics.concrete.ItemReinforcedConcrete;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
@@ -35,7 +34,6 @@ import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.ItemDetector;
 import mods.railcraft.common.blocks.logbook.BlockLogbook;
 import mods.railcraft.common.blocks.machine.ItemMachine;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
@@ -121,7 +119,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     POST("post", BlockPost.class, ItemPost::new),
     POST_METAL("post_metal", BlockPostMetal.class, ItemPostMetal::new),
     POST_METAL_PLATFORM("post_metal_platform", BlockPostMetalPlatform.class, ItemPostMetal::new),
-    REINFORCED_CONCRETE("reinforced_concrete", BlockReinforcedConcrete.class, ItemReinforcedConcrete::new),
+    REINFORCED_CONCRETE("reinforced_concrete", BlockReinforcedConcrete.class, ItemBlockRailcraftColored::new),
     RITUAL("ritual", BlockRitual.class, null),
     SIGNAL("signal", BlockMachineSignalRailcraft.class, ItemSignal::new),
     SIGNAL_DUAL("signal_dual", BlockMachineSignalDualRailcraft.class, ItemSignal::new),
@@ -184,12 +182,13 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         this(tag, blockClass, blockSupplier, itemSupplier, null);
     }
 
+    @SuppressWarnings("SameParameterValue")
     <B extends Block & IRailcraftBlock, I extends ItemBlock & IRailcraftItemBlock>
     RailcraftBlocks(String tag, Class<B> blockClass, @Nullable Supplier<B> blockSupplier,
                     @Nullable Function<B, I> itemSupplier, @Nullable Supplier<?> altRecipeObject) {
         this.def = new BlockDef<>(this, tag, blockClass, blockSupplier, itemSupplier, altRecipeObject);
-        RailcraftBlockMetadata annotation = blockClass.getAnnotation(RailcraftBlockMetadata.class);
-        this.variantClass = annotation != null ? annotation.variant() : null;
+        BlockMetaVariant annotation = blockClass.getAnnotation(BlockMetaVariant.class);
+        this.variantClass = annotation != null ? annotation.value() : null;
         conditions().add(RailcraftConfig::isBlockEnabled, () -> "disabled via config");
     }
 
@@ -286,10 +285,12 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
         def.item().ifPresent(o -> o.finalizeDefinition());
     }
 
+    @SuppressWarnings("unused")
     public boolean isEqual(IVariantEnum variant, @Nullable ItemStack stack) {
         return !InvTools.isEmpty(stack) && def.block().isPresent() && InvTools.isItemEqual(stack, getStack(variant));
     }
 
+    @SuppressWarnings("unused")
     public boolean isEqual(@Nullable Block block) {
         return def.block().isPresent() && def.block().get() == block;
     }

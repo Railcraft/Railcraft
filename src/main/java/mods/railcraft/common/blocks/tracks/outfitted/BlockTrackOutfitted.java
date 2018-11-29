@@ -14,6 +14,7 @@ import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
@@ -65,7 +66,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
+@BlockMetaTile(TileTrackOutfitted.class)
+public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
     // TODO: Move to rail network
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.TRACK, 0.01);
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, TrackShapeHelper::isStraight);
@@ -83,6 +85,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
 
     @Override
     public void finalizeDefinition() {
+        super.finalizeDefinition();
         for (Tuple<TrackType, TrackKit> combo : TrackRegistry.getCombinations()) {
             TrackType trackType = combo.getFirst();
             TrackKit trackKit = combo.getSecond();
@@ -153,7 +156,7 @@ public class BlockTrackOutfitted extends BlockTrackTile implements IPostConnecti
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileTrackOutfitted createTileEntity(World world, IBlockState state) {
         if (state.getValue(TICKING))
             return new TileTrackOutfittedTicking();
         return new TileTrackOutfitted();

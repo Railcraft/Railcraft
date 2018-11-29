@@ -14,7 +14,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.machine.BlockMachine;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = ManipulatorVariant.class)
+@BlockMetaVariant(ManipulatorVariant.class)
 public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);
     public static final PropertyBool ACTIVE = PropertyBool.create("active");

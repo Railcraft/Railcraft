@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.glass;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.interfaces.IBlockColored;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.color.ColorPlugin;
@@ -31,7 +32,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -46,16 +46,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
-import java.util.*;
+
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, ColorPlugin.IColoredBlock {
+public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, ColorPlugin.IColorHandlerBlock, IBlockColored {
 
-    public static final PropertyEnum<EnumColor> COLOR = PropertyEnum.create("color", EnumColor.class);
     public static final PropertyEnum<Position> POSITION = PropertyEnum.create("position", Position.class);
 
     public BlockStrengthGlass() {
@@ -64,7 +66,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         setHardness(1);
         setSoundType(SoundType.GLASS);
         setCreativeTab(CreativePlugin.STRUCTURE_TAB);
-        setDefaultState(blockState.getBaseState().withProperty(COLOR, EnumColor.WHITE).withProperty(POSITION, Position.SINGLE));
+        setDefaultState(blockState.getBaseState().withProperty(EnumColor.PROPERTY, EnumColor.WHITE).withProperty(POSITION, Position.SINGLE));
     }
 
     @Override
@@ -81,16 +83,15 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(COLOR).build();
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
+        return new StateMap.Builder().ignore(EnumColor.PROPERTY).build();
     }
 
     @Override
     public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
+        IRailcraftBlock.super.finalizeDefinition();
 
         Object[] frameTypes = {"ingotTin", "ingotNickel", "ingotInvar", "ingotBrass", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
@@ -118,15 +119,13 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         }
     }
 
-    @Nullable
     @Override
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return EnumColor.class;
     }
 
-    @Nullable
     @Override
-    public IVariantEnum[] getVariants() {
+    public @Nullable IVariantEnum[] getVariants() {
         return EnumColor.VALUES;
     }
 
@@ -135,13 +134,14 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(COLOR, (EnumColor) variant);
+            state = state.withProperty(EnumColor.PROPERTY, (EnumColor) variant);
         }
         return state;
     }
 
+    @Override
     public EnumColor getColor(IBlockState state) {
-        return state.getValue(COLOR);
+        return state.getValue(EnumColor.PROPERTY);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         TOP,
         CENTER,
         BOTTOM;
-        public static Map<EnumSet<Position>, Position> patterns = new HashMap<>();
+        public static final Map<EnumSet<Position>, Position> patterns = new HashMap<>();
 
         static {
             patterns.put(EnumSet.noneOf(Position.class), SINGLE);
@@ -179,6 +179,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         state = super.getActualState(state, world, pos);
@@ -208,7 +209,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
-    public IBlockColor colorHandler() {
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) -> getColor(state).getHexColor();
     }
 
@@ -216,7 +217,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getColor(state).getDye() != color) {
-            world.setBlockState(pos, getDefaultState().withProperty(COLOR, EnumColor.fromDye(color)));
+            world.setBlockState(pos, getDefaultState().withProperty(EnumColor.PROPERTY, EnumColor.fromDye(color)));
             return true;
         }
         return false;
@@ -225,6 +226,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     /**
      * Get the MapColor for this Block and the given BlockState
      */
+    @SuppressWarnings("deprecation")
     @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return getColor(state).getMapColor();
@@ -233,9 +235,10 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(COLOR, EnumColor.fromOrdinal(meta));
+        return getDefaultState().withProperty(EnumColor.PROPERTY, EnumColor.fromOrdinal(meta));
     }
 
     /**
@@ -248,7 +251,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, COLOR, POSITION);
+        return new BlockStateContainer(this, EnumColor.PROPERTY, POSITION);
     }
 
 }

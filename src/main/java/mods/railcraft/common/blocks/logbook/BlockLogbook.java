@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.logbook;
 
 import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -46,7 +47,8 @@ import net.minecraftforge.common.ForgeHooks;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class BlockLogbook extends BlockContainerRailcraft {
+@BlockMetaTile(TileLogbook.class)
+public final class BlockLogbook extends BlockContainerRailcraft<TileLogbook> {
     public static final PropertyEnum<EnumFacing.Axis> ROTATION = PropertyEnum.create("rotation", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 
     public BlockLogbook() {
@@ -83,6 +85,7 @@ public final class BlockLogbook extends BlockContainerRailcraft {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateFromMeta(int meta) {
         if (meta != 0 && meta != 2)
@@ -98,14 +101,11 @@ public final class BlockLogbook extends BlockContainerRailcraft {
         return state.getValue(ROTATION).ordinal();
     }
 
-    public EnumFacing.Axis getAxis(IBlockAccess world, BlockPos pos) {
-        return getAxis(WorldPlugin.getBlockState(world, pos));
-    }
-
     public EnumFacing.Axis getAxis(IBlockState state) {
         return state.getValue(ROTATION);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         EnumFacing.Axis axis = facing.getAxis();
@@ -149,6 +149,7 @@ public final class BlockLogbook extends BlockContainerRailcraft {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World world, BlockPos pos) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos);
@@ -164,11 +165,6 @@ public final class BlockLogbook extends BlockContainerRailcraft {
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileLogbook();
-    }
-
-    @Override
     public boolean canBeReplacedByLeaves(IBlockState state, IBlockAccess world, BlockPos pos) {
         return false;
     }
@@ -177,6 +173,7 @@ public final class BlockLogbook extends BlockContainerRailcraft {
      * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
      * blockstate.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
         return state.withProperty(ROTATION, state.getValue(ROTATION) == EnumFacing.Axis.Z ? EnumFacing.Axis.X : EnumFacing.Axis.Z);

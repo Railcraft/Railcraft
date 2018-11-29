@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
@@ -22,7 +23,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Items;
@@ -43,17 +43,13 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin.IColoredBlock {
+@BlockMetaTile(TileTrackForce.class)
+public final class BlockTrackForce extends BlockTrackTile<TileTrackForce> implements ColorPlugin.IColorHandlerBlock {
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, EnumRailDirection.NORTH_SOUTH, EnumRailDirection.EAST_WEST);
 
     public BlockTrackForce() {
         setHardness(-1);
         setSoundType(SoundType.GLASS);
-    }
-
-    @Override
-    public void finalizeDefinition() {
-        ColorPlugin.instance.register(this, this);
     }
 
     @Override
@@ -106,15 +102,11 @@ public final class BlockTrackForce extends BlockTrackTile implements ColorPlugin
     }
 
     @Override
-    public IBlockColor colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> {
-            if (worldIn != null && pos != null) {
-                TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);
-                if (tile instanceof TileTrackForce)
-                    return ((TileTrackForce) tile).getColor();
-            }
-            return BlockForceTrackEmitter.DEFAULT_SHADE;
-        };
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
+        return (state, worldIn, pos, tintIndex) ->
+                getTileEntity(state, worldIn, pos)
+                        .map(TileTrackForce::getColor)
+                        .orElse(BlockForceTrackEmitter.DEFAULT_COLOR).getHexColor();
     }
 
     @Override

@@ -23,14 +23,16 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+
 /**
  * Created by CovertJaguar on 4/13/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockContainerRailcraftSubtyped<V extends Enum<V> & IVariantEnum> extends BlockContainerRailcraft implements ISubtypedBlock<V> {
+public abstract class BlockContainerRailcraftSubtyped<T extends RailcraftTileEntity, V extends Enum<V> & IVariantEnum> extends BlockContainerRailcraft<T> implements ISubtypedBlock<V> {
     private VariantData<V> variantData;
 
+    @SuppressWarnings("SameParameterValue")
     protected BlockContainerRailcraftSubtyped(Material materialIn) {
         this(materialIn, materialIn.getMaterialMapColor());
     }

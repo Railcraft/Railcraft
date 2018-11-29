@@ -42,7 +42,7 @@ import java.util.List;
 /**
  * A Block designed for blocks with variants defined by tile entities.
  */
-public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEntityDelegate implements ISubtypedBlock<V> {
+public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEntityDelegate<TileMachineBase> implements ISubtypedBlock<V> {
     private VariantData<V> variantData;
 
     public BlockMachine(Material mat) {
@@ -181,7 +181,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
     }
 
     @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
+    public TileMachineBase createTileEntity(World world, IBlockState state) {
         return getVariant(state).getTileEntity();
     }
 

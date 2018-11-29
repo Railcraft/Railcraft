@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.metals;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -39,7 +39,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import java.util.Random;
 
-@RailcraftBlockMetadata(variant = EnumMetal.class)
+@BlockMetaVariant(EnumMetal.class)
 public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
 
     public BlockMetal() {
@@ -89,8 +89,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
         return state;
     }
 
-    @Nullable
-    public static BlockMetal getBlock() {
+    public static @Nullable BlockMetal getBlock() {
         return (BlockMetal) RailcraftBlocks.METAL.block();
     }
 
@@ -119,6 +118,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
         return getVariant(WorldPlugin.getBlockState(world, pos));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState blockState, World worldIn, BlockPos pos) {
         return getVariant(blockState).getHardness();
@@ -129,6 +129,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
         return state.getValue(getVariantProperty()).ordinal();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos neighborPos) {
         getVariant(state).getBlockDef().onNeighborBlockChange(worldIn, pos, state, neighborBlock);

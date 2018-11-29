@@ -40,8 +40,6 @@ public class ItemBattery<B extends BlockBattery> extends ItemBlockRailcraft<B> {
     @Override
     public ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag adv) {
         ToolTip tips = super.getToolTip(stack, world, adv);
-        if (tips == null)
-            tips = new ToolTip();
         IChargeBlock.ChargeSpec chargeSpec = getBlock().getChargeSpec(InvTools.getBlockStateFromStack(stack));
         IBatteryBlock.Spec batterySpec = chargeSpec.getBatterySpec();
         assert batterySpec != null;

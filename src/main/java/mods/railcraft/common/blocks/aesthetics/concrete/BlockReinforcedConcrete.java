@@ -13,7 +13,8 @@ package mods.railcraft.common.blocks.aesthetics.concrete;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.interfaces.IBlockColored;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
@@ -32,7 +33,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
@@ -46,8 +46,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-@RailcraftBlockMetadata(variant = EnumColor.class)
-public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> implements ColorPlugin.IColoredBlock {
+@BlockMetaVariant(EnumColor.class)
+public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> implements ColorPlugin.IColorHandlerBlock, IBlockColored {
 
     public BlockReinforcedConcrete() {
         super(Material.ROCK, MapColor.STONE);
@@ -72,10 +72,9 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    @Nullable
     @Override
-    public StateMapperBase getStateMapper() {
+    @SideOnly(Side.CLIENT)
+    public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().ignore(getVariantProperty()).build();
     }
 
@@ -89,9 +88,10 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         return state;
     }
 
+    @Override
     public void finalizeDefinition() {
+        super.finalizeDefinition();
         //TODO: Make it craft a powder ALA Vanilla? World interaction may not be such a bad idea, and we can get rid of the fluid crafting in exchange for crafting colors directly...
-        ColorPlugin.instance.register(this, this);
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
         CraftingPlugin.addRecipe(getStack(8, EnumColor.SILVER),
                 "SIS",
@@ -114,7 +114,8 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         }
     }
 
-    private EnumColor getColor(IBlockState state) {
+    @Override
+    public EnumColor getColor(IBlockState state) {
         return state.getValue(getVariantProperty());
     }
 
@@ -129,7 +130,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
     }
 
     @Override
-    public IBlockColor colorHandler() {
+    public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) -> getColor(state).getHexColor();
     }
 

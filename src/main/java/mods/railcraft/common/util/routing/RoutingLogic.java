@@ -64,8 +64,7 @@ public final class RoutingLogic {
         return new RoutingLogic(data);
     }
 
-    @Nullable
-    public RoutingLogicException getError() {
+    public @Nullable RoutingLogicException getError() {
         return error;
     }
 
@@ -185,12 +184,14 @@ public final class RoutingLogic {
 
     }
 
+    @SuppressWarnings("NewClassNamingConvention")
     private interface Expression {
 
         int evaluate(ITileRouting tile, EntityMinecart cart);
 
     }
 
+    @SuppressWarnings("NewClassNamingConvention")
     private interface Condition extends Expression {
 
         @Override
@@ -545,7 +546,7 @@ public final class RoutingLogic {
         public boolean matches(ITileRouting tile, EntityMinecart cart) {
             if (cart instanceof IPaintedCart) {
                 IPaintedCart pCart = (IPaintedCart) cart;
-                return (primary == null || primary.isEqual(pCart.getPrimaryColor())) && (secondary == null || secondary.isEqual(pCart.getSecondaryColor()));
+                return (primary == null || primary.isEqual(pCart.getPrimaryDyeColor())) && (secondary == null || secondary.isEqual(pCart.getSecondaryDyeColor()));
             }
             return false;
         }

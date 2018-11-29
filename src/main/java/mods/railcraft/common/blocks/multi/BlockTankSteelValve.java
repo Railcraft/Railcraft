@@ -10,25 +10,21 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
-public class BlockTankSteelValve extends BlockTankMetal {
+@BlockMetaTile(TileTankSteelValve.class)
+public class BlockTankSteelValve extends BlockTankMetal<TileTankSteelValve> {
 
     public BlockTankSteelValve() {
         super(Material.IRON);
@@ -57,17 +53,7 @@ public class BlockTankSteelValve extends BlockTankMetal {
     }
 
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
-        return new TileTankSteelValve();
-    }
-
-    @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(2, 1);
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileTankSteelValve.class;
     }
 }

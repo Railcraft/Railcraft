@@ -25,7 +25,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTankIron extends BlockTankMetal {
+public abstract class BlockTankIron<T extends TileTankBase> extends BlockTankMetal<T> {
     protected BlockTankIron(Material material) {
         super(material);
     }

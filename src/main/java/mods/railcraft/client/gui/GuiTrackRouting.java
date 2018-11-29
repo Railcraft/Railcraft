@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -19,7 +20,6 @@ import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiTrackRouting extends TileGui {
@@ -29,13 +29,12 @@ public class GuiTrackRouting extends TileGui {
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
     private ToolTip notOwnedToolTips;
-    private String ownerName = "[Unknown]";
+    private String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
     public GuiTrackRouting(InventoryPlayer inv, TrackKitRouting track) {
         super(track.getTile(), new ContainerTrackRouting(inv, track), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_track_routing.png");
         ySize = 140;
         this.track = track;
-        EntityPlayer player = inv.player;
         lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + ownerName);
         unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + ownerName);
         notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + ownerName);

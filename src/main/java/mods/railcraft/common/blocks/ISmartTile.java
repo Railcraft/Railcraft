@@ -16,13 +16,10 @@ import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -107,16 +104,6 @@ public interface ISmartTile extends ITile {
         if (isSideSolid(side.getOpposite()))
             return IPostConnection.ConnectStyle.TWO_THIN;
         return IPostConnection.ConnectStyle.NONE;
-    }
-
-    void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack);
-
-    default void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
-
-    }
-
-    default void notifyBlocksOfNeighborChange() {
-        WorldPlugin.notifyBlocksOfNeighborChange(tile().getWorld(), tile().getPos(), tile().getBlockType());
     }
 
     default IBlockState getActualState(IBlockState state) {

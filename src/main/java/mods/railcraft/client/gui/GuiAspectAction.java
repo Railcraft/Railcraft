@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
@@ -23,7 +24,6 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
-import org.jetbrains.annotations.Nullable;
 
 public class GuiAspectAction extends GuiContainerRailcraft {
 
@@ -32,10 +32,10 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     private final boolean[] aspects = new boolean[SignalAspect.values().length];
     private GuiMultiButton lockButton;
     private boolean changed;
-    private @Nullable ToolTip lockedToolTips;
-    private @Nullable ToolTip unlockedToolTips;
-    private @Nullable ToolTip notOwnedToolTips;
-    public String ownerName = "[Unknown]";
+    private ToolTip lockedToolTips;
+    private ToolTip unlockedToolTips;
+    private ToolTip notOwnedToolTips;
+    public String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
     public GuiAspectAction(EntityPlayer player, ITileAspectResponder actionManager, String title) {
         this(player, actionManager, title, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");

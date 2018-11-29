@@ -35,7 +35,7 @@ import static mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType
 public class GuiTradeStation extends TileGui {
 
     private final TileTradeStation tile;
-    private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<VillagerRegistry.VillagerProfession>();
+    private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
     private final EntityVillager villager;
 
     public GuiTradeStation(InventoryPlayer playerInv, TileTradeStation tile) {
@@ -68,7 +68,7 @@ public class GuiTradeStation extends TileGui {
         GuiSimpleButton[] dice = new GuiSimpleButton[3];
 
         ToolTip tip = ToolTip.buildToolTip("gui.railcraft.trade.station.dice.tips");
-        if (tip != null)
+        if (!tip.isEmpty())
             tip.get(0).format = TextFormatting.YELLOW;
 
         for (int b = 0; b < 3; b++) {

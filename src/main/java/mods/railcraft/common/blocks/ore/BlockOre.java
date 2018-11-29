@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
@@ -36,7 +36,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = EnumOre.class)
+@BlockMetaVariant(EnumOre.class)
 public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
 
     private final Random rand = new Random();
@@ -89,9 +89,10 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> drops = new ArrayList<>();
         switch (getVariant(state)) {
             case SULFUR: {
                 int qty = 2 + rand.nextInt(4) + rand.nextInt(fortune + 1);

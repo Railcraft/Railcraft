@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -28,10 +29,8 @@ import net.minecraft.world.World;
 import java.util.Map;
 import java.util.Random;
 
-/**
- *
- */
-public final class BlockFluxTransformer extends BlockMultiBlockCharge {
+@BlockMetaTile(TileFluxTransformer.class)
+public final class BlockFluxTransformer extends BlockMultiBlockCharge<TileFluxTransformer> {
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.5,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 1.0));
 
@@ -53,18 +52,8 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge {
     }
 
     @Override
-    public TileMultiBlock createTileEntity(World world, IBlockState state) {
-        return new TileFluxTransformer();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public Class<TileFluxTransformer> getTileClass(IBlockState state) {
-        return TileFluxTransformer.class;
     }
 
     @Override

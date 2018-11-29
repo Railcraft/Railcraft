@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -34,7 +34,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftBlockMetadata(variant = EnumOreMagic.class)
+@BlockMetaVariant(EnumOreMagic.class)
 public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
 
     public BlockOreMagic() {

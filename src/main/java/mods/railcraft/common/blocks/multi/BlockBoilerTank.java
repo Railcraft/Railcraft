@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.multi;
 
 import net.minecraft.block.SoundType;
@@ -12,7 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public abstract class BlockBoilerTank extends BlockMultiBlock {
+public abstract class BlockBoilerTank<T extends TileBoilerTank> extends BlockMultiBlock<T> {
 
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -47,6 +57,7 @@ public abstract class BlockBoilerTank extends BlockMultiBlock {
         return CORE;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public int getLightOpacity(IBlockState state) {
         return 0;
@@ -57,11 +68,13 @@ public abstract class BlockBoilerTank extends BlockMultiBlock {
         return new BlockStateContainer.Builder(this).add(NORTH, SOUTH, EAST, WEST).build();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;

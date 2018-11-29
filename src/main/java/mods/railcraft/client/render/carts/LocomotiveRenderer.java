@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,8 +30,8 @@ public class LocomotiveRenderer extends CartModelRenderer {
         EntityLocomotive loco = (EntityLocomotive) cart;
 
         boolean ghost = SeasonPlugin.isGhostTrain(cart);
-        EnumColor pColor = ghost ? EnumColor.SILVER : EnumColor.fromDye(loco.getPrimaryColor());
-        EnumColor sColor = ghost ? EnumColor.SILVER : EnumColor.fromDye(loco.getSecondaryColor());
+        EnumColor pColor = ghost ? EnumColor.SILVER : EnumColor.fromDye(loco.getPrimaryDyeColor());
+        EnumColor sColor = ghost ? EnumColor.SILVER : EnumColor.fromDye(loco.getSecondaryDyeColor());
 
         int primaryColor = pColor.getHexColor();
         int secondaryColor = sColor.getHexColor();

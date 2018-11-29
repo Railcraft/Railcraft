@@ -11,7 +11,6 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.machine.RailcraftBlockMetadata;
 import mods.railcraft.common.util.collections.ArrayTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -28,7 +27,7 @@ import javax.annotation.Nullable;
  */
 public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailcraftBlock {
     class VariantData<V extends Enum<V> & IVariantEnum> {
-        private RailcraftBlockMetadata annotation;
+        private BlockMetaVariant annotation;
         private Class<V> variantClass;
         private V[] variantValues;
         private PropertyEnum<V> variantProperty;
@@ -36,9 +35,9 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
 
     default VariantData<V> getVariantData() {
         VariantData<V> data = new VariantData<>();
-        data.annotation = getClass().getAnnotation(RailcraftBlockMetadata.class);
+        data.annotation = getClass().getAnnotation(BlockMetaVariant.class);
         //noinspection unchecked
-        data.variantClass = (Class<V>) data.annotation.variant();
+        data.variantClass = (Class<V>) data.annotation.value();
         data.variantValues = data.variantClass.getEnumConstants();
         data.variantProperty = PropertyEnum.create(data.annotation.propertyName(), data.variantClass);
         return data;

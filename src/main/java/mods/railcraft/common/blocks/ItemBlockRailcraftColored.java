@@ -9,11 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBlockRailcraftColored<B extends Block & IRailcraftBlock> extends ItemBlockRailcraftSubtyped<B> {
 
@@ -22,8 +20,7 @@ public class ItemBlockRailcraftColored<B extends Block & IRailcraftBlock> extend
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IItemColor colorHandler() {
+    public ColorPlugin.IColorFunctionItem colorHandler() {
         return (stack, tintIndex) -> EnumColor.fromOrdinal(stack.getItemDamage()).getHexColor();
     }
 }

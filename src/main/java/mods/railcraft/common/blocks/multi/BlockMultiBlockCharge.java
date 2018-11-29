@@ -25,7 +25,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockMultiBlockCharge extends BlockMultiBlock implements IChargeBlock {
+public abstract class BlockMultiBlockCharge<T extends TileMultiBlockCharge> extends BlockMultiBlock<T> implements IChargeBlock {
     protected BlockMultiBlockCharge(Material materialIn) {
         super(materialIn);
     }

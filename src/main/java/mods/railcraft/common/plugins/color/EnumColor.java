@@ -12,19 +12,22 @@ package mods.railcraft.common.plugins.color;
 import com.google.common.primitives.Ints;
 import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.interfaces.IBlockColored;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.BlockColored;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-import org.jetbrains.annotations.Contract;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -55,6 +58,7 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
     public static final EnumColor[] VALUES_INVERTED = values();
     public static final String DEFAULT_COLOR_TAG = "color";
     public static final Map<String, EnumColor> nameMap = new HashMap<>();
+    public static final PropertyEnum<EnumColor> PROPERTY = PropertyEnum.create("color", EnumColor.class);
 
     static {
         ArrayUtils.reverse(VALUES_INVERTED);
@@ -87,8 +91,7 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return VALUES[id];
     }
 
-    @Nullable
-    public static EnumColor fromDyeOreDictTag(String dyeTag) {
+    public static @Nullable EnumColor fromDyeOreDictTag(String dyeTag) {
         return Arrays.stream(VALUES).filter(color -> color.getDyeOreDictTag().equalsIgnoreCase(dyeTag)).findFirst().orElse(null);
     }
 
@@ -99,57 +102,69 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return color;
     }
 
-    @Nullable
-    public static EnumColor fromNameStrict(String name) {
+    public static @Nullable EnumColor fromNameStrict(String name) {
         return nameMap.get(name.toLowerCase(Locale.ENGLISH));
     }
 
-    public static EnumColor getRand() {
+    public static EnumColor random() {
         return VALUES[MiscTools.RANDOM.nextInt(VALUES.length)];
     }
 
-    public static EnumColor readFromNBT(@Nullable NBTTagCompound nbt, String tag) {
-        if (nbt != null) {
-            if (nbt.hasKey(tag, 8))
-                return EnumColor.fromName(nbt.getString(tag));
-            if (nbt.hasKey(tag, 1))
-                return EnumColor.fromOrdinal(nbt.getByte(tag));
-        }
-        return EnumColor.WHITE;
-    }
-
-    @Contract("null->false")
-    public static boolean isColored(@Nullable ItemStack stack) {
+    /**
+     * Returns true if the item has color information.
+     */
+    public static boolean isColored(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return false;
-        if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
+        IBlockState state = InvTools.getBlockStateFromStack(stack);
+        if (state.getBlock() instanceof BlockColored)
+            return true;
+        if (state.getBlock() instanceof IBlockColored)
             return true;
         if (stack.getItem() == Items.DYE)
+            return true;
+        if (dyeColorOf(stack).isPresent())
             return true;
         NBTTagCompound nbt = stack.getTagCompound();
         return nbt != null && nbt.hasKey(DEFAULT_COLOR_TAG);
     }
 
-    public static EnumColor fromItemStack(@Nullable ItemStack stack) {
+    /**
+     * Returns the color of an ItemStack.
+     *
+     * It can be wool, clay, concrete, dye, or dye substitutes.
+     *
+     * @return The color or {@link EnumColor#WHITE} if no color associated with the item.
+     */
+    public static Optional<EnumColor> fromItemStack(ItemStack stack) {
         if (InvTools.isEmpty(stack))
-            return EnumColor.WHITE;
-        if (InvTools.isStackEqualToBlock(stack, Blocks.WOOL))
-            return EnumColor.fromOrdinal(stack.getItemDamage());
-        if (stack.getItem() == Items.DYE)
-            return EnumColor.fromOrdinal(15 - stack.getItemDamage());
+            return Optional.empty();
         NBTTagCompound nbt = stack.getTagCompound();
-        return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);
+        if (nbt != null && nbt.hasKey(DEFAULT_COLOR_TAG))
+            return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);
+        IBlockState state = InvTools.getBlockStateFromStack(stack);
+        if (state.getBlock() instanceof BlockColored)
+            return Optional.of(fromDye(state.getValue(BlockColored.COLOR)));
+        if (state.getBlock() instanceof IBlockColored)
+            return Optional.of(((IBlockColored) state.getBlock()).getColor(state));
+        if (state.getBlock() instanceof BlockRailcraftSubtyped)
+            if (stack.getItem() == Items.DYE)
+                return Optional.of(EnumColor.fromOrdinal(15 - stack.getItemDamage()));
+        return dyeColorOf(stack);
     }
 
-    @Contract("null -> null; !null -> _")
-    @Nullable
-    public static EnumColor dyeColorOf(@Nullable ItemStack stack) {
+    /**
+     * If the item can be used as dye, return the dye color.
+     *
+     * @return The color or null if not a dye item.
+     */
+    public static Optional<EnumColor> dyeColorOf(ItemStack stack) {
         if (InvTools.isEmpty(stack))
-            return null;
+            return Optional.empty();
         int[] ids = OreDictionary.getOreIDs(stack);
         return Arrays.stream(VALUES)
                 .filter(color -> Ints.contains(ids, OreDictionary.getOreID(color.oreTagDyeName)))
-                .findAny().orElse(null);
+                .findAny();
     }
 
     public EnumDyeColor getDye() {
@@ -192,8 +207,26 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return oreTagDyeName;
     }
 
+    public void writeToNBT(NBTTagCompound nbt) {
+        writeToNBT(nbt, DEFAULT_COLOR_TAG);
+    }
+
     public void writeToNBT(NBTTagCompound nbt, String tag) {
         nbt.setString(tag, getName());
+    }
+
+    public static Optional<EnumColor> readFromNBT(@Nullable NBTTagCompound nbt) {
+        return readFromNBT(nbt, DEFAULT_COLOR_TAG);
+    }
+
+    public static Optional<EnumColor> readFromNBT(@Nullable NBTTagCompound nbt, String tag) {
+        if (nbt != null) {
+            if (nbt.hasKey(tag, NBTPlugin.EnumNBTType.STRING.ordinal()))
+                return Optional.of(EnumColor.fromName(nbt.getString(tag)));
+            if (nbt.hasKey(tag, NBTPlugin.EnumNBTType.BYTE.ordinal()))
+                return Optional.of(EnumColor.fromOrdinal(nbt.getByte(tag)));
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -222,9 +255,8 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return dye != null && getDye() == dye;
     }
 
-    @Nullable
     @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
+    public @Nullable Object getAlternate(IRailcraftRecipeIngredient container) {
         return null;
     }
 
@@ -236,7 +268,6 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return dyes;
     }
 
-    @Nullable
     @Override
     public Object getRecipeObject() {
         return getDyeOreDictTag();

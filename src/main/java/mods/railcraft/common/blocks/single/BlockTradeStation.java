@@ -1,6 +1,17 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
+import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -9,12 +20,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
-import net.minecraft.world.World;
 
-public class BlockTradeStation extends BlockEntityDelegate {
+@BlockMetaTile(TileTradeStation.class)
+public class BlockTradeStation extends BlockEntityDelegate<TileTradeStation> {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
@@ -30,24 +40,8 @@ public class BlockTradeStation extends BlockEntityDelegate {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
-    }
-
-    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
-    }
-
-    @Override
-    public Class<? extends TileEntity> getTileClass(IBlockState state) {
-        return TileTradeStation.class;
-    }
-
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileTradeStation();
     }
 
     @Override

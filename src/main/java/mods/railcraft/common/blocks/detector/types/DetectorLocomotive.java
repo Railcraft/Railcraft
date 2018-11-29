@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -38,14 +38,11 @@ public class DetectorLocomotive extends DetectorFilter {
             if (cart instanceof EntityLocomotive) {
                 EntityLocomotive loco = (EntityLocomotive) cart;
                 ItemStack primary = getFilters().getStackInSlot(0);
-                if (primary != null && EnumColor.fromItemStack(primary) != EnumColor.fromDye(loco.getPrimaryColor())) {
-                    continue;
-                }
+                boolean matches = EnumColor.fromItemStack(primary).map(c -> c == loco.getPrimaryColor()).orElse(false);
                 ItemStack secondary = getFilters().getStackInSlot(1);
-                if (secondary != null && EnumColor.fromItemStack(secondary) != EnumColor.fromDye(loco.getSecondaryColor())) {
-                    continue;
-                }
-                return FULL_POWER;
+                matches &= EnumColor.fromItemStack(secondary).map(c -> c == loco.getSecondaryColor()).orElse(false);
+                if (matches)
+                    return FULL_POWER;
             }
         }
         return NO_POWER;

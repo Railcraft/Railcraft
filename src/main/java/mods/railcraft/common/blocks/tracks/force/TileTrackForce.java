@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.tracks.force;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
+import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,9 +30,9 @@ public final class TileTrackForce extends RailcraftTileEntity {
 
     private @Nullable TileForceTrackEmitter emitter;
     private int index;
-    private int color = BlockForceTrackEmitter.DEFAULT_SHADE;
+    private EnumColor color = BlockForceTrackEmitter.DEFAULT_COLOR;
 
-    int getColor() {
+    EnumColor getColor() {
         return color;
     }
 
@@ -59,19 +60,19 @@ public final class TileTrackForce extends RailcraftTileEntity {
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        data.writeInt(color);
+        data.writeEnum(color);
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        color = data.readInt();
+        color = data.readEnum(EnumColor.VALUES);
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setInteger("color", color);
+        color.writeToNBT(data);
         data.setInteger("index", index);
         return data;
     }
@@ -79,7 +80,7 @@ public final class TileTrackForce extends RailcraftTileEntity {
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        color = data.getInteger("color");
+        color = EnumColor.readFromNBT(data).orElse(BlockForceTrackEmitter.DEFAULT_COLOR);
         index = data.getInteger("index");
     }
 }

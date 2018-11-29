@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +78,7 @@ public final class ChatPlugin {
                 args[i] = translateMessage((String) args[i]);
             } else if (args[i] instanceof GameProfile) {
                 String username = PlayerPlugin.fillGameProfile(((GameProfile) args[i])).getName();
-                args[i] = username != null ? username : "[unknown]";
+                args[i] = username != null ? username : RailcraftConstantsAPI.UNKNOWN_PLAYER;
             }
         }
     }

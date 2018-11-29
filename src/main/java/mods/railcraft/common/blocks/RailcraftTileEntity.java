@@ -15,7 +15,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mods.railcraft.api.core.INetworkedObject;
-import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -44,13 +43,14 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IOwnable, ITile {
+public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, ITile {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
@@ -69,7 +69,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         return uuid;
     }
 
-    //    @Nullable
     public IBlockState getBlockState() {
         if (isInvalid()) {
             if (Game.DEVELOPMENT_ENVIRONMENT) {
@@ -125,16 +124,6 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
     }
 
     @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-//        data.writeUTF(owner);
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-//        owner = data.readUTF();
-    }
-
-    @Override
     public void markBlockForUpdate() {
 //        System.out.println("updating");
         if (hasWorld()) {
@@ -144,22 +133,21 @@ public abstract class RailcraftTileEntity extends TileEntity implements INetwork
         }
     }
 
-    public void notifyBlocksOfNeighborChange() {
-        if (world != null)
-            WorldPlugin.notifyBlocksOfNeighborChange(world, getPos(), getBlockType());
-    }
-
     @Override
     public void sendUpdateToClient() {
         PacketBuilder.instance().sendTileEntityPacket(this);
     }
 
+    @OverridingMethodsMustInvokeSuper
+    @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         if (placer instanceof EntityPlayer)
             owner = ((EntityPlayer) placer).getGameProfile();
         notifyBlocksOfNeighborChange();
     }
 
+    @OverridingMethodsMustInvokeSuper
+    @Override
     public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
         tileCache.resetTimers();
     }

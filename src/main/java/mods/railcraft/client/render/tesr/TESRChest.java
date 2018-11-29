@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.tesr;
 
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.single.BlockChestRailcraft;
 import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelChest;
@@ -17,6 +17,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.Objects;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -30,8 +32,8 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
 
     private final ResourceLocation texture;
 
-    public TESRChest(RailcraftBlocks type) {
-        this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + type.getBaseTag() + ".png");
+    public TESRChest(BlockChestRailcraft type) {
+        this.texture = new ResourceLocation(RailcraftConstants.TESR_TEXTURE_FOLDER + Objects.requireNonNull(type.getRegistryName()).getPath() + ".png");
     }
 
     /**
@@ -42,14 +44,14 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
         final EnumFacing facing = tile.getFacing();
 
         if (destroyStage >= 0) {
-            this.bindTexture(DESTROY_STAGES[destroyStage]);
+            bindTexture(DESTROY_STAGES[destroyStage]);
             GlStateManager.matrixMode(5890);
             GlStateManager.pushMatrix();
             GlStateManager.scale(4.0F, 4.0F, 1.0F);
             GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
             GlStateManager.matrixMode(5888);
         } else {
-            this.bindTexture(texture);
+            bindTexture(texture);
         }
 
         GlStateManager.pushMatrix();
@@ -83,8 +85,8 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraf
         float f = tile.prevLidAngle + (tile.lidAngle - tile.prevLidAngle) * partialTicks;
         f = 1.0F - f;
         f = 1.0F - f * f * f;
-        this.chestModel.chestLid.rotateAngleX = -(f * ((float) Math.PI / 2F));
-        this.chestModel.renderAll();
+        chestModel.chestLid.rotateAngleX = -(f * ((float) Math.PI / 2F));
+        chestModel.renderAll();
         GlStateManager.disableRescaleNormal();
         GlStateManager.popMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

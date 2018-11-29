@@ -76,6 +76,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
 
     @Override
     public void finalizeDefinition() {
+        super.finalizeDefinition();
         for (Materials mat : Materials.getValidMats()) {
             if (Materials.MAT_SET_FROZEN.contains(mat))
                 continue;
@@ -117,6 +118,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         list.addAll(Materials.getCreativeList().stream().filter(m -> !Materials.MAT_SET_FROZEN.contains(m)).map(this::getStack).filter(InvTools::nonEmpty).collect(Collectors.toList()));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         return AABBFactory.start().createBoxForTileAt(pos).expandHorizontally(-SELECT).raiseFloor(2 * 0.0625f).raiseCeiling(-0.0625f).build();
@@ -132,21 +134,25 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         worldIn.spawnParticle(FLAME, dx, dy, dz, 0.0D, 0.0D, 0.0D);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         return MatTools.getDrops(world, pos, state, fortune);
@@ -189,6 +195,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         return new TileMaterial();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
         return MatTools.getBlockHardness(state, worldIn, pos);
@@ -216,6 +223,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
      * Get the MapColor for this Block and the given BlockState
      */
 
+    @SuppressWarnings("deprecation")
     @Override
     public MapColor getMapColor(IBlockState state, IBlockAccess world, BlockPos pos) {
         return EnumColor.YELLOW.getMapColor();
@@ -226,6 +234,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
         return new ExtendedBlockState(this, new IProperty[]{}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);
