@@ -152,10 +152,9 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
 
     @Override
     public void update() {
-        super.update();
-
         if (Game.isHost(world)) {
             if (isValidMaster()) {
+                super.update();
                 addToNet();
                 boolean addedEnergy = false;
                 if (energy < IC2_OUTPUT) {
