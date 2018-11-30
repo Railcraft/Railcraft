@@ -219,8 +219,9 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        IInventoryObject cartInv = InventoryFactory.get(cart, getFacing().getOpposite());
-        return cartInv != null && cartInv.getNumSlots() > 0 && super.canHandleCart(cart);
+        return InventoryFactory.get(cart, getFacing().getOpposite())
+                .map(IInventoryObject::getNumSlots).orElse(0) > 0
+                && super.canHandleCart(cart);
     }
 
     public final EnumTransferMode getMode() {

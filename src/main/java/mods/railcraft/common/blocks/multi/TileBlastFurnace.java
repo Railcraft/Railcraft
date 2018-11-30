@@ -18,9 +18,8 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -112,8 +111,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileBlastFurnace)
             return false;
-        IInventoryObject tileInv = InventoryFactory.get(tile);
-        return tileInv != null && tileInv.getNumSlots() >= 27;
+        return InventoryComposite.of(tile).slotCount() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
     /**
      * The number of ticks that the furnace will keep burning
@@ -455,7 +453,6 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
     public boolean isEmpty() {
         return inv.isEmpty();
     }
-
 
     @Override
     public EnumGui getGui() {

@@ -10,15 +10,12 @@
 
 package mods.railcraft.common.util.inventory;
 
-import com.google.common.collect.Iterators;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
-
-import java.util.Iterator;
 
 /**
  * Created by CovertJaguar on 11/18/2018 for Railcraft.
@@ -31,11 +28,6 @@ public interface IInventoryImplementor extends IInventory, IInventoryObject, IIn
     @Override
     default Object getBackingObject() {
         return getInventory();
-    }
-
-    @Override
-    default Iterator<IInventoryObject> iterator() {
-        return Iterators.singletonIterator(this);
     }
 
     @Override
@@ -132,5 +124,4 @@ public interface IInventoryImplementor extends IInventory, IInventoryObject, IIn
     default int getNumSlots() {
         return getSizeInventory();
     }
-
 }

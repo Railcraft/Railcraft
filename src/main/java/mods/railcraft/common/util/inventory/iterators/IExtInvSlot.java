@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,6 @@
 package mods.railcraft.common.util.inventory.iterators;
 
 import net.minecraft.item.ItemStack;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * This interface extends IInvSlot by allowing you to modify a slot directly.
@@ -27,7 +25,7 @@ public interface IExtInvSlot extends IInvSlot {
     /**
      * Sets the current ItemStack in the slot.
      */
-    void setStack(@Nullable ItemStack stack);
+    void setStack(ItemStack stack);
 
     void clear();
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
-import mods.railcraft.common.util.inventory.InventoryFactory;
-import mods.railcraft.common.util.inventory.iterators.IInvSlot;
-import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -34,13 +30,7 @@ public class FirestoneTickHandler {
             return;
         if (entity instanceof EntityPlayer && ((EntityPlayer) entity).openContainer != ((EntityPlayer) entity).inventoryContainer)
             return;
-        IInventoryObject inv = InventoryFactory.get(entity);
-        if (inv != null) {
-            for (IInvSlot slot : InventoryIterator.getRailcraft(inv)) {
-                ItemStack stack = slot.getStack();
-                FirestoneTools.trySpawnFire(entity.world, entity.getPosition(), stack);
-            }
-        }
+        InventoryComposite.of(entity).streamStacks().forEach(stack -> FirestoneTools.trySpawnFire(entity.world, entity.getPosition(), stack));
     }
 
 }

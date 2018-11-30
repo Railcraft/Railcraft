@@ -17,9 +17,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
@@ -74,7 +72,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
             InventoryComposite inv = InventoryComposite.of(cart);
             if (!inv.isEmpty() && canAcceptPushedItem(requester, cart, stack))
                 stack = InvTools.moveItemStack(stack, inv);
-            if (InvTools.isEmpty(stack) || !canPassItemRequests(cart, stack))
+            if (InvTools.isEmpty(stack) || blocksItemRequests(cart, stack))
                 break;
         }
         return stack;
@@ -121,7 +119,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
             if (cart == upTo) {
                 break;
             }
-            if (!canPassItemRequests(cart, result)) {
+            if (blocksItemRequests(cart, result)) {
                 return ItemStack.EMPTY;
             }
         }
@@ -141,11 +139,10 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
         return !(cart instanceof IItemCart) || ((IItemCart) cart).canProvidePulledItem(requester, stack);
     }
 
-    private boolean canPassItemRequests(EntityMinecart cart, ItemStack stack) {
+    private boolean blocksItemRequests(EntityMinecart cart, ItemStack stack) {
         if (cart instanceof IItemCart)
-            return ((IItemCart) cart).canPassItemRequests(stack);
-        IInventoryObject inv = InventoryFactory.get(cart);
-        return inv != null && inv.getNumSlots() >= NUM_SLOTS;
+            return !((IItemCart) cart).canPassItemRequests(stack);
+        return InventoryComposite.of(cart).slotCount() < NUM_SLOTS;
     }
 
     @Override
@@ -177,7 +174,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
                 if (fluidHandler != null)
                     fluidStack.amount -= fluidHandler.fill(fluidStack, true);
             }
-            if (fluidStack.amount <= 0 || !canPassFluidRequests(cart, fluidStack))
+            if (fluidStack.amount <= 0 || blocksFluidRequests(cart, fluidStack))
                 break;
         }
         if (fluidStack.amount <= 0)
@@ -209,7 +206,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
                 }
             }
 
-            if (!canPassFluidRequests(cart, fluidStack))
+            if (blocksFluidRequests(cart, fluidStack))
                 break;
         }
         return null;
@@ -234,14 +231,14 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
         return !Fluids.isEmpty(fluidHandler.drain(new FluidStack(fluid, 1), false));
     }
 
-    private boolean canPassFluidRequests(EntityMinecart cart, FluidStack fluid) {
+    private boolean blocksFluidRequests(EntityMinecart cart, FluidStack fluid) {
         if (cart instanceof IFluidCart)
-            return ((IFluidCart) cart).canPassFluidRequests(fluid);
+            return !((IFluidCart) cart).canPassFluidRequests(fluid);
         IFluidHandler fluidHandler = FluidTools.getFluidHandler(null, cart);
         if (fluidHandler != null) {
-            return hasMatchingTank(fluidHandler, fluid);
+            return !hasMatchingTank(fluidHandler, fluid);
         }
-        return false;
+        return true;
     }
 
     private boolean hasMatchingTank(IFluidHandler handler, FluidStack fluid) {

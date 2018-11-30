@@ -16,6 +16,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -33,14 +34,15 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         return new ItemHandlerInventoryIterator(inv);
     }
 
-    public static InventoryIterator<? extends IInvSlot> getRailcraft(IInventoryObject inv) {
+    public static InventoryIterator<? extends IInvSlot> get(IInventoryObject inv) {
+        Objects.requireNonNull(inv.getBackingObject());
         if (inv.getBackingObject() instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv.getBackingObject());
         if (inv.getBackingObject() instanceof IInventory)
             return new StandardInventoryIterator((IInventory) inv.getBackingObject());
         if (inv.getBackingObject() instanceof IItemHandler)
             return new ItemHandlerInventoryIterator((IItemHandler) inv.getBackingObject());
-        throw new RuntimeException("Invalid Inventory Object");
+        throw new IllegalArgumentException("Invalid Inventory Object");
     }
 
     public Stream<T> stream() {

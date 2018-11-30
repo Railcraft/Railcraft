@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import com.google.common.collect.Iterators;
 import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -44,7 +43,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -240,11 +238,6 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance) {
         return CartTools.isInRangeToRenderDist(this, distance);
-    }
-
-    @Override
-    public Iterator<IInventoryObject> iterator() {
-        return Iterators.singletonIterator(this);
     }
 
     @Override

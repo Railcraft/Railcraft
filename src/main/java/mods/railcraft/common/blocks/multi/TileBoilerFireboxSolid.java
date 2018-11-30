@@ -17,10 +17,9 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventoryFactory;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
@@ -51,8 +50,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
             return true;
         if (tile instanceof TileBoiler)
             return false;
-        IInventoryObject inventoryObject = InventoryFactory.get(tile);
-        return inventoryObject != null && inventoryObject.getNumSlots() >= 27;
+        return InventoryComposite.of(tile).slotCount() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
     private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
     private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);

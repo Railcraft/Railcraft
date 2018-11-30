@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import com.google.common.collect.Iterators;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
@@ -23,7 +22,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -149,11 +147,6 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryObjec
     @Override
     public Stream<ItemStack> streamStacks() {
         return inventoryContents.stream().filter(InvTools::nonEmpty);
-    }
-
-    @Override
-    public Iterator<IInventoryObject> iterator() {
-        return Iterators.singletonIterator(this);
     }
 
     public abstract static class Callback implements IInventoryChangedListener {

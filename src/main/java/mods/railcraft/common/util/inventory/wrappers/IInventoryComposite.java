@@ -10,11 +10,13 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
+import com.google.common.collect.Iterators;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import net.minecraft.item.ItemStack;
 
-import java.util.function.Consumer;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -24,23 +26,27 @@ import java.util.stream.StreamSupport;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IInventoryComposite extends Iterable<IInventoryObject> {
-    default Stream<IInventoryObject> stream() {
-        return StreamSupport.stream(spliterator(), false);
+
+    @Override
+    default Iterator<IInventoryObject> iterator() {
+        if (this instanceof IInventoryObject)
+            return Iterators.singletonIterator((IInventoryObject) this);
+        return Collections.emptyIterator();
     }
 
     default int slotCount() {
         return stream().mapToInt(IInventoryObject::getNumSlots).sum();
     }
 
-    default void forEachStack(Consumer<ItemStack> action) {
-        forEach(inv -> streamStacks().forEach(action));
+    default Stream<IInventoryObject> stream() {
+        return StreamSupport.stream(spliterator(), false);
     }
 
-    default Stream<IInvSlot> streamSlots() {
-        return stream().flatMap(inv -> InventoryIterator.getRailcraft(inv).stream());
+    default Stream<? extends IInvSlot> streamSlots() {
+        return stream().flatMap(inv -> InventoryIterator.get(inv).stream());
     }
 
     default Stream<ItemStack> streamStacks() {
-        return stream().flatMap(inv -> InventoryIterator.getRailcraft(inv).streamStacks());
+        return stream().flatMap(inv -> InventoryIterator.get(inv).streamStacks());
     }
 }

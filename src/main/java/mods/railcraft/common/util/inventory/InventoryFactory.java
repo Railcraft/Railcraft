@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,8 +24,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
-
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Created by CovertJaguar on 5/28/2017 for Railcraft.
@@ -36,8 +38,7 @@ public class InventoryFactory {
     private InventoryFactory() {
     }
 
-    @Nullable
-    public static IInventoryObject get(World world, BlockPos pos, EnumFacing side, @Nullable final Class<? extends TileEntity> type, @Nullable final Class<? extends TileEntity> exclude) {
+    public static Optional<IInventoryObject> get(World world, BlockPos pos, EnumFacing side, final @Nullable Class<? extends TileEntity> type, final @Nullable Class<? extends TileEntity> exclude) {
         return get(world, pos, side, tile -> {
             //noinspection SimplifiableIfStatement
             if (type != null && !type.isAssignableFrom(tile.getClass()))
@@ -46,51 +47,48 @@ public class InventoryFactory {
         });
     }
 
-    @Nullable
-    public static IInventoryObject get(World world, BlockPos pos, EnumFacing side, java.util.function.Predicate<TileEntity> filter) {
+    public static Optional<IInventoryObject> get(World world, BlockPos pos, EnumFacing side, java.util.function.Predicate<TileEntity> filter) {
         TileEntity tile = WorldPlugin.getBlockTile(world, pos.offset(side));
         if (!(tile instanceof IInventory) || !filter.test(tile))
-            return null;
+            return Optional.empty();
         return get(tile, side.getOpposite());
     }
 
-    @Nullable
-    public static IInventoryObject get(@Nullable Object obj, EnumFacing side) {
-        if (obj == null)
-            return null;
-
+    public static Optional<IInventoryObject> get(@Nullable Object obj, EnumFacing side) {
+        IInventoryObject inv = null;
         if (obj instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) obj;
-            return new ChestWrapper(chest);
+            inv = new ChestWrapper(chest);
         } else if (obj instanceof ISidedInventory) {
-            return new SidedInventoryDecorator((ISidedInventory) obj, side);
+            inv = new SidedInventoryDecorator((ISidedInventory) obj, side);
         } else if (obj instanceof IInventory) {
-            return InventoryAdaptor.get((IInventory) obj);
+            inv = InventoryAdaptor.get((IInventory) obj);
         } else if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
-            return InventoryAdaptor.get(((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side));
+            inv = InventoryAdaptor.get(
+                    Objects.requireNonNull(
+                            ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)
+                    )
+            );
         }
-        return null;
+        return Optional.ofNullable(inv);
     }
 
-    @Nullable
-    public static IInventoryObject get(@Nullable Object obj) {
-        if (obj == null)
-            return null;
-
-        if (obj instanceof IInventoryObject)
-            return (IInventoryObject) obj;
-
-        if (obj instanceof TileEntityChest) {
+    public static Optional<IInventoryObject> get(@Nullable Object obj) {
+        IInventoryObject inv = null;
+        if (obj instanceof IInventoryObject) {
+            inv = (IInventoryObject) obj;
+        } else if (obj instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) obj;
-            return new ChestWrapper(chest);
+            inv = new ChestWrapper(chest);
+        } else if (obj instanceof IInventory) {
+            inv = InventoryAdaptor.get((IInventory) obj);
+        } else if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+            inv = InventoryAdaptor.get(
+                    Objects.requireNonNull(
+                            ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
+                    )
+            );
         }
-
-        if (obj instanceof IInventory)
-            return InventoryAdaptor.get((IInventory) obj);
-
-        if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null))
-            return InventoryAdaptor.get(((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null));
-
-        return null;
+        return Optional.ofNullable(inv);
     }
 }

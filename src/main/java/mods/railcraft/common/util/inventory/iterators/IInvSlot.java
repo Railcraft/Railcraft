@@ -44,4 +44,5 @@ public interface IInvSlot {
 
     int getIndex();
 
+    int maxStackSize();
 }

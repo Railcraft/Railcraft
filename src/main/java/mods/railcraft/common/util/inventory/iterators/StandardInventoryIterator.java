@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ package mods.railcraft.common.util.inventory.iterators;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -67,7 +66,7 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         }
 
         @Override
-        public void setStack(@Nullable ItemStack stack) {
+        public void setStack(ItemStack stack) {
             inv.setInventorySlotContents(slot, stack);
         }
 
@@ -94,6 +93,11 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         @Override
         public int getIndex() {
             return slot;
+        }
+
+        @Override
+        public int maxStackSize() {
+            return inv.getInventoryStackLimit();
         }
 
         @Override

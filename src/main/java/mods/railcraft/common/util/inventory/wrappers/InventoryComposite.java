@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -62,19 +62,12 @@ public final class InventoryComposite extends ForwardingList<IInventoryObject> i
     }
 
     public static InventoryComposite of(Object... objects) {
-        InventoryComposite composite = new InventoryComposite();
-        for (Object obj : objects) {
+        return Arrays.stream(objects).flatMap(obj -> {
             if (obj instanceof IInventoryComposite) {
-                for (IInventoryObject inv : (IInventoryComposite) obj) {
-                    composite.add(inv);
-                }
-            } else {
-                IInventoryObject inv = InventoryFactory.get(obj);
-                if (inv != null)
-                    composite.add(inv);
+                return ((IInventoryComposite) obj).stream();
             }
-        }
-        return composite;
+            return InventoryFactory.get(obj).map(Stream::of).orElseGet(Stream::empty);
+        }).collect(Collectors.toCollection(InventoryComposite::new));
     }
 
     public static InventoryComposite of(Collection<IInventoryObject> objects) {
@@ -85,6 +78,7 @@ public final class InventoryComposite extends ForwardingList<IInventoryObject> i
         return new InventoryComposite();
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Override
     public Stream<IInventoryObject> stream() {
         return super.stream();

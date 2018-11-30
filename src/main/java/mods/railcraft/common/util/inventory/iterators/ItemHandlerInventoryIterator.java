@@ -72,7 +72,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
         @Override
         public boolean canTakeStackFromSlot(ItemStack stack) {
-            return inv.extractItem(slot, 1, true) != null;
+            return !InvTools.isEmpty(inv.extractItem(slot, 1, true));
         }
 
         @Override
@@ -85,5 +85,9 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
             return InvTools.makeSafe(inv.getStackInSlot(slot));
         }
 
+        @Override
+        public int maxStackSize() {
+            return inv.getSlotLimit(getIndex());
+        }
     }
 }

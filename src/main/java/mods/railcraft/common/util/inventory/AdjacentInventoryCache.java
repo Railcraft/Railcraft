@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -64,9 +65,7 @@ public final class AdjacentInventoryCache {
                 invs.remove(side);
                 TileEntity tile = tiles.get(side);
                 if (tile != null && (filter == null || filter.test(tile))) {
-                    IInventoryObject inv = InventoryFactory.get(tile, side.getOpposite());
-                    if (inv != null)
-                        invs.put(side, inv);
+                    InventoryFactory.get(tile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
                 }
             }
             changedSides.clear();

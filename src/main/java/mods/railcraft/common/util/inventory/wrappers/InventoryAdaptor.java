@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,8 @@ package mods.railcraft.common.util.inventory.wrappers;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraftforge.items.IItemHandler;
+
+import java.util.Objects;
 
 /**
  * Created by CovertJaguar on 3/15/2016 for Railcraft.
@@ -26,6 +28,7 @@ public abstract class InventoryAdaptor implements IInventoryObject {
     }
 
     public static InventoryAdaptor get(final IInventory inventory) {
+        Objects.requireNonNull(inventory);
         return new InventoryAdaptor(inventory) {
 
             @Override
@@ -36,6 +39,7 @@ public abstract class InventoryAdaptor implements IInventoryObject {
     }
 
     public static InventoryAdaptor get(final IItemHandler inventory) {
+        Objects.requireNonNull(inventory);
         return new InventoryAdaptor(inventory) {
 
             @Override
