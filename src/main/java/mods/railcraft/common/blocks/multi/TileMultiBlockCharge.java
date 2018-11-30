@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.common.util.misc.Game;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,11 +38,13 @@ public abstract class TileMultiBlockCharge extends TileMultiBlock {
     @Override
     public void update() {
         super.update();
-        if (clock % 16 == 0) {
-            int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
-            if (prevComparatorOutput != newComparatorOutput)
-                world.updateComparatorOutputLevel(pos, getBlockType());
-            prevComparatorOutput = newComparatorOutput;
+        if (Game.isHost(world)) {
+            if (clock % 16 == 0) {
+                int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
+                if (prevComparatorOutput != newComparatorOutput)
+                    world.updateComparatorOutputLevel(pos, getBlockType());
+                prevComparatorOutput = newComparatorOutput;
+            }
         }
     }
 
