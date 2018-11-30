@@ -152,14 +152,14 @@ public final class StackFilters {
      * Matches if the Inventory contains the given ItemStack.
      */
     public static Predicate<ItemStack> containedIn(final IInventoryComposite inv) {
-        return stack -> InvTools.containsItem(inv, stack);
+        return inv::contains;
     }
 
     /**
      * Matches if the Inventory has room and accepts the given ItemStack
      */
     public static Predicate<ItemStack> roomIn(final IInventoryComposite inv) {
-        return stack -> InvTools.isRoomForStack(stack, inv);
+        return inv::canFit;
     }
 
     /**

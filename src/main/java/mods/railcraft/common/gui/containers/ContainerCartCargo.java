@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.carts.EntityCartCargo;
 import mods.railcraft.common.gui.slots.SlotFilter;
 import mods.railcraft.common.gui.slots.SlotLinked;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
@@ -21,7 +20,7 @@ public class ContainerCartCargo extends RailcraftContainer {
     public ContainerCartCargo(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
         super(cart);
 
-        SlotFilter filter = new SlotFilter(cart.getFilterInv(), 0, 26, 36, () -> InvTools.isInventoryEmpty(cart));
+        SlotFilter filter = new SlotFilter(cart.getFilterInv(), 0, 26, 36, cart::hasNoItems);
         filter.setStackLimit(1);
         addSlot(filter);
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,11 +11,13 @@
 package mods.railcraft.common.util.inventory.wrappers;
 
 /**
+ * Wrapper object for the various inventory API objects.
+ *
  * Created by CovertJaguar on 5/7/2016.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInventoryObject {
+public interface IInventoryAdapter {
     Object getBackingObject();
 
     int getNumSlots();

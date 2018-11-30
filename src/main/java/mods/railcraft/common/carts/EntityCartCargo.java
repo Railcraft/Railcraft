@@ -58,7 +58,7 @@ public class EntityCartCargo extends CartBaseFiltered {
     public void onUpdate() {
         super.onUpdate();
         if (Game.isHost(world))
-            setSlotsFilled(InvTools.countStacks(this));
+            setSlotsFilled(countStacks());
     }
 
     @Override

@@ -97,7 +97,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             InvTools.moveOneItem(invBurn, invWaterOutput, StandardStackFilters.FUEL.negate());
             ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invStock));
             if (!InvTools.isEmpty(stack))
-                InvTools.moveItemStack(stack, invStock);
+                invStock.addStack(stack);
             if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
                 FluidStack pulled = CartToolsAPI.transferHelper().pullFluid(this, Fluids.WATER.getB(1));
                 if (pulled != null) {
@@ -117,10 +117,11 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         FluidStack water = tankWater.getFluid();
         if (water == null || water.amount < tankWater.getCapacity() / 3)
             return true;
-        int numItems = InvTools.countItems(invFuel);
+        int numItems = invFuel.countItems();
         if (numItems == 0)
             return true;
-        int maxItems = InvTools.countMaxItemStackSize(invFuel);
+        int maxItems = invFuel.countMaxItemStackSize();
+        // FIXME: This math is weird, it completely ignores empty slots
         return (double) numItems / (double) maxItems < 0.25;
     }
 

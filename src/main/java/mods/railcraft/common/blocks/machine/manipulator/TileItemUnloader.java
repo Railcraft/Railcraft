@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,11 +58,11 @@ public class TileItemUnloader extends TileItemManipulator {
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        return super.canHandleCart(cart) && !InvTools.isInventoryEmpty(InventoryComposite.of(InventoryAdaptor.get((IInventory) cart)));
+        return super.canHandleCart(cart) && InventoryComposite.of((IInventory) cart).hasItems();
     }
 
     private void clearInv() {
-        if (!InvTools.isInventoryEmpty(invBuffer)) {
+        if (invBuffer.hasItems()) {
             InvTools.moveOneItem(invBuffer, invCache.getAdjacentInventories());
         }
     }

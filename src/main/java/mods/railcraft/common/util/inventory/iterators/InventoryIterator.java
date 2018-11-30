@@ -10,7 +10,7 @@
 package mods.railcraft.common.util.inventory.iterators;
 
 import com.google.common.collect.Streams;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -34,7 +34,7 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         return new ItemHandlerInventoryIterator(inv);
     }
 
-    public static InventoryIterator<? extends IInvSlot> get(IInventoryObject inv) {
+    public static InventoryIterator<? extends IInvSlot> get(IInventoryAdapter inv) {
         Objects.requireNonNull(inv.getBackingObject());
         if (inv.getBackingObject() instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv.getBackingObject());

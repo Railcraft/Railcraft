@@ -11,7 +11,7 @@ package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryAdvanced extends InventoryBasic implements IInventoryObject, IInventoryComposite {
+public class InventoryAdvanced extends InventoryBasic implements IInventoryAdapter, IInventoryComposite {
 
     public static final InventoryAdvanced ZERO_SIZE_INV = new InventoryAdvanced(0);
 

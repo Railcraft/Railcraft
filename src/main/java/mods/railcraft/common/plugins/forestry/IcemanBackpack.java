@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.common.plugins.forestry;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
@@ -84,7 +83,7 @@ public class IcemanBackpack extends BaseBackpack {
     private void manageSnow(IInventory backpackInventory) {
         InventoryComposite inv = InventoryComposite.of(backpackInventory);
         if (!inv.isEmpty()) {
-            int numSnowballs = InvTools.countItems(inv, SNOWBALL_MATCHER);
+            int numSnowballs = inv.countItems(SNOWBALL_MATCHER);
             InventoryManipulator im = InventoryManipulator.get(backpackInventory);
             while (numSnowballs > 16 && im.canRemoveItems(SNOWBALL_MATCHER, 4) && im.canAddStack(SNOW_BLOCK)) {
                 im.removeItems(SNOWBALL_MATCHER, 4);

@@ -259,15 +259,15 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
                         List<ItemStack> outputs = recipe.pollOutputs(random);
                         boolean hasRoom = outputs.stream()
-                                .map(output -> InvTools.moveItemStack(output, tempInv))
+                                .map(tempInv::addStack)
                                 .allMatch(InvTools::isEmpty);
 
                         if (hasRoom) {
                             for (ItemStack output : outputs) {
-                                InvTools.moveItemStack(output, invOutput);
+                                invOutput.addStack(output);
                             }
 
-                            InvTools.removeOneItem(invInput, input);
+                            invInput.removeOneItem(input);
 
                             SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
 

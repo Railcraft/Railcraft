@@ -89,7 +89,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
         for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && stack.isStackable() && sizeOf(stack) == 1) {
-                ItemStack request = InvTools.removeOneItem(chests, StackFilters.of(stack));
+                ItemStack request = chests.removeOneItem(StackFilters.of(stack));
                 if (!InvTools.isEmpty(request)) {
                     inc(stack);
                     break;

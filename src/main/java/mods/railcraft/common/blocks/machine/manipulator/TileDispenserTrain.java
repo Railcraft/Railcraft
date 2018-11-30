@@ -73,14 +73,14 @@ public class TileDispenserTrain extends TileDispenserCart {
             return false;
         }
         Predicate<ItemStack> filter = new MinecartItemType(spawn);
-        if (InvTools.countItems(this, filter) == 0) {
+        if (countItems(filter) == 0) {
             resetSpawnSequence();
             return false;
         }
         BlockPos offset = getPos().offset(facing);
         if ((spawn.getItem() instanceof ItemMinecart || spawn.getItem() instanceof IMinecartItem)
                 && EntitySearcher.findMinecarts().around(getPos().offset(facing)).in(world).isEmpty()) {
-            ItemStack cartItem = InvTools.removeOneItem(this, filter);
+            ItemStack cartItem = removeOneItem(filter);
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
@@ -91,7 +91,7 @@ public class TileDispenserTrain extends TileDispenserCart {
                         resetSpawnSequence();
                     return true;
                 } else
-                    InvTools.moveItemStack(cartItem, this);
+                    addStack(cartItem);
             }
         }
         return false;

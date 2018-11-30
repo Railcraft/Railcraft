@@ -15,10 +15,7 @@ import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.*;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.*;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -48,7 +45,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             IInventoryComposite dest = tile.getDestination();
 
             return tile.getSource().streamStacks().filter(StackFilters.matchesAny(tile.getItemFilters()))
-                    .anyMatch(stack -> InvTools.acceptsItemStack(stack, dest));
+                    .anyMatch(dest::willAccept);
         });
 
         modeHasWork.put(EnumTransferMode.TRANSFER, tile -> {
@@ -57,7 +54,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             IInventoryComposite dest = tile.getDestination();
 
             return sourceManifest.values().stream()
-                    .filter(entry -> InvTools.acceptsAnyItemStack(entry.stacks(), dest))
+                    .filter(entry -> dest.willAcceptAny(entry.stacks()))
                     .anyMatch(entry -> tile.transferredItems.count(entry.key()) < filterManifest.count(entry.key()));
         });
 
@@ -68,7 +65,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             InventoryManifest destManifest = InventoryManifest.create(dest, filterManifest.keySet());
 
             return sourceManifest.values().stream()
-                    .filter(entry -> InvTools.acceptsAnyItemStack(entry.stacks(), dest))
+                    .filter(entry -> dest.willAcceptAny(entry.stacks()))
                     .anyMatch(entry -> destManifest.count(entry.key()) < filterManifest.count(entry.key()));
         });
 
@@ -83,11 +80,11 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             InventoryManifest remainingManifest = InventoryManifest.create(tile.getSource());
             remainingManifest.keySet().removeIf(stackKey -> StackFilters.matchesAny(tile.getItemFilters()).test(stackKey.get()));
 
-            return remainingManifest.stackStream().anyMatch(stack -> InvTools.acceptsItemStack(stack, dest));
+            return remainingManifest.stackStream().anyMatch(dest::willAccept);
         });
     }
 
-    protected final InventoryComposite chests = InventoryComposite.make();
+    protected final InventoryComposite chests = InventoryComposite.create();
     protected final Multiset<StackKey> transferredItems = HashMultiset.create();
     protected final InventoryMapper invBuffer;
     private final InventoryAdvanced invFilters = new InventoryAdvanced(9).callbackInv(this).phantom();
@@ -134,7 +131,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         chests.add(invBuffer);
         chests.addAll(invCache.getAdjacentInventories());
 
-        InventoryComposite cartInv = InventoryComposite.of(InventoryFactory.get(cart, getFacing().getOpposite()));
+        InventoryComposite cartInv = InventoryComposite.of(cart, getFacing().getOpposite());
         if (cartInv.isEmpty()) {
             sendCart(cart);
             return;
@@ -182,7 +179,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
 
     @Override
     protected boolean hasWorkForCart(EntityMinecart cart) {
-        IInventoryComposite cartInv = InventoryComposite.of(InventoryFactory.get(cart, getFacing().getOpposite()));
+        IInventoryComposite cartInv = InventoryComposite.of(cart, getFacing().getOpposite());
         if (cartInv.slotCount() <= 0)
             return false;
         EnumRedstoneMode state = redstoneController().getButtonState();
@@ -192,7 +189,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             case MANUAL:
                 return true;
             case PARTIAL:
-                if (InvTools.isInventoryEmpty(cartInv))
+                if (cartInv.hasNoItems())
                     return true;
         }
         this.cart = cartInv;
@@ -219,8 +216,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        return InventoryFactory.get(cart, getFacing().getOpposite())
-                .map(IInventoryObject::getNumSlots).orElse(0) > 0
+        return InventoryComposite.of(cart, getFacing().getOpposite()).slotCount() > 0
                 && super.canHandleCart(cart);
     }
 

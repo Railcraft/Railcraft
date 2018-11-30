@@ -55,11 +55,11 @@ public class DetectorItem extends DetectorFilter {
                     case ANYTHING:
                         return FULL_POWER;
                     case EMPTY:
-                        if (InvTools.isInventoryEmpty(cartInv))
+                        if (cartInv.hasNoItems())
                             return FULL_POWER;
                         continue;
                     case FULL:
-                        if (InvTools.isInventoryFull(cartInv))
+                        if (cartInv.isFull())
                             return FULL_POWER;
                         continue;
                     case FILTERED:
@@ -67,7 +67,7 @@ public class DetectorItem extends DetectorFilter {
                             return FULL_POWER;
                         continue;
                     case NOT_EMPTY:
-                        if (!InvTools.isInventoryEmpty(cartInv))
+                        if (cartInv.hasItems())
                             return FULL_POWER;
                         continue;
                     case ANALOG:
@@ -83,8 +83,8 @@ public class DetectorItem extends DetectorFilter {
             if (InvTools.isEmpty(filter))
                 continue;
             Predicate<ItemStack> stackFilter = StackFilters.matches(filter);
-            int amountFilter = InvTools.countItems(getFilters(), stackFilter);
-            int amountCart = InvTools.countItems(cartInv, stackFilter);
+            int amountFilter = getFilters().countItems(stackFilter);
+            int amountCart = cartInv.countItems(stackFilter);
 
             switch (filterMode) {
                 case EXACTLY:

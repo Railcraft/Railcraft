@@ -141,9 +141,9 @@ public abstract class TileRollingMachine extends TileMachineBase {
         if (currentRecipe != null && canMakeMore()) {
             if (progress >= currentRecipe.getTime()) {
                 isWorking = false;
-                if (InvTools.isRoomForStack(currentRecipeOutput, invResult)) {
+                if (invResult.canFit(currentRecipeOutput)) {
                     currentRecipe.consume(craftMatrix);
-                    InvTools.moveItemStack(currentRecipeOutput, invResult);
+                    invResult.addStack(currentRecipeOutput);
                     useLast = false;
                     progress = 0;
                     currentRecipe = null;

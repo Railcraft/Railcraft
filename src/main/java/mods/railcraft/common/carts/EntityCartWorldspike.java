@@ -152,7 +152,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (InvTools.isEmpty(stack)) {
             ItemStack found = CartToolsAPI.transferHelper().pullStack(this, getFuelMap().getStackFilter());
             if (!InvTools.isEmpty(found))
-                InvTools.moveItemStack(found, this);
+                addStack(found);
         }
     }
 

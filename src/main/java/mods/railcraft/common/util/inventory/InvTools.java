@@ -12,15 +12,14 @@ package mods.railcraft.common.util.inventory;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.api.items.InvToolsAPI;
-import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
+import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -165,10 +164,10 @@ public abstract class InvTools {
 
     public static InventoryComposite getAdjacentInventories(World world, BlockPos pos, @Nullable Class<? extends TileEntity> type) {
         return Arrays.stream(EnumFacing.VALUES)
-                .map(side -> InventoryFactory.get(world, pos, side, type, null))
+                .map(side -> InventoryAdaptor.get(world, pos, side, type, null))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .collect(Collectors.toCollection(InventoryComposite::make));
+                .collect(Collectors.toCollection(InventoryComposite::create));
     }
 
 //    public static Map<Integer, IInventory> getAdjacentInventoryMap(World world, int i, int j, int k) {
@@ -350,126 +349,6 @@ public abstract class InvTools {
         }
     }
 
-    public static boolean isInventoryEmpty(IInventoryComposite inv) {
-        return inv.streamStacks().findAny().isPresent();
-    }
-
-    public static boolean isInventoryFull(IInventoryComposite inv) {
-        return !hasEmptySlot(inv);
-    }
-
-    public static boolean hasEmptySlot(IInventoryComposite inv) {
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.get(inventoryObject)) {
-                if (!slot.hasStack())
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    public static int countMaxItemStackSize(IInventoryComposite inv) {
-        int count = 0;
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.get(inventoryObject)) {
-                ItemStack stack = slot.getStack();
-                if (!isEmpty(stack))
-                    count += stack.getMaxStackSize();
-            }
-        }
-        return count;
-    }
-
-    /**
-     * Counts the number of items.
-     *
-     * @param inv the inventory
-     * @return the number of items in the inventory
-     */
-    public static int countItems(IInventoryComposite inv) {
-        return countItems(inv, StandardStackFilters.ALL);
-    }
-
-    public static int countItems(IInventoryComposite inv, Predicate<ItemStack> filter) {
-        int count = 0;
-        for (IInventoryObject inventoryObject : inv) {
-            count += InventoryIterator.get(inventoryObject).streamStacks()
-                    .filter(filter)
-                    .mapToInt(InvTools::sizeOf)
-                    .sum();
-        }
-        return count;
-    }
-
-    public static boolean numItemsMoreThan(IInventoryComposite inv, int amount) {
-        int count = 0;
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.get(inventoryObject)) {
-                ItemStack stack = slot.getStack();
-                if (!isEmpty(stack))
-                    count += sizeOf(stack);
-                if (count >= amount)
-                    return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Counts the number of items that match the filter.
-     *
-     * @param inv     the inventory
-     * @param filters the items to match against
-     * @return the number of items in the inventory
-     */
-    public static int countItems(IInventoryComposite inv, ItemStack... filters) {
-        return countItems(inv, StackFilters.anyOf(filters));
-    }
-
-    public static int countStacks(IInventoryComposite inv) {
-        return countStacks(inv, StandardStackFilters.ALL);
-    }
-
-    public static int countStacks(IInventoryComposite inv, Predicate<ItemStack> filter) {
-        int count = 0;
-        for (IInventoryObject inventoryObject : inv) {
-            count += InventoryIterator.get(inventoryObject).streamStacks()
-                    .filter(filter)
-                    .count();
-        }
-        return count;
-    }
-
-    /**
-     * Returns true if the inventory contains any of the specified items.
-     *
-     * @param inv   the inventory  The inventory to check
-     * @param items The ItemStack to look for
-     * @return true is exists
-     */
-    public static boolean containsItem(IInventoryComposite inv, ItemStack... items) {
-        return containsItem(inv, StackFilters.anyOf(items));
-
-    }
-
-    /**
-     * Returns true if the inventory contains the specified item.
-     *
-     * @param inv    the inventory  The inventory to check
-     * @param filter The ItemStack to look for
-     * @return true is exists
-     */
-    public static boolean containsItem(IInventoryComposite inv, Predicate<ItemStack> filter) {
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.get(inventoryObject)) {
-                ItemStack stack = slot.getStack();
-                if (!isEmpty(stack) && filter.test(stack))
-                    return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Attempts to move a single item from one inventory to another.
      *
@@ -503,8 +382,8 @@ public abstract class InvTools {
      * @return null if nothing was moved, the stack moved otherwise
      */
     public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest, Predicate<ItemStack> filter) {
-        for (IInventoryObject src : source) {
-            for (IInventoryObject dst : dest) {
+        for (IInventoryAdapter src : source) {
+            for (IInventoryAdapter dst : dest) {
                 InventoryManipulator<?> imSource = InventoryManipulator.get(src);
                 ItemStack moved = imSource.moveItem(dst, filter);
                 if (!isEmpty(moved))
@@ -698,66 +577,7 @@ public abstract class InvTools {
         return isItemEqual(stackA, stackB) && sizeOf(stackA) <= sizeOf(stackB);
     }
 
-    /**
-     * Places an ItemStack in a destination Inventory. Will attempt to move as
-     * much of the stack as possible, returning any remainder.
-     *
-     * @param stack The ItemStack to put in the inventory.
-     * @param dest  The destination IInventories.
-     * @return Null if itemStack was completely moved, a new itemStack with
-     * remaining stackSize if part or none of the stack was moved.
-     */
-    public static ItemStack moveItemStack(ItemStack stack, IInventoryComposite dest) {
-        for (IInventoryObject inv : dest) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inv);
-            stack = im.addStack(stack);
-            if (isEmpty(stack))
-                return emptyStack();
-        }
-        return stack;
-    }
-
-    /**
-     * Checks if there is room for the ItemStack in the inventory.
-     *
-     * @param stack The ItemStack
-     * @param dest  The IInventory
-     * @return true if room for stack
-     */
-    @Contract("null,_ -> false;")
-    public static boolean isRoomForStack(@Nullable ItemStack stack, IInventoryComposite dest) {
-        return !isEmpty(stack) && dest.stream().anyMatch(inv -> {
-            InventoryManipulator im = InventoryManipulator.get(inv);
-            return im.canAddStack(stack);
-        });
-    }
-
-    /**
-     * Checks if inventory will accept the ItemStack.
-     *
-     * @param stack The ItemStack
-     * @param dest  The IInventory
-     * @return true if room for stack
-     */
-    public static boolean acceptsItemStack(ItemStack stack, IInventoryComposite dest) {
-        if (isEmpty(stack))
-            return false;
-        ItemStack newStack = copyOne(stack);
-        return dest.streamSlots().anyMatch(slot -> slot.canPutStackInSlot(newStack));
-    }
-
-    /**
-     * Checks if inventory will accept any item from the list.
-     *
-     * @param stacks The ItemStacks
-     * @param dest   The IInventory
-     * @return true if room for stack
-     */
-    public static boolean acceptsAnyItemStack(List<ItemStack> stacks, IInventoryComposite dest) {
-        return stacks.stream().anyMatch(stack -> acceptsItemStack(stack, dest));
-    }
-
-//    /**
+    //    /**
 //     * Removes a up to numItems worth of items from the inventory, not caring
 //     * about what the items are.
 //     *
@@ -792,126 +612,6 @@ public abstract class InvTools {
 //        }
 //        return list.toArray(new ItemStack[0]);
 //    }
-
-    /**
-     * Removes and returns a single item from the inventory.
-     *
-     * @param inv the inventory The inventory
-     * @return An ItemStack
-     */
-    @SuppressWarnings("unused")
-    public static ItemStack removeOneItem(IInventoryComposite inv) {
-        return removeOneItem(inv, StandardStackFilters.ALL);
-    }
-
-    /**
-     * Removes and returns a single item from the inventory that matches the
-     * filter.
-     *
-     * @param inv    the inventory    The inventory
-     * @param filter the filter to match against
-     * @return An ItemStack
-     */
-    public static ItemStack removeOneItem(IInventoryComposite inv, ItemStack... filter) {
-        return removeOneItem(inv, StackFilters.anyOf(filter));
-    }
-
-    /**
-     * Removes and returns a single item from the inventory that matches the
-     * filter.
-     *
-     * @param inv   The inventories
-     * @param filter the filter to match against
-     * @return An ItemStack
-     */
-    public static ItemStack removeOneItem(IInventoryComposite inv, Predicate<ItemStack> filter) {
-        for (IInventoryObject inventoryObject : inv) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inventoryObject);
-            ItemStack stack = im.removeItem(filter);
-            if (!isEmpty(stack))
-                return stack;
-        }
-        return emptyStack();
-    }
-
-    /**
-     * Removes a specified number of items matching the filter, but only if the
-     * operation can be completed. If the function returns false, the inventory
-     * will not be modified.
-     *
-     * @param inv    the inventory
-     * @param amount the amount of items to remove
-     * @param filter the filter to match against
-     * @return true if there are enough items that can be removed, false
-     * otherwise.
-     */
-    public static boolean removeItemsAbsolute(IInventoryComposite inv, int amount, ItemStack... filter) {
-        return removeItemsAbsolute(inv, amount, StackFilters.anyOf(filter));
-    }
-
-    /**
-     * Removes a specified number of items matching the filter, but only if the
-     * operation can be completed. If the function returns false, the inventory
-     * will not be modified.
-     *
-     * @param inv    the inventory
-     * @param amount the amount of items to remove
-     * @param filter the filter to match against
-     * @return true if there are enough items that can be removed, false
-     * otherwise.
-     */
-    public static boolean removeItemsAbsolute(IInventoryComposite inv, int amount, Predicate<ItemStack> filter) {
-        for (IInventoryObject inventoryObject : inv) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inventoryObject);
-            if (im.canRemoveItems(filter, amount)) {
-                im.removeItems(filter, amount);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Returns a single item from the inventory that matches the
-     * filter, but does not remove it.
-     *
-     * @param inv    the inventory    The inventory
-     * @param filter the filter to match against
-     * @return An ItemStack
-     */
-    public static ItemStack findMatchingItem(IInventoryComposite inv, Predicate<ItemStack> filter) {
-        for (IInventoryObject inventoryObject : inv) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inventoryObject);
-            ItemStack removed = im.tryRemoveItem(filter);
-            if (!isEmpty(removed))
-                return removed;
-        }
-        return emptyStack();
-    }
-
-    /**
-     * Returns all items from the inventory that match the
-     * filter, but does not remove them.
-     * The resulting set will be populated with a single instance of each item type.
-     *
-     * @param inv    the inventory    The inventory
-     * @param filter EnumItemType to match against
-     * @return A Set of ItemStacks
-     */
-    public static Set<StackKey> findMatchingItems(IInventoryComposite inv, Predicate<ItemStack> filter) {
-        Set<StackKey> items = new HashSet<>();
-        for (IInventoryObject inventoryObject : inv) {
-            for (IInvSlot slot : InventoryIterator.get(inventoryObject)) {
-                ItemStack stack = slot.getStack();
-                if (!isEmpty(stack) && filter.test(stack)) {
-                    stack = stack.copy();
-                    setSize(stack, 1);
-                    items.add(StackKey.make(stack));
-                }
-            }
-        }
-        return items;
-    }
 
     public static void writeInvToNBT(IInventory inv, String tag, NBTTagCompound data) {
         NBTTagList list = new NBTTagList();
@@ -995,6 +695,6 @@ public abstract class InvTools {
                 }).sum();
 
         average = average / (double) inv.slotCount();
-        return MathHelper.floor(average * 14.0F) + (isInventoryEmpty(inv) ? 0 : 1);
+        return MathHelper.floor(average * 14.0F) + (inv.hasNoItems() ? 0 : 1);
     }
 }

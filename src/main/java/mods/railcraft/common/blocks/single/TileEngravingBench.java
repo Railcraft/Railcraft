@@ -188,9 +188,9 @@ public class TileEngravingBench extends TileSmartItemTicking implements ISidedIn
 
         if (progress >= PROCESS_TIME) {
             isCrafting = false;
-            if (InvTools.isRoomForStack(emblem, invResult)) {
+            if (invResult.canFit(emblem)) {
                 decrStackSize(SLOT_INPUT, 1);
-                InvTools.moveItemStack(emblem, invResult);
+                invResult.addStack(emblem);
                 progress = 0;
             }
         } else

@@ -20,7 +20,7 @@ import net.minecraft.util.text.ITextComponent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class InvWrapperBase implements IInventory, IInventoryObject, IInventoryComposite {
+public abstract class InvWrapperBase implements IInventory, IInventoryAdapter, IInventoryComposite {
 
     private final IInventory inv;
     protected boolean checkItems;

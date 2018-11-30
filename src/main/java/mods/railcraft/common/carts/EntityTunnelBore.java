@@ -673,7 +673,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockBallast() {
         ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invBallast));
         if (!InvTools.isEmpty(stack))
-            InvTools.moveItemStack(stack, invBallast);
+            invBallast.addStack(stack);
     }
 
     protected boolean placeBallast(BlockPos targetPos) {
@@ -712,7 +712,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockTracks() {
         ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invRails));
         if (!InvTools.isEmpty(stack))
-            InvTools.moveItemStack(stack, invRails);
+            invRails.addStack(stack);
     }
 
     protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
@@ -852,10 +852,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (!RailcraftConfig.boreDestroysBlocks() && world.getGameRules().getBoolean("doTileDrops")) {
             for (ItemStack stack : items) {
                 if (StandardStackFilters.FUEL.test(stack))
-                    stack = InvTools.moveItemStack(stack, invFuel);
+                    stack = invFuel.addStack(stack);
 
                 if (!InvTools.isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))
-                    stack = InvTools.moveItemStack(stack, invBallast);
+                    stack = invBallast.addStack(stack);
 
                 if (!InvTools.isEmpty(stack))
                     stack = CartToolsAPI.transferHelper().pushStack(this, stack);
@@ -1030,7 +1030,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     protected void stockFuel() {
         ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invFuel));
         if (!InvTools.isEmpty(stack))
-            InvTools.moveItemStack(stack, invFuel);
+            invFuel.addStack(stack);
     }
 
     protected void addFuel() {

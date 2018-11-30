@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,7 +28,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class PrototypeRecipe extends BaseRecipe {
-    private static Predicate<ItemStack> PROTOTYPE_CONTAINER = StackFilters.of(IPrototypedItem.class);
+    private static final Predicate<ItemStack> PROTOTYPE_CONTAINER = StackFilters.of(IPrototypedItem.class);
 
     public PrototypeRecipe() {
         super("prototype");
@@ -37,11 +37,11 @@ public class PrototypeRecipe extends BaseRecipe {
     @Override
     public boolean matches(InventoryCrafting grid, @Nullable World world) {
         InventoryComposite inv = InventoryComposite.of(grid);
-        int containerStacks = InvTools.countStacks(inv, PROTOTYPE_CONTAINER);
+        int containerStacks = inv.countStacks(PROTOTYPE_CONTAINER);
         if (containerStacks != 1)
             return false;
-        ItemStack container = InvTools.findMatchingItem(inv, PROTOTYPE_CONTAINER);
-        return !InvTools.isEmpty(container) && InvTools.countStacks(inv, validPrototype(container)) == 1;
+        ItemStack container = inv.findOne(PROTOTYPE_CONTAINER);
+        return !InvTools.isEmpty(container) && inv.countStacks(validPrototype(container)) == 1;
     }
 
     private Predicate<ItemStack> validPrototype(ItemStack container) {
@@ -53,10 +53,10 @@ public class PrototypeRecipe extends BaseRecipe {
         if (!matches(grid, null))
             return InvTools.emptyStack();
         InventoryComposite inv = InventoryComposite.of(grid);
-        ItemStack container = InvTools.findMatchingItem(inv, PROTOTYPE_CONTAINER);
+        ItemStack container = inv.findOne(PROTOTYPE_CONTAINER);
         if (InvTools.isEmpty(container))
             return InvTools.emptyStack();
-        ItemStack prototype = InvTools.findMatchingItem(inv, validPrototype(container));
+        ItemStack prototype = inv.findOne(validPrototype(container));
         if (!InvTools.isEmpty(prototype))
             return ((IPrototypedItem) container.getItem()).setPrototype(container, prototype);
         return InvTools.emptyStack();

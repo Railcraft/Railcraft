@@ -11,7 +11,9 @@
 package mods.railcraft.common.util.inventory.wrappers;
 
 import com.google.common.collect.ForwardingList;
-import mods.railcraft.common.util.inventory.InventoryFactory;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,42 +24,42 @@ import java.util.stream.Stream;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class InventoryComposite extends ForwardingList<IInventoryObject> implements IInventoryComposite {
-    private final List<IInventoryObject> list = new ArrayList<>(10);
+public final class InventoryComposite extends ForwardingList<IInventoryAdapter> implements IInventoryComposite {
+    private final List<IInventoryAdapter> list = NonNullList.create();
 
-    private InventoryComposite(IInventoryObject... objects) {
+    private InventoryComposite(IInventoryAdapter... objects) {
         addAll(Arrays.asList(objects));
     }
 
-    private InventoryComposite(Collection<IInventoryObject> objects) {
+    private InventoryComposite(Collection<IInventoryAdapter> objects) {
         addAll(objects);
     }
 
     @Override
-    protected List<IInventoryObject> delegate() {
+    protected List<IInventoryAdapter> delegate() {
         return list;
     }
 
     @Override
-    public boolean add(IInventoryObject element) {
+    public boolean add(IInventoryAdapter element) {
         //noinspection ConstantConditions
         return element != null && list.add(element);
     }
 
     @Override
-    public void add(int index, IInventoryObject element) {
+    public void add(int index, IInventoryAdapter element) {
         //noinspection ConstantConditions
         if (element != null)
             list.add(index, element);
     }
 
     @Override
-    public boolean addAll(Collection<? extends IInventoryObject> collection) {
+    public boolean addAll(Collection<? extends IInventoryAdapter> collection) {
         return standardAddAll(collection);
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends IInventoryObject> elements) {
+    public boolean addAll(int index, Collection<? extends IInventoryAdapter> elements) {
         return standardAddAll(index, elements);
     }
 
@@ -66,21 +68,30 @@ public final class InventoryComposite extends ForwardingList<IInventoryObject> i
             if (obj instanceof IInventoryComposite) {
                 return ((IInventoryComposite) obj).stream();
             }
-            return InventoryFactory.get(obj).map(Stream::of).orElseGet(Stream::empty);
+            return InventoryAdaptor.get(obj).map(Stream::of).orElseGet(Stream::empty);
         }).collect(Collectors.toCollection(InventoryComposite::new));
     }
 
-    public static InventoryComposite of(Collection<IInventoryObject> objects) {
+    public static InventoryComposite of(Collection<IInventoryAdapter> objects) {
         return objects.stream().filter(Objects::nonNull).collect(Collectors.toCollection(InventoryComposite::new));
     }
 
-    public static InventoryComposite make() {
+    public static InventoryComposite of(@Nullable Object obj, EnumFacing side) {
+        return InventoryAdaptor.get(obj, side).map(InventoryComposite::of).orElseGet(InventoryComposite::new);
+    }
+
+    public static InventoryComposite of(IInventoryAdapter inv) {
+        Objects.requireNonNull(inv);
+        return new InventoryComposite(inv);
+    }
+
+    public static InventoryComposite create() {
         return new InventoryComposite();
     }
 
     @SuppressWarnings("EmptyMethod")
     @Override
-    public Stream<IInventoryObject> stream() {
+    public Stream<IInventoryAdapter> stream() {
         return super.stream();
     }
 }

@@ -12,7 +12,7 @@ package mods.railcraft.common.util.inventory.manipulators;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -36,8 +36,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
         return new ItemHandlerInventoryManipulator(inv);
     }
 
-
-    public static InventoryManipulator<? extends IInvSlot> get(IInventoryObject inv) {
+    public static InventoryManipulator<? extends IInvSlot> get(IInventoryAdapter inv) {
         if (inv.getBackingObject() instanceof IInventory)
             return new StandardInventoryManipulator((IInventory) inv.getBackingObject());
         if (inv.getBackingObject() instanceof IItemHandler)
@@ -115,7 +114,7 @@ public abstract class InventoryManipulator<T extends IInvSlot> implements Iterab
 
     protected abstract List<ItemStack> removeItem(Predicate<ItemStack> filter, int maxAmount, boolean doRemove);
 
-    public ItemStack moveItem(IInventoryObject dest, Predicate<ItemStack> filter) {
+    public ItemStack moveItem(IInventoryAdapter dest, Predicate<ItemStack> filter) {
         InventoryManipulator imDest = InventoryManipulator.get(dest);
         for (IInvSlot slot : this) {
             ItemStack stack = slot.getStack();

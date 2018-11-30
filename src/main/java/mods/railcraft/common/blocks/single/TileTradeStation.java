@@ -147,23 +147,23 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean canDoTrade(MerchantRecipe recipe) {
         //noinspection ConstantConditions
-        if (!InvTools.isEmpty(recipe.getItemToBuy()) && InvTools.countItems(invInput, recipe.getItemToBuy()) < sizeOf(recipe.getItemToBuy()))
+        if (!InvTools.isEmpty(recipe.getItemToBuy()) && invInput.countItems(recipe.getItemToBuy()) < sizeOf(recipe.getItemToBuy()))
             return false;
         //noinspection ConstantConditions
-        if (!InvTools.isEmpty(recipe.getSecondItemToBuy()) && InvTools.countItems(invInput, recipe.getSecondItemToBuy()) < sizeOf(recipe.getSecondItemToBuy()))
+        if (!InvTools.isEmpty(recipe.getSecondItemToBuy()) && invInput.countItems(recipe.getSecondItemToBuy()) < sizeOf(recipe.getSecondItemToBuy()))
             return false;
-        return InvTools.isRoomForStack(recipe.getItemToSell(), invOutput);
+        return invOutput.canFit(recipe.getItemToSell());
     }
 
     private void doTrade(IMerchant merchant, MerchantRecipe recipe) {
         merchant.useRecipe(recipe);
         //noinspection ConstantConditions
         if (!InvTools.isEmpty(recipe.getItemToBuy()))
-            InvTools.removeItemsAbsolute(invInput, sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
+            invInput.removeItemsAbsolute(sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
         //noinspection ConstantConditions
         if (!InvTools.isEmpty(recipe.getSecondItemToBuy()))
-            InvTools.removeItemsAbsolute(invInput, sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
-        InvTools.moveItemStack(recipe.getItemToSell().copy(), invOutput);
+            invInput.removeItemsAbsolute(sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
+        invOutput.addStack(recipe.getItemToSell().copy());
     }
 
     @Override

@@ -74,7 +74,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
                     master.tankWater.setFluid(Fluids.WATER.get(water));
                     InventoryMapper masterFuel = InventoryMapper.make(master.inventory, SLOT_BURN, 4);
                     for (ItemStack stack : fuel) {
-                        InvTools.moveItemStack(stack, masterFuel);
+                        masterFuel.addStack(stack);
                     }
                 }
                 return;
@@ -98,7 +98,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
             return;
 
         if (isMaster && clock % 4 == 0)
-            needsFuel = !InvTools.numItemsMoreThan(invFuel, 64);
+            needsFuel = !invFuel.numItemsMoreThan(64);
 
         if (needsFuel()) {
             TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();

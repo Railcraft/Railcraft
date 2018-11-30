@@ -227,8 +227,8 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
                 ItemStack stack = invInput.getStackInSlot(slot);
                 if (!InvTools.isEmpty(stack)) {
                     ItemStack output = FurnaceRecipes.instance().getSmeltingResult(stack);
-                    if (!InvTools.isEmpty(output) && InvTools.isRoomForStack(output, invOutput)) {
-                        ItemStack remainder = InvTools.moveItemStack(output.copy(), invOutput);
+                    if (!InvTools.isEmpty(output) && invOutput.canFit(output)) {
+                        ItemStack remainder = invOutput.addStack(output.copy());
                         if (InvTools.isEmpty(remainder)) {
                             invInput.decrStackSize(slot, 1);
                             changed = true;

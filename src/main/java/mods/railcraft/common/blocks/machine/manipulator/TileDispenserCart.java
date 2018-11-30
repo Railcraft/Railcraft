@@ -89,9 +89,9 @@ public class TileDispenserCart extends TileManipulator {
             ItemStack cartStack = cart.getCartItem();
             if (cart.hasCustomName())
                 cartStack.setStackDisplayName(cart.getName());
-            ItemStack remainder = InvTools.moveItemStack(cartStack.copy(), testInv);
+            ItemStack remainder = testInv.addStack(cartStack.copy());
             if (remainder.isEmpty()) {
-                InvTools.moveItemStack(cartStack, getInventory());
+                getInventory().addStack(cartStack);
                 if (cart.isBeingRidden())
                     CartTools.removePassengers(cart);
                 cart.setDead();

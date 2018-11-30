@@ -71,7 +71,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
         for (EntityMinecart cart : carts) {
             InventoryComposite inv = InventoryComposite.of(cart);
             if (!inv.isEmpty() && canAcceptPushedItem(requester, cart, stack))
-                stack = InvTools.moveItemStack(stack, inv);
+                stack = inv.addStack(stack);
             if (InvTools.isEmpty(stack) || blocksItemRequests(cart, stack))
                 break;
         }
@@ -95,11 +95,11 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
         for (EntityMinecart cart : carts) {
             InventoryComposite inv = InventoryComposite.of(cart);
             if (!inv.isEmpty()) {
-                Set<StackKey> items = InvTools.findMatchingItems(inv, filter);
+                Set<StackKey> items = inv.findAll(filter);
                 for (StackKey stackKey : items) {
                     ItemStack stack = stackKey.get();
                     if (canProvidePulledItem(requester, cart, stack)) {
-                        ItemStack toRemove = InvTools.findMatchingItem(inv, StackFilters.of(stack));
+                        ItemStack toRemove = inv.findOne(StackFilters.of(stack));
                         if (!InvTools.isEmpty(toRemove)) {
                             result = toRemove;
                             upTo = cart;
@@ -125,7 +125,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
         }
 
         if (targetInv != null) {
-            return InvTools.removeOneItem(targetInv, result);
+            return targetInv.removeOneItem(result);
         }
 
         return ItemStack.EMPTY;

@@ -9,7 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.util.inventory.wrappers.IInventoryObject;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
+import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import net.minecraft.tileentity.TileEntity;
@@ -29,9 +30,9 @@ import java.util.function.Predicate;
 public final class AdjacentInventoryCache {
 
     private final AdjacentTileCache cache;
-    private final InventoryComposite sortedInvs = InventoryComposite.make();
-    private final Map<EnumFacing, IInventoryObject> invs = new EnumMap<>(EnumFacing.class);
-    private final Comparator<IInventoryObject> sorter;
+    private final InventoryComposite sortedInvs = InventoryComposite.create();
+    private final Map<EnumFacing, IInventoryAdapter> invs = new EnumMap<>(EnumFacing.class);
+    private final Comparator<IInventoryAdapter> sorter;
     private final Predicate<TileEntity> filter;
     private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
 
@@ -39,7 +40,7 @@ public final class AdjacentInventoryCache {
         this(cache, null, null);
     }
 
-    public AdjacentInventoryCache(AdjacentTileCache cache, @Nullable Predicate<TileEntity> filter, @Nullable Comparator<IInventoryObject> sorter) {
+    public AdjacentInventoryCache(AdjacentTileCache cache, @Nullable Predicate<TileEntity> filter, @Nullable Comparator<IInventoryAdapter> sorter) {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override
@@ -65,7 +66,7 @@ public final class AdjacentInventoryCache {
                 invs.remove(side);
                 TileEntity tile = tiles.get(side);
                 if (tile != null && (filter == null || filter.test(tile))) {
-                    InventoryFactory.get(tile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
+                    InventoryAdaptor.get(tile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
                 }
             }
             changedSides.clear();
