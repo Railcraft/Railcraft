@@ -12,6 +12,7 @@ package mods.railcraft.common.plugins.ic2;
 import ic2.api.energy.tile.IEnergyAcceptor;
 import ic2.api.energy.tile.IEnergyTile;
 import ic2.api.energy.tile.IMetaDelegate;
+import mods.railcraft.common.util.misc.Code;
 import net.minecraft.util.EnumFacing;
 
 import java.util.List;
@@ -22,10 +23,9 @@ import java.util.List;
 public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implements IMetaDelegate {
     private final List<IEnergyTile> subTiles;
 
-    @SuppressWarnings("unchecked")
     public TileIC2MultiEmitterDelegate(IMultiEmitterDelegate delegate) {
         super(delegate);
-        subTiles = (List<IEnergyTile>) delegate.getSubTiles();
+        subTiles = Code.cast(delegate.getSubTiles());
     }
 
     @Override
@@ -35,11 +35,6 @@ public class TileIC2MultiEmitterDelegate extends TileIC2EmitterDelegate implemen
 
     @Override
     public List<IEnergyTile> getSubTiles() {
-        for (IEnergyTile tile : subTiles) {
-            if (tile == null) {
-                throw new NullPointerException();
-            }
-        }
         return subTiles;
     }
 
