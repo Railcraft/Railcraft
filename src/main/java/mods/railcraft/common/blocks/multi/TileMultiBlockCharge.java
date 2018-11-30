@@ -38,13 +38,11 @@ public abstract class TileMultiBlockCharge extends TileMultiBlock {
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(world)) {
-            if (clock % 16 == 0) {
-                int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
-                if (prevComparatorOutput != newComparatorOutput)
-                    world.updateComparatorOutputLevel(pos, getBlockType());
-                prevComparatorOutput = newComparatorOutput;
-            }
+        if (Game.isHost(world) && clock % 16 == 0) {
+            int newComparatorOutput = Charge.distribution.network(world).access(pos).getComparatorOutput();
+            if (prevComparatorOutput != newComparatorOutput)
+                world.updateComparatorOutputLevel(pos, getBlockType());
+            prevComparatorOutput = newComparatorOutput;
         }
     }
 
