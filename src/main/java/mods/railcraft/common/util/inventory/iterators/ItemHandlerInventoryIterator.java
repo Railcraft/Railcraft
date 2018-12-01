@@ -9,13 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
+import mods.railcraft.common.util.inventory.InvOp;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.Iterator;
-
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -66,18 +65,27 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
         @Override
         public boolean canPutStackInSlot(ItemStack stack) {
-            ItemStack remainder = inv.insertItem(slot, stack, true);
-            return InvTools.isEmpty(remainder) || sizeOf(remainder) < sizeOf(stack);
+            return inv.isItemValid(slot, stack);
         }
 
         @Override
         public boolean canTakeStackFromSlot(ItemStack stack) {
-            return !InvTools.isEmpty(inv.extractItem(slot, 1, true));
+            return !InvTools.isEmpty(removeFromSlot(1, InvOp.SIMULATE));
         }
 
         @Override
         public ItemStack decreaseStack() {
             return inv.extractItem(slot, 1, false);
+        }
+
+        @Override
+        public ItemStack removeFromSlot(int amount, InvOp op) {
+            return inv.extractItem(slot, amount, op == InvOp.SIMULATE);
+        }
+
+        @Override
+        public ItemStack addToSlot(ItemStack stack, InvOp op) {
+            return inv.insertItem(slot, stack, op == InvOp.SIMULATE);
         }
 
         @Override

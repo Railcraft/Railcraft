@@ -13,7 +13,6 @@ package mods.railcraft.common.util.chest;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -58,7 +57,7 @@ public class MetalsChestLogic extends ChestLogic {
         NUGGET_CONDENSE {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
+                InventoryManipulator im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
                     if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(ingotStack)) {
@@ -74,7 +73,7 @@ public class MetalsChestLogic extends ChestLogic {
         INGOT_CONDENSE {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
+                InventoryManipulator im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
                     if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(blockStack)) {
@@ -90,7 +89,7 @@ public class MetalsChestLogic extends ChestLogic {
         NUGGET_SWAP {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
+                InventoryManipulator im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = nuggetFilters.get(metal);
                     ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
@@ -107,7 +106,7 @@ public class MetalsChestLogic extends ChestLogic {
         INGOT_SWAP {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
+                InventoryManipulator im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = ingotFilters.get(metal);
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
@@ -124,7 +123,7 @@ public class MetalsChestLogic extends ChestLogic {
         BLOCK_SWAP {
             @Override
             public boolean evaluate(IInventory inv) {
-                InventoryManipulator<IExtInvSlot> im = InventoryManipulator.get(inv);
+                InventoryManipulator im = InventoryManipulator.get(inv);
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = blockFilters.get(metal);
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);

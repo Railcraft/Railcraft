@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * Primary interface for inventories of all types.
+ *
  * Created by CovertJaguar on 5/28/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -27,40 +29,16 @@ import java.util.stream.Stream;
 public final class InventoryComposite extends ForwardingList<IInventoryAdapter> implements IInventoryComposite {
     private final List<IInventoryAdapter> list = NonNullList.create();
 
-    private InventoryComposite(IInventoryAdapter... objects) {
-        addAll(Arrays.asList(objects));
+    private InventoryComposite() {
     }
 
-    private InventoryComposite(Collection<IInventoryAdapter> objects) {
-        addAll(objects);
+    private InventoryComposite(IInventoryAdapter... objects) {
+        addAll(Arrays.asList(objects));
     }
 
     @Override
     protected List<IInventoryAdapter> delegate() {
         return list;
-    }
-
-    @Override
-    public boolean add(IInventoryAdapter element) {
-        //noinspection ConstantConditions
-        return element != null && list.add(element);
-    }
-
-    @Override
-    public void add(int index, IInventoryAdapter element) {
-        //noinspection ConstantConditions
-        if (element != null)
-            list.add(index, element);
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends IInventoryAdapter> collection) {
-        return standardAddAll(collection);
-    }
-
-    @Override
-    public boolean addAll(int index, Collection<? extends IInventoryAdapter> elements) {
-        return standardAddAll(index, elements);
     }
 
     public static InventoryComposite of(Object... objects) {

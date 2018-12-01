@@ -26,6 +26,10 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
+ * Primary interface for inventories of all types.
+ *
+ * Supports treating multiple inventories as a single object.
+ *
  * Created by CovertJaguar on 5/28/2017 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
@@ -157,7 +161,7 @@ public interface IInventoryComposite extends Iterable<IInventoryAdapter> {
      */
     default ItemStack findOne(Predicate<ItemStack> filter) {
         for (IInventoryAdapter inventoryObject : this) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inventoryObject);
+            InventoryManipulator im = InventoryManipulator.get(inventoryObject);
             ItemStack removed = im.tryRemoveItem(filter);
             if (!InvTools.isEmpty(removed))
                 return removed;
@@ -214,7 +218,7 @@ public interface IInventoryComposite extends Iterable<IInventoryAdapter> {
      */
     default boolean removeItemsAbsolute(int amount, Predicate<ItemStack> filter) {
         for (IInventoryAdapter inventoryObject : this) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inventoryObject);
+            InventoryManipulator im = InventoryManipulator.get(inventoryObject);
             if (im.canRemoveItems(filter, amount)) {
                 im.removeItems(filter, amount);
                 return true;
@@ -252,7 +256,7 @@ public interface IInventoryComposite extends Iterable<IInventoryAdapter> {
      */
     default ItemStack removeOneItem(Predicate<ItemStack> filter) {
         for (IInventoryAdapter inventoryObject : this) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inventoryObject);
+            InventoryManipulator im = InventoryManipulator.get(inventoryObject);
             ItemStack stack = im.removeItem(filter);
             if (!InvTools.isEmpty(stack))
                 return stack;
@@ -270,7 +274,7 @@ public interface IInventoryComposite extends Iterable<IInventoryAdapter> {
      */
     default ItemStack addStack(ItemStack stack) {
         for (IInventoryAdapter inv : this) {
-            InventoryManipulator<?> im = InventoryManipulator.get(inv);
+            InventoryManipulator im = InventoryManipulator.get(inv);
             stack = im.addStack(stack);
             if (InvTools.isEmpty(stack))
                 return InvTools.emptyStack();

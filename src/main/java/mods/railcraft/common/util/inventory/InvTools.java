@@ -143,11 +143,15 @@ public abstract class InvTools {
         return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
     }
 
-    public static ItemStack copyOne(ItemStack stack) {
+    public static ItemStack copy(ItemStack stack, int newSize) {
         ItemStack ret = copy(stack);
         if (!isEmpty(ret))
-            ret.setCount(1);
+            ret.setCount(newSize);
         return ret;
+    }
+
+    public static ItemStack copyOne(ItemStack stack) {
+        return copy(stack, 1);
     }
 
     public static boolean canMerge(ItemStack target, ItemStack source) {
@@ -343,7 +347,7 @@ public abstract class InvTools {
         for (IExtInvSlot slot : InventoryIterator.getVanilla(inv)) {
             ItemStack stack = slot.getStack();
             if (!isEmpty(stack) && !inv.isItemValidForSlot(slot.getIndex(), stack)) {
-                slot.setStack(emptyStack());
+                slot.clear();
                 dropItem(stack, world, pos);
             }
         }
@@ -384,7 +388,7 @@ public abstract class InvTools {
     public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest, Predicate<ItemStack> filter) {
         for (IInventoryAdapter src : source) {
             for (IInventoryAdapter dst : dest) {
-                InventoryManipulator<?> imSource = InventoryManipulator.get(src);
+                InventoryManipulator imSource = InventoryManipulator.get(src);
                 ItemStack moved = imSource.moveItem(dst, filter);
                 if (!isEmpty(moved))
                     return moved;

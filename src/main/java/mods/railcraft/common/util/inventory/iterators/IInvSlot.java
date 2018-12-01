@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.iterators;
 
+import mods.railcraft.common.util.inventory.InvOp;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,6 +35,15 @@ public interface IInvSlot {
     }
 
     ItemStack decreaseStack();
+
+    ItemStack removeFromSlot(int amount, InvOp op);
+
+    /**
+     * Add as much of the given ItemStack to the slot as possible.
+     *
+     * @return the remaining items that were not added
+     */
+    ItemStack addToSlot(ItemStack stack, InvOp op);
 
     /**
      * It is not legal to edit the stack returned from this function.

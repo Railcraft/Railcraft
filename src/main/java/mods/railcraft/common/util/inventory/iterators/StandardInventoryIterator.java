@@ -10,11 +10,14 @@
 
 package mods.railcraft.common.util.inventory.iterators;
 
+import mods.railcraft.common.util.inventory.InvOp;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import java.util.Iterator;
+
+import static mods.railcraft.common.util.inventory.InvTools.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -88,6 +91,39 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         @Override
         public ItemStack decreaseStack() {
             return inv.decrStackSize(slot, 1);
+        }
+
+        @Override
+        public ItemStack removeFromSlot(int amount, InvOp op) {
+            switch (op) {
+                case EXECUTE:
+                    return inv.decrStackSize(slot, amount);
+                default:
+                    return InvTools.copyOne(getStack());
+            }
+        }
+
+        @Override
+        public ItemStack addToSlot(ItemStack stack, InvOp op) {
+            int available = sizeOf(stack);
+            if (available <= 0)
+                return stack.copy();
+            int max = Math.min(stack.getMaxStackSize(), inv.getInventoryStackLimit());
+            int wanted = 0;
+
+            ItemStack stackInSlot = getStack();
+            if (InvTools.isEmpty(stackInSlot)) {
+                wanted = Math.min(available, max);
+                if (wanted > 0 && op == InvOp.EXECUTE) {
+                    setStack(copy(stack, wanted));
+                }
+            } else if (InvTools.isItemEqual(stack, stackInSlot)) {
+                wanted = Math.min(available, max - sizeOf(stackInSlot));
+                if (wanted > 0 && op == InvOp.EXECUTE) {
+                    setStack(incSize(stackInSlot, wanted));
+                }
+            }
+            return copy(stack, available - wanted);
         }
 
         @Override
