@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,6 +56,8 @@ public class OreGeneratorFactory {
     }
 
     private OreGeneratorFactory(Configuration config, String defaultType, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, int defaultSeed, String defaultFringeOre, String defaultCoreOre) {
+        config.setCategoryComment(CAT, "Copy this file to add your own ore spawns or deleted it to disable spawning.\n" +
+                "Setting railcraft.config->worldgen.generateDefaultConfigs to true will reset the entire folder to defaults.");
         config.setCategoryComment(CAT + ".retrogen", "Retrogen settings. You must have the Railcraft-Retrogen mod installed for these to do anything.");
         boolean retrogen = config.getBoolean("retrogen", CAT + ".retrogen", false, "Whether retrogen should be enabled on this generator.");
         String retrogenMarker = config.getString("retrogenMarker", CAT + ".retrogen", "RCRGMARK", "The marker used to indicate whether a chunk has generated this ore. Generally this should be unique each time you run retrogen.");
@@ -91,9 +93,9 @@ public class OreGeneratorFactory {
 
         public GeneratorSettings(Configuration config, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange) {
             weight = config.getInt("weight", CAT, defaultWeight, 0, Integer.MAX_VALUE, "The generator weight, larger weights generate later. You can use this to sort what order stuff is generated.");
-            depth = config.getInt("depth", OreGeneratorFactory.CAT, defaultDepth, 10, Integer.MAX_VALUE, "The y level that the mine will generate at. Generally you should keep this below 220 for vanilla height worlds. If your sea level is the normal 63, its usually best to stay below 50 as well due to the topsoil.");
-            range = config.getInt("range", OreGeneratorFactory.CAT, defaultRange, 1, 20, "The scale of the gaussian distribution used to spread the mine vertically, how tall it is. Note that it spreads above and blow the y level equally, so a value of 3 is roughly 6 blocks tall.");
-            blockCount = config.getInt("blockCount", OreGeneratorFactory.CAT, defaultBlockCount, 1, 16, "The number of ore blocks generated during each successful event. Each chunk generally gets 216 generation events, but not all events result in ore spawn due to chance settings and noise fields.");
+            depth = config.getInt("depth", CAT, defaultDepth, 10, Integer.MAX_VALUE, "The y level that the mine will generate at. Generally you should keep this below 220 for vanilla height worlds. If your sea level is the normal 63, its usually best to stay below 50 as well due to the topsoil.");
+            range = config.getInt("range", CAT, defaultRange, 1, 20, "The scale of the gaussian distribution used to spread the mine vertically, how tall it is. Note that it spreads above and blow the y level equally, so a value of 3 is roughly 6 blocks tall.");
+            blockCount = config.getInt("blockCount", CAT, defaultBlockCount, 1, 16, "The number of ore blocks generated during each successful event. Each chunk generally gets 216 generation events, but not all events result in ore spawn due to chance settings and noise fields.");
         }
     }
 
@@ -109,19 +111,19 @@ public class OreGeneratorFactory {
             this.skyGen = RailcraftConfig.isWorldGenEnabled("sky");
 
             config.setCategoryComment(CAT + ".ore", "The ore blocks to be generated. Format: <modid>:<blockname>#<meta>");
-            fringeOre = BlockItemParser.parseBlock(config.getString("fringe", OreGeneratorFactory.CAT + ".ore", defaultFringeOre, "The ore block generated on the fringe of the mine."));
-            coreOre = BlockItemParser.parseBlock(config.getString("core", OreGeneratorFactory.CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine."));
+            fringeOre = BlockItemParser.parseBlock(config.getString("fringe", CAT + ".ore", defaultFringeOre, "The ore block generated on the fringe of the mine."));
+            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine."));
 
-            noiseSeed = config.getInt("seed", OreGeneratorFactory.CAT, defaultSeed, 0, Integer.MAX_VALUE, "The seed used to create the noise map. Generally it is set to the atomic number of the element being generated, but it can be anything you want. Should be unique for each generator or your mines will generate in the same places, which can be desirable if you want to mix ores like Iron and Nickel.");
-            cloudScale = config.getFloat("cloud", OreGeneratorFactory.CAT + ".scale", 0.0018F, 0.000001F, 1F, "The scale of the noise map used to determine the boundaries of the mine. Very small changes can have drastic effects. Smaller numbers result in larger mines. Recommended to not change this.");
-            veinScale = config.getFloat("vein", OreGeneratorFactory.CAT + ".scale", 0.015F, 0.000001F, 1F, "The scale of the noise map used to create the veins. Very small changes can have drastic effects. Smaller numbers result in larger veins. Recommended to not change this.");
-            fringeLimit = config.getFloat("fringe", OreGeneratorFactory.CAT + ".limits", 0.7F, 0F, 1F, "The limit of noise of the cloud layer above which fringe ore is generated. Lower numbers result in larger, more common, fringe areas.");
-            richLimit = config.getFloat("rich", OreGeneratorFactory.CAT + ".limits", 0.8F, 0F, 1F, "The limit of noise of the cloud layer above which core ore is generated in rich biomes. Lower numbers result in larger rich areas.");
-            coreLimit = config.getFloat("core", OreGeneratorFactory.CAT + ".limits", 0.9F, 0F, 1F, "The limit of noise of the cloud layer above which core ore is generated. Lower numbers result in larger core areas.");
-            veinLimit = config.getFloat("vein", OreGeneratorFactory.CAT + ".limits", 0.25F, 0F, 1F, "The limit of noise of the vein layer below which ore is generated. Larger numbers result in larger veins.");
-            fringeGenChance = config.getFloat("fringeGen", OreGeneratorFactory.CAT + ".chances", 0.3F, 0F, 1F, "The percent chance that a generate event in a fringe area will result in ore spawning.");
-            coreGenChance = config.getFloat("coreGen", OreGeneratorFactory.CAT + ".chances", 1F, 0F, 1F, "The percent chance that a generate event in a core area will result in ore spawning.");
-            coreOreChance = config.getFloat("coreOre", OreGeneratorFactory.CAT + ".chances", 0.2F, 0F, 1F, "The percent chance that a generate event in a core area will result in core ore spawning instead of fringe ore. Applied after coreGen.");
+            noiseSeed = config.getInt("seed", CAT, defaultSeed, 0, Integer.MAX_VALUE, "The seed used to create the noise map. Generally it is set to the atomic number of the element being generated, but it can be anything you want. Should be unique for each generator or your mines will generate in the same places, which can be desirable if you want to mix ores like Iron and Nickel.");
+            cloudScale = config.getFloat("cloud", CAT + ".scale", 0.0018F, 0.000001F, 1F, "The scale of the noise map used to determine the boundaries of the mine. Very small changes can have drastic effects. Smaller numbers result in larger mines. Recommended to not change this.");
+            veinScale = config.getFloat("vein", CAT + ".scale", 0.015F, 0.000001F, 1F, "The scale of the noise map used to create the veins. Very small changes can have drastic effects. Smaller numbers result in larger veins. Recommended to not change this.");
+            fringeLimit = config.getFloat("fringe", CAT + ".limits", 0.7F, 0F, 1F, "The limit of noise of the cloud layer above which fringe ore is generated. Lower numbers result in larger, more common, fringe areas.");
+            richLimit = config.getFloat("rich", CAT + ".limits", 0.8F, 0F, 1F, "The limit of noise of the cloud layer above which core ore is generated in rich biomes. Lower numbers result in larger rich areas.");
+            coreLimit = config.getFloat("core", CAT + ".limits", 0.9F, 0F, 1F, "The limit of noise of the cloud layer above which core ore is generated. Lower numbers result in larger core areas.");
+            veinLimit = config.getFloat("vein", CAT + ".limits", 0.25F, 0F, 1F, "The limit of noise of the vein layer below which ore is generated. Larger numbers result in larger veins.");
+            fringeGenChance = config.getFloat("fringeGen", CAT + ".chances", 0.3F, 0F, 1F, "The percent chance that a generate event in a fringe area will result in ore spawning.");
+            coreGenChance = config.getFloat("coreGen", CAT + ".chances", 1F, 0F, 1F, "The percent chance that a generate event in a core area will result in ore spawning.");
+            coreOreChance = config.getFloat("coreOre", CAT + ".chances", 0.2F, 0F, 1F, "The percent chance that a generate event in a core area will result in core ore spawning instead of fringe ore. Applied after coreGen.");
         }
     }
 
