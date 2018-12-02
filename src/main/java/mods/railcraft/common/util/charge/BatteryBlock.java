@@ -112,6 +112,10 @@ public class BatteryBlock implements IBatteryBlock {
         return MathHelper.clamp(getMaxDraw() - chargeDrawnThisTick, 0.0, getCharge() * getEfficiency());
     }
 
+    public double getInitialCharge() {
+        return state == State.DISPOSABLE ? getCapacity() : 0.0;
+    }
+
     @Override
     public String toString() {
         return String.format("%s@%s { c:%.2f }", getClass().getSimpleName(), Integer.toHexString(hashCode()), charge);

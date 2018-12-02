@@ -62,12 +62,12 @@ public class ChargeNetwork implements Charge.INetwork {
     private final ChargeNode NULL_NODE = new NullNode();
     private final Charge network;
     private final WeakReference<World> world;
-    private final BatterySaveData batterySaveData;
+    private final ChargeSaveData worldData;
 
     public ChargeNetwork(Charge network, World world) {
         this.network = network;
         this.world = new WeakReference<>(world);
-        this.batterySaveData = BatterySaveData.forWorld(world);
+        this.worldData = ChargeSaveData.getFor(network, world);
     }
 
     private void printDebug(String msg, Object... args) {
@@ -79,7 +79,7 @@ public class ChargeNetwork implements Charge.INetwork {
         tickingNodes.removeIf(ChargeNode::checkUsageRecordingCompletion);
 
         // Process the queue of nodes waiting to be added/removed from the network
-        Map<BlockPos, ChargeNode> added = new LinkedHashMap<>();
+        Set<BlockPos> added = new HashSet<>();
         Iterator<Map.Entry<BlockPos, ChargeNode>> iterator = queue.entrySet().iterator();
         int count = 0;
         while (iterator.hasNext() && count < 500) {
@@ -89,7 +89,7 @@ public class ChargeNetwork implements Charge.INetwork {
                 removeNodeImpl(action.getKey());
             } else {
                 addNodeImpl(action.getKey(), action.getValue());
-                added.put(action.getKey(), action.getValue());
+                added.add(action.getKey());
             }
             iterator.remove();
         }
@@ -97,14 +97,10 @@ public class ChargeNetwork implements Charge.INetwork {
         // Search for connected nodes of recently added nodes and register them too
         // helps fill out the graph faster and more reliably
         Set<BlockPos> newNodes = new HashSet<>();
-        for (Map.Entry<BlockPos, ChargeNode> addedNode : added.entrySet()) {
-            forConnections(addedNode.getKey(), (conPos, conState) -> {
-                if (addNode(conPos, conState))
-                    newNodes.add(conPos);
-            });
-            if (addedNode.getValue().isGridNull())
-                addedNode.getValue().constructGrid();
-        }
+        added.forEach(pos -> forConnections(pos, (conPos, conState) -> {
+            if (addNode(conPos, conState))
+                newNodes.add(conPos);
+        }));
 
         // Remove discarded grids and tick what's left
         grids.removeIf(g -> g.invalid);
@@ -140,9 +136,9 @@ public class ChargeNetwork implements Charge.INetwork {
 
         // update the battery in the save data tracker
         if (node.chargeBattery.isPresent())
-            batterySaveData.initBattery(node.chargeBattery.get());
+            worldData.initBattery(node.chargeBattery.get());
         else
-            batterySaveData.removeBattery(pos);
+            worldData.removeBattery(pos);
 
         // clean up any preexisting node
         if (oldNode != null) {
@@ -153,6 +149,9 @@ public class ChargeNetwork implements Charge.INetwork {
             }
             oldNode.chargeGrid = NULL_GRID;
         }
+
+        if (node.isGridNull())
+            node.constructGrid();
     }
 
     private void removeNodeImpl(BlockPos pos) {
@@ -161,7 +160,7 @@ public class ChargeNetwork implements Charge.INetwork {
             chargeNode.invalid = true;
             chargeNode.chargeGrid.destroy(true);
         }
-        batterySaveData.removeBattery(pos);
+        worldData.removeBattery(pos);
     }
 
     @Override
@@ -214,8 +213,6 @@ public class ChargeNetwork implements Charge.INetwork {
                 if (chargeSpec != null) {
                     node = new ChargeNode(pos, chargeSpec);
                     addNodeImpl(pos, node);
-                    if (node.isGridNull())
-                        node.constructGrid();
                 }
             }
         }
@@ -247,7 +244,7 @@ public class ChargeNetwork implements Charge.INetwork {
                 batteries.add(chargeNode.chargeBattery.get());
                 sortBatteries();
             } else {
-                batterySaveData.removeBattery(chargeNode.pos);
+                worldData.removeBattery(chargeNode.pos);
             }
             return added;
         }
@@ -287,18 +284,16 @@ public class ChargeNetwork implements Charge.INetwork {
             return Iterators.unmodifiableIterator(super.iterator());
         }
 
-        private void destroy(boolean touchNodes) {
-            if (isActive()) {
-                printDebug("Destroying grid: {0}", this);
-                invalid = true;
-                totalLosses = 0.0;
-                if (touchNodes) {
-                    forEach(n -> n.chargeGrid = NULL_GRID);
-                }
-                batteries.clear();
-                super.clear();
-                grids.remove(this);
+        protected void destroy(boolean touchNodes) {
+            printDebug("Destroying grid: {0}", this);
+            invalid = true;
+            totalLosses = 0.0;
+            if (touchNodes) {
+                forEach(n -> n.chargeGrid = NULL_GRID);
             }
+            batteries.clear();
+            chargeNodes.clear();
+            grids.remove(this);
         }
 
         @Override
@@ -322,13 +317,13 @@ public class ChargeNetwork implements Charge.INetwork {
                     charge += removeCharge(batteries(IBatteryBlock.State.SOURCE).collect(Collectors.toList()), neededCharge);
                 }
                 final double chargeLevel = charge / capacity;
-                rechargeable.forEach(bat -> {
-                    bat.setCharge(chargeLevel * bat.getCapacity());
-                    batterySaveData.updateBatteryRecord(bat);
-                });
+                rechargeable.forEach(bat -> bat.setCharge(chargeLevel * bat.getCapacity()));
             }
 
-            batteries.forEach(BatteryBlock::tick);
+            batteries.forEach(bat -> {
+                bat.tick();
+                worldData.updateBatteryRecord(bat);
+            });
 
             // track usage patterns
             averageUsagePerTick = (averageUsagePerTick * 49D + chargeUsedThisTick) / 50D;
@@ -447,7 +442,7 @@ public class ChargeNetwork implements Charge.INetwork {
             double amountNeeded = desiredAmount;
             for (BatteryBlock battery : batteries) {
                 amountNeeded -= battery.removeCharge(amountNeeded);
-                batterySaveData.updateBatteryRecord(battery);
+                worldData.updateBatteryRecord(battery);
                 if (amountNeeded <= 0.0)
                     break;
             }
@@ -466,6 +461,10 @@ public class ChargeNetwork implements Charge.INetwork {
         @Override
         protected Set<ChargeNode> delegate() {
             return Collections.emptySet();
+        }
+
+        @Override
+        protected void destroy(boolean touchNodes) {
         }
 
         @Override
@@ -604,29 +603,28 @@ public class ChargeNetwork implements Charge.INetwork {
             ChargeNode nextNode;
             while ((nextNode = nodeQueue.poll()) != null) {
                 nextNode.forConnections(n -> {
-                    if (!visitedNodes.contains(n) && (n.isGridNull() || !grids.contains(n.chargeGrid))) {
-                        if (n.isGridNull())
-                            nullNodes.add(n);
-                        grids.add(n.chargeGrid);
+                    if (!visitedNodes.contains(n)) {
                         visitedNodes.add(n);
-                        nodeQueue.addLast(n);
+                        if (n.isGridNull()) {
+                            nullNodes.add(n);
+                            nodeQueue.addLast(n);
+                        } else
+                            grids.add(n.chargeGrid);
                     }
                 });
             }
             chargeGrid = Objects.requireNonNull(grids.pollLast());
-            if (chargeGrid.isNull() && nullNodes.size() > 1) {
+            if (chargeGrid.isNull()) {
                 chargeGrid = new ChargeGrid();
                 ChargeNetwork.this.grids.add(chargeGrid);
             }
-            if (chargeGrid.isActive()) {
-                int originalSize = chargeGrid.size();
-                chargeGrid.addAll(nullNodes);
-                for (ChargeGrid grid : grids) {
-                    chargeGrid.addAll(grid);
-                }
-                grids.forEach(g -> g.destroy(false));
-                printDebug("Constructing Grid: {0}->{1} Added {2} nodes", pos, chargeGrid, chargeGrid.size() - originalSize);
-            }
+            int originalSize = chargeGrid.size();
+            chargeGrid.addAll(nullNodes);
+            grids.forEach(grid -> {
+                chargeGrid.addAll(grid);
+                grid.destroy(false);
+            });
+            printDebug("Constructing Grid: {0}->{1} Added {2} nodes", pos, chargeGrid, chargeGrid.size() - originalSize);
         }
 
         @Override
