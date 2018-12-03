@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.machine.manipulator;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
@@ -63,7 +62,7 @@ public class TileItemUnloader extends TileItemManipulator {
 
     private void clearInv() {
         if (invBuffer.hasItems()) {
-            InvTools.moveOneItem(invBuffer, invCache.getAdjacentInventories());
+            invBuffer.moveOneItemTo(invCache.getAdjacentInventories());
         }
     }
 

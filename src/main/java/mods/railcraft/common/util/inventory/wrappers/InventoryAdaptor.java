@@ -10,14 +10,10 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -65,28 +61,19 @@ public abstract class InventoryAdaptor implements IInventoryAdapter {
         };
     }
 
-    public static Optional<IInventoryAdapter> get(World world, BlockPos pos, EnumFacing side, final @Nullable Class<? extends TileEntity> type, final @Nullable Class<? extends TileEntity> exclude) {
-        return get(world, pos, side, tile -> {
-            //noinspection SimplifiableIfStatement
-            if (type != null && !type.isAssignableFrom(tile.getClass()))
-                return false;
-            return exclude == null || !exclude.isAssignableFrom(tile.getClass());
-        });
+    public static Optional<IInventoryAdapter> get(@Nullable Object obj) {
+        return get(obj, null);
     }
 
-    public static Optional<IInventoryAdapter> get(World world, BlockPos pos, EnumFacing side, java.util.function.Predicate<TileEntity> filter) {
-        TileEntity tile = WorldPlugin.getBlockTile(world, pos.offset(side));
-        if (!(tile instanceof IInventory) || !filter.test(tile))
-            return Optional.empty();
-        return get(tile, side.getOpposite());
-    }
-
-    public static Optional<IInventoryAdapter> get(@Nullable Object obj, EnumFacing side) {
+    // TODO: If we want to prefer IItemHandler, this is the place it needs to be done.
+    public static Optional<IInventoryAdapter> get(@Nullable Object obj, @Nullable EnumFacing side) {
         IInventoryAdapter inv = null;
-        if (obj instanceof TileEntityChest) {
+        if (obj instanceof IInventoryAdapter) {
+            inv = (IInventoryAdapter) obj;
+        } else if (obj instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) obj;
             inv = new ChestWrapper(chest);
-        } else if (obj instanceof ISidedInventory) {
+        } else if (side != null && obj instanceof ISidedInventory) {
             inv = new SidedInventoryDecorator((ISidedInventory) obj, side);
         } else if (obj instanceof IInventory) {
             inv = get((IInventory) obj);
@@ -94,25 +81,6 @@ public abstract class InventoryAdaptor implements IInventoryAdapter {
             inv = get(
                     Objects.requireNonNull(
                             ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)
-                    )
-            );
-        }
-        return Optional.ofNullable(inv);
-    }
-
-    public static Optional<IInventoryAdapter> get(@Nullable Object obj) {
-        IInventoryAdapter inv = null;
-        if (obj instanceof IInventoryAdapter) {
-            inv = (IInventoryAdapter) obj;
-        } else if (obj instanceof TileEntityChest) {
-            TileEntityChest chest = (TileEntityChest) obj;
-            inv = new ChestWrapper(chest);
-        } else if (obj instanceof IInventory) {
-            inv = get((IInventory) obj);
-        } else if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-            inv = get(
-                    Objects.requireNonNull(
-                            ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)
                     )
             );
         }

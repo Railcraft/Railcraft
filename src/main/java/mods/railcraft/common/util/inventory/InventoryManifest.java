@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -45,11 +46,19 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
         return entry.count();
     }
 
-    public Stream<ItemStack> stackStream() {
+    public Stream<ItemStack> streamValueStacks() {
         return entries.values().stream().flatMap(ManifestEntry::stream);
     }
 
-    private static ManifestEntry compute(StackKey key, @Nullable ManifestEntry entry, ItemStack stack) {
+    public Stream<ItemStack> streamKeyStacks() {
+        return entries.keySet().stream().map(StackKey::get);
+    }
+
+    public List<ItemStack> keyStacks() {
+        return streamKeyStacks().collect(Collectors.toList());
+    }
+
+    private static ManifestEntry compute(StackKey key, @Nullable InventoryManifest.ManifestEntry entry, ItemStack stack) {
         if (entry == null)
             entry = new ManifestEntry(key);
         entry.stacks.add(stack.copy());
@@ -85,7 +94,7 @@ public final class InventoryManifest extends ForwardingMap<StackKey, InventoryMa
     public static InventoryManifest create(IInventoryComposite invs, Collection<StackKey> keys) {
         InventoryManifest manifest = new InventoryManifest();
         for (StackKey filterKey : keys) {
-            Predicate<ItemStack> filter = StackFilters.matches(filterKey.get());
+            Predicate<ItemStack> filter = StackFilters.anyMatch(filterKey.get());
             invs.streamStacks().filter(filter).forEach(stack -> manifest.compute(filterKey, (k, v) -> compute(k, v, stack)));
         }
         return manifest;

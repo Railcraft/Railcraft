@@ -18,7 +18,11 @@ import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.misc.Predicates;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -193,6 +197,35 @@ public interface IInventoryComposite extends Iterable<IInventoryAdapter> {
     }
 
     /**
+     * Attempts to move a single item from one inventory to another.
+     *
+     * @param dest the destination inventory
+     * @return null if nothing was moved, the stack moved otherwise
+     */
+    default ItemStack moveOneItemTo(IInventoryComposite dest) {
+        return moveOneItemTo(dest, Predicates.alwaysTrue());
+    }
+
+    /**
+     * Attempts to move a single item from one inventory to another.
+     *
+     * @param dest   the destination inventory
+     * @param filter Predicate to match against
+     * @return null if nothing was moved, the stack moved otherwise
+     */
+    default ItemStack moveOneItemTo(IInventoryComposite dest, Predicate<ItemStack> filter) {
+        for (IInventoryAdapter src : this) {
+            for (IInventoryAdapter dst : dest) {
+                InventoryManipulator imSource = InventoryManipulator.get(src);
+                ItemStack moved = imSource.moveItem(dst, filter);
+                if (!InvTools.isEmpty(moved))
+                    return moved;
+            }
+        }
+        return InvTools.emptyStack();
+    }
+
+    /**
      * Removes a specified number of items matching the filter, but only if the
      * operation can be completed. If the function returns false, the inventory
      * will not be modified.
@@ -315,5 +348,20 @@ public interface IInventoryComposite extends Iterable<IInventoryAdapter> {
 
     default Stream<ItemStack> streamStacks() {
         return stream().flatMap(inv -> InventoryIterator.get(inv).streamStacks());
+    }
+
+    /**
+     * @see Container#calcRedstoneFromInventory(IInventory)
+     */
+    default int calcRedstone() {
+        double average = streamSlots()
+                .filter(IInvSlot::hasStack)
+                .mapToDouble(slot -> {
+                    ItemStack stack = slot.getStack();
+                    return (double) InvTools.sizeOf(stack) / (double) Math.min(stack.getMaxStackSize(), slot.maxStackSize());
+                }).sum();
+
+        average = average / (double) slotCount();
+        return MathHelper.floor(average * 14.0F) + (hasNoItems() ? 0 : 1);
     }
 }

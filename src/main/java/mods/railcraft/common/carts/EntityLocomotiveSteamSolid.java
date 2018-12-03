@@ -93,8 +93,8 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         super.onUpdate();
 
         if (Game.isHost(world)) {
-            InvTools.moveOneItem(invStock, invBurn);
-            InvTools.moveOneItem(invBurn, invWaterOutput, StandardStackFilters.FUEL.negate());
+            invStock.moveOneItemTo(invBurn);
+            invBurn.moveOneItemTo(invWaterOutput, StandardStackFilters.FUEL.negate());
             ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invStock));
             if (!InvTools.isEmpty(stack))
                 invStock.addStack(stack);

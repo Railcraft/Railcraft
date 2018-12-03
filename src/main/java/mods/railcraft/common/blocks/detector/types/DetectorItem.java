@@ -71,7 +71,7 @@ public class DetectorItem extends DetectorFilter {
                             return FULL_POWER;
                         continue;
                     case ANALOG:
-                        return InvTools.calcRedstoneFromInventory(cartInv);
+                        return cartInv.calcRedstone();
                 }
         }
         return NO_POWER;
@@ -82,7 +82,7 @@ public class DetectorItem extends DetectorFilter {
             ItemStack filter = getFilters().getStackInSlot(i);
             if (InvTools.isEmpty(filter))
                 continue;
-            Predicate<ItemStack> stackFilter = StackFilters.matches(filter);
+            Predicate<ItemStack> stackFilter = StackFilters.anyMatch(filter);
             int amountFilter = getFilters().countItems(stackFilter);
             int amountCart = cartInv.countItems(stackFilter);
 

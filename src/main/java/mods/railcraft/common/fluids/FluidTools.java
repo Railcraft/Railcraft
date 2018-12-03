@@ -121,11 +121,11 @@ public final class FluidTools {
     }
 
     private static void sendToProcessing(IInventory inv) {
-        InvTools.moveOneItem(InventoryMapper.make(inv, 0, 1), InventoryMapper.make(inv, 1, 1).ignoreItemChecks());
+        InventoryMapper.make(inv, 0, 1).moveOneItemTo(InventoryMapper.make(inv, 1, 1).ignoreItemChecks());
     }
 
     private static void sendToOutput(IInventory inv) {
-        InvTools.moveOneItem(InventoryMapper.make(inv, 1, 1), InventoryMapper.make(inv, 2, 1).ignoreItemChecks());
+        InventoryMapper.make(inv, 1, 1).moveOneItemTo(InventoryMapper.make(inv, 2, 1).ignoreItemChecks());
     }
 
     private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {

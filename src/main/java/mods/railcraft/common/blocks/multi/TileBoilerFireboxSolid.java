@@ -85,8 +85,8 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
     @Override
     protected void process() {
         if (clock % 4 == 0) {
-            InvTools.moveOneItem(invStock, invBurn);
-            InvTools.moveOneItem(invBurn, invWaterOutput, NOT_FUEL);
+            invStock.moveOneItemTo(invBurn);
+            invBurn.moveOneItemTo(invWaterOutput, NOT_FUEL);
         }
     }
 
@@ -104,7 +104,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
             TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
 
             if (mBlock != null)
-                InvTools.moveOneItem(invCache.getAdjacentInventories(), mBlock.invFuel, StandardStackFilters.FUEL);
+                invCache.getAdjacentInventories().moveOneItemTo(mBlock.invFuel, StandardStackFilters.FUEL);
         }
     }
 

@@ -15,7 +15,9 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAIMateBreeding;
+import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
 import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
@@ -60,6 +62,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     private byte feedCounter;
     private boolean powered;
     private final InventoryComposite feedInv = InventoryComposite.of(InventoryAdaptor.get(this));
+    protected final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !getClass().isInstance(tile), InventorySorter.SIZE_DESCENDING);
 
     public TileFeedStation() {
         super(1);
@@ -87,8 +90,8 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
         ItemStack feed = getStackInSlot(0);
 
         if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed.isEmpty() || sizeOf(feed) < feed.getMaxStackSize())) {
-            InventoryComposite chests = InvTools.getAdjacentInventories(world, getPos());
-            InvTools.moveOneItem(chests, feedInv, StandardStackFilters.FEED);
+            InventoryComposite chests = invCache.getAdjacentInventories();
+            chests.moveOneItemTo(feedInv, StandardStackFilters.FEED);
         }
 
         feed = getStackInSlot(0);

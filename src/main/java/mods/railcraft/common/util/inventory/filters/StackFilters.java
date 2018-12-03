@@ -70,17 +70,24 @@ public final class StackFilters {
     }
 
     /**
-     * Matches against the provided ItemStack. If the Item class extends IFilterItem then it will pass the check to the item.
+     * Matches against the provided ItemStacks. If the Item class extends IFilterItem then it will pass the check to the item.
      */
-    public static Predicate<ItemStack> matches(final ItemStack filter) {
-        return stack -> InvTools.matchesFilter(filter, stack);
+    public static Predicate<ItemStack> anyMatch(final ItemStack... filters) {
+        return anyMatch(Arrays.asList(filters));
+    }
+
+    /**
+     * Matches against the provided ItemStacks. If the Item class extends IFilterItem then it will pass the check to the item.
+     */
+    public static Predicate<ItemStack> anyMatch(final Collection<ItemStack> filters) {
+        return stack -> filters.stream().anyMatch(f -> InvTools.matchesFilter(f, stack));
     }
 
     /**
      * Matches against the provided Inventory. If the Item class extends IFilterItem then it will pass the check to the item.
      */
-    public static Predicate<ItemStack> matchesAny(final IInventoryComposite inv) {
-        return stack -> inv.streamStacks().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
+    public static Predicate<ItemStack> anyMatch(final IInventoryComposite inv) {
+        return stack -> inv.streamStacks().anyMatch(f -> InvTools.matchesFilter(f, stack));
     }
 
     /**

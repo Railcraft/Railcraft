@@ -138,7 +138,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
         boiler.tick(1);
 
         if (StandardStackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
-            InvTools.moveOneItem(invFuel, invOutput, StandardStackFilters.EMPTY_BUCKET);
+            invFuel.moveOneItemTo(invOutput, StandardStackFilters.EMPTY_BUCKET);
     }
 
     @Override

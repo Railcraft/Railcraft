@@ -12,24 +12,15 @@ package mods.railcraft.common.util.inventory;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.api.items.InvToolsAPI;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
-import mods.railcraft.common.util.inventory.iterators.IInvSlot;
 import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
-import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -37,11 +28,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -52,12 +41,12 @@ import net.minecraftforge.registries.GameData;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-@SuppressWarnings({"WeakerAccess", "SameParameterValue", "unused"})
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class InvTools {
     public static final String TAG_SLOT = "Slot";
 
@@ -158,35 +147,10 @@ public abstract class InvTools {
         return target.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean canMerge(ItemStack target, ItemStack source, int slotLimit) {
         return canMerge(target, source) && target.getCount() + source.getCount() <= slotLimit;
     }
-
-    public static InventoryComposite getAdjacentInventories(World world, BlockPos pos) {
-        return getAdjacentInventories(world, pos, null);
-    }
-
-    public static InventoryComposite getAdjacentInventories(World world, BlockPos pos, @Nullable Class<? extends TileEntity> type) {
-        return Arrays.stream(EnumFacing.VALUES)
-                .map(side -> InventoryAdaptor.get(world, pos, side, type, null))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toCollection(InventoryComposite::create));
-    }
-
-//    public static Map<Integer, IInventory> getAdjacentInventoryMap(World world, int i, int j, int k) {
-//        return getAdjacentInventoryMap(world, i, j, k, null);
-//    }
-//
-//    public static Map<Integer, IInventory> getAdjacentInventoryMap(World world, int i, int j, int k, Class<? extends IInventory> type) {
-//        Map<Integer, IInventory> map = new TreeMap<Integer, IInventory>();
-//        for (int side = 0; side < 6; side++) {
-//            IInventory inv = get(world, i, j, k, EnumFacing.VALUES[side], type, null);
-//            if (inv != null)
-//                map.put(side, inv);
-//        }
-//        return map;
-//    }
 
     public static @Nullable IItemHandler getItemHandler(@Nullable Object obj) {
         if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
@@ -351,64 +315,6 @@ public abstract class InvTools {
                 dropItem(stack, world, pos);
             }
         }
-    }
-
-    /**
-     * Attempts to move a single item from one inventory to another.
-     *
-     * @param source the source inventory
-     * @param dest   the destination inventory
-     * @return null if nothing was moved, the stack moved otherwise
-     */
-    public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest) {
-        return moveOneItem(source, dest, Predicates.alwaysTrue());
-    }
-
-    /**
-     * Attempts to move a single item from one inventory to another.
-     *
-     * @param source  the source inventory
-     * @param dest    the destination inventory
-     * @param filters ItemStack to match against
-     * @return null if nothing was moved, the stack moved otherwise
-     */
-    @Deprecated
-    public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest, ItemStack... filters) {
-        return moveOneItem(source, dest, StackFilters.anyOf(filters));
-    }
-
-    /**
-     * Attempts to move a single item from one inventory to another.
-     *
-     * @param source the source inventory
-     * @param dest   the destination inventory
-     * @param filter Predicate to match against
-     * @return null if nothing was moved, the stack moved otherwise
-     */
-    public static ItemStack moveOneItem(IInventoryComposite source, IInventoryComposite dest, Predicate<ItemStack> filter) {
-        for (IInventoryAdapter src : source) {
-            for (IInventoryAdapter dst : dest) {
-                InventoryManipulator imSource = InventoryManipulator.get(src);
-                ItemStack moved = imSource.moveItem(dst, filter);
-                if (!isEmpty(moved))
-                    return moved;
-            }
-        }
-        return emptyStack();
-    }
-
-    /**
-     * Attempts to move a single item from one inventory to another.
-     * <p/>
-     * Will not move any items in the filter.
-     *
-     * @param source the source inventory
-     * @param dest   the destination inventory
-     * @param filter ItemStacks to exclude
-     * @return null if nothing was moved, the stack moved otherwise
-     */
-    public static ItemStack moveOneItemExcept(IInventoryComposite source, IInventoryComposite dest, Predicate<ItemStack> filter) {
-        return moveOneItem(source, dest, filter.negate());
     }
 
     public static boolean isWildcard(ItemStack stack) {
@@ -643,7 +549,7 @@ public abstract class InvTools {
         }
     }
 
-    public static void writeItemToNBT(@Nullable ItemStack stack, NBTTagCompound data) {
+    public static void writeItemToNBT(ItemStack stack, NBTTagCompound data) {
         if (isEmpty(stack))
             return;
         if (sizeOf(stack) > 127)
@@ -655,7 +561,7 @@ public abstract class InvTools {
         return new ItemStack(data);
     }
 
-    public static boolean isStackEqualToBlock(@Nullable ItemStack stack, @Nullable Block block) {
+    public static boolean isStackEqualToBlock(ItemStack stack, @Nullable Block block) {
         return !(isEmpty(stack) || block == null) && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() == block;
     }
 
@@ -663,13 +569,12 @@ public abstract class InvTools {
         if (isEmpty(stack))
             return Blocks.AIR.getDefaultState();
         Item item = stack.getItem();
-        Block block = GameData.getBlockItemMap().inverse().get(stack.getItem());
+        Block block = GameData.getBlockItemMap().inverse().get(item);
         //noinspection deprecation
         return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
     }
 
-    @Contract("null,_,_->null")
-    public static @Nullable IBlockState getBlockStateFromStack(@Nullable ItemStack stack, World world, BlockPos pos) {
+    public static @Nullable IBlockState getBlockStateFromStack(ItemStack stack, World world, BlockPos pos) {
         if (isEmpty(stack))
             return null;
         Item item = stack.getItem();
@@ -685,20 +590,4 @@ public abstract class InvTools {
         return null;
     }
 
-    /**
-     * @see Container#calcRedstoneFromInventory(IInventory)
-     */
-    public static int calcRedstoneFromInventory(@Nullable IInventoryComposite inv) {
-        if (inv == null)
-            return 0;
-        double average = inv.streamSlots()
-                .filter(IInvSlot::hasStack)
-                .mapToDouble(slot -> {
-                    ItemStack stack = slot.getStack();
-                    return (double) sizeOf(stack) / (double) Math.min(stack.getMaxStackSize(), slot.maxStackSize());
-                }).sum();
-
-        average = average / (double) inv.slotCount();
-        return MathHelper.floor(average * 14.0F) + (inv.hasNoItems() ? 0 : 1);
-    }
 }

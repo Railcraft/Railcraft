@@ -15,7 +15,9 @@ import mods.railcraft.common.gui.buttons.MultiButtonController;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.*;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.*;
+import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
+import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -23,12 +25,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -44,7 +47,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         modeHasWork.put(EnumTransferMode.ALL, tile -> {
             IInventoryComposite dest = tile.getDestination();
 
-            return tile.getSource().streamStacks().filter(StackFilters.matchesAny(tile.getItemFilters()))
+            return tile.getSource().streamStacks().filter(StackFilters.anyMatch(tile.getItemFilters()))
                     .anyMatch(dest::willAccept);
         });
 
@@ -78,9 +81,9 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
                 return true;
 
             InventoryManifest remainingManifest = InventoryManifest.create(tile.getSource());
-            remainingManifest.keySet().removeIf(stackKey -> StackFilters.matchesAny(tile.getItemFilters()).test(stackKey.get()));
+            remainingManifest.keySet().removeIf(stackKey -> StackFilters.anyMatch(tile.getItemFilters()).test(stackKey.get()));
 
-            return remainingManifest.stackStream().anyMatch(dest::willAccept);
+            return remainingManifest.streamValueStacks().anyMatch(dest::willAccept);
         });
     }
 
@@ -138,39 +141,36 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         }
         this.cart = cartInv;
 
+        InventoryManifest filterManifest = InventoryManifest.create(getItemFilters());
+        Stream<InventoryManifest.ManifestEntry> manifestStream = filterManifest.values().stream();
         switch (getMode()) {
             case ALL: {
-                InventoryManifest filterManifest = InventoryManifest.create(getItemFilters());
                 if (filterManifest.isEmpty()) {
-                    ItemStack moved = InvTools.moveOneItem(getSource(), getDestination());
-                    itemMoved(moved, null);
+                    ItemStack moved = getSource().moveOneItemTo(getDestination());
+                    itemMoved(moved);
                 } else {
-                    moveItem(filterManifest.values().stream(), false);
+                    moveItem(manifestStream);
                 }
                 break;
             }
             case TRANSFER: {
-                InventoryManifest filterManifest = InventoryManifest.create(getItemFilters());
-                moveItem(filterManifest.values().stream().filter(entry -> transferredItems.count(entry.key()) < entry.count()), true);
+                moveItem(manifestStream.filter(entry -> transferredItems.count(entry.key()) < entry.count()));
                 break;
             }
             case STOCK: {
-                InventoryManifest filterManifest = InventoryManifest.create(getItemFilters());
                 InventoryManifest destManifest = InventoryManifest.create(getDestination(), filterManifest.keySet());
-                moveItem(filterManifest.values().stream().filter(entry -> destManifest.count(entry.key()) < entry.count()), false);
+                moveItem(manifestStream.filter(entry -> destManifest.count(entry.key()) < entry.count()));
                 break;
             }
             case EXCESS: {
-                InventoryManifest filterManifest = InventoryManifest.create(getItemFilters());
                 InventoryManifest sourceManifest = InventoryManifest.create(getSource(), filterManifest.keySet());
 
-                moveItem(filterManifest.values().stream().filter(entry -> sourceManifest.count(entry.key()) > entry.count()), false);
+                moveItem(manifestStream.filter(entry -> sourceManifest.count(entry.key()) > entry.count()));
                 if (!isProcessing()) {
-                    Predicate<ItemStack> keep = filterManifest.keySet().stream()
-                            .map(e -> StackFilters.matches(e.get())).reduce(StackFilters.none(), Predicate::or);
+                    Predicate<ItemStack> canMove = StackFilters.anyMatch(filterManifest.keyStacks()).negate();
 
-                    ItemStack moved = InvTools.moveOneItemExcept(getSource(), getDestination(), keep);
-                    itemMoved(moved, null);
+                    ItemStack moved = getSource().moveOneItemTo(getDestination(), canMove);
+                    itemMoved(moved);
                 }
                 break;
             }
@@ -196,22 +196,17 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
         return modeHasWork.get(getMode()).test(this);
     }
 
-    protected void moveItem(Stream<InventoryManifest.ManifestEntry> stream, boolean track) {
-        //noinspection ResultOfMethodCallIgnored
-        stream.anyMatch(entry -> {
-            ItemStack moved = InvTools.moveOneItem(getSource(), getDestination(), StackFilters.matches(entry.key().get()));
-            return itemMoved(moved, track ? entry.key() : null);
-        });
+    protected void moveItem(Stream<InventoryManifest.ManifestEntry> stream) {
+        List<ItemStack> keys = stream.map(InventoryManifest.ManifestEntry::key).map(StackKey::get).collect(Collectors.toList());
+        ItemStack moved = getSource().moveOneItemTo(getDestination(), StackFilters.anyMatch(keys));
+        itemMoved(moved);
     }
 
-    protected boolean itemMoved(@Nullable ItemStack remaining, @Nullable StackKey key) {
-        if (!InvTools.isEmpty(remaining)) {
+    protected final void itemMoved(@Nullable ItemStack moved) {
+        if (!InvTools.isEmpty(moved)) {
             setProcessing(true);
-            if (key != null)
-                transferredItems.add(key);
-            return true;
+            transferredItems.add(StackKey.make(moved));
         }
-        return false;
     }
 
     @Override
