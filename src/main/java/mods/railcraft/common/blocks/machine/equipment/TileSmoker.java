@@ -19,6 +19,7 @@ import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.Optionals;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
@@ -124,14 +125,12 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
         ItemStack heldItem = player.getHeldItem(hand);
         if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
             return false;
-        return EnumColor.dyeColorOf(heldItem).map(color -> {
-            if (setColor(color)) {
-                if (!player.capabilities.isCreativeMode)
-                    player.setHeldItem(hand, InvTools.depleteItem(heldItem));
-                return true;
-            }
-            return false;
-        }).orElse(false);
+        if (Optionals.test(EnumColor.dyeColorOf(heldItem), this::setColor)) {
+            if (!player.capabilities.isCreativeMode)
+                player.setHeldItem(hand, InvTools.depleteItem(heldItem));
+            return true;
+        }
+        return false;
     }
 
     public boolean setColor(EnumColor color) {

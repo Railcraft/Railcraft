@@ -21,6 +21,7 @@ import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Optionals;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -42,6 +43,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 @BlockMetaTile(TileForceTrackEmitter.class)
@@ -97,17 +99,16 @@ public class BlockForceTrackEmitter extends BlockContainerRailcraft<TileForceTra
         ItemStack heldItem = player.getHeldItem(hand);
         if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
             return false;
-        //noinspection Convert2MethodRef
-        return getTileEntity(state, worldIn, pos)
-                .map(tile -> EnumColor.dyeColorOf(heldItem)
-                        .filter(color -> tile.setColor(color))
-                        .map(c -> {
-                            if (!player.capabilities.isCreativeMode)
-                                player.setHeldItem(hand, InvTools.depleteItem(heldItem));
-                            return true;
-                        })
-                        .orElse(false))
-                .orElse(false);
+        Optional<? extends TileForceTrackEmitter> tile = getTileEntity(state, worldIn, pos);
+        if (tile.isPresent()) {
+            TileForceTrackEmitter t = tile.get();
+            if (Optionals.test(EnumColor.dyeColorOf(heldItem), t::setColor)) {
+                if (!player.capabilities.isCreativeMode)
+                    player.setHeldItem(hand, InvTools.depleteItem(heldItem));
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
