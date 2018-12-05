@@ -89,6 +89,10 @@ public final class AdjacentTileCache {
         return pos.getX() >> 4 == sidePos.getX() >> 4 && pos.getZ() >> 4 == sidePos.getZ() >> 4;
     }
 
+    public Optional<TileEntity> onSide(EnumFacing side) {
+        return Optional.ofNullable(getTileOnSide(side));
+    }
+
     public @Nullable TileEntity getTileOnSide(EnumFacing side) {
         if (Game.BUKKIT || !isInSameChunk(side)) {
             changed(side);

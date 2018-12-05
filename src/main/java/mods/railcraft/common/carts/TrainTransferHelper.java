@@ -24,9 +24,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -146,9 +147,8 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
     }
 
     @Override
-    public @Nullable IItemHandler getTrainItemHandler(EntityMinecart cart) {
-        Train train = Train.getTrain(cart);
-        return train.getItemHandler();
+    public Optional<IItemHandlerModifiable> getTrainItemHandler(EntityMinecart cart) {
+        return Train.get(cart).flatMap(Train::getItemHandler);
     }
 
     // ***************************************************************************************************************************
@@ -246,8 +246,7 @@ public enum TrainTransferHelper implements ITrainTransferHelper {
     }
 
     @Override
-    public @Nullable IFluidHandler getTrainFluidHandler(EntityMinecart cart) {
-        Train train = Train.getTrain(cart);
-        return train.getFluidHandler();
+    public Optional<IFluidHandler> getTrainFluidHandler(EntityMinecart cart) {
+        return Train.get(cart).flatMap(Train::getFluidHandler);
     }
 }

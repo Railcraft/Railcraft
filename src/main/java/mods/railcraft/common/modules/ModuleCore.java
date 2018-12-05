@@ -158,13 +158,14 @@ public class ModuleCore extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new SoundLimiterTicker());
                 MinecraftForge.EVENT_BUS.register(new MinecartRiderAIDisabler());
                 MinecraftForge.EVENT_BUS.register(new ShuntingAuraTickHandler());
+                MinecraftForge.EVENT_BUS.register(Train.getTicker());
                 MinecraftForge.EVENT_BUS.register(new Object() {
                     @SubscribeEvent
                     public void logout(PlayerEvent.PlayerLoggedOutEvent event) {
                         Entity riding = event.player.getRidingEntity();
                         if (riding instanceof EntityMinecart) {
                             EntityMinecart cart = (EntityMinecart) riding;
-                            if (Train.getTrain(cart).size() > 1)
+                            if (Train.isPartOfTrain(cart))
                                 CartTools.removePassengers(cart, event.player.getPositionVector().add(0, 1, 0));
                         }
                     }

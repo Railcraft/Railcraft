@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,7 @@ public class TileRFUnloader extends TileRFManipulator {
     @Override
     public void upkeep() {
         super.upkeep();
-        EnergyPlugin.pushToTiles(this, tileCache, AMOUNT_TO_PUSH_TO_TILES);
+        EnergyPlugin.pushToTiles(this, AMOUNT_TO_PUSH_TO_TILES);
     }
 
     @Override

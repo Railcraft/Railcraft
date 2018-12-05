@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.util.network;
 import mods.railcraft.common.carts.EntityCartBed;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.util.collections.Streams;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding.VALUES;
 
@@ -92,14 +94,13 @@ public class PacketKeyPress extends RailcraftPacket {
             return;
         if (!(player.getRidingEntity() instanceof EntityMinecart))
             return;
-        for (EntityMinecart cart : Train.getTrain((EntityMinecart) player.getRidingEntity())) {
-            if (cart instanceof EntityLocomotive) {
-                EntityLocomotive loco = (EntityLocomotive) cart;
-                if (loco.canControl(player.getGameProfile())) {
-                    action.accept(loco);
-                    if (single) return;
-                }
-            }
+        Stream<EntityLocomotive> locos = Train.streamCarts((EntityMinecart) player.getRidingEntity())
+                .flatMap(Streams.toType(EntityLocomotive.class))
+                .filter(loco -> loco.canControl(player.getGameProfile()));
+        if (single) {
+            locos.findAny().ifPresent(action);
+        } else {
+            locos.forEach(action);
         }
     }
 

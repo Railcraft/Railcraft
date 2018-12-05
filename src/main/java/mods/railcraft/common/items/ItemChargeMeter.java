@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.charge.BatteryBlock;
 import mods.railcraft.common.util.charge.ChargeNetwork;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Capabilities;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.block.state.IBlockState;
@@ -86,13 +87,10 @@ public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockin
 
         if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemChargeMeter)
             try {
-                if (entity.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
-                    IBatteryCart battery = entity.getCapability(CapabilitiesCharge.CART_BATTERY, null);
-                    if (battery != null) {
-                        sendChat(player, "gui.railcraft.charge.meter.cart", battery.getCharge(), battery.getDraw(), battery.getLosses());
-                        event.setCanceled(true);
-                    }
-                }
+                Capabilities.get(entity, CapabilitiesCharge.CART_BATTERY, null).ifPresent(battery -> {
+                    sendChat(player, "gui.railcraft.charge.meter.cart", battery.getCharge(), battery.getDraw(), battery.getLosses());
+                    event.setCanceled(true);
+                });
             } catch (Throwable er) {
                 Game.logErrorAPI(Railcraft.MOD_ID, er, IBatteryCart.class);
                 ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");

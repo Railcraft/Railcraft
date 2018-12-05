@@ -14,6 +14,7 @@ import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Vec2D;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -209,11 +210,10 @@ public final class LinkageHandler {
             cart.motionZ *= LINK_DRAG;
         }
 
-        Train train = Train.getTrain(cart);
-        if (train.size() == 1)
-            train.setMaxSpeed(1.2f);
-        else if (train.isTrainEnd(cart))
-            train.refreshMaxSpeed();
+        Train.get(cart).ifPresent(train -> {
+            if (train.isTrainEnd(cart))
+                train.refreshMaxSpeed();
+        });
 
     }
 
@@ -331,8 +331,7 @@ public final class LinkageHandler {
     public void canMinecartTick(EntityEvent.CanUpdate event) {
         if (event.getEntity() instanceof EntityMinecart) {
             EntityMinecart cart = (EntityMinecart) event.getEntity();
-            Train train = Train.getTrain(cart);
-            if (train.stream(EntityCartWorldspike.class).anyMatch(EntityCartWorldspike::hasActiveTicket)) {
+            if (Train.streamCarts(cart).flatMap(Streams.toType(EntityCartWorldspike.class)).anyMatch(EntityCartWorldspike::hasActiveTicket)) {
                 event.setCanUpdate(true);
             }
         }

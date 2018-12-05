@@ -33,9 +33,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.GameData;
 import org.jetbrains.annotations.Contract;
@@ -150,13 +147,6 @@ public abstract class InvTools {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean canMerge(ItemStack target, ItemStack source, int slotLimit) {
         return canMerge(target, source) && target.getCount() + source.getCount() <= slotLimit;
-    }
-
-    public static @Nullable IItemHandler getItemHandler(@Nullable Object obj) {
-        if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
-            return ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        }
-        return null;
     }
 
     public static int[] buildSlotArray(int start, int size) {

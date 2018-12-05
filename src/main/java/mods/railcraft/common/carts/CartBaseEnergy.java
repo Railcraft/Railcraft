@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
 
-abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart {
+abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart, IWeightedCart {
 
     private final IBatteryCart cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 
@@ -91,13 +91,8 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     }
 
     @Override
-    public final float getMaxCartSpeedOnRail() {
-        if (Game.isClient(world))
-            return super.getMaxCartSpeedOnRail();
-        int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
-        if (numLocomotives == 0)
-            return super.getMaxCartSpeedOnRail();
-        return Math.min(1.2F, 0.18F - 0.05F * getTier() + (numLocomotives - 1) * 0.075F);
+    public final float softMaxSpeed() {
+        return 0.18F - 0.05F * getTier();
     }
 
     @Override

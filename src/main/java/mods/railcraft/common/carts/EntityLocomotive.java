@@ -323,11 +323,11 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     }
 
     public boolean isIdle() {
-        return !isShutdown() && (tempIdle > 0 || getMode() == LocoMode.IDLE || Train.getTrain(this).isIdle());
+        return !isShutdown() && (tempIdle > 0 || getMode() == LocoMode.IDLE || Train.get(this).map(Train::isIdle).orElse(false));
     }
 
     public boolean isShutdown() {
-        return getMode() == LocoMode.SHUTDOWN || Train.getTrain(this).isStopped();
+        return getMode() == LocoMode.SHUTDOWN || Train.get(this).map(Train::isStopped).orElse(false);
     }
 
     public void forceIdle(int ticks) {
@@ -518,7 +518,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         if (Game.isHost(world)) {
             if (!entity.isEntityAlive())
                 return;
-            if (!Train.getTrain(this).isPassenger(entity) && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this)) && RCEntitySelectors.KILLABLE.test(entity)) {
+            if (Train.streamCarts(this).noneMatch(t -> t.isPassenger(entity))
+                    && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this))
+                    && RCEntitySelectors.KILLABLE.test(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
                     living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));

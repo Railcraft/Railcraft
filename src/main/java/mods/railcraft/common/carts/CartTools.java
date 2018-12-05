@@ -194,11 +194,13 @@ public final class CartTools {
         LinkageManager lm = LinkageManager.INSTANCE;
         debug.add("LinkA: " + lm.getLinkA(cart));
         debug.add("LinkB: " + lm.getLinkB(cart));
-        debug.add("Train: " + Train.getTrain(cart).getUUID());
-        debug.add("Train Carts:");
-        for (UUID uuid : Train.getTrain(cart).getUUIDs()) {
-            debug.add("  " + uuid);
-        }
+        debug.add("Train: " + Train.get(cart).map(Train::getUUID).map(UUID::toString).orElse("NA on Client"));
+        Train.get(cart).ifPresent(train -> {
+            debug.add("Train Carts:");
+            for (UUID uuid : train.getUUIDs()) {
+                debug.add("  " + uuid);
+            }
+        });
         return debug;
     }
 
@@ -267,5 +269,4 @@ public final class CartTools {
         entity.prevPosY = j;
         entity.prevPosZ = k;
     }
-
 }

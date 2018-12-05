@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * The LinkageManager contains all the functions needed to link and interacted
@@ -429,12 +430,12 @@ public enum LinkageManager implements ILinkageManager {
      */
     @Override
     public int countCartsInTrain(EntityMinecart cart) {
-        return Train.getTrain(cart).size();
+        return Train.get(cart).map(Train::size).orElse(1);
     }
 
     @Override
-    public Iterable<EntityMinecart> trainIterator(EntityMinecart cart) {
-        return Train.getTrain(cart);
+    public Stream<EntityMinecart> streamTrain(EntityMinecart cart) {
+        return Train.streamCarts(cart);
     }
 
     public Iterable<EntityMinecart> linkIterator(final EntityMinecart start, final LinkType type) {

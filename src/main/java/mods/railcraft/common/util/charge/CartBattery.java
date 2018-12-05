@@ -10,11 +10,11 @@
 
 package mods.railcraft.common.util.charge;
 
-import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryCart;
+import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.util.misc.Capabilities;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 
@@ -167,16 +167,11 @@ public class CartBattery implements IBatteryCart {
         if (drewFromTrack > 0)
             drewFromTrack--;
         else if (type == Type.USER && charge < (capacity * 0.5) && clock % DRAW_INTERVAL == 0) {
-            ILinkageManager lm = CartToolsAPI.linkageManager();
-            for (EntityMinecart cart : lm.trainIterator(owner)) {
-                if (cart.hasCapability(CapabilitiesCharge.CART_BATTERY, null)) {
-                    IBatteryCart ch = cart.getCapability(CapabilitiesCharge.CART_BATTERY, null);
-                    if (ch != null && ch.getType() != Type.USER && ch.getCharge() > 0) {
-                        charge += ch.removeCharge(capacity - charge);
-                        break;
-                    }
-                }
-            }
+            Train.streamCarts(owner)
+                    .flatMap(c -> Capabilities.stream(c, CapabilitiesCharge.CART_BATTERY, null))
+                    .filter(c -> c.getType() != Type.USER && c.getCharge() > 0)
+                    .findAny()
+                    .ifPresent(c -> charge += c.removeCharge(capacity - charge));
         }
     }
 

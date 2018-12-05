@@ -15,7 +15,7 @@ import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
-import mods.railcraft.common.carts.Train.TrainState;
+import mods.railcraft.common.carts.Train.State;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -986,8 +986,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected void setActive(boolean active) {
         this.active = active;
-        TrainState state = active ? Train.TrainState.STOPPED : Train.TrainState.NORMAL;
-        Train.getTrain(this).setTrainState(state);
+        Train.State state = active ? State.STOPPED : State.NORMAL;
+        Train.get(this).ifPresent(t -> t.setTrainState(state));
 //        dataManager.set(WATCHER_ID_ACTIVE, Byte.valueOf((byte)(active ? 1 : 0)));
     }
 

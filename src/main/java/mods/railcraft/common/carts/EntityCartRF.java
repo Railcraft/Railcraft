@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,7 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 
-public final class EntityCartRF extends CartBase {
+public final class EntityCartRF extends CartBase implements IWeightedCart {
     private static final DataParameter<Integer> RF = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final int RF_CAP = 2000000;
     public final IIndicatorController rfIndicator = new IndicatorController() {
@@ -125,11 +125,8 @@ public final class EntityCartRF extends CartBase {
     }
 
     @Override
-    public final float getMaxCartSpeedOnRail() {
-        int numLocomotives = Train.getTrain(this).getNumRunningLocomotives();
-        if (numLocomotives == 0)
-            return super.getMaxCartSpeedOnRail();
-        return Math.min(1.2F, 0.08F + (numLocomotives - 1) * 0.075F);
+    public final float softMaxSpeed() {
+        return 0.08F;
     }
 
     @Override

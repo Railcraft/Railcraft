@@ -10,11 +10,14 @@
 
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.util.misc.AdjacentTileCache;
+import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.util.misc.Capabilities;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 
@@ -68,34 +71,28 @@ public class EnergyPlugin {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public static int pushToTiles(TileEntity te, AdjacentTileCache tileCache, int pushPerSide) {
-        int pushed = 0;
-        for (EnumFacing side : EnumFacing.VALUES) {
-            if (!te.hasCapability(ENERGY, side))
-                continue;
-            IEnergyStorage source = te.getCapability(ENERGY, side);
-            TileEntity tile = tileCache.getTileOnSide(side);
-            if (source != null && canTileReceivePower(tile, side.getOpposite())) {
-                IEnergyStorage receiver = tile.getCapability(ENERGY, side.getOpposite());
-                if (receiver != null) {
-                    int amountToPush = source.extractEnergy(pushPerSide, true);
-                    if (amountToPush > 0) {
-                        int amountPushed = receiver.receiveEnergy(amountToPush, false);
-                        pushed += amountPushed;
-                        source.extractEnergy(amountPushed, false);
-                    }
-                }
+    public static int pushToTiles(RailcraftTileEntity te, int pushPerSide) {
+        return Arrays.stream(EnumFacing.VALUES)
+                .mapToInt(side -> pushToSide(te, pushPerSide, side)).sum();
+    }
 
-            }
-        }
-        return pushed;
+    private static int pushToSide(RailcraftTileEntity te, int pushPerSide, EnumFacing side) {
+        return Capabilities.get(te, ENERGY, side).map(source ->
+                te.getTileCache().onSide(side)
+                        .flatMap(tile -> Capabilities.get(tile, ENERGY, side.getOpposite()))
+                        .filter(IEnergyStorage::canReceive)
+                        .map(receiver -> {
+                            int amountToPush = source.extractEnergy(pushPerSide, true);
+                            if (amountToPush > 0) {
+                                int amountPushed = receiver.receiveEnergy(amountToPush, false);
+                                source.extractEnergy(amountPushed, false);
+                                return amountPushed;
+                            }
+                            return 0;
+                        }).orElse(0)).orElse(0);
     }
 
     public static boolean canTileReceivePower(@Nullable TileEntity tile, EnumFacing side) {
-        if (tile != null && tile.hasCapability(ENERGY, side)) {
-            //noinspection ConstantConditions
-            return tile.getCapability(ENERGY, side).canReceive();
-        }
-        return false;
+        return Capabilities.get(tile, ENERGY, side).map(IEnergyStorage::canReceive).orElse(false);
     }
 }

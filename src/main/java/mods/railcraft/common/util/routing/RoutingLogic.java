@@ -12,6 +12,7 @@ package mods.railcraft.common.util.routing;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IPaintedCart;
 import mods.railcraft.api.carts.IRoutableCart;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.carts.Train;
@@ -19,8 +20,6 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.Streams;
-import mods.railcraft.api.fuel.INeedsFuel;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
@@ -87,21 +86,20 @@ public final class RoutingLogic {
     private EntityMinecart getRoutableCart(EntityMinecart cart) {
         // FIXME Train: Will this cause desync?
         // Note that this doesn't actually change the behavior as link information has never been available on the client.
-        if (Game.isClient(cart.world))
-            return cart;
-        Train train = Train.getTrain(cart);
-        if (train.size() == 1)
-            return cart;
-        if (train.isTrainEnd(cart)) {
-            if (cart instanceof IRoutableCart)
+        return Train.get(cart).map(train -> {
+            if (train.size() <= 1)
                 return cart;
-            if (cart instanceof IPaintedCart)
-                return cart;
-            if (cart instanceof INeedsFuel)
-                return cart;
-        }
-        EntityMinecart loco = train.getHeadLocomotive();
-        return loco == null ? cart : loco;
+            if (train.isTrainEnd(cart)) {
+                if (cart instanceof IRoutableCart)
+                    return cart;
+                if (cart instanceof IPaintedCart)
+                    return cart;
+                if (cart instanceof INeedsFuel)
+                    return cart;
+            }
+            EntityMinecart loco = train.getHeadLocomotive();
+            return loco == null ? cart : loco;
+        }).orElse(cart);
     }
 
     public boolean matches(ITileRouting tile, EntityMinecart cart) {
@@ -412,7 +410,7 @@ public final class RoutingLogic {
 
         @Override
         public boolean matches(ITileRouting tile, EntityMinecart cart) {
-            return Train.getTrain(cart).stream().flatMap(Streams.toType(INeedsFuel.class)).anyMatch(needs -> needs.needsFuel() == needsRefuel);
+            return Train.streamCarts(cart).flatMap(Streams.toType(INeedsFuel.class)).anyMatch(needs -> needs.needsFuel() == needsRefuel);
         }
 
     }
@@ -498,7 +496,7 @@ public final class RoutingLogic {
         }
 
         private List<Entity> getPassengers(EntityMinecart cart) {
-            return Train.getTrain(cart).stream().flatMap(c -> c.getPassengers().stream()).collect(Collectors.toList());
+            return Train.streamCarts(cart).flatMap(c -> c.getPassengers().stream()).collect(Collectors.toList());
         }
 
     }

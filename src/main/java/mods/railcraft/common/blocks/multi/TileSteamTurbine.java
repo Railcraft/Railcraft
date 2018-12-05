@@ -196,7 +196,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
         if (!tMan.isEmpty())
             tMan.push(tileCache, Predicates.instanceOf(TileBoilerFirebox.class), EnumFacing.HORIZONTALS, TANK_WATER, WATER_OUTPUT);
 
-        EnergyPlugin.pushToTiles(this, tileCache, FE_OUTPUT);
+        EnergyPlugin.pushToTiles(this, FE_OUTPUT);
     }
 
     private void addToNet() {

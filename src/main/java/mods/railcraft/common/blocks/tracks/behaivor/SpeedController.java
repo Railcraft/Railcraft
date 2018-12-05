@@ -40,7 +40,7 @@ public enum SpeedController {
         private boolean isDerailing(EntityMinecart cart) {
             if (CartToolsAPI.getCartSpeedUncapped(cart) > 0.35F && MiscTools.RANDOM.nextInt(500) == 250)
                 return true;
-            return Train.getTrain(cart).stream().anyMatch(MinecartHooks.INSTANCE::isDerailed);
+            return Train.streamCarts(cart).anyMatch(MinecartHooks.INSTANCE::isDerailed);
         }
 
         @Override

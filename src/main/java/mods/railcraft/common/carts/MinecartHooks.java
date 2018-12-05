@@ -373,10 +373,8 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         if (highSpeed) {
             if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
                 return;
-            for (EntityMinecart c : Train.getTrain(cart)) {
-                if (c != null && c.isPassenger(other))
-                    return;
-            }
+            if (Train.streamCarts(cart).anyMatch(c -> c.isPassenger(other)))
+                return;
 
             if (other instanceof EntityMinecart) {
                 boolean otherHighSpeed = CartTools.isTravellingHighSpeed((EntityMinecart) other);
@@ -448,8 +446,9 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         // Fix links for killed carts
         // Unloaded entities are not "isDead"
         if (Game.isHost(entityIn.world) && !entityIn.isEntityAlive() && entityIn instanceof EntityMinecart) {
+            // We only mark Trains for deletion here, this event seems to be called from outside the server thread.
+            Train.get(((EntityMinecart) entityIn)).ifPresent(Train::kill);
             LinkageManager.INSTANCE.breakLinks((EntityMinecart) entityIn);
-            Train.deleteTrain((EntityMinecart) entityIn);
         }
     }
 

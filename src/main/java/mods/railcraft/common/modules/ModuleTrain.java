@@ -43,8 +43,8 @@ public class ModuleTrain extends RailcraftModulePayload {
 
                     @SubscribeEvent(priority = EventPriority.HIGHEST)
                     public void onUnlinking(CartLinkEvent.Unlink event) {
-                        Train.deleteTrain(event.getCartOne());
-                        Train.deleteTrain(event.getCartTwo());
+                        Train.killTrain(event.getCartOne());
+                        Train.killTrain(event.getCartTwo());
                     }
                 });
                 add(

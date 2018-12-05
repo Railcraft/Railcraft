@@ -40,7 +40,7 @@ public class DetectorTrain extends Detector {
     @Override
     public int testCarts(List<EntityMinecart> carts) {
         if (carts.stream()
-                .mapToInt(cart -> Train.getTrain(cart).size())
+                .mapToInt(cart -> (int) Train.streamCarts(cart).count())
                 .anyMatch(count -> count >= getTrainSize())) {
             return FULL_POWER;
         }
