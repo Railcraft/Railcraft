@@ -210,8 +210,8 @@ public final class CartTools {
      * @param id Cart's persistent UUID
      * @return EntityMinecart
      */
-    public static @Nullable EntityMinecart getCartFromUUID(World world, @Nullable UUID id) {
-        if (id == null)
+    public static @Nullable EntityMinecart getCartFromUUID(@Nullable World world, @Nullable UUID id) {
+        if (world == null || id == null)
             return null;
         if (world instanceof WorldServer) {
             Entity entity = ((WorldServer) world).getEntityFromUuid(id);

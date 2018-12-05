@@ -77,22 +77,6 @@ public final class Train implements Iterable<EntityMinecart> {
         return Manager.forWorld(world);
     }
 
-    public static Train forServer(EntityMinecart cart) {
-        return get(cart).orElseThrow(ClientAccessException::new);
-    }
-
-    public static Optional<Train> get(EntityMinecart cart) {
-        return getManager(cart.world).map(manager ->
-                manager.compute(getTrainUUID(cart), (id, train) -> {
-                    if (train != null) {
-                        train.validate(cart);
-                    } else {
-                        train = new Train(cart);
-                    }
-                    return train;
-                }));
-    }
-
     public static Object getTicker() {
         return new Object() {
             @SubscribeEvent
@@ -104,17 +88,36 @@ public final class Train implements Iterable<EntityMinecart> {
         };
     }
 
+    public static Train forServer(EntityMinecart cart) {
+        return get(cart).orElseThrow(ClientAccessException::new);
+    }
+
+    public static Optional<Train> get(EntityMinecart cart) {
+        return getManager(cart.world).map(manager ->
+                manager.compute(getTrainUUID(cart), (id, train) -> {
+                    if (train != null) {
+                        train.world = cart.world;
+                        train.validate(cart);
+                    } else {
+                        train = new Train(cart);
+                    }
+                    return train;
+                }));
+    }
+
+    private static Optional<Train> getTrainUnchecked(@Nullable EntityMinecart cart) {
+        if (cart == null)
+            return Optional.empty();
+        Optional<Train> train = getManager(cart.world).map(manager -> manager.get(getTrainUUID(cart)));
+        train.ifPresent(t -> t.world = cart.world);
+        return train;
+    }
+
     /**
      * Will stream all carts in the train if on the server, or just the passed in cart if on the client.
      */
     public static Stream<EntityMinecart> streamCarts(EntityMinecart cart) {
         return get(cart).map(Train::stream).orElseGet(() -> Stream.of(cart));
-    }
-
-    private static Optional<Train> getTrainUnsafe(@Nullable EntityMinecart cart) {
-        if (cart == null)
-            return Optional.empty();
-        return getManager(cart.world).map(manager -> manager.get(getTrainUUID(cart)));
     }
 
     public static @Nullable UUID getTrainUUID(EntityMinecart cart) {
@@ -135,8 +138,8 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     private static Optional<Train> getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
-        Optional<Train> train1 = getTrainUnsafe(cart1);
-        Optional<Train> train2 = getTrainUnsafe(cart2);
+        Optional<Train> train1 = getTrainUnchecked(cart1);
+        Optional<Train> train2 = getTrainUnchecked(cart2);
 
         if (train1.equals(train2))
             return train1;
@@ -163,13 +166,7 @@ public final class Train implements Iterable<EntityMinecart> {
         NBTPlugin.writeUUID(cart.getEntityData(), TRAIN_NBT, trainId);
     }
 
-    void setWorld(World world) {
-        this.world = world;
-    }
-
     private @Nullable EntityMinecart getCart(UUID cartID) {
-        if (world == null)
-            return null;
         return CartTools.getCartFromUUID(world, cartID);
     }
 
@@ -193,7 +190,7 @@ public final class Train implements Iterable<EntityMinecart> {
         else
             throw new RuntimeException("Something went horribly wrong in the linkage code!");
 
-        getTrainUnsafe(next).ifPresent(Train::delete);
+        getTrainUnchecked(next).filter(t -> t != this).ifPresent(Train::delete);
         addTrainTag(next);
 
         LinkageManager lm = LinkageManager.INSTANCE;
@@ -227,7 +224,7 @@ public final class Train implements Iterable<EntityMinecart> {
      */
     public static void killTrain(EntityMinecart cart) {
 //        Game.log(Level.WARN, "Thread: " + Thread.currentThread().getName());
-        getTrainUnsafe(cart).ifPresent(Train::kill);
+        getTrainUnchecked(cart).ifPresent(Train::kill);
         removeTrainTag(cart);
     }
 
