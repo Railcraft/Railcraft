@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public final class ChargeSaveData extends WorldSavedData {
     private static final String NAME = "railcraft.charge.";
-    private final Map<BlockPos, Double> chargeLevels = CollectionToolsAPI.blockPosMap(HashMap::new);
+    private final Map<BlockPos, Double> chargeLevels = CollectionToolsAPI.blockPosMap(new HashMap<>());
 
     public static ChargeSaveData getFor(Charge network, World world) {
         MapStorage storage = world.getPerWorldStorage();

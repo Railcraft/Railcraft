@@ -55,8 +55,8 @@ public class ChargeNetwork implements Charge.INetwork {
     public static final double CHARGE_PER_DAMAGE = 1000.0;
     public static final EnumMap<IChargeBlock.ConnectType, ConnectionMap> CONNECTION_MAPS = new EnumMap<>(IChargeBlock.ConnectType.class);
     private final ChargeGrid NULL_GRID = new NullGrid();
-    private final Map<BlockPos, ChargeNode> nodes = CollectionToolsAPI.blockPosMap(HashMap::new);
-    private final Map<BlockPos, ChargeNode> queue = CollectionToolsAPI.blockPosMap(LinkedHashMap::new);
+    private final Map<BlockPos, ChargeNode> nodes = CollectionToolsAPI.blockPosMap(new HashMap<>());
+    private final Map<BlockPos, ChargeNode> queue = CollectionToolsAPI.blockPosMap(new LinkedHashMap<>());
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
     private final Set<ChargeGrid> grids = Collections.newSetFromMap(new WeakHashMap<>());

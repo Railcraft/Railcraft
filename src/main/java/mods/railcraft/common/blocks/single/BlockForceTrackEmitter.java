@@ -97,9 +97,10 @@ public class BlockForceTrackEmitter extends BlockContainerRailcraft<TileForceTra
         ItemStack heldItem = player.getHeldItem(hand);
         if (InvTools.isEmpty(heldItem) || hand == EnumHand.OFF_HAND)
             return false;
+        //noinspection Convert2MethodRef
         return getTileEntity(state, worldIn, pos)
                 .map(tile -> EnumColor.dyeColorOf(heldItem)
-                        .filter(tile::setColor)
+                        .filter(color -> tile.setColor(color))
                         .map(c -> {
                             if (!player.capabilities.isCreativeMode)
                                 player.setHeldItem(hand, InvTools.depleteItem(heldItem));
