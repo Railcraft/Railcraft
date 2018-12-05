@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.charge;
 
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -31,7 +32,7 @@ import java.util.Map;
  */
 public final class ChargeSaveData extends WorldSavedData {
     private static final String NAME = "railcraft.charge.";
-    private final Map<BlockPos, Double> chargeLevels = new HashMap<>();
+    private final Map<BlockPos, Double> chargeLevels = CollectionToolsAPI.blockPosMap(HashMap::new);
 
     public static ChargeSaveData getFor(Charge network, World world) {
         MapStorage storage = world.getPerWorldStorage();

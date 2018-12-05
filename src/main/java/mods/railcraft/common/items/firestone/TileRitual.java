@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
+import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -27,19 +28,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class TileRitual extends RailcraftTickingTileEntity {
     public static final int[] REBUILD_DELAY = new int[8];
-    private final Deque<BlockPos> queue = new ArrayDeque<>();
-    private final Set<BlockPos> visitedBlocks = new HashSet<>();
+    private final Deque<BlockPos> queue = CollectionToolsAPI.blockPosDeque(ArrayDeque::new);
+    private final Deque<BlockPos> lavaFound = CollectionToolsAPI.blockPosDeque(ArrayDeque::new);
+    private final Set<BlockPos> visitedBlocks = CollectionToolsAPI.blockPosSet(HashSet::new);
     public int charge;
     public long rotationYaw, preRotationYaw;
     public float yOffset = -2, preYOffset = -2;
-    private Deque<BlockPos> lavaFound = new ArrayDeque<>();
     private int rebuildDelay;
     private String itemName;
 
@@ -131,13 +135,9 @@ public class TileRitual extends RailcraftTickingTileEntity {
     }
 
     private void expandQueue() {
-        while (!lavaFound.isEmpty()) {
-            Deque<BlockPos> blocksToExpand = lavaFound;
-            lavaFound = new LinkedList<>();
-
-            for (BlockPos index : blocksToExpand) {
-                queueAdjacent(index);
-            }
+        BlockPos next;
+        while ((next = lavaFound.poll()) != null) {
+            queueAdjacent(next);
         }
     }
 

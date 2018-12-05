@@ -18,6 +18,7 @@ import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.charge.IChargeProtectionItem;
+import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -54,8 +55,8 @@ public class ChargeNetwork implements Charge.INetwork {
     public static final double CHARGE_PER_DAMAGE = 1000.0;
     public static final EnumMap<IChargeBlock.ConnectType, ConnectionMap> CONNECTION_MAPS = new EnumMap<>(IChargeBlock.ConnectType.class);
     private final ChargeGrid NULL_GRID = new NullGrid();
-    private final Map<BlockPos, ChargeNode> nodes = new HashMap<>();
-    private final Map<BlockPos, ChargeNode> queue = new LinkedHashMap<>();
+    private final Map<BlockPos, ChargeNode> nodes = CollectionToolsAPI.blockPosMap(HashMap::new);
+    private final Map<BlockPos, ChargeNode> queue = CollectionToolsAPI.blockPosMap(LinkedHashMap::new);
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private final Set<ChargeNode> tickingNodes = new LinkedHashSet<>();
     private final Set<ChargeGrid> grids = Collections.newSetFromMap(new WeakHashMap<>());
@@ -132,7 +133,7 @@ public class ChargeNetwork implements Charge.INetwork {
      * Add the node to the network and clean up any node that used to exist there
      */
     private void addNodeImpl(BlockPos pos, ChargeNode node) {
-        ChargeNode oldNode = nodes.put(pos, node);
+        ChargeNode oldNode = nodes.put(pos.toImmutable(), node);
 
         // update the battery in the save data tracker
         if (node.chargeBattery.isPresent())
@@ -167,6 +168,7 @@ public class ChargeNetwork implements Charge.INetwork {
     public boolean addNode(BlockPos pos, IBlockState state) {
         IChargeBlock.ChargeSpec chargeSpec = getChargeSpec(state, pos);
         if (chargeSpec != null && needsNode(pos, chargeSpec)) {
+            pos = pos.toImmutable();
             printDebug("Registering Node: {0}->{1}", pos, chargeSpec);
             queue.put(pos, new ChargeNode(pos, chargeSpec));
             return true;
@@ -191,7 +193,7 @@ public class ChargeNetwork implements Charge.INetwork {
 
     @Override
     public void removeNode(BlockPos pos) {
-        queue.put(pos, null);
+        queue.put(pos.toImmutable(), null);
     }
 
     public ChargeGrid grid(BlockPos pos) {
@@ -211,6 +213,7 @@ public class ChargeNetwork implements Charge.INetwork {
                 IBlockState state = WorldPlugin.getBlockState(worldObj, pos);
                 IChargeBlock.ChargeSpec chargeSpec = getChargeSpec(state, pos);
                 if (chargeSpec != null) {
+                    pos = pos.toImmutable();
                     node = new ChargeNode(pos, chargeSpec);
                     addNodeImpl(pos, node);
                 }
@@ -453,7 +456,7 @@ public class ChargeNetwork implements Charge.INetwork {
 
         @Override
         public String toString() {
-            return String.format("ChargeGrid{s=%d,b=%d}", size(), batteries.size());
+            return String.format("ChargeGrid{id=%s,s=%d,b=%d}", "@" + System.identityHashCode(this), size(), batteries.size());
         }
     }
 
@@ -514,10 +517,10 @@ public class ChargeNetwork implements Charge.INetwork {
         private final Collection<BiConsumer<ChargeNode, Double>> listeners = new LinkedHashSet<>();
 
         private ChargeNode(BlockPos pos, IChargeBlock.ChargeSpec chargeSpec) {
-            this.pos = pos;
+            this.pos = pos.toImmutable();
             this.chargeSpec = chargeSpec;
             this.chargeBattery = chargeSpec.getBatterySpec() == null ?
-                    Optional.empty() : Optional.of(new BatteryBlock(pos, chargeSpec.getBatterySpec()));
+                    Optional.empty() : Optional.of(new BatteryBlock(this.pos, chargeSpec.getBatterySpec()));
         }
 
         public IChargeBlock.ChargeSpec getChargeSpec() {
@@ -595,11 +598,12 @@ public class ChargeNetwork implements Charge.INetwork {
             Set<ChargeNode> visitedNodes = new HashSet<>();
             visitedNodes.add(this);
             Set<ChargeNode> nullNodes = new HashSet<>();
-            nullNodes.add(this);
+            if (isGridNull())
+                nullNodes.add(this);
             Deque<ChargeNode> nodeQueue = new ArrayDeque<>();
             nodeQueue.add(this);
-            TreeSet<ChargeGrid> grids = new TreeSet<>(Comparator.comparingInt(ForwardingCollection::size));
-            grids.add(chargeGrid);
+            TreeSet<ChargeGrid> seenGrids = new TreeSet<>(Comparator.comparingInt(ForwardingCollection::size));
+            seenGrids.add(chargeGrid);
             ChargeNode nextNode;
             while ((nextNode = nodeQueue.poll()) != null) {
                 nextNode.forConnections(n -> {
@@ -609,18 +613,18 @@ public class ChargeNetwork implements Charge.INetwork {
                             nullNodes.add(n);
                             nodeQueue.addLast(n);
                         } else
-                            grids.add(n.chargeGrid);
+                            seenGrids.add(n.chargeGrid);
                     }
                 });
             }
-            chargeGrid = Objects.requireNonNull(grids.pollLast());
+            chargeGrid = Objects.requireNonNull(seenGrids.pollLast());
             if (chargeGrid.isNull()) {
                 chargeGrid = new ChargeGrid();
-                ChargeNetwork.this.grids.add(chargeGrid);
+                grids.add(chargeGrid);
             }
             int originalSize = chargeGrid.size();
             chargeGrid.addAll(nullNodes);
-            grids.forEach(grid -> {
+            seenGrids.forEach(grid -> {
                 chargeGrid.addAll(grid);
                 grid.destroy(false);
             });
@@ -841,4 +845,5 @@ public class ChargeNetwork implements Charge.INetwork {
             return ret == null ? EnumSet.noneOf(IChargeBlock.ConnectType.class) : ret;
         }
     }
+
 }

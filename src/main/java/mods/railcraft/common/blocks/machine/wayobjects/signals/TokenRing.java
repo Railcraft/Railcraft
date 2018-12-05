@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
+import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.api.signals.ITokenRing;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 public class TokenRing implements ITokenRing {
     private static final int MAX_DISTANCE = 256 * 256;
     private final UUID uuid;
-    private final Set<BlockPos> signals = new HashSet<>();
+    private final Set<BlockPos> signals = CollectionToolsAPI.blockPosSet(HashSet::new);
     private final Set<UUID> trackedCarts = new HashSet<>();
     private BlockPos centroid = BlockPos.ORIGIN;
     private final TokenManager.TokenWorldManager manager;

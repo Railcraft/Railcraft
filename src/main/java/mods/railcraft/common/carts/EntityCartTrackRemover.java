@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.carts;
 
+import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
@@ -26,8 +27,8 @@ import java.util.Set;
 
 public class EntityCartTrackRemover extends CartBaseMaintenance {
 
-    private final Set<BlockPos> tracksBehind = new HashSet<>();
-    private final Set<BlockPos> tracksRemoved = new HashSet<>();
+    private final Set<BlockPos> tracksBehind = CollectionToolsAPI.blockPosSet(HashSet::new);
+    private final Set<BlockPos> tracksRemoved = CollectionToolsAPI.blockPosSet(HashSet::new);
 
     public EntityCartTrackRemover(World world) {
         super(world);
