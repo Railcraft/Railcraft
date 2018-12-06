@@ -108,11 +108,10 @@ public final class LinkageHandler {
         boolean adj1 = canCartBeAdjustedBy(cart1, cart2);
         boolean adj2 = canCartBeAdjustedBy(cart2, cart1);
 
-        Vec2D cart1Pos = new Vec2D(cart1.posX, cart1.posZ);
-        Vec2D cart2Pos = new Vec2D(cart2.posX, cart2.posZ);
+        Vec2D cart1Pos = new Vec2D(cart1);
+        Vec2D cart2Pos = new Vec2D(cart2);
 
-        Vec2D unit = Vec2D.subtract(cart2Pos, cart1Pos);
-        unit.normalize();
+        Vec2D unit = Vec2D.unit(cart2Pos, cart1Pos);
 
         // Energy transfer
 
@@ -136,6 +135,7 @@ public final class LinkageHandler {
 
         float optDist = getOptimalDistance(cart1, cart2);
         double stretch = dist - optDist;
+//        double stretch = Math.max(0.0, dist - optDist);
 //        if(Math.abs(stretch) > 0.5) {
 //            stretch *= 2;
 //        }
@@ -205,11 +205,30 @@ public final class LinkageHandler {
         boolean linkedB = adjustLinkedCart(cart, LinkageManager.LinkType.LINK_B);
         boolean linked = linkedA || linkedB;
 
+        // Centroid
+//        List<BlockPos> points = Train.streamCarts(cart).map(Entity::getPosition).collect(Collectors.toList());
+//        Vec2D centroid = new Vec2D(MathTools.centroid(points));
+//
+//        Vec2D cartPos = new Vec2D(cart);
+//        Vec2D unit = Vec2D.unit(cartPos, centroid);
+//
+//        double amount = 0.2;
+//        double pushX = amount * unit.getX();
+//        double pushZ = amount * unit.getY();
+//
+//        pushX = limitForce(pushX);
+//        pushZ = limitForce(pushZ);
+//
+//        cart.motionX += pushX;
+//        cart.motionZ += pushZ;
+
+        // Drag
         if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class) && !CartTools.isTravellingHighSpeed(cart)) {
             cart.motionX *= LINK_DRAG;
             cart.motionZ *= LINK_DRAG;
         }
 
+        // Speed
         Train.get(cart).ifPresent(train -> {
             if (train.isTrainEnd(cart))
                 train.refreshMaxSpeed();

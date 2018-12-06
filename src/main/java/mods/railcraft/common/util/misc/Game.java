@@ -74,6 +74,12 @@ public final class Game {
         if (isClient(world)) throw new ClientAccessException();
     }
 
+    public static void requiresServerThread() {
+        MinecraftServer mcServer = FMLCommonHandler.instance().getMinecraftServerInstance();
+        if (!mcServer.isCallingFromMinecraftThread())
+            throw new IllegalThreadStateException("Must call from server!");
+    }
+
     public static MinecraftServer getServer() {
         return FMLCommonHandler.instance().getMinecraftServerInstance();
     }

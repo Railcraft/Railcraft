@@ -1,12 +1,17 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -14,6 +19,9 @@ import java.awt.geom.Point2D;
 /**
  * A mutable 2D Vector class that supports a broader range of math operations
  * than Minecraft's immutable Vec3D class.
+ *
+ * For historical purposes, I borrowed this class from NovaStar,
+ * a simple 2D space shooter project I wrote in college.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -33,6 +41,18 @@ public class Vec2D extends Point2D.Double {
         super(p.getX(), p.getY());
     }
 
+    public Vec2D(final Vec3i p) {
+        super(p.getX(), p.getZ());
+    }
+
+    public Vec2D(final Vec3d p) {
+        super(p.x, p.z);
+    }
+
+    public Vec2D(final Entity p) {
+        super(p.posX, p.posZ);
+    }
+
     public Vec2D(double x, double y) {
         super(x, y);
     }
@@ -43,12 +63,18 @@ public class Vec2D extends Point2D.Double {
         return v;
     }
 
-    static public Vec2D add(final Point2D a, final Point2D b) {
+    public static Vec2D add(final Point2D a, final Point2D b) {
         return new Vec2D(a.getX() + b.getX(), a.getY() + b.getY());
     }
 
-    static public Vec2D subtract(final Point2D a, final Point2D b) {
+    public static Vec2D subtract(final Point2D a, final Point2D b) {
         return new Vec2D(a.getX() - b.getX(), a.getY() - b.getY());
+    }
+
+    public static Vec2D unit(final Point2D a, final Point2D b) {
+        Vec2D unit = subtract(a, b);
+        unit.normalize();
+        return unit;
     }
 
     @SuppressWarnings("CloneDoesntCallSuperClone")
@@ -81,7 +107,7 @@ public class Vec2D extends Point2D.Double {
     }
 
     public Vec2D unitVector() {
-        Vec2D v = this.clone();
+        Vec2D v = clone();
         v.normalize();
         return v;
     }

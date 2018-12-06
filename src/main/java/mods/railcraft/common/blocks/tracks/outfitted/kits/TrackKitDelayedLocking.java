@@ -36,7 +36,7 @@ public class TrackKitDelayedLocking extends TrackKitLocking implements IGuiRetur
     public static final int MAX_DELAY = 1200;
     public static final int MIN_DELAY = 0;
     private int delay = 100;
-    private int waited = 0;
+    private int waited;
 
     public TrackKitDelayedLocking() {
         setProfile(LockingProfileType.HOLDING_TRAIN);
@@ -87,10 +87,11 @@ public class TrackKitDelayedLocking extends TrackKitLocking implements IGuiRetur
      * then we want the track to be "locked" when the redstone is off, regardless of whether a
      * new or old cart starts moving onto the track. In the end, what we're really after is
      * having 2 truth tables and a way to decide which of the 2 tables to use. To do this, we
-     * use the boolean <code>trainLeaving</code> to indicate which table to use. As the name
-     * implies, <code>trainLeaving</code> indicates whether the train or cart is in the process
+     * use the boolean {@code trainLeaving} to indicate which table to use. As the name
+     * implies, {@code trainLeaving} indicates whether the train or cart is in the process
      * of leaving the track.
      */
+    @Override
     void calculateLocked() {
         if (currentCart == null) {
             waited = 0;

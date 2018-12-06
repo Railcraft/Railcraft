@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,10 @@
 
 package mods.railcraft.common.util.misc;
 
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
+
+import java.util.Collection;
 import java.util.UUID;
 
 /**
@@ -39,5 +43,21 @@ public final class MathTools {
 
     public static boolean nearZero(double f) {
         return Math.abs(f) < 0.001;
+    }
+
+    public static BlockPos centroid(Collection<? extends Vec3i> points) {
+        double x = 0;
+        double y = 0;
+        double z = 0;
+        for (Vec3i pos : points) {
+            x += pos.getX();
+            y += pos.getY();
+            z += pos.getZ();
+        }
+        int size = points.size();
+        x /= size;
+        y /= size;
+        z /= size;
+        return new BlockPos(x, y, z);
     }
 }

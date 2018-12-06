@@ -214,6 +214,11 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
 
     @Override
     public @Nullable AxisAlignedBB getCollisionBox(EntityMinecart cart, Entity other) {
+//        return null;
+//        if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
+//            return null;
+//        if (Train.streamCarts(cart).anyMatch(c -> c.isPassenger(other)))
+//            return null;
         if (other instanceof EntityItem && RailcraftConfig.doCartsCollideWithItems())
             return other.getEntityBoundingBox().grow(-0.01);
         return other.canBePushed() ? other.getEntityBoundingBox().grow(-COLLISION_EXPANSION) : null;
@@ -221,6 +226,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
 
     @Override
     public AxisAlignedBB getMinecartCollisionBox(EntityMinecart cart) {
+//        return new AxisAlignedBB(0, 0, 0,0,0,0);
 //        return cart.getEntityBoundingBox().expand(MinecartHooks.COLLISION_EXPANSION, 0, MinecartHooks.COLLISION_EXPANSION);
         double yaw = Math.toRadians(cart.rotationYaw);
         double diff = ((CART_LENGTH - CART_WIDTH) / 2.0) + MinecartHooks.COLLISION_EXPANSION;

@@ -99,8 +99,8 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public static Optional<Train> get(EntityMinecart cart) {
-
         return getManager(cart.world).map(manager -> {
+            Game.requiresServerThread();
             Train train = manager.get(getTrainUUID(cart));
             if (train != null) {
                 if (train.isDead) {
@@ -190,7 +190,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public void validate(EntityMinecart cart) {
-        if (!contains(cart) || !isValid() || isEmpty())
+        if (!contains(cart) || isInvalid())
             rebuild(cart);
     }
 
@@ -223,13 +223,13 @@ public final class Train implements Iterable<EntityMinecart> {
             rebuild(next, linkB);
     }
 
-    private boolean isValid() {
-        return carts.stream().allMatch(this::isCartValid);
+    private boolean isInvalid() {
+        return isEmpty() || carts.stream().anyMatch(this::isCartInvalid);
     }
 
-    private boolean isCartValid(UUID cartID) {
+    private boolean isCartInvalid(UUID cartID) {
         EntityMinecart cart = getCart(cartID);
-        return cart != null && uuid.equals(getTrainUUID(cart));
+        return cart != null && !uuid.equals(getTrainUUID(cart));
     }
 
     public static void repairTrain(EntityMinecart cart1, EntityMinecart cart2) {
@@ -247,12 +247,12 @@ public final class Train implements Iterable<EntityMinecart> {
         removeTrainTag(cart);
     }
 
-    public void delete() {
+    private void delete() {
         getManager(world).ifPresent(man -> man.remove(getUUID()));
-        resetTrain();
+        clear();
     }
 
-    private void resetTrain() {
+    private void clear() {
         forEach(Train::removeTrainTag);
         carts.clear();
         locks.clear();
@@ -500,8 +500,15 @@ public final class Train implements Iterable<EntityMinecart> {
         }
 
         public void tick() {
-            List<Train> deadTrains = values().stream().filter(t -> t.isDead).collect(Collectors.toList());
-            deadTrains.forEach(Train::delete);
+            Iterator<Train> it = values().iterator();
+            while (it.hasNext()) {
+                Train train = it.next();
+                train.world = world;
+                if (train.isDead || train.isInvalid()) {
+                    train.clear();
+                    it.remove();
+                }
+            }
         }
 
     }

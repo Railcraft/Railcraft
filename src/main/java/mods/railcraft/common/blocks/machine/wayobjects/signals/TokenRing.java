@@ -15,6 +15,7 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.MathTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -103,7 +104,7 @@ public class TokenRing implements ITokenRing {
 
     void loadSignals(Collection<BlockPos> signals) {
         this.signals.addAll(signals);
-        centroid = calculateCentroid();
+        centroid = MathTools.centroid(signals);
     }
 
     void loadCarts(Collection<UUID> carts) {
@@ -126,7 +127,7 @@ public class TokenRing implements ITokenRing {
 
     private void signalsChanged() {
         manager.markDirty();
-        centroid = calculateCentroid();
+        centroid = MathTools.centroid(signals);
     }
 
     public void markCart(EntityMinecart cart) {
@@ -161,21 +162,5 @@ public class TokenRing implements ITokenRing {
 
     public BlockPos centroid() {
         return centroid;
-    }
-
-    private BlockPos calculateCentroid() {
-        double x = 0;
-        double y = 0;
-        double z = 0;
-        for (BlockPos pos : signals) {
-            x += pos.getX();
-            y += pos.getY();
-            z += pos.getZ();
-        }
-        int size = signals.size();
-        x /= size;
-        y /= size;
-        z /= size;
-        return new BlockPos(x, y, z);
     }
 }
