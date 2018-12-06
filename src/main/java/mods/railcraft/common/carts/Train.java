@@ -14,6 +14,7 @@ import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.api.core.ClientAccessException;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.collections.Streams;
@@ -73,6 +74,11 @@ public final class Train implements Iterable<EntityMinecart> {
         this.locks.addAll(locks);
     }
 
+    public static void printDebug(String msg, Object... args) {
+        if (RailcraftConfig.printLinkingDebug())
+            Game.log(Level.DEBUG, msg, args);
+    }
+
     private static Optional<Manager> getManager(@Nullable World world) {
         return Manager.forWorld(world);
     }
@@ -93,16 +99,24 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public static Optional<Train> get(EntityMinecart cart) {
-        return getManager(cart.world).map(manager ->
-                manager.compute(getTrainUUID(cart), (id, train) -> {
-                    if (train != null) {
-                        train.world = cart.world;
-                        train.validate(cart);
-                    } else {
-                        train = new Train(cart);
-                    }
-                    return train;
-                }));
+
+        return getManager(cart.world).map(manager -> {
+            Train train = manager.get(getTrainUUID(cart));
+            if (train != null) {
+                if (train.isDead) {
+                    train = null;
+                } else {
+                    train.world = cart.world;
+                    train.validate(cart);
+                }
+            }
+            if (train == null) {
+                train = new Train(cart);
+                manager.put(train.uuid, train);
+                printDebug("Creating new train object: {0}", train);
+            }
+            return train;
+        });
     }
 
     private static Optional<Train> getTrainUnchecked(@Nullable EntityMinecart cart) {
@@ -111,6 +125,11 @@ public final class Train implements Iterable<EntityMinecart> {
         Optional<Train> train = getManager(cart.world).map(manager -> manager.get(getTrainUUID(cart)));
         train.ifPresent(t -> t.world = cart.world);
         return train;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Train{id=%s,n=%d}", uuid, size());
     }
 
     /**
