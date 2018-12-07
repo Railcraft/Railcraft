@@ -19,10 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 @SideOnly(Side.CLIENT)
 public abstract class EntityGui extends GuiContainerRailcraft {
-
+    // TODO: merge with tile gui
     public EntityGui(Entity entity, RailcraftContainer container, String texture) {
         super(container, texture);
-        Entity entity1 = entity;
     }
 
 //    @Override

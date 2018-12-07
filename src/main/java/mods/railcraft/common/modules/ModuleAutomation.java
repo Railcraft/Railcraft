@@ -51,7 +51,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
                         RailcraftCarts.MOW_TRACK_LAYER,
                         RailcraftCarts.MOW_TRACK_RELAYER,
                         RailcraftCarts.MOW_TRACK_REMOVER,
-                        RailcraftCarts.MOW_UNDERCUTTER
+                        RailcraftCarts.MOW_UNDERCUTTER,
+                        RailcraftCarts.TRADE_STATION
                 );
             }
 

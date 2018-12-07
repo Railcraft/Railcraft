@@ -30,6 +30,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -92,7 +93,7 @@ public final class FactoryContainer {
                 case FEED_STATION:
                     return new ContainerFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new ContainerTradeStation(inv, (TileTradeStation) obj);
+                    return new ContainerTradeStation(inv, obj instanceof TileTradeStation ? ((TileTradeStation) obj).getLogic() : ((EntityCartTradeStation) obj).getLogic());
                 case WORLDSPIKE:
                     return new ContainerWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:

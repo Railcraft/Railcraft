@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.chest.ChestLogic;
+import mods.railcraft.common.util.chest.InventoryLogic;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -39,14 +39,14 @@ public abstract class TileChestRailcraft extends TileSmartItemTicking implements
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
-    protected final ChestLogic logic;
+    protected final InventoryLogic logic;
 
     protected TileChestRailcraft() {
         super(27);
         this.logic = createLogic();
     }
 
-    protected abstract ChestLogic createLogic();
+    protected abstract InventoryLogic createLogic();
 
     @Override
     public void setWorld(World worldIn) {

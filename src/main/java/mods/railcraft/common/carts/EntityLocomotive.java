@@ -203,12 +203,10 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                 return true;
             }
             if (!isPrivate() || PlayerPlugin.isOwnerOrOp(getOwner(), player.getGameProfile()))
-                openGui(player);
+                super.doInteract(player, hand); // open gui
         }
         return true;
     }
-
-    protected abstract void openGui(EntityPlayer player);
 
     @Override
     public boolean isSecure() {

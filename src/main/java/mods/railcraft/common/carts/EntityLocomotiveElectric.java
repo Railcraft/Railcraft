@@ -73,11 +73,6 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    protected void openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_ELECTRIC, player, world, this);
-    }
-
-    @Override
     protected int getIdleFuelUse() {
         return 0;
     }

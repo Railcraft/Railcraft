@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 /**
  * The logic behind the metals chest.
  */
-public class MetalsChestLogic extends ChestLogic {
+public class MetalsChestLogic extends InventoryLogic {
 
     static final Map<Metal, Predicate<ItemStack>> nuggetFilters = new EnumMap<>(Metal.class);
     static final Map<Metal, Predicate<ItemStack>> ingotFilters = new EnumMap<>(Metal.class);

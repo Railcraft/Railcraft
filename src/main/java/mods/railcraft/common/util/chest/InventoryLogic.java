@@ -10,14 +10,22 @@
 
 package mods.railcraft.common.util.chest;
 
-import net.minecraft.util.ITickable;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.world.World;
 
 /**
- * A logic shared by block entities and entities.
+ *
  */
-public interface EntityLogic extends ITickable {
+public abstract class InventoryLogic extends AbstractLogic {
 
-    World getWorld();
+    protected IInventory inventory;
 
+    InventoryLogic(World world, IInventory inventory) {
+        super(world);
+        this.inventory = inventory;
+    }
+
+    public IInventory getInventory() {
+        return inventory;
+    }
 }

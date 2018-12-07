@@ -25,6 +25,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Created by CovertJaguar on 6/12/2016 for Railcraft.
@@ -107,9 +108,27 @@ public class DataManagerPlugin {
         }
     };
 
+    public static final DataSerializer<byte[]> BYTE_ARRAY = new DataSerializerIO<byte[]>() {
+        @Override
+        public void write(PacketBuffer packetBuffer, byte[] bytes) {
+            packetBuffer.writeByteArray(bytes);
+        }
+
+        @Override
+        public byte[] read(PacketBuffer packetBuffer) throws IOException {
+            return packetBuffer.readByteArray();
+        }
+
+        @Override
+        public byte[] copyValue(byte[] value) {
+            return Arrays.copyOf(value, value.length);
+        }
+    };
+
     public static void register() {
         DataSerializers.registerSerializer(OPTIONAL_FLUID_STACK);
         DataSerializers.registerSerializer(ENUM_COLOR);
+        DataSerializers.registerSerializer(BYTE_ARRAY);
     }
 
     @SuppressWarnings("deprecation")

@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 /**
  * The logic behind the void chest.
  */
-public class VoidChestLogic extends ChestLogic {
+public class VoidChestLogic extends InventoryLogic {
 
     public VoidChestLogic(World world, IInventory inventory) {
         super(world, inventory);

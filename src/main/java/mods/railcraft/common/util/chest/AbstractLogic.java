@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 /**
  * A base logic with a world defined.
  */
-public abstract class AbstractLogic implements EntityLogic {
+public abstract class AbstractLogic implements IEntityLogic {
     protected World world;
 
     AbstractLogic(World world) {

@@ -152,8 +152,7 @@ public final class CraftingPlugin {
         return ingredients;
     }
 
-    @Nullable
-    public static Ingredient getIngredient(Object source) {
+    public static @Nullable Ingredient getIngredient(Object source) {
         if (source instanceof FluidStack) {
             return new FluidIngredient((FluidStack) source);
         }

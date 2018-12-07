@@ -1093,13 +1093,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, @Nullable EnumHand hand) {
-        if (Game.isHost(world))
-            GuiHandler.openGui(EnumGui.CART_BORE, player, world, this);
-        return true;
-    }
-
-    @Override
     public void markDirty() {
         if (!isActive())
             setDelay(STANDARD_DELAY);

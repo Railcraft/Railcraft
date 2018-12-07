@@ -10,18 +10,20 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
-import mods.railcraft.common.blocks.single.TileTradeStation;
-import mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.chest.TradeStationLogic;
+import mods.railcraft.common.util.chest.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.util.collections.RevolvingList;
+import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorldNameable;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
@@ -29,23 +31,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType.NEXT_TRADE;
-import static mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType.SET_PROFESSION;
+import static mods.railcraft.common.util.chest.TradeStationLogic.GuiPacketType.NEXT_TRADE;
+import static mods.railcraft.common.util.chest.TradeStationLogic.GuiPacketType.SET_PROFESSION;
 
 public class GuiTradeStation extends TileGui {
 
-    private final TileTradeStation tile;
+    private final IWorldNameable owner;
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
     private final EntityVillager villager;
 
-    public GuiTradeStation(InventoryPlayer playerInv, TileTradeStation tile) {
-        super(tile, new ContainerTradeStation(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+    public GuiTradeStation(InventoryPlayer playerInv, TradeStationLogic tile, IWorldNameable namer) {
+        super(namer, new ContainerTradeStation(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+        this.owner = namer;
         xSize = 176;
         ySize = 214;
-
-        this.tile = tile;
-
-        String label = tile.getName();
 
         villager = new EntityVillager(tile.getWorld());
 
@@ -122,7 +121,8 @@ public class GuiTradeStation extends TileGui {
             }
         } catch (IOException ignored) {
         }
-        PacketBuilder.instance().sendGuiReturnPacket(tile, bytes.toByteArray());
+        // Gui Return packets don't recognize logics!
+        PacketBuilder.instance().sendGuiReturnPacket((IGuiReturnHandler) owner, bytes.toByteArray());
     }
 
     @Override

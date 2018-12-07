@@ -13,7 +13,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.chest.ChestLogic;
+import mods.railcraft.common.util.chest.InventoryLogic;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;
@@ -28,13 +28,13 @@ import net.minecraft.world.World;
 
 public abstract class EntityCartChestRailcraft extends CartBaseContainer {
     private int clock = MiscTools.RANDOM.nextInt();
-    protected final ChestLogic logic = createLogic();
+    protected final InventoryLogic logic = createLogic();
 
     protected EntityCartChestRailcraft(World world) {
         super(world);
     }
 
-    protected abstract ChestLogic createLogic();
+    protected abstract InventoryLogic createLogic();
 
     @Override
     public abstract IRailcraftCartContainer getCartType();
@@ -43,13 +43,6 @@ public abstract class EntityCartChestRailcraft extends CartBaseContainer {
     public abstract IBlockState getDefaultDisplayTile();
 
     protected abstract int getTickInterval();
-
-    @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world))
-            player.displayGUIChest(this);
-        return true;
-    }
 
     @Override
     public int getDefaultDisplayTileOffset() {
@@ -102,13 +95,18 @@ public abstract class EntityCartChestRailcraft extends CartBaseContainer {
     }
 
     @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        player.displayGUIChest(this);
+    }
+
+    @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
         return new ContainerChest(playerInventory, this, playerIn);
     }
 
     @Override
     protected final EnumGui getGuiType() {
-        throw new Error("Should not be called");
+        throw new UnsupportedOperationException("Should not be called");
     }
 
 }

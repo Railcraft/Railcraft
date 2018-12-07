@@ -37,6 +37,7 @@ import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
@@ -105,7 +106,7 @@ public class FactoryGui {
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new GuiTradeStation(inv, (TileTradeStation) obj);
+                    return new GuiTradeStation(inv, obj instanceof TileTradeStation ? ((TileTradeStation) obj).getLogic() : ((EntityCartTradeStation) obj).getLogic(), (IWorldNameable) obj);
                 case WORLDSPIKE:
                     return new GuiWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:

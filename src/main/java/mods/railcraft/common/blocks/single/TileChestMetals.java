@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.chest.ChestLogic;
+import mods.railcraft.common.util.chest.InventoryLogic;
 import mods.railcraft.common.util.chest.MetalsChestLogic;
 import mods.railcraft.common.util.misc.Game;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +32,7 @@ public class TileChestMetals extends TileChestRailcraft {
     }
 
     @Override
-    protected ChestLogic createLogic() {
+    protected InventoryLogic createLogic() {
         return new MetalsChestLogic(getWorld(), this);
     }
 

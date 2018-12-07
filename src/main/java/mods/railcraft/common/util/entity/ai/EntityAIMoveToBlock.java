@@ -47,7 +47,7 @@ public class EntityAIMoveToBlock extends EntityAIBase {
         this.searchedState = searchedState;
         this.maxDist = maxDist;
         this.weight = weight;
-        setMutexBits(AIPlugin.LOOK);
+        setMutexBits(AIPlugin.MOVE);
     }
 
     /**
