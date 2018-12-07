@@ -135,7 +135,7 @@ public final class LinkageHandler {
 
         float optDist = getOptimalDistance(cart1, cart2);
         double stretch = dist - optDist;
-//        double stretch = Math.max(0.0, dist - optDist);
+//        stretch = Math.max(0.0, stretch);
 //        if(Math.abs(stretch) > 0.5) {
 //            stretch *= 2;
 //        }
@@ -228,10 +228,16 @@ public final class LinkageHandler {
             cart.motionZ *= LINK_DRAG;
         }
 
-        // Speed
+        // Speed & End Drag
         Train.get(cart).ifPresent(train -> {
-            if (train.isTrainEnd(cart))
+            if (train.isTrainEnd(cart)) {
                 train.refreshMaxSpeed();
+//                if (linked && !(cart instanceof EntityLocomotive)) {
+//                    double drag = 0.97;
+//                    cart.motionX *= drag;
+//                    cart.motionZ *= drag;
+//                }
+            }
         });
 
     }
