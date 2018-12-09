@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.chest;
 
 import mods.railcraft.api.core.INetworkedObject;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -32,6 +33,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
@@ -101,7 +103,7 @@ public abstract class TradeStationLogic extends InventoryLogic implements IEntit
         ItemStack buy2 = recipeSlots.getStackInSlot(tradeSet * 3 + 1);
         ItemStack sell = recipeSlots.getStackInSlot(tradeSet * 3 + 2);
         for (EntityVillager villager : villagers) {
-            MerchantRecipeList recipes = villager.getRecipes(null);
+            MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) world, getX(), getY(), getZ()));
             for (MerchantRecipe recipe : recipes) {
                 if (recipe.isRecipeDisabled())
                     continue;
@@ -210,7 +212,7 @@ public abstract class TradeStationLogic extends InventoryLogic implements IEntit
     public void nextTrade(int tradeSet) {
         EntityVillager villager = new EntityVillager(world);
         villager.setProfession(profession);
-        MerchantRecipeList recipes = villager.getRecipes(null);
+        MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) world, getX(), getY(), getZ()));
         assert recipes != null;
         MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
         recipeSlots.setInventorySlotContents(tradeSet * 3 + 0, recipe.getItemToBuy());

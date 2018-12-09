@@ -19,6 +19,7 @@ import mods.railcraft.common.util.chest.TradeStationLogic;
 import mods.railcraft.common.util.entity.ai.EntityAIMoveToBlock;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchBlock;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -130,6 +131,9 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     public void update() {
         super.update();
 
+        if (Game.isClient(world))
+            return;
+
         if (clock % 256 == 0)
             logic.updateNearbyAI();
 
@@ -180,10 +184,6 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     @Override
     public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
         logic.readGuiData(data, sender);
-    }
-
-    public void nextTrade(int tradeSet) {
-        logic.nextTrade(tradeSet);
     }
 
     @Override

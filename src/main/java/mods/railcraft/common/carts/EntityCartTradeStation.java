@@ -140,6 +140,9 @@ public class EntityCartTradeStation extends CartBaseContainer implements IGuiRet
     public void onUpdate() {
         super.onUpdate();
 
+        if (Game.isClient(world))
+            return;
+
         clock++;
         if (clock % 256 == 0)
             logic.updateNearbyAI();
