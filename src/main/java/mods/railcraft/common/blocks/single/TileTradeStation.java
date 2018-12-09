@@ -126,10 +126,8 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
                 if (recipe.isRecipeDisabled())
                     continue;
                 // TODO: There must be clearer way to write this!
-                //noinspection ConstantConditions
                 if (!InvTools.isEmpty(recipe.getItemToBuy()) && !InvTools.isItemLessThanOrEqualTo(recipe.getItemToBuy(), buy1))
                     continue;
-                //noinspection ConstantConditions
                 if (!InvTools.isEmpty(recipe.getSecondItemToBuy()) && !InvTools.isItemLessThanOrEqualTo(recipe.getSecondItemToBuy(), buy2))
                     continue;
                 if (!InvTools.isItemGreaterOrEqualThan(recipe.getItemToSell(), sell))
@@ -146,10 +144,8 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
 
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean canDoTrade(MerchantRecipe recipe) {
-        //noinspection ConstantConditions
         if (!InvTools.isEmpty(recipe.getItemToBuy()) && invInput.countItems(recipe.getItemToBuy()) < sizeOf(recipe.getItemToBuy()))
             return false;
-        //noinspection ConstantConditions
         if (!InvTools.isEmpty(recipe.getSecondItemToBuy()) && invInput.countItems(recipe.getSecondItemToBuy()) < sizeOf(recipe.getSecondItemToBuy()))
             return false;
         return invOutput.canFit(recipe.getItemToSell());
@@ -157,10 +153,8 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
 
     private void doTrade(IMerchant merchant, MerchantRecipe recipe) {
         merchant.useRecipe(recipe);
-        //noinspection ConstantConditions
         if (!InvTools.isEmpty(recipe.getItemToBuy()))
             invInput.removeItemsAbsolute(sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
-        //noinspection ConstantConditions
         if (!InvTools.isEmpty(recipe.getSecondItemToBuy()))
             invInput.removeItemsAbsolute(sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
         invOutput.addStack(recipe.getItemToSell().copy());

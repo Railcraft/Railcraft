@@ -95,12 +95,11 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
 
         @Override
         public ItemStack removeFromSlot(int amount, InvOp op) {
-            switch (op) {
-                case EXECUTE:
-                    return inv.decrStackSize(slot, amount);
-                default:
-                    return InvTools.copyOne(getStack());
+            if (op == InvOp.EXECUTE) {
+                return inv.decrStackSize(slot, amount);
             }
+            ItemStack stack = getStack();
+            return InvTools.copy(stack, Math.min(amount, sizeOf(stack)));
         }
 
         @Override
