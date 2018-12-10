@@ -16,8 +16,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.BlockRailBase;
@@ -50,7 +49,7 @@ import java.util.List;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryAdapter, IInventoryComposite {
+public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryComposite {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected @Nullable EnumFacing travelDirection;
     protected @Nullable EnumFacing verticalTravelDirection;
@@ -215,16 +214,6 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     protected abstract EnumGui getGuiType();
-
-    @Override
-    public int getNumSlots() {
-        return getSizeInventory();
-    }
-
-    @Override
-    public Object getBackingObject() {
-        return this;
-    }
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {

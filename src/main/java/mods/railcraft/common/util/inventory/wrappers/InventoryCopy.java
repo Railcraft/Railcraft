@@ -11,8 +11,8 @@ package mods.railcraft.common.util.inventory.wrappers;
 
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
-import mods.railcraft.common.util.inventory.iterators.IInvSlot;
-import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.IInvSlot;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 

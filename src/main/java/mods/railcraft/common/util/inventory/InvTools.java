@@ -12,8 +12,6 @@ package mods.railcraft.common.util.inventory;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.api.items.InvToolsAPI;
-import mods.railcraft.common.util.inventory.iterators.IExtInvSlot;
-import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
@@ -40,6 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
@@ -287,6 +286,32 @@ public abstract class InvTools {
                 world.spawnEntity(entityItem);
             }
         }
+    }
+
+    static int tryPut(List<IInvSlot> slots, ItemStack stack, int injected, InvOp op) {
+        if (injected >= sizeOf(stack))
+            return injected;
+        for (IInvSlot slot : slots) {
+            int amountToInsert = sizeOf(stack) - injected;
+            ItemStack remainder = slot.addToSlot(copy(stack, amountToInsert), op);
+            if (isEmpty(remainder))
+                return sizeOf(stack);
+            injected += amountToInsert - sizeOf(remainder);
+            if (injected >= sizeOf(stack))
+                return injected;
+        }
+        return injected;
+    }
+
+    static boolean tryRemove(IInventoryComposite comp, int amount, Predicate<ItemStack> filter, InvOp op) {
+        int amountNeeded = amount;
+        for (InventoryAdaptor inv : comp) {
+            List<ItemStack> stacks = inv.extractItems(amountNeeded, filter, op);
+            amountNeeded -= stacks.stream().mapToInt(InvTools::sizeOf).sum();
+            if (amountNeeded <= 0)
+                return true;
+        }
+        return false;
     }
 
     public static void validateInventory(IInventory inv, int slot, World world, BlockPos pos, Predicate<ItemStack> canStay) {

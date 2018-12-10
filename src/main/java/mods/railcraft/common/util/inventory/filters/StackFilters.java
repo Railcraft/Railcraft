@@ -14,7 +14,7 @@ import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;

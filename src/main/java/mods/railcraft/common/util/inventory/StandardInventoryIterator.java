@@ -8,10 +8,8 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.inventory.iterators;
+package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.util.inventory.InvOp;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
@@ -84,7 +82,7 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         }
 
         @Override
-        public boolean canTakeStackFromSlot(ItemStack stack) {
+        public boolean canTakeStackFromSlot() {
             return true;
         }
 

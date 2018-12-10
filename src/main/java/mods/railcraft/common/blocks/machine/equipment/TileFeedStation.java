@@ -19,8 +19,7 @@ import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
-import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -61,7 +60,6 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
     private int feedTime;
     private byte feedCounter;
     private boolean powered;
-    private final InventoryComposite feedInv = InventoryComposite.of(InventoryAdaptor.get(this));
     protected final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !getClass().isInstance(tile), InventorySorter.SIZE_DESCENDING);
 
     public TileFeedStation() {
@@ -91,7 +89,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
         if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed.isEmpty() || sizeOf(feed) < feed.getMaxStackSize())) {
             InventoryComposite chests = invCache.getAdjacentInventories();
-            chests.moveOneItemTo(feedInv, StandardStackFilters.FEED);
+            chests.moveOneItemTo(this, StandardStackFilters.FEED);
         }
 
         feed = getStackInSlot(0);

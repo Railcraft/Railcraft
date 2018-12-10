@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,7 @@ public class StackKey {
     private final ItemStack stack;
 
     public StackKey(ItemStack stack) {
-        this.stack = stack.copy();
+        this.stack = InvTools.copyOne(stack);
     }
 
     @Override

@@ -154,9 +154,9 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
     private void doTrade(IMerchant merchant, MerchantRecipe recipe) {
         merchant.useRecipe(recipe);
         if (!InvTools.isEmpty(recipe.getItemToBuy()))
-            invInput.removeItemsAbsolute(sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
+            invInput.removeItems(sizeOf(recipe.getItemToBuy()), recipe.getItemToBuy());
         if (!InvTools.isEmpty(recipe.getSecondItemToBuy()))
-            invInput.removeItemsAbsolute(sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
+            invInput.removeItems(sizeOf(recipe.getSecondItemToBuy()), recipe.getSecondItemToBuy());
         invOutput.addStack(recipe.getItemToSell().copy());
     }
 

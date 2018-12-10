@@ -7,10 +7,9 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.inventory.iterators;
+package mods.railcraft.common.util.inventory;
 
 import com.google.common.collect.Streams;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -34,7 +33,7 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         return new ItemHandlerInventoryIterator(inv);
     }
 
-    public static InventoryIterator<? extends IInvSlot> get(IInventoryAdapter inv) {
+    public static InventoryIterator<? extends IInvSlot> get(InventoryAdaptor inv) {
         Objects.requireNonNull(inv.getBackingObject());
         if (inv.getBackingObject() instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv.getBackingObject());

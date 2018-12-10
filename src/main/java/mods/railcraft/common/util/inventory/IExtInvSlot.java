@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.inventory.iterators;
+package mods.railcraft.common.util.inventory;
 
 import net.minecraft.item.ItemStack;
 

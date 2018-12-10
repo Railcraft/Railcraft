@@ -10,8 +10,6 @@
 package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.blocks.RailcraftTileEntity;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -33,7 +31,7 @@ import java.util.stream.Stream;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryAdvanced extends InventoryBasic implements IInventoryAdapter, IInventoryComposite {
+public class InventoryAdvanced extends InventoryBasic implements IInventoryComposite {
 
     public static final InventoryAdvanced ZERO_SIZE_INV = new InventoryAdvanced(0);
 
@@ -72,12 +70,7 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryAdapt
     }
 
     @Override
-    public Object getBackingObject() {
-        return this;
-    }
-
-    @Override
-    public int getNumSlots() {
+    public int slotCount() {
         return getSizeInventory();
     }
 

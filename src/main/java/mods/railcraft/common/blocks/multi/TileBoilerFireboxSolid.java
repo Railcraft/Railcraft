@@ -19,7 +19,7 @@ import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
@@ -98,7 +98,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
             return;
 
         if (isMaster && clock % 4 == 0)
-            needsFuel = !invFuel.numItemsMoreThan(64);
+            needsFuel = invFuel.countItems() < 64;
 
         if (needsFuel()) {
             TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();

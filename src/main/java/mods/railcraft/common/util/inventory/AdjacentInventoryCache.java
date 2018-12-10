@@ -9,9 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
-import mods.railcraft.common.util.inventory.wrappers.InventoryAdaptor;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -31,8 +28,8 @@ public final class AdjacentInventoryCache {
 
     private final AdjacentTileCache cache;
     private final InventoryComposite sortedInvs = InventoryComposite.create();
-    private final Map<EnumFacing, IInventoryAdapter> invs = new EnumMap<>(EnumFacing.class);
-    private final Comparator<IInventoryAdapter> sorter;
+    private final Map<EnumFacing, InventoryAdaptor> invs = new EnumMap<>(EnumFacing.class);
+    private final Comparator<InventoryAdaptor> sorter;
     private final Predicate<TileEntity> filter;
     private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
 
@@ -40,7 +37,7 @@ public final class AdjacentInventoryCache {
         this(cache, null, null);
     }
 
-    public AdjacentInventoryCache(AdjacentTileCache cache, @Nullable Predicate<TileEntity> filter, @Nullable Comparator<IInventoryAdapter> sorter) {
+    public AdjacentInventoryCache(AdjacentTileCache cache, @Nullable Predicate<TileEntity> filter, @Nullable Comparator<InventoryAdaptor> sorter) {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override
@@ -66,7 +63,7 @@ public final class AdjacentInventoryCache {
                 invs.remove(side);
                 TileEntity tile = tiles.get(side);
                 if (tile != null && (filter == null || filter.test(tile))) {
-                    InventoryAdaptor.get(tile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
+                    InventoryAdaptor.of(tile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
                 }
             }
             changedSides.clear();

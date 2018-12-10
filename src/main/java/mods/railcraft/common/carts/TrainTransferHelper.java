@@ -18,7 +18,7 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;

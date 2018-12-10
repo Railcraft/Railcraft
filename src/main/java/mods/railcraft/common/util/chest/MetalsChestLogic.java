@@ -13,8 +13,7 @@ package mods.railcraft.common.util.chest;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import net.minecraft.inventory.IInventory;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -42,7 +41,7 @@ public class MetalsChestLogic extends ChestLogic {
 
     private Target target = Target.NUGGET_CONDENSE;
 
-    public MetalsChestLogic(World world, IInventory inventory) {
+    public MetalsChestLogic(World world, IInventoryComposite inventory) {
         super(world, inventory);
     }
 
@@ -56,13 +55,12 @@ public class MetalsChestLogic extends ChestLogic {
 
         NUGGET_CONDENSE {
             @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+            public boolean evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
-                    if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(metal.nuggetFilter, 9) && im.canAddStack(ingotStack)) {
-                        im.removeItems(metal.nuggetFilter, 9);
-                        im.addStack(ingotStack);
+                    if (!InvTools.isEmpty(ingotStack) && inv.canFit(ingotStack)
+                            && inv.removeItems(9, metal.nuggetFilter)) {
+                        inv.addStack(ingotStack);
                         return true;
                     }
                 }
@@ -72,13 +70,12 @@ public class MetalsChestLogic extends ChestLogic {
         },
         INGOT_CONDENSE {
             @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+            public boolean evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
-                    if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(metal.ingotFilter, 9) && im.canAddStack(blockStack)) {
-                        im.removeItems(metal.ingotFilter, 9);
-                        im.addStack(blockStack);
+                    if (!InvTools.isEmpty(blockStack) && inv.canFit(blockStack)
+                            && inv.removeItems(9, metal.ingotFilter)) {
+                        inv.addStack(blockStack);
                         return true;
                     }
                 }
@@ -88,14 +85,13 @@ public class MetalsChestLogic extends ChestLogic {
         },
         NUGGET_SWAP {
             @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+            public boolean evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = nuggetFilters.get(metal);
                     ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
-                    if (!InvTools.isEmpty(nuggetStack) && im.canRemoveItems(filter, 1) && im.canAddStack(nuggetStack)) {
-                        im.removeItems(filter, 1);
-                        im.addStack(nuggetStack);
+                    if (!InvTools.isEmpty(nuggetStack) && inv.canFit(nuggetStack)
+                            && inv.removeItems(1, filter)) {
+                        inv.addStack(nuggetStack);
                         return true;
                     }
                 }
@@ -105,14 +101,13 @@ public class MetalsChestLogic extends ChestLogic {
         },
         INGOT_SWAP {
             @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+            public boolean evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = ingotFilters.get(metal);
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
-                    if (!InvTools.isEmpty(ingotStack) && im.canRemoveItems(filter, 1) && im.canAddStack(ingotStack)) {
-                        im.removeItems(filter, 1);
-                        im.addStack(ingotStack);
+                    if (!InvTools.isEmpty(ingotStack) && inv.canFit(ingotStack)
+                            && inv.removeItems(1, filter)) {
+                        inv.addStack(ingotStack);
                         return true;
                     }
                 }
@@ -122,14 +117,13 @@ public class MetalsChestLogic extends ChestLogic {
         },
         BLOCK_SWAP {
             @Override
-            public boolean evaluate(IInventory inv) {
-                InventoryManipulator im = InventoryManipulator.get(inv);
+            public boolean evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = blockFilters.get(metal);
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
-                    if (!InvTools.isEmpty(blockStack) && im.canRemoveItems(filter, 1) && im.canAddStack(blockStack)) {
-                        im.removeItems(filter, 1);
-                        im.addStack(blockStack);
+                    if (!InvTools.isEmpty(blockStack) && inv.canFit(blockStack)
+                            && inv.removeItems(1, filter)) {
+                        inv.addStack(blockStack);
                         return true;
                     }
                 }
@@ -140,7 +134,7 @@ public class MetalsChestLogic extends ChestLogic {
 
         public static final Target[] VALUES = values();
 
-        public abstract boolean evaluate(IInventory inv);
+        public abstract boolean evaluate(IInventoryComposite inv);
 
         public Target next() {
             return VALUES[(ordinal() + 1) % VALUES.length];

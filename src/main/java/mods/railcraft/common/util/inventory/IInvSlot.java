@@ -7,12 +7,14 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.inventory.iterators;
+package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.util.inventory.InvOp;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.function.Predicate;
 
 /**
  * This Interface represents an abstract inventory slot. It provides a unified interface for interfacing with Inventories.
@@ -23,7 +25,7 @@ public interface IInvSlot {
 
     boolean canPutStackInSlot(ItemStack stack);
 
-    boolean canTakeStackFromSlot(ItemStack stack);
+    boolean canTakeStackFromSlot();
 
     default boolean hasStack() {
         return !InvTools.isEmpty(getStack());
@@ -34,6 +36,13 @@ public interface IInvSlot {
         return !InvTools.isEmpty(stack) && stack.getItem() == item;
     }
 
+    default boolean matches(Predicate<ItemStack> filter) {
+        return filter.test(getStack());
+    }
+
+    /**
+     * Removes a single item from an inventory slot and returns it in a new stack.
+     */
     ItemStack decreaseStack();
 
     ItemStack removeFromSlot(int amount, InvOp op);

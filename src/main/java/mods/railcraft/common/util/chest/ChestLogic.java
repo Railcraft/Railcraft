@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.util.chest;
 
-import net.minecraft.inventory.IInventory;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import net.minecraft.world.World;
 
 /**
@@ -18,9 +18,9 @@ import net.minecraft.world.World;
  */
 public abstract class ChestLogic extends AbstractLogic {
 
-    protected IInventory inventory;
+    protected IInventoryComposite inventory;
 
-    ChestLogic(World world, IInventory inventory) {
+    ChestLogic(World world, IInventoryComposite inventory) {
         super(world);
         this.inventory = inventory;
     }

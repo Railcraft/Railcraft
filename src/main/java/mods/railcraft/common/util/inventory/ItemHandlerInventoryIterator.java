@@ -7,10 +7,8 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.inventory.iterators;
+package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.util.inventory.InvOp;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
@@ -69,7 +67,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
         }
 
         @Override
-        public boolean canTakeStackFromSlot(ItemStack stack) {
+        public boolean canTakeStackFromSlot() {
             return !InvTools.isEmpty(removeFromSlot(1, InvOp.SIMULATE));
         }
 
