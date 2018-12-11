@@ -226,4 +226,14 @@ public abstract class TradeStationLogic extends InventoryLogic implements IEntit
     public abstract void onLogicChanged();
 
     public abstract String getName();
+
+    @Override
+    public @Nullable World theWorld() {
+        return getWorld();
+    }
+
+    public interface IContainer extends InventoryLogic.IContainer, ILocatable.IContainer, ISaveable.IContainer {
+        @Override
+        TradeStationLogic getLogic();
+    }
 }

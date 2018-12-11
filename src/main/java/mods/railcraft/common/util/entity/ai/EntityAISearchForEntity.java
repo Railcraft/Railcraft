@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class EntityAIMoveToEntity extends EntityAIBase {
+public class EntityAISearchForEntity extends EntityAIBase {
 
     private final EntityCreature owner;
     /**
@@ -37,11 +37,11 @@ public class EntityAIMoveToEntity extends EntityAIBase {
      */
     protected @Nullable Entity watchedEntity;
 
-    public EntityAIMoveToEntity(EntityCreature owner, Predicate<Entity> searcher, int maxDist) {
+    public EntityAISearchForEntity(EntityCreature owner, Predicate<Entity> searcher, int maxDist) {
         this(owner, searcher, maxDist, 0.001F);
     }
 
-    public EntityAIMoveToEntity(EntityCreature owner, Predicate<Entity> searcher, int maxDist, float weight) {
+    public EntityAISearchForEntity(EntityCreature owner, Predicate<Entity> searcher, int maxDist, float weight) {
         this.owner = owner;
         this.searcher = searcher;
         this.maxDist = maxDist;

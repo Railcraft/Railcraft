@@ -25,13 +25,13 @@ import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.chest.TradeStationLogic;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
@@ -106,7 +106,7 @@ public class FactoryGui {
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new GuiTradeStation(inv, obj instanceof TileTradeStation ? ((TileTradeStation) obj).getLogic() : ((EntityCartTradeStation) obj).getLogic(), (IWorldNameable) obj);
+                    return new GuiTradeStation(inv, ((TradeStationLogic.IContainer) obj).getLogic(), (IWorldNameable) obj);
                 case WORLDSPIKE:
                     return new GuiWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:

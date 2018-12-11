@@ -24,7 +24,7 @@ import java.util.Objects;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class EntityAIMoveToBlock extends EntityAIBase {
+public class EntityAISearchForBlock extends EntityAIBase {
 
     private final EntityCreature entity;
     /**
@@ -38,11 +38,11 @@ public class EntityAIMoveToBlock extends EntityAIBase {
      */
     protected @Nullable BlockPos watchedBlock;
 
-    public EntityAIMoveToBlock(EntityCreature entity, IBlockState searchedState, int maxDist) {
+    public EntityAISearchForBlock(EntityCreature entity, IBlockState searchedState, int maxDist) {
         this(entity, searchedState, maxDist, 0.001F);
     }
 
-    public EntityAIMoveToBlock(EntityCreature entity, IBlockState searchedState, int maxDist, float weight) {
+    public EntityAISearchForBlock(EntityCreature entity, IBlockState searchedState, int maxDist, float weight) {
         this.entity = entity;
         this.searchedState = searchedState;
         this.maxDist = maxDist;

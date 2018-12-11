@@ -16,7 +16,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.util.chest.TradeStationLogic;
-import mods.railcraft.common.util.entity.ai.EntityAIMoveToBlock;
+import mods.railcraft.common.util.entity.ai.EntityAISearchForBlock;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchBlock;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -43,7 +43,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileTradeStation extends TileSmartItemTicking implements IGuiReturnHandler, ISidedInventory, ITileRotate {
+public class TileTradeStation extends TileSmartItemTicking implements TradeStationLogic.IContainer, IGuiReturnHandler, ISidedInventory, ITileRotate {
 
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 16);
     private final TradeStationLogic logic;
@@ -68,11 +68,6 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
             @Override
             public void onLogicChanged() {
                 TileTradeStation.this.sendUpdateToClient();
-            }
-
-            @Override
-            public @Nullable World theWorld() {
-                return TileTradeStation.this.world;
             }
 
             @Override
@@ -109,12 +104,13 @@ public class TileTradeStation extends TileSmartItemTicking implements IGuiReturn
             protected void modifyNearbyAI() {
                 for (EntityVillager villager : findNearbyVillagers(20)) {
                     AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, RailcraftBlocks.TRADE_STATION.getDefaultState(), 4, 0.08F));
-                    AIPlugin.addAITask(villager, 9, new EntityAIMoveToBlock(villager, RailcraftBlocks.TRADE_STATION.getDefaultState(), 16, 0.002F));
+                    AIPlugin.addAITask(villager, 9, new EntityAISearchForBlock(villager, RailcraftBlocks.TRADE_STATION.getDefaultState(), 16, 0.002F));
                 }
             }
         };
     }
 
+    @Override
     public TradeStationLogic getLogic() {
         return logic;
     }

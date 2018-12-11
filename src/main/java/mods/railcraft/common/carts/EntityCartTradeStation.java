@@ -17,7 +17,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.chest.TradeStationLogic;
-import mods.railcraft.common.util.entity.ai.EntityAIMoveToEntity;
+import mods.railcraft.common.util.entity.ai.EntityAISearchForEntity;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchEntity;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -44,7 +44,7 @@ import java.io.UncheckedIOException;
 /**
  *
  */
-public class EntityCartTradeStation extends CartBaseContainer implements IGuiReturnHandler {
+public class EntityCartTradeStation extends CartBaseContainer implements TradeStationLogic.IContainer, IGuiReturnHandler {
 
     static final byte[] INITIAL_BUFFER;
     static final DataParameter<byte[]> BYTE_BUFFER = DataManagerPlugin.create(DataManagerPlugin.BYTE_ARRAY);
@@ -75,11 +75,6 @@ public class EntityCartTradeStation extends CartBaseContainer implements IGuiRet
             @Override
             public void onLogicChanged() {
                 setDisplayTile(RailcraftBlocks.TRADE_STATION.getDefaultState().withProperty(BlockTradeStation.FACING, direction));
-            }
-
-            @Override
-            public @Nullable World theWorld() {
-                return world;
             }
 
             @Override
@@ -124,7 +119,7 @@ public class EntityCartTradeStation extends CartBaseContainer implements IGuiRet
             protected void modifyNearbyAI() {
                 for (EntityVillager villager : findNearbyVillagers(20)) {
                     AIPlugin.addAITask(villager, 9, new EntityAIWatchEntity(villager, entity -> entity instanceof EntityCartTradeStation, 4, 0.08F));
-                    AIPlugin.addAITask(villager, 9, new EntityAIMoveToEntity(villager, entity -> entity instanceof EntityCartTradeStation, 16, 0.002F));
+                    AIPlugin.addAITask(villager, 9, new EntityAISearchForEntity(villager, entity -> entity instanceof EntityCartTradeStation, 16, 0.002F));
                 }
             }
         };
@@ -170,6 +165,7 @@ public class EntityCartTradeStation extends CartBaseContainer implements IGuiRet
         return 16;
     }
 
+    @Override
     public TradeStationLogic getLogic() {
         return logic;
     }

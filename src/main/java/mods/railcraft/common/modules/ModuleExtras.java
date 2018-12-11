@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.RailcraftCarts;
 
-@RailcraftModule(value = "railcraft:extras", softDependencyClasses = {ModuleCarts.class, ModuleTracks.class}, description = "silly stuff, launch track, tnt carts, work cart")
+@RailcraftModule(value = "railcraft:extras", softDependencyClasses = {ModuleCarts.class, ModuleTracks.class}, description = "assorted stuff including elevator track and (anti)grief")
 public class ModuleExtras extends RailcraftModulePayload {
     public ModuleExtras() {
         setEnabledEventHandler(new ModuleEventHandler() {

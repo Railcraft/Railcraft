@@ -28,4 +28,9 @@ public abstract class InventoryLogic extends AbstractLogic {
     public IInventory getInventory() {
         return inventory;
     }
+
+    public interface IContainer extends IEntityLogic.IContainer {
+        @Override
+        InventoryLogic getLogic();
+    }
 }

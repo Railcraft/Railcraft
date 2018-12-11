@@ -22,6 +22,10 @@ public interface IEntityLogic extends ITickable {
 
     World getWorld();
 
+    interface IContainer {
+        IEntityLogic getLogic();
+    }
+
     interface ILocatable extends IEntityLogic {
         double getX();
 
@@ -30,12 +34,22 @@ public interface IEntityLogic extends ITickable {
         double getZ();
 
         BlockPos getPos();
+
+        interface IContainer extends IEntityLogic.IContainer {
+            @Override
+            ILocatable getLogic();
+        }
     }
 
     interface ISaveable extends IEntityLogic {
         void readFromNBT(NBTTagCompound tag);
 
         NBTTagCompound writeToNBT(NBTTagCompound tag);
+
+        interface IContainer extends IEntityLogic.IContainer {
+            @Override
+            ISaveable getLogic();
+        }
     }
 
 }
