@@ -10,8 +10,6 @@
 
 package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -22,13 +20,8 @@ import net.minecraft.util.text.ITextComponent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInventoryImplementor extends IInventory, IInventoryAdapter, IInventoryComposite {
+public interface IInventoryImplementor extends IInventory, IInventoryComposite {
     IInventory getInventory();
-
-    @Override
-    default Object getBackingObject() {
-        return getInventory();
-    }
 
     @Override
     default int getSizeInventory() {
@@ -118,10 +111,5 @@ public interface IInventoryImplementor extends IInventory, IInventoryAdapter, II
     @Override
     default ITextComponent getDisplayName() {
         return getInventory().getDisplayName();
-    }
-
-    @Override
-    default int getNumSlots() {
-        return getSizeInventory();
     }
 }

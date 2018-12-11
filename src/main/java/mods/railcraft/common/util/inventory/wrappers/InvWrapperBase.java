@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ import net.minecraft.util.text.ITextComponent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class InvWrapperBase implements IInventory, IInventoryAdapter, IInventoryComposite {
+public abstract class InvWrapperBase implements IInventory, IInventoryComposite {
 
     private final IInventory inv;
     protected boolean checkItems;
@@ -133,12 +134,7 @@ public abstract class InvWrapperBase implements IInventory, IInventoryAdapter, I
     }
 
     @Override
-    public Object getBackingObject() {
-        return this;
-    }
-
-    @Override
-    public int getNumSlots() {
+    public int slotCount() {
         return getSizeInventory();
     }
 

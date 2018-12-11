@@ -9,19 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.util.inventory.wrappers.IInventoryAdapter;
-
 import java.util.Comparator;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum InventorySorter implements Comparator<IInventoryAdapter> {
+public enum InventorySorter implements Comparator<InventoryAdaptor> {
 
     SIZE_DESCENDING {
         @Override
-        public int compare(IInventoryAdapter inv1, IInventoryAdapter inv2) {
-            return inv2.getNumSlots() - inv1.getNumSlots();
+        public int compare(InventoryAdaptor inv1, InventoryAdaptor inv2) {
+            return inv2.slotCount() - inv1.slotCount();
         }
 
     }

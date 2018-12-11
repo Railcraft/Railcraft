@@ -10,9 +10,7 @@
 
 package mods.railcraft.common.util.chest;
 
-import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import net.minecraft.world.World;
 
 /**
@@ -20,18 +18,12 @@ import net.minecraft.world.World;
  */
 public class VoidChestLogic extends InventoryLogic {
 
-    public VoidChestLogic(World world, IInventory inventory) {
+    public VoidChestLogic(World world, IInventoryComposite inventory) {
         super(world, inventory);
     }
 
     @Override
     public void update() {
-        for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-            ItemStack stack = inventory.getStackInSlot(slot);
-            if (!InvTools.isEmpty(stack)) {
-                inventory.decrStackSize(slot, 1);
-                break;
-            }
-        }
+        inventory.removeOneItem();
     }
 }

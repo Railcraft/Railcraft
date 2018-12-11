@@ -12,8 +12,7 @@ package mods.railcraft.common.plugins.forestry;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -82,17 +81,18 @@ public class IcemanBackpack extends BaseBackpack {
 
     private void manageSnow(IInventory backpackInventory) {
         InventoryComposite inv = InventoryComposite.of(backpackInventory);
-        if (!inv.isEmpty()) {
+        if (inv.hasItems()) {
             int numSnowballs = inv.countItems(SNOWBALL_MATCHER);
-            InventoryManipulator im = InventoryManipulator.get(backpackInventory);
-            while (numSnowballs > 16 && im.canRemoveItems(SNOWBALL_MATCHER, 4) && im.canAddStack(SNOW_BLOCK)) {
-                im.removeItems(SNOWBALL_MATCHER, 4);
-                im.addStack(new ItemStack(Blocks.SNOW));
+            while (numSnowballs > 16
+                    && inv.canFit(SNOW_BLOCK)
+                    && inv.removeItems(4, SNOWBALL_MATCHER)) {
+                inv.addStack(new ItemStack(Blocks.SNOW));
                 numSnowballs -= 4;
             }
-            while (numSnowballs < 8 && im.canRemoveItem(SNOW_BLOCK_MATCHER) && im.canAddStack(new ItemStack(Items.SNOWBALL, 4))) {
-                im.removeItem(SNOW_BLOCK_MATCHER);
-                im.addStack(new ItemStack(Items.SNOWBALL, 4));
+            while (numSnowballs < 8
+                    && inv.canFit(new ItemStack(Items.SNOWBALL, 4))
+                    && inv.removeItems(1, SNOW_BLOCK_MATCHER)) {
+                inv.addStack(new ItemStack(Items.SNOWBALL, 4));
                 numSnowballs += 4;
             }
         }

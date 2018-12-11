@@ -86,3 +86,21 @@ Railcraft is licensed under a custom usage license tailored specifically for the
   * You may **NOT** use Railcraft Art Assets in other projects **unless** the project is intended to operate alongside Railcraft. Examples are Addons, Resource Packs and InterMod Integration.
   * You **MAY** fork and edit the Github Project for the purpose of contributing to the Official Railcraft Project. You may **NOT** distribute any Jar created from a fork for any reason.
   * All contributions to the Official Railcraft Project must be covered by a Contributor Licensing Agreement signed by the contributor.
+
+# Wisdom
+“Surely there is a mine for silver, And a place where gold is refined. Iron is taken from the earth, And copper is smelted from ore.
+
+Man puts an end to darkness, And searches every recess for ore in the darkness and the shadow of creepers. He breaks open a shaft away from people; In places forgotten by feet they dig far away from men; They jump to and fro.
+
+As for the earth, from it comes bread, But underneath it is turned up by fire and lava; Its stones are the source of emeralds, And it contains redstone dust. That path no bird knows, Nor has the falcon’s eye seen it. The proud ocelot has not trodden it, Nor has the fierce wolf passed over it.
+
+He puts his hand on the flint; He overturns the mountains at the roots. He cuts out channels in the rocks, And his eye sees every precious thing. He dams up the streams from trickling; What is hidden he brings forth to light.
+
+“But where can wisdom be found? And where is the place of understanding? Man does not know its value, Nor is it found in the Nether or the End. The deep says, ‘It is not in me’; And the sea says, ‘It is not with me.’ It cannot be purchased for gold, Nor can silver be weighed for its price. It cannot be valued in stars, In precious obsidian or the heart of the sea. Neither gold nor crystal can equal it, Nor can it be exchanged for jewelry of fine gold. No mention shall be made of coral or quartz, For the price of wisdom is above emeralds. Lapis Lazuli cannot equal it, Nor can it be valued in ingots of gold.
+
+“From where then does wisdom come? And where is the place of understanding? It is hidden from the eyes of all living, And concealed from the birds of the air. If you search through the bones and question the dead, they say, 'we've heard only rumors of it.'
+
+God understands its way, And He knows its place. For He looks to the ends of the earth, And sees under the whole heavens, To establish a weight for the wind, And apportion the waters by measure. When He made a law for the rain, And a path for the thunderbolt, Then He saw wisdom and declared it; He prepared it, indeed, He searched it out.
+
+And to man He said, ‘Behold, the reverence and love of the Lord, that is wisdom, And to depart from evil is understanding.’ ”
+Job 28:1‭-‬28 Minecraft Edition

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,7 +7,7 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.inventory.iterators;
+package mods.railcraft.common.util.inventory;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -63,8 +63,8 @@ public class SidedInventoryIterator extends StandardInventoryIterator {
         }
 
         @Override
-        public boolean canTakeStackFromSlot(ItemStack stack) {
-            return inv.canExtractItem(slot, stack, EnumFacing.DOWN);
+        public boolean canTakeStackFromSlot() {
+            return inv.canExtractItem(slot, getStack(), EnumFacing.DOWN);
         }
 
     }

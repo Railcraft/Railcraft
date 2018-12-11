@@ -24,9 +24,8 @@ import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.iterators.IInvSlot;
-import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
-import mods.railcraft.common.util.inventory.manipulators.InventoryManipulator;
+import mods.railcraft.common.util.inventory.IInvSlot;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -34,7 +33,6 @@ import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -222,7 +220,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 EntitySearcher.find(EntityItem.class).around(target).in(world).forEach(item -> {
                     if (node.useCharge(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getItem().copy();
-                        InventoryManipulator.get((IInventory) invInput).addStack(stack);
+                        invInput.addStack(stack);
                         item.setDead();
                     }
                 });

@@ -12,7 +12,7 @@ package mods.railcraft.common.util.crafting;
 import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;

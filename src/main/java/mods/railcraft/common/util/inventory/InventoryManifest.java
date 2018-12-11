@@ -13,7 +13,6 @@ package mods.railcraft.common.util.inventory;
 import com.google.common.collect.ForwardingMap;
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.wrappers.IInventoryComposite;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 

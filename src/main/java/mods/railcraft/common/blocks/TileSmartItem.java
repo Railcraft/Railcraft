@@ -57,11 +57,6 @@ public abstract class TileSmartItem extends RailcraftTileEntity implements ISmar
     }
 
     @Override
-    public Object getBackingObject() {
-        return this;
-    }
-
-    @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }

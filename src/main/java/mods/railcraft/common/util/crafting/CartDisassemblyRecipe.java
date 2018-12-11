@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,8 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.RailcraftCarts;
-import mods.railcraft.common.util.inventory.iterators.IInvSlot;
-import mods.railcraft.common.util.inventory.iterators.InventoryIterator;
+import mods.railcraft.common.util.inventory.IInvSlot;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
