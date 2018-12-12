@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -60,7 +60,8 @@ public class SeasonPlugin {
         Season season = cart instanceof IRailcraftCart ? ((IRailcraftCart) cart).getSeason() : Season.NONE;
         if (season == Season.NONE)
             return (RailcraftConfig.isPolarExpressEnabled() && CHRISTMAS)
-                    || cart.hasCustomName() && POLAR_EXPRESS.equals(cart.getCustomNameTag());
+                    || cart.hasCustomName() && POLAR_EXPRESS.equals(cart.getCustomNameTag())
+                    || cart.world.getBiome(cart.getPosition()).isSnowyBiome();
         return season == Season.CHRISTMAS;
     }
 
