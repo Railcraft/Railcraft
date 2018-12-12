@@ -188,7 +188,7 @@ public class TrackKitLocking extends TrackKitRailcraft implements ITrackKitLockd
     void lockCurrentCart() {
         if (currentCart != null) {
             HighSpeedTools.performHighSpeedChecks(theWorldAsserted(), getPos(), currentCart, getTrackKit());
-            Train train = Train.forServer(currentCart);
+            Train train = Train.get(currentCart).orElse(null);
             if (currentTrain != train && currentTrain != null)
                 currentTrain.removeLock(getUUID());
             currentTrain = train;

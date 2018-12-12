@@ -22,4 +22,14 @@ public class Optionals {
     public static <T> boolean test(Optional<T> obj, Predicate<T> action) {
         return obj.map(action::test).orElse(false);
     }
+
+    /**
+     * This function exists because {@link Optional#orElse(Object)} won't accept super classes for other.
+     */
+    public static <T1, T2 extends T1> T1 get(Optional<T2> obj, T1 orElse) {
+        //noinspection OptionalIsPresent
+        if (obj.isPresent())
+            return obj.get();
+        return orElse;
+    }
 }

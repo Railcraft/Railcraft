@@ -13,7 +13,6 @@ import com.google.common.collect.ForwardingMap;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.IBatteryCart;
-import mods.railcraft.api.core.ClientAccessException;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -45,7 +44,6 @@ import java.util.stream.Stream;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings("unused")
 public final class Train implements Iterable<EntityMinecart> {
     public static final String TRAIN_NBT = "rcTrain";
 
@@ -94,32 +92,28 @@ public final class Train implements Iterable<EntityMinecart> {
         };
     }
 
-    public static Train forServer(EntityMinecart cart) {
-        return get(cart).orElseThrow(ClientAccessException::new);
-    }
-
-    public static Optional<Train> get(EntityMinecart cart) {
+    public static Optional<Train> get(@Nullable EntityMinecart cart) {
+        if (cart == null)
+            return Optional.empty();
         return getManager(cart.world).map(manager -> {
             Game.requiresServerThread();
             Train train = manager.get(getTrainUUID(cart));
-            if (train != null) {
-                if (train.isDead) {
-                    train = null;
-                } else {
-                    train.world = cart.world;
-                    train.validate(cart);
-                }
-            }
             if (train == null) {
                 train = new Train(cart);
                 manager.put(train.uuid, train);
                 printDebug("Creating new train object: {0}", train);
+            } else {
+                train.world = cart.world;
+                if (train.isDead || !train.contains(cart) || train.isInvalid()) {
+                    train.kill();
+                    return null;
+                }
             }
             return train;
         });
     }
 
-    private static Optional<Train> getTrainUnchecked(@Nullable EntityMinecart cart) {
+    private static Optional<Train> getTrainRaw(@Nullable EntityMinecart cart) {
         if (cart == null)
             return Optional.empty();
         Optional<Train> train = getManager(cart.world).map(manager -> manager.get(getTrainUUID(cart)));
@@ -144,6 +138,10 @@ public final class Train implements Iterable<EntityMinecart> {
         return NBTPlugin.readUUID(nbt, TRAIN_NBT);
     }
 
+    public static boolean isPartOfTrain(EntityMinecart cart) {
+        return Train.get(cart).map(t -> t.size() > 1).orElse(false);
+    }
+
     public static boolean areInSameTrain(@Nullable EntityMinecart cart1, @Nullable EntityMinecart cart2) {
         if (cart1 == null || cart2 == null)
             return false;
@@ -156,9 +154,9 @@ public final class Train implements Iterable<EntityMinecart> {
         return train1 != null && Objects.equals(train1, train2);
     }
 
-    private static Optional<Train> getLongestTrainUnsafe(EntityMinecart cart1, EntityMinecart cart2) {
-        Optional<Train> train1 = getTrainUnchecked(cart1);
-        Optional<Train> train2 = getTrainUnchecked(cart2);
+    private static Optional<Train> getLongerTrain(EntityMinecart cart1, EntityMinecart cart2) {
+        Optional<Train> train1 = getTrainRaw(cart1);
+        Optional<Train> train2 = getTrainRaw(cart2);
 
         if (train1.equals(train2))
             return train1;
@@ -172,12 +170,12 @@ public final class Train implements Iterable<EntityMinecart> {
         return train2;
     }
 
-    public static void removeTrainTag(EntityMinecart cart) {
-        cart.getEntityData().removeTag(TRAIN_NBT);
+    public static void repairTrain(EntityMinecart cart1, EntityMinecart cart2) {
+        getLongerTrain(cart1, cart2).ifPresent(t -> t.rebuild(cart1));
     }
 
-    public static boolean isPartOfTrain(EntityMinecart cart) {
-        return Train.get(cart).map(t -> t.size() > 1).orElse(false);
+    public static void removeTrainTag(EntityMinecart cart) {
+        cart.getEntityData().removeTag(TRAIN_NBT);
     }
 
     public void addTrainTag(EntityMinecart cart) {
@@ -186,17 +184,12 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     private @Nullable EntityMinecart getCart(UUID cartID) {
+        Objects.requireNonNull(world);
         return CartTools.getCartFromUUID(world, cartID);
     }
 
-    public void validate(EntityMinecart cart) {
-        if (!contains(cart) || isInvalid())
-            rebuild(cart);
-    }
-
-    public void rebuild(EntityMinecart first) {
-        forEach(Train::removeTrainTag);
-        carts.clear();
+    private void rebuild(EntityMinecart first) {
+        clear();
         rebuild(null, first);
         markDirty();
     }
@@ -207,9 +200,9 @@ public final class Train implements Iterable<EntityMinecart> {
         else if (carts.getLast() == prev.getPersistentID())
             carts.addLast(next.getPersistentID());
         else
-            throw new RuntimeException("Something went horribly wrong in the linkage code!");
+            throw new IllegalStateException("Passed a non-null prev value on an empty train!");
 
-        getTrainUnchecked(next).filter(t -> t != this).ifPresent(Train::delete);
+        getTrainRaw(next).filter(t -> t != this).ifPresent(Train::kill);
         addTrainTag(next);
 
         LinkageManager lm = LinkageManager.INSTANCE;
@@ -232,10 +225,6 @@ public final class Train implements Iterable<EntityMinecart> {
         return cart != null && !uuid.equals(getTrainUUID(cart));
     }
 
-    public static void repairTrain(EntityMinecart cart1, EntityMinecart cart2) {
-        getLongestTrainUnsafe(cart1, cart2).ifPresent(t -> t.rebuild(cart1));
-    }
-
     /**
      * Only marks the train for removal, it isn't removed until the next world tick.
      *
@@ -243,19 +232,17 @@ public final class Train implements Iterable<EntityMinecart> {
      */
     public static void killTrain(EntityMinecart cart) {
 //        Game.log(Level.WARN, "Thread: " + Thread.currentThread().getName());
-        getTrainUnchecked(cart).ifPresent(Train::kill);
+        getTrainRaw(cart).ifPresent(Train::kill);
         removeTrainTag(cart);
     }
 
-    private void delete() {
-        getManager(world).ifPresent(man -> man.remove(getUUID()));
-        clear();
+    public void kill() {
+        isDead = true;
     }
 
     private void clear() {
         forEach(Train::removeTrainTag);
         carts.clear();
-        locks.clear();
         markDirty();
     }
 
@@ -266,6 +253,10 @@ public final class Train implements Iterable<EntityMinecart> {
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean contains(@Nullable EntityMinecart cart) {
         return cart != null && carts.contains(cart.getPersistentID());
+    }
+
+    public boolean contains(@Nullable UUID cart) {
+        return cart != null && carts.contains(cart);
     }
 
     public boolean isTrainEnd(@Nullable EntityMinecart cart) {
@@ -281,11 +272,11 @@ public final class Train implements Iterable<EntityMinecart> {
         return ends;
     }
 
-    public @Nullable EntityLocomotive getHeadLocomotive() {
+    public Optional<EntityLocomotive> getHeadLocomotive() {
         return getEnds().stream()
                 .map(this::getCart)
                 .flatMap(Streams.toType(EntityLocomotive.class))
-                .findFirst().orElse(null);
+                .findFirst();
     }
 
     public Stream<EntityMinecart> stream() {
@@ -458,10 +449,6 @@ public final class Train implements Iterable<EntityMinecart> {
         this.dirty = dirty;
     }
 
-    public void kill() {
-        isDead = true;
-    }
-
     public static final class Manager extends ForwardingMap<UUID, Train> {
 
         private static final Map<World, Manager> instances = new MapMaker().weakKeys().makeMap();
@@ -515,7 +502,7 @@ public final class Train implements Iterable<EntityMinecart> {
 
     public static final class SaveData extends WorldSavedData {
         final Map<UUID, Train> trains = new ForwardingMap<UUID, Train>() {
-            private Map<UUID, Train> trains = new HashMap<>();
+            private final Map<UUID, Train> trains = new HashMap<>();
 
             @Override
             protected Map<UUID, Train> delegate() {
