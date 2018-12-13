@@ -10,13 +10,14 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.IBatteryBlock;
-import mods.railcraft.common.blocks.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.blocks.multi.BlockSteamTurbine.Texture;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.items.ItemTurbineRotor;
 import mods.railcraft.common.items.RailcraftItems;
@@ -55,7 +56,7 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileSteamTurbine extends TileMultiBlockCharge implements IMultiEmitterDelegate, IEnergyStorage, INeedsMaintenance, ISteamUser, ITileTanks {
+public final class TileSteamTurbine extends TileMultiBlockCharge implements IMultiEmitterDelegate, IEnergyStorage, INeedsMaintenance, ISteamUser, ITileTank {
 
     public static final int IC2_OUTPUT = 225;
     private static final int FE_OUTPUT = 900;
@@ -66,8 +67,8 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
     private final InventoryAdvanced inv = new InventoryAdvanced(1).callbackTile(this);
     public float output;
     private final FluidStack waterFilter = Fluids.WATER.get(2);
-    protected final FilteredTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this);
-    protected final FilteredTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this);
+    protected final StandardTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this).setFilterFluid(Fluids.STEAM).canDrain(false);
+    protected final StandardTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 4, this).setFilterFluid(Fluids.WATER).canFill(false);
     protected final TankManager tankManager = new TankManager();
     public static final int TANK_STEAM = 0;
     public static final int TANK_WATER = 1;
@@ -143,10 +144,6 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
 
     public TileSteamTurbine() {
         super(patterns);
-        tankSteam.setFilter(Fluids.STEAM);
-        tankWater.setFilter(Fluids.WATER);
-        tankSteam.setCanDrain(false);
-        tankWater.setCanFill(false);
         tankManager.add(TANK_STEAM, tankSteam); // Steam
         tankManager.add(TANK_WATER, tankWater); // Water
     }

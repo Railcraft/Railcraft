@@ -8,15 +8,15 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
-
-import mods.railcraft.common.fluids.TankManager;
-
 /**
- * Created by CovertJaguar on 9/10/2016 for Railcraft.
+ * Created by CovertJaguar on 12/12/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITileTanks {
-    TankManager getTankManager();
-}
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.common.util.steam;
+
+import mcp.MethodsReturnNonnullByDefault;
+
+import javax.annotation.ParametersAreNonnullByDefault;

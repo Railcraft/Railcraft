@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.crafting.ICokeOvenRecipe;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -43,7 +44,7 @@ import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
-public final class TileCokeOven extends TileMultiBlockOven implements ISidedInventory {
+public final class TileCokeOven extends TileMultiBlockOven implements ISidedInventory, ITileTank {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
@@ -121,6 +122,7 @@ public final class TileCokeOven extends TileMultiBlockOven implements ISidedInve
         }
     }
 
+    @Override
     public TankManager getTankManager() {
         TileCokeOven mBlock = (TileCokeOven) getMasterBlock();
         if (mBlock != null)

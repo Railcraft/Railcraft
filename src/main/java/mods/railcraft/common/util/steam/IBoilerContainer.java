@@ -14,7 +14,6 @@ import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import net.minecraftforge.fluids.FluidStack;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -27,16 +26,19 @@ public interface IBoilerContainer extends ITemperature, INeedsFuel {
     @Nullable
     SteamBoiler getBoiler();
 
-    void explode();
+    void steamExplosion(FluidStack resource);
 
-    default void onFillWater() {
-        SteamBoiler boiler = getBoiler();
-        if (boiler != null && boiler.isSuperHeated() && SteamConstants.BOILERS_EXPLODE) {
-            FluidStack water = boiler.getTankWater().getFluid();
-            if (Fluids.isEmpty(water)) {
-                boiler.setHeat(SteamConstants.SUPER_HEATED - 1);
-                explode();
+    default @Nullable FluidStack onFillWater(@Nullable FluidStack resource) {
+        if (!Fluids.isEmpty(resource)) {
+            SteamBoiler boiler = getBoiler();
+            if (boiler != null && boiler.isSuperHeated()) {
+                FluidStack water = boiler.getTankWater().getFluid();
+                if (Fluids.isEmpty(water)) {
+                    steamExplosion(resource);
+                    return null;
+                }
             }
         }
+        return resource;
     }
 }

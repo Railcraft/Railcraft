@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -38,17 +38,15 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngineSteam extends TileEngine implements ISteamUser, ITileTanks {
+public abstract class TileEngineSteam extends TileEngine implements ISteamUser, ITileTank {
 
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
     public static final int TANK_STEAM = 0;
-    protected final FilteredTank tankSteam;
+    protected final FilteredTank tankSteam = new FilteredTank(TANK_CAPACITY, this).setFilterFluid(Fluids.STEAM);
     protected final TankManager tankManager = new TankManager();
     private int steamUsed;
 
     protected TileEngineSteam() {
-        tankSteam = new FilteredTank(TANK_CAPACITY, this);
-        tankSteam.setFilter(Fluids.STEAM);
         tankManager.add(tankSteam);
     }
 

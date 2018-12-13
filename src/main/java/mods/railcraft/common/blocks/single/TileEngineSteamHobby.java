@@ -66,11 +66,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
         FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
             @Override
             public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
-                onFillWater();
-                return super.fillInternal(resource, doFill);
+                return super.fillInternal(onFillWater(resource), doFill);
             }
-        };
-        tankWater.setFilter(Fluids.WATER);
+        }.setFilterFluid(Fluids.WATER);
         tankManager.add(tankWater);
         tankSteam.setCapacity(4 * FluidTools.BUCKET_VOLUME);
 
@@ -281,7 +279,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public void explode() {
+    public void steamExplosion(FluidStack resource) {
         explode = true;
     }
 

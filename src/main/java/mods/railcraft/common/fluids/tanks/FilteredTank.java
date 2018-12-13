@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,15 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.gui.tooltips.ToolTipLine;
-import mods.railcraft.common.util.misc.Predicates;
-import net.minecraft.tileentity.TileEntity;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -25,44 +21,27 @@ import java.util.function.Supplier;
  */
 public class FilteredTank extends StandardTank {
 
-    private Predicate<@Nullable FluidStack> filter = Predicates.alwaysTrue();
-
     public FilteredTank(int capacity) {
         this(capacity, null);
     }
 
-    public FilteredTank(int capacity, @Nullable TileEntity tile) {
+    public FilteredTank(int capacity, @Nullable ITileTank tile) {
         super(capacity, tile);
     }
 
-    public void setFilter(@Nullable Predicate<@Nullable FluidStack> filter) {
-        this.filter = filter == null ? Predicates.alwaysTrue() : filter;
+    public FilteredTank setFilterFluid(Supplier<Fluid> filter) {
+        this.filter = () -> {
+            Fluid fluid = filter.get();
+            if (fluid == null)
+                return null;
+            return new FluidStack(fluid, 1);
+        };
+        return this;
     }
 
-    public void setFilter(@Nullable Fluids filter) {
-        this.filter = filter == null ? Predicates.alwaysTrue() : filter::is;
-    }
-
-    @Deprecated
-    public void setFilter(@Nullable Supplier<@Nullable Fluid> typeFilter) {
-        this.filter = typeFilter == null ? Predicates.alwaysTrue() : fluidStack -> typeFilter.get() == null || Fluids.areEqual(typeFilter.get(), fluidStack);
-    }
-
-    @Override
-    public boolean matchesFilter(@Nullable FluidStack fluidStack) {
-        return filter.test(fluidStack);
-    }
-
-    @Override
-    protected void refreshTooltip() {
-        toolTip.clear();
-        int amount = getFluidAmount();
-        FluidStack fluidStack = getFluid();
-
-        if (fluidStack != null)
-            toolTip.add(getFluidNameToolTip(fluidStack));
-
-        toolTip.add(new ToolTipLine(String.format("%,d", amount) + " / " + String.format("%,d", getCapacity())));
+    public FilteredTank setFilterFluidStack(Supplier<FluidStack> filter) {
+        this.filter = filter;
+        return this;
     }
 
 }

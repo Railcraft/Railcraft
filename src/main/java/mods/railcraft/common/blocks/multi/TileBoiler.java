@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -41,7 +42,7 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoiler extends TileMultiBlock implements IBoilerContainer {
+public abstract class TileBoiler extends TileMultiBlock implements IBoilerContainer, ITileTank {
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
@@ -94,15 +95,13 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
             @Override
             public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
                 if (!isValidMaster()) return 0;
-                onFillWater();
-                return super.fillInternal(resource, doFill);
+                return super.fillInternal(onFillWater(resource), doFill);
             }
-        };
-        tankWater.setFilter(Fluids.WATER);
+        }.setFilterFluid(Fluids.WATER);
         tankManager.add(tankWater);
 
-        tankSteam = new FilteredTank(16 * FluidTools.BUCKET_VOLUME, this);
-        tankSteam.setFilter(Fluids.STEAM);
+        tankSteam = new FilteredTank(16 * FluidTools.BUCKET_VOLUME, this)
+                .setFilterFluid(Fluids.STEAM);
         tankManager.add(tankSteam);
     }
 
@@ -158,7 +157,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     }
 
     @Override
-    public void explode() {
+    public void steamExplosion(FluidStack resource) {
         explode = true;
     }
 
@@ -204,6 +203,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         return null;
     }
 
+    @Override
     public TankManager getTankManager() {
         TileBoiler mBlock = (TileBoiler) getMasterBlock();
         if (mBlock != null)
@@ -236,7 +236,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
             if (mBlock != null) {
                 StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
                 FluidStack steam = tank.getFluid();
-                if (steam != null && (!mBlock.boiler.isBoiling() || steam.amount >= tank.getCapacity() / 2))
+                if (steam != null && (mBlock.boiler.isCold() || steam.amount >= tank.getCapacity() / 2))
                     mBlock.tankManager.push(tileCache, getOutputFilter(), EnumFacing.VALUES, TANK_STEAM, TRANSFER_RATE);
             }
         }

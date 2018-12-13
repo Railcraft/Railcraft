@@ -140,7 +140,7 @@ public abstract class InvTools {
     }
 
     public static boolean canMerge(ItemStack target, ItemStack source) {
-        return target.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
+        return target.isEmpty() || source.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

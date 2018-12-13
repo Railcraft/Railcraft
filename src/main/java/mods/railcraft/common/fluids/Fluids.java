@@ -23,17 +23,22 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum Fluids {
+public enum Fluids implements Supplier<Fluid> {
 
     WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
     private final String tag;
 
     Fluids() {
         tag = name().toLowerCase(Locale.ROOT);
+    }
+
+    public static boolean areEqual(@Nullable FluidStack fluidStack1, @Nullable FluidStack fluidStack2) {
+        return fluidStack1 != null && fluidStack1.isFluidEqual(fluidStack2);
     }
 
     public static boolean areEqual(@Nullable Fluid fluid, @Nullable FluidStack fluidStack) {
@@ -66,6 +71,7 @@ public enum Fluids {
         return tag;
     }
 
+    @Override
     public @Nullable Fluid get() {
         return FluidRegistry.getFluid(tag);
     }

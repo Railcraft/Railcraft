@@ -9,11 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -33,6 +34,7 @@ public class StandardTank extends FluidTank {
             refreshTooltip();
         }
     };
+    protected @Nullable Supplier<FluidStack> filter;
     private int tankIndex;
     private boolean hidden;
     private @Nullable Consumer<StandardTank> updateCallback;
@@ -41,13 +43,24 @@ public class StandardTank extends FluidTank {
         super(capacity);
     }
 
-    public StandardTank(int capacity, @Nullable TileEntity tile) {
+    public StandardTank(int capacity, @Nullable ITileTank tile) {
         this(capacity);
-        this.tile = tile;
+        this.tile = tile != null ? tile.tile() : null;
     }
 
-    public void setUpdateCallback(@Nullable Consumer<StandardTank> callback) {
+    public StandardTank setUpdateCallback(@Nullable Consumer<StandardTank> callback) {
         this.updateCallback = callback;
+        return this;
+    }
+
+    public StandardTank canDrain(boolean canDrain) {
+        setCanDrain(canDrain);
+        return this;
+    }
+
+    public StandardTank canFill(boolean canFill) {
+        setCanFill(canDrain);
+        return this;
     }
 
     public int getTankIndex() {
@@ -87,6 +100,9 @@ public class StandardTank extends FluidTank {
     }
 
     public boolean matchesFilter(@Nullable FluidStack fluidStack) {
+        if (filter != null) {
+            return Fluids.areEqual(filter.get(), fluidStack);
+        }
         return true;
     }
 
@@ -139,9 +155,13 @@ public class StandardTank extends FluidTank {
         toolTip.clear();
         int amount = getFluidAmount();
         FluidStack fluidStack = getFluid();
-        if (!Fluids.isEmpty(fluidStack)) {
+
+        if (Fluids.isEmpty(fluidStack) && filter != null)
+            fluidStack = filter.get();
+
+        if (!Fluids.isEmpty(fluidStack))
             toolTip.add(getFluidNameToolTip(fluidStack));
-        }
+
         toolTip.add(new ToolTipLine(String.format(Locale.ENGLISH, "%,d / %,d", amount, getCapacity())));
     }
 

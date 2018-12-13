@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.interfaces.ITileTanks;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -47,7 +47,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public abstract class TileSteamTrap extends TileMachineBase implements ISteamUser, ITileRotate, ITileTanks {
+public abstract class TileSteamTrap extends TileMachineBase implements ISteamUser, ITileRotate, ITileTank {
 
     private static final byte JET_TIME = 40;
     private static final byte DAMAGE = 8;
@@ -56,11 +56,9 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     protected boolean powered;
     private byte jet;
     private final TankManager tankManager = new TankManager();
-    private final FilteredTank tank;
+    private final FilteredTank tank = new FilteredTank(FluidTools.BUCKET_VOLUME * 32, this).setFilterFluid(Fluids.STEAM);
 
     protected TileSteamTrap() {
-        tank = new FilteredTank(FluidTools.BUCKET_VOLUME * 32, this);
-        tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
     }
 
