@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,8 +18,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class TileGui extends GuiContainerRailcraft {
     private final RailcraftTileEntity tile;
-    @Nullable
-    private final String name;
+    private final @Nullable String name;
 
     protected TileGui(RailcraftTileEntity tile, RailcraftContainer container, String texture) {
         this(tile, container, texture, null);
