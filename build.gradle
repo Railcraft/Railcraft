@@ -54,6 +54,10 @@ println 'Environment: ' + project.environment
 println '*************************************************************'
 println ''
 
+// Change the 4G in -Xmx4G to your desired max RAM and 4G in -Xms4G to your desired initial RAM
+def optimizedVmArgs = [ '-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M' ]
+def combinedVmArgs = [['-ea'], optimizedVmArgs].flatten()
+
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
     runDir = "run"
@@ -62,6 +66,9 @@ minecraft {
 
     replace '@VERSION@', project.version
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+
+    clientJvmArgs = combinedVmArgs
+    serverJvmArgs = combinedVmArgs
 }
 
 sourceSets {
@@ -142,6 +149,7 @@ processResources {
 }
 
 runClient {
+    // in git bash, do (replace stuff in the <>) ./gradlew runClient -PmcUsername=<your minecraft login email> -PmcPassword=<your minecraft password>
     if (project.hasProperty('mcUsername') && project.hasProperty('mcPassword')) {
         args "--username=${project.mcUsername}"
         args "--password=${project.mcPassword}"
@@ -271,8 +279,6 @@ artifacts {
     archives jar
 }
 
-idea.module.inheritOutputDirs = true
-
 task wrapper(type: Wrapper) {
-    gradleVersion = "4.10.2"
+    gradleVersion = "4.10.3"
 }
