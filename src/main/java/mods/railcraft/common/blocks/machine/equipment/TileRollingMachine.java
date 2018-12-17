@@ -77,7 +77,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, world, getPos());
+        InvTools.spewInventory(inv, world, getPos());
     }
 
     public int getProgress() {
@@ -167,11 +167,11 @@ public abstract class TileRollingMachine extends TileMachineBase {
      * Evenly redistributes items between all the slots.
      */
     private void balanceSlots() {
-        for (IInvSlot slotA : InventoryIterator.getVanilla(craftMatrix)) {
+        for (IInvSlot slotA : InventoryIterator.get(craftMatrix)) {
             ItemStack stackA = slotA.getStack();
             if (InvTools.isEmpty(stackA))
                 continue;
-            for (IInvSlot slotB : InventoryIterator.getVanilla(craftMatrix)) {
+            for (IInvSlot slotB : InventoryIterator.get(craftMatrix)) {
                 if (slotA.getIndex() == slotB.getIndex())
                     continue;
                 ItemStack stackB = slotB.getStack();
@@ -199,7 +199,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return false;
         if (useLast)
             return true;
-        return InventoryIterator.getVanilla(craftMatrix).streamStacks()
+        return InventoryIterator.get(craftMatrix).streamStacks()
                 .filter(InvTools::nonEmpty)
                 .anyMatch(s -> sizeOf(s) > 1);
     }

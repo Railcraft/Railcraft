@@ -11,7 +11,12 @@ package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.items.ActivationBlockingItem;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Annotations;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerProfileCache;
@@ -123,6 +128,17 @@ public final class PlayerPlugin {
 //        }
     }
 
+    public static boolean doesItemBlockActivation(EntityPlayer player, EnumHand hand) {
+        if (player.isSneaking())
+            return false;
+        ItemStack heldItem = player.getHeldItem(hand);
+        if (!InvTools.isEmpty(heldItem)) {
+            return TrackTools.isRailItem(heldItem.getItem())
+                    || Annotations.isAnnotatedDeepSearch(ActivationBlockingItem.class, heldItem.getItem());
+        }
+        return false;
+    }
+
     public static GameProfile fillGameProfile(GameProfile profile) {
         String name = profile.getName();
         UUID id = profile.getId();
@@ -134,5 +150,4 @@ public final class PlayerPlugin {
         GameProfile filled = id == null ? cache.getGameProfileForUsername(name) : cache.getProfileByUUID(id);
         return filled == null ? profile : filled;
     }
-
 }

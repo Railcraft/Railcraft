@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.util.steam;
 import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.widgets.IIndicatorController;
 import mods.railcraft.common.gui.widgets.IndicatorController;
@@ -39,7 +38,7 @@ public class SteamBoiler {
     private RailcraftTileEntity tile;
     private IFuelProvider fuelProvider;
 
-    public SteamBoiler(FilteredTank tankWater, FilteredTank tankSteam) {
+    public SteamBoiler(StandardTank tankWater, StandardTank tankSteam) {
         this.tankWater = tankWater;
         this.tankSteam = tankSteam;
     }
@@ -126,8 +125,8 @@ public class SteamBoiler {
         heat = Math.max(heat, SteamConstants.COLD_TEMP);
     }
 
-    public boolean isBoiling() {
-        return getHeat() >= SteamConstants.BOILING_POINT;
+    public boolean isCold() {
+        return getHeat() < SteamConstants.BOILING_POINT;
     }
 
     public boolean isSuperHeated() {
@@ -147,7 +146,7 @@ public class SteamBoiler {
     }
 
     public int getBurnProgressScaled(int i) {
-        if (!isBoiling())
+        if (isCold())
             return 0;
         int scale = (int) ((burnTime / currentItemBurnTime) * i);
         scale = Math.max(0, scale);
@@ -203,7 +202,7 @@ public class SteamBoiler {
     }
 
     public int convertSteam(int numTanks) {
-        if (!isBoiling())
+        if (isCold())
             return 0;
 
         partialConversions += numTanks * getHeatLevel();

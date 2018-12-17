@@ -18,7 +18,6 @@ import mods.railcraft.common.blocks.machine.manipulator.ManipulatorVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -37,8 +36,7 @@ public class ModuleTrain extends RailcraftModulePayload {
                 MinecraftForge.EVENT_BUS.register(new Object() {
                     @SubscribeEvent(priority = EventPriority.HIGHEST)
                     public void onLinking(CartLinkEvent.Link event) {
-                        EntityMinecart cart = event.getCartOne();
-                        Train.repairTrain(cart, event.getCartTwo());
+                        Train.repairTrain(event.getCartOne(), event.getCartTwo());
                     }
 
                     @SubscribeEvent(priority = EventPriority.HIGHEST)

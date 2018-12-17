@@ -91,7 +91,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
                     player.inventory.setInventorySlotContents(player.inventory.currentItem, InvTools.depleteItem(current));
                     player.inventory.markDirty();
                 }
-                if (Game.isHost(theWorld())) {
+                if (Game.isHost(theWorldAsserted())) {
                     if (isLogicValid())
                         return true;
                 } else
@@ -119,7 +119,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, tile.getWorld(), getTile().getPos());
+        InvTools.spewInventory(inv, tile.getWorld(), getTile().getPos());
     }
 
     @Override

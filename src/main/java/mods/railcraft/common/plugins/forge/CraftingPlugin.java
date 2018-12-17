@@ -340,7 +340,7 @@ public final class CraftingPlugin {
     }
 
     private static final class ResourceLocationGenerator implements Iterator<ResourceLocation> {
-        int now = 0;
+        int now;
 
         ResourceLocationGenerator() {
         }
@@ -468,7 +468,7 @@ public final class CraftingPlugin {
         });
     }
 
-    //TODO fix all these messs
+    //TODO fix all these messes
     private void addShapelessRecipeWaiter(ItemStack stack, Object... args) {
         add(() -> {
         });

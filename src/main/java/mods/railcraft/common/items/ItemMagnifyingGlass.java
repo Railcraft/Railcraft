@@ -11,7 +11,7 @@ package mods.railcraft.common.items;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IOwnable;
-import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
@@ -49,7 +49,8 @@ import java.util.stream.Collectors;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemMagnifyingGlass extends ItemRailcraft implements IActivationBlockingItem {
+@ActivationBlockingItem
+public class ItemMagnifyingGlass extends ItemRailcraft {
 
     private static final String CART_NUMBERING_KEY = "cartNumber";
 

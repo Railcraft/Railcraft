@@ -10,16 +10,10 @@
 
 package mods.railcraft.common.blocks.logbook;
 
-import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
 import mods.railcraft.common.blocks.BlockMetaTile;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.color.EnumColor;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.SoundType;
@@ -123,22 +117,13 @@ public final class BlockLogbook extends BlockContainerRailcraft<TileLogbook> {
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileLogbook)
-            ((TileLogbook) tile).onBlockPlacedBy(state, placer, stack);
+        getTileEntity(state, worldIn, pos).ifPresent(t -> t.onBlockPlacedBy(state, placer, stack));
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking())
+        if (PlayerPlugin.doesItemBlockActivation(player, hand))
             return false;
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (!InvTools.isEmpty(heldItem)) {
-            if (heldItem.getItem() instanceof IActivationBlockingItem)
-                return false;
-            if (TrackTools.isRailItem(heldItem.getItem()))
-                return false;
-        }
         if (Game.isClient(worldIn))
             return true;
         TileEntity tile = WorldPlugin.getBlockTile(worldIn, pos);

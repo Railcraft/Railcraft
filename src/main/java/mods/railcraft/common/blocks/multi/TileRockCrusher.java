@@ -59,8 +59,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     private static final double CRUSHING_POWER_COST_PER_TICK = 160;
     private static final double SUCKING_POWER_COST = 5000;
     private static final double KILLING_POWER_COST = 10000;
-    private static final double MAX_RECEIVE = 5000;
-    private static final double MAX_ENERGY = CRUSHING_POWER_COST_PER_TICK * PROCESS_TIME;
     private static final int[] SLOTS_INPUT = InvTools.buildSlotArray(SLOT_INPUT, 9);
     private static final int[] SLOTS_OUTPUT = InvTools.buildSlotArray(SLOT_OUTPUT, 9);
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
@@ -194,13 +192,13 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
         return false;
     }
 
-    private void useCharge(double amount) {
+    private void useCharge(@SuppressWarnings("SameParameterValue") double amount) {
         if (!isStructureValid())
             return;
         Charge.distribution.network(world).access(getMasterPos()).useCharge(amount);
     }
 
-    private boolean gridHasCapacity(double amount) {
+    private boolean gridHasCapacity(@SuppressWarnings("SameParameterValue") double amount) {
         if (!isStructureValid())
             return false;
         return Charge.distribution.network(world).access(getMasterPos()).hasCapacity(amount);
@@ -241,7 +239,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
                 ItemStack input = InvTools.emptyStack();
                 ICrusherRecipe recipe = null;
-                for (IInvSlot slot : InventoryIterator.getVanilla(invInput)) {
+                for (IInvSlot slot : InventoryIterator.get(invInput)) {
                     input = slot.getStack();
                     if (!InvTools.isEmpty(input)) {
                         recipe = RockCrusherCraftingManager.getInstance().getRecipe(input);

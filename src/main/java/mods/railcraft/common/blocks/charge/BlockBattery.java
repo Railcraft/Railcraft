@@ -15,6 +15,7 @@ import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -35,7 +36,7 @@ import java.util.Map;
  */
 public abstract class BlockBattery extends BlockCharge {
     public static final String RECHARGEABLE_BATTERY_ORE_TAG = "blockChargeBatteryRechargeable";
-    public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().raiseCeiling(0.0625D).build();
+    public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().raiseCeiling(-0.0625D).build();
 
     protected BlockBattery() {
         super(Material.CIRCUITS);
@@ -56,7 +57,8 @@ public abstract class BlockBattery extends BlockCharge {
     @Override
     public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         super.onEntityCollision(world, pos, state, entity);
-        Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.BLOCK, 1F);
+        if (Game.isHost(world))
+            Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.BLOCK, 1F);
     }
 
     @Override

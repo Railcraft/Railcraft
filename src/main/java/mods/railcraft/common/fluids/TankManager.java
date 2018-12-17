@@ -24,8 +24,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -52,10 +52,10 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Override
     public boolean add(StandardTank tank) {
-        boolean added = tanks.add(tank);
+        tanks.add(tank);
         int index = tanks.indexOf(tank);
         tank.setTankIndex(index);
-        return added;
+        return true;
     }
 
     public void writeTanksToNBT(NBTTagCompound data) {
@@ -100,12 +100,7 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
-        for (StandardTank tank : tanks) {
-            int filled = tank.fill(resource, doFill);
-            if (filled > 0)
-                return filled;
-        }
-        return 0;
+        return tanks.stream().mapToInt(tank -> tank.fill(resource, doFill)).filter(filled -> filled > 0).findFirst().orElse(0);
     }
 
     public int fill(int tankIndex, @Nullable FluidStack resource, boolean doFill) {
@@ -115,38 +110,24 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
         return tanks.get(tankIndex).fill(resource, doFill);
     }
 
-    @Nullable
     @Override
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
-        for (StandardTank tank : tanks) {
-            FluidStack fluidStack = tank.drain(resource, doDrain);
-            if (fluidStack != null)
-                return fluidStack;
-        }
-        return null;
+    public @Nullable FluidStack drain(FluidStack resource, boolean doDrain) {
+        return tanks.stream().map(tank -> tank.drain(resource, doDrain)).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    @Nullable
     @Override
-    public FluidStack drain(int maxDrain, boolean doDrain) {
-        for (StandardTank tank : tanks) {
-            FluidStack fluidStack = tank.drain(maxDrain, doDrain);
-            if (fluidStack != null)
-                return fluidStack;
-        }
-        return null;
+    public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
+        return tanks.stream().map(tank -> tank.drain(maxDrain, doDrain)).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    @Nullable
-    public FluidStack drain(int tankIndex, FluidStack resource, boolean doDrain) {
+    public @Nullable FluidStack drain(int tankIndex, FluidStack resource, boolean doDrain) {
         if (tankIndex < 0 || tankIndex >= tanks.size())
             return null;
 
         return tanks.get(tankIndex).drain(resource, doDrain);
     }
 
-    @Nullable
-    public FluidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
+    public @Nullable FluidStack drain(int tankIndex, int maxDrain, boolean doDrain) {
         if (tankIndex < 0 || tankIndex >= tanks.size())
             return null;
 

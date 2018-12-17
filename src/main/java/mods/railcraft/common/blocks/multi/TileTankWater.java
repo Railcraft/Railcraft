@@ -56,7 +56,7 @@ public class TileTankWater extends TileTank {
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
     private static final EnumFacing[] LIQUID_OUTPUTS = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
-    private final FilteredTank tank;
+    private final FilteredTank tank = new FilteredTank(TANK_CAPACITY, this).setFilterFluid(Fluids.WATER);
 
     static {
         char[][][] map = {
@@ -103,8 +103,6 @@ public class TileTankWater extends TileTank {
 
     public TileTankWater() {
         super(2, patterns);
-        tank = new FilteredTank(TANK_CAPACITY, this);
-        tank.setFilter(Fluids.WATER);
         tankManager.add(tank);
     }
 
@@ -200,9 +198,8 @@ public class TileTankWater extends TileTank {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
-        switch (slot) {
-            case SLOT_INPUT:
-                return FluidItemHelper.isRoomInContainer(stack, Fluids.WATER.get()) || FluidItemHelper.containsFluid(stack, Fluids.WATER.get());
+        if (slot == SLOT_INPUT) {
+            return FluidItemHelper.isRoomInContainer(stack, Fluids.WATER.get()) || FluidItemHelper.containsFluid(stack, Fluids.WATER.get());
         }
         return false;
     }

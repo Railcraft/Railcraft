@@ -20,11 +20,11 @@ public class GuiSteamTurbine extends TileGui {
     private final TileSteamTurbine tile;
 
     public GuiSteamTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
-        super(tile, new ContainerTurbine(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_turbine.png");
+        super(tile, new ContainerTurbine(playerInv, tile),
+                RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_turbine.png",
+                LocalizationPlugin.translate("gui.railcraft.steam.turbine"));
         xSize = 176;
         ySize = 140;
-
-        String label = LocalizationPlugin.translate("gui.railcraft.steam.turbine");
         this.tile = tile;
     }
 

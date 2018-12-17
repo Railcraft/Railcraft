@@ -40,6 +40,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
@@ -106,18 +107,6 @@ public abstract class InvTools {
         return stack.toString();
     }
 
-    public static ItemStack makeStack(@Nullable Item item, int qty, int meta) {
-        if (item != null)
-            return new ItemStack(item, qty, meta);
-        return emptyStack();
-    }
-
-    public static ItemStack makeStack(@Nullable Block block, int qty, int meta) {
-        if (block != null)
-            return new ItemStack(block, qty, meta);
-        return emptyStack();
-    }
-
     public static ItemStack makeSafe(@Nullable ItemStack stack) {
         if (isEmpty(stack))
             return emptyStack();
@@ -140,7 +129,7 @@ public abstract class InvTools {
     }
 
     public static boolean canMerge(ItemStack target, ItemStack source) {
-        return target.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
+        return target.isEmpty() || source.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
@@ -178,6 +167,11 @@ public abstract class InvTools {
         lore.appendTag(new NBTTagString(msg));
     }
 
+    /**
+     * Use this for manipulating top level NBT data only.
+     *
+     * In most cases you should use {@link InvToolsAPI#getRailcraftData(ItemStack, boolean)}
+     */
     public static NBTTagCompound getItemData(ItemStack stack) {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt == null) {
@@ -185,37 +179,6 @@ public abstract class InvTools {
             stack.setTagCompound(nbt);
         }
         return nbt;
-    }
-
-    public static void addTagString(ItemStack stack, String key, String value) {
-        NBTTagCompound nbt = getItemData(stack);
-        nbt.setString(key, value);
-    }
-
-    @SuppressWarnings("unused")
-    public static void addTagInt(ItemStack stack, String key, int value) {
-        NBTTagCompound nbt = getItemData(stack);
-        nbt.setInteger(key, value);
-    }
-
-    public static void addTagBoolean(ItemStack stack, String key, boolean value) {
-        NBTTagCompound nbt = getItemData(stack);
-        nbt.setBoolean(key, value);
-    }
-
-    public static boolean getTagBoolean(ItemStack stack, String key) {
-        NBTTagCompound nbt = getItemData(stack);
-        return nbt.getBoolean(key);
-    }
-
-    public static void addTagDouble(ItemStack stack, String key, double value) {
-        NBTTagCompound nbt = getItemData(stack);
-        nbt.setDouble(key, value);
-    }
-
-    public static double getTagDouble(ItemStack stack, String key) {
-        NBTTagCompound nbt = getItemData(stack);
-        return nbt.getDouble(key);
     }
 
     public static ItemStack depleteItem(ItemStack stack) {
@@ -247,19 +210,17 @@ public abstract class InvTools {
         world.spawnEntity(entityItem);
     }
 
-    public static void dropInventory(IInventory inv, World world, BlockPos pos) {
+    public static void spewInventory(IInventory inv, World world, BlockPos pos) {
         if (Game.isClient(world)) return;
-        for (IExtInvSlot slot : InventoryIterator.getVanilla(inv)) {
-            spewItem(slot.getStack(), world, pos);
-            slot.clear();
-        }
+        spewItems(InventoryIterator.get(inv).stream()
+                .map(IExtInvSlot::clear)
+                .filter(InvTools::nonEmpty)
+                .collect(Collectors.toList()), world, pos);
     }
 
-    public static void dropItems(Collection<ItemStack> items, World world, BlockPos pos) {
+    public static void spewItems(Collection<ItemStack> stacks, World world, BlockPos pos) {
         if (Game.isClient(world)) return;
-        for (ItemStack stack : items) {
-            spewItem(stack, world, pos);
-        }
+        stacks.forEach(stack -> spewItem(stack, world, pos));
     }
 
     public static void spewItem(@Nullable ItemStack stack, World world, BlockPos pos) {
@@ -314,24 +275,6 @@ public abstract class InvTools {
         return false;
     }
 
-    public static void validateInventory(IInventory inv, int slot, World world, BlockPos pos, Predicate<ItemStack> canStay) {
-        ItemStack stack = inv.getStackInSlot(slot);
-        if (!isEmpty(stack) && !canStay.test(stack)) {
-            inv.setInventorySlotContents(slot, emptyStack());
-            dropItem(stack, world, pos);
-        }
-    }
-
-    public static void validateInventory(IInventory inv, World world, BlockPos pos) {
-        for (IExtInvSlot slot : InventoryIterator.getVanilla(inv)) {
-            ItemStack stack = slot.getStack();
-            if (!isEmpty(stack) && !inv.isItemValidForSlot(slot.getIndex(), stack)) {
-                slot.clear();
-                dropItem(stack, world, pos);
-            }
-        }
-    }
-
     public static boolean isWildcard(ItemStack stack) {
         return isWildcard(stack.getItemDamage());
     }
@@ -343,14 +286,6 @@ public abstract class InvTools {
     @Contract("_,null->false;")
     public static boolean isItem(ItemStack stack, @Nullable Item item) {
         return !isEmpty(stack) && item != null && stack.getItem() == item;
-    }
-
-    public static boolean isItemClass(ItemStack stack, Class<? extends Item> itemClass) {
-        return !isEmpty(stack) && stack.getItem().getClass() == itemClass;
-    }
-
-    public static boolean extendsItemClass(ItemStack stack, Class<? extends Item> itemClass) {
-        return isEmpty(stack) && itemClass.isAssignableFrom(stack.getItem().getClass());
     }
 
     public static boolean matchesFilter(ItemStack filter, ItemStack stack) {
@@ -501,42 +436,6 @@ public abstract class InvTools {
     public static boolean isItemLessThanOrEqualTo(@Nullable ItemStack stackA, @Nullable ItemStack stackB) {
         return isItemEqual(stackA, stackB) && sizeOf(stackA) <= sizeOf(stackB);
     }
-
-    //    /**
-//     * Removes a up to numItems worth of items from the inventory, not caring
-//     * about what the items are.
-//     *
-//     * @param inv the inventory the inventory
-//     * @param numItems the number of items
-//     * @return the items removed
-//     */
-//    public static ItemStack[] removeItems(IInventory inv, int numItems) {
-////        if (inv instanceof ISpecialInventory)
-////            return ((ISpecialInventory) inv).extractItem(true, null, numItems);
-//        StandaloneInventory output = new StandaloneInventory(27);
-//        for (int i = 0; i < inv.getSizeInventory(); i++) {
-//            if (numItems <= 0)
-//                break;
-//            ItemStack slot = inv.getStackInSlot(i);
-//            if (slot == null)
-//                continue;
-//            ItemStack removed = inv.decrStackSize(i, numItems);
-//            numItems -= removed.stackSize;
-//            ItemStack remainder = moveItemStack(removed, output);
-//            if (remainder != null) {
-//                moveItemStack(remainder, inv);
-//                numItems += remainder.stackSize;
-//                break;
-//            }
-//        }
-//
-//        List<ItemStack> list = new LinkedList<ItemStack>();
-//        for (ItemStack stack : output.getContents()) {
-//            if (stack != null)
-//                list.add(stack);
-//        }
-//        return list.toArray(new ItemStack[0]);
-//    }
 
     public static void writeInvToNBT(IInventory inv, String tag, NBTTagCompound data) {
         NBTTagList list = new NBTTagList();

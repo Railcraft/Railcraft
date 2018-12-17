@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.common.fluids.tanks;
 
 import mods.railcraft.api.fuel.FluidFuelManager;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.Fluids;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BoilerFuelTank extends StandardTank {
 
-    public BoilerFuelTank(int capacity, TileEntity tile) {
+    public BoilerFuelTank(int capacity, ITileTank tile) {
         super(capacity, tile);
     }
 

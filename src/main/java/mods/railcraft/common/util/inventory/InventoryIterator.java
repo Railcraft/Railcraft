@@ -23,13 +23,13 @@ import java.util.stream.Stream;
  */
 public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<T> {
 
-    public static InventoryIterator<IExtInvSlot> getVanilla(IInventory inv) {
+    public static InventoryIterator<IExtInvSlot> get(IInventory inv) {
         if (inv instanceof ISidedInventory)
             return new SidedInventoryIterator((ISidedInventory) inv);
         return new StandardInventoryIterator(inv);
     }
 
-    public static InventoryIterator<IInvSlot> getForge(IItemHandler inv) {
+    public static InventoryIterator<IInvSlot> get(IItemHandler inv) {
         return new ItemHandlerInventoryIterator(inv);
     }
 
@@ -43,6 +43,8 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
             return new ItemHandlerInventoryIterator((IItemHandler) inv.getBackingObject());
         throw new IllegalArgumentException("Invalid Inventory Object");
     }
+
+    public abstract T slot(int index);
 
     public Stream<T> stream() {
         return Streams.stream(this);

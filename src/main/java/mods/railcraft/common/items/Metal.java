@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -99,9 +99,8 @@ public enum Metal implements IVariantEnum {
         plateFilter = StackFilters.ofOreType("plate" + oreSuffix);
     }
 
-    @Nullable
     @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
+    public @Nullable Object getAlternate(IRailcraftRecipeIngredient container) {
         Form form = Form.containerMap.inverse().get(container);
         return form != null ? form.getOreDictTag(this) : null;
     }
@@ -123,8 +122,7 @@ public enum Metal implements IVariantEnum {
         return form.getStack(this, qty);
     }
 
-    @Nullable
-    public IBlockState getState(Form form) {
+    public @Nullable IBlockState getState(Form form) {
         return form.getState(this);
     }
 
@@ -133,10 +131,10 @@ public enum Metal implements IVariantEnum {
             @Override
             public ItemStack getStack(Metal metal, int qty) {
                 switch (metal) {
-                    case GOLD:
-                        return new ItemStack(Items.GOLD_NUGGET, qty);
                     case IRON:
                         return new ItemStack(Items.IRON_NUGGET, qty);
+                    case GOLD:
+                        return new ItemStack(Items.GOLD_NUGGET, qty);
                 }
                 return super.getStack(metal, qty);
             }
@@ -156,9 +154,8 @@ public enum Metal implements IVariantEnum {
         PLATE("plate", RailcraftItems.PLATE) {
         },
         BLOCK("block", RailcraftBlocks.METAL, blockMap) {
-            @Nullable
             @Override
-            public IBlockState getState(Metal metal) {
+            public @Nullable IBlockState getState(Metal metal) {
                 switch (metal) {
                     case IRON:
                         return Blocks.IRON_BLOCK.getDefaultState();
@@ -180,9 +177,8 @@ public enum Metal implements IVariantEnum {
             }
         },
         ORE("ore", RailcraftBlocks.ORE_METAL, oreMap) {
-            @Nullable
             @Override
-            public IBlockState getState(Metal metal) {
+            public @Nullable IBlockState getState(Metal metal) {
                 switch (metal) {
                     case IRON:
                         return Blocks.IRON_ORE.getDefaultState();
@@ -211,7 +207,7 @@ public enum Metal implements IVariantEnum {
         POOR_ORE("orePoor", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
         };
         static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
-        public static Form[] VALUES = values();
+        public static final Form[] VALUES = values();
         final String orePrefix;
         protected final IRailcraftObjectContainer<?> container;
         private final BiMap<Metal, IVariantEnum> variantMap;
@@ -232,20 +228,17 @@ public enum Metal implements IVariantEnum {
             this.variantMap = variantMap;
         }
 
-        @Nullable
-        public String getOreDictTag(Metal metal) {
+        public @Nullable String getOreDictTag(Metal metal) {
             return metal.getOreTag(this);
         }
 
-        @Nullable
-        public IVariantEnum getVariantObject(Metal metal) {
+        public @Nullable IVariantEnum getVariantObject(Metal metal) {
             if (variantMap != null)
                 return variantMap.get(metal);
             return metal;
         }
 
-        @Nullable
-        public IBlockState getState(Metal metal) {
+        public @Nullable IBlockState getState(Metal metal) {
             IVariantEnum variant = getVariantObject(metal);
             if (variant != null && container instanceof IRailcraftBlockContainer)
                 return ((IRailcraftBlockContainer) container).getState(variant);

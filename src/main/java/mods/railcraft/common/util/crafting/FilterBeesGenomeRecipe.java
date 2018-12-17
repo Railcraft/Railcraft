@@ -15,11 +15,10 @@ import mods.railcraft.common.items.ItemFilterBeeGenome;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.IInvSlot;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
-import mods.railcraft.common.util.inventory.InventoryComposite;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -36,9 +35,9 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FilterBeesGenomeRecipe extends BaseRecipe {
-    private static Predicate<ItemStack> FILTER = StackFilters.of(ItemFilterBeeGenome.class);
-    private static Predicate<ItemStack> BEE = s -> ForestryPlugin.instance().isAnalyzedBee(s);
-    private static char[] MAP = {
+    private static final Predicate<ItemStack> FILTER = StackFilters.of(ItemFilterBeeGenome.class);
+    private static final Predicate<ItemStack> BEE = s -> ForestryPlugin.instance().isAnalyzedBee(s);
+    private static final char[] MAP = {
             '_', 'B', '_',
             'B', 'F', 'B',
             '_', '_', '_'
@@ -52,7 +51,7 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
     public boolean matches(InventoryCrafting grid, @Nullable World world) {
         if (grid.getSizeInventory() < 9)
             return false;
-        for (IInvSlot slot : InventoryIterator.getVanilla(grid)) {
+        for (IInvSlot slot : InventoryIterator.get(grid)) {
             char slotTarget = MAP[slot.getIndex()];
             switch (slotTarget) {
                 case '_':
@@ -76,7 +75,6 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
     public ItemStack getCraftingResult(InventoryCrafting grid) {
         if (!matches(grid, null))
             return InvTools.emptyStack();
-        InventoryComposite inv = InventoryComposite.of(grid);
         ItemStack filter = grid.getStackInRowAndColumn(1, 1);
         ItemStack type = grid.getStackInRowAndColumn(1, 0);
         ItemStack active = grid.getStackInRowAndColumn(0, 1);
@@ -86,7 +84,7 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
             return InvTools.emptyStack();
 
         try {
-            EnumBeeType beeType = BeeManager.beeRoot.getType(type);
+            EnumBeeType beeType = BeeManager.beeRoot != null ? BeeManager.beeRoot.getType(type) : null;
             String typeName = "";
             if (beeType != null)
                 typeName = beeType.name();

@@ -86,7 +86,7 @@ public class TileRollingMachinePowered extends TileRollingMachine implements ISi
     @Override
     protected void findMoreStuff() {
         IInventoryComposite chests = cache.getAdjacentInventories();
-        for (IInvSlot slot : InventoryIterator.getVanilla(craftMatrix)) {
+        for (IInvSlot slot : InventoryIterator.get(craftMatrix)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && stack.isStackable() && sizeOf(stack) == 1) {
                 ItemStack request = chests.removeOneItem(StackFilters.of(stack));

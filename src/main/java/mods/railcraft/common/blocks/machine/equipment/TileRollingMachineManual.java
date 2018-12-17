@@ -31,7 +31,7 @@ public class TileRollingMachineManual extends TileRollingMachine {
 
     @Override
     public void onGuiClosed(EntityPlayer player) {
-        InventoryIterator.getVanilla(getInventory()).stream()
+        InventoryIterator.get(getInventory()).stream()
                 .filter(IInvSlot::hasStack)
                 .forEach(slot -> {
                     ItemStack stack = slot.getStack();

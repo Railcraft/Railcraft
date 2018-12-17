@@ -34,7 +34,7 @@ import java.util.List;
 public class TileDetector extends RailcraftTickingTileEntity implements IGuiReturnHandler, ITileRouting {
 
     public static final float SENSITIVITY = 0.2f;
-    public int powerState;
+    private int powerState;
 
     public Detector detector = Detector.DUMMY;
     //    private boolean tested;
@@ -177,5 +177,9 @@ public class TileDetector extends RailcraftTickingTileEntity implements IGuiRetu
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
         return oldState.getBlock() != newState.getBlock();
+    }
+
+    public int getPowerState() {
+        return powerState;
     }
 }
