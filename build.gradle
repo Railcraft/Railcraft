@@ -55,8 +55,9 @@ println '*************************************************************'
 println ''
 
 // Change the 4G in -Xmx4G to your desired max RAM and 4G in -Xms4G to your desired initial RAM
-def optimizedVmArgs = [ '-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M' ]
-def combinedVmArgs = [['-ea'], optimizedVmArgs].flatten()
+def optimizedVmArgs = ['-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M']
+def assertionVmArgs = ['-ea:mods.railcraft...', '-ea:net.minecraft...', '-ea:net.minecraftforge...']
+def combinedVmArgs = [assertionVmArgs, optimizedVmArgs].flatten()
 
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
