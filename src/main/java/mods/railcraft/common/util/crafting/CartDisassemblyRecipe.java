@@ -42,7 +42,7 @@ public class CartDisassemblyRecipe extends BaseRecipe {
     public boolean matches(InventoryCrafting grid, World worldIn) {
         int itemCount = 0;
         boolean foundCart = false;
-        for (IInvSlot slot : InventoryIterator.getVanilla(grid)) {
+        for (IInvSlot slot : InventoryIterator.get(grid)) {
             if (slot.hasStack()) {
                 if (slot.containsItem(fullCart))
                     foundCart = true;
@@ -72,7 +72,7 @@ public class CartDisassemblyRecipe extends BaseRecipe {
         ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
         Arrays.fill(grid, ItemStack.EMPTY);
 
-        for (IInvSlot slot : InventoryIterator.getVanilla(inv)) {
+        for (IInvSlot slot : InventoryIterator.get(inv)) {
             if (slot.containsItem(fullCart))
                 grid[slot.getIndex()] = new ItemStack(emptyCart);
         }

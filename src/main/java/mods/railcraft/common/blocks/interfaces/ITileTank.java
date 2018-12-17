@@ -8,21 +8,15 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.misc;
+package mods.railcraft.common.blocks.interfaces;
+
+import mods.railcraft.common.fluids.TankManager;
 
 /**
- * Created by CovertJaguar on 11/28/2018 for Railcraft.
+ * Created by CovertJaguar on 12/12/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class Code {
-    public static <C> C cast(Object o) throws ClassCastException {
-        //noinspection unchecked
-        return (C) o;
-    }
-
-    public static void assertInstance(Class<?> clazz, Object obj) {
-        if (!clazz.isInstance(obj))
-            throw new AssertionError("Object not instance of " + clazz.getSimpleName());
-    }
+public interface ITileTank extends ITile {
+    TankManager getTankManager();
 }

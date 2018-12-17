@@ -120,11 +120,6 @@ public final class CartTools {
         return Math.abs(cart.motionX) < vel && Math.abs(cart.motionZ) < vel;
     }
 
-    public static List<EntityMinecart> getMinecartsIn(World world, AxisAlignedBB searchBox) {
-        List<EntityMinecart> entities = world.getEntitiesWithinAABB(EntityMinecart.class, searchBox);
-        return entities.stream().filter(cart -> !cart.isDead).collect(Collectors.toList());
-    }
-
     public static List<UUID> getMinecartUUIDsAt(World world, BlockPos pos, float sensitivity) {
         return getMinecartUUIDsAt(world, pos.getX(), pos.getY(), pos.getZ(), sensitivity);
     }

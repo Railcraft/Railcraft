@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
@@ -57,7 +58,7 @@ import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
 import static net.minecraft.util.EnumFacing.*;
 
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "BuildCraftAPI|statements")
-public final class TileSteamOven extends TileMultiBlockOven implements ISidedInventory, ISteamUser, ITileRotate {
+public final class TileSteamOven extends TileMultiBlockOven implements ISidedInventory, ISteamUser, ITileRotate, ITileTank {
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
@@ -69,7 +70,7 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
     private final TankManager tankManager = new TankManager();
-    private final FilteredTank tank;
+    private final FilteredTank tank = new FilteredTank(TANK_CAPACITY, this).setFilterFluid(Fluids.STEAM);
     private final InventoryMapper invInput = InventoryMapper.make(this, SLOT_INPUT, 9);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9).ignoreItemChecks();
 
@@ -109,8 +110,6 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
 
     public TileSteamOven() {
         super(18, patterns);
-        tank = new FilteredTank(TANK_CAPACITY, this);
-        tank.setFilter(Fluids.STEAM);
         tankManager.add(tank);
     }
 
@@ -130,6 +129,7 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
         }
     }
 
+    @Override
     public TankManager getTankManager() {
         TileSteamOven mBlock = (TileSteamOven) getMasterBlock();
         if (mBlock != null)
@@ -209,7 +209,7 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
     }
 
     private boolean hasRecipe() {
-        for (IExtInvSlot slot : InventoryIterator.getVanilla(invInput)) {
+        for (IExtInvSlot slot : InventoryIterator.get(invInput)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && !InvTools.isEmpty(FurnaceRecipes.instance().getSmeltingResult(stack)))
                 return true;

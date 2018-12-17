@@ -71,7 +71,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
                 return true;
             UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
             FluidStack fluidStack;
-            return uBucket != null && InvTools.extendsItemClass(stack, UniversalBucket.class) && (fluidStack = uBucket.getFluid(stack)) != null && fluidStack.amount <= 0;
+            return uBucket != null && StackFilters.of(UniversalBucket.class).test(stack) && (fluidStack = uBucket.getFluid(stack)) != null && fluidStack.amount <= 0;
         }
 
     },

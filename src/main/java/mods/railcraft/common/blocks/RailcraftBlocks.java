@@ -136,7 +136,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     TRACK_FORCE("track_force", BlockTrackForce.class, ItemTrack::new),
     TRACK_OUTFITTED("track_outfitted", BlockTrackOutfitted.class, ItemTrackOutfitted::new),
     WALL("wall", BlockRailcraftWall.class, ItemMaterial::new),
-    WIRE("wire", BlockWire.class, ItemBlockRailcraft::new),
+    WIRE("wire", BlockWire.class, ItemWire::new),
     WORLD_LOGIC("worldlogic", BlockWorldLogic.class, ItemBlockRailcraft::new),
     WORLDSPIKE("worldspike", BlockWorldspike.class, ItemWorldspike::new),
     WORLDSPIKE_POINT("worldspike_point", BlockWorldspikePoint.class, ItemBlockRailcraft::new),

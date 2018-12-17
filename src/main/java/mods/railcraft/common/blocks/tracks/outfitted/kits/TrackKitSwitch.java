@@ -90,7 +90,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         if (lockingCarts.contains(cart.getPersistentID()))
             return false; // Carts at the locking entrance always are on locked tracks
 
-        boolean sameTrain = Train.forServer(cart).getUUIDs().contains(currentCart);
+        boolean sameTrain = Train.get(cart).map(t -> t.contains(currentCart)).orElse(false);
 
         boolean shouldSwitch = (switchDevice != null) && switchDevice.shouldSwitch(cart);
 

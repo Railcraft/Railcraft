@@ -9,11 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.manipulator;
 
+import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -36,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-public abstract class TileFluidManipulator extends TileManipulatorCart implements ISidedInventory {
+public abstract class TileFluidManipulator extends TileManipulatorCart implements ISidedInventory, ITileTank {
 
     protected static final int SLOT_INPUT = 0;
     protected static final int SLOT_PROCESSING = 1;
@@ -48,15 +50,15 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 //        protected final IInventory invInput = new InventoryMapper(this, SLOT_PROCESSING, 1);
 //        protected final IInventory invInput = new InventoryMapper(this, SLOT_OUTPUT, 1);
     protected final TankManager tankManager = new TankManager();
-    protected final FilteredTank tank = new FilteredTank(CAPACITY, this);
+    protected final StandardTank tank = new FilteredTank(CAPACITY, this).setFilterFluidStack(this::getFilterFluid);
     private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
     protected TileFluidManipulator() {
         setInventorySize(3);
         tankManager.add(tank);
-        tank.setFilter(fluidStack -> FluidTools.matches(getFilterFluid(), fluidStack));
     }
 
+    @Override
     public TankManager getTankManager() {
         return tankManager;
     }
@@ -113,10 +115,9 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        switch (slot) {
-            case SLOT_INPUT:
-                FluidStack filter;
-                return FluidItemHelper.isContainer(stack) && (FluidItemHelper.isEmptyContainer(stack) || (filter = getFilterFluid()) == null || FluidItemHelper.containsFluid(stack, filter));
+        if (slot == SLOT_INPUT) {
+            FluidStack filter;
+            return FluidItemHelper.isContainer(stack) && (FluidItemHelper.isEmptyContainer(stack) || (filter = getFilterFluid()) == null || FluidItemHelper.containsFluid(stack, filter));
         }
         return false;
     }

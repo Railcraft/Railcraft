@@ -28,7 +28,6 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -37,8 +36,8 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.StringUtils;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ import java.util.List;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
-    private static String WILDCARD = "item.railcraft.filter.bee.genome.tips.wildcard";
+    private static final String WILDCARD = "item.railcraft.filter.bee.genome.tips.wildcard";
 
     @Override
     public void finalizeDefinition() {
@@ -55,48 +54,47 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
     }
 
     public static ItemStack setBeeFilter(ItemStack filter, String type, @Nullable ItemStack active, @Nullable ItemStack inactive) {
-        filter = filter.copy();
-        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(filter, "filter", true);
-        nbt.setString("type", type);
-        NBTPlugin.writeItemStack(nbt, "active", active);
-        NBTPlugin.writeItemStack(nbt, "inactive", inactive);
-        InvToolsAPI.setItemDataRailcraft(filter, "filter", nbt);
+        ItemStack f = filter.copy();
+        InvToolsAPI.getRailcraftDataSubtag(filter, "filter", true).ifPresent(nbt -> {
+            nbt.setString("type", type);
+            NBTPlugin.writeItemStack(nbt, "active", active);
+            NBTPlugin.writeItemStack(nbt, "inactive", inactive);
+            InvToolsAPI.setRailcraftDataSubtag(f, "filter", nbt);
+        });
         return filter;
     }
 
-    @Nullable
     public static BeeFilter getBeeFilter(ItemStack stack) {
-        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "filter");
-        if (nbt != null) {
-            try {
-                String typeName = nbt.getString("type");
-                EnumBeeType type = null;
-                try {
-                    type = EnumBeeType.valueOf(typeName);
-                } catch (IllegalArgumentException ignored) {
-                }
+        return InvToolsAPI.getRailcraftDataSubtag(stack, "filter")
+                .map(nbt -> {
+                    try {
+                        String typeName = nbt.getString("type");
+                        EnumBeeType type = null;
+                        try {
+                            type = EnumBeeType.valueOf(typeName);
+                        } catch (IllegalArgumentException ignored) {
+                        }
 
-                EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;
-                try {
-                    chromosome = EnumBeeChromosome.valueOf(nbt.getString("chromosome"));
-                } catch (IllegalArgumentException ignored) {
-                }
+                        EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;
+                        try {
+                            chromosome = EnumBeeChromosome.valueOf(nbt.getString("chromosome"));
+                        } catch (IllegalArgumentException ignored) {
+                        }
 
-                ItemStack active = NBTPlugin.readItemStack(nbt, "active");
-                ItemStack inactive = NBTPlugin.readItemStack(nbt, "inactive");
-                return new BeeFilter(type, chromosome, active, inactive);
-            } catch (Throwable ignored) {
-            }
-        }
-        return new BeeFilter(null, EnumBeeChromosome.SPECIES, null, null);
+                        ItemStack active = NBTPlugin.readItemStack(nbt, "active");
+                        ItemStack inactive = NBTPlugin.readItemStack(nbt, "inactive");
+                        return new BeeFilter(type, chromosome, active, inactive);
+                    } catch (Throwable ignored) {
+                    }
+                    return null;
+                }).orElseGet(() -> new BeeFilter(null, EnumBeeChromosome.SPECIES, null, null));
     }
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, "filter");
-        if (nbt != null) {
+        InvToolsAPI.getRailcraftDataSubtag(stack, "filter").ifPresent(nbt -> {
             try {
                 EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;
                 try {
@@ -108,15 +106,14 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
             } catch (Throwable throwable) {
                 Game.logErrorAPI(Mod.FORESTRY.modId, throwable, EnumBeeChromosome.class);
             }
-        }
+        });
         return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
     }
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     @Override
     public boolean matches(ItemStack matcher, ItemStack target) {
-        BeeFilter beeFilter = getBeeFilter(matcher);
-        return beeFilter != null && beeFilter.matches(target);
+        return getBeeFilter(matcher).matches(target);
     }
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
@@ -126,36 +123,34 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
         super.addInformation(stack, player, info, adv);
         try {
             BeeFilter beeFilter = getBeeFilter(stack);
-            if (beeFilter != null) {
 
-                info.add(tr("item.railcraft.filter.bee.genome.tips.type",
-                        tr(translateType(beeFilter.type))));
+            info.add(tr("item.railcraft.filter.bee.genome.tips.type",
+                    tr(translateType(beeFilter.type))));
 
-                info.add(tr("item.railcraft.filter.bee.genome.tips.chromosome",
-                        tr(translateChromosome(beeFilter.chromosome))));
+            info.add(tr("item.railcraft.filter.bee.genome.tips.chromosome",
+                    tr(translateChromosome(beeFilter.chromosome))));
 
-                String active;
-                if (beeFilter.active != null) {
-                    IAllele allele = beeFilter.getActiveChromosome(beeFilter.active);
-                    if (allele != null)
-                        active = StringUtils.capitalize(allele.getAlleleName());
-                    else
-                        active = wildcard();
-                } else
+            String active;
+            if (beeFilter.active != null) {
+                IAllele allele = beeFilter.getActiveChromosome(beeFilter.active);
+                if (allele != null)
+                    active = StringUtils.capitalize(allele.getAlleleName());
+                else
                     active = wildcard();
-                info.add(tr("item.railcraft.filter.bee.genome.tips.active", active));
+            } else
+                active = wildcard();
+            info.add(tr("item.railcraft.filter.bee.genome.tips.active", active));
 
-                String inactive;
-                if (beeFilter.inactive != null) {
-                    IAllele allele = beeFilter.getInactiveChromosome(beeFilter.inactive);
-                    if (allele != null)
-                        inactive = StringUtils.capitalize(allele.getName());
-                    else
-                        inactive = wildcard();
-                } else
+            String inactive;
+            if (beeFilter.inactive != null) {
+                IAllele allele = beeFilter.getInactiveChromosome(beeFilter.inactive);
+                if (allele != null)
+                    inactive = StringUtils.capitalize(allele.getAlleleName());
+                else
                     inactive = wildcard();
-                info.add(tr("item.railcraft.filter.bee.genome.tips.inactive", inactive));
-            }
+            } else
+                inactive = wildcard();
+            info.add(tr("item.railcraft.filter.bee.genome.tips.inactive", inactive));
         } catch (Throwable throwable) {
             Game.logErrorAPI(Mod.FORESTRY.modId, throwable, BeeManager.class);
         }
@@ -231,6 +226,8 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
 
         @Nullable
         IAllele getActiveChromosome(ItemStack stack) {
+            if (BeeManager.beeRoot == null)
+                return null;
             if (!InvTools.isEmpty(stack)) {
                 IBee bee = BeeManager.beeRoot.getMember(stack);
                 if (bee != null)
@@ -241,6 +238,8 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
 
         @Nullable
         IAllele getInactiveChromosome(ItemStack stack) {
+            if (BeeManager.beeRoot == null)
+                return null;
             if (!InvTools.isEmpty(stack)) {
                 IBee bee = BeeManager.beeRoot.getMember(stack);
                 if (bee != null)
@@ -254,6 +253,8 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
                 if (!ForestryPlugin.instance().isAnalyzedBee(bee))
                     return false;
                 if (type != null) {
+                    if (BeeManager.beeRoot == null)
+                        return false;
                     EnumBeeType beeType = BeeManager.beeRoot.getType(bee);
                     if (type != beeType)
                         return false;

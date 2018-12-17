@@ -8,15 +8,19 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.interfaces;
+package mods.railcraft.common.blocks.charge;
 
-import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.api.items.ActivationBlockingItem;
+import mods.railcraft.common.blocks.ItemBlockRailcraft;
 
 /**
- * Created by CovertJaguar on 9/10/2016 for Railcraft.
+ * Created by CovertJaguar on 12/16/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITileTanks {
-    TankManager getTankManager();
+@ActivationBlockingItem
+public class ItemWire extends ItemBlockRailcraft<BlockWire> {
+    public ItemWire(BlockWire block) {
+        super(block);
+    }
 }

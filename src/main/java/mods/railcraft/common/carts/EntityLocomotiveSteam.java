@@ -15,6 +15,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
@@ -53,9 +54,17 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
     public final SteamBoiler boiler;
-    protected final FilteredTank tankWater;
+    protected final StandardTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
+        @Override
+        public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
+            return super.fillInternal(onFillWater(resource), doFill);
+        }
+    }.setFilterFluid(Fluids.WATER);
     @SuppressWarnings("WeakerAccess")
-    protected final FilteredTank tankSteam;
+    protected final StandardTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16)
+            .setFilterFluid(Fluids.STEAM)
+            .canDrain(false)
+            .canFill(false);
     @SuppressWarnings("WeakerAccess")
     protected final InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
@@ -75,20 +84,6 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 
     {
         setMaxReverseSpeed(LocoSpeed.SLOWEST);
-
-        tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
-            @Override
-            public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
-                onFillWater();
-                return super.fillInternal(resource, doFill);
-            }
-        };
-        tankWater.setFilter(Fluids.WATER);
-
-        tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16);
-        tankSteam.setFilter(Fluids.STEAM);
-        tankSteam.setCanDrain(false);
-        tankSteam.setCanFill(false);
 
         tankManager.add(tankWater);
         tankManager.add(tankSteam);
@@ -255,6 +250,11 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 
     @Override
     public void setFilling(boolean filling) {
+    }
+
+    @Override
+    public void steamExplosion(FluidStack resource) {
+        explode();
     }
 }
 

@@ -10,7 +10,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.charge.*;
-import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -44,7 +44,8 @@ import java.util.Locale;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemChargeMeter extends ItemRailcraft implements IActivationBlockingItem {
+@ActivationBlockingItem
+public class ItemChargeMeter extends ItemRailcraft {
     private static final DecimalFormat chargeFormatter = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
     private static final int SECONDS_TO_RECORD = 5;
 

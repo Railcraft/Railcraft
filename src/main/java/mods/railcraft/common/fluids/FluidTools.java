@@ -53,12 +53,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({"WeakerAccess"})
 public final class FluidTools {
     public static final int BUCKET_FILL_TIME = 8;
     public static final int NETWORK_UPDATE_INTERVAL = 128;
@@ -84,16 +82,6 @@ public final class FluidTools {
         if (fluidStack == null)
             return "null";
         return fluidStack.amount + "x" + fluidStack.getFluid().getName();
-    }
-
-    /**
-     * Forge is too picking here. So no {@link InvTools#isEmpty(ItemStack)} here.
-     *
-     * @param stack The stack to check
-     * @return True if the liquid failed to drains/fill
-     */
-    public static boolean isFailed(@Nullable ItemStack stack) {
-        return stack == null;
     }
 
     public static @Nullable IFluidHandler getFluidHandler(ICapabilityProvider object) {
@@ -154,7 +142,7 @@ public final class FluidTools {
      */
     public static ProcessState processContainer(IInventory inv, StandardTank tank, boolean defaultToFill, ProcessState state) {
         ItemStack container = inv.getStackInSlot(1);
-        if (isEmpty(container) || FluidUtil.getFluidHandler(container) == null) {
+        if (InvTools.isEmpty(container) || FluidUtil.getFluidHandler(container) == null) {
             sendToProcessing(inv);
             return ProcessState.RESET;
         }
@@ -203,7 +191,7 @@ public final class FluidTools {
     public static boolean processContainers(IFluidHandler fluidHandler, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill, boolean processFilled, boolean processEmpty) {
         ItemStack input = inv.getStackInSlot(inputSlot);
 
-        if (isEmpty(input))
+        if (InvTools.isEmpty(input))
             return false;
 
         if (processFilled && drainContainers(fluidHandler, inv, inputSlot, outputSlot))
@@ -218,7 +206,7 @@ public final class FluidTools {
     public static boolean fillContainers(IFluidHandler source, IInventory inv, int inputSlot, int outputSlot, @Nullable Fluid fluidToFill) {
         ItemStack input = inv.getStackInSlot(inputSlot);
         //need an empty container
-        if (isEmpty(input))
+        if (InvTools.isEmpty(input))
             return false;
         ItemStack output = inv.getStackInSlot(outputSlot);
         FluidActionResult container = FluidUtil.tryFillContainer(input, source, BUCKET_VOLUME, null, false);
@@ -226,13 +214,13 @@ public final class FluidTools {
         if (!container.isSuccess())
             return false;
         //check filled fluid type
-        if (fluidToFill != null && !isEmpty(container.getResult())) {
+        if (fluidToFill != null && !InvTools.isEmpty(container.getResult())) {
             FluidStack fluidStack = FluidUtil.getFluidContained(container.getResult());
             if (fluidStack != null && fluidStack.getFluid() != fluidToFill)
                 return false;
         }
         //check place for container
-        if (!hasPlaceToPutContainer(output, container.getResult()))
+        if (!InvTools.canMerge(output, container.getResult()))
             return false;
         //do actual things here
         container = FluidUtil.tryFillContainer(input, source, BUCKET_VOLUME, null, true);
@@ -244,7 +232,7 @@ public final class FluidTools {
     public static boolean drainContainers(IFluidHandler dest, IInventory inv, int inputSlot, int outputSlot) {
         ItemStack input = inv.getStackInSlot(inputSlot);
         //need a valid container
-        if (isEmpty(input))
+        if (InvTools.isEmpty(input))
             return false;
         ItemStack output = inv.getStackInSlot(outputSlot);
         FluidActionResult container = FluidUtil.tryEmptyContainer(input, dest, BUCKET_VOLUME, null, false);
@@ -252,17 +240,12 @@ public final class FluidTools {
         if (!container.isSuccess())
             return false;
         //check place for container
-        if (!hasPlaceToPutContainer(output, container.getResult()))
+        if (!InvTools.canMerge(output, container.getResult()))
             return false;
         //do actual things here
         container = FluidUtil.tryEmptyContainer(input, dest, BUCKET_VOLUME, null, true);
         storeContainer(inv, inputSlot, outputSlot, container.getResult());
         return true;
-    }
-
-    @Deprecated
-    private static boolean hasPlaceToPutContainer(ItemStack output, ItemStack container) {
-        return isEmpty(output) || isEmpty(container) || output.getCount() < output.getMaxStackSize() && InvTools.isItemEqual(container, output);
     }
 
     /**
@@ -271,12 +254,12 @@ public final class FluidTools {
      */
     @Deprecated
     private static void storeContainer(IInventory inv, int inputSlot, int outputSlot, @Nullable ItemStack container) {
-        if (isEmpty(container)) {
+        if (InvTools.isEmpty(container)) {
             inv.decrStackSize(inputSlot, 1);
             return;
         }
         ItemStack output = inv.getStackInSlot(outputSlot);
-        if (isEmpty(output))
+        if (InvTools.isEmpty(output))
             inv.setInventorySlotContents(outputSlot, container);
         else
             InvTools.inc(output);

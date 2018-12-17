@@ -31,7 +31,7 @@ public class InventoryCopy extends InvWrapperBase {
     public InventoryCopy(IInventory original) {
         super(original);
         this.copy = new InventoryAdvanced(original.getSizeInventory());
-        for (IInvSlot slot : InventoryIterator.getVanilla(original)) {
+        for (IInvSlot slot : InventoryIterator.get(original)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack)) {
                 copy.setInventorySlotContents(slot.getIndex(), stack.copy());

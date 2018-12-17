@@ -44,6 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
@@ -65,6 +66,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
         return RailcraftItems.FIRESTONE_REFINED.getStack(1, CHARGES - 1);
     }
 
+    @SuppressWarnings("unused")
+    // Seriously Intellij! It's used in the same place _all_ the other item constructors are!
     public ItemFirestoneRefined() {
         setMaxStackSize(1);
         setMaxDamage(CHARGES);
@@ -96,6 +99,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'R', "blockRedstone",
                 'L', fluidStack,
                 'F', RailcraftItems.FIRESTONE_CUT);
+
+        // FIXME: currently dupes stones!
         CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
                 "LOL",
                 "RFR",
@@ -214,7 +219,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     @Override
     public EntityItemFirestone createEntity(World world, Entity location, ItemStack stack) {
         EntityItemFirestone entity = super.createEntity(world, location, stack);
-        entity.setRefined(true);
+        Objects.requireNonNull(entity).setRefined(true);
         return entity;
     }
 }

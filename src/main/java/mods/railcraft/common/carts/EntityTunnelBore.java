@@ -678,7 +678,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
     protected boolean placeBallast(BlockPos targetPos) {
         if (!world.isSideSolid(targetPos, EnumFacing.UP))
-            for (IExtInvSlot slot : InventoryIterator.getVanilla(invBallast)) {
+            for (IExtInvSlot slot : InventoryIterator.get(invBallast)) {
                 ItemStack stack = slot.getStack();
                 if (!InvTools.isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
                     BlockPos.PooledMutableBlockPos searchPos = BlockPos.PooledMutableBlockPos.retain();
@@ -722,7 +722,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             WorldPlugin.destroyBlockSafe(world, targetPos, owner, true);
 
         if (WorldPlugin.isBlockAir(world, targetPos, oldState) && world.isSideSolid(targetPos.down(), EnumFacing.UP))
-            for (IInvSlot slot : InventoryIterator.getVanilla(invRails)) {
+            for (IInvSlot slot : InventoryIterator.get(invRails)) {
                 ItemStack stack = slot.getStack();
                 if (!InvTools.isEmpty(stack)) {
                     boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) world, targetPos, shape);

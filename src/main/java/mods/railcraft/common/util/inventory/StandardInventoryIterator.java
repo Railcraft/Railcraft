@@ -42,7 +42,7 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
 
             @Override
             public IExtInvSlot next() {
-                return new InvSlot(slot++);
+                return slot(slot++);
             }
 
             @Override
@@ -51,6 +51,11 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
             }
 
         };
+    }
+
+    @Override
+    public IExtInvSlot slot(int index) {
+        return new InvSlot(index);
     }
 
     class InvSlot implements IExtInvSlot {
@@ -69,11 +74,6 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         @Override
         public void setStack(ItemStack stack) {
             inv.setInventorySlotContents(slot, stack);
-        }
-
-        @Override
-        public void clear() {
-            setStack(InvTools.emptyStack());
         }
 
         @Override
