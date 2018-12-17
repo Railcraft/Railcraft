@@ -11,18 +11,16 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IPostConnection;
-import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.interfaces.ITile;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -49,19 +47,12 @@ public interface ISmartTile extends ITile {
      */
     default void onBlockRemoval() {
         if (this instanceof IInventory)
-            InvTools.dropInventory((IInventory) this, tile().getWorld(), tile().getPos());
+            InvTools.spewInventory((IInventory) this, tile().getWorld(), tile().getPos());
     }
 
     default boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking())
+        if (PlayerPlugin.doesItemBlockActivation(player, hand))
             return false;
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (!InvTools.isEmpty(heldItem)) {
-            if (heldItem.getItem() instanceof IActivationBlockingItem)
-                return false;
-            if (TrackTools.isRailItem(heldItem.getItem()))
-                return false;
-        }
         return openGui(player);
     }
 
@@ -80,6 +71,7 @@ public interface ISmartTile extends ITile {
         return null;
     }
 
+    @SuppressWarnings("SameReturnValue")
     default boolean isSideSolid(EnumFacing side) {
         return true;
     }

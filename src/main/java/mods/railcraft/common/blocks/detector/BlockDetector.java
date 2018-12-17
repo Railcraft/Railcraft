@@ -14,8 +14,6 @@ import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
-import mods.railcraft.common.blocks.BlockMetaVariant;
-import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -30,7 +28,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -45,9 +42,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.minecraft.util.EnumFacing.NORTH;
 
@@ -206,13 +200,12 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
     @SuppressWarnings("deprecation")
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        state = super.getActualState(state, worldIn, pos);
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileDetector) {
-            TileDetector detector = (TileDetector) tile;
-            state = state.withProperty(getVariantProperty(), detector.getDetector().getType()).withProperty(POWERED, detector.powerState > PowerPlugin.NO_POWER);
-        }
-        return state;
+        IBlockState newState = super.getActualState(state, worldIn, pos);
+        return getTileEntity(state, worldIn, pos)
+                .map(t -> newState
+                        .withProperty(getVariantProperty(), t.getDetector().getType())
+                        .withProperty(POWERED, t.getPowerState() > PowerPlugin.NO_POWER))
+                .orElse(newState);
     }
 
     @Override
@@ -245,14 +238,10 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
         return getMetaFromState(state);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        TileEntity tile = world.getTileEntity(pos);
-        ArrayList<ItemStack> items = new ArrayList<>();
-        if (tile instanceof TileDetector)
-            items.add(((TileDetector) tile).getDetector().getType().getStack());
-        return items;
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        getTileEntity(state, world, pos)
+                .ifPresent(t -> drops.add(t.getDetector().getType().getStack()));
     }
 
     //TODO: Move drop code here? We have a reference to the TileEntity now.
@@ -265,9 +254,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
         //noinspection ConstantConditions
         player.addStat(StatList.getBlockStats(this));
         player.addExhaustion(0.005F);
-        TileEntity tile = world.getTileEntity(pos);
-        if (tile instanceof TileDetector)
-            ((TileDetector) tile).getDetector().onBlockRemoved();
+        getTileEntity(state, world, pos).ifPresent(t -> t.getDetector().onBlockRemoved());
         if (Game.isHost(world) && !player.capabilities.isCreativeMode)
             dropBlockAsItem(world, pos, WorldPlugin.getBlockState(world, pos), 0);
         return world.setBlockToAir(pos);
@@ -313,10 +300,9 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
     @SuppressWarnings("deprecation")
     @Override
     public float getBlockHardness(IBlockState state, World worldIn, BlockPos pos) {
-        TileEntity tile = worldIn.getTileEntity(pos);
-        if (tile instanceof TileDetector)
-            return ((TileDetector) tile).getDetector().getHardness();
-        return super.getBlockHardness(state, worldIn, pos);
+        return getTileEntity(state, worldIn, pos)
+                .map(t -> t.getDetector().getHardness())
+                .orElseGet(() -> super.getBlockHardness(state, worldIn, pos));
     }
 
     @SuppressWarnings("deprecation")
@@ -335,13 +321,11 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
     @SuppressWarnings("deprecation")
     @Override
     public int getWeakPower(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        TileEntity t = worldIn.getTileEntity(pos);
-        if (t instanceof TileDetector) {
-            TileDetector tile = (TileDetector) t;
-            if (state.getValue(FRONT) == side.getOpposite())
-                return tile.powerState;
-        }
-        return PowerPlugin.NO_POWER;
+        if (state.getValue(FRONT) != side.getOpposite())
+            return PowerPlugin.NO_POWER;
+        return getTileEntity(state, worldIn, pos)
+                .map(TileDetector::getPowerState)
+                .orElse(PowerPlugin.NO_POWER);
     }
 
     /**

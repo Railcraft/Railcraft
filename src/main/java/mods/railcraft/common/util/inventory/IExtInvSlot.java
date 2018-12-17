@@ -11,6 +11,10 @@
 package mods.railcraft.common.util.inventory;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.function.Predicate;
 
 /**
  * This interface extends IInvSlot by allowing you to modify a slot directly.
@@ -27,5 +31,21 @@ public interface IExtInvSlot extends IInvSlot {
      */
     void setStack(ItemStack stack);
 
-    void clear();
+    default ItemStack clear() {
+        ItemStack stack = getStack();
+        setStack(ItemStack.EMPTY);
+        return stack;
+    }
+
+    default void validate(World world, BlockPos pos) {
+        validate(world, pos, this::canPutStackInSlot);
+    }
+
+    default void validate(World world, BlockPos pos, Predicate<ItemStack> filter) {
+        ItemStack stack = getStack();
+        if (InvTools.nonEmpty(stack) && filter.test(stack)) {
+            clear();
+            InvTools.spewItem(stack, world, pos);
+        }
+    }
 }

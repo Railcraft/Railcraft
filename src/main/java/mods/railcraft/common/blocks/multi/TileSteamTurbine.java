@@ -234,7 +234,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, world, getPos());
+        InvTools.spewInventory(inv, world, getPos());
     }
 
     public boolean hasEnergy() {

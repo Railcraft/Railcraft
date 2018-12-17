@@ -37,7 +37,7 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
 
             @Override
             public IInvSlot next() {
-                return new InvSlot(slot++);
+                return slot(slot++);
             }
 
             @Override
@@ -46,6 +46,11 @@ public class ItemHandlerInventoryIterator extends InventoryIterator<IInvSlot> {
             }
 
         };
+    }
+
+    @Override
+    public IInvSlot slot(int index) {
+        return new InvSlot(index);
     }
 
     private class InvSlot implements IInvSlot {

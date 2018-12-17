@@ -119,7 +119,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Override
     public void setDead() {
         super.setDead();
-        InvTools.dropInventory(invLiquids, world, getPosition());
+        InvTools.spewInventory(invLiquids, world, getPosition());
     }
 
     @Override

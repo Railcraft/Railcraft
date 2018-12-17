@@ -209,7 +209,7 @@ public final class TileSteamOven extends TileMultiBlockOven implements ISidedInv
     }
 
     private boolean hasRecipe() {
-        for (IExtInvSlot slot : InventoryIterator.getVanilla(invInput)) {
+        for (IExtInvSlot slot : InventoryIterator.get(invInput)) {
             ItemStack stack = slot.getStack();
             if (!InvTools.isEmpty(stack) && !InvTools.isEmpty(FurnaceRecipes.instance().getSmeltingResult(stack)))
                 return true;

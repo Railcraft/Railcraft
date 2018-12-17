@@ -20,4 +20,9 @@ public class Code {
         //noinspection unchecked
         return (C) o;
     }
+
+    public static void assertInstance(Class<?> clazz, Object obj) {
+        if (!clazz.isInstance(obj))
+            throw new AssertionError("Object not instance of " + clazz.getSimpleName());
+    }
 }

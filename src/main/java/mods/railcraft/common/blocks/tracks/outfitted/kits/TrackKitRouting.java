@@ -131,7 +131,7 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
-        InvTools.dropInventory(inv, getTile().getWorld(), getPos());
+        InvTools.spewInventory(inv, getTile().getWorld(), getPos());
     }
 
 }

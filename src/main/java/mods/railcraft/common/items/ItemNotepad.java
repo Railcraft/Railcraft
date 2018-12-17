@@ -20,8 +20,10 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
+import mods.railcraft.common.util.misc.Code;
+import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -78,65 +80,57 @@ public class ItemNotepad extends ItemRailcraft {
     @Override
     public void initializeClient() {
         ModelManager.registerComplexItemModel(this, stack -> {
-            NBTTagCompound tag = InvToolsAPI.getItemDataRailcraft(stack, false);
-            if (tag != null && tag.hasKey("contents")) {
+            if (InvToolsAPI.getRailcraftDataSubtag(stack, NBT_CONTENTS, false).isPresent())
                 return MODEL_FILLED;
-            }
             return MODEL_EMPTY;
         }, MODEL_EMPTY, MODEL_FILLED);
     }
 
     private static void setPasteMode(ItemStack stack, PasteMode mode) {
-        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, true);
-            nbt.setByte("pasteMode", (byte) mode.ordinal());
-        }
+        Code.assertInstance(ItemNotepad.class, stack.getItem());
+        InvToolsAPI.getRailcraftData(stack, true)
+                .ifPresent(nbt -> NBTPlugin.writeEnumName(nbt, NBT_PASTE_MODE, mode));
     }
 
     private static PasteMode getPasteMode(ItemStack stack) {
-        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, false);
-            return PasteMode.fromOrdinal(nbt != null ? nbt.getByte("pasteMode") : 0);
-        }
-        return PasteMode.ALL;
+        Code.assertInstance(ItemNotepad.class, stack.getItem());
+        return InvToolsAPI.getRailcraftData(stack, false)
+                .map(nbt -> NBTPlugin.readEnumName(nbt, NBT_PASTE_MODE, PasteMode.ALL))
+                .orElse(PasteMode.ALL);
     }
 
     private static PasteMode nextPasteMode(ItemStack stack) {
-        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            PasteMode pasteMode = getPasteMode(stack);
-            pasteMode = pasteMode.next();
-            setPasteMode(stack, pasteMode);
-            return pasteMode;
-        }
-        return PasteMode.ALL;
+        Code.assertInstance(ItemNotepad.class, stack.getItem());
+        PasteMode pasteMode = getPasteMode(stack);
+        pasteMode = EnumTools.next(pasteMode, PasteMode.VALUES);
+        setPasteMode(stack, pasteMode);
+        return pasteMode;
     }
 
     private static void setContents(ItemStack stack, EnumMap<Contents, NBTTagCompound> contents) {
-        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-
+        Code.assertInstance(ItemNotepad.class, stack.getItem());
+        InvToolsAPI.getRailcraftData(stack, true).ifPresent(nbt -> {
             NBTTagCompound contentTag = new NBTTagCompound();
             for (Map.Entry<Contents, NBTTagCompound> entry : contents.entrySet()) {
                 contentTag.setTag(entry.getKey().nbtTag, entry.getValue());
             }
-
-            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, true);
-            nbt.setTag("contents", contentTag);
-        }
+            nbt.setTag(NBT_CONTENTS, contentTag);
+        });
     }
 
     private static EnumMap<Contents, NBTTagCompound> getContents(ItemStack stack) {
+        Code.assertInstance(ItemNotepad.class, stack.getItem());
         EnumMap<Contents, NBTTagCompound> contents = new EnumMap<>(Contents.class);
-        if (!InvTools.isEmpty(stack) && stack.getItem() instanceof ItemNotepad) {
-            NBTTagCompound nbt = InvToolsAPI.getItemDataRailcraft(stack, false);
-            if (nbt != null && nbt.hasKey("contents")) {
-                nbt = nbt.getCompoundTag("contents");
-                for (Contents content : Contents.VALUES) {
-                    if (nbt.hasKey(content.nbtTag)) {
-                        contents.put(content, nbt.getCompoundTag(content.nbtTag));
+        InvToolsAPI.getRailcraftData(stack, false)
+                .filter(nbt -> nbt.hasKey(NBT_CONTENTS))
+                .map(nbt -> nbt.getCompoundTag(NBT_CONTENTS))
+                .ifPresent(nbt -> {
+                    for (Contents content : Contents.VALUES) {
+                        if (nbt.hasKey(content.nbtTag)) {
+                            contents.put(content, nbt.getCompoundTag(content.nbtTag));
+                        }
                     }
-                }
-            }
-        }
+                });
         return contents;
     }
 
@@ -165,7 +159,7 @@ public class ItemNotepad extends ItemRailcraft {
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (player.isSneaking()) {
-            InvToolsAPI.clearItemDataRailcraft(stack, "contents");
+            InvToolsAPI.clearRailcraftDataSubtag(stack, NBT_CONTENTS);
         } else {
             PasteMode pasteMode = nextPasteMode(stack);
             if (Game.isClient(world))
@@ -316,12 +310,6 @@ public class ItemNotepad extends ItemRailcraft {
             this.allows = EnumSet.copyOf(Arrays.asList(allows));
         }
 
-        public static PasteMode fromOrdinal(int id) {
-            if (id < 0 || id >= VALUES.length)
-                return ALL;
-            return VALUES[id];
-        }
-
         public boolean allows(Contents content) {
             return allows.contains(content);
         }
@@ -330,15 +318,6 @@ public class ItemNotepad extends ItemRailcraft {
         public String toString() {
             return LocalizationPlugin.translate(locTag);
         }
-
-        public PasteMode next() {
-            return VALUES[(ordinal() + 1) % VALUES.length];
-        }
-
-//        public PasteMode previous() {
-//            return VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
-//        }
-
     }
 
 }

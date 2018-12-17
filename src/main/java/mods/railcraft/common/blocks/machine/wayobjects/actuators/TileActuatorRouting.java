@@ -107,7 +107,7 @@ public class TileActuatorRouting extends TileActuatorSecured implements IRouter,
     @Override
     public void onBlockRemoval() {
         super.onBlockRemoval();
-        InvTools.dropInventory(inv, world, getPos());
+        InvTools.spewInventory(inv, world, getPos());
     }
 
     @Override

@@ -30,7 +30,7 @@ public class SidedInventoryIterator extends StandardInventoryIterator {
     @Override
     public Iterator<IExtInvSlot> iterator() {
         return new Iterator<IExtInvSlot>() {
-            int[] slots = inv.getSlotsForFace(EnumFacing.DOWN);
+            final int[] slots = inv.getSlotsForFace(EnumFacing.DOWN);
             int index;
 
             @Override
@@ -40,7 +40,7 @@ public class SidedInventoryIterator extends StandardInventoryIterator {
 
             @Override
             public IExtInvSlot next() {
-                return new InvSlot(slots[index++]);
+                return slot(slots[index++]);
             }
 
             @Override
@@ -49,6 +49,11 @@ public class SidedInventoryIterator extends StandardInventoryIterator {
             }
 
         };
+    }
+
+    @Override
+    public IExtInvSlot slot(int index) {
+        return new InvSlot(index);
     }
 
     private class InvSlot extends StandardInventoryIterator.InvSlot {

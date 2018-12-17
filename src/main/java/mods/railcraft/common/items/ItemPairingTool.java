@@ -22,8 +22,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Function;
 
 /**
@@ -44,24 +44,21 @@ public class ItemPairingTool extends ItemRailcraft {
         setMaxStackSize(1);
     }
 
-    @Nullable
-    public WorldCoordinate getPairData(ItemStack stack) {
-        WorldCoordinate pos = null;
-        NBTTagCompound pairData = InvToolsAPI.getItemDataRailcraft(stack, PAIR_DATA_TAG);
-        if (pairData != null)
-            pos = WorldCoordinate.readFromNBT(pairData, COORD_TAG);
-        return pos;
+    public @Nullable WorldCoordinate getPairData(ItemStack stack) {
+        return InvToolsAPI.getRailcraftDataSubtag(stack, PAIR_DATA_TAG)
+                .map(nbt -> WorldCoordinate.readFromNBT(nbt, COORD_TAG))
+                .orElse(null);
     }
 
     public void setPairData(ItemStack stack, TileEntity tile) {
         NBTTagCompound pairData = new NBTTagCompound();
         WorldCoordinate pos = WorldCoordinate.from(tile);
         pos.writeToNBT(pairData, COORD_TAG);
-        InvToolsAPI.setItemDataRailcraft(stack, PAIR_DATA_TAG, pairData);
+        InvToolsAPI.setRailcraftDataSubtag(stack, PAIR_DATA_TAG, pairData);
     }
 
     public void clearPairData(ItemStack stack) {
-        InvToolsAPI.clearItemDataRailcraft(stack, PAIR_DATA_TAG);
+        InvToolsAPI.clearRailcraftDataSubtag(stack, PAIR_DATA_TAG);
     }
 
     public <T> boolean actionCleanPairing(ItemStack stack, EntityPlayer player, World worldIn, Class<? extends T> clazz, Function<T, IPair> transform) {

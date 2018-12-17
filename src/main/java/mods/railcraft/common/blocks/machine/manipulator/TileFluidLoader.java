@@ -21,7 +21,8 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.entity.EntitySearcher;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.IExtInvSlot;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -107,10 +108,10 @@ public class TileFluidLoader extends TileFluidManipulator {
     @Override
     protected void upkeep() {
         super.upkeep();
-
-        InvTools.validateInventory(this, SLOT_INPUT, world, getPos(), s -> isItemValidForSlot(SLOT_INPUT, s));
-        InvTools.validateInventory(this, SLOT_PROCESSING, world, getPos(), FluidItemHelper::isContainer);
-        InvTools.validateInventory(this, SLOT_OUTPUT, world, getPos(), FluidItemHelper::isContainer);
+        InventoryIterator<IExtInvSlot> it = InventoryIterator.get(this);
+        it.slot(SLOT_INPUT).validate(world, getPos());
+        it.slot(SLOT_PROCESSING).validate(world, getPos(), FluidItemHelper::isContainer);
+        it.slot(SLOT_OUTPUT).validate(world, getPos(), FluidItemHelper::isContainer);
 
         tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
     }
