@@ -12,7 +12,8 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.common.blocks.TileSmartItemTicking;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.chest.InventoryLogic;
+import mods.railcraft.common.util.logic.ILogicContainer;
+import mods.railcraft.common.util.logic.InventoryLogic;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -23,7 +24,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 
 import java.util.List;
 
@@ -33,25 +33,15 @@ import static net.minecraft.util.EnumFacing.DOWN;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: investigate chest locking
-public abstract class TileChestRailcraft extends TileSmartItemTicking implements ITileRotate {
+public abstract class TileRailcraftChest<L extends InventoryLogic> extends TileSmartItemTicking implements ITileRotate, ILogicContainer<L> {
 
     private static final int TICK_PER_SYNC = 64;
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
-    protected final InventoryLogic logic;
 
-    protected TileChestRailcraft() {
+    protected TileRailcraftChest() {
         super(27);
-        this.logic = createLogic();
-    }
-
-    protected abstract InventoryLogic createLogic();
-
-    @Override
-    public void setWorld(World worldIn) {
-        super.setWorld(worldIn);
-        logic.setWorld(worldIn);
     }
 
     @Override

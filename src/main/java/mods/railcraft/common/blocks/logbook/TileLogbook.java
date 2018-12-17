@@ -14,7 +14,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileLogbook extends RailcraftTickingTileEntity {
+public class TileLogbook extends TileRailcraftTicking {
     private static final float SEARCH_RADIUS = 16;
     private final Multimap<LocalDate, GameProfile> log = HashMultimap.create();
 

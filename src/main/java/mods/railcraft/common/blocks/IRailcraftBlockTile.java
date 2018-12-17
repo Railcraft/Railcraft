@@ -28,7 +28,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IRailcraftBlockTile<T extends RailcraftTileEntity> extends IRailcraftBlock, ITileEntityProvider {
+public interface IRailcraftBlockTile<T extends TileRailcraft> extends IRailcraftBlock, ITileEntityProvider {
 
     default Class<? extends T> getTileClass(IBlockState state) {
         BlockMetaTile annotation = getClass().getAnnotation(BlockMetaTile.class);

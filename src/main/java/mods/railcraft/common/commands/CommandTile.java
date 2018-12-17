@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.commands;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.command.CommandException;
@@ -41,8 +41,8 @@ public class CommandTile extends SubCommand {
             BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             TileEntity tile = WorldPlugin.getBlockTile(sender.getEntityWorld(), pos);
-            if (tile instanceof RailcraftTileEntity) {
-                sender.sendMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((RailcraftTileEntity) tile).getOwner().getName()));
+            if (tile instanceof TileRailcraft) {
+                sender.sendMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((TileRailcraft) tile).getOwner().getName()));
             } else {
                 throw new BlockNotFoundException();
             }
@@ -61,9 +61,9 @@ public class CommandTile extends SubCommand {
             BlockPos pos = CommandHelpers.parseBlockPos(sender, argsQueue);
 
             TileEntity tile = WorldPlugin.getBlockTile(sender.getEntityWorld(), pos);
-            if (tile instanceof RailcraftTileEntity) {
-                ((RailcraftTileEntity) tile).clearOwner();
-                sender.sendMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((RailcraftTileEntity) tile).getOwner().getName()));
+            if (tile instanceof TileRailcraft) {
+                ((TileRailcraft) tile).clearOwner();
+                sender.sendMessage(ChatPlugin.translateMessage("command.railcraft.railcraft.tile.owner.message", ((TileRailcraft) tile).getOwner().getName()));
             } else {
                 throw new BlockNotFoundException();
             }

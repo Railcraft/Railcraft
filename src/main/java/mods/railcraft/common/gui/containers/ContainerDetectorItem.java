@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorItem;
 import mods.railcraft.common.gui.slots.SlotFilter;
@@ -42,7 +42,7 @@ public class ContainerDetectorItem extends RailcraftContainer {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(detector.getTile(), entityplayer);
+        return TileRailcraft.isUsableByPlayerHelper(detector.getTile(), entityplayer);
     }
 
 }

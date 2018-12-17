@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.ITankTile;
@@ -84,7 +84,7 @@ public class FactoryGui {
                 case DETECTOR_LOCOMOTIVE:
                     return new GuiDetectorLocomotive(inv, (TileDetector) obj);
                 case DETECTOR_ROUTING:
-                    return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) ((TileDetector) obj).getDetector());
+                    return new GuiRouting(inv, (TileRailcraft) obj, (IRouter) ((TileDetector) obj).getDetector());
                 case CART_DISPENSER:
                     return new GuiDispenserCart(inv, (TileDispenserCart) obj);
                 case TRAIN_DISPENSER:
@@ -122,7 +122,7 @@ public class FactoryGui {
                 case ANVIL:
                     return new GuiAnvil(inv, world, new BlockPos(x, y, z));
                 case ROUTING:
-                    return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) obj);
+                    return new GuiRouting(inv, (TileRailcraft) obj, (IRouter) obj);
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:

@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChestMetals extends TileChestRailcraft {
+public class TileChestMetals extends TileRailcraftChest<MetalsChestLogic> {
 
     private static final int TICK_PER_CONDENSE = 16;
     private MetalsChestLogic logic = new MetalsChestLogic(getWorld(), this);

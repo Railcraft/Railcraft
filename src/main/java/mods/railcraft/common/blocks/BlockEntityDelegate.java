@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Random;
 
-public abstract class BlockEntityDelegate<T extends RailcraftTileEntity & ISmartTile> extends BlockContainerRailcraft<T> implements IPostConnection {
+public abstract class BlockEntityDelegate<T extends TileRailcraft & ISmartTile> extends BlockContainerRailcraft<T> implements IPostConnection {
 
     protected BlockEntityDelegate(Material materialIn) {
         super(materialIn);

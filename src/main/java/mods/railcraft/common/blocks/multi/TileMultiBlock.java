@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.ISmartTile;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.events.MultiBlockEvent.Form;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -43,7 +43,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.*;
 
-public abstract class TileMultiBlock extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile {
+public abstract class TileMultiBlock extends TileRailcraftTicking implements ISmartTile, IMultiBlockTile {
 
     //    private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 16;

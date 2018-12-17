@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
 import net.minecraft.world.IWorldNameable;
 import org.jetbrains.annotations.Nullable;

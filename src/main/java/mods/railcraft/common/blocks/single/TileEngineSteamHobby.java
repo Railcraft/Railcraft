@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -179,7 +179,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+        return TileRailcraft.isUsableByPlayerHelper(this, player);
     }
 
     @Override

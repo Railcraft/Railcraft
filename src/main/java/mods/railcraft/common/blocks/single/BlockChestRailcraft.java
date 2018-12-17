@@ -34,7 +34,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockChestRailcraft<T extends TileChestRailcraft> extends BlockEntityDelegate<T> {
+public abstract class BlockChestRailcraft<T extends TileRailcraftChest> extends BlockEntityDelegate<T> {
 
     public static final PropertyDirection FACING = BlockChest.FACING;
     private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
@@ -58,7 +58,7 @@ public abstract class BlockChestRailcraft<T extends TileChestRailcraft> extends 
         ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new TESRChest(this));
         //noinspection ConstantConditions
         Item.getItemFromBlock(this).setTileEntityItemStackRenderer(new TileEntityItemStackRenderer() {
-            private final TileChestRailcraft template = createTileEntity(null, getDefaultState());
+            private final TileRailcraftChest template = createTileEntity(null, getDefaultState());
 
             @Override
             @SideOnly(Side.CLIENT)

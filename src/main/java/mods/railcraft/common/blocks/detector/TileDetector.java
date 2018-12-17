@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import java.io.IOException;
 import java.util.List;
 
-public class TileDetector extends RailcraftTickingTileEntity implements IGuiReturnHandler, ITileRouting {
+public class TileDetector extends TileRailcraftTicking implements IGuiReturnHandler, ITileRouting {
 
     public static final float SENSITIVITY = 0.2f;
     private int powerState;

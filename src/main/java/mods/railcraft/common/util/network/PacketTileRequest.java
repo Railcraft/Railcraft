@@ -1,15 +1,15 @@
-/*******************************************************************************
- Copyright (c) CovertJaguar, 2011-2016
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
  and may only be used with explicit written
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
- ******************************************************************************/
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -53,7 +53,7 @@ public class PacketTileRequest extends RailcraftPacket {
 
         tile = world.getTileEntity(new BlockPos(x, y, z));
 
-        if (tile instanceof RailcraftTileEntity && player != null)
+        if (tile instanceof TileRailcraft && player != null)
             PacketBuilder.instance().sendTileEntityPacket(tile, player);
     }
 

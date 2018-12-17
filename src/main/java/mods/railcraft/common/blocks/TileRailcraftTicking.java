@@ -21,7 +21,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class RailcraftTickingTileEntity extends RailcraftTileEntity implements ITickable {
+public abstract class TileRailcraftTicking extends TileRailcraft implements ITickable {
 
     protected int clock = MiscTools.RANDOM.nextInt();
     private boolean sendClientUpdate;

@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.tracks.force;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.single.TileForceTrackEmitter;
 import mods.railcraft.common.plugins.color.EnumColor;
@@ -26,7 +26,7 @@ import java.io.IOException;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileTrackForce extends RailcraftTileEntity {
+public final class TileTrackForce extends TileRailcraft {
 
     private @Nullable TileForceTrackEmitter emitter;
     private int index;

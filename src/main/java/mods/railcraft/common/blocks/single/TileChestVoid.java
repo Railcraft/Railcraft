@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChestVoid extends TileChestRailcraft {
+public class TileChestVoid extends TileRailcraftChest<VoidChestLogic> {
 
     private static final int TICK_PER_VOID = 8;
 

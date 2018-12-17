@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks;
 
 import mods.railcraft.common.blocks.IRailcraftBlockTile;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +23,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BlockTrackTile<T extends RailcraftTileEntity> extends BlockTrack implements IRailcraftBlockTile<T> {
+public abstract class BlockTrackTile<T extends TileRailcraft> extends BlockTrack implements IRailcraftBlockTile<T> {
 
     private final ThreadLocal<Boolean> lastClearResult = new ThreadLocal<>();
 

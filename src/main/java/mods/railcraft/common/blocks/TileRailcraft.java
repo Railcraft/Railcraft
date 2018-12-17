@@ -50,7 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class RailcraftTileEntity extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, ITile {
+public abstract class TileRailcraft extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, ITile {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 

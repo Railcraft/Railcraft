@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.interfaces;
 
 import mods.railcraft.api.core.IOwnable;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -26,8 +26,8 @@ import org.jetbrains.annotations.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface ITile extends IOwnable {
-    default RailcraftTileEntity tile() {
-        return (RailcraftTileEntity) this;
+    default TileRailcraft tile() {
+        return (TileRailcraft) this;
     }
 
     void markBlockForUpdate();

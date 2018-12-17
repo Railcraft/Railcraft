@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 import mods.railcraft.api.tracks.ISwitchActuator;
 import mods.railcraft.api.tracks.ISwitchActuator.ArrowDirection;
 import mods.railcraft.api.tracks.ITrackKitSwitch;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.Train;
@@ -136,14 +136,14 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         determineMirror();
 
         // Notify any neighboring switches that we exist so they know to register themselves with us
-        ((RailcraftTileEntity) getTile()).notifyBlocksOfNeighborChange();
+        ((TileRailcraft) getTile()).notifyBlocksOfNeighborChange();
     }
 
     @Override
     public void onBlockRemoved() {
         super.onBlockRemoved();
         // Notify any neighboring switches that we exist so they know to register themselves with us
-        ((RailcraftTileEntity) getTile()).notifyBlocksOfNeighborChange();
+        ((TileRailcraft) getTile()).notifyBlocksOfNeighborChange();
     }
 
     protected void determineRailDirection() {
@@ -383,7 +383,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     public abstract ArrowDirection getWhiteSignDirection();
 
     public @Nullable ISwitchActuator getSwitchDevice() {
-        TileEntity entity = ((RailcraftTileEntity) getTile()).getTileCache().getTileOnSide(getActuatorLocation());
+        TileEntity entity = ((TileRailcraft) getTile()).getTileCache().getTileOnSide(getActuatorLocation());
         if (entity instanceof ISwitchActuator) {
             return (ISwitchActuator) entity;
         }

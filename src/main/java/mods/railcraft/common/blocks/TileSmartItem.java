@@ -24,7 +24,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 /**
  *
  */
-public abstract class TileSmartItem extends RailcraftTileEntity implements ISmartTile, ITileInventory {
+public abstract class TileSmartItem extends TileRailcraft implements ISmartTile, ITileInventory {
 
     private final InventoryAdvanced inv;
 

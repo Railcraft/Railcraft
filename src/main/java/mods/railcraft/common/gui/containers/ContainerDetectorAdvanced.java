@@ -1,14 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorAdvanced;
 import mods.railcraft.common.gui.slots.SlotMinecartFilter;
@@ -43,7 +44,7 @@ public class ContainerDetectorAdvanced extends RailcraftContainer {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(detector.getTile(), entityplayer);
+        return TileRailcraft.isUsableByPlayerHelper(detector.getTile(), entityplayer);
     }
 
 }

@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.detector.types;
 
 import mods.railcraft.api.carts.CartToolsAPI;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.BlockDetector;
 import mods.railcraft.common.blocks.detector.DetectorSecured;
 import mods.railcraft.common.blocks.detector.EnumDetector;
@@ -55,7 +55,7 @@ public class DetectorRouting extends DetectorSecured implements IRouter, ITileRo
         public void onInventoryChanged(IInventory invBasic) {
             super.onInventoryChanged(invBasic);
             logic = null;
-            tile().ifPresent(RailcraftTileEntity::sendUpdateToClient);
+            tile().ifPresent(TileRailcraft::sendUpdateToClient);
         }
 
     });

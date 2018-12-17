@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.materials.slab;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -21,7 +21,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileSlab extends RailcraftTileEntity {
+public class TileSlab extends TileRailcraft {
 
     private Materials top = Materials.NO_MAT;
 

@@ -13,7 +13,7 @@ import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.tracks.IOutfittedTrackTile;
 import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.api.tracks.ITrackKitLockdown;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.force.BlockTrackForce;
@@ -46,7 +46,7 @@ import static mods.railcraft.common.blocks.RailcraftBlocks.TRACK_FORCE;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileForceTrackEmitter extends RailcraftTickingTileEntity implements ITileRotate, IMagnifiable {
+public class TileForceTrackEmitter extends TileRailcraftTicking implements ITileRotate, IMagnifiable {
 
     private static final double BASE_DRAW = 22;
     private static final double CHARGE_PER_TRACK = 2;

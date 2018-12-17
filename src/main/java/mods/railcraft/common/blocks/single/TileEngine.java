@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ISmartTile;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.FEEnergyIndicator;
@@ -41,7 +41,7 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileEngine extends RailcraftTickingTileEntity implements ITileRotate, ITileNonSolid, ISmartTile {
+public abstract class TileEngine extends TileRailcraftTicking implements ITileRotate, ITileNonSolid, ISmartTile {
     //TODO: Convert to MJ
     public float currentOutput;
     private EnumFacing direction = EnumFacing.UP;

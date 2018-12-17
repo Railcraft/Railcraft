@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.crafting.IRollingMachineRecipe;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
@@ -118,7 +118,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(tile, player);
+        return TileRailcraft.isUsableByPlayerHelper(tile, player);
     }
 
     @Override

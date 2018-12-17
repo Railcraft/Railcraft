@@ -10,7 +10,7 @@
 package mods.railcraft.common.commands;
 
 import mods.railcraft.api.signals.*;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.Train;
@@ -112,8 +112,8 @@ public class CommandDebug extends SubCommand {
             case BLOCK:
                 World world = CommandHelpers.getWorld(sender);
                 TileEntity tile = WorldPlugin.getBlockTile(world, rayTraceResult.getBlockPos());
-                if (tile instanceof RailcraftTileEntity) {
-                    debug = ((RailcraftTileEntity) tile).getDebugOutput();
+                if (tile instanceof TileRailcraft) {
+                    debug = ((TileRailcraft) tile).getDebugOutput();
                 } else {
                     throw new BlockNotFoundException();
                 }
@@ -212,8 +212,8 @@ public class CommandDebug extends SubCommand {
 
             World world = CommandHelpers.getWorld(sender);
             TileEntity tile = WorldPlugin.getBlockTile(world, pos);
-            if (tile instanceof RailcraftTileEntity) {
-                List<String> debug = ((RailcraftTileEntity) tile).getDebugOutput();
+            if (tile instanceof TileRailcraft) {
+                List<String> debug = ((TileRailcraft) tile).getDebugOutput();
                 for (String s : debug) {
                     printLine(sender, s);
                 }
