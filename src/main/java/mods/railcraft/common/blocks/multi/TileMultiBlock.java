@@ -45,7 +45,7 @@ import java.util.*;
 
 public abstract class TileMultiBlock extends RailcraftTickingTileEntity implements ISmartTile, IMultiBlockTile {
 
-    private static final int UNKNOWN_STATE_RECHECK = 256;
+    //    private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 16;
     private final Timer netTimer = new Timer();
     private final List<? extends MultiBlockPattern> patterns;
@@ -63,7 +63,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
         this.patterns = patterns;
         currentPattern = patterns.get(0);
-        state = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? MultiBlockState.VALID : MultiBlockState.UNKNOWN;
+        state = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? MultiBlockState.VALID : MultiBlockState.UNTESTED;
         components.add(this);
     }
 
@@ -147,7 +147,9 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     public void update() {
         super.update();
         if (Game.isHost(world)) {
-            if (state == MultiBlockState.UNKNOWN && clock % UNKNOWN_STATE_RECHECK == 0)
+            if (state == MultiBlockState.UNTESTED
+//                    || (state == MultiBlockState.UNKNOWN && clock % UNKNOWN_STATE_RECHECK == 0)
+            )
                 testIfMasterBlock(); //                ClientProxy.getMod().totalMultiBlockUpdates++;
         } else if (requestPacket && netTimer.hasTriggered(world, NETWORK_RECHECK)) {
             PacketDispatcher.sendToServer(new PacketTileRequest(this));
@@ -274,10 +276,16 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+        onBlockChange();
+    }
+
+    @Override
     public void onChunkUnload() {
         super.onChunkUnload();
         if (Game.isClient(world)) return;
-        state = MultiBlockState.UNKNOWN;
+        state = MultiBlockState.UNTESTED;
         scheduleMasterRetest();
     }
 
@@ -285,7 +293,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
     @OverridingMethodsMustInvokeSuper
     public void invalidate() {
         if (world == null || Game.isHost(world)) {
-            state = MultiBlockState.UNKNOWN;
+            state = MultiBlockState.UNTESTED;
             scheduleMasterRetest();
         }
         super.invalidate();
@@ -303,8 +311,8 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         depth--;
         if (depth < 0)
             return;
-        if (state != MultiBlockState.UNKNOWN) {
-            state = MultiBlockState.UNKNOWN;
+        if (state != MultiBlockState.UNTESTED) {
+            state = MultiBlockState.UNTESTED;
 
             TileMultiBlock mBlock = getMasterBlock();
             if (mBlock != null) {
@@ -435,15 +443,11 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
         return isMaster && isStructureValid();
     }
 
-    public final void setMaster(boolean m) {
-        isMaster = m;
-    }
-
     public final void scheduleMasterRetest() {
         if (Game.isClient(world))
             return;
         if (masterBlock != null)
-            masterBlock.state = MultiBlockState.UNKNOWN;
+            masterBlock.state = MultiBlockState.UNTESTED;
     }
 
     @Override
@@ -488,7 +492,7 @@ public abstract class TileMultiBlock extends RailcraftTickingTileEntity implemen
 
     public enum MultiBlockState {
 
-        VALID, INVALID, UNKNOWN
+        VALID, INVALID, UNKNOWN, UNTESTED
     }
 
 }
