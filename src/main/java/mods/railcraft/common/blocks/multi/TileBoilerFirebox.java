@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -249,7 +249,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(this, player);
+        return TileRailcraft.isUsableByPlayerHelper(this, player);
     }
 
     @Override

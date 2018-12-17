@@ -20,10 +20,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +59,6 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         loadFromNBT(compound);
     }
 
-
     @Override
     public String getName() {
         return hasCustomName() ? getCustomNameTag() : LocalizationPlugin.translate(getCartType().getEntityLocalizationTag());
@@ -90,13 +87,9 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         killAndDrop(this);
     }
 
-    /**
-     * {@link net.minecraft.entity.item.EntityArmorStand#IS_RIDEABLE_MINECART}
-     */
     @Override
-    public @Nullable EntityMinecart.Type getType() {
-        FMLLog.bigWarning("This method should NEVER be called");
-        return null;
+    public final EntityMinecart.Type getType() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

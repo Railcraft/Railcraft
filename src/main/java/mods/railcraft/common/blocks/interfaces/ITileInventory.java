@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.interfaces;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,7 +28,7 @@ public interface ITileInventory extends ITileCompare, ICapabilityProvider, ITile
 
     @Override
     default boolean isUsableByPlayer(EntityPlayer player) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(tile(), player);
+        return TileRailcraft.isUsableByPlayerHelper(tile(), player);
     }
 
     default void dropItem(ItemStack stack) {

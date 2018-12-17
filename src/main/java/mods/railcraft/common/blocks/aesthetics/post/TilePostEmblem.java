@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.post;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -26,7 +26,7 @@ import java.io.IOException;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TilePostEmblem extends RailcraftTileEntity {
+public class TilePostEmblem extends TileRailcraft {
     private EnumFacing facing = EnumFacing.NORTH;
     private String emblem = "";
     private @Nullable EnumColor color;

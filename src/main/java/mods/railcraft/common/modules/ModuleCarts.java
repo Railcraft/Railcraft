@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,18 +14,16 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.RailcraftCarts;
 
-@RailcraftModule(value = "railcraft:extras", softDependencyClasses = {ModuleCarts.class, ModuleTracks.class}, description = "assorted stuff including elevator track and (anti)grief")
-public class ModuleExtras extends RailcraftModulePayload {
-    public ModuleExtras() {
+@RailcraftModule(value = "railcraft:carts", description = "railcraft custom carts")
+public class ModuleCarts extends RailcraftModulePayload {
+    public ModuleCarts() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
                 add(
-                        TrackKits.PRIMING,
-                        TrackKits.LAUNCHER,
-                        RailcraftCarts.TNT_WOOD,
-                        RailcraftBlocks.TRACK_ELEVATOR,
-                        RailcraftBlocks.LOGBOOK
+                        RailcraftCarts.WORK,
+                        RailcraftCarts.JUKEBOX,
+                        RailcraftCarts.BED
                 );
             }
         });

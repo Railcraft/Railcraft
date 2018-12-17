@@ -21,5 +21,5 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Inherited
 public @interface BlockMetaTile {
-    Class<? extends RailcraftTileEntity> value();
+    Class<? extends TileRailcraft> value();
 }

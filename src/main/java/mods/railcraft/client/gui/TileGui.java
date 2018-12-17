@@ -9,22 +9,22 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
+import net.minecraft.world.IWorldNameable;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileGui extends GuiContainerRailcraft {
-    private final RailcraftTileEntity tile;
+    private final IWorldNameable tile;
     private final @Nullable String name;
 
-    protected TileGui(RailcraftTileEntity tile, RailcraftContainer container, String texture) {
+    protected TileGui(IWorldNameable tile, RailcraftContainer container, String texture) {
         this(tile, container, texture, null);
     }
 
-    protected TileGui(RailcraftTileEntity tile, RailcraftContainer container, String texture, @Nullable String name) {
+    protected TileGui(IWorldNameable tile, RailcraftContainer container, String texture, @Nullable String name) {
         super(container, texture);
         this.tile = tile;
         this.name = name;

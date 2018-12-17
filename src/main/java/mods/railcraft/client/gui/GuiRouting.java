@@ -11,7 +11,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerRouting;
@@ -30,7 +30,7 @@ public class GuiRouting extends TileGui {
     private final IRouter router;
     private GuiMultiButton lockButton;
     private GuiMultiButton routingButton;
-    private final RailcraftTileEntity tile;
+    private final TileRailcraft tile;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
     private ToolTip notOwnedToolTips;
@@ -38,7 +38,7 @@ public class GuiRouting extends TileGui {
     private final ToolTip publicToolTips;
     private String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
-    public GuiRouting(InventoryPlayer inv, RailcraftTileEntity tile, IRouter router) {
+    public GuiRouting(InventoryPlayer inv, TileRailcraft tile, IRouter router) {
         super(tile, new ContainerRouting(inv, router), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_routing.png");
         ySize = 160;
         this.tile = tile;

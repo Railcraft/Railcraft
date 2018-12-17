@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.ISmartTile;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
@@ -37,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-public class TileAdminSteamProducer extends RailcraftTickingTileEntity implements ISmartTile {
+public class TileAdminSteamProducer extends TileRailcraftTicking implements ISmartTile {
 
     private static final IFluidHandler HANDLER = new IFluidHandler() {
         @Override

@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.ISmartTile;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TileMachineBase extends RailcraftTickingTileEntity implements ISmartTile {
+public abstract class TileMachineBase extends TileRailcraftTicking implements ISmartTile {
 
     private boolean checkedBlock;
 

@@ -17,6 +17,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.ItemWrapper;
 import mods.railcraft.common.items.ModItems;
+import mods.railcraft.common.modules.ModuleCarts;
 import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.ModuleSteam;
@@ -59,6 +60,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     FURNACE(0, "cart_furnace", EntityCartFurnace.class, EntityCartFurnace::new, (c) -> Items.FURNACE_MINECART, from(Blocks.FURNACE)),
     HOPPER(0, "cart_hopper", EntityCartHopper.class, EntityCartHopper::new, (c) -> Items.HOPPER_MINECART, from(Blocks.HOPPER)),
     TNT(0, "cart_tnt", EntityCartTNT.class, EntityCartTNT::new, (c) -> Items.TNT_MINECART, from(Blocks.TNT)),
+    // Item form added by Railcraft
     SPAWNER(0, "cart_spawner", EntityCartSpawner.class, EntityCartSpawner::new, ItemCartSpawner::new, null),
 
     // Railcraft Carts
@@ -92,6 +94,11 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         return !InvTools.isEmpty(stack) ? stack : new ItemStack(Blocks.GLASS, 8);
     }),
     TNT_WOOD(0, "cart_tnt_wood", EntityCartTNTWood.class, EntityCartTNTWood::new, ItemCartTNTWood::new),
+    TRADE_STATION(0, "cart_trade_station", EntityCartTradeStation.class, EntityCartTradeStation::new, ItemCartTradeStation::new, RailcraftBlocks.TRADE_STATION::getStack) {
+        {
+            conditions().add(RailcraftBlocks.TRADE_STATION);
+        }
+    },
     WORK(0, "cart_work", EntityCartWork.class, EntityCartWork::new, ItemCartWork::new, from(Blocks.CRAFTING_TABLE)),
 
     // Railcraft Locomotives
@@ -174,6 +181,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         this.rarity = (byte) rarity;
         this.type = type;
         this.factory = factory;
+        conditions().add(ModuleCarts.class);
         conditions().add(RailcraftConfig::isCartEnabled, () -> "disabled via config");
     }
 
@@ -311,6 +319,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     public boolean isVanillaCart() {
+        // Note: Spawner minecarts are from vanilla but the item form is from Railcraft.
         switch (this) {
             case CHEST:
             case HOPPER:

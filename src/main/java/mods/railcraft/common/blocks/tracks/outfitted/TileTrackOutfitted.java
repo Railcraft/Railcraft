@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.tracks.outfitted;
 
 import mods.railcraft.api.tracks.*;
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.items.IMagnifiable;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -21,7 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.io.IOException;
 
-public class TileTrackOutfitted extends RailcraftTileEntity implements IOutfittedTrackTile, IGuiReturnHandler, IMagnifiable {
+public class TileTrackOutfitted extends TileRailcraft implements IOutfittedTrackTile, IGuiReturnHandler, IMagnifiable {
 
     private ITrackKitInstance trackKitInstance = new TrackKitMissing(false);
     private TrackType trackType = TrackTypes.IRON.getTrackType();

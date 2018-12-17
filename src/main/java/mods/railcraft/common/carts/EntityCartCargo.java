@@ -62,14 +62,6 @@ public class EntityCartCargo extends CartBaseFiltered {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world)) {
-            GuiHandler.openGui(EnumGui.CART_CARGO, player, world, this);
-        }
-        return true;
-    }
-
-    @Override
     public int getDefaultDisplayTileOffset() {
         return 8;
     }

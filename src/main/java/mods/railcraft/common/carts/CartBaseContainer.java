@@ -13,6 +13,7 @@ import mods.railcraft.api.carts.IItemCart;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
@@ -41,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +94,11 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand))) || doInteract(player, hand);
     }
 
+    @OverridingMethodsMustInvokeSuper
     public boolean doInteract(EntityPlayer player, EnumHand hand) {
+        if (Game.isHost(world)) {
+            openRailcraftGui(player);
+        }
         return true;
     }
 
@@ -206,6 +212,10 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     @Override
     public String getGuiID() {
         return "railcraft:" + getCartType().getBaseTag();
+    }
+
+    protected void openRailcraftGui(EntityPlayer player) {
+        GuiHandler.openGui(getGuiType(), player, world, this);
     }
 
     @Override

@@ -108,11 +108,6 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     }
 
     @Override
-    protected void openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.LOCO_STEAM, player, world, this);
-    }
-
-    @Override
     public boolean needsFuel() {
         FluidStack water = tankWater.getFluid();
         if (water == null || water.amount < tankWater.getCapacity() / 3)

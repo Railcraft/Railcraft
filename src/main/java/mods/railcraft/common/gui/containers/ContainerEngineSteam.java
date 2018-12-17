@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
@@ -74,7 +74,7 @@ public class ContainerEngineSteam extends RailcraftContainer {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return RailcraftTileEntity.isUsableByPlayerHelper(tile, entityplayer);
+        return TileRailcraft.isUsableByPlayerHelper(tile, entityplayer);
     }
 
 }

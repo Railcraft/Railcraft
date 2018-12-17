@@ -208,13 +208,6 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world))
-            GuiHandler.openGui(EnumGui.CART_UNDERCUTTER, player, world, this);
-        return true;
-    }
-
-    @Override
     public int[] getSlotsForFace(EnumFacing side) {
         return SLOTS;
     }

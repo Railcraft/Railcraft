@@ -8,16 +8,13 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.chest;
-
-import net.minecraft.util.ITickable;
-import net.minecraft.world.World;
+package mods.railcraft.common.util.logic;
 
 /**
- * A logic shared by block entities and entities.
+ * Created by CovertJaguar on 12/17/2018 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface EntityLogic extends ITickable {
-
-    World getWorld();
-
+public interface ILogicContainer<T extends AbstractLogic> {
+    T getLogic();
 }

@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -50,11 +50,11 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
         return callback(new CallbackInv(callback));
     }
 
-    public InventoryAdvanced callbackTile(RailcraftTileEntity callback) {
+    public InventoryAdvanced callbackTile(TileRailcraft callback) {
         return callback(new CallbackTile(() -> callback));
     }
 
-    public InventoryAdvanced callbackTile(Supplier<RailcraftTileEntity> callback) {
+    public InventoryAdvanced callbackTile(Supplier<TileRailcraft> callback) {
         return callback(new CallbackTile(callback));
     }
 
@@ -206,13 +206,13 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
 
     public static class CallbackTile extends Callback {
 
-        private final Supplier<RailcraftTileEntity> tile;
+        private final Supplier<TileRailcraft> tile;
 
-        public CallbackTile(Supplier<RailcraftTileEntity> tile) {
+        public CallbackTile(Supplier<TileRailcraft> tile) {
             this.tile = tile;
         }
 
-        public Optional<RailcraftTileEntity> tile() {
+        public Optional<TileRailcraft> tile() {
             return Optional.ofNullable(tile.get());
         }
 
@@ -223,12 +223,12 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
 
         @Override
         public String getName() {
-            return tile().map(RailcraftTileEntity::getName).orElse("");
+            return tile().map(TileRailcraft::getName).orElse("");
         }
 
         @Override
         public Boolean hasCustomName() {
-            return tile().map(RailcraftTileEntity::hasCustomName).orElse(false);
+            return tile().map(TileRailcraft::hasCustomName).orElse(false);
         }
     }
 }

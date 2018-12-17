@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.plugins.forge;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.util.misc.Capabilities;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -71,12 +71,12 @@ public class EnergyPlugin {
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public static int pushToTiles(RailcraftTileEntity te, int pushPerSide) {
+    public static int pushToTiles(TileRailcraft te, int pushPerSide) {
         return Arrays.stream(EnumFacing.VALUES)
                 .mapToInt(side -> pushToSide(te, pushPerSide, side)).sum();
     }
 
-    private static int pushToSide(RailcraftTileEntity te, int pushPerSide, EnumFacing side) {
+    private static int pushToSide(TileRailcraft te, int pushPerSide, EnumFacing side) {
         return Capabilities.get(te, ENERGY, side).map(source ->
                 te.getTileCache().onSide(side)
                         .flatMap(tile -> Capabilities.get(tile, ENERGY, side.getOpposite()))

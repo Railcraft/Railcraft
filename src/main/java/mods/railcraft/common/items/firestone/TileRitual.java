@@ -10,7 +10,7 @@
 package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.api.core.CollectionToolsAPI;
-import mods.railcraft.common.blocks.RailcraftTickingTileEntity;
+import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
@@ -36,7 +36,7 @@ import java.util.Set;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class TileRitual extends RailcraftTickingTileEntity {
+public class TileRitual extends TileRailcraftTicking {
     public static final int[] REBUILD_DELAY = new int[8];
     private final Deque<BlockPos> queue = CollectionToolsAPI.blockPosDeque(ArrayDeque::new);
     private final Deque<BlockPos> lavaFound = CollectionToolsAPI.blockPosDeque(ArrayDeque::new);

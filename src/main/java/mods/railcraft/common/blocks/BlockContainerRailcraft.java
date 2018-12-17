@@ -34,7 +34,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockContainerRailcraft<T extends RailcraftTileEntity> extends BlockContainer implements IRailcraftBlockTile<T> {
+public abstract class BlockContainerRailcraft<T extends TileRailcraft> extends BlockContainer implements IRailcraftBlockTile<T> {
     protected BlockContainerRailcraft(Material materialIn) {
         super(materialIn);
     }

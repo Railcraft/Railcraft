@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerTank;
@@ -25,7 +25,7 @@ public class GuiTank extends TileGui {
     private ITankTile tile;
 
     public GuiTank(InventoryPlayer inv, ITankTile tile) {
-        super((RailcraftTileEntity) tile, new ContainerTank(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_tank_water.png");
+        super((TileRailcraft) tile, new ContainerTank(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_tank_water.png");
         this.tile = tile;
     }
 

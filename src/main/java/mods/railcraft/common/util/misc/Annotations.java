@@ -25,7 +25,13 @@ public class Annotations {
     }
 
     public static boolean isAnnotatedDeepSearch(Class<? extends Annotation> annotation, Object obj) {
-        return isAnnotated(annotation, obj)
-                || Arrays.stream(obj.getClass().getInterfaces()).anyMatch(c -> c.isAnnotationPresent(annotation));
+        if (isAnnotated(annotation, obj))
+            return true;
+        Class<?> objClass = obj.getClass();
+        do {
+            if (Arrays.stream(objClass.getInterfaces()).anyMatch(c -> c.isAnnotationPresent(annotation)))
+                return true;
+        } while ((objClass = objClass.getSuperclass()) != Object.class);
+        return false;
     }
 }

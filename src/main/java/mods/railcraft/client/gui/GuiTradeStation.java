@@ -10,48 +10,48 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
-import mods.railcraft.common.blocks.single.TileTradeStation;
-import mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.util.logic.TradeStationLogic;
+import mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.util.collections.RevolvingList;
+import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IWorldNameable;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
-import static mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType.NEXT_TRADE;
-import static mods.railcraft.common.blocks.single.TileTradeStation.GuiPacketType.SET_PROFESSION;
+import static mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType.NEXT_TRADE;
+import static mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType.SET_PROFESSION;
 
 public class GuiTradeStation extends TileGui {
 
-    private final TileTradeStation tile;
+    private final IWorldNameable owner;
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
     private final EntityVillager villager;
 
-    public GuiTradeStation(InventoryPlayer playerInv, TileTradeStation tile) {
-        super(tile, new ContainerTradeStation(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+    public GuiTradeStation(InventoryPlayer playerInv, TradeStationLogic logic, IWorldNameable namer) {
+        super(namer, new ContainerTradeStation(playerInv, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+        this.owner = namer;
         xSize = 176;
         ySize = 214;
 
-        this.tile = tile;
-
-        String label = tile.getName();
-
-        villager = new EntityVillager(tile.getWorld());
+        villager = new EntityVillager(logic.theWorldAsserted());
 
         professions.addAll(ForgeRegistries.VILLAGER_PROFESSIONS.getValuesCollection());
 
-        professions.setCurrent(tile.getProfession());
+        professions.setCurrent(logic.getProfession());
         villager.setProfession(professions.getCurrent());
     }
 
@@ -86,27 +86,27 @@ public class GuiTradeStation extends TileGui {
         switch (button.id) {
             case 0:
                 professions.rotateLeft();
-                sendUpdateToTile(SET_PROFESSION, professions.getCurrent());
+                sendUpdate(SET_PROFESSION, professions.getCurrent());
                 break;
             case 1:
                 professions.rotateRight();
-                sendUpdateToTile(SET_PROFESSION, professions.getCurrent());
+                sendUpdate(SET_PROFESSION, professions.getCurrent());
                 break;
             case 2:
-                sendUpdateToTile(NEXT_TRADE, (byte) 0);
+                sendUpdate(NEXT_TRADE, (byte) 0);
                 break;
             case 3:
-                sendUpdateToTile(NEXT_TRADE, (byte) 1);
+                sendUpdate(NEXT_TRADE, (byte) 1);
                 break;
             case 4:
-                sendUpdateToTile(NEXT_TRADE, (byte) 2);
+                sendUpdate(NEXT_TRADE, (byte) 2);
                 break;
         }
 
         villager.setProfession(professions.getCurrent());
     }
 
-    public void sendUpdateToTile(GuiPacketType type, Object... args) {
+    public void sendUpdate(GuiPacketType type, Object... args) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream data = new DataOutputStream(bytes);
         try {
@@ -117,12 +117,12 @@ public class GuiTradeStation extends TileGui {
                 else if (arg instanceof Byte)
                     data.writeByte((Byte) arg);
                 else if (arg instanceof VillagerRegistry.VillagerProfession) {
-                    data.writeUTF(((VillagerRegistry.VillagerProfession) arg).getRegistryName().toString());
+                    data.writeUTF(Objects.requireNonNull(((VillagerRegistry.VillagerProfession) arg).getRegistryName()).toString());
                 }
             }
         } catch (IOException ignored) {
         }
-        PacketBuilder.instance().sendGuiReturnPacket(tile, bytes.toByteArray());
+        PacketBuilder.instance().sendGuiReturnPacket((IGuiReturnHandler) owner, bytes.toByteArray());
     }
 
     @Override

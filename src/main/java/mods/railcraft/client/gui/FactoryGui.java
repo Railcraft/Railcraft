@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.machine.ITankTile;
@@ -25,18 +25,21 @@ import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.single.TileTradeStation;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.logic.ILogicContainer;
+import mods.railcraft.common.util.logic.TradeStationLogic;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
@@ -83,7 +86,7 @@ public class FactoryGui {
                 case DETECTOR_LOCOMOTIVE:
                     return new GuiDetectorLocomotive(inv, (TileDetector) obj);
                 case DETECTOR_ROUTING:
-                    return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) ((TileDetector) obj).getDetector());
+                    return new GuiRouting(inv, (TileRailcraft) obj, (IRouter) ((TileDetector) obj).getDetector());
                 case CART_DISPENSER:
                     return new GuiDispenserCart(inv, (TileDispenserCart) obj);
                 case TRAIN_DISPENSER:
@@ -105,7 +108,7 @@ public class FactoryGui {
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new GuiTradeStation(inv, (TileTradeStation) obj);
+                    return new GuiTradeStation(inv, Code.<ILogicContainer<TradeStationLogic>>cast(obj).getLogic(), (IWorldNameable) obj);
                 case WORLDSPIKE:
                     return new GuiWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:
@@ -121,7 +124,7 @@ public class FactoryGui {
                 case ANVIL:
                     return new GuiAnvil(inv, world, new BlockPos(x, y, z));
                 case ROUTING:
-                    return new GuiRouting(inv, (RailcraftTileEntity) obj, (IRouter) obj);
+                    return new GuiRouting(inv, (TileRailcraft) obj, (IRouter) obj);
                 case TRACK_ROUTING:
                     return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:

@@ -29,7 +29,7 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockContainerRailcraftSubtyped<T extends RailcraftTileEntity, V extends Enum<V> & IVariantEnum> extends BlockContainerRailcraft<T> implements ISubtypedBlock<V> {
+public abstract class BlockContainerRailcraftSubtyped<T extends TileRailcraft, V extends Enum<V> & IVariantEnum> extends BlockContainerRailcraft<T> implements ISubtypedBlock<V> {
     private VariantData<V> variantData;
 
     @SuppressWarnings("SameParameterValue")

@@ -75,14 +75,6 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         return 5;
     }
 
-    @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world)) {
-            player.displayGUIChest(this);
-        }
-        return true;
-    }
-
     /**
      * Called every tick the minecart is on an activator rail.
      */
@@ -219,6 +211,11 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     @Override
     public String getGuiID() {
         return "minecraft:hopper";
+    }
+
+    @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        player.displayGUIChest(this);
     }
 
     @Override

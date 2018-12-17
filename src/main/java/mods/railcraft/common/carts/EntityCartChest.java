@@ -46,13 +46,6 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world))
-            player.displayGUIChest(this);
-        return true;
-    }
-
-    @Override
     public IBlockState getDefaultDisplayTile() {
         return Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.NORTH);
     }
@@ -98,13 +91,18 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        player.displayGUIChest(this);
+    }
+
+    @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
         return new ContainerChest(playerInventory, this, playerIn);
     }
 
     @Override
     protected EnumGui getGuiType() {
-        throw new Error("Should not be called");
+        throw new UnsupportedOperationException("Should not be called");
     }
 
 }

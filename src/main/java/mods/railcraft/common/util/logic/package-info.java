@@ -10,7 +10,7 @@
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.util.chest;
+package mods.railcraft.common.util.logic;
 
 import mcp.MethodsReturnNonnullByDefault;
 

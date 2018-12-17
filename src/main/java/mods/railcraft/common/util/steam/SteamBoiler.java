@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.steam;
 
-import mods.railcraft.common.blocks.RailcraftTileEntity;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.StandardTank;
@@ -35,7 +35,7 @@ public class SteamBoiler {
     private double maxHeat = SteamConstants.MAX_HEAT_LOW;
     private double efficiencyModifier = 1;
     private int ticksPerCycle = 16;
-    private RailcraftTileEntity tile;
+    private TileRailcraft tile;
     private IFuelProvider fuelProvider;
 
     public SteamBoiler(StandardTank tankWater, StandardTank tankSteam) {
@@ -56,7 +56,7 @@ public class SteamBoiler {
         return this;
     }
 
-    public SteamBoiler setTile(RailcraftTileEntity tile) {
+    public SteamBoiler setTile(TileRailcraft tile) {
         this.tile = tile;
         return this;
     }

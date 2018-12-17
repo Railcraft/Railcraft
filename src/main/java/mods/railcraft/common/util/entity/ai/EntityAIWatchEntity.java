@@ -10,40 +10,39 @@
 package mods.railcraft.common.util.entity.ai;
 
 import mods.railcraft.common.plugins.forge.AIPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
-import net.minecraft.block.state.IBlockState;
+import mods.railcraft.common.util.entity.EntitySearcher;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class EntityAIWatchBlock extends EntityAIBase {
+public class EntityAIWatchEntity extends EntityAIBase {
 
-    private final EntityLiving theWatcher;
+    private final EntityLiving owner;
     /**
      * This is the Maximum distance that the AI will look for the Entity
      */
     private final int maxDist;
     private final float weight;
-    private final IBlockState searchedState;
+    private final Predicate<Entity> watchedType;
     /**
      * The closest entity which is being watched by this one.
      */
-    protected @Nullable BlockPos watchedBlock;
+    protected @Nullable Entity watchedEntity;
     private int lookTime;
 
-    public EntityAIWatchBlock(EntityLiving entity, IBlockState searchedState, int maxDist) {
-        this(entity, searchedState, maxDist, 0.02F);
+    public EntityAIWatchEntity(EntityLiving entity, Predicate<Entity> watchedType, int maxDist) {
+        this(entity, watchedType, maxDist, 0.02F);
     }
 
-    public EntityAIWatchBlock(EntityLiving entity, IBlockState searchedState, int maxDist, float weight) {
-        this.theWatcher = entity;
-        this.searchedState = searchedState;
+    public EntityAIWatchEntity(EntityLiving entity, Predicate<Entity> watchedType, int maxDist, float weight) {
+        this.owner = entity;
+        this.watchedType = watchedType;
         this.maxDist = maxDist;
         this.weight = weight;
         setMutexBits(AIPlugin.LOOK);
@@ -54,20 +53,20 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     @Override
     public boolean shouldExecute() {
-        if (theWatcher.getRNG().nextFloat() >= weight)
+        if (owner.getRNG().nextFloat() >= weight)
             return false;
 //            if (this.theWatcher.getAttackTarget() != null)
 //                return false;
 
-        if (watchedBlock == null || isBlockInvalid())
-            watchedBlock = WorldPlugin.findBlock(theWatcher.world, theWatcher.getPosition(), maxDist, state -> Objects.equals(state, searchedState));
+        if (watchedEntity == null || isEntityValid())
+            watchedEntity = EntitySearcher.find().around(owner).outTo(maxDist).and(watchedType).except(owner).in(owner.world).any();
 
-        return watchedBlock != null;
+        return watchedEntity != null;
     }
 
-    private boolean isBlockInvalid() {
-        assert watchedBlock != null;
-        return searchedState != WorldPlugin.getBlockState(theWatcher.world, watchedBlock) || theWatcher.getDistanceSq(watchedBlock) > maxDist * maxDist;
+    private boolean isEntityValid() {
+        assert watchedEntity != null;
+        return watchedEntity.isDead || owner.getDistanceSq(watchedEntity) > maxDist * maxDist;
     }
 
     /**
@@ -75,7 +74,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     @Override
     public void startExecuting() {
-        this.lookTime = 40 + theWatcher.getRNG().nextInt(40);
+        this.lookTime = 40 + owner.getRNG().nextInt(40);
     }
 
     /**
@@ -83,7 +82,7 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     @Override
     public void resetTask() {
-        this.watchedBlock = null;
+        this.watchedEntity = null;
     }
 
     /**
@@ -91,8 +90,8 @@ public class EntityAIWatchBlock extends EntityAIBase {
      */
     @Override
     public void updateTask() {
-        assert watchedBlock != null;
-        theWatcher.getLookHelper().setLookPosition(watchedBlock.getX() + 0.5, watchedBlock.getY() + 0.5, watchedBlock.getZ() + 0.5, 10.0F, theWatcher.getVerticalFaceSpeed());
+        assert watchedEntity != null;
+        owner.getLookHelper().setLookPosition(watchedEntity.posX, watchedEntity.posY + 0.5, watchedEntity.posZ, 10.0F, owner.getVerticalFaceSpeed());
         --this.lookTime;
     }
 }

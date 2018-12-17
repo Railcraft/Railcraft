@@ -109,13 +109,6 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world))
-            GuiHandler.openGui(EnumGui.CART_TRACK_LAYER, player, world, this);
-        return true;
-    }
-
-    @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         ItemStack trackReplace = patternInv.getStackInSlot(SLOT_REPLACE);
         return InvTools.isItemEqual(stack, trackReplace);
