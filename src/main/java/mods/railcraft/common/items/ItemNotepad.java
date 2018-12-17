@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.client.render.models.resource.ModelManager;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
@@ -51,9 +51,12 @@ import java.util.stream.Collectors;
  *
  * Created by Forecaster on 09/05/2016 for the Railcraft project.
  */
-public class ItemNotepad extends ItemRailcraft implements IActivationBlockingItem {
-    public final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + "_filled"), "inventory");
-    public final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + "_empty"), "inventory");
+@ActivationBlockingItem
+public class ItemNotepad extends ItemRailcraft {
+    public static final ModelResourceLocation MODEL_FILLED = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + "_filled"), "inventory");
+    public static final ModelResourceLocation MODEL_EMPTY = new ModelResourceLocation(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, RailcraftItems.NOTEPAD.getBaseTag() + "_empty"), "inventory");
+    public static final String NBT_CONTENTS = "contents";
+    public static final String NBT_PASTE_MODE = "pasteMode";
 
     public ItemNotepad() {
         setMaxStackSize(1);

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.core.WorldCoordinate;
-import mods.railcraft.api.items.IActivationBlockingItem;
+import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.api.items.InvToolsAPI;
 import mods.railcraft.api.signals.IPair;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
@@ -31,7 +31,8 @@ import java.util.function.Function;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemPairingTool extends ItemRailcraft implements IActivationBlockingItem {
+@ActivationBlockingItem
+public class ItemPairingTool extends ItemRailcraft {
     public static final String PAIR_DATA_TAG = "pairData";
     public static final String COORD_TAG = "coord";
     private final String guiTagPrefix;

@@ -9,9 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.detector;
 
-import mods.railcraft.api.items.IActivationBlockingItem;
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
 import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.blocks.BlockMetaVariant;
@@ -280,14 +280,12 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        Item item = playerIn.getHeldItem(hand).getItem();
-        if (item instanceof IActivationBlockingItem)
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (PlayerPlugin.doesItemBlockActivation(player, hand))
             return false;
-        else if (TrackTools.isRailItem(item))
-            return false;
-        TileEntity tile = worldIn.getTileEntity(pos);
-        return tile instanceof TileDetector && ((TileDetector) tile).blockActivated(playerIn);
+        return getTileEntity(state, worldIn, pos)
+                .map(t -> t.blockActivated(player))
+                .orElse(false);
     }
 
     @Override
