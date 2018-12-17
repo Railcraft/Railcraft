@@ -10,9 +10,8 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.chest.InventoryLogic;
-import mods.railcraft.common.util.chest.VoidChestLogic;
-import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.VoidChestLogic;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,24 +19,21 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TileChestVoid extends TileRailcraftChest<VoidChestLogic> {
 
-    private static final int TICK_PER_VOID = 8;
+    private final VoidChestLogic logic = new VoidChestLogic(AbstractLogic.LogicAdapter.of(this), this);
 
     @Override
-    protected InventoryLogic createLogic() {
-        return new VoidChestLogic(getWorld(), this);
+    public VoidChestLogic getLogic() {
+        return logic;
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return null;
     }
 
     @Override
     public void update() {
         super.update();
-        if (Game.isHost(world) && clock % TICK_PER_VOID == 0) {
-            logic.update();
-        }
+        logic.update();
     }
 }

@@ -41,6 +41,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -239,16 +240,12 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
         return world;
     }
 
-    public final World theWorldAsserted() {
-        assert world != null;
-        return world;
-    }
-
     @Override
     public boolean hasCustomName() {
         return !customName.isEmpty();
     }
 
+    @SuppressWarnings("unused")
     public void setCustomName(@Nullable String name) {
         customName = Strings.nullToEmpty(name);
     }
@@ -259,7 +256,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
     }
 
     @Override
-    public ITextComponent getDisplayName() {
+    public @NotNull ITextComponent getDisplayName() {
         return hasCustomName() ? new TextComponentString(customName) : new TextComponentTranslation(getLocalizationTag());
     }
 

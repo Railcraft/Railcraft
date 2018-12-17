@@ -9,18 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
+import mods.railcraft.api.core.IWorldSupplier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IGuiReturnHandler {
-    @Nullable
-    World theWorld();
+public interface IGuiReturnHandler extends IWorldSupplier {
 
     // @SideOnly(Side.CLIENT)
     default void writeGuiData(RailcraftOutputStream data) throws IOException {

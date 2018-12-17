@@ -8,22 +8,23 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.chest;
+package mods.railcraft.common.util.logic;
 
-import mods.railcraft.common.util.inventory.IInventoryComposite;
-import net.minecraft.world.World;
+import net.minecraft.inventory.IInventory;
 
 /**
  * The logic behind the void chest.
  */
 public class VoidChestLogic extends InventoryLogic {
+    private static final int TICK_PER_VOID = 8;
 
-    public VoidChestLogic(World world, IInventoryComposite inventory) {
-        super(world, inventory);
+    public VoidChestLogic(LogicAdapter adapter, IInventory inventory) {
+        super(adapter, inventory);
     }
 
     @Override
-    public void update() {
-        inventory.removeOneItem();
+    public void updateServer() {
+        if (clock(TICK_PER_VOID))
+            removeOneItem();
     }
 }

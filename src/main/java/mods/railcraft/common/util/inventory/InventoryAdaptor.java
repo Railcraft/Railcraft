@@ -50,7 +50,7 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-abstract class InventoryAdaptor implements IInventoryManipulator {
+public abstract class InventoryAdaptor implements IInventoryManipulator {
     private final Object inventory;
 
     private InventoryAdaptor(Object inventory) {
@@ -61,7 +61,7 @@ abstract class InventoryAdaptor implements IInventoryManipulator {
         return inventory;
     }
 
-    public static InventoryAdaptor of(final IInventory inventory) {
+    static InventoryAdaptor of(final IInventory inventory) {
         Objects.requireNonNull(inventory);
         return new InventoryAdaptor(inventory) {
 
@@ -72,7 +72,7 @@ abstract class InventoryAdaptor implements IInventoryManipulator {
         };
     }
 
-    public static InventoryAdaptor of(final IItemHandler inventory) {
+    static InventoryAdaptor of(final IItemHandler inventory) {
         Objects.requireNonNull(inventory);
         return new InventoryAdaptor(inventory) {
 
@@ -83,12 +83,12 @@ abstract class InventoryAdaptor implements IInventoryManipulator {
         };
     }
 
-    public static Optional<InventoryAdaptor> of(@Nullable Object obj) {
+    static Optional<InventoryAdaptor> of(@Nullable Object obj) {
         return of(obj, null);
     }
 
     // TODO: If we want to prefer IItemHandler, this is the place it needs to be done.
-    public static Optional<InventoryAdaptor> of(@Nullable Object obj, @Nullable EnumFacing side) {
+    static Optional<InventoryAdaptor> of(@Nullable Object obj, @Nullable EnumFacing side) {
         InventoryAdaptor inv = null;
         if (obj instanceof InventoryAdaptor) {
             inv = (InventoryAdaptor) obj;

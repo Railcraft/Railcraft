@@ -8,14 +8,15 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.chest;
+package mods.railcraft.common.util.logic;
 
 import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.IInventoryComposite;
+import mods.railcraft.common.util.misc.EnumTools;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.function.Predicate;
  * The logic behind the metals chest.
  */
 public class MetalsChestLogic extends InventoryLogic {
+    private static final int TICK_PER_CONDENSE = 16;
 
     static final Map<Metal, Predicate<ItemStack>> nuggetFilters = new EnumMap<>(Metal.class);
     static final Map<Metal, Predicate<ItemStack>> ingotFilters = new EnumMap<>(Metal.class);
@@ -41,103 +43,103 @@ public class MetalsChestLogic extends InventoryLogic {
 
     private Target target = Target.NUGGET_CONDENSE;
 
-    public MetalsChestLogic(World world, IInventoryComposite inventory) {
-        super(world, inventory);
+    public MetalsChestLogic(LogicAdapter adapter, IInventory inventory) {
+        super(adapter, inventory);
     }
 
     @Override
-    public void update() {
-        if (!target.evaluate(inventory))
-            target = target.next();
+    public void updateServer() {
+        if (clock(TICK_PER_CONDENSE))
+            target = target.evaluate(this);
     }
 
     enum Target {
 
         NUGGET_CONDENSE {
             @Override
-            public boolean evaluate(IInventoryComposite inv) {
+            public Target evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
                     if (!InvTools.isEmpty(ingotStack) && inv.canFit(ingotStack)
                             && inv.removeItems(9, metal.nuggetFilter)) {
                         inv.addStack(ingotStack);
-                        return true;
+                        return this;
                     }
                 }
-                return false;
+                return next();
             }
 
         },
         INGOT_CONDENSE {
             @Override
-            public boolean evaluate(IInventoryComposite inv) {
+            public Target evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
                     if (!InvTools.isEmpty(blockStack) && inv.canFit(blockStack)
                             && inv.removeItems(9, metal.ingotFilter)) {
                         inv.addStack(blockStack);
-                        return true;
+                        return this;
                     }
                 }
-                return false;
+                return next();
             }
 
         },
         NUGGET_SWAP {
             @Override
-            public boolean evaluate(IInventoryComposite inv) {
+            public Target evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = nuggetFilters.get(metal);
                     ItemStack nuggetStack = metal.getStack(Metal.Form.NUGGET);
                     if (!InvTools.isEmpty(nuggetStack) && inv.canFit(nuggetStack)
                             && inv.removeItems(1, filter)) {
                         inv.addStack(nuggetStack);
-                        return true;
+                        return this;
                     }
                 }
-                return false;
+                return next();
             }
 
         },
         INGOT_SWAP {
             @Override
-            public boolean evaluate(IInventoryComposite inv) {
+            public Target evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = ingotFilters.get(metal);
                     ItemStack ingotStack = metal.getStack(Metal.Form.INGOT);
                     if (!InvTools.isEmpty(ingotStack) && inv.canFit(ingotStack)
                             && inv.removeItems(1, filter)) {
                         inv.addStack(ingotStack);
-                        return true;
+                        return this;
                     }
                 }
-                return false;
+                return next();
             }
 
         },
         BLOCK_SWAP {
             @Override
-            public boolean evaluate(IInventoryComposite inv) {
+            public Target evaluate(IInventoryComposite inv) {
                 for (Metal metal : Metal.VALUES) {
                     Predicate<ItemStack> filter = blockFilters.get(metal);
                     ItemStack blockStack = metal.getStack(Metal.Form.BLOCK);
                     if (!InvTools.isEmpty(blockStack) && inv.canFit(blockStack)
                             && inv.removeItems(1, filter)) {
                         inv.addStack(blockStack);
-                        return true;
+                        return this;
                     }
                 }
-                return false;
+                return next();
             }
 
         };
 
         public static final Target[] VALUES = values();
 
-        public abstract boolean evaluate(IInventoryComposite inv);
+        public abstract Target evaluate(IInventoryComposite inv);
 
-        public Target next() {
-            return VALUES[(ordinal() + 1) % VALUES.length];
+        protected Target next() {
+            return EnumTools.next(this, VALUES);
         }
 
     }

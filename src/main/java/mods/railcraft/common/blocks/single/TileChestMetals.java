@@ -10,9 +10,8 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.chest.InventoryLogic;
-import mods.railcraft.common.util.chest.MetalsChestLogic;
-import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.MetalsChestLogic;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -20,26 +19,21 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TileChestMetals extends TileRailcraftChest<MetalsChestLogic> {
 
-    private static final int TICK_PER_CONDENSE = 16;
-    private MetalsChestLogic logic = new MetalsChestLogic(getWorld(), this);
+    private final MetalsChestLogic logic = new MetalsChestLogic(AbstractLogic.LogicAdapter.of(this), this);
 
     @Override
     public void update() {
         super.update();
-
-        if (clock % TICK_PER_CONDENSE == 0 && Game.isHost(world))
-            logic.update();
+        logic.update();
     }
 
     @Override
-    protected InventoryLogic createLogic() {
-        return new MetalsChestLogic(getWorld(), this);
+    public MetalsChestLogic getLogic() {
+        return logic;
     }
 
-
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return null;
     }
 

@@ -11,8 +11,9 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.util.chest.InventoryLogic;
-import mods.railcraft.common.util.chest.MetalsChestLogic;
+import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.InventoryLogic;
+import mods.railcraft.common.util.logic.MetalsChestLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 
@@ -24,7 +25,7 @@ public class EntityCartChestMetals extends EntityCartChestRailcraft {
 
     @Override
     protected InventoryLogic createLogic() {
-        return new MetalsChestLogic(world, this);
+        return new MetalsChestLogic(AbstractLogic.LogicAdapter.of(this), this);
     }
 
     @Override
@@ -35,10 +36,5 @@ public class EntityCartChestMetals extends EntityCartChestRailcraft {
     @Override
     public IBlockState getDefaultDisplayTile() {
         return RailcraftBlocks.CHEST_METALS.getDefaultState();
-    }
-
-    @Override
-    protected int getTickInterval() {
-        return 16;
     }
 }

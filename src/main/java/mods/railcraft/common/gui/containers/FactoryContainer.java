@@ -25,7 +25,9 @@ import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.util.chest.TradeStationLogic;
+import mods.railcraft.common.util.logic.ILogicContainer;
+import mods.railcraft.common.util.logic.TradeStationLogic;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -92,7 +94,7 @@ public final class FactoryContainer {
                 case FEED_STATION:
                     return new ContainerFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new ContainerTradeStation(inv, ((TradeStationLogic.IContainer) obj).getLogic());
+                    return new ContainerTradeStation(inv, Code.<ILogicContainer<TradeStationLogic>>cast(obj).getLogic());
                 case WORLDSPIKE:
                     return new ContainerWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:

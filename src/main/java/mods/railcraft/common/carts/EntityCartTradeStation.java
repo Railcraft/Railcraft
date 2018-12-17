@@ -13,14 +13,14 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.single.BlockTradeStation;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.util.chest.TradeStationLogic;
 import mods.railcraft.common.util.entity.ai.EntityAISearchForEntity;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchEntity;
+import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.ILogicContainer;
+import mods.railcraft.common.util.logic.TradeStationLogic;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -31,7 +31,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
@@ -44,18 +43,17 @@ import java.io.UncheckedIOException;
 /**
  *
  */
-public class EntityCartTradeStation extends CartBaseContainer implements TradeStationLogic.IContainer, IGuiReturnHandler {
+public class EntityCartTradeStation extends CartBaseContainer implements ILogicContainer<TradeStationLogic>, IGuiReturnHandler {
 
     static final byte[] INITIAL_BUFFER;
     static final DataParameter<byte[]> BYTE_BUFFER = DataManagerPlugin.create(DataManagerPlugin.BYTE_ARRAY);
     private final TradeStationLogic logic;
-    private int clock = MiscTools.RANDOM.nextInt();
 
     static {
         try (ByteArrayOutputStream bytes = new ByteArrayOutputStream();
              RailcraftOutputStream stream = new RailcraftOutputStream(bytes)) {
             stream.writeUTF("minecraft:farmer");
-            stream.writeByte(EnumFacing.NORTH.ordinal());
+            stream.writeByte(EnumFacing.WEST.ordinal());
             INITIAL_BUFFER = bytes.toByteArray();
         } catch (IOException ex) {
             Game.log(Level.FATAL, "Cannot initialize trade station cart");
@@ -65,18 +63,7 @@ public class EntityCartTradeStation extends CartBaseContainer implements TradeSt
 
     protected EntityCartTradeStation(World world) {
         super(world);
-        logic = new TradeStationLogic(world, this) {
-            @Override
-            public boolean openGui(EntityPlayer player) {
-                GuiHandler.openGui(EnumGui.TRADE_STATION, player, getWorld(), EntityCartTradeStation.this);
-                return true;
-            }
-
-            @Override
-            public void onLogicChanged() {
-                setDisplayTile(RailcraftBlocks.TRADE_STATION.getDefaultState().withProperty(BlockTradeStation.FACING, direction));
-            }
-
+        logic = new TradeStationLogic(AbstractLogic.LogicAdapter.of(this), this) {
             @Override
             public void sendUpdateToClient() {
                 try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -88,31 +75,6 @@ public class EntityCartTradeStation extends CartBaseContainer implements TradeSt
                     if (Game.DEVELOPMENT_ENVIRONMENT)
                         throw new UncheckedIOException(ex);
                 }
-            }
-
-            @Override
-            public double getX() {
-                return posX;
-            }
-
-            @Override
-            public double getY() {
-                return posY;
-            }
-
-            @Override
-            public double getZ() {
-                return posZ;
-            }
-
-            @Override
-            public BlockPos getPos() {
-                return getPosition();
-            }
-
-            @Override
-            public String getName() {
-                return EntityCartTradeStation.this.getName();
             }
 
             @Override
@@ -134,20 +96,12 @@ public class EntityCartTradeStation extends CartBaseContainer implements TradeSt
     @Override
     public void onUpdate() {
         super.onUpdate();
-
-        if (Game.isClient(world))
-            return;
-
-        clock++;
-        if (clock % 256 == 0)
-            logic.updateNearbyAI();
-
         logic.update();
     }
 
     @Override
     public IBlockState getDefaultDisplayTile() {
-        return RailcraftBlocks.TRADE_STATION.getDefaultState().withProperty(BlockTradeStation.FACING, logic.direction);
+        return RailcraftBlocks.TRADE_STATION.getDefaultState().withProperty(BlockTradeStation.FACING, EnumFacing.WEST);
     }
 
     @Override

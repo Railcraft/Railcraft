@@ -8,10 +8,13 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.util.chest;
+package mods.railcraft.common.util.logic;
 
-import mcp.MethodsReturnNonnullByDefault;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+/**
+ * Created by CovertJaguar on 12/17/2018 for Railcraft.
+ *
+ * @author CovertJaguar <http://www.railcraft.info>
+ */
+public interface ILogicContainer<T extends AbstractLogic> {
+    T getLogic();
+}

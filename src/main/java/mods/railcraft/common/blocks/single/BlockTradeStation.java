@@ -13,15 +13,21 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 @BlockMetaTile(TileTradeStation.class)
 public class BlockTradeStation extends BlockEntityDelegate<TileTradeStation> {
@@ -59,5 +65,31 @@ public class BlockTradeStation extends BlockEntityDelegate<TileTradeStation> {
                 'G', Blocks.GLASS_PANE,
                 'E', "gemEmerald",
                 'D', Blocks.DISPENSER);
+    }
+
+    public EnumFacing getFacing(IBlockState state) {
+        return state.getValue(FACING);
+    }
+
+    @Override
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+        //noinspection ConstantConditions
+        return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(FACING,
+                placer == null ? EnumFacing.NORTH : MiscTools.getHorizontalSideFacingPlayer(placer));
+    }
+
+    @Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis) {
+        if (axis.getAxis() == EnumFacing.Axis.Y)
+            return false;
+        IBlockState state = WorldPlugin.getBlockState(world, pos);
+        EnumFacing facing = getFacing(state);
+        if (facing == axis)
+            facing = axis.getOpposite();
+        else
+            facing = axis;
+        WorldPlugin.setBlockState(world, pos, state.withProperty(FACING, facing));
+        markBlockForUpdate(world, pos);
+        return true;
     }
 }

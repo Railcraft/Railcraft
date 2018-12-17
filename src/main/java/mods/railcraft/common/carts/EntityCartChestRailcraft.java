@@ -13,9 +13,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.chest.InventoryLogic;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.logic.InventoryLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,11 +21,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public abstract class EntityCartChestRailcraft extends CartBaseContainer {
-    private int clock = MiscTools.RANDOM.nextInt();
     protected final InventoryLogic logic = createLogic();
 
     protected EntityCartChestRailcraft(World world) {
@@ -41,8 +37,6 @@ public abstract class EntityCartChestRailcraft extends CartBaseContainer {
 
     @Override
     public abstract IBlockState getDefaultDisplayTile();
-
-    protected abstract int getTickInterval();
 
     @Override
     public int getDefaultDisplayTileOffset() {
@@ -87,11 +81,7 @@ public abstract class EntityCartChestRailcraft extends CartBaseContainer {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        clock++;
-
-        if (Game.isHost(world) && clock % getTickInterval() == 0) {
-            logic.update();
-        }
+        logic.update();
     }
 
     @Override
