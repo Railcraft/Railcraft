@@ -52,7 +52,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     public final SteamBoiler boiler;
     private boolean wasLit;
     protected final InventoryAdvanced inventory;
-    protected final InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
+    //    protected final InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
     protected final InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_LIQUID_OUTPUT, 1).ignoreItemChecks();
 
     protected TileBoilerFirebox(int invSize) {
@@ -134,7 +134,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
             return;
         }
 
-        if (isMaster) {
+        if (isValidMaster()) {
             process();
 
             boiler.tick(getNumTanks());

@@ -152,8 +152,7 @@ public final class CraftingPlugin {
         return ingredients;
     }
 
-    @Nullable
-    public static Ingredient getIngredient(Object source) {
+    public static @Nullable Ingredient getIngredient(Object source) {
         if (source instanceof FluidStack) {
             return new FluidIngredient((FluidStack) source);
         }
@@ -341,7 +340,7 @@ public final class CraftingPlugin {
     }
 
     private static final class ResourceLocationGenerator implements Iterator<ResourceLocation> {
-        int now = 0;
+        int now;
 
         ResourceLocationGenerator() {
         }
@@ -469,7 +468,7 @@ public final class CraftingPlugin {
         });
     }
 
-    //TODO fix all these messs
+    //TODO fix all these messes
     private void addShapelessRecipeWaiter(ItemStack stack, Object... args) {
         add(() -> {
         });

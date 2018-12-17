@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,13 +31,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
+/**
  * Note: the nbt for the item is as such:
  * /give @s railcraft:track_outfitted 1 0 {railcraft:{rail:"railcraft_reinforced",kit:"railcraft_buffer"}
  * Gives the sender a reinforced buffer stop track item.
@@ -68,7 +69,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
         }
         ModelManager.registerComplexItemModel(this, (stack -> new ModelResourceLocation(
                 new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN,
-                        MODEL_PREFIX + getSuffix(stack)), "inventory")), textures.toArray(new ModelResourceLocation[textures.size()]));
+                        MODEL_PREFIX + getSuffix(stack)), "inventory")), textures.toArray(new ModelResourceLocation[0]));
     }
 
     @Override
@@ -112,7 +113,7 @@ public class ItemTrackOutfitted extends ItemTrack implements ITrackItem {
     }
 
     @Override
-    public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile) {
+    public boolean isPlacedTileEntity(ItemStack stack, @Nullable TileEntity tile) {
         if (tile instanceof TileTrackOutfitted) {
             TileTrackOutfitted track = (TileTrackOutfitted) tile;
             return track.getTrackKitInstance().getTrackKit() == TrackRegistry.TRACK_KIT.get(stack);

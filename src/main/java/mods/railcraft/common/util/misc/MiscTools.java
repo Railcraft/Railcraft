@@ -28,7 +28,6 @@ public final class MiscTools {
 
     public static final Random RANDOM = new Random();
 
-    @SuppressWarnings("ConstantConditions")
     public static String cleanTag(String tag) {
         return tag.replaceAll("[Rr]ailcraft\\p{Punct}", "").replaceFirst("^tile\\.", "").replaceFirst("^item\\.", "");
     }
@@ -43,18 +42,6 @@ public final class MiscTools {
         return raytraceresult == null ? null : new RayTraceResult(raytraceresult.hitVec.add(pos.getX(), pos.getY(), pos.getZ()), raytraceresult.sideHit, pos);
     }
 
-    private static boolean isVecOutsideYZBounds(@Nullable Vec3d vec3d) {
-        return vec3d == null || vec3d.y < 0 || vec3d.y > 1 || vec3d.z < 0 || vec3d.z > 1;
-    }
-
-    private static boolean isVecOutsideXZBounds(@Nullable Vec3d vec3d) {
-        return vec3d == null || vec3d.x < 0 || vec3d.x > 1 || vec3d.z < 0 || vec3d.z > 1;
-    }
-
-    private static boolean isVecOutsideXYBounds(@Nullable Vec3d vec3d) {
-        return vec3d == null || vec3d.x < 0 || vec3d.x > 1 || vec3d.y < 0 || vec3d.y > 1;
-    }
-
     public static @Nullable RayTraceResult rayTracePlayerLook(EntityPlayer player) {
         Entity pointedEntity = null;
         final double reach = player.capabilities.isCreativeMode ? 5.0F : 4.5F;
@@ -66,7 +53,7 @@ public final class MiscTools {
         List<Entity> foundEntities = player.world.getEntitiesInAABBexcluding(player,
                 player.getEntityBoundingBox().grow(lookVec.x * reach, lookVec.y * reach, lookVec.z * reach)
                         .grow(1),
-                com.google.common.base.Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith()));
+                Predicates.and(EntitySelectors.NOT_SPECTATING, e -> e != null && e.canBeCollidedWith())::test);
         double smallestDistance = reach;
 
         for (Entity entity : foundEntities) {

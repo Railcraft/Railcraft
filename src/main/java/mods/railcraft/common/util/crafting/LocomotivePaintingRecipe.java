@@ -19,6 +19,7 @@ import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -28,9 +29,9 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
     private final ItemStack locomotive;
 
     public LocomotivePaintingRecipe(ItemStack locomotive) {
-        super(locomotive.getItem().getRegistryName().getPath() + "_painting");
+        super(Objects.requireNonNull(locomotive.getItem().getRegistryName()).getPath() + "_painting");
         this.locomotive = locomotive;
-        InvTools.addTagString(locomotive, "gregfix", "get the hell off my lawn!");
+        InvTools.getItemData(locomotive).setString("gregfix", "get the hell off my lawn!");
     }
 
     private boolean isDye(ItemStack stack) {
