@@ -10,11 +10,25 @@
 
 package mods.railcraft.common.util.logic;
 
+import mods.railcraft.api.core.INetworkedObject;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
+import net.minecraft.world.IWorldNameable;
+
 /**
  * Created by CovertJaguar on 12/17/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ILogicContainer<T extends ILogic> {
-    T getLogic();
+public interface ILogic extends ITickable, INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IWorldNameable {
+
+    default NBTTagCompound writeToNBT(NBTTagCompound data) {
+        return data;
+    }
+
+    default void readFromNBT(NBTTagCompound data) {
+    }
+
 }

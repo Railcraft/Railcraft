@@ -153,6 +153,7 @@ public abstract class TradeStationLogic extends InventoryLogic implements IGuiRe
         invOutput.addStack(InvTools.copy(recipe.getItemToSell()));
     }
 
+    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         recipeSlots.writeToNBT("recipe", data);
 
@@ -160,6 +161,7 @@ public abstract class TradeStationLogic extends InventoryLogic implements IGuiRe
         return data;
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound data) {
         recipeSlots.readFromNBT("recipe", data);
 

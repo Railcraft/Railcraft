@@ -12,6 +12,9 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.TankManager;
+import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -29,6 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -50,6 +54,16 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     protected static final int SLOT_LIQUID_INPUT = 0;
     protected static final int SLOT_LIQUID_OUTPUT = 1;
     public final SteamBoiler boiler;
+    protected final TankManager tankManager = new TankManager();
+    protected final FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
+        @Override
+        public int fillInternal(@org.jetbrains.annotations.Nullable FluidStack resource, boolean doFill) {
+            if (!isValidMaster()) return 0;
+            return super.fillInternal(onFillWater(resource), doFill);
+        }
+    }.setFilterFluid(Fluids.WATER);
+    protected final FilteredTank tankSteam = new FilteredTank(16 * FluidTools.BUCKET_VOLUME, this)
+            .setFilterFluid(Fluids.STEAM);
     private boolean wasLit;
     protected final InventoryAdvanced inventory;
     //    protected final InventoryMapper invWaterInput = InventoryMapper.make(this, SLOT_LIQUID_INPUT, 1);
@@ -57,6 +71,10 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
 
     protected TileBoilerFirebox(int invSize) {
         inventory = new InventoryAdvanced(invSize).callbackInv(this);
+
+        tankManager.add(tankWater);
+        tankManager.add(tankSteam);
+
         boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setTile(this);
     }

@@ -10,15 +10,11 @@
 
 package mods.railcraft.common.util.logic;
 
-import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorldNameable;
@@ -28,8 +24,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A base logic with a world defined.
  */
-public abstract class AbstractLogic implements ITickable,
-        INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IWorldNameable {
+public abstract class AbstractLogic implements ILogic {
     protected final LogicAdapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
 
@@ -47,11 +42,11 @@ public abstract class AbstractLogic implements ITickable,
     }
 
     @SuppressWarnings("EmptyMethod")
-    protected void updateClient() {
+    void updateClient() {
 
     }
 
-    protected void updateServer() {
+    void updateServer() {
 
     }
 

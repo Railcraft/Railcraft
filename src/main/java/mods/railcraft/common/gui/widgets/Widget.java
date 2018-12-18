@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -69,9 +69,7 @@ public class Widget {
         gui.drawTexturedModalRect(guiX + x, guiY + y, u, v, w, h);
     }
 
-    @Nullable
-    @SideOnly(Side.CLIENT)
-    public ToolTip getToolTip() {
+    public @Nullable ToolTip getToolTip() {
         return null;
     }
 

@@ -12,9 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -56,9 +54,6 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     protected static final List<MultiBlockPattern> patterns = new ArrayList<>();
     private static final Set<IBlockState> boilerBlocks = new HashSet<>();
     private static final Set<IBlockState> fireboxBlocks = new HashSet<>();
-    protected final TankManager tankManager = new TankManager();
-    protected final FilteredTank tankWater;
-    protected final FilteredTank tankSteam;
     private boolean explode;
 
     static {
@@ -90,19 +85,6 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
 
     protected TileBoiler() {
         super(patterns);
-
-        tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
-            @Override
-            public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
-                if (!isValidMaster()) return 0;
-                return super.fillInternal(onFillWater(resource), doFill);
-            }
-        }.setFilterFluid(Fluids.WATER);
-        tankManager.add(tankWater);
-
-        tankSteam = new FilteredTank(16 * FluidTools.BUCKET_VOLUME, this)
-                .setFilterFluid(Fluids.STEAM);
-        tankManager.add(tankSteam);
     }
 
     private static MultiBlockPattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int capacity) {
@@ -205,7 +187,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
 
     @Override
     public TankManager getTankManager() {
-        TileBoiler mBlock = (TileBoiler) getMasterBlock();
+        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
         if (mBlock != null)
             return mBlock.tankManager;
         return TankManager.NIL;

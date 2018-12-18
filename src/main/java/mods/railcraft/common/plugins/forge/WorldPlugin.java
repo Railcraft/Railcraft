@@ -60,11 +60,17 @@ public class WorldPlugin {
     }
 
     public static <T> Optional<T> getTileEntity(@Nullable IBlockAccess world, @Nullable BlockPos pos, Class<T> tileClass) {
+        return getTileEntity(world, pos, tileClass, false);
+    }
+
+    public static <T> Optional<T> getTileEntity(@Nullable IBlockAccess world, @Nullable BlockPos pos, Class<T> tileClass, boolean checkLoaded) {
         if (world == null || pos == null)
             return Optional.empty();
-        TileEntity tileEntity = getBlockTile(world, pos);
-        if (tileClass.isInstance(tileEntity))
-            return Optional.of(tileClass.cast(tileEntity));
+        if (!checkLoaded || !(world instanceof World) || isBlockLoaded((World) world, pos)) {
+            TileEntity tileEntity = getBlockTile(world, pos);
+            if (tileClass.isInstance(tileEntity))
+                return Optional.of(tileClass.cast(tileEntity));
+        }
         return Optional.empty();
     }
 

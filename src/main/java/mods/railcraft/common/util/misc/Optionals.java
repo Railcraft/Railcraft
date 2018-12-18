@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.misc;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -31,5 +32,15 @@ public class Optionals {
         if (obj.isPresent())
             return obj.get();
         return orElse;
+    }
+
+    public static <T, U> Function<T, Optional<U>> toType(Class<U> clazz) {
+        return t -> {
+            if (clazz.isInstance(t)) {
+                return Optional.of(clazz.cast(t));
+            } else {
+                return Optional.empty();
+            }
+        };
     }
 }
