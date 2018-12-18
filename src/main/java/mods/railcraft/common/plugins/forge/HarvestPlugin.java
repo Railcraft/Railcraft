@@ -47,7 +47,7 @@ public final class HarvestPlugin {
     private static final MethodHandle GET_SILK_TOUCH_DROP_METHOD;
 
     static {
-        String methodName = Game.DEVELOPMENT_ENVIRONMENT ? "getSilkTouchDrop" : "func_180643_i";
+        String methodName = Game.OBFUSCATED ? "getSilkTouchDrop" : "func_180643_i";
         MethodHandle handle = null;
         try {
             Method method = Block.class.getDeclaredMethod(methodName, IBlockState.class);
