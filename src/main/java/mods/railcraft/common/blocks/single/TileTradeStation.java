@@ -16,7 +16,7 @@ import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAISearchForBlock;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchBlock;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.Logic;
 import mods.railcraft.common.util.logic.ILogicContainer;
 import mods.railcraft.common.util.logic.TradeStationLogic;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -42,7 +42,7 @@ public class TileTradeStation extends TileSmartItemTicking implements ILogicCont
 
     public TileTradeStation() {
         super(16);
-        logic = new TradeStationLogic(AbstractLogic.LogicAdapter.of(this), this) {
+        logic = new TradeStationLogic(Logic.Adapter.of(this), this) {
 
             @Override
             protected void modifyNearbyAI() {

@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.Logic;
 import mods.railcraft.common.util.logic.MetalsChestLogic;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class TileChestMetals extends TileRailcraftChest<MetalsChestLogic> {
 
-    private final MetalsChestLogic logic = new MetalsChestLogic(AbstractLogic.LogicAdapter.of(this), this);
+    private final MetalsChestLogic logic = new MetalsChestLogic(Logic.Adapter.of(this), this);
 
     @Override
     public void update() {

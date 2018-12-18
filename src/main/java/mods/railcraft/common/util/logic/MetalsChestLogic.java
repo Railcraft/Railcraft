@@ -43,7 +43,7 @@ public class MetalsChestLogic extends InventoryLogic {
 
     private Target target = Target.NUGGET_CONDENSE;
 
-    public MetalsChestLogic(LogicAdapter adapter, IInventory inventory) {
+    public MetalsChestLogic(Adapter adapter, IInventory inventory) {
         super(adapter, inventory);
     }
 

@@ -18,7 +18,7 @@ import net.minecraft.inventory.IInventory;
 public class VoidChestLogic extends InventoryLogic {
     private static final int TICK_PER_VOID = 8;
 
-    public VoidChestLogic(LogicAdapter adapter, IInventory inventory) {
+    public VoidChestLogic(Adapter adapter, IInventory inventory) {
         super(adapter, inventory);
     }
 

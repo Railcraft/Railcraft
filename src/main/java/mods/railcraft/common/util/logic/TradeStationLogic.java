@@ -57,7 +57,7 @@ public abstract class TradeStationLogic extends InventoryLogic implements IGuiRe
     private final InventoryMapper invInput = InventoryMapper.make(inventory, 0, 10);
     private final InventoryMapper invOutput = InventoryMapper.make(inventory, 10, 6).ignoreItemChecks();
 
-    protected TradeStationLogic(LogicAdapter adapter, IInventory inventory) {
+    protected TradeStationLogic(Adapter adapter, IInventory inventory) {
         super(adapter, inventory);
     }
 

@@ -20,12 +20,12 @@ import java.util.Iterator;
 /**
  *
  */
-public abstract class InventoryLogic extends AbstractLogic implements IInventoryComposite {
+public abstract class InventoryLogic extends Logic implements IInventoryComposite {
 
     protected final IInventory inventory;
     protected final IInventoryComposite composite;
 
-    InventoryLogic(LogicAdapter adapter, IInventory inventory) {
+    InventoryLogic(Adapter adapter, IInventory inventory) {
         super(adapter);
         this.inventory = inventory;
         this.composite = InventoryComposite.of(inventory);

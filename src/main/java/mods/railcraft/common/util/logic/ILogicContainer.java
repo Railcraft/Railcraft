@@ -15,6 +15,6 @@ package mods.railcraft.common.util.logic;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ILogicContainer<T extends ILogic> {
+public interface ILogicContainer<T extends Logic> {
     T getLogic();
 }

@@ -10,11 +10,16 @@
 
 package mods.railcraft.common.util.logic;
 
+import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorldNameable;
@@ -22,13 +27,13 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A base logic with a world defined.
+ * The basic logic class.
  */
-public abstract class AbstractLogic implements ILogic {
-    protected final LogicAdapter adapter;
+public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IWorldNameable {
+    protected final Adapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
 
-    AbstractLogic(LogicAdapter adapter) {
+    Logic(Adapter adapter) {
         this.adapter = adapter;
     }
 
@@ -96,7 +101,14 @@ public abstract class AbstractLogic implements ILogic {
         adapter.sendUpdateToClient();
     }
 
-    public abstract static class LogicAdapter implements IWorldSupplier, IWorldNameable {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        return data;
+    }
+
+    public void readFromNBT(NBTTagCompound data) {
+    }
+
+    public abstract static class Adapter implements IWorldSupplier, IWorldNameable {
 
         abstract double getX();
 
@@ -108,8 +120,8 @@ public abstract class AbstractLogic implements ILogic {
 
         abstract void sendUpdateToClient();
 
-        public static LogicAdapter of(TileRailcraft tile) {
-            return new LogicAdapter() {
+        public static Adapter of(TileRailcraft tile) {
+            return new Adapter() {
                 @Override
                 public @Nullable World theWorld() {
                     return tile.theWorld();
@@ -157,8 +169,8 @@ public abstract class AbstractLogic implements ILogic {
             };
         }
 
-        public static LogicAdapter of(EntityMinecart entity) {
-            return new LogicAdapter() {
+        public static Adapter of(EntityMinecart entity) {
+            return new Adapter() {
                 @Override
                 double getX() {
                     return entity.posX;

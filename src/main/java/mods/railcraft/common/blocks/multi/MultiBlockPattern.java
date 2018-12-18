@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.logic.StructureLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
@@ -78,15 +79,19 @@ public final class MultiBlockPattern {
         return entityCheckBounds.offset(masterPos.getX(), masterPos.getY(), masterPos.getZ());
     }
 
-    public char getPatternMarkerChecked(BlockPos patternPos) {
-        int x = patternPos.getX();
-        int y = patternPos.getY();
-        int z = patternPos.getZ();
+    public char getPatternMarkerChecked(BlockPos posInPattern) {
+        int x = posInPattern.getX();
+        int y = posInPattern.getY();
+        int z = posInPattern.getZ();
         if (x < 0 || y < 0 || z < 0)
             return EMPTY_PATTERN;
         if (x >= getPatternWidthX() || y >= getPatternHeight() || z >= getPatternWidthZ())
             return EMPTY_PATTERN;
-        return getPatternMarker(x, y, z);
+        return getPatternMarker(posInPattern);
+    }
+
+    public char getPatternMarker(BlockPos posInPattern) {
+        return getPatternMarker(posInPattern.getX(), posInPattern.getY(), posInPattern.getZ());
     }
 
     public char getPatternMarker(int x, int y, int z) {
@@ -127,6 +132,7 @@ public final class MultiBlockPattern {
         return attachedData == null ? backup : (T) attachedData;
     }
 
+    @Deprecated
     public State testPattern(TileMultiBlock tile) {
         int xWidth = getPatternWidthX();
         int zWidth = getPatternWidthZ();
@@ -156,6 +162,39 @@ public final class MultiBlockPattern {
 //                    System.out.println("test entities: " + entityCheckBounds.toString());
 //                }
         if (entityCheckBounds != null && !tile.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, entityCheckBounds).isEmpty())
+            return State.ENTITY_IN_WAY;
+        return State.VALID;
+    }
+
+    public State testPattern(StructureLogic logic) {
+        int xWidth = getPatternWidthX();
+        int zWidth = getPatternWidthZ();
+        int height = getPatternHeight();
+
+        BlockPos offset = logic.getPos().subtract(getMasterOffset());
+
+        BlockPos.PooledMutableBlockPos now = BlockPos.PooledMutableBlockPos.retain();
+        for (int patX = 0; patX < xWidth; patX++) {
+            for (int patY = 0; patY < height; patY++) {
+                for (int patZ = 0; patZ < zWidth; patZ++) {
+                    int x = patX + offset.getX();
+                    int y = patY + offset.getY();
+                    int z = patZ + offset.getZ();
+                    now.setPos(x, y, z);
+                    if (!logic.theWorldAsserted().isBlockLoaded(now))
+                        return State.NOT_LOADED;
+                    if (!logic.isMapPositionValid(now, getPatternMarker(patX, patY, patZ)))
+                        return State.PATTERN_DOES_NOT_MATCH;
+                }
+            }
+        }
+        now.release();
+
+        AxisAlignedBB entityCheckBounds = getEntityCheckBounds(logic.getPos());
+//                if(entityCheckBounds != null) {
+//                    System.out.println("test entities: " + entityCheckBounds.toString());
+//                }
+        if (entityCheckBounds != null && !logic.theWorldAsserted().getEntitiesWithinAABB(EntityLivingBase.class, entityCheckBounds).isEmpty())
             return State.ENTITY_IN_WAY;
         return State.VALID;
     }

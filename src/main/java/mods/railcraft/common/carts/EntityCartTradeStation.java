@@ -17,7 +17,7 @@ import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAISearchForEntity;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchEntity;
-import mods.railcraft.common.util.logic.AbstractLogic;
+import mods.railcraft.common.util.logic.Logic;
 import mods.railcraft.common.util.logic.ILogicContainer;
 import mods.railcraft.common.util.logic.TradeStationLogic;
 import mods.railcraft.common.util.misc.Game;
@@ -63,7 +63,7 @@ public class EntityCartTradeStation extends CartBaseContainer implements ILogicC
 
     protected EntityCartTradeStation(World world) {
         super(world);
-        logic = new TradeStationLogic(AbstractLogic.LogicAdapter.of(this), this) {
+        logic = new TradeStationLogic(Logic.Adapter.of(this), this) {
             @Override
             public void sendUpdateToClient() {
                 try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
