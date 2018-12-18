@@ -16,7 +16,6 @@ import mods.railcraft.common.fluids.tanks.FakeTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -144,9 +143,12 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         if (!isStructureValid())
             return base.getBlock().getDefaultState();
         BlockPos pos = getPatternPosition();
-        MultiBlockPattern pattern = getPattern();
-        for (Map.Entry<EnumFacing, PropertyBool> entry : BlockTankIronValve.TOUCHES.entrySet()) {
-            base = base.withProperty(entry.getValue(), !isMapPositionOtherBlock(pattern.getPatternMarkerChecked(pos.offset(entry.getKey()))));
+        MultiBlockPattern pattern = requireNonNull(getPattern());
+        for (EnumFacing facing : EnumFacing.VALUES) {
+            if (isMapPositionOtherBlock(pattern.getPatternMarkerChecked(pos.offset(facing)))) {
+                base = base.withProperty(BlockTankIronValve.OPTIONAL_AXIS, BlockTankIronValve.OptionalAxis.from(facing.getAxis()));
+                break;
+            }
         }
         return base;
     }

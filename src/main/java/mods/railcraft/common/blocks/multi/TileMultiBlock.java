@@ -14,7 +14,9 @@ import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.events.MultiBlockEvent.Form;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -34,8 +36,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,13 +57,13 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     private boolean requestPacket;
     private MultiBlockState state;
     private @Nullable TileMultiBlock masterBlock;
-    private MultiBlockPattern currentPattern;
+    private @Nullable MultiBlockPattern currentPattern;
     private @Nullable UUID uuidMaster;
 
     protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
         this.patterns = patterns;
-        currentPattern = patterns.get(0);
-        state = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? MultiBlockState.VALID : MultiBlockState.UNTESTED;
+        currentPattern = null;
+        state = MultiBlockState.UNTESTED;
         components.add(this);
     }
 
@@ -114,19 +114,20 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
         posInPattern = new BlockPos(x, y, z);
     }
 
-    public final MultiBlockPattern getPattern() {
+    public final @Nullable MultiBlockPattern getPattern() {
+        assert !(isStructureValid() && (currentPattern == null));
         return currentPattern;
     }
 
-    public final void setPattern(MultiBlockPattern pattern) {
-        if (currentPattern != pattern) {
+    public final void setPattern(@Nullable MultiBlockPattern pattern) {
+        if (Game.isHost(world) && currentPattern != pattern) {
             onPatternChanged();
-            this.currentPattern = pattern;
         }
+        this.currentPattern = pattern;
     }
 
     public final byte getPatternIndex() {
-        return (byte) patterns.indexOf(currentPattern);
+        return currentPattern == null ? -1 : (byte) patterns.indexOf(currentPattern);
     }
 
     public final BlockPos getMasterPos() {
@@ -260,6 +261,7 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     private void testPatterns() {
         patternStates.clear();
         patterns.forEach(map -> patternStates.put(map.testPattern(this), map));
+        // TODO just return the first valid one for performance concerns
     }
 
     @Override
@@ -360,7 +362,8 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
 
         isMaster = data.getBoolean("master");
         try {
-            currentPattern = patterns.get(data.getByte("pattern"));
+            byte index = data.getByte("pattern");
+            currentPattern = index < 0 ? null : patterns.get(index);
         } catch (Exception ex) {
             //NOOP
         }
@@ -371,9 +374,9 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        boolean hasMaster = getMasterBlock() != null;
-        data.writeBoolean(hasMaster);
-        if (hasMaster) {
+        MultiBlockState state = getState();
+        data.writeEnum(state);
+        if (state == MultiBlockState.VALID) {
             byte patternIndex = getPatternIndex();
             data.writeByte(patternIndex);
 
@@ -390,8 +393,10 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
         requestPacket = false;
         boolean needsRenderUpdate = false;
 
-        boolean hasMaster = data.readBoolean();
-        if (hasMaster) {
+        MultiBlockState state = data.readEnum(MultiBlockState.VALUES);
+
+        if (state == MultiBlockState.VALID) {
+            this.state = MultiBlockState.VALID;
             byte patternIndex = data.readByte();
             patternIndex = (byte) Math.max(patternIndex, 0);
             patternIndex = (byte) Math.min(patternIndex, patterns.size() - 1);
@@ -402,8 +407,8 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
             byte pZ = data.readByte();
 
 //            System.out.println("HasMaster :" + pX + ", " + pY + ", " + pZ);
-
-            if (posInPattern == null || posInPattern.getX() != pX || posInPattern.getY() != pY || posInPattern.getZ() != pZ) {
+            byte oldPatternIndex = getPatternIndex();
+            if (oldPatternIndex != patternIndex || posInPattern.getX() != pX || posInPattern.getY() != pY || posInPattern.getZ() != pZ) {
                 posInPattern = new BlockPos(pX, pY, pZ);
                 needsRenderUpdate = true;
             }
@@ -424,10 +429,12 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
                 }
             if (getMasterBlock() == null)
                 requestPacket = true;
-        } else if (masterBlock != null) {
+        } else if (state != getState() || masterBlock != null) {
             needsRenderUpdate = true;
             masterBlock = null;
             isMaster = false;
+            this.state = state;
+            setPattern(null);
         }
 
         if (needsRenderUpdate)
@@ -452,6 +459,11 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
 
     @Override
     public final boolean isStructureValid() {
+        boolean valid = masterBlock != null && masterBlock.state == MultiBlockState.VALID;
+        if (valid) {
+            assert masterBlock.isMaster;
+            assert !masterBlock.isInvalid();
+        }
         return masterBlock != null && masterBlock.state == MultiBlockState.VALID && masterBlock.isMaster && !masterBlock.isInvalid();
     }
 
@@ -468,8 +480,10 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     public final boolean openGui(EntityPlayer player) {
         TileMultiBlock masterBlock = getMasterBlock();
 
-        if (masterBlock != null && isStructureValid() && masterBlock.getGui() != null) {
-            GuiHandler.openGui(masterBlock.getGui(), player, world, masterBlock.getPos());
+        if (isStructureValid() && masterBlock != null) {
+            EnumGui gui = masterBlock.getGui();
+            if (gui != null)
+                GuiHandler.openGui(gui, player, world, masterBlock.getPos());
             return true;
         }
         return false;
@@ -481,7 +495,7 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     }
 
     @Override
-    public MultiBlockPattern getCurrentPattern() {
+    public @Nullable MultiBlockPattern getCurrentPattern() {
         return currentPattern;
     }
 
@@ -492,7 +506,9 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
 
     public enum MultiBlockState {
 
-        VALID, INVALID, UNKNOWN, UNTESTED
+        VALID, INVALID, UNKNOWN, UNTESTED;
+
+        static final MultiBlockState[] VALUES = values();
     }
 
 }

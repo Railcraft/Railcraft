@@ -245,6 +245,7 @@ public final class MultiBlockPattern {
     public enum State {
 
         VALID(TileMultiBlock.MultiBlockState.VALID, "railcraft.multiblock.state.valid"),
+        // TODO map to untested?
         ENTITY_IN_WAY(TileMultiBlock.MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.entity"),
         PATTERN_DOES_NOT_MATCH(TileMultiBlock.MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.pattern"),
         NOT_LOADED(TileMultiBlock.MultiBlockState.UNKNOWN, "railcraft.multiblock.state.unknown.unloaded");

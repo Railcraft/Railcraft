@@ -27,10 +27,9 @@ public interface IMultiBlockTile extends IOwnable, ITile {
      */
     boolean isValidMaster();
 
-    @Nullable
-    TileMultiBlock getMasterBlock();
+    @Nullable TileMultiBlock getMasterBlock();
 
-    MultiBlockPattern getCurrentPattern();
+    @Nullable MultiBlockPattern getCurrentPattern();
 
     MultiBlockState getState();
 

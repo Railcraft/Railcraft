@@ -15,30 +15,22 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Tuple;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
 
 @BlockMetaTile(TileTankIronValve.class)
 public class BlockTankIronValve extends BlockTankIron<TileTankIronValve> {
 
-    public static final EnumMap<EnumFacing, PropertyBool> TOUCHES = new EnumMap<>(EnumFacing.class);
-
-    static {
-        for (EnumFacing face : EnumFacing.VALUES) {
-            TOUCHES.put(face, PropertyBool.create(face.getName2()));
-        }
-    }
+    public static final IProperty<OptionalAxis> OPTIONAL_AXIS = PropertyEnum.create("axis", OptionalAxis.class);
 
     public BlockTankIronValve() {
         super(Material.IRON);
         setHarvestLevel("pickaxe", 1);
+        setDefaultState(getDefaultState().withProperty(OPTIONAL_AXIS, OptionalAxis.NONE));
     }
 
     @Override
@@ -54,16 +46,42 @@ public class BlockTankIronValve extends BlockTankIron<TileTankIronValve> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        List<IProperty> props = new ArrayList<>();
-        props.add(getVariantProperty());
-        for (EnumFacing face : EnumFacing.VALUES) {
-            props.add(TOUCHES.get(face));
-        }
-        return new BlockStateContainer(this, props.toArray(new IProperty[7]));
+        return new BlockStateContainer(this, OPTIONAL_AXIS);
     }
 
     @Override
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(2, 1);
+    }
+
+    public enum OptionalAxis implements IStringSerializable {
+        NONE,
+        X,
+        Y,
+        Z;
+
+        final String name;
+
+        OptionalAxis() {
+            this.name = name().toLowerCase();
+        }
+
+        public static OptionalAxis from(EnumFacing.Axis axis) {
+            switch (axis) {
+                case X:
+                    return OptionalAxis.X;
+                case Y:
+                    return OptionalAxis.Y;
+                case Z:
+                    return OptionalAxis.Z;
+                default:
+                    return OptionalAxis.NONE;
+            }
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
     }
 }

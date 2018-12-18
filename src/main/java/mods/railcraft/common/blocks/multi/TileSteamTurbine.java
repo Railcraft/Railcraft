@@ -53,6 +53,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -454,7 +456,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
         if (!isStructureValid()) {
             return base;
         }
-        MultiBlockPattern currentPattern = getCurrentPattern();
+        MultiBlockPattern currentPattern = requireNonNull(getCurrentPattern());
         Axis axis = currentPattern.getAttachedData(Axis.X);
         base = base.withProperty(BlockSteamTurbine.WINDOW, getPatternMarker() == 'W')
                 .withProperty(BlockSteamTurbine.LONG_AXIS, axis);
