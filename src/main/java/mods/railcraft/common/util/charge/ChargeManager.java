@@ -12,11 +12,11 @@ package mods.railcraft.common.util.charge;
 
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Map;
@@ -33,7 +33,7 @@ public enum ChargeManager implements Charge.IManager {
 
     ChargeManager(Charge type) {
         this.type = type;
-        ReflectionHelper.setPrivateValue(Charge.class, type, this, "manager");
+        Code.setValue(Charge.class, type, this, "manager");
     }
 
     private final Map<World, ChargeNetwork> networks = new MapMaker().weakKeys().makeMap();

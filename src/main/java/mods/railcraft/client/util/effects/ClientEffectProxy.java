@@ -9,11 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.util.effects;
 
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
 import mods.railcraft.client.render.tesr.TESRSignals;
-import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;
@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.PacketEffect.Effect;
@@ -42,7 +43,6 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,7 +63,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
 
     public ClientEffectProxy() {
         SignalTools.effectManager = this;
-        ReflectionHelper.setPrivateValue(Charge.class, null, this, "effects");
+        Code.setValue(Charge.class, null, this, "effects");
     }
 
     private void doTeleport(RailcraftInputStream data) throws IOException {

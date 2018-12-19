@@ -39,6 +39,7 @@ import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.charge.CapabilityCartBatterySetup;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.block.BlockDispenser;
@@ -56,13 +57,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.IForgeRegistry;
 import org.apache.logging.log4j.Level;
@@ -78,12 +79,12 @@ public class ModuleCore extends RailcraftModulePayload {
 
     public ModuleCore() {
         setEnabledEventHandler(new ModuleEventHandler() {
-            private final Field modField = ReflectionHelper.findField(EntityEntryBuilder.class, "mod");
+            private final Field modField = ObfuscationReflectionHelper.findField(EntityEntryBuilder.class, "mod");
 
             @Override
             public void construction() {
-                ReflectionHelper.setPrivateValue(CartToolsAPI.class, null, LinkageManager.INSTANCE, "linkageManager");
-                ReflectionHelper.setPrivateValue(CartToolsAPI.class, null, TrainTransferHelper.INSTANCE, "transferHelper");
+                Code.setValue(CartToolsAPI.class, null, LinkageManager.INSTANCE, "linkageManager");
+                Code.setValue(CartToolsAPI.class, null, TrainTransferHelper.INSTANCE, "transferHelper");
 
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandAdmin());

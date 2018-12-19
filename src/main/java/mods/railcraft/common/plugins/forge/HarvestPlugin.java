@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,16 +11,12 @@ package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.core.IContainerBlock;
 import mods.railcraft.common.core.IContainerState;
-import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Code;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-
 import org.jetbrains.annotations.Nullable;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
@@ -42,23 +38,6 @@ public final class HarvestPlugin {
         public String getToolString(int level) {
             return name + ":" + level;
         }
-    }
-
-    private static final MethodHandle GET_SILK_TOUCH_DROP_METHOD;
-
-    static {
-        String methodName = Game.DEVELOPMENT_ENVIRONMENT ? "getSilkTouchDrop" : "func_180643_i";
-        MethodHandle handle = null;
-        try {
-            Method method = Block.class.getDeclaredMethod(methodName, IBlockState.class);
-            boolean oldAccessible = method.isAccessible();
-            method.setAccessible(true);
-            handle = MethodHandles.lookup().unreflect(method);
-            method.setAccessible(oldAccessible);
-        } catch (Throwable throwable) {
-            Game.logThrowable("Cannot initialize silk touch drops", throwable);
-        }
-        GET_SILK_TOUCH_DROP_METHOD = handle;
     }
 
     private HarvestPlugin() {
@@ -103,15 +82,9 @@ public final class HarvestPlugin {
         return block.isToolEffective(toolClass, state) ? block.getHarvestLevel(state) : -1;
     }
 
-    @Nullable
     public static ItemStack getSilkTouchDrop(IBlockState state) {
-        if (GET_SILK_TOUCH_DROP_METHOD == null)
-            return emptyStack();
-        try {
-            return (ItemStack) GET_SILK_TOUCH_DROP_METHOD.invoke(state.getBlock(), state);
-        } catch (Throwable throwable) {
-            Game.logThrowable("Cannot get silk touch drops", throwable);
-        }
-        return emptyStack();
+        // Block#getSilkTouchDrop
+        return Code.findMethod(Block.class, "func_180643_i", ItemStack.class, IBlockState.class)
+                .invoke(state.getBlock(), state).orElse(emptyStack());
     }
 }
