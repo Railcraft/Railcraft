@@ -59,6 +59,7 @@ public class Code {
             methods.put(srgName, methodCaller);
             return methodCaller;
         }
+        methods.put(srgName, emptyCaller());
         return emptyCaller();
     }
 
