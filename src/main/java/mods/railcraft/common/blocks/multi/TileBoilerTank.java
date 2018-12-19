@@ -20,6 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import java.io.IOException;
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
@@ -41,11 +43,12 @@ public abstract class TileBoilerTank extends TileBoiler {
         if (marker == 'O')
             return state;
         BlockPos patternPos = getPatternPosition();
+        MultiBlockPattern pattern = requireNonNull(getCurrentPattern());
         state = state
-                .withProperty(BlockBoilerTank.NORTH, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
-                .withProperty(BlockBoilerTank.SOUTH, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
-                .withProperty(BlockBoilerTank.EAST, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
-                .withProperty(BlockBoilerTank.WEST, getCurrentPattern().getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
+                .withProperty(BlockBoilerTank.NORTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
+                .withProperty(BlockBoilerTank.SOUTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
+                .withProperty(BlockBoilerTank.EAST, pattern.getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
+                .withProperty(BlockBoilerTank.WEST, pattern.getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
         return state;
     }
 

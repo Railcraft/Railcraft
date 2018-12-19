@@ -60,8 +60,7 @@ public interface ISmartTile extends ITile {
         EnumGui gui = getGui();
 
         if (gui != null) {
-            BlockPos pos = tile().getPos();
-            GuiHandler.openGui(gui, player, tile().getWorld(), pos.getX(), pos.getY(), pos.getZ());
+            GuiHandler.openGui(gui, player, tile().getWorld(), tile().getPos());
             return true;
         }
         return false;

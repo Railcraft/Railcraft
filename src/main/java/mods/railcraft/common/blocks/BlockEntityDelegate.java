@@ -61,7 +61,7 @@ public abstract class BlockEntityDelegate<T extends TileRailcraft & ISmartTile> 
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (hand == EnumHand.OFF_HAND)
+        if (hand == EnumHand.OFF_HAND)  //TODO remove this
             return false;
         return WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).map(t -> t.blockActivated(playerIn, hand, side, hitX, hitY, hitZ)).orElse(false);
     }

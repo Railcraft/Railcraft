@@ -15,76 +15,38 @@
         "transform": "forge:default-block"
       }
     ],
-    "north": {
-      "true": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_wall_1"
-        }
+    "axis": {
+      "none": {
+        "north": "railcraft:blocks/tank_iron_valve_1",
+        "south": "railcraft:blocks/tank_iron_valve_1",
+        "west": "railcraft:blocks/tank_iron_valve_1",
+        "east": "railcraft:blocks/tank_iron_valve_1",
+        "up": "railcraft:blocks/tank_iron_valve_0",
+        "down": "railcraft:blocks/tank_iron_valve_0"
       },
-      "false": {
-        "textures": {
-          "north": "railcraft:blocks/tank_iron_valve_1"
-        }
-      }
-    },
-    "south": {
-      "true": {
-        "textures": {
-          "south": "railcraft:blocks/tank_iron_wall_1"
-        }
+      "x": {
+        "north": "railcraft:blocks/tank_iron_wall_1",
+        "south": "railcraft:blocks/tank_iron_wall_1",
+        "west": "railcraft:blocks/tank_iron_valve_1",
+        "east": "railcraft:blocks/tank_iron_valve_1",
+        "up": "railcraft:blocks/tank_iron_wall_0",
+        "down": "railcraft:blocks/tank_iron_wall_0"
       },
-      "false": {
-        "textures": {
-          "south": "railcraft:blocks/tank_iron_valve_1"
-        }
-      }
-    },
-    "west": {
-      "true": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_wall_1"
-        }
+      "y": {
+        "north": "railcraft:blocks/tank_iron_wall_1",
+        "south": "railcraft:blocks/tank_iron_wall_1",
+        "west": "railcraft:blocks/tank_iron_wall_1",
+        "east": "railcraft:blocks/tank_iron_wall_1",
+        "up": "railcraft:blocks/tank_iron_valve_0",
+        "down": "railcraft:blocks/tank_iron_valve_0"
       },
-      "false": {
-        "textures": {
-          "west": "railcraft:blocks/tank_iron_valve_1"
-        }
-      }
-    },
-    "east": {
-      "true": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_wall_1"
-        }
-      },
-      "false": {
-        "textures": {
-          "east": "railcraft:blocks/tank_iron_valve_1"
-        }
-      }
-    },
-    "up": {
-      "true": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_wall_0"
-        }
-      },
-      "false": {
-        "textures": {
-          "up": "railcraft:blocks/tank_iron_valve_0"
-        }
-      }
-    },
-    "down": {
-      "true": {
-        "textures": {
-          "down": "railcraft:blocks/tank_iron_wall_0"
-        }
-      },
-      "false": {
-        "textures": {
-          "down": "railcraft:blocks/tank_iron_valve_0"
-        }
+      "z": {
+        "north": "railcraft:blocks/tank_iron_valve_1",
+        "south": "railcraft:blocks/tank_iron_valve_1",
+        "west": "railcraft:blocks/tank_iron_wall_1",
+        "east": "railcraft:blocks/tank_iron_wall_1",
+        "up": "railcraft:blocks/tank_iron_wall_0",
+        "down": "railcraft:blocks/tank_iron_wall_0"
       }
     }
   }

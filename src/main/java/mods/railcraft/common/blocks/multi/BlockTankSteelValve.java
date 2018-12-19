@@ -14,14 +14,11 @@ import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Tuple;
 
-import java.util.ArrayList;
-import java.util.List;
+import static mods.railcraft.common.blocks.multi.BlockTankIronValve.OPTIONAL_AXIS;
 
 @BlockMetaTile(TileTankSteelValve.class)
 public class BlockTankSteelValve extends BlockTankMetal<TileTankSteelValve> {
@@ -29,6 +26,7 @@ public class BlockTankSteelValve extends BlockTankMetal<TileTankSteelValve> {
     public BlockTankSteelValve() {
         super(Material.IRON);
         setHarvestLevel("pickaxe", 1);
+        setDefaultState(getDefaultState().withProperty(OPTIONAL_AXIS, BlockTankIronValve.OptionalAxis.NONE));
     }
 
     @Override
@@ -44,12 +42,7 @@ public class BlockTankSteelValve extends BlockTankMetal<TileTankSteelValve> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        List<IProperty> props = new ArrayList<>();
-        props.add(getVariantProperty());
-        for (EnumFacing face : EnumFacing.VALUES) {
-            props.add(BlockTankIronValve.TOUCHES.get(face));
-        }
-        return new BlockStateContainer(this, props.toArray(new IProperty[7]));
+        return new BlockStateContainer(this, OPTIONAL_AXIS);
     }
 
     @Override
