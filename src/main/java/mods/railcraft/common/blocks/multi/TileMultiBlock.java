@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.events.MultiBlockEvent.Form;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -260,8 +259,8 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
 
     private void testPatterns() {
         patternStates.clear();
+        // This specifically tests all patterns in order to provide complete data to the MagGlass
         patterns.forEach(map -> patternStates.put(map.testPattern(this), map));
-        // TODO just return the first valid one for performance concerns
     }
 
     @Override

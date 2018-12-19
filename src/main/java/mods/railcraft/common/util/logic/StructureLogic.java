@@ -28,8 +28,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -65,7 +63,7 @@ public class StructureLogic extends Logic {
         this.tile = tile;
         this.patterns = patterns;
         this.logic = logic;
-        state = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT ? StructureState.VALID : StructureState.UNTESTED;
+        state = StructureState.UNTESTED;
         components.add(tile);
     }
 
@@ -110,6 +108,8 @@ public class StructureLogic extends Logic {
             changed = true;
             this.masterPos = newMaster;
         }
+
+        // Possible side effects?
         if (masterPos == null)
             state = StructureState.INVALID;
         else
@@ -136,9 +136,14 @@ public class StructureLogic extends Logic {
     }
 
     @Override
-    protected void updateClient() {
+    public void update() {
+        super.update();
         if (isValidMaster())
-            logic.updateClient();
+            logic.update();
+    }
+
+    @Override
+    protected void updateClient() {
         if (requestPacket && netTimer.hasTriggered(theWorldAsserted(), NETWORK_RECHECK)) {
             PacketDispatcher.sendToServer(new PacketTileRequest(tile));
             requestPacket = false;
@@ -147,9 +152,7 @@ public class StructureLogic extends Logic {
 
     @Override
     protected void updateServer() {
-        if (isValidMaster())
-            logic.updateServer();
-        else if (state == StructureState.UNTESTED)
+        if (state == StructureState.UNTESTED)
             testIfMasterBlock();
         //                ClientProxy.getMod().totalMultiBlockUpdates++;
     }
@@ -261,7 +264,7 @@ public class StructureLogic extends Logic {
         }
     }
 
-    public Function<TileEntity, Optional<StructureLogic>> tileToLogic() {
+    private Function<TileEntity, Optional<StructureLogic>> tileToLogic() {
         return t -> Optional.of(t)
                 .flatMap(Optionals.toType(ILogicContainer.class))
                 .map(ILogicContainer::getLogic)
@@ -299,7 +302,8 @@ public class StructureLogic extends Logic {
         logic.readFromNBT(data);
         isMaster = data.getBoolean("master");
         try {
-            currentPattern = patterns.get(data.getByte("pattern"));
+            byte index = data.getByte("pattern");
+            currentPattern = index < 0 ? null : patterns.get(index);
         } catch (Exception ex) {
             //NOOP
         }
@@ -307,11 +311,9 @@ public class StructureLogic extends Logic {
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
-        boolean hasMaster = getMasterLogic().isPresent();
-        data.writeBoolean(hasMaster);
-        if (hasMaster) {
-            byte patternIndex = getPatternIndex();
-            data.writeByte(patternIndex);
+        data.writeEnum(state);
+        if (state == StructureState.VALID) {
+            data.writeByte(getPatternIndex());
             data.writeBlockPos(Objects.requireNonNull(posInPattern));
         }
         logic.writePacketData(data);
@@ -320,9 +322,8 @@ public class StructureLogic extends Logic {
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         requestPacket = false;
-
-        boolean hasMaster = data.readBoolean();
-        if (hasMaster) {
+        state = data.readEnum(StructureState.VALUES);
+        if (state == StructureState.VALID) {
             int patternIndex = data.readByte();
             patternIndex = MathHelper.clamp(patternIndex, 0, patterns.size() - 1);
             MultiBlockPattern pat = patterns.get(patternIndex);
@@ -335,7 +336,7 @@ public class StructureLogic extends Logic {
             // TODO is this still necessary?
             if (!getMasterLogic().isPresent())
                 requestPacket = true;
-        } else if (masterPos != null) {
+        } else {
             isMaster = false;
             setPattern(null, null);
         }
@@ -372,6 +373,8 @@ public class StructureLogic extends Logic {
 
     public enum StructureState {
 
-        VALID, INVALID, UNKNOWN, UNTESTED
+        VALID, INVALID, UNKNOWN, UNTESTED;
+
+        static final StructureState[] VALUES = values();
     }
 }

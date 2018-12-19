@@ -26,6 +26,8 @@ import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 /**
  * The basic logic class.
  */
@@ -38,7 +40,8 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
     }
 
     @Override
-    public final void update() {
+    @OverridingMethodsMustInvokeSuper
+    public void update() {
         clock++;
         if (Game.isHost(theWorldAsserted()))
             updateServer();
