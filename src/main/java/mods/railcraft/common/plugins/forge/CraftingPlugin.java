@@ -16,7 +16,7 @@ import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.util.crafting.FluidIngredient;
+import mods.railcraft.common.util.crafting.IngredientFluid;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.crafting.RemainingItemShapedRecipe;
 import mods.railcraft.common.util.crafting.RemainingItemShapelessRecipe;
@@ -154,7 +154,7 @@ public final class CraftingPlugin {
 
     public static @Nullable Ingredient getIngredient(Object source) {
         if (source instanceof FluidStack) {
-            return new FluidIngredient((FluidStack) source);
+            return new IngredientFluid((FluidStack) source);
         }
         return CraftingHelper.getIngredient(source);
     }

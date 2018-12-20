@@ -45,40 +45,11 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings("unused")
 public final class RemainingItemShapedRecipe extends ShapedRecipes {
 
-    private final int recipeWidth;
-    /**
-     * How many vertical slots this recipe uses.
-     */
-    private final int recipeHeight;
-    /**
-     * Is a array of ItemStack that composes the recipe.
-     */
-    private final NonNullList<Ingredient> recipeItems;
-    /**
-     * Is the ItemStack that you get when craft the recipe.
-     */
-    private final ItemStack recipeOutput;
-    private final String group;
-
-    @Nullable IRemainderIngredient[] bySlots;
+    // is there a cleaner way to map Ingredients to ItemStacks?
+    @Nullable IngredientRailcraft[] bySlots;
 
     public RemainingItemShapedRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result) {
         super(group, width, height, ingredients, result);
-        this.group = group;
-        this.recipeWidth = width;
-        this.recipeHeight = height;
-        this.recipeItems = ingredients;
-        this.recipeOutput = result;
-    }
-
-    @Override
-    public String getGroup() {
-        return this.group;
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
-        return this.recipeOutput;
     }
 
     @Override
@@ -94,7 +65,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
         for (int i = 0; i < nonNullList.size(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
 
-            IRemainderIngredient ingredient = bySlots[i];
+            IngredientRailcraft ingredient = bySlots[i];
 
             if (ingredient != null) {
                 nonNullList.set(i, ingredient.getRemaining(itemstack));
@@ -106,38 +77,13 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
         return nonNullList;
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return this.recipeItems;
-    }
-
-    /**
-     * Used to determine if this recipe can fit in a grid of the given width/height
-     */
-    @Override
-    public boolean canFit(int width, int height) {
-        return width >= this.recipeWidth && height >= this.recipeHeight;
-    }
-
     /**
      * Used to check if a recipe matches current crafting inventory
      */
     @Override
     public boolean matches(InventoryCrafting inv, @Nullable World worldIn) {
-        bySlots = new IRemainderIngredient[inv.getSizeInventory()];
-        for (int i = 0; i <= inv.getWidth() - this.recipeWidth; ++i) {
-            for (int j = 0; j <= inv.getHeight() - this.recipeHeight; ++j) {
-                if (this.checkMatch(inv, i, j, true)) {
-                    return true;
-                }
-
-                if (this.checkMatch(inv, i, j, false)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        bySlots = new IngredientRailcraft[inv.getSizeInventory()];
+        return super.matches(inv, worldIn);
     }
 
     /**
@@ -156,8 +102,8 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
                     int index = p_77573_4_ ? this.recipeWidth - k - 1 + l * this.recipeWidth : k + l * this.recipeWidth;
                     ingredient = this.recipeItems.get(index);
 
-                    if (ingredient instanceof IRemainderIngredient) {
-                        bySlots[index] = (IRemainderIngredient) ingredient;
+                    if (ingredient instanceof IngredientRailcraft) {
+                        bySlots[index] = (IngredientRailcraft) ingredient;
                     }
                 }
 
@@ -169,24 +115,6 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
         }
 
         return true;
-    }
-
-    /**
-     * Returns an Item that is the result of this recipe
-     */
-    @Override
-    public ItemStack getCraftingResult(InventoryCrafting inv) {
-        return this.getRecipeOutput().copy();
-    }
-
-    @Override
-    public int getRecipeWidth() {
-        return this.recipeWidth;
-    }
-
-    @Override
-    public int getRecipeHeight() {
-        return this.recipeHeight;
     }
 
     public static final class Factory implements IRecipeFactory {

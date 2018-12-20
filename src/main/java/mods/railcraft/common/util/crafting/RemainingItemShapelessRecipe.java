@@ -41,34 +41,10 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings("unused")
 public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
 
-    private final ItemStack recipeOutput;
-    /**
-     * Is a List of ItemStack that composes the recipe.
-     */
-    public final NonNullList<Ingredient> recipeItems;
-    private final String group;
     private @Nullable int[] lastResult;
 
     public RemainingItemShapelessRecipe(String group, ItemStack output, NonNullList<Ingredient> ingredients) {
         super(group, output, ingredients);
-        this.group = group;
-        this.recipeOutput = output;
-        this.recipeItems = ingredients;
-    }
-
-    @Override
-    public String getGroup() {
-        return this.group;
-    }
-
-    @Override
-    public ItemStack getRecipeOutput() {
-        return this.recipeOutput;
-    }
-
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return this.recipeItems;
     }
 
     @Override
@@ -86,8 +62,8 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
 
             if (!itemstack.isEmpty()) {
                 Ingredient ingredient = recipeItems.get(mappings[index]);
-                if (ingredient instanceof IRemainderIngredient) {
-                    ret.set(i, ((IRemainderIngredient) ingredient).getRemaining(itemstack));
+                if (ingredient instanceof IngredientRailcraft) {
+                    ret.set(i, ((IngredientRailcraft) ingredient).getRemaining(itemstack));
                 } else {
                     ret.set(i, ForgeHooks.getContainerItem(itemstack));
                 }
@@ -125,22 +101,6 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
         }
         lastResult = results;
         return true;
-    }
-
-    /**
-     * Returns an Item that is the result of this recipe
-     */
-    @Override
-    public ItemStack getCraftingResult(InventoryCrafting inv) {
-        return this.recipeOutput.copy();
-    }
-
-    /**
-     * Used to determine if this recipe can fit in a grid of the given width/height
-     */
-    @Override
-    public boolean canFit(int width, int height) {
-        return width * height >= this.recipeItems.size();
     }
 
     public static final class Factory implements IRecipeFactory {
