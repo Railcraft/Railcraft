@@ -249,6 +249,7 @@ public class StructureLogic extends Logic {
 
     private void testPatterns() {
         patternStates.clear();
+        // This specifically tests all patterns in order to provide complete data to the MagGlass
         patterns.forEach(map -> patternStates.put(map.testPattern(this), map));
     }
 
