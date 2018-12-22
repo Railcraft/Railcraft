@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import mods.railcraft.api.crafting.ICrusherCraftingManager;
-import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.IGenRule;
 import mods.railcraft.api.crafting.IOutputEntry;
+import mods.railcraft.api.crafting.IRockCrusherCrafter;
+import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
@@ -21,102 +21,68 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.logging.log4j.Level;
 
-import org.jetbrains.annotations.Nullable;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-public final class RockCrusherCraftingManager implements ICrusherCraftingManager {
+public enum RockCrusherCrafter implements IRockCrusherCrafter {
+    INSTANCE;
+    private final List<IRecipe> recipes = new ArrayList<>();
 
-    private final List<ICrusherRecipe> recipes = new ArrayList<>();
-    public static final ICrusherRecipe NULL_RECIPE = new CrusherRecipe(Ingredient.EMPTY);
-    private static final RockCrusherCraftingManager INSTANCE = new RockCrusherCraftingManager();
-
-    public static RockCrusherCraftingManager getInstance() {
-        return INSTANCE;
-    }
-
-    private RockCrusherCraftingManager() {
+    @Override
+    public List<IRecipe> getRecipes() {
+        return CollectionTools.removeOnlyList(recipes);
     }
 
     @Override
-    public List<ICrusherRecipe> getRecipes() {
-        return recipes;
-    }
-
-    @Override
-    public IGenRule createGenRule(float randomChance) {
-        return new RandomChanceGenRule(randomChance);
-    }
-
-    @Nullable
-    @Override
-    public ICrusherRecipe getRecipe(ItemStack input) {
+    public Optional<IRecipe> getRecipe(ItemStack input) {
         if (InvTools.isEmpty(input)) {
-            return null;
+            return Optional.empty();
         }
-        for (ICrusherRecipe r : recipes) {
-            if (r.getInput().apply(input))
-                return r;
-        }
-        return null;
+        return recipes.stream().filter(r -> r.getInput().apply(input)).findFirst();
     }
 
     @Override
-    public void addRecipe(ICrusherRecipe recipe) {
-        if (!recipe.getInput().apply(ItemStack.EMPTY)) {
-            recipes.add(recipe);
+    public IRecipeBuilder makeRecipe(Ingredient input) {
+        if (!input.apply(ItemStack.EMPTY)) {
+            return new RecipeBuilder(input);
         } else {
             Game.logTrace(Level.ERROR, 10, "Tried to register an invalid rock crusher recipe");
         }
+        return new IRecipeBuilder() {};
     }
 
-    @Override
-    public ICrusherRecipeBuilder createRecipeBuilder() {
-        return new CrusherRecipeBuilderImpl();
-    }
-
-    private static class CrusherRecipeBuilderImpl implements ICrusherRecipeBuilder {
-        private Ingredient input;
+    private class RecipeBuilder implements IRecipeBuilder {
+        private final Ingredient input;
         private List<IOutputEntry> outputs = new ArrayList<>();
 
-        @Override
-        public ICrusherRecipeBuilder input(Ingredient input) {
+        public RecipeBuilder(Ingredient input) {
             this.input = input;
-            return this;
         }
 
         @Override
-        public ICrusherRecipeBuilder addOutput(IOutputEntry entry) {
+        public IRecipeBuilder addOutput(IOutputEntry entry) {
             this.outputs.add(entry);
             return this;
         }
 
         @Override
-        public ICrusherRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
+        public IRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
             if (output.isEmpty())
                 return this;
             return addOutput(new OutputEntry(output, rule));
         }
 
         @Override
-        public ICrusherRecipeBuilder addOutput(ItemStack output, float chance) {
+        public IRecipeBuilder addOutput(ItemStack output, float chance) {
             return addOutput(output, new RandomChanceGenRule(chance));
         }
 
         @Override
-        public ICrusherRecipe build() throws IllegalArgumentException {
+        public void register() throws IllegalArgumentException {
             checkArgument(input != null, "input");
-            return new CrusherRecipe(input, outputs);
-        }
-
-        @Override
-        public void buildAndRegister() throws IllegalArgumentException {
-            RockCrusherCraftingManager.getInstance().addRecipe(build());
+            recipes.add(new Recipe(input, outputs));
         }
     }
 
@@ -163,16 +129,16 @@ public final class RockCrusherCraftingManager implements ICrusherCraftingManager
         }
     }
 
-    private static class CrusherRecipe implements ICrusherRecipe {
+    private static class Recipe implements IRecipe {
 
         private final Ingredient inputMatcher;
         private final List<IOutputEntry> outputs;
 
-        CrusherRecipe(Ingredient inputMatcher) {
+        Recipe(Ingredient inputMatcher) {
             this(inputMatcher, new ArrayList<>());
         }
 
-        CrusherRecipe(Ingredient inputMatcher, List<IOutputEntry> entries) {
+        Recipe(Ingredient inputMatcher, List<IOutputEntry> entries) {
             this.inputMatcher = inputMatcher;
             this.outputs = entries;
         }

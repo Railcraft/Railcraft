@@ -166,15 +166,15 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         }
     }
 
-    @SuppressWarnings("unused")
-    public static String getOwner(@Nullable ItemStack ticket) {
-        if (ticket == null || !(ticket.getItem() instanceof ItemTicket))
-            return "";
-        NBTTagCompound nbt = ticket.getTagCompound();
-        if (nbt == null)
-            return "";
-        return nbt.getString("author");
-    }
+//    @SuppressWarnings("unused")
+//    public static String getOwner(@Nullable ItemStack ticket) {
+//        if (ticket == null || !(ticket.getItem() instanceof ItemTicket))
+//            return "";
+//        NBTTagCompound nbt = ticket.getTagCompound();
+//        if (nbt == null)
+//            return "";
+//        return nbt.getString("author");
+//    }
 
     @Override
     public boolean validateNBT(NBTTagCompound nbt) {

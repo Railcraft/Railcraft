@@ -11,7 +11,7 @@ package mods.railcraft.common.items;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -20,14 +20,16 @@ import mods.railcraft.common.blocks.ore.EnumOreMetal;
 import mods.railcraft.common.blocks.ore.EnumOreMetalPoor;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-
+import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Locale;
 import java.util.function.Predicate;
 
@@ -47,7 +49,8 @@ public enum Metal implements IVariantEnum {
     NICKEL("Nickel"),
     INVAR("Invar"),
     ZINC("Zinc"),
-    BRASS("Brass"),;
+    BRASS("Brass"),
+    ;
     public static final Metal[] VALUES = values();
     public static final Metal[] CLASSIC_METALS = {IRON, GOLD, COPPER, TIN, LEAD, SILVER};
     static final BiMap<Metal, IVariantEnum> oreMap = HashBiMap.create();
@@ -100,9 +103,9 @@ public enum Metal implements IVariantEnum {
     }
 
     @Override
-    public @Nullable Object getAlternate(IRailcraftRecipeIngredient container) {
+    public Ingredient getAlternate(IIngredientSource container) {
         Form form = Form.containerMap.inverse().get(container);
-        return form != null ? form.getOreDictTag(this) : null;
+        return form != null ? Ingredients.from(form.getOreDictTag(this)) : Ingredient.EMPTY;
     }
 
     @Override
@@ -206,7 +209,7 @@ public enum Metal implements IVariantEnum {
         },
         POOR_ORE("orePoor", RailcraftBlocks.ORE_METAL_POOR, poorOreMap) {
         };
-        static final BiMap<Form, IRailcraftRecipeIngredient> containerMap = HashBiMap.create();
+        static final BiMap<Form, IIngredientSource> containerMap = HashBiMap.create();
         public static final Form[] VALUES = values();
         final String orePrefix;
         protected final IRailcraftObjectContainer<?> container;

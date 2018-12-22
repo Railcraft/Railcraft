@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,13 +10,13 @@
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.misc.MicroBlockPlugin;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
@@ -45,10 +45,9 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         'I', EnumGeneric.STONE_ABYSSAL.getStack());
                 if (COBBLE.isEnabled()) {
-                    RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                            .input(EnumGeneric.STONE_ABYSSAL.getIngredient())
+                    Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_ABYSSAL.getIngredient())
                             .addOutput(getStack(COBBLE))
-                            .buildAndRegister();
+                            .register();
                 }
             }
         }
@@ -102,10 +101,9 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         "II",
                         'I', EnumGeneric.STONE_QUARRIED.getStack());
-                RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                        .input(EnumGeneric.STONE_QUARRIED.getIngredient())
+                Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_QUARRIED.getIngredient())
                         .addOutput(getStack(COBBLE))
-                        .buildAndRegister();
+                        .register();
             }
         }
     },

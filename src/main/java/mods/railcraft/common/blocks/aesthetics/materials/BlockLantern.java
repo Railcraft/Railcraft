@@ -32,6 +32,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
@@ -84,9 +85,9 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
             RailcraftRegistry.register(this, mat, getStack(mat));
             ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
 
-            Object slab;
+            Ingredient slab;
             if (RailcraftBlocks.SLAB.isEnabled())
-                slab = RailcraftBlocks.SLAB.getRecipeObject(mat);
+                slab = RailcraftBlocks.SLAB.getIngredient(mat);
             else
                 slab = mat.getCraftingEquivalent();
 //            if (mat == Materials.SANDSTONE)

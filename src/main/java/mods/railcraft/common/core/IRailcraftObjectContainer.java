@@ -10,13 +10,15 @@
 
 package mods.railcraft.common.core;
 
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IRailcraftModule;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,7 +32,7 @@ import java.util.function.Supplier;
  *
  * Created by CovertJaguar on 4/13/2016.
  */
-public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extends IRailcraftRecipeIngredient {
+public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extends IIngredientSource {
     class Definition {
         public final Set<Class<? extends IRailcraftModule>> modules = new HashSet<>();
         private final InitializationConditional conditions = new InitializationConditional();
@@ -103,10 +105,12 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         return getObject().map(o -> o.getWildcard()).orElse(ItemStack.EMPTY);
     }
 
+    @Override
     default ItemStack getStack() {
         return getStack(1);
     }
 
+    @Override
     default ItemStack getStack(int qty) {
         return getStack(qty, null);
     }
@@ -126,38 +130,28 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
 
     Optional<T> getObject();
 
-    /**
-     * @deprecated As of MC 1.12, replaced by
-     * {@link #getIngredient()} }
-     */
-    @Deprecated
     @Override
-    default @Nullable Object getRecipeObject() {
-        return getRecipeObject(null);
+    default Ingredient getIngredient() {
+        return getIngredient(null);
     }
 
-    /**
-     * @deprecated As of MC 1.12, replaced by
-     * {@link #getIngredient(IVariantEnum)} }
-     */
-    @Deprecated
     @Override
-    default @Nullable Object getRecipeObject(@Nullable IVariantEnum variant) {
-        Object obj = getObject().map(o -> {
-            if (!isEnabled())
-                return null;
-            if (o.getVariantEnum() != null && variant == null)
-                return o.getWildcard();
-            o.checkVariant(variant);
-            return o.getRecipeObject(variant);
-        }).orElse(null);
+    default Ingredient getIngredient(@Nullable IVariantEnum variant) {
+        Object obj = getObject()
+                .filter(t -> isEnabled())
+                .map(o -> {
+                    if (o.getVariantEnum() != null && variant == null)
+                        return o.getWildcard();
+                    o.checkVariant(variant);
+                    return o.getIngredient(variant);
+                }).orElse(null);
         if (obj == null && variant != null)
             obj = variant.getAlternate(this);
         if (obj == null && getDef().altRecipeObject != null)
             obj = getDef().altRecipeObject.get();
-        if (obj instanceof ItemStack)
-            obj = ((ItemStack) obj).copy();
-        return obj;
+        if (obj == null)
+            return Ingredient.EMPTY;
+        return Ingredients.from(obj);
     }
 
     default boolean isEnabled() {

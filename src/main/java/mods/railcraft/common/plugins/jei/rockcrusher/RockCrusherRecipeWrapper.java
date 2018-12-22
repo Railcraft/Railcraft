@@ -14,17 +14,17 @@ import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mods.railcraft.api.crafting.ICrusherRecipe;
 import mods.railcraft.api.crafting.IOutputEntry;
+import mods.railcraft.api.crafting.IRockCrusherCrafter;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RockCrusherRecipeWrapper implements IRecipeWrapper {
-    private ICrusherRecipe recipe;
+    private IRockCrusherCrafter.IRecipe recipe;
 
-    public RockCrusherRecipeWrapper(ICrusherRecipe recipe) {
+    public RockCrusherRecipeWrapper(IRockCrusherCrafter.IRecipe recipe) {
         this.recipe = recipe;
     }
 
@@ -42,7 +42,7 @@ public class RockCrusherRecipeWrapper implements IRecipeWrapper {
         return lists;
     }
 
-    public ICrusherRecipe getRecipe() {
+    public IRockCrusherCrafter.IRecipe getRecipe() {
         return recipe;
     }
 }

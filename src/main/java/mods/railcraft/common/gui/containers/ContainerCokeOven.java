@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.multi.TileCokeOven;
 import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
 import mods.railcraft.common.gui.slots.SlotOutput;
@@ -101,7 +101,7 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return !InvTools.isEmpty(stack) && RailcraftCraftingManager.getCokeOvenCraftings().getRecipe(stack) != null;
+            return !InvTools.isEmpty(stack) && Crafters.cokeOven().getRecipe(stack) != null;
         }
 
     }

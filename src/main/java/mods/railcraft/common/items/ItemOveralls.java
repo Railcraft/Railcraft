@@ -10,7 +10,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.charge.IChargeProtectionItem;
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -55,11 +54,6 @@ public class ItemOveralls extends ItemRailcraftArmor implements IChargeProtectio
         super.addInformation(stack, world, info, adv);
         ToolTip tip = ToolTip.buildToolTip(stack.getTranslationKey() + ".tips");
         info.addAll(tip.convertToStrings());
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum meta) {
-        return this;
     }
 
     @Override

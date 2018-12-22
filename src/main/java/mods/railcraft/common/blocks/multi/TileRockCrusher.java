@@ -10,22 +10,21 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
+import com.google.common.collect.Streams;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.crafting.ICrusherRecipe;
+import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IRockCrusherCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.IInvSlot;
-import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -237,19 +236,12 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 if (paused)
                     return;
 
-                ItemStack input = InvTools.emptyStack();
-                ICrusherRecipe recipe = null;
-                for (IInvSlot slot : InventoryIterator.get(invInput)) {
-                    input = slot.getStack();
-                    if (!InvTools.isEmpty(input)) {
-                        recipe = RockCrusherCraftingManager.getInstance().getRecipe(input);
-                        if (recipe == null)
-                            recipe = RockCrusherCraftingManager.NULL_RECIPE;
-                        break;
-                    }
-                }
+                IRockCrusherCrafter.IRecipe recipe = invInput.streamStacks()
+                        .flatMap(stack -> Streams.stream(Crafters.rockCrusher().getRecipe(stack)))
+                        .findFirst()
+                        .orElse(null);
 
-                if (recipe != null)
+                if (recipe != null) {
                     if (processTime >= PROCESS_TIME) {
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
@@ -263,7 +255,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                                 invOutput.addStack(output);
                             }
 
-                            invInput.removeOneItem(input);
+                            invInput.removeOneItem(recipe.getInput());
 
                             SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
 
@@ -274,18 +266,8 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                         if (Charge.distribution.network(world).access(pos).useCharge(CRUSHING_POWER_COST_PER_TICK)) {
                             processTime++;
                         }
-//                        if (!node().isNull()) { //TODO: no charge
-
-
-//                            int energy = energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, true);
-//                            if (energy >= CRUSHING_POWER_COST_PER_TICK) {
-//                                processTime++;
-//                                energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
-//                            }
-//                        } else
-//                            processTime++;
                     }
-                else {
+                } else {
                     processTime = 0;
                     isWorking = false;
                 }
@@ -381,7 +363,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (slot < 9)
-            return RockCrusherCraftingManager.getInstance().getRecipe(stack) != null;
+            return Crafters.rockCrusher().getRecipe(stack).isPresent();
         return false;
     }
 

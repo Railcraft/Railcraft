@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -134,7 +134,7 @@ public class ForestryPlugin {
         public void defineBackpackRecipes() {
             MinecraftForge.EVENT_BUS.register(new BackpackEventHandler());
 
-            ItemStack silk = ModItems.SILK.get();
+            ItemStack silk = ModItems.SILK.getStack();
 
             RailcraftItems trackmanT1 = RailcraftItems.BACKPACK_TRACKMAN_T1;
             if (trackmanT1.isLoaded()) {
@@ -164,7 +164,7 @@ public class ForestryPlugin {
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', RailcraftItems.BACKPACK_TRACKMAN_T1.getRecipeObject());
+                                'T', RailcraftItems.BACKPACK_TRACKMAN_T1.getWildcard());
                     }
                 }
             }
@@ -179,7 +179,7 @@ public class ForestryPlugin {
                             "VYV",
                             "X#X",
                             '#', Blocks.WOOL,
-                            'V', RailcraftItems.SIGNAL_LAMP.getRecipeObject(),
+                            'V', RailcraftItems.SIGNAL_LAMP,
                             'X', Items.STRING,
                             'Y', "chestWood");
                 }
@@ -197,7 +197,7 @@ public class ForestryPlugin {
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', signalmanT1.getRecipeObject());
+                                'T', signalmanT1.getWildcard());
                     }
                 }
             }
@@ -230,7 +230,7 @@ public class ForestryPlugin {
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', icemanT1.getRecipeObject());
+                                'T', icemanT1.getWildcard());
                     }
                 }
             }
@@ -267,7 +267,7 @@ public class ForestryPlugin {
                                 "WWW",
                                 'X', "gemDiamond",
                                 'W', silk,
-                                'T', apothecaryT1.getRecipeObject());
+                                'T', apothecaryT1.getWildcard());
                     }
                 }
             }

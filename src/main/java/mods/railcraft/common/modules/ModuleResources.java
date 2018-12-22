@@ -10,7 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -74,7 +74,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
-                        RailcraftCraftingManager.getBlastFurnaceCraftings().addRecipe(Ingredient.fromItem(ItemDust.getItemFromBlock(Blocks.IRON_BLOCK)), 11520, EnumMetal.BLOCK_STEEL.getStack(), RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.SLAG));
+                        Crafters.blastFurnace().addRecipe(Ingredient.fromItem(ItemDust.getItemFromBlock(Blocks.IRON_BLOCK)), 11520, EnumMetal.BLOCK_STEEL.getStack(), RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.SLAG));
                     }
 
                     type = EnumMetal.BLOCK_COPPER;

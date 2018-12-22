@@ -12,7 +12,6 @@ package mods.railcraft.common.plugins.forge;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import mods.railcraft.api.core.IIngredientSource;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.modules.RailcraftModuleManager;
@@ -23,7 +22,6 @@ import mods.railcraft.common.util.crafting.RemainingItemShapelessRecipe;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
@@ -53,7 +51,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -238,22 +235,22 @@ public final class CraftingPlugin {
         */
     }
 
-    @SuppressWarnings("deprecation")
-    public static ItemStack getIngredientStack(IRailcraftRecipeIngredient ingredient, int qty) {
-        Object object = ingredient.getRecipeObject();
-        if (object instanceof ItemStack) {
-            ItemStack stack = ((ItemStack) object).copy();
-            setSize(stack, qty);
-            return stack;
-        }
-        if (object instanceof Item)
-            return new ItemStack((Item) object, qty);
-        if (object instanceof Block)
-            return new ItemStack((Block) object, qty);
-        if (object instanceof String)
-            return OreDictPlugin.getOre((String) object, qty);
-        throw new RuntimeException("Unknown ingredient object");
-    }
+//    @SuppressWarnings("deprecation")
+//    public static ItemStack getIngredientStack(IRailcraftRecipeIngredient ingredient, int qty) {
+//        Object object = ingredient.getRecipeObject();
+//        if (object instanceof ItemStack) {
+//            ItemStack stack = ((ItemStack) object).copy();
+//            setSize(stack, qty);
+//            return stack;
+//        }
+//        if (object instanceof Item)
+//            return new ItemStack((Item) object, qty);
+//        if (object instanceof Block)
+//            return new ItemStack((Block) object, qty);
+//        if (object instanceof String)
+//            return OreDictPlugin.getOre((String) object, qty);
+//        throw new RuntimeException("Unknown ingredient object");
+//    }
 
     private static final class MissingIngredientException extends InvalidRecipeException {
         MissingIngredientException(RecipeType recipeType, ItemStack result) {
@@ -364,13 +361,13 @@ public final class CraftingPlugin {
         List<Object> recipeList = Lists.newArrayList(recipeArray);
         for (int i = 0; i < recipeList.size(); i++) {
             Object obj = recipeList.get(i);
-            if (obj instanceof IRailcraftRecipeIngredient) {
+            if (obj instanceof IIngredientSource) {
                 Object obj2 = i + 1 < recipeList.size() ? recipeList.get(i + 1) : null;
                 if (obj2 instanceof IVariantEnum) {
-                    recipeList.set(i, ((IRailcraftRecipeIngredient) obj).getRecipeObject((IVariantEnum) obj2));
+                    recipeList.set(i, ((IIngredientSource) obj).getIngredient((IVariantEnum) obj2));
                     recipeList.remove(i + 1);
                 } else {
-                    recipeList.set(i, ((IRailcraftRecipeIngredient) obj).getRecipeObject());
+                    recipeList.set(i, ((IIngredientSource) obj).getIngredient());
                 }
                 if (recipeList.get(i) == null)
                     throw new MissingIngredientException(recipeType, result);

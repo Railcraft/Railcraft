@@ -10,12 +10,13 @@
 package mods.railcraft.common.plugins.color;
 
 import com.google.common.primitives.Ints;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.interfaces.IBlockColored;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockColored;
@@ -25,6 +26,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,7 +37,7 @@ import java.util.*;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
+public enum EnumColor implements IVariantEnum, IIngredientSource {
 
     WHITE(0xF9FFFE, "dyeWhite", "white"),
     ORANGE(0xF9801D, "dyeOrange", "orange"),
@@ -207,6 +209,11 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return oreTagDyeName;
     }
 
+    @Override
+    public String getOreTag() {
+        return getDyeOreDictTag();
+    }
+
     public void writeToNBT(NBTTagCompound nbt) {
         writeToNBT(nbt, DEFAULT_COLOR_TAG);
     }
@@ -255,11 +262,6 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
         return dye != null && getDye() == dye;
     }
 
-    @Override
-    public @Nullable Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
-    }
-
     public List<ItemStack> getDyesStacks() {
         if (dyes == null) {
             dyes = new ArrayList<>();
@@ -269,7 +271,7 @@ public enum EnumColor implements IVariantEnum, IRailcraftRecipeIngredient {
     }
 
     @Override
-    public Object getRecipeObject() {
-        return getDyeOreDictTag();
+    public Ingredient getIngredient() {
+        return Ingredients.from(getDyeOreDictTag());
     }
 }

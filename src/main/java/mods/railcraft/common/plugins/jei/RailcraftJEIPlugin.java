@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -143,7 +143,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
 //        }
 //
 //        if (rolling)
-//            registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()));
+//            registry.addRecipes(RollingMachineRecipeMaker.recipes(registry.getJeiHelpers()));
 //
 //    }
 

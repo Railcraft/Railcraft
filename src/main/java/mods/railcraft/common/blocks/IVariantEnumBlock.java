@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IContainerBlock;
@@ -31,7 +32,7 @@ import java.util.function.Consumer;
  * <p>
  * Created by CovertJaguar on 3/24/2016.
  */
-public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> extends Comparable<M>, IVariantEnum, IContainerState, IContainerBlock {
+public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> extends Comparable<M>, IVariantEnum, IContainerState, IContainerBlock, IIngredientSource {
     class Definition {
         public final Class<? extends IRailcraftModule>[] modules;
         public final String tag;
@@ -96,14 +97,17 @@ public interface IVariantEnumBlock<M extends Enum<M> & IVariantEnumBlock<M>> ext
         return IVariantEnum.super.isDeprecated();
     }
 
+    @Override
     default Ingredient getIngredient() {
         return Ingredient.fromStacks(getStack());
     }
 
+    @Override
     default ItemStack getStack() {
         return getStack(1);
     }
 
+    @Override
     default ItemStack getStack(int qty) {
         Block block = block();
         if (block == null)

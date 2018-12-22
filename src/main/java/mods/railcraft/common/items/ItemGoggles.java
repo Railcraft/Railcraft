@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.*;
@@ -135,11 +134,6 @@ public class ItemGoggles extends ItemRailcraftArmor {
 
         list.add(String.format(mode, "\u00A75" + aura));
         list.add(tip);
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum meta) {
-        return this;
     }
 
     public enum GoggleAura {

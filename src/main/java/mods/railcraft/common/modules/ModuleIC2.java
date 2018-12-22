@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -76,7 +76,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
 //                            'P', Blocks.STONE_PRESSURE_PLATE);
 //                }
 
-                ItemStack batbox = ModItems.BAT_BOX.get();
+                ItemStack batbox = ModItems.BAT_BOX.getStack();
                 if (!InvTools.isEmpty(batbox)) {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_BATBOX;
                     ItemStack stack = cart.getStack();
@@ -91,7 +91,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 }
 
                 if (!Mod.IC2_CLASSIC.isLoaded()) {
-                    ItemStack cesu = ModItems.CESU.get();
+                    ItemStack cesu = ModItems.CESU.getStack();
                     if (!InvTools.isEmpty(cesu)) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_CESU;
                         ItemStack stack = cart.getStack();
@@ -105,7 +105,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         }
                     }
                 } else {
-                    ItemStack mfsu = ModItems.MFSU.get();
+                    ItemStack mfsu = ModItems.MFSU.getStack();
                     if (!InvTools.isEmpty(mfsu)) {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_MFSU;
                         ItemStack stack = cart.getStack();
@@ -120,7 +120,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     }
                 }
 
-                ItemStack mfe = ModItems.MFE.get();
+                ItemStack mfe = ModItems.MFE.getStack();
                 if (!InvTools.isEmpty(mfe)) {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_MFE;
                     ItemStack stack = cart.getStack();
@@ -135,8 +135,8 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     }
                 }
 
-                ItemStack battery = ModItems.BATTERY.get();
-                ItemStack machine = ModItems.IC2_MACHINE.get();
+                ItemStack battery = ModItems.BATTERY.getStack();
+                ItemStack machine = ModItems.IC2_MACHINE.getStack();
 
                 ItemStack detector;
                 if (RailcraftBlocks.DETECTOR.isLoaded())

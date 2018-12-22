@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -60,7 +60,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
                 IC2Plugin.addMaceratorRecipe(new ItemStack(Items.ENDER_PEARL), getStack(EnumDust.ENDER));
             }
             if (RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
-                IC2Plugin.addMaceratorRecipe(ModItems.SLAG.get(), getStack(EnumDust.SLAG));
+                IC2Plugin.addMaceratorRecipe(ModItems.SLAG.getStack(), getStack(EnumDust.SLAG));
             }
         }
     }

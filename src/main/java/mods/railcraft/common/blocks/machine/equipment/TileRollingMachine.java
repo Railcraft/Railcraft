@@ -9,12 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
+import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
-import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryConcatenator;
 import mods.railcraft.common.util.misc.Game;
@@ -129,7 +129,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return;
 
         if (clock % 8 == 0) {
-            currentRecipe = RollingMachineCraftingManager.getInstance().findMatching(craftMatrix);
+            currentRecipe = Crafters.rollingMachine().findMatching(craftMatrix);
             if (currentRecipe != null) {
                 currentRecipeOutput = currentRecipe.getOutput(craftMatrix);
                 findMoreStuff();
@@ -195,7 +195,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     }
 
     public boolean canMakeMore() {
-        if (RollingMachineCraftingManager.getInstance().findMatching(craftMatrix) == null)
+        if (Crafters.rollingMachine().findMatching(craftMatrix) == null)
             return false;
         if (useLast)
             return true;

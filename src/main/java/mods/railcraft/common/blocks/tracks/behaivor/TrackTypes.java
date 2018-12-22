@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.tracks.behaivor;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
@@ -101,7 +101,7 @@ public enum TrackTypes {
 
     private final TrackType trackType;
 
-    TrackTypes(ResourceLocation baseBlock, IRailcraftRecipeIngredient rail, IRailcraftRecipeIngredient railbed) {
+    TrackTypes(ResourceLocation baseBlock, IIngredientSource rail, IIngredientSource railbed) {
         TrackType.Builder builder = new TrackType.Builder(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name().toLowerCase(Locale.ROOT)), baseBlock, rail, railbed);
         trackType = make(builder);
         TrackRegistry.TRACK_TYPE.register(trackType);

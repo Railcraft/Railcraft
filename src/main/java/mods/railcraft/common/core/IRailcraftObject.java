@@ -13,11 +13,13 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IRailcraftRegistryEntry;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
@@ -34,19 +36,32 @@ import java.util.Objects;
 public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRailcraftRegistryEntry<T>, IIngredientSource {
     T getObject();
 
-    default @Nullable Object getRecipeObject(@Nullable IVariantEnum variant) {
-        return getStack(1, variant);
+    @Override
+    default Ingredient getIngredient() {
+        return CraftingHelper.getIngredient(getObject());
     }
 
     @Override
-    default Ingredient getIngredient() {
-        return Ingredient.fromStacks(getStack(1));
+    default Ingredient getIngredient(@Nullable IVariantEnum variant) {
+        checkVariant(variant);
+        String oreTag = getOreTag(variant);
+        if (oreTag != null)
+            return Ingredients.from(oreTag);
+        if (variant != null)
+            return Ingredients.from(getStack(variant));
+        return Ingredients.from(getWildcard());
     }
 
+    default @Nullable String getOreTag(@Nullable IVariantEnum variant) {
+        return null;
+    }
+
+    @Override
     default ItemStack getStack() {
         return getStack(1, null);
     }
 
+    @Override
     default ItemStack getStack(int qty) {
         return getStack(qty, null);
     }
@@ -72,13 +87,13 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
         throw new RuntimeException("IRailcraftObject.getStack(int, IVariantEnum) needs to be overridden");
     }
 
-    default @Nullable ItemStack getWildcard() {
+    default ItemStack getWildcard() {
         Object obj = getObject();
         if (obj instanceof Item)
             return new ItemStack((Item) obj, 1, OreDictionary.WILDCARD_VALUE);
         if (obj instanceof Block)
             return new ItemStack((Block) obj, 1, OreDictionary.WILDCARD_VALUE);
-        return null;
+        return ItemStack.EMPTY;
     }
 
     default void defineRecipes() {

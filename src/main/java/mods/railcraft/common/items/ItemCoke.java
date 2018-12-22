@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,11 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -33,7 +32,7 @@ public class ItemCoke extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        BlastFurnaceCraftingManager.getInstance().addFuel(getIngredient(), COKE_HEAT);
+        Crafters.blastFurnace().addFuel(getRegistryName(), getIngredient(), COKE_HEAT);
         if (RailcraftConfig.coalCokeTorchOutput() > 0) {
             CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                     "C",
@@ -42,7 +41,7 @@ public class ItemCoke extends ItemRailcraft {
                     'S', "stickWood");
         }
         FluidStack creosoteStack = Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE);
-        RailcraftCraftingManager.getCokeOvenCraftings().addRecipe(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 0)), new ItemStack(this), creosoteStack, COKE_COOK_TIME);
+        Crafters.cokeOven().addRecipe(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 0)), new ItemStack(this), creosoteStack, COKE_COOK_TIME);
     }
 
     @Override

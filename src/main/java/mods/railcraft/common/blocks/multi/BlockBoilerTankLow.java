@@ -10,12 +10,12 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.ItemDust.EnumDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -39,6 +39,6 @@ public final class BlockBoilerTankLow extends BlockBoilerTank<TileBoilerTankLow>
                 'P', RailcraftItems.PLATE, Metal.IRON,
                 'I', RailcraftItems.PLATE, Metal.INVAR); //todo: Replace with steam piping when implemented
 
-        BlastFurnaceCraftingManager.getInstance().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(this)), 2560, RailcraftItems.INGOT.getStack(1, Metal.STEEL), RailcraftItems.DUST.getStack(1, EnumDust.SLAG));
+        Crafters.blastFurnace().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(this)), 2560, RailcraftItems.INGOT.getStack(1, Metal.STEEL), RailcraftItems.DUST.getStack(1, EnumDust.SLAG));
     }
 }

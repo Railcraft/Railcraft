@@ -10,11 +10,11 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreIngredient;
 
@@ -61,19 +61,19 @@ public class ItemCharge extends ItemRailcraftSubtyped {
 
 
         //TODO configure time
-        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+        Crafters.rollingMachine().newShapelessRecipeBuilder()
                 .output(getStack(SPOOL_SMALL))
                 .add(ingotCopper)
                 .time(100)
                 .buildAndRegister();
 
-        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+        Crafters.rollingMachine().newShapelessRecipeBuilder()
                 .output(getStack(SPOOL_SMALL))
                 .add(ingotConductiveIron)
                 .time(100)
                 .buildAndRegister();
 
-//        RailcraftCraftingManager.rollingMachine.addRecipe(
+//        Crafters.rollingMachine.addRecipe(
 //                getStack(SPOOL_SMALL),
 //                "C",
 //                'C', "ingotCopper");
@@ -82,24 +82,24 @@ public class ItemCharge extends ItemRailcraftSubtyped {
         Ingredient blockConductiveIron = new OreIngredient("blockConductiveIron");
 
         //TODO configure time
-        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+        Crafters.rollingMachine().newShapelessRecipeBuilder()
                 .output(getStack(SPOOL_LARGE))
                 .add(blockCopper)
                 .time(300)
                 .buildAndRegister();
 
-        RollingMachineCraftingManager.getInstance().newShapelessRecipeBuilder()
+        Crafters.rollingMachine().newShapelessRecipeBuilder()
                 .output(getStack(SPOOL_LARGE))
                 .add(blockConductiveIron)
                 .time(300)
                 .buildAndRegister();
 
-//        RailcraftCraftingManager.rollingMachine().addRecipe(
+//        Crafters.rollingMachine().addRecipe(
 //                getStack(SPOOL_LARGE),
 //                "C",
 //                'C', "blockConductiveIron");
 //
-//        RailcraftCraftingManager.rollingMachine().addRecipe(
+//        Crafters.rollingMachine().addRecipe(
 //                getStack(SPOOL_LARGE),
 //                "C",
 //                'C', "blockCopper");
@@ -113,35 +113,35 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'T', RailcraftItems.CHARGE, TERMINAL,
                 'P', "plateTin");
 
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(ELECTRODE_NICKEL),
                 " P ",
                 " P ",
                 " P ",
                 'P', "plateNickel");
 
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(ELECTRODE_IRON),
                 " P ",
                 " P ",
                 " P ",
                 'P', "plateIron");
 
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(ELECTRODE_ZINC),
                 " P ",
                 " P ",
                 " P ",
                 'P', "plateZinc");
 
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(ELECTRODE_CARBON),
                 " P ",
                 " P ",
                 " P ",
                 'P', "coal");
 
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(ELECTRODE_SILVER),
                 " P ",
                 " P ",
@@ -164,14 +164,14 @@ public class ItemCharge extends ItemRailcraftSubtyped {
         ELECTRODE_SILVER("plateSilver"),
         ;
         public static EnumCharge[] VALUES = values();
-        private final Object alternate;
+        private final Ingredient alternate;
 
         EnumCharge(Object alt) {
-            this.alternate = alt;
+            this.alternate = Ingredients.from(alt);
         }
 
         @Override
-        public Object getAlternate(IRailcraftRecipeIngredient container) {
+        public Ingredient getAlternate(IIngredientSource container) {
             return alternate;
         }
 

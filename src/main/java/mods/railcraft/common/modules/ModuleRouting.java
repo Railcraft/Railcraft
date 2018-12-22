@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,24 +50,27 @@ public class ModuleRouting extends RailcraftModulePayload {
 
                 if (EnumDetector.ROUTING.isEnabled()) {
                     CraftingPlugin.addRecipe(EnumDetector.ROUTING.getStack(),
-                        "XXX",
-                        "XPX",
-                        "XXX",
-                        'X', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1),
-                        'P', Blocks.STONE_PRESSURE_PLATE);
+                            "XXX",
+                            "XPX",
+                            "XXX",
+                            'X', new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1),
+                            'P', Blocks.STONE_PRESSURE_PLATE);
 
                 }
 
                 if (RailcraftBlocks.ACTUATOR.isEnabled()) {
                     // Define Switch Motor
                     if (ActuatorVariant.ROUTING.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
-                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getStack(), ActuatorVariant.MOTOR.getStack(), EnumDetector.ROUTING.getStack());
+                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.ROUTING.getStack(),
+                                ActuatorVariant.MOTOR,
+                                EnumDetector.ROUTING.getStack());
                     }
 
                     // Lever -> Motor upgrade recipe
                     if (ActuatorVariant.LEVER.isEnabled() && ActuatorVariant.MOTOR.isEnabled()) {
-                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.MOTOR.getStack(), ActuatorVariant.LEVER.getStack(), RailcraftItems.CIRCUIT.getRecipeObject(
-                            ItemCircuit.EnumCircuit.RECEIVER));
+                        CraftingPlugin.addShapelessRecipe(ActuatorVariant.MOTOR.getStack(),
+                                ActuatorVariant.LEVER,
+                                RailcraftItems.CIRCUIT.getIngredient(ItemCircuit.EnumCircuit.RECEIVER));
                     }
                 }
             }

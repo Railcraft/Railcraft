@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,49 +18,49 @@ public class ItemRebar extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.rollingMachine().addRecipe(new ItemStack(this, 4),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 4),
                 "  I",
                 " I ",
                 "I  ",
                 'I', new ItemStack(Items.IRON_INGOT));
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 4),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 4),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotBronze");
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 6),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 6),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotRefinedIron");
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 6),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 6),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotInvar");
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 8),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 8),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotSteel");
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 8),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 8),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotDarkSteel");
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 16),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 16),
                 "  I",
                 " I ",
                 "I  ",
                 'I', "ingotTungsten");
 
-        RollingMachineCraftingManager.getInstance().addRecipe(new ItemStack(this, 16),
+        Crafters.rollingMachine().addRecipe(new ItemStack(this, 16),
                 "  I",
                 " I ",
                 "I  ",

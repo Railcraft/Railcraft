@@ -76,8 +76,8 @@ public class ModuleForestry extends RailcraftModulePayload {
                 stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.STONE);
                 ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.WATER.get(750), ItemStack.EMPTY, stack,
                         "#r#",
-                        '#', RailcraftItems.CONCRETE,
-                        'r', RailcraftItems.REBAR);
+                        '#', RailcraftItems.CONCRETE.getWildcard(),
+                        'r', RailcraftItems.REBAR.getWildcard());
 
                 if (Fluids.CREOSOTE.isPresent() && RailcraftConfig.creosoteTorchOutput() > 0) {
                     ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
@@ -88,7 +88,7 @@ public class ModuleForestry extends RailcraftModulePayload {
                 }
 
                 if (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing")) {
-                    ItemStack casing = ModItems.STURDY_CASING.get();
+                    ItemStack casing = ModItems.STURDY_CASING.getStack();
                     // todo broke!
                     CraftingPlugin.addRecipe(casing,
                             "III",

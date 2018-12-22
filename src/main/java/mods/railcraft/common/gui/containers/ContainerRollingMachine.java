@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
@@ -16,7 +17,6 @@ import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotUnshiftable;
 import mods.railcraft.common.gui.slots.SlotUntouchable;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -112,7 +112,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     @Override
     public final void onCraftMatrixChanged(IInventory inv) {
-        IRollingMachineRecipe output = RollingMachineCraftingManager.getInstance().findMatching(craftMatrix);
+        IRollingMachineRecipe output = Crafters.rollingMachine().findMatching(craftMatrix);
         craftResult.setInventorySlotContents(0, output == null ? ItemStack.EMPTY : output.getOutput(craftMatrix));
     }
 

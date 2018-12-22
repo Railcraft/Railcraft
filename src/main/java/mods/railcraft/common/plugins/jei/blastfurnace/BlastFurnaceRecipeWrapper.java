@@ -14,15 +14,15 @@ import com.google.common.collect.Lists;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
+import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import net.minecraft.client.Minecraft;
 
 import java.util.Collections;
 
 public class BlastFurnaceRecipeWrapper implements IRecipeWrapper {
-    private IBlastFurnaceRecipe recipe;
+    private IBlastFurnaceCrafter.IRecipe recipe;
 
-    public BlastFurnaceRecipeWrapper(IBlastFurnaceRecipe recipe) {
+    public BlastFurnaceRecipeWrapper(IBlastFurnaceCrafter.IRecipe recipe) {
         this.recipe = recipe;
     }
 

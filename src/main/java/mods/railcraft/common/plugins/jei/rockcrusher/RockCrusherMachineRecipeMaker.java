@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,23 +11,16 @@
 package mods.railcraft.common.plugins.jei.rockcrusher;
 
 import mezz.jei.api.IJeiHelpers;
-import mods.railcraft.api.crafting.ICrusherRecipe;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class RockCrusherMachineRecipeMaker {
 
     public static List<RockCrusherRecipeWrapper> getRecipes(IJeiHelpers jeiHelpers) {
-        List<RockCrusherRecipeWrapper> wrappers = new ArrayList<>();
-        Collection<ICrusherRecipe> rawRecipes = RockCrusherCraftingManager.getInstance().getRecipes();
-        for (ICrusherRecipe recipe : rawRecipes) {
-            wrappers.add(new RockCrusherRecipeWrapper(recipe));
-        }
-
-        return wrappers;
+        return Crafters.rockCrusher().getRecipes().stream()
+                .map(RockCrusherRecipeWrapper::new).collect(Collectors.toList());
     }
 
     private RockCrusherMachineRecipeMaker() {

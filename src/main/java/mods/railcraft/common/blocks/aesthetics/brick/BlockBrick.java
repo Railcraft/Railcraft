@@ -10,12 +10,12 @@
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.BlockMetaVariant;
+import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -69,10 +69,9 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
                 'I', getStack(BLOCK));
         CraftingPlugin.addShapelessRecipe(getStack(ETCHED), getStack(BLOCK), new ItemStack(Items.GUNPOWDER));
 
-        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                .input(Ingredient.fromStacks(new ItemStack(this)))
+        Crafters.rockCrusher().makeRecipe(Ingredient.fromStacks(new ItemStack(this)))
                 .addOutput(getStack(COBBLE))
-                .buildAndRegister();
+                .register();
 
         CraftingPlugin.addFurnaceRecipe(getStack(COBBLE), getStack(BLOCK), 0.0F);
         theme.initRecipes(this);

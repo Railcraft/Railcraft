@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,23 +11,16 @@
 package mods.railcraft.common.plugins.jei.blastfurnace;
 
 import mezz.jei.api.IJeiHelpers;
-import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
-import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class BlastFurnaceRecipeMaker {
 
     public static List<BlastFurnaceRecipeWrapper> getRecipes(IJeiHelpers jeiHelpers) {
-        List<BlastFurnaceRecipeWrapper> wrappers = new ArrayList<>();
-        Collection<IBlastFurnaceRecipe> rawRecipes = BlastFurnaceCraftingManager.getInstance().getRecipes();
-        for (IBlastFurnaceRecipe recipe : rawRecipes) {
-            wrappers.add(new BlastFurnaceRecipeWrapper(recipe));
-        }
-
-        return wrappers;
+        return Crafters.blastFurnace().getRecipes().stream()
+                .map(BlastFurnaceRecipeWrapper::new).collect(Collectors.toList());
     }
 
     private BlastFurnaceRecipeMaker() {

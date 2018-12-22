@@ -9,8 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.items.ItemDust;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.crafting.Ingredients;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.Nullable;
@@ -47,6 +53,13 @@ public enum TankDefinition {
         @Override
         public int getCapacityPerBlock() {
             return 16 * FluidTools.BUCKET_VOLUME;
+        }
+
+        @Override
+        public void defineRecipes(Block block) {
+            // Smelting Recipe to turn Iron Tanks into Steel Nuggets
+            Crafters.blastFurnace().addRecipe(Ingredients.from(block), 640,
+                    RailcraftItems.NUGGET.getStack(4, Metal.STEEL), RailcraftItems.DUST.getStack(4, ItemDust.EnumDust.SLAG));
         }
     },
     STEEL {
@@ -95,4 +108,8 @@ public enum TankDefinition {
     public abstract float getResistance(@Nullable Entity exploder);
 
     public abstract int getCapacityPerBlock();
+
+    public void defineRecipes(Block block) {
+
+    }
 }

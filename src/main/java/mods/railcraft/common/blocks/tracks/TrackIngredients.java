@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,15 +10,18 @@
 
 package mods.railcraft.common.blocks.tracks;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
+import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
 import mods.railcraft.common.items.ItemRailbed;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -26,33 +29,38 @@ import java.util.function.Supplier;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum TrackIngredients implements IRailcraftRecipeIngredient {
-    RAIL_STRAP_IRON(() -> "slabWood", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.WOOD)),
-    RAIL_STANDARD(() -> "ingotIron", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.STANDARD)),
-    RAIL_ADVANCED(() -> "ingotGold", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ADVANCED)),
-    RAIL_SPEED(() -> "ingotSteel", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.SPEED)),
-    RAIL_REINFORCED(() -> Blocks.OBSIDIAN, () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.REINFORCED)),
-    RAIL_ELECTRIC(() -> "ingotCopper", () -> RailcraftItems.RAIL.getRecipeObject(ItemRail.EnumRail.ELECTRIC)),
-    TIE_WOOD(() -> RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.WOOD)),
-    TIE_STONE(() -> RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.STONE)),
-    RAILBED_WOOD(() -> "stickWood", () -> RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.WOOD)),
-    RAILBED_STONE(() -> Blocks.STONE_SLAB, () -> RailcraftItems.RAILBED.getRecipeObject(ItemRailbed.EnumRailbed.STONE));
-    private final Supplier<Object> ingredientSupplier;
-    private final Supplier<Object> ingredientSupplierVanilla;
+public enum TrackIngredients implements IIngredientSource {
+    RAIL_STRAP_IRON(() -> Ingredients.from("slabWood"), RailcraftItems.RAIL, ItemRail.EnumRail.WOOD),
+    RAIL_STANDARD(() -> Ingredients.from("ingotIron"), RailcraftItems.RAIL, ItemRail.EnumRail.STANDARD),
+    RAIL_ADVANCED(() -> Ingredients.from("ingotGold"), RailcraftItems.RAIL, ItemRail.EnumRail.ADVANCED),
+    RAIL_SPEED(() -> Ingredients.from("ingotSteel"), RailcraftItems.RAIL, ItemRail.EnumRail.SPEED),
+    RAIL_REINFORCED(() -> Ingredients.from(Blocks.OBSIDIAN), RailcraftItems.RAIL, ItemRail.EnumRail.REINFORCED),
+    RAIL_ELECTRIC(() -> Ingredients.from("ingotCopper"), RailcraftItems.RAIL, ItemRail.EnumRail.ELECTRIC),
+    TIE_WOOD(RailcraftItems.TIE, ItemTie.EnumTie.WOOD),
+    TIE_STONE(RailcraftItems.TIE, ItemTie.EnumTie.STONE),
+    RAILBED_WOOD(() -> Ingredients.from("stickWood"), RailcraftItems.RAILBED, ItemRailbed.EnumRailbed.WOOD),
+    RAILBED_STONE(() -> Ingredients.from(Blocks.STONE_SLAB), RailcraftItems.RAILBED, ItemRailbed.EnumRailbed.STONE);
+    private final Supplier<Ingredient> ingredientSupplierVanilla;
+    private final RailcraftItems itemContainer;
+    private final IVariantEnum variant;
 
-    TrackIngredients(Supplier<Object> ingredientSupplier) {
-        this.ingredientSupplier = ingredientSupplier;
-        this.ingredientSupplierVanilla = ingredientSupplier;
+    TrackIngredients(RailcraftItems itemContainer, IVariantEnum variant) {
+        this(() -> itemContainer.getIngredient(variant), itemContainer, variant);
     }
 
-    TrackIngredients(Supplier<Object> ingredientSupplierVanilla, Supplier<Object> ingredientSupplier) {
-        this.ingredientSupplier = ingredientSupplier;
+    TrackIngredients(Supplier<Ingredient> ingredientSupplierVanilla, RailcraftItems itemContainer, IVariantEnum variant) {
+        this.itemContainer = itemContainer;
+        this.variant = variant;
         this.ingredientSupplierVanilla = ingredientSupplierVanilla;
     }
 
-    @Nullable
     @Override
-    public Object getRecipeObject() {
-        return RailcraftConfig.vanillaTrackRecipes() ? ingredientSupplierVanilla.get() : ingredientSupplier.get();
+    public Ingredient getIngredient() {
+        return RailcraftConfig.vanillaTrackRecipes() ? ingredientSupplierVanilla.get() : itemContainer.getIngredient(variant);
+    }
+
+    @Override
+    public ItemStack getStack(int qty) {
+        return itemContainer.getStack(qty, variant);
     }
 }

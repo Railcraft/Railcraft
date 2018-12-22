@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
@@ -23,7 +24,6 @@ import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -86,7 +86,7 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                 Block blockPost = RailcraftBlocks.POST.block();
                 if (blockPost != null) {
-                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getStack(4), RailcraftItems.TIE.getRecipeObject(ItemTie.EnumTie.WOOD));
+                    CraftingPlugin.addShapelessRecipe(EnumPost.WOOD.getStack(4), RailcraftItems.TIE.getIngredient(ItemTie.EnumTie.WOOD));
                     CraftingPlugin.addRecipe(EnumPost.WOOD_PLATFORM.getStack(),
                             " T ",
                             " I ",
@@ -97,7 +97,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                             "SIS",
                             "SIS",
                             "SIS",
-                            'I', RailcraftItems.REBAR.getRecipeObject(),
+                            'I', RailcraftItems.REBAR,
                             'S', "stone");
                     CraftingPlugin.addRecipe(EnumPost.STONE_PLATFORM.getStack(),
                             " T ",
@@ -107,13 +107,13 @@ public class ModuleStructures extends RailcraftModulePayload {
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getStack(16);
 
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotIron");
 
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
@@ -126,37 +126,37 @@ public class ModuleStructures extends RailcraftModulePayload {
                             'I', EnumPost.METAL_UNPAINTED.getStack());
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(32);
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotSteel");
 
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
                             'I', "ingotSteel");
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(12);
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotBronze");
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",
                             'I', "ingotBronze");
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(20);
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "III",
                             " I ",
                             "III",
                             'I', "ingotRefinedIron");
-                    RollingMachineCraftingManager.getInstance().addRecipe(stack,
+                    Crafters.rollingMachine().addRecipe(stack,
                             "I I",
                             "III",
                             "I I",

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.multi.TileRockCrusher;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
@@ -90,7 +90,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(@Nullable ItemStack stack) {
-            return !InvTools.isEmpty(stack) && RailcraftCraftingManager.getRockCrusherCraftings().getRecipe(stack) != null;
+            return !InvTools.isEmpty(stack) && Crafters.rockCrusher().getRecipe(stack) != null;
         }
 
     }

@@ -1,10 +1,20 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.plugins.jei.cokeoven;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mods.railcraft.api.crafting.ICokeOvenRecipe;
+import mods.railcraft.api.crafting.ICokeOvenCrafter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
@@ -14,9 +24,9 @@ import java.awt.*;
 
 public final class CokeOvenWrapper implements IRecipeWrapper {
     private final IJeiHelpers helpers;
-    private final ICokeOvenRecipe recipe;
+    private final ICokeOvenCrafter.IRecipe recipe;
 
-    public CokeOvenWrapper(IJeiHelpers helpers, ICokeOvenRecipe recipe) {
+    public CokeOvenWrapper(IJeiHelpers helpers, ICokeOvenCrafter.IRecipe recipe) {
         this.helpers = helpers;
         this.recipe = recipe;
     }

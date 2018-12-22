@@ -14,7 +14,7 @@ import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostBase;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
@@ -98,7 +98,7 @@ public class BlockWire extends BlockCharge implements IPostConnection {
 
     @Override
     public void defineRecipes() {
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(8, null),
                 "LPL",
                 "PCP",
@@ -107,7 +107,7 @@ public class BlockWire extends BlockCharge implements IPostConnection {
                 'P', Items.PAPER,
                 'L', "ingotLead");
 
-        RailcraftCraftingManager.rollingMachine().addRecipe(
+        Crafters.rollingMachine().addRecipe(
                 getStack(8, null),
                 "LPL",
                 "PCP",

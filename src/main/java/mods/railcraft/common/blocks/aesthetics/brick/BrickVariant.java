@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,13 +10,14 @@
 
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 /**
@@ -24,17 +25,17 @@ import java.util.Locale;
  */
 public enum BrickVariant implements IVariantEnum {
 
-    BRICK(new ItemStack(Blocks.STONEBRICK)),
-    FITTED(new ItemStack(Blocks.STONEBRICK)),
-    BLOCK(new ItemStack(Blocks.STONEBRICK)),
+    BRICK(Blocks.STONEBRICK),
+    FITTED(Blocks.STONEBRICK),
+    BLOCK(Blocks.STONEBRICK),
     ORNATE(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META)),
     ETCHED(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CRACKED_META)),
     COBBLE(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CRACKED_META));
     public static final BrickVariant[] VALUES = values();
-    private final Object alt;
+    private final Ingredient alt;
 
     BrickVariant(Object alt) {
-        this.alt = alt;
+        this.alt = Ingredients.from(alt);
     }
 
     public static BrickVariant fromOrdinal(int ordinal) {
@@ -53,9 +54,8 @@ public enum BrickVariant implements IVariantEnum {
         return name().toLowerCase(Locale.ROOT);
     }
 
-    @Nullable
     @Override
-    public Object getAlternate(IRailcraftRecipeIngredient container) {
+    public Ingredient getAlternate(IIngredientSource container) {
         return alt;
     }
 }

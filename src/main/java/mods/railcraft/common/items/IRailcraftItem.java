@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.core.IRailcraftObject;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -20,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -48,22 +46,6 @@ public interface IRailcraftItem extends IRailcraftObject<Item> {
     default void addToolTips(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag flag) {
         ToolTip toolTip = getToolTip(stack, world, flag);
         info.addAll(toolTip.convertToStrings());
-    }
-
-    @Override
-    @Deprecated
-    default Object getRecipeObject(@Nullable IVariantEnum variant) {
-        checkVariant(variant);
-        String oreTag = getOreTag(variant);
-        if (oreTag != null)
-            return oreTag;
-        if (variant != null && ((Item) this).getHasSubtypes())
-            return getStack(variant);
-        return getObject();
-    }
-
-    default @Nullable String getOreTag(@Nullable IVariantEnum variant) {
-        return null;
     }
 
 }

@@ -11,15 +11,14 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -47,8 +46,8 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public final class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
 
-    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && BlastFurnaceCraftingManager.getInstance().getRecipe(stack) != null;
-    public static final Predicate<ItemStack> FUEL_FILTER = stack -> BlastFurnaceCraftingManager.getInstance().getCookTime(stack) > 0;
+    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && Crafters.blastFurnace().getRecipe(stack).isPresent();
+    public static final Predicate<ItemStack> FUEL_FILTER = stack -> Crafters.blastFurnace().getCookTime(stack) > 0;
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
@@ -125,7 +124,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
     public boolean clientBurning;
     private int finishedAt;
     private ItemStack lastInput = ItemStack.EMPTY;
-    private @Nullable IBlastFurnaceRecipe currentRecipe;
+    private @Nullable IBlastFurnaceCrafter.IRecipe currentRecipe;
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
@@ -173,10 +172,8 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         ItemStack input = getStackInSlot(SLOT_INPUT);
         if (InvTools.isEmpty(input))
             return 1;
-        IBlastFurnaceRecipe recipe = RailcraftCraftingManager.getBlastFurnaceCraftings().getRecipe(input);
-        if (recipe != null)
-            return recipe.getCookTime();
-        return 1;
+        return Crafters.blastFurnace().getRecipe(input)
+                .map(IBlastFurnaceCrafter.IRecipe::getCookTime).orElse(1);
     }
 
     public int getBurnProgressScaled(int i) {
@@ -260,7 +257,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         if (input != lastInput) {
             resetCooking();
             lastInput = input;
-            currentRecipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
+            currentRecipe = Crafters.blastFurnace().getRecipe(input).orElse(null);
         }
 
         if (currentRecipe == null) {
@@ -307,7 +304,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         // TODO fix mess
 //        if (!InvTools.isEmpty(input)) {
 //            ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
-//            IBlastFurnaceRecipe recipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
+//            IRecipe recipe = BlastFurnaceCrafter.getInstance().getRecipe(input);
 //
 //            if (recipe != null) {
 //                if (paused) return;
@@ -351,7 +348,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         if (fuel.isEmpty()) {
             return;
         }
-        int itemBurnTime = BlastFurnaceCraftingManager.getInstance().getCookTime(fuel);
+        int itemBurnTime = Crafters.blastFurnace().getCookTime(fuel);
         if (itemBurnTime <= 0) {
             return;
         }

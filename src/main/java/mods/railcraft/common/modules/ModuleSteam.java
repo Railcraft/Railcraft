@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -64,7 +64,7 @@ public class ModuleSteam extends RailcraftModulePayload {
 //                            'C', "blockGlassColorless",
 //                            'G', "gearIron");
 
-//                    RailcraftCraftingManager.blastFurnace.addRecipe(beta.getStack(), true, false, 15360, RailcraftItems.INGOT.getStack(12, Metal.STEEL));
+//                    Crafters.blastFurnace.addRecipe(beta.getStack(), true, false, 15360, RailcraftItems.INGOT.getStack(12, Metal.STEEL));
 //                }
 
 //                beta = EnumMachineBeta.ENGINE_STEAM_HIGH;
@@ -110,7 +110,7 @@ public class ModuleSteam extends RailcraftModulePayload {
 //                            "P",
 //                            'P', RailcraftItems.PLATE, Metal.IRON);
 
-//                    RailcraftCraftingManager.blastFurnace.addRecipe(beta.getStack(), true, false, 2560, RailcraftItems.INGOT.getStack(2, Metal.STEEL));
+//                    Crafters.blastFurnace.addRecipe(beta.getStack(), true, false, 2560, RailcraftItems.INGOT.getStack(2, Metal.STEEL));
 //                }
 
 //                beta = EnumMachineBeta.BOILER_TANK_HIGH_PRESSURE;

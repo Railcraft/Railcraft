@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,11 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -50,14 +51,14 @@ public class ItemRailbed extends ItemRailcraftSubtyped {
         WOOD("stickWood"),
         STONE(Blocks.STONE_SLAB);
         public static final EnumRailbed[] VALUES = values();
-        private Object alternate;
+        private Ingredient alternate;
 
         EnumRailbed(Object alt) {
-            this.alternate = alt;
+            this.alternate = Ingredients.from(alt);
         }
 
         @Override
-        public Object getAlternate(IRailcraftRecipeIngredient container) {
+        public Ingredient getAlternate(IIngredientSource container) {
             return alternate;
         }
 

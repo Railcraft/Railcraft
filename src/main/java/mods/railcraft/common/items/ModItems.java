@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
 
@@ -25,7 +27,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public enum ModItems implements IRailcraftRecipeIngredient {
+public enum ModItems implements IIngredientSource {
 
     SILK(Mod.FORESTRY, "crafting_material", 3),
     STURDY_CASING(Mod.FORESTRY, "sturdy_machine"),
@@ -74,11 +76,13 @@ public enum ModItems implements IRailcraftRecipeIngredient {
         this.meta = meta;
     }
 
-    public ItemStack get() {
-        return get(1);
+    @Override
+    public ItemStack getStack() {
+        return getStack(1);
     }
 
-    public ItemStack get(int qty) {
+    @Override
+    public ItemStack getStack(int qty) {
         init();
         if (!InvTools.isEmpty(stack)) {
             stack = stack.copy();
@@ -89,8 +93,8 @@ public enum ModItems implements IRailcraftRecipeIngredient {
     }
 
     @Override
-    public Object getRecipeObject() {
-        return get();
+    public Ingredient getIngredient() {
+        return Ingredients.from(getStack());
     }
 
     public boolean isEqual(ItemStack otherStack, boolean matchMeta, boolean matchNBT) {

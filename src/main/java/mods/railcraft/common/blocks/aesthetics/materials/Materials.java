@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.aesthetics.materials;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -454,10 +453,5 @@ public enum Materials implements IVariantEnum {
 
     public boolean isSourceValid() {
         return getState() != null;
-    }
-
-    @Override
-    public @Nullable Object getAlternate(IRailcraftRecipeIngredient container) {
-        return null;
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,11 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
@@ -60,44 +61,44 @@ public class ItemGear extends ItemRailcraftSubtyped {
         Ingredient ingotBrass = new OreIngredient("ingotBrass");
         Ingredient plateBrass = new OreIngredient("plateBrass");
 
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+        Crafters.rollingMachine().newShapedRecipeBuilder()
                 .output(getStack(2, EnumGear.BUSHING))
                 .ingredients(
-                    ingotBronze, ingotBronze,
-                    ingotBronze, ingotBronze
+                        ingotBronze, ingotBronze,
+                        ingotBronze, ingotBronze
                 )
                 .height(2)
                 .width(2)
                 .time(200)
                 .buildAndRegister();
 
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+        Crafters.rollingMachine().newShapedRecipeBuilder()
                 .output(getStack(2, EnumGear.BUSHING))
                 .ingredients(
-                    ingotBrass, ingotBrass,
-                    ingotBrass, ingotBrass
+                        ingotBrass, ingotBrass,
+                        ingotBrass, ingotBrass
                 )
                 .height(2)
                 .width(2)
                 .time(200)
                 .buildAndRegister();
 
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+        Crafters.rollingMachine().newShapedRecipeBuilder()
                 .output(getStack(2, EnumGear.BUSHING))
                 .ingredients(
-                    plateBronze, plateBronze,
-                    plateBronze, plateBronze
+                        plateBronze, plateBronze,
+                        plateBronze, plateBronze
                 )
                 .height(2)
                 .width(2)
                 .time(100)
                 .buildAndRegister();
 
-        RollingMachineCraftingManager.getInstance().newShapedRecipeBuilder()
+        Crafters.rollingMachine().newShapedRecipeBuilder()
                 .output(getStack(2, EnumGear.BUSHING))
                 .ingredients(
-                    plateBrass, plateBrass,
-                    plateBrass, plateBrass
+                        plateBrass, plateBrass,
+                        plateBrass, plateBrass
                 )
                 .height(2)
                 .width(2)
@@ -143,16 +144,17 @@ public class ItemGear extends ItemRailcraftSubtyped {
         STEEL("blockSteel"),
         BUSHING("ingotBronze"),
         BRONZE("blockBronze"),
-        INVAR("blockInvar"),;
+        INVAR("blockInvar"),
+        ;
         public static final EnumGear[] VALUES = values();
-        private Object alternate;
+        private Ingredient alternate;
 
         EnumGear(Object alt) {
-            this.alternate = alt;
+            this.alternate = Ingredients.from(alt);
         }
 
         @Override
-        public Object getAlternate(IRailcraftRecipeIngredient container) {
+        public Ingredient getAlternate(IIngredientSource container) {
             return alternate;
         }
 

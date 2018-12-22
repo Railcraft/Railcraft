@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,8 +12,8 @@ package mods.railcraft.common.plugins.jei.rolling;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IRollingMachineRecipe;
-import mods.railcraft.common.util.crafting.RollingMachineCraftingManager;
 import mods.railcraft.common.util.crafting.ShapedRollingMachineRecipe;
 import mods.railcraft.common.util.crafting.ShapelessRollingMachineRecipe;
 
@@ -25,7 +25,7 @@ public final class RollingMachineRecipeMaker {
 
     public static List<IRecipeWrapper> getRecipes(IJeiHelpers jeiHelpers) {
         List<IRecipeWrapper> wrappers = new ArrayList<>();
-        Collection<IRollingMachineRecipe> rawRecipes = RollingMachineCraftingManager.getInstance().getRecipes();
+        Collection<IRollingMachineRecipe> rawRecipes = Crafters.rollingMachine().getRecipes();
         for (IRollingMachineRecipe recipe : rawRecipes) {
             if(recipe instanceof ShapedRollingMachineRecipe)
                 wrappers.add(new ShapedRollingMachineRecipeWrapper((ShapedRollingMachineRecipe)recipe, jeiHelpers.getStackHelper()));

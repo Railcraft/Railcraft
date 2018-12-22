@@ -76,10 +76,10 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
             conditions().add(RailcraftBlocks.CHEST_VOID);
         }
     },
-    ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, EntityCartEnergyBatBox::new, ItemCart::new, ModItems.BAT_BOX::get),
-    ENERGY_CESU(0, "cart_ic2_cesu", EntityCartEnergyCESU.class, EntityCartEnergyCESU::new, ItemCart::new, ModItems.CESU::get),
-    ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, EntityCartEnergyMFE::new, ItemCart::new, ModItems.MFE::get),
-    ENERGY_MFSU(1, "cart_ic2_mfsu", EntityCartEnergyMFSU.class, EntityCartEnergyMFSU::new, ItemCart::new, ModItems.MFSU::get),
+    ENERGY_BATBOX(0, "cart_ic2_batbox", EntityCartEnergyBatBox.class, EntityCartEnergyBatBox::new, ItemCart::new, ModItems.BAT_BOX::getStack),
+    ENERGY_CESU(0, "cart_ic2_cesu", EntityCartEnergyCESU.class, EntityCartEnergyCESU::new, ItemCart::new, ModItems.CESU::getStack),
+    ENERGY_MFE(0, "cart_ic2_mfe", EntityCartEnergyMFE.class, EntityCartEnergyMFE::new, ItemCart::new, ModItems.MFE::getStack),
+    ENERGY_MFSU(1, "cart_ic2_mfsu", EntityCartEnergyMFSU.class, EntityCartEnergyMFSU::new, ItemCart::new, ModItems.MFSU::getStack),
     GIFT(3, "cart_gift", EntityCartGift.class, EntityCartGift::new, ItemCartGift::new),
     JUKEBOX(0, "cart_jukebox", EntityCartJukebox.class, EntityCartJukebox::new, ItemCartJukebox::new, from(Blocks.JUKEBOX)),
     BED(0, "cart_bed", EntityCartBed.class, EntityCartBed::new, ItemCartBed::new, () -> new ItemStack(Items.BED)),

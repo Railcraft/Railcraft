@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.RockCrusherCraftingManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -31,14 +31,13 @@ public final class BlockCokeOvenRed extends BlockCokeOven {
                 "MBM",
                 'B', "ingotBrick",
                 'M', redSand);
-        RockCrusherCraftingManager.getInstance().createRecipeBuilder()
-                .input(CraftingPlugin.getIngredient(this))
+        Crafters.rockCrusher().makeRecipe(CraftingPlugin.getIngredient(this))
                 .addOutput(new ItemStack(Items.BRICK, 3))
                 .addOutput(redSand, 0.5f)
                 .addOutput(redSand, 0.25f)
                 .addOutput(redSand, 0.25f)
                 .addOutput(redSand, 0.25f)
                 .addOutput(redSand, 0.25f)
-                .buildAndRegister();
+                .register();
     }
 }

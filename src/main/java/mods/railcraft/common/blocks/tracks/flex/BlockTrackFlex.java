@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,7 +43,7 @@ public class BlockTrackFlex extends BlockTrackStateless {
         if (!RailcraftConfig.vanillaTrackRecipes()) {
             Object[] tracks = new Object[Math.round((float) Math.ceil(((float) TrackConstants.FLEX_RECIPE_OUTPUT) / 6F))];
             Arrays.fill(tracks, getStack());
-            CraftingPlugin.addShapelessRecipe(CraftingPlugin.getIngredientStack(getTrackType().getRail(), 1), tracks);
+            CraftingPlugin.addShapelessRecipe(getTrackType().getRail().getStack(), tracks);
         }
     }
 

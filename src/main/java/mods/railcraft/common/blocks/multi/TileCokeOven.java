@@ -11,7 +11,8 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.crafting.ICokeOvenRecipe;
+import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.ICokeOvenCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -21,7 +22,6 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
@@ -180,7 +180,7 @@ public final class TileCokeOven extends TileMultiBlockOven implements ISidedInve
                 if (!InvTools.isEmpty(input)) {
                     if (!paused && clock % COOK_STEP_LENGTH == 0) {
                         ItemStack output = getStackInSlot(SLOT_OUTPUT);
-                        ICokeOvenRecipe recipe = CokeOvenCraftingManager.getInstance().getRecipe(input);
+                        ICokeOvenCrafter.IRecipe recipe = Crafters.cokeOven().getRecipe(input).orElse(null);
 
                         if (recipe != null) {
                             FluidStack fluidOutput = recipe.getFluidOutput();
@@ -253,7 +253,7 @@ public final class TileCokeOven extends TileMultiBlockOven implements ISidedInve
             return false;
         switch (slot) {
             case SLOT_INPUT:
-                return CokeOvenCraftingManager.getInstance().getRecipe(stack) != null;
+                return Crafters.cokeOven().getRecipe(stack).isPresent();
             case SLOT_LIQUID_INPUT:
                 return FluidItemHelper.isRoomInContainer(stack);
             default:

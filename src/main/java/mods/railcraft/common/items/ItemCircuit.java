@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.core.IRailcraftRecipeIngredient;
+import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
 import java.util.Locale;
 
@@ -95,14 +97,14 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
         SIGNAL(Items.REPEATER),
         RADIO(Blocks.REDSTONE_BLOCK);
         public static EnumCircuit[] VALUES = values();
-        private Object alternate;
+        private Ingredient alternate;
 
         EnumCircuit(Object alt) {
-            this.alternate = alt;
+            this.alternate = Ingredients.from(alt);
         }
 
         @Override
-        public Object getAlternate(IRailcraftRecipeIngredient container) {
+        public Ingredient getAlternate(IIngredientSource container) {
             return alternate;
         }
 

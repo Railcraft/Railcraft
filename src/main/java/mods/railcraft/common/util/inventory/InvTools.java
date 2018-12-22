@@ -57,6 +57,11 @@ public abstract class InvTools {
         return !InvToolsAPI.isEmpty(stack);
     }
 
+    public static void requiresNotEmpty(@Nullable ItemStack stack) {
+        if (isEmpty(stack))
+            throw new NullPointerException();
+    }
+
     public static ItemStack emptyStack() {
         return InvToolsAPI.emptyStack();
     }

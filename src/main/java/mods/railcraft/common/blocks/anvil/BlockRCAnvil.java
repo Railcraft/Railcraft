@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -68,11 +68,6 @@ public class BlockRCAnvil extends BlockAnvil implements IRailcraftBlock {
             state = state.withProperty(DAMAGE, variant.ordinal());
         }
         return state;
-    }
-
-    @Override
-    public Object getRecipeObject(@Nullable IVariantEnum variant) {
-        return this;
     }
 
     @Override

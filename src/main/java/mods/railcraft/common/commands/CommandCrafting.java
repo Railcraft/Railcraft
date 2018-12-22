@@ -1,9 +1,18 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.commands;
 
-import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
-import mods.railcraft.api.crafting.ICokeOvenRecipe;
-import mods.railcraft.common.util.crafting.BlastFurnaceCraftingManager;
-import mods.railcraft.common.util.crafting.CokeOvenCraftingManager;
+import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
+import mods.railcraft.api.crafting.ICokeOvenCrafter;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -37,8 +46,7 @@ public final class CommandCrafting extends SubCommand {
             }
             EntityPlayerMP player = (EntityPlayerMP) sender;
             ItemStack input = player.getHeldItem(EnumHand.MAIN_HAND);
-            ICokeOvenRecipe recipe = CokeOvenCraftingManager.getInstance().getRecipe(input);
-            ItemStack output = recipe == null ? ItemStack.EMPTY : recipe.getOutput();
+            ItemStack output = Crafters.cokeOven().getRecipe(input).map(ICokeOvenCrafter.IRecipe::getOutput).orElse(ItemStack.EMPTY);
             player.sendMessage(new TextComponentTranslation("command.railcraft.railcraft.crafting.coke.oven.message",
                     input.getTextComponent(), output.getTextComponent()));
         }
@@ -56,8 +64,8 @@ public final class CommandCrafting extends SubCommand {
             }
             EntityPlayerMP player = (EntityPlayerMP) sender;
             ItemStack input = player.getHeldItem(EnumHand.MAIN_HAND);
-            IBlastFurnaceRecipe recipe = BlastFurnaceCraftingManager.getInstance().getRecipe(input);
-            ItemStack output = recipe == null ? ItemStack.EMPTY : recipe.getOutput();
+            ItemStack output = Crafters.blastFurnace().getRecipe(input)
+                    .map(IBlastFurnaceCrafter.IRecipe::getOutput).orElse(ItemStack.EMPTY);
             player.sendMessage(new TextComponentTranslation("command.railcraft.railcraft.crafting.blast.furnace.message",
                     input.getTextComponent(), output.getTextComponent()));
         }
@@ -75,7 +83,7 @@ public final class CommandCrafting extends SubCommand {
             }
             EntityPlayerMP player = (EntityPlayerMP) sender;
             ItemStack input = player.getHeldItem(EnumHand.MAIN_HAND);
-            int time = BlastFurnaceCraftingManager.getInstance().getCookTime(input);
+            int time = Crafters.blastFurnace().getCookTime(input);
             player.sendMessage(new TextComponentTranslation("command.railcraft.railcraft.crafting.blast.furnace.fuel.message",
                     input.getTextComponent(), time));
         }
