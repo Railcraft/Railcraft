@@ -52,6 +52,8 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockMultiB
         setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE));
     }
 
+    public abstract TankDefinition getTankType();
+
     @Override
     public VariantData<EnumColor> getVariantData() {
         if (variantData == null)
@@ -62,6 +64,7 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockMultiB
     @OverridingMethodsMustInvokeSuper
     @Override
     public void defineRecipes() {
+        getTankType().defineRecipes(this);
         addColorRecipes();
     }
 

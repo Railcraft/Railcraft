@@ -13,15 +13,13 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.Tuple;
 
 @BlockMetaTile(TileTankIronWall.class)
-public class BlockTankIronWall extends BlockTankIron<TileTankIronWall> {
+public class BlockTankIronWall extends BlockTankMetalWall<TileTankIronWall> {
 
-    public BlockTankIronWall() {
-        super(Material.IRON);
-        setHarvestLevel("pickaxe", 1);
+    @Override
+    public TankDefinition getTankType() {
+        return TankDefinition.IRON;
     }
 
     @Override
@@ -32,8 +30,4 @@ public class BlockTankIronWall extends BlockTankIron<TileTankIronWall> {
                 'P', RailcraftItems.PLATE, Metal.IRON);
     }
 
-    @Override
-    public Tuple<Integer, Integer> getTextureDimensions() {
-        return new Tuple<>(2, 1);
-    }
 }

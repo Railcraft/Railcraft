@@ -13,20 +13,14 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.Tuple;
-
-import static mods.railcraft.common.blocks.multi.BlockTankIronValve.OPTIONAL_AXIS;
 
 @BlockMetaTile(TileTankSteelValve.class)
-public class BlockTankSteelValve extends BlockTankMetal<TileTankSteelValve> {
+public class BlockTankSteelValve extends BlockTankMetalValve<TileTankSteelValve> {
 
-    public BlockTankSteelValve() {
-        super(Material.IRON);
-        setHarvestLevel("pickaxe", 1);
-        setDefaultState(getDefaultState().withProperty(OPTIONAL_AXIS, BlockTankIronValve.OptionalAxis.NONE));
+    @Override
+    public TankDefinition getTankType() {
+        return TankDefinition.STEEL;
     }
 
     @Override
@@ -40,13 +34,4 @@ public class BlockTankSteelValve extends BlockTankMetal<TileTankSteelValve> {
                 'L', Blocks.LEVER);
     }
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, OPTIONAL_AXIS);
-    }
-
-    @Override
-    public Tuple<Integer, Integer> getTextureDimensions() {
-        return new Tuple<>(2, 1);
-    }
 }
