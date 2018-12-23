@@ -20,7 +20,7 @@ public final class BlastFurnaceRecipeMaker {
 
     public static List<BlastFurnaceRecipeWrapper> getRecipes(IJeiHelpers jeiHelpers) {
         return Crafters.blastFurnace().getRecipes().stream()
-                .map(BlastFurnaceRecipeWrapper::new).collect(Collectors.toList());
+                .map(recipe -> new BlastFurnaceRecipeWrapper(jeiHelpers, recipe)).collect(Collectors.toList());
     }
 
     private BlastFurnaceRecipeMaker() {

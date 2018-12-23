@@ -20,7 +20,7 @@ public final class RockCrusherMachineRecipeMaker {
 
     public static List<RockCrusherRecipeWrapper> getRecipes(IJeiHelpers jeiHelpers) {
         return Crafters.rockCrusher().getRecipes().stream()
-                .map(RockCrusherRecipeWrapper::new).collect(Collectors.toList());
+                .map(recipe -> new RockCrusherRecipeWrapper(jeiHelpers, recipe)).collect(Collectors.toList());
     }
 
     private RockCrusherMachineRecipeMaker() {

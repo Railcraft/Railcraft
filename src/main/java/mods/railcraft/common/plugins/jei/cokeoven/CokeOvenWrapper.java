@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
+import java.util.Collections;
 
 public final class CokeOvenWrapper implements IRecipeWrapper {
     private final IJeiHelpers helpers;
@@ -33,7 +34,7 @@ public final class CokeOvenWrapper implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInputs(VanillaTypes.ITEM, helpers.getStackHelper().toItemStackList(recipe.getInput()));
+        ingredients.setInputLists(VanillaTypes.ITEM, Collections.singletonList(helpers.getStackHelper().toItemStackList(recipe.getInput())));
         ItemStack output = recipe.getOutput();
         if (!output.isEmpty()) {
             ingredients.setOutput(VanillaTypes.ITEM, recipe.getOutput());
@@ -46,7 +47,7 @@ public final class CokeOvenWrapper implements IRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        int cookTime = recipe.getCookTime();
+        int cookTime = recipe.getTickTime();
         minecraft.fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.jei.burntime", cookTime), -2, 41, Color.GRAY.getRGB());
     }
 }
