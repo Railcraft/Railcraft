@@ -175,7 +175,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         if (InvTools.isEmpty(input))
             return 1;
         return Crafters.blastFurnace().getRecipe(input)
-                .map(IBlastFurnaceCrafter.IRecipe::getCookTime).orElse(1);
+                .map(IBlastFurnaceCrafter.IRecipe::getTickTime).orElse(1);
     }
 
     public int getBurnProgressScaled(int i) {
@@ -286,7 +286,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
 
         setCooking(true);
         cookTime++;
-        if (cookTime < currentRecipe.getCookTime()) {
+        if (cookTime < currentRecipe.getTickTime()) {
             return;
         }
 

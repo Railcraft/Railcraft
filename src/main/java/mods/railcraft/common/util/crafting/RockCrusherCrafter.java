@@ -17,9 +17,11 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -44,21 +46,31 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
     }
 
     @Override
-    public IRecipeBuilder makeRecipe(Ingredient input) {
+    public IRecipeBuilder makeRecipe(@Nullable ResourceLocation name, Ingredient input) {
+        Objects.requireNonNull(name);
         if (!input.apply(ItemStack.EMPTY)) {
-            return new RecipeBuilder(input);
+            return new RecipeBuilder(name, input);
         } else {
-            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid rock crusher recipe");
+            Game.log(Level.WARN, "Tried, but failed to register {0} as a rock crusher recipe", name);
         }
         return new IRecipeBuilder() {};
     }
 
     private class RecipeBuilder implements IRecipeBuilder {
+        private final ResourceLocation name;
         private final Ingredient input;
         private List<IOutputEntry> outputs = new ArrayList<>();
+        private int processTime = PROCESS_TIME;
 
-        public RecipeBuilder(Ingredient input) {
+        public RecipeBuilder(ResourceLocation name, Ingredient input) {
+            this.name = name;
             this.input = input;
+        }
+
+        @Override
+        public IRecipeBuilder setProcessTime(int processTime) {
+            this.processTime = processTime;
+            return this;
         }
 
         @Override
@@ -82,7 +94,27 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
         @Override
         public void register() throws IllegalArgumentException {
             checkArgument(input != null, "input");
-            recipes.add(new Recipe(input, outputs));
+            recipes.add(new IRecipe() {
+                @Override
+                public Ingredient getInput() {
+                    return input;
+                }
+
+                @Override
+                public List<IOutputEntry> getOutputs() {
+                    return outputs;
+                }
+
+                @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
+
+                @Override
+                public int getTickTime() {
+                    return processTime;
+                }
+            });
         }
     }
 
@@ -126,31 +158,6 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
         @Override
         public IGenRule getGenRule() {
             return genRule;
-        }
-    }
-
-    private static class Recipe implements IRecipe {
-
-        private final Ingredient inputMatcher;
-        private final List<IOutputEntry> outputs;
-
-        Recipe(Ingredient inputMatcher) {
-            this(inputMatcher, new ArrayList<>());
-        }
-
-        Recipe(Ingredient inputMatcher, List<IOutputEntry> entries) {
-            this.inputMatcher = inputMatcher;
-            this.outputs = entries;
-        }
-
-        @Override
-        public Ingredient getInput() {
-            return inputMatcher;
-        }
-
-        @Override
-        public List<IOutputEntry> getOutputs() {
-            return outputs;
         }
     }
 }

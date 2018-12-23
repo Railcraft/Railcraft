@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -19,24 +20,25 @@ import net.minecraft.item.ItemStack;
 /**
  *
  */
-public final class BlockCokeOvenRegular extends BlockCokeOven {
+public final class BlockCokeOvenSandy extends BlockCokeOven {
 
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
+        ItemStack sand = new ItemStack(Blocks.SAND, 1, 0);
         CraftingPlugin.addRecipe(stack,
                 "MBM",
                 "BMB",
                 "MBM",
                 'B', "ingotBrick",
-                'M', Blocks.SAND);
-        Crafters.rockCrusher().makeRecipe(CraftingPlugin.getIngredient(this))
+                'M', sand);
+        Crafters.rockCrusher().makeRecipe("railcraft:cokeOvenSandy", Ingredients.from(this))
                 .addOutput(new ItemStack(Items.BRICK, 3))
                 .addOutput(new ItemStack(Items.BRICK), 0.5f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
-                .addOutput(new ItemStack(Blocks.SAND), 0.25f)
+                .addOutput(sand, 0.25f)
+                .addOutput(sand, 0.25f)
+                .addOutput(sand, 0.25f)
+                .addOutput(sand, 0.25f)
                 .register();
     }
 }

@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -23,7 +24,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
@@ -69,7 +69,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
                 'I', getStack(BLOCK));
         CraftingPlugin.addShapelessRecipe(getStack(ETCHED), getStack(BLOCK), new ItemStack(Items.GUNPOWDER));
 
-        Crafters.rockCrusher().makeRecipe(Ingredient.fromStacks(new ItemStack(this)))
+        Crafters.rockCrusher().makeRecipe(getRegistryName(), Ingredients.from(this))
                 .addOutput(getStack(COBBLE))
                 .register();
 

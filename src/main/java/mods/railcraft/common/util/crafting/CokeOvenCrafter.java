@@ -15,6 +15,7 @@ import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
@@ -33,32 +34,37 @@ public enum CokeOvenCrafter implements ICokeOvenCrafter {
     }
 
     @Override
-    public void addRecipe(Ingredient input, ItemStack output, @Nullable FluidStack liquidOutput, int cookTime) {
-        if (input.test(ItemStack.EMPTY)) {
-            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid coke oven recipe");
-            return;
+    public void addRecipe(@Nullable ResourceLocation name, Ingredient input, ItemStack output, @Nullable FluidStack liquidOutput, int cookTime) {
+        if (!input.test(ItemStack.EMPTY)) {
+            recipes.add(new IRecipe() {
+                @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
+
+                @Override
+                public Ingredient getInput() {
+                    return input;
+                }
+
+                @Override
+                public int getTickTime() {
+                    return cookTime;
+                }
+
+                @Override
+                public @Nullable FluidStack getFluidOutput() {
+                    return FluidTools.copy(liquidOutput);
+                }
+
+                @Override
+                public ItemStack getOutput() {
+                    return output.copy();
+                }
+            });
+        } else {
+            Game.log(Level.WARN, "Tried, but failed to register {0} as a coke oven recipe", name);
         }
-        recipes.add(new IRecipe() {
-            @Override
-            public Ingredient getInput() {
-                return input;
-            }
-
-            @Override
-            public int getCookTime() {
-                return cookTime;
-            }
-
-            @Override
-            public @Nullable FluidStack getFluidOutput() {
-                return FluidTools.copy(liquidOutput);
-            }
-
-            @Override
-            public ItemStack getOutput() {
-                return output.copy();
-            }
-        });
     }
 
     @Override

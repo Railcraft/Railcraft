@@ -76,7 +76,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     public void defineRecipes() {
         ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
         if (!ore.isEmpty()) {
-            Crafters.rockCrusher().makeRecipe(Ingredient.fromStacks(ore))
+            Crafters.rockCrusher().makeRecipe("railcraft:firestoneOre", Ingredient.fromStacks(ore))
                     .addOutput(RailcraftItems.FIRESTONE_RAW.getStack())
                     .register();
         }

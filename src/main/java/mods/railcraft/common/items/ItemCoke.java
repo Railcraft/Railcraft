@@ -13,11 +13,10 @@ import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemCoke extends ItemRailcraft {
@@ -40,8 +39,8 @@ public class ItemCoke extends ItemRailcraft {
                     'C', "fuelCoke",
                     'S', "stickWood");
         }
-        FluidStack creosoteStack = Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE);
-        Crafters.cokeOven().addRecipe(Ingredient.fromStacks(new ItemStack(Items.COAL, 1, 0)), new ItemStack(this), creosoteStack, COKE_COOK_TIME);
+        Crafters.cokeOven().addRecipe("railcraft:coke", Ingredients.from(Items.COAL, 0),
+                getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE), COKE_COOK_TIME);
     }
 
     @Override

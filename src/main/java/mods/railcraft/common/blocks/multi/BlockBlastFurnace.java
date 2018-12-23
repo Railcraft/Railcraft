@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -60,7 +61,7 @@ public final class BlockBlastFurnace extends BlockMultiBlockInventory<TileBlastF
                 'B', new ItemStack(Blocks.NETHER_BRICK),
                 'M', new ItemStack(Blocks.SOUL_SAND),
                 'P', Items.MAGMA_CREAM);
-        Crafters.rockCrusher().makeRecipe(CraftingPlugin.getIngredient(this))
+        Crafters.rockCrusher().makeRecipe("railcraft:recycleBlastFurnace", Ingredients.from(this))
                 .addOutput(new ItemStack(Blocks.NETHER_BRICK), 0.75f)
                 .addOutput(new ItemStack(Blocks.SOUL_SAND), 0.75f)
                 .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.05f)

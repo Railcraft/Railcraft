@@ -88,14 +88,13 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
             }
 
             CraftingPlugin.addRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
-            Crafters.rockCrusher().makeRecipe(mat.getCraftingEquivalent())
+            Crafters.rockCrusher().makeRecipe("railcraft:stair", mat.getCraftingEquivalent())
                     .addOutput(mat.getSourceItem())
                     .register();
         }
 
         MatTools.defineCrusherRecipes(this);
     }
-
 
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
@@ -108,13 +107,11 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
         return new ExtendedBlockState(this, new IProperty[]{FACING, HALF, SHAPE}, new IUnlistedProperty[]{Materials.MATERIAL_PROPERTY});
     }
 
-
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         IExtendedBlockState actState = (IExtendedBlockState) super.getActualState(state, worldIn, pos);
         return actState.withProperty(Materials.MATERIAL_PROPERTY, MatTools.getMat(worldIn, pos));
     }
-
 
     @Override
     public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {

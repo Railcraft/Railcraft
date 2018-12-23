@@ -54,7 +54,6 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
 
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
-    private static final int PROCESS_TIME = 100;
     private static final double CRUSHING_POWER_COST_PER_TICK = 160;
     private static final double SUCKING_POWER_COST = 5000;
     private static final double KILLING_POWER_COST = 10000;
@@ -127,6 +126,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     private final InventoryMapper invInput = new InventoryMapper(this, 0, 9).ignoreItemChecks();
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9).ignoreItemChecks();
     private final Set<Object> actions = new HashSet<>();
+    private Optional<IRockCrusherCrafter.IRecipe> recipe;
     private int processTime;
     private final Random random = new Random();
     private boolean isWorking;
@@ -236,16 +236,16 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 if (paused)
                     return;
 
-                IRockCrusherCrafter.IRecipe recipe = invInput.streamStacks()
+                recipe = invInput.streamStacks()
                         .flatMap(stack -> Streams.stream(Crafters.rockCrusher().getRecipe(stack)))
-                        .findFirst()
-                        .orElse(null);
+                        .findFirst();
 
-                if (recipe != null) {
-                    if (processTime >= PROCESS_TIME) {
+                if (recipe.isPresent()) {
+                    IRockCrusherCrafter.IRecipe r = recipe.get();
+                    if (processTime >= r.getTickTime()) {
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
-                        List<ItemStack> outputs = recipe.pollOutputs(random);
+                        List<ItemStack> outputs = r.pollOutputs(random);
                         boolean hasRoom = outputs.stream()
                                 .map(tempInv::addStack)
                                 .allMatch(InvTools::isEmpty);
@@ -255,9 +255,10 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                                 invOutput.addStack(output);
                             }
 
-                            invInput.removeOneItem(recipe.getInput());
+                            invInput.removeOneItem(r.getInput());
 
-                            SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH, SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
+                            SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH,
+                                    SoundCategory.BLOCKS, 1.0f, world.rand.nextFloat() * 0.25F + 0.7F);
 
                             processTime = 0;
                         }
@@ -308,7 +309,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     }
 
     public int getProgressScaled(int i) {
-        return (getProcessTime() * i) / PROCESS_TIME;
+        return recipe.map(r -> (getProcessTime() * i) / r.getTickTime()).orElse(0);
     }
 
     @Override

@@ -41,10 +41,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
 
 @RailcraftModule(value = "railcraft:factory", description = "coke oven, blast furnace, rolling machine, rock crusher, etc...")
 public class ModuleFactory extends RailcraftModulePayload {
@@ -146,7 +143,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 {
                     IRockCrusherCrafter rc = Crafters.rockCrusher();
                     if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled() || RailcraftItems.DUST.isEnabled()) {
-                        IRockCrusherCrafter.IRecipeBuilder builder = rc.makeRecipe(Ingredient.fromItem(Item.getItemFromBlock(Blocks.OBSIDIAN)));
+                        IRockCrusherCrafter.IRecipeBuilder builder = rc.makeRecipe("railcraft:obsidian", Ingredients.from(Blocks.OBSIDIAN));
                         if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled())
                             builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
                         if (RailcraftItems.DUST.isEnabled()) {
@@ -159,7 +156,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 
 
                     if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled() && RailcraftItems.DUST.isEnabled()) {
-                        rc.makeRecipe(EnumGeneric.CRUSHED_OBSIDIAN)
+                        rc.makeRecipe("railcraft:obsidianCrushed", Ingredients.from(EnumGeneric.CRUSHED_OBSIDIAN))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f)
                                 .register();
@@ -168,126 +165,126 @@ public class ModuleFactory extends RailcraftModulePayload {
 
                     //TODO move to individual classes once we do split up
                     if (WorldspikeVariant.STANDARD.isAvailable()) {
-                        getWorldSpikeBuilder(WorldspikeVariant.STANDARD.getIngredient())
+                        getWorldSpikeBuilder("railcraft:recycleWorldspikeStandard", WorldspikeVariant.STANDARD.getIngredient())
                                 .addOutput(new ItemStack(Items.DIAMOND), 0.5f)
                                 .register();
 
                     }
 
                     if (WorldspikeVariant.PERSONAL.isAvailable()) {
-                        getWorldSpikeBuilder(WorldspikeVariant.PERSONAL.getIngredient())
+                        getWorldSpikeBuilder("railcraft:recycleWorldspikePersonal", WorldspikeVariant.PERSONAL.getIngredient())
                                 .addOutput(new ItemStack(Items.EMERALD), 0.5f)
                                 .register();
                     }
 
                     if (WorldspikeVariant.PASSIVE.isAvailable()) {
-                        getWorldSpikeBuilder(WorldspikeVariant.PASSIVE.getIngredient())
+                        getWorldSpikeBuilder("railcraft:recycleWorldspikePassive", WorldspikeVariant.PASSIVE.getIngredient())
                                 .addOutput(new ItemStack(Blocks.PRISMARINE), 0.5f)
                                 .register();
                     }
 
-                    rc.makeRecipe(Ingredients.from(Blocks.COBBLESTONE))
+                    rc.makeRecipe("minecraft:cobblestone", Ingredients.from(Blocks.COBBLESTONE))
                             .addOutput(new ItemStack(Blocks.GRAVEL))
                             .addOutput(new ItemStack(Items.FLINT), 0.10f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.MOSSY_COBBLESTONE))
+                    rc.makeRecipe("minecraft:cobblestoneMossy", Ingredients.from(Blocks.MOSSY_COBBLESTONE))
                             .addOutput(new ItemStack(Blocks.GRAVEL))
                             .addOutput(new ItemStack(Blocks.VINE), 0.80f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.GRAVEL))
+                    rc.makeRecipe("minecraft:gravel", Ingredients.from(Blocks.GRAVEL))
                             .addOutput(new ItemStack(Blocks.SAND))
                             .addOutput(new ItemStack(Items.GOLD_NUGGET), 0.001f)
                             .addOutput(new ItemStack(Items.DIAMOND), 0.00005f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE))
+                    rc.makeRecipe("minecraft:stone", Ingredients.from(Blocks.STONE))
                             .addOutput(new ItemStack(Blocks.COBBLESTONE))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.SANDSTONE))
+                    rc.makeRecipe("minecraft:sandstone", Ingredients.from(Blocks.SANDSTONE))
                             .addOutput(new ItemStack(Blocks.SAND, 4))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.BRICK_BLOCK))
+                    rc.makeRecipe("minecraft:brick", Ingredients.from(Blocks.BRICK_BLOCK))
                             .addOutput(new ItemStack(Items.BRICK, 3))
                             .addOutput(new ItemStack(Items.BRICK), 0.5f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.CLAY))
+                    rc.makeRecipe("minecraft:clay", Ingredients.from(Blocks.CLAY))
                             .addOutput(new ItemStack(Items.CLAY_BALL, 4))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONEBRICK))
+                    rc.makeRecipe("minecraft:stonebrick", Ingredients.from(Blocks.STONEBRICK))
                             .addOutput(new ItemStack(Blocks.COBBLESTONE))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_STAIRS))
+                    rc.makeRecipe("minecraft:stairsStone", Ingredients.from(Blocks.STONE_STAIRS))
                             .addOutput(new ItemStack(Blocks.GRAVEL))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_BRICK_STAIRS))
+                    rc.makeRecipe("minecraft:stairsStonebrick", Ingredients.from(Blocks.STONE_BRICK_STAIRS))
                             .addOutput(new ItemStack(Blocks.COBBLESTONE))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.NETHER_BRICK_STAIRS))
+                    rc.makeRecipe("minecraft:stairsNether", Ingredients.from(Blocks.NETHER_BRICK_STAIRS))
                             .addOutput(new ItemStack(Blocks.NETHER_BRICK))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.BRICK_STAIRS))
+                    rc.makeRecipe("minecraft:stairsBrick", Ingredients.from(Blocks.BRICK_STAIRS))
                             .addOutput(new ItemStack(Items.BRICK, 4))
                             .addOutput(new ItemStack(Items.BRICK), 0.5f)
                             .addOutput(new ItemStack(Items.BRICK), 0.5f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_SLAB, 0))
+                    rc.makeRecipe("minecraft:slabStone", Ingredients.from(Blocks.STONE_SLAB, 0))
                             .addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_SLAB, 1))
+                    rc.makeRecipe("minecraft:slabStone", Ingredients.from(Blocks.STONE_SLAB, 1))
                             .addOutput(new ItemStack(Blocks.SAND), 0.45f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_SLAB, 3))
+                    rc.makeRecipe("minecraft:slabStone", Ingredients.from(Blocks.STONE_SLAB, 3))
                             .addOutput(new ItemStack(Blocks.GRAVEL), 0.45f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_SLAB, 4))
+                    rc.makeRecipe("minecraft:slabStone", Ingredients.from(Blocks.STONE_SLAB, 4))
                             .addOutput(new ItemStack(Items.BRICK))
                             .addOutput(new ItemStack(Items.BRICK), 0.75f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.STONE_SLAB, 5))
+                    rc.makeRecipe("minecraft:slabStone", Ingredients.from(Blocks.STONE_SLAB, 5))
                             .addOutput(new ItemStack(Blocks.COBBLESTONE), 0.45f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.ICE))
+                    rc.makeRecipe("minecraft:ice", Ingredients.from(Blocks.ICE))
                             .addOutput(new ItemStack(Blocks.SNOW), 0.85f)
                             .addOutput(new ItemStack(Items.SNOWBALL), 0.25f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.NETHER_BRICK_FENCE))
+                    rc.makeRecipe("minecraft:fenceNether", Ingredients.from(Blocks.NETHER_BRICK_FENCE))
                             .addOutput(new ItemStack(Blocks.NETHER_BRICK))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.GLOWSTONE))
+                    rc.makeRecipe("minecraft:glowstone", Ingredients.from(Blocks.GLOWSTONE))
                             .addOutput(new ItemStack(Items.GLOWSTONE_DUST, 3))
                             .addOutput(new ItemStack(Items.GLOWSTONE_DUST), 0.75f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.REDSTONE_LAMP))
+                    rc.makeRecipe("minecraft:redstoneLamp", Ingredients.from(Blocks.REDSTONE_LAMP))
                             .addOutput(new ItemStack(Items.GLOWSTONE_DUST, 3))
                             .addOutput(new ItemStack(Items.GLOWSTONE_DUST), 0.75f)
                             .addOutput(new ItemStack(Items.REDSTONE, 3))
                             .addOutput(new ItemStack(Items.REDSTONE), 0.75f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Items.BONE))
+                    rc.makeRecipe("minecraft:bone", Ingredients.from(Items.BONE))
                             .addOutput(new ItemStack(Items.DYE, 4, 15))
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Items.BLAZE_ROD))
+                    rc.makeRecipe("minecraft:blazeRod", Ingredients.from(Items.BLAZE_ROD))
                             .addOutput(new ItemStack(Items.BLAZE_POWDER, 2))
                             .addOutput(new ItemStack(Items.BLAZE_POWDER), 0.65f)
                             .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.5f)
@@ -296,86 +293,86 @@ public class ModuleFactory extends RailcraftModulePayload {
                             .register();
 
                     //todo: Investigate if we should spawn the respective cobblestone variant from crushing ores. This would need to be applied to IC2 ores as well if done
-                    rc.makeRecipe(Ingredients.from(Blocks.REDSTONE_ORE))
+                    rc.makeRecipe("minecraft:oreRedstone", Ingredients.from(Blocks.REDSTONE_ORE))
                             .addOutput(new ItemStack(Items.REDSTONE, 6))
                             .addOutput(new ItemStack(Items.REDSTONE, 2), 0.85f)
                             .addOutput(new ItemStack(Items.REDSTONE, 1), 0.25f)
                             .addOutput(new ItemStack(Items.GLOWSTONE_DUST), 0.1f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.DIAMOND_ORE))
+                    rc.makeRecipe("minecraft:oreDiamond", Ingredients.from(Blocks.DIAMOND_ORE))
                             .addOutput(new ItemStack(Items.DIAMOND))
                             .addOutput(new ItemStack(Items.DIAMOND), 0.85f)
                             .addOutput(new ItemStack(Items.DIAMOND), 0.25f)
                             .addOutput(new ItemStack(Items.COAL), 0.1f)
                             .register();
 
-                    rc.makeRecipe(RailcraftBlocks.ORE.getIngredient(EnumOre.DARK_DIAMOND))
+                    rc.makeRecipe("railcraft:oreDiamondDark", RailcraftBlocks.ORE.getIngredient(EnumOre.DARK_DIAMOND))
                             .addOutput(new ItemStack(Items.DIAMOND))
                             .addOutput(new ItemStack(Items.DIAMOND), 0.85f)
                             .addOutput(new ItemStack(Items.DIAMOND), 0.25f)
                             .addOutput(new ItemStack(Items.COAL), 0.1f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.EMERALD_ORE))
+                    rc.makeRecipe("minecraft:oreEmerald", Ingredients.from(Blocks.EMERALD_ORE))
                             .addOutput(new ItemStack(Items.EMERALD))
                             .addOutput(new ItemStack(Items.EMERALD), 0.85f)
                             .addOutput(new ItemStack(Items.EMERALD), 0.25f)
                             .register();
 
-                    rc.makeRecipe(RailcraftBlocks.ORE.getIngredient(EnumOre.DARK_EMERALD))
+                    rc.makeRecipe("railcraft:oreEmeraldDark", RailcraftBlocks.ORE.getIngredient(EnumOre.DARK_EMERALD))
                             .addOutput(new ItemStack(Items.EMERALD))
                             .addOutput(new ItemStack(Items.EMERALD), 0.85f)
                             .addOutput(new ItemStack(Items.EMERALD), 0.25f)
                             .register();
 
-                    rc.makeRecipe(Ingredients.from(Blocks.LAPIS_ORE))
+                    rc.makeRecipe("minecraft:oreLapis", Ingredients.from(Blocks.LAPIS_ORE))
                             .addOutput(new ItemStack(Items.DYE, 8, 4))
                             .addOutput(new ItemStack(Items.DYE, 1, 4), 0.85f)
                             .addOutput(new ItemStack(Items.DYE, 1, 4), 0.35f)
                             .register();
 
-                    rc.makeRecipe(RailcraftBlocks.ORE.getIngredient(EnumOre.DARK_LAPIS))
+                    rc.makeRecipe("railcraft:oreLapisDark", RailcraftBlocks.ORE.getIngredient(EnumOre.DARK_LAPIS))
                             .addOutput(new ItemStack(Items.DYE, 8, 4))
                             .addOutput(new ItemStack(Items.DYE, 1, 4), 0.85f)
                             .addOutput(new ItemStack(Items.DYE, 1, 4), 0.35f)
                             .register();
 
                     if (RailcraftItems.DUST.isEnabled()) {
-                        rc.makeRecipe(Ingredients.from(Items.COAL, 0))
+                        rc.makeRecipe("minecraft:coal", Ingredients.from(Items.COAL, 0))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.COAL))
                                 .register();
 
-                        rc.makeRecipe(Ingredients.from(Blocks.COAL_ORE))
+                        rc.makeRecipe("minecraft:oreCoal", Ingredients.from(Blocks.COAL_ORE))
                                 .addOutput(RailcraftItems.DUST.getStack(2, ItemDust.EnumDust.COAL))
                                 .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.COAL), 0.65f)
                                 .addOutput(new ItemStack(Items.COAL), 0.15f)
                                 .addOutput(new ItemStack(Items.DIAMOND), 0.001f)
                                 .register();
 
-                        rc.makeRecipe(Ingredients.from(Blocks.COAL_BLOCK, 0))
+                        rc.makeRecipe("minecraft:blockCoal", Ingredients.from(Blocks.COAL_BLOCK, 0))
                                 .addOutput(RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.COAL))
                                 .register();
 
-                        rc.makeRecipe(Ingredients.from(Items.COAL, 1))
+                        rc.makeRecipe("minecraft:charcoal", Ingredients.from(Items.COAL, 1))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.CHARCOAL))
                                 .register();
 
-                        rc.makeRecipe(Ingredients.from("blockCharcoal"))
+                        rc.makeRecipe("minecraft:blockCharcoal", Ingredients.from("blockCharcoal"))
                                 .addOutput(RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.CHARCOAL))
                                 .register();
 
-                        rc.makeRecipe(Ingredient.fromItem(Items.ENDER_PEARL))
+                        rc.makeRecipe("minecraft:enderPearl", Ingredient.fromItem(Items.ENDER_PEARL))
                                 .addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.ENDER))
                                 .register();
 
-                        rc.makeRecipe(RailcraftBlocks.ORE.getIngredient(EnumOre.SULFUR))
+                        rc.makeRecipe("railcraft:oreSulfur", RailcraftBlocks.ORE.getIngredient(EnumOre.SULFUR))
                                 .addOutput(RailcraftItems.DUST.getStack(5, ItemDust.EnumDust.SULFUR))
                                 .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.85f)
                                 .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SULFUR), 0.35f)
                                 .register();
 
-                        rc.makeRecipe(RailcraftBlocks.ORE.getIngredient(EnumOre.SALTPETER))
+                        rc.makeRecipe("railcraft:oreSaltpeter", RailcraftBlocks.ORE.getIngredient(EnumOre.SALTPETER))
                                 .addOutput(RailcraftItems.DUST.getStack(3, ItemDust.EnumDust.SALTPETER))
                                 .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SALTPETER), 0.85f)
                                 .addOutput(RailcraftItems.DUST.getStack(1, ItemDust.EnumDust.SALTPETER), 0.35f)
@@ -416,7 +413,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
 
                 if (EnumGeneric.BLOCK_COKE.isEnabled()) {
-                    Crafters.cokeOven().addRecipe(Ingredient.fromItem(Item.getItemFromBlock(Blocks.COAL_BLOCK)), EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
+                    Crafters.cokeOven().addRecipe("railcraft:cokeBlock", Ingredients.from(Blocks.COAL_BLOCK),
+                            EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
                     ItemStack stack = EnumGeneric.BLOCK_COKE.getStack();
                     CraftingPlugin.addRecipe(stack,
                             "CCC",
@@ -427,8 +425,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
             }
 
-            private IRockCrusherCrafter.IRecipeBuilder getWorldSpikeBuilder(Ingredient ingredient) {
-                IRockCrusherCrafter.IRecipeBuilder builder = Crafters.rockCrusher().makeRecipe(ingredient);
+            private IRockCrusherCrafter.IRecipeBuilder getWorldSpikeBuilder(String name, Ingredient ingredient) {
+                IRockCrusherCrafter.IRecipeBuilder builder = Crafters.rockCrusher().makeRecipe(name, ingredient);
                 if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
                     builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
                     builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);
@@ -447,14 +445,12 @@ public class ModuleFactory extends RailcraftModulePayload {
                 return builder;
             }
 
-            private void registerCrushedOreRecipe(ItemStack ore, ItemStack dust) {
+            private void registerCrushedOreRecipe(Ingredient ore, ItemStack dust) {
                 if (InvTools.isEmpty(dust))
                     return;
-                dust = dust.copy();
-                setSize(dust, 2);
 
-                Crafters.rockCrusher().makeRecipe(Ingredient.fromStacks(ore))
-                        .addOutput(dust)
+                Crafters.rockCrusher().makeRecipe("ic2:crushedOre", ore)
+                        .addOutput(InvTools.copy(dust, 2))
                         .register();
             }
 
@@ -467,13 +463,14 @@ public class ModuleFactory extends RailcraftModulePayload {
                 if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
-                List<ItemStack> logs = new ArrayList<>(25);
-                logs.addAll(OreDictionary.getOres("logWood"));
-                logs.addAll(OreDictionary.getOres("woodRubber"));
-                Crafters.cokeOven().addRecipe(Ingredient.fromStacks(logs.toArray(new ItemStack[0])), new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
+                String[] logs = {"logWood", "woodRubber"};
+                for (String oreTag : logs) {
+                    Crafters.cokeOven().addRecipe("railcraft:" + oreTag, Ingredients.from(oreTag),
+                            new ItemStack(Items.COAL, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
+                }
 
                 if (Mod.FORESTRY.isLoaded()) {
-                    Crafters.rockCrusher().makeRecipe(Ingredient.fromStacks(ModItems.APATITE_ORE.getStack()))
+                    Crafters.rockCrusher().makeRecipe("forestry:apatite", Ingredient.fromStacks(ModItems.APATITE_ORE.getStack()))
                             .addOutput(ModItems.APATITE.getStack(4))
                             .addOutput(ModItems.APATITE.getStack(), 0.85f)
                             .addOutput(ModItems.APATITE.getStack(), 0.25f)
@@ -493,33 +490,14 @@ public class ModuleFactory extends RailcraftModulePayload {
                     ItemStack crushedUranium = classic ? ModItems.URANIUM_DROP.getStack() : ModItems.CRUSHED_URANIUM.getStack();
 
                     if (RailcraftConfig.canCrushOres()) {
-                        registerCrushedOreRecipe(new ItemStack(Blocks.IRON_ORE), crushedIron);
-                        registerCrushedOreRecipe(new ItemStack(Blocks.GOLD_ORE), crushedGold);
+                        registerCrushedOreRecipe(Ingredients.from(Blocks.IRON_ORE), crushedIron);
+                        registerCrushedOreRecipe(Ingredients.from(Blocks.GOLD_ORE), crushedGold);
 
-                        List<ItemStack> ores = OreDictionary.getOres("oreCopper");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedCopper);
-                        }
-
-                        ores = OreDictionary.getOres("oreTin");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedTin);
-                        }
-
-                        ores = OreDictionary.getOres("oreSilver");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedSilver);
-                        }
-
-                        ores = OreDictionary.getOres("oreLead");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedLead);
-                        }
-
-                        ores = OreDictionary.getOres("oreUranium");
-                        for (ItemStack ore : ores) {
-                            registerCrushedOreRecipe(ore, crushedUranium);
-                        }
+                        registerCrushedOreRecipe(Ingredients.from("oreCopper"), crushedCopper);
+                        registerCrushedOreRecipe(Ingredients.from("oreTin"), crushedTin);
+                        registerCrushedOreRecipe(Ingredients.from("oreSilver"), crushedSilver);
+                        registerCrushedOreRecipe(Ingredients.from("oreLead"), crushedLead);
+                        registerCrushedOreRecipe(Ingredients.from("oreUranium"), crushedUranium);
                     }
 
                     if (RailcraftConfig.getRecipeConfig("ic2.macerator.ores")) {

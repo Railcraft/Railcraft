@@ -186,7 +186,7 @@ public final class TileCokeOven extends TileMultiBlockOven implements ISidedInve
                             FluidStack fluidOutput = recipe.getFluidOutput();
                             if ((InvTools.isEmpty(output) || (output.isItemEqual(recipe.getOutput()) && sizeOf(output) + sizeOf(recipe.getOutput()) <= output.getMaxStackSize()))
                                     && (fluidOutput == null || tank.fill(recipe.getFluidOutput(), false) >= fluidOutput.amount)) {
-                                cookTimeTotal = recipe.getCookTime();
+                                cookTimeTotal = recipe.getTickTime();
                                 cookTime += COOK_STEP_LENGTH;
                                 setCooking(true);
 

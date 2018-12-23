@@ -147,7 +147,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     CHEST_METALS("chest_metals", BlockChestMetals.class, ItemBlockEntityDelegate::new),
     CHEST_VOID("chest_void", BlockChestVoid.class, ItemBlockEntityDelegate::new),
     // multiblocks
-    COKE_OVEN("coke_oven", BlockCokeOvenRegular.class, ItemBlockCustomModel::new),
+    COKE_OVEN("coke_oven", BlockCokeOvenSandy.class, ItemBlockCustomModel::new),
     COKE_OVEN_RED("coke_oven_red", BlockCokeOvenRed.class, ItemBlockCustomModel::new),
     BLAST_FURNACE("blast_furnace", BlockBlastFurnace.class, ItemBlockCustomModel::new),
     ROCK_CRUSHER("rock_crusher", BlockRockCrusher.class, ItemBlockEntityDelegate::new),

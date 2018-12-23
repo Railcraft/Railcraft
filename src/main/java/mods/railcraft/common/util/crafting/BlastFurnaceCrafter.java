@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
+import mods.railcraft.api.crafting.ISimpleRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.items.RailcraftItems;
@@ -23,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -32,8 +34,8 @@ import java.util.Optional;
 
 public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     INSTANCE;
-    private final List<IRecipe> recipes = new ArrayList<>();
-    private final List<IFuel> fuels = new ArrayList<>();
+    private final List<@NotNull IRecipe> recipes = new ArrayList<>();
+    private final List<@NotNull ISimpleRecipe> fuels = new ArrayList<>();
 
     public void postInit() {
         addFuel("thaumcraft:alumentum", ThaumcraftPlugin.ITEMS.get("alumentum", 0));
@@ -61,7 +63,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     public void addFuel(@Nullable ResourceLocation name, Ingredient input, int cookTime) {
         Objects.requireNonNull(name);
         if (!input.apply(ItemStack.EMPTY)) {
-            fuels.add(new IFuel() {
+            fuels.add(new ISimpleRecipe() {
                 @Override
                 public ResourceLocation getName() {
                     return name;
@@ -73,7 +75,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
                 }
 
                 @Override
-                public int getCookTime() {
+                public int getTickTime() {
                     return cookTime;
                 }
             });
@@ -98,7 +100,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
                 }
 
                 @Override
-                public int getCookTime() {
+                public int getTickTime() {
                     return cookTime;
                 }
 
@@ -118,12 +120,12 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     }
 
     @Override
-    public List<IRecipe> getRecipes() {
+    public List<@NotNull IRecipe> getRecipes() {
         return CollectionTools.removeOnlyList(recipes);
     }
 
     @Override
-    public List<IFuel> getFuels() {
+    public List<@NotNull ISimpleRecipe> getFuels() {
         return CollectionTools.removeOnlyList(fuels);
     }
 
@@ -132,7 +134,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         return fuels.stream()
                 .filter(fuel -> fuel.getInput().test(stack))
                 .findFirst()
-                .map(IFuel::getCookTime)
+                .map(ISimpleRecipe::getTickTime)
                 .orElse(0);
     }
 
