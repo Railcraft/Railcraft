@@ -15,6 +15,8 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
+import mods.railcraft.common.items.ItemDust;
+import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.client.Minecraft;
 
 import java.util.Collections;
@@ -29,7 +31,8 @@ public class BlastFurnaceRecipeWrapper implements IRecipeWrapper {
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInputs(VanillaTypes.ITEM, Lists.newArrayList(recipe.getInput().getMatchingStacks()));
-        ingredients.setOutputLists(VanillaTypes.ITEM, Lists.newArrayList(Collections.singletonList(recipe.getOutput()), Collections.singletonList(recipe.getSecondOutput())));
+        ingredients.setOutputLists(VanillaTypes.ITEM, Lists.newArrayList(Collections.singletonList(recipe.getOutput()),
+                Collections.singletonList(RailcraftItems.DUST.getStack(recipe.getSlagOutput(), ItemDust.EnumDust.SLAG))));
     }
 
     @Override

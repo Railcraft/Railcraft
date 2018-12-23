@@ -63,6 +63,11 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         if (!input.apply(ItemStack.EMPTY)) {
             fuels.add(new IFuel() {
                 @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
+
+                @Override
                 public Ingredient getInput() {
                     return input;
                 }
@@ -78,9 +83,15 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     }
 
     @Override
-    public void addRecipe(Ingredient input, int cookTime, ItemStack output, ItemStack secondOutput) {
+    public void addRecipe(@Nullable ResourceLocation name, Ingredient input, int cookTime, ItemStack output, int slagOutput) {
+        Objects.requireNonNull(name);
         if (!input.apply(ItemStack.EMPTY)) {
             recipes.add(new IRecipe() {
+                @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
+
                 @Override
                 public Ingredient getInput() {
                     return input;
@@ -97,12 +108,12 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
                 }
 
                 @Override
-                public ItemStack getSecondOutput() {
-                    return secondOutput.copy();
+                public int getSlagOutput() {
+                    return slagOutput;
                 }
             });
         } else {
-            Game.logTrace(Level.ERROR, 10, "Tried to register an invalid blast furnace recipe");
+            Game.log(Level.WARN, "Tried, but failed to register {0} as a blast furnace recipe", name);
         }
     }
 

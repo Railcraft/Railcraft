@@ -83,43 +83,65 @@ public class ModuleFactory extends RailcraftModulePayload {
             @Override
             public void init() {
                 {
-                    int burnTime = 1280;
+                    int smeltTime = IBlastFurnaceCrafter.SMELT_TIME;
                     Metal steel = Metal.STEEL;
-                    ItemDust.EnumDust slag = ItemDust.EnumDust.SLAG;
                     IBlastFurnaceCrafter bf = Crafters.blastFurnace();
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_INGOT), burnTime, RailcraftItems.INGOT.getStack(1, steel), RailcraftItems.DUST.getStack(1, slag));
+                    bf.addRecipe("railcraft:ingotSteel", Ingredient.fromItem(Items.IRON_INGOT), smeltTime,
+                            RailcraftItems.INGOT.getStack(1, steel), 1);
 
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_HELMET), burnTime * 5, RailcraftItems.INGOT.getStack(5, steel), RailcraftItems.DUST.getStack(5, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_CHESTPLATE), burnTime * 8, RailcraftItems.INGOT.getStack(8, steel), RailcraftItems.DUST.getStack(8, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_LEGGINGS), burnTime * 7, RailcraftItems.INGOT.getStack(7, steel), RailcraftItems.DUST.getStack(7, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_BOOTS), burnTime * 4, RailcraftItems.INGOT.getStack(4, steel), RailcraftItems.DUST.getStack(4, slag));
+                    bf.addRecipe("railcraft:smeltHelmet", Ingredient.fromItem(Items.IRON_HELMET), smeltTime * 5,
+                            RailcraftItems.INGOT.getStack(5, steel), 5);
+                    bf.addRecipe("railcraft:smeltChestplate", Ingredient.fromItem(Items.IRON_CHESTPLATE), smeltTime * 8,
+                            RailcraftItems.INGOT.getStack(8, steel), 8);
+                    bf.addRecipe("railcraft:smeltLeggings", Ingredient.fromItem(Items.IRON_LEGGINGS), smeltTime * 7,
+                            RailcraftItems.INGOT.getStack(7, steel), 7);
+                    bf.addRecipe("railcraft:smeltBoots", Ingredient.fromItem(Items.IRON_BOOTS), smeltTime * 4,
+                            RailcraftItems.INGOT.getStack(4, steel), 4);
 
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_HORSE_ARMOR), burnTime * 4, RailcraftItems.INGOT.getStack(4, steel), RailcraftItems.DUST.getStack(4, slag));
+                    bf.addRecipe("railcraft:smeltHorseArmor", Ingredient.fromItem(Items.IRON_HORSE_ARMOR), smeltTime * 4,
+                            RailcraftItems.INGOT.getStack(4, steel), 4);
 
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_SWORD), burnTime * 2, RailcraftItems.INGOT.getStack(2, steel), RailcraftItems.DUST.getStack(2, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_SHOVEL), burnTime, RailcraftItems.INGOT.getStack(1, steel), RailcraftItems.DUST.getStack(1, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_PICKAXE), burnTime * 3, RailcraftItems.INGOT.getStack(3, steel), RailcraftItems.DUST.getStack(3, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_AXE), burnTime * 3, RailcraftItems.INGOT.getStack(3, steel), RailcraftItems.DUST.getStack(3, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_HOE), burnTime * 2, RailcraftItems.INGOT.getStack(2, steel), RailcraftItems.DUST.getStack(2, slag));
-                    bf.addRecipe(Ingredient.fromItem(Items.SHEARS), burnTime * 2, RailcraftItems.INGOT.getStack(2, steel), RailcraftItems.DUST.getStack(2, slag));
+                    bf.addRecipe("railcraft:smeltSword", Ingredient.fromItem(Items.IRON_SWORD), smeltTime * 2,
+                            RailcraftItems.INGOT.getStack(2, steel), 2);
+                    bf.addRecipe("railcraft:smeltShovel", Ingredient.fromItem(Items.IRON_SHOVEL), smeltTime,
+                            RailcraftItems.INGOT.getStack(1, steel), 1);
+                    bf.addRecipe("railcraft:smeltPickaxe", Ingredient.fromItem(Items.IRON_PICKAXE), smeltTime * 3,
+                            RailcraftItems.INGOT.getStack(3, steel), 3);
+                    bf.addRecipe("railcraft:smeltAxe", Ingredient.fromItem(Items.IRON_AXE), smeltTime * 3,
+                            RailcraftItems.INGOT.getStack(3, steel), 3);
+                    bf.addRecipe("railcraft:smeltHoe", Ingredient.fromItem(Items.IRON_HOE), smeltTime * 2,
+                            RailcraftItems.INGOT.getStack(2, steel), 2);
+                    bf.addRecipe("railcraft:smeltShears", Ingredient.fromItem(Items.SHEARS), smeltTime * 2,
+                            RailcraftItems.INGOT.getStack(2, steel), 2);
 
-                    //TODO move to respective classes
-                    bf.addRecipe(RailcraftItems.CROWBAR_IRON.getIngredient(), burnTime * 3, RailcraftItems.INGOT.getStack(3, steel), RailcraftItems.DUST.getStack(3, slag));
+                    bf.addRecipe("railcraft:smeltCrowbar", RailcraftItems.CROWBAR_IRON.getIngredient(), smeltTime * 3,
+                            RailcraftItems.INGOT.getStack(3, steel), 3);
 
-                    bf.addRecipe(Ingredient.fromItem(Items.IRON_DOOR), burnTime * 6, RailcraftItems.INGOT.getStack(6, steel), RailcraftItems.DUST.getStack(6, slag));
-                    bf.addRecipe(Ingredient.fromItem(Item.getItemFromBlock(Blocks.IRON_TRAPDOOR)), burnTime * 6, RailcraftItems.INGOT.getStack(4, steel), RailcraftItems.DUST.getStack(4, slag));
+                    bf.addRecipe("railcraft:smeltDoor", Ingredient.fromItem(Items.IRON_DOOR), smeltTime * 6,
+                            RailcraftItems.INGOT.getStack(6, steel), 6);
+                    bf.addRecipe("railcraft:smeltTrapdoor", Ingredient.fromItem(Item.getItemFromBlock(Blocks.IRON_TRAPDOOR)), smeltTime * 6,
+                            RailcraftItems.INGOT.getStack(4, steel), 4);
 
-                    int recycleTime = burnTime / 2;
-                    bf.addRecipe(RailcraftItems.ARMOR_HELMET_STEEL.getIngredient(), recycleTime * 4, RailcraftItems.INGOT.getStack(4, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.ARMOR_CHESTPLATE_STEEL.getIngredient(), recycleTime * 6, RailcraftItems.INGOT.getStack(6, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.ARMOR_LEGGINGS_STEEL.getIngredient(), recycleTime * 5, RailcraftItems.INGOT.getStack(5, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.ARMOR_BOOTS_STEEL.getIngredient(), recycleTime * 3, RailcraftItems.INGOT.getStack(3, steel), ItemStack.EMPTY);
+                    int recycleTime = smeltTime / 2;
+                    bf.addRecipe("railcraft:recycleHelmet", RailcraftItems.ARMOR_HELMET_STEEL.getIngredient(), recycleTime * 4,
+                            RailcraftItems.INGOT.getStack(4, steel), 0);
+                    bf.addRecipe("railcraft:recycleChestplate", RailcraftItems.ARMOR_CHESTPLATE_STEEL.getIngredient(), recycleTime * 6,
+                            RailcraftItems.INGOT.getStack(6, steel), 0);
+                    bf.addRecipe("railcraft:recycleLeggings", RailcraftItems.ARMOR_LEGGINGS_STEEL.getIngredient(), recycleTime * 5,
+                            RailcraftItems.INGOT.getStack(5, steel), 0);
+                    bf.addRecipe("railcraft:recycleBoots", RailcraftItems.ARMOR_BOOTS_STEEL.getIngredient(), recycleTime * 3,
+                            RailcraftItems.INGOT.getStack(3, steel), 0);
 
-                    bf.addRecipe(RailcraftItems.SWORD_STEEL.getIngredient(), recycleTime, RailcraftItems.INGOT.getStack(1, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.PICKAXE_STEEL.getIngredient(), recycleTime * 2, RailcraftItems.INGOT.getStack(2, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.HOE_STEEL.getIngredient(), recycleTime, RailcraftItems.INGOT.getStack(1, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.AXE_STEEL.getIngredient(), recycleTime * 2, RailcraftItems.INGOT.getStack(2, steel), ItemStack.EMPTY);
-                    bf.addRecipe(RailcraftItems.SHEARS_STEEL.getIngredient(), recycleTime, RailcraftItems.INGOT.getStack(1, steel), ItemStack.EMPTY);
+                    bf.addRecipe("railcraft:recycleSword", RailcraftItems.SWORD_STEEL.getIngredient(), recycleTime,
+                            RailcraftItems.INGOT.getStack(1, steel), 0);
+                    bf.addRecipe("railcraft:recyclePickaxe", RailcraftItems.PICKAXE_STEEL.getIngredient(), recycleTime * 2,
+                            RailcraftItems.INGOT.getStack(2, steel), 0);
+                    bf.addRecipe("railcraft:recycleHoe", RailcraftItems.HOE_STEEL.getIngredient(), recycleTime,
+                            RailcraftItems.INGOT.getStack(1, steel), 0);
+                    bf.addRecipe("railcraft:recycleAxe", RailcraftItems.AXE_STEEL.getIngredient(), recycleTime * 2,
+                            RailcraftItems.INGOT.getStack(2, steel), 0);
+                    bf.addRecipe("railcraft:recycleShears", RailcraftItems.SHEARS_STEEL.getIngredient(), recycleTime,
+                            RailcraftItems.INGOT.getStack(1, steel), 0);
                 }
                 {
                     IRockCrusherCrafter rc = Crafters.rockCrusher();

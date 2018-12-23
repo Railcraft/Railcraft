@@ -11,6 +11,7 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -26,11 +27,11 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -74,7 +75,8 @@ public class ModuleResources extends RailcraftModulePayload {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
-                        Crafters.blastFurnace().addRecipe(Ingredient.fromItem(ItemDust.getItemFromBlock(Blocks.IRON_BLOCK)), 11520, EnumMetal.BLOCK_STEEL.getStack(), RailcraftItems.DUST.getStack(9, ItemDust.EnumDust.SLAG));
+                        Crafters.blastFurnace().addRecipe("railcraft:smeltBlock", Ingredients.from(Blocks.IRON_BLOCK), IBlastFurnaceCrafter.SMELT_TIME * 9,
+                                EnumMetal.BLOCK_STEEL.getStack(), 9);
                     }
 
                     type = EnumMetal.BLOCK_COPPER;

@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.crafting.Ingredients;
@@ -57,9 +57,9 @@ public enum TankDefinition {
 
         @Override
         public void defineRecipes(Block block) {
-            // Smelting Recipe to turn Iron Tanks into Steel Nuggets
-            Crafters.blastFurnace().addRecipe(Ingredients.from(block), 640,
-                    RailcraftItems.NUGGET.getStack(4, Metal.STEEL), RailcraftItems.DUST.getStack(4, ItemDust.EnumDust.SLAG));
+            // Smelting Recipe to turn Iron Tanks into Steel Ingots
+            Crafters.blastFurnace().addRecipe("railcraft:smeltIronTank", Ingredients.from(block), IBlastFurnaceCrafter.SMELT_TIME * 4,
+                    RailcraftItems.INGOT.getStack(4, Metal.STEEL), 4);
         }
     },
     STEEL {

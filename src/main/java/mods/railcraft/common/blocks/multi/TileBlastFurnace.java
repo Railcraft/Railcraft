@@ -15,6 +15,8 @@ import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.items.ItemDust;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryComposite;
@@ -272,7 +274,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         }
 
         ItemStack secondOutputSlot = getStackInSlot(SLOT_SECOND_OUTPUT);
-        ItemStack nextSecondOutput = currentRecipe.getSecondOutput();
+        ItemStack nextSecondOutput = RailcraftItems.DUST.getStack(currentRecipe.getSlagOutput(), ItemDust.EnumDust.SLAG);
 
         if (!InvTools.canMerge(secondOutputSlot, nextSecondOutput, getInventoryStackLimit())) {
             return;
