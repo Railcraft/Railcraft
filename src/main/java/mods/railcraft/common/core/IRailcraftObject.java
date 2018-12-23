@@ -71,6 +71,8 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
     }
 
     default ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        if (qty <= 0)
+            return ItemStack.EMPTY;
         int meta;
         if (variant != null) {
             checkVariant(variant);
