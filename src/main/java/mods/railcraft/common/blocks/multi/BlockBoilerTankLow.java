@@ -37,7 +37,7 @@ public final class BlockBoilerTankLow extends BlockBoilerTank<TileBoilerTankLow>
                 'P', RailcraftItems.PLATE, Metal.IRON,
                 'I', RailcraftItems.PLATE, Metal.INVAR); //todo: Replace with steam piping when implemented
 
-        Crafters.blastFurnace().addRecipe("railcraft:smeltBoilerTank", Ingredients.from(this), 2560,
+        Crafters.blastFurnace().addRecipe("railcraft:smelt_boiler_tank", Ingredients.from(this), 2560,
                 RailcraftItems.INGOT.getStack(1, Metal.STEEL), 1);
     }
 }

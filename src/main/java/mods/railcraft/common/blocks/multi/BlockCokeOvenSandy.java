@@ -32,7 +32,7 @@ public final class BlockCokeOvenSandy extends BlockCokeOven {
                 "MBM",
                 'B', "ingotBrick",
                 'M', sand);
-        Crafters.rockCrusher().makeRecipe("railcraft:cokeOvenSandy", Ingredients.from(this))
+        Crafters.rockCrusher().makeRecipe("railcraft:coke_oven_sandy", Ingredients.from(this))
                 .addOutput(new ItemStack(Items.BRICK, 3))
                 .addOutput(new ItemStack(Items.BRICK), 0.5f)
                 .addOutput(sand, 0.25f)

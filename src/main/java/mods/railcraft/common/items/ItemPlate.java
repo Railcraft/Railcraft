@@ -32,7 +32,7 @@ public class ItemPlate extends ItemMetal {
                     'I', m.getOreTag(Form.INGOT));
         }
 
-        Crafters.blastFurnace().addRecipe("railcraft:smeltPlate", RailcraftItems.PLATE.getIngredient(IRON), IBlastFurnaceCrafter.SMELT_TIME,
+        Crafters.blastFurnace().addRecipe("railcraft:smelt_plate", RailcraftItems.PLATE.getIngredient(IRON), IBlastFurnaceCrafter.SMELT_TIME,
                 Metal.STEEL.getStack(Form.INGOT), 1);
     }
 }

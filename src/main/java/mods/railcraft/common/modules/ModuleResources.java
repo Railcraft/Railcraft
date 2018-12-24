@@ -75,7 +75,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
-                        Crafters.blastFurnace().addRecipe("railcraft:smeltBlock", Ingredients.from(Blocks.IRON_BLOCK), IBlastFurnaceCrafter.SMELT_TIME * 9,
+                        Crafters.blastFurnace().addRecipe("railcraft:smelt_block", Ingredients.from(Blocks.IRON_BLOCK), IBlastFurnaceCrafter.SMELT_TIME * 9,
                                 EnumMetal.BLOCK_STEEL.getStack(), 9);
                     }
 

@@ -39,11 +39,11 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
 
     public void postInit() {
         addFuel("thaumcraft:alumentum", ThaumcraftPlugin.ITEMS.get("alumentum", 0));
-        addFuel("railcraft:blockCoke", EnumGeneric.BLOCK_COKE.getStack());
+        addFuel("railcraft:block_coke", EnumGeneric.BLOCK_COKE.getStack());
         addFuel("minecraft:charcoal", new ItemStack(Items.COAL, 1, 1));
         addFuel(RailcraftItems.FIRESTONE_REFINED);
         addFuel(RailcraftItems.FIRESTONE_CRACKED);
-        addFuel("ore:blockCharcoal", OreDictPlugin.getOre("blockCharcoal", 1));
+        addFuel("ore:block_charcoal", OreDictPlugin.getOre("blockCharcoal", 1));
     }
 
     public void addFuel(IRailcraftObjectContainer<?> obj) {

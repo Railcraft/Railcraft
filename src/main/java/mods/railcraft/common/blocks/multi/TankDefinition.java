@@ -58,7 +58,7 @@ public enum TankDefinition {
         @Override
         public void defineRecipes(Block block) {
             // Smelting Recipe to turn Iron Tanks into Steel Ingots
-            Crafters.blastFurnace().addRecipe("railcraft:smeltIronTank", Ingredients.from(block), IBlastFurnaceCrafter.SMELT_TIME * 4,
+            Crafters.blastFurnace().addRecipe("railcraft:smelt_iron_tank", Ingredients.from(block), IBlastFurnaceCrafter.SMELT_TIME * 4,
                     RailcraftItems.INGOT.getStack(4, Metal.STEEL), 4);
         }
     },
