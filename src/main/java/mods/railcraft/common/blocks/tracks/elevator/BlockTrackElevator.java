@@ -89,7 +89,7 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this, 8),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this, 8),
                 "IRI",
                 "ISI",
                 "IRI",

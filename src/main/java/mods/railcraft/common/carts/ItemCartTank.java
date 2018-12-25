@@ -35,13 +35,13 @@ public class ItemCartTank extends ItemCart implements IPrototypedItem {
     @Override
     public void defineRecipes() {
         if (RailcraftBlocks.TANK_IRON_GAUGE.isEnabled()) {
-            CraftingPlugin.addRecipe(getStack(),
+            CraftingPlugin.addShapedRecipe(getStack(),
                     "T",
                     "M",
                     'T', RailcraftBlocks.TANK_IRON_GAUGE,
                     'M', Items.MINECART);
         } else {
-            CraftingPlugin.addRecipe(getStack(),
+            CraftingPlugin.addShapedRecipe(getStack(),
                     "GGG",
                     "GMG",
                     "GGG",

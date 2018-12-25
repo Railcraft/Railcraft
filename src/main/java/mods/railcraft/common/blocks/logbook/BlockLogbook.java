@@ -61,7 +61,7 @@ public final class BlockLogbook extends BlockContainerRailcraft<TileLogbook> {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(1),
+        CraftingPlugin.addShapedRecipe(getStack(1),
                 " B ",
                 "GCG",
                 "WWW",

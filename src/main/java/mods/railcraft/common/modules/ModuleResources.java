@@ -62,7 +62,7 @@ public class ModuleResources extends RailcraftModulePayload {
             public void init() {
                 if (Fluids.CREOSOTE.isPresent() && RailcraftConfig.creosoteTorchOutput() > 0) {
                     FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
-                    CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
+                    CraftingPlugin.addShapedRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                             "C",
                             "W",
                             "S",
@@ -154,7 +154,7 @@ public class ModuleResources extends RailcraftModulePayload {
             private void initMetalBlock(Metal m) {
                 String blockTag = m.getOreTag(Metal.Form.BLOCK);
                 OreDictionary.registerOre(blockTag, m.getStack(Metal.Form.BLOCK));
-                CraftingPlugin.addRecipe(m.getStack(Metal.Form.BLOCK),
+                CraftingPlugin.addShapedRecipe(m.getStack(Metal.Form.BLOCK),
                         "III",
                         "III",
                         "III",

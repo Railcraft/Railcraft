@@ -40,6 +40,7 @@
       <w>coords</w>
       <w>craftable</w>
       <w>crafter</w>
+      <w>crafters</w>
       <w>craftings</w>
       <w>cullface</w>
       <w>decoupler</w>
@@ -141,6 +142,7 @@
       <w>unloader</w>
       <w>unlocalized</w>
       <w>unpowered</w>
+      <w>unstackable</w>
       <w>unstitch</w>
       <w>upmost</w>
       <w>uvlock</w>

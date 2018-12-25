@@ -48,7 +48,7 @@ public class BlockTrackFlex extends BlockTrackStateless {
     }
 
     protected void defineTrackRecipe() {
-        CraftingPlugin.addRecipe(getRecipeOutput(),
+        CraftingPlugin.addShapedRecipe(getRecipeOutput(),
                 "I I",
                 "I#I",
                 "I I",

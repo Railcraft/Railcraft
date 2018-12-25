@@ -94,7 +94,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this), true,
+        CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
                 "GCG",
                 "I I",
                 "LLL",

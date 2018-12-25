@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,14 +34,14 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
     public void defineRecipes() {
         switch (armorType) {
             case HEAD:
-                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
                         "III",
                         "I I",
                         'I', "ingotSteel");
                 CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
             case CHEST:
-                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
                         "I I",
                         "III",
                         "III",
@@ -49,7 +49,7 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
                 CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
             case LEGS:
-                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
                         "III",
                         "I I",
                         "I I",
@@ -57,7 +57,7 @@ public class ItemSteelArmor extends ItemRailcraftArmor implements IMetalArmor {
                 CraftingPlugin.addFurnaceRecipe(new ItemStack(this), RailcraftItems.NUGGET.getStack(Metal.STEEL), 0.1f);
                 break;
             case FEET:
-                CraftingPlugin.addRecipe(new ItemStack(this), true,
+                CraftingPlugin.addShapedRecipe(new ItemStack(this), true,
                         "I I",
                         "I I",
                         'I', "ingotSteel");

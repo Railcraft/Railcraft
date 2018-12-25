@@ -63,7 +63,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     @Override
     public void defineRecipes() {
         FeederVariant.IC2.ifAvailable(v ->
-                CraftingPlugin.addRecipe(getStack(v),
+                CraftingPlugin.addShapedRecipe(getStack(v),
                         "PPP",
                         "TCT",
                         "PPP",

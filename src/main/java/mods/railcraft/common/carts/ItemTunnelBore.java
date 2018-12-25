@@ -43,7 +43,7 @@ public class ItemTunnelBore extends ItemCart {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "ICI",
                 "FCF",
                 " S ",

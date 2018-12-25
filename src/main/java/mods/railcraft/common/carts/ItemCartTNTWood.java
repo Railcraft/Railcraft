@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,7 @@ public class ItemCartTNTWood extends ItemCart {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "WTW",
                 "WWW",
                 'T', Blocks.TNT,

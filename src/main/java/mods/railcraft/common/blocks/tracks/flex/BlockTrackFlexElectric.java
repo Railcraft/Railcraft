@@ -40,7 +40,7 @@ public class BlockTrackFlexElectric extends BlockTrackFlex implements IChargeBlo
 
     @Override
     public void defineTrackRecipe() {
-        CraftingPlugin.addRecipe(getRecipeOutput(),
+        CraftingPlugin.addShapedRecipe(getRecipeOutput(),
                 "IcI",
                 "I#I",
                 "IcI",

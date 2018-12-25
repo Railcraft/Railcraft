@@ -12,6 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.common.items.ItemTie.EnumTie;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
@@ -20,7 +21,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Locale;
 
@@ -42,61 +42,67 @@ public class ItemRail extends ItemRailcraftSubtyped {
     public void defineRecipes() {
         RailcraftItems item = RailcraftItems.RAIL;
 
-        Ingredient ironIngot = new OreIngredient("ingotIron");
-        Crafters.rollingMachine().newShapedRecipeBuilder()
-                .grid(new Ingredient[][]{
-                        {ironIngot, Ingredient.EMPTY, ironIngot},
-                        {ironIngot, Ingredient.EMPTY, ironIngot},
-                        {ironIngot, Ingredient.EMPTY, ironIngot},
-                })
-                .output(item.getStack(8, EnumRail.STANDARD))
-                .buildAndRegister();
-
         // Standard
-//        Crafters.rollingMachine().addRecipe(item.getStack(8, EnumRail.STANDARD),
-//                "I I",
-//                "I I",
-//                "I I",
-//                'I', Items.IRON_INGOT);
+        Crafters.rollingMachine().newRecipe(item.getStack(8, EnumRail.STANDARD))
+                .shaped(
+                        "I I",
+                        "I I",
+                        "I I",
+                        'I', Metal.Form.INGOT, Metal.IRON);
 
-        Crafters.rollingMachine().addRecipe(item.getStack(8, EnumRail.STANDARD),
+        Crafters.rollingMachine().newRecipe(item.getStack(8, EnumRail.STANDARD)).shaped(
                 "I I",
                 "I I",
                 "I I",
-                'I', "ingotBronze");
+                'I', Metal.Form.INGOT, Metal.BRONZE);
 
-        Crafters.rollingMachine().addRecipe(item.getStack(12, EnumRail.STANDARD),
-                "I I",
-                "I I",
-                "I I",
-                'I', "ingotInvar");
+        Crafters.rollingMachine().newRecipe(item.getStack(12, EnumRail.STANDARD))
+                .name("railcraft", "rail_invar")
+                .time((int) (IRollingMachineCrafter.DEFAULT_PROCESS_TIME * 1.5))
+                .shaped(
+                        "I I",
+                        "I I",
+                        "I I",
+                        'I', Metal.Form.INGOT, Metal.INVAR);
 
-        Crafters.rollingMachine().addRecipe(item.getStack(16, EnumRail.STANDARD),
-                "I I",
-                "I I",
-                "I I",
-                'I', "ingotSteel");
+        Crafters.rollingMachine().newRecipe(item.getStack(16, EnumRail.STANDARD))
+                .name("railcraft", "rail_steel")
+                .time(IRollingMachineCrafter.DEFAULT_PROCESS_TIME * 2)
+                .shaped(
+                        "I I",
+                        "I I",
+                        "I I",
+                        'I', Metal.Form.INGOT, Metal.STEEL);
 
-        Crafters.rollingMachine().addRecipe(item.getStack(32, EnumRail.STANDARD),
-                "I I",
-                "I I",
-                "I I",
-                'I', "ingotTungsten");
+        Crafters.rollingMachine().newRecipe(item.getStack(32, EnumRail.STANDARD))
+                .name("railcraft", "rail_tungsten")
+                .time(IRollingMachineCrafter.DEFAULT_PROCESS_TIME * 4)
+                .shaped(
+                        "I I",
+                        "I I",
+                        "I I",
+                        'I', "ingotTungsten");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(32, EnumRail.STANDARD),
-                "I I",
-                "I I",
-                "I I",
-                'I', "ingotTitanium");
+        Crafters.rollingMachine().newRecipe(item.getStack(32, EnumRail.STANDARD))
+                .name("railcraft:rail_titanium")
+                .time(IRollingMachineCrafter.DEFAULT_PROCESS_TIME * 4)
+                .shaped(
+                        "I I",
+                        "I I",
+                        "I I",
+                        'I', "ingotTitanium");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(48, EnumRail.STANDARD),
-                "I I",
-                "I I",
-                "I I",
-                'I', "ingotTungstensteel");
+        Crafters.rollingMachine().newRecipe(item.getStack(48, EnumRail.STANDARD))
+                .name("railcraft:rail_tungsten_steel")
+                .time(IRollingMachineCrafter.DEFAULT_PROCESS_TIME * 6)
+                .shaped(
+                        "I I",
+                        "I I",
+                        "I I",
+                        'I', "ingotTungstensteel");
 
         // Advanced
-        Crafters.rollingMachine().addRecipe(item.getStack(8, EnumRail.ADVANCED),
+        Crafters.rollingMachine().newRecipe(item.getStack(8, EnumRail.ADVANCED)).shaped(
                 "R G",
                 "R G",
                 "R G",
@@ -109,7 +115,7 @@ public class ItemRail extends ItemRailcraftSubtyped {
         CraftingPlugin.addShapelessRecipe(item.getStack(6, EnumRail.WOOD), "ingotBronze", RailcraftItems.TIE.getIngredient(EnumTie.WOOD));
 
         // Speed
-        Crafters.rollingMachine().addRecipe(item.getStack(8, EnumRail.SPEED),
+        Crafters.rollingMachine().newRecipe(item.getStack(8, EnumRail.SPEED)).shaped(
                 "IBG",
                 "IBG",
                 "IBG",
@@ -118,27 +124,27 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 'G', Items.GOLD_INGOT);
 
         // Reinforced
-        Crafters.rollingMachine().addRecipe(item.getStack(8, EnumRail.REINFORCED),
+        Crafters.rollingMachine().newRecipe(item.getStack(8, EnumRail.REINFORCED)).shaped(
                 "IDI",
                 "IDI",
                 "IDI",
                 'I', "ingotSteel",
                 'D', "dustObsidian");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(8, EnumRail.REINFORCED),
+        Crafters.rollingMachine().newRecipe(item.getStack(8, EnumRail.REINFORCED)).shaped(
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotDarkSteel");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(4, EnumRail.REINFORCED),
+        Crafters.rollingMachine().newRecipe(item.getStack(4, EnumRail.REINFORCED)).shaped(
                 "IDI",
                 "IDI",
                 "IDI",
                 'I', "ingotInvar",
                 'D', "dustObsidian");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(16, EnumRail.REINFORCED),
+        Crafters.rollingMachine().newRecipe(item.getStack(16, EnumRail.REINFORCED)).shaped(
                 "IDI",
                 "IDI",
                 "IDI",
@@ -146,20 +152,20 @@ public class ItemRail extends ItemRailcraftSubtyped {
                 'D', "dustObsidian");
 
         // Electric
-        Crafters.rollingMachine().addRecipe(item.getStack(6, EnumRail.ELECTRIC),
+        Crafters.rollingMachine().newRecipe(item.getStack(6, EnumRail.ELECTRIC)).shaped(
                 "I I",
                 "I I",
                 "I I",
                 'I', "ingotCopper");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(12, EnumRail.ELECTRIC),
+        Crafters.rollingMachine().newRecipe(item.getStack(12, EnumRail.ELECTRIC)).shaped(
                 "ICI",
                 "ICI",
                 "ICI",
                 'I', "ingotSteel",
                 'C', "ingotCopper");
 
-        Crafters.rollingMachine().addRecipe(item.getStack(12, EnumRail.ELECTRIC),
+        Crafters.rollingMachine().newRecipe(item.getStack(12, EnumRail.ELECTRIC)).shaped(
                 "ICI",
                 "ICI",
                 "ICI",

@@ -94,7 +94,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
 //                slab = new ItemStack(Blocks.STONE_SLAB, 1, 1);
 //            else if (mat == Materials.STONE_BRICK)
 //                slab = new ItemStack(Blocks.STONE_SLAB, 1, 0);
-            CraftingPlugin.addRecipe(getStack(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.TORCH));
+            CraftingPlugin.addShapedRecipe(getStack(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.TORCH));
         }
         MatTools.defineCrusherRecipes(this);
     }

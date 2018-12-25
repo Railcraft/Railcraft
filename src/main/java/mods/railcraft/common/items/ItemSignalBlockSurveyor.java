@@ -41,7 +41,7 @@ public class ItemSignalBlockSurveyor extends ItemPairingTool implements IBoxable
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 " C ",
                 "BGB",
                 " R ",

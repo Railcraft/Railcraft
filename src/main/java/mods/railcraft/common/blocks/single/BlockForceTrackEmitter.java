@@ -127,7 +127,7 @@ public class BlockForceTrackEmitter extends BlockContainerRailcraft<TileForceTra
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "PIP",
                 "RBR",
                 "PIP",

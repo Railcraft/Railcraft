@@ -39,11 +39,11 @@ import static java.util.Objects.requireNonNull;
  * A shaped recipe which respects its ingredient's choice of remaining items.
  */
 @SuppressWarnings("unused")
-public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
+public final class ShapelessRailcraftRecipe extends ShapelessRecipes {
 
     private @Nullable int[] lastResult;
 
-    public RemainingItemShapelessRecipe(String group, ItemStack output, NonNullList<Ingredient> ingredients) {
+    public ShapelessRailcraftRecipe(String group, ItemStack output, NonNullList<Ingredient> ingredients) {
         super(group, output, ingredients);
     }
 
@@ -62,8 +62,8 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
 
             if (!itemstack.isEmpty()) {
                 Ingredient ingredient = recipeItems.get(mappings[index]);
-                if (ingredient instanceof IngredientRailcraft) {
-                    ret.set(i, ((IngredientRailcraft) ingredient).getRemaining(itemstack));
+                if (ingredient instanceof RailcraftIngredient) {
+                    ret.set(i, ((RailcraftIngredient) ingredient).getRemaining(itemstack));
                 } else {
                     ret.set(i, ForgeHooks.getContainerItem(itemstack));
                 }
@@ -128,7 +128,7 @@ public final class RemainingItemShapelessRecipe extends ShapelessRecipes {
 
             ItemStack itemstack = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
             // railcraft: changed the output
-            return new RemainingItemShapelessRecipe(group, itemstack, ingredients);
+            return new ShapelessRailcraftRecipe(group, itemstack, ingredients);
         }
     }
 

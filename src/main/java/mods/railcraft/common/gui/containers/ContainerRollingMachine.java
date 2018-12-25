@@ -10,7 +10,6 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.api.crafting.IRollingMachineRecipe;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.gui.slots.SlotOutput;
@@ -30,6 +29,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
     private final InventoryCrafting craftMatrix;
     private final IInventory craftResult;
     private int lastProgress;
+    private int lastProcessTime;
     private ItemStack prevOutput;
 
     public ContainerRollingMachine(final InventoryPlayer inventoryplayer, final TileRollingMachine tile) {
@@ -83,6 +83,8 @@ public class ContainerRollingMachine extends RailcraftContainer {
         for (IContainerListener listener : listeners) {
             if (lastProgress != tile.getProgress()) {
                 listener.sendWindowProperty(this, 0, tile.getProgress());
+            }
+            if (lastProcessTime != tile.getProcessTime()) {
                 listener.sendWindowProperty(this, 1, tile.getProcessTime());
             }
         }
@@ -94,6 +96,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
         }
 
         lastProgress = tile.getProgress();
+        lastProcessTime = tile.getProcessTime();
     }
 
     @Override
@@ -112,8 +115,10 @@ public class ContainerRollingMachine extends RailcraftContainer {
 
     @Override
     public final void onCraftMatrixChanged(IInventory inv) {
-        IRollingMachineRecipe output = Crafters.rollingMachine().findMatching(craftMatrix);
-        craftResult.setInventorySlotContents(0, output == null ? ItemStack.EMPTY : output.getOutput(craftMatrix));
+        craftResult.setInventorySlotContents(0,
+                Crafters.rollingMachine().getRecipe(craftMatrix, tile.theWorldAsserted())
+                        .map(r -> r.getCraftingResult(craftMatrix))
+                        .orElse(ItemStack.EMPTY));
     }
 
     @Override

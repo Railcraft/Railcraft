@@ -67,7 +67,7 @@ public class ItemNotepad extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "IF",
                 "XP",
                 'I', new ItemStack(Items.DYE, 1, 0),

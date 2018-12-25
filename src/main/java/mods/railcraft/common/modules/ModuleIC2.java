@@ -81,7 +81,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     RailcraftCarts cart = RailcraftCarts.ENERGY_BATBOX;
                     ItemStack stack = cart.getStack();
                     if (!InvTools.isEmpty(stack)) {
-                        CraftingPlugin.addRecipe(stack,
+                        CraftingPlugin.addShapedRecipe(stack,
                                 "E",
                                 "M",
                                 'E', batbox,
@@ -96,7 +96,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_CESU;
                         ItemStack stack = cart.getStack();
                         if (!InvTools.isEmpty(stack)) {
-                            CraftingPlugin.addRecipe(stack,
+                            CraftingPlugin.addShapedRecipe(stack,
                                     "E",
                                     "M",
                                     'E', cesu,
@@ -110,7 +110,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                         RailcraftCarts cart = RailcraftCarts.ENERGY_MFSU;
                         ItemStack stack = cart.getStack();
                         if (!InvTools.isEmpty(stack)) {
-                            CraftingPlugin.addRecipe(stack,
+                            CraftingPlugin.addShapedRecipe(stack,
                                     "E",
                                     "M",
                                     'E', mfsu,
@@ -126,7 +126,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                     ItemStack stack = cart.getStack();
                     if (!InvTools.isEmpty(stack)) {
 
-                        CraftingPlugin.addRecipe(stack,
+                        CraftingPlugin.addShapedRecipe(stack,
                                 "E",
                                 "M",
                                 'E', mfe,

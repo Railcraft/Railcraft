@@ -394,7 +394,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     if (RailcraftBlocks.BLAST_FURNACE.isLoaded() && BrickTheme.INFERNAL.getBlock() != null) {
 
                         ItemStack stack = RailcraftBlocks.BLAST_FURNACE.getStack(4);
-                        CraftingPlugin.addRecipe(stack,
+                        CraftingPlugin.addShapedRecipe(stack,
                                 " B ",
                                 "BPB",
                                 " B ",
@@ -403,7 +403,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                     if (RailcraftBlocks.COKE_OVEN.isLoaded() && BrickTheme.SANDY.getBlock() != null) {
                         ItemStack stack = RailcraftBlocks.COKE_OVEN.getStack();
-                        CraftingPlugin.addRecipe(stack,
+                        CraftingPlugin.addShapedRecipe(stack,
                                 " B ",
                                 " S ",
                                 " B ",
@@ -416,7 +416,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     Crafters.cokeOven().addRecipe("railcraft:coke_block", Ingredients.from(Blocks.COAL_BLOCK),
                             EnumGeneric.BLOCK_COKE.getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9), COKE_COOK_TIME * 9);
                     ItemStack stack = EnumGeneric.BLOCK_COKE.getStack();
-                    CraftingPlugin.addRecipe(stack,
+                    CraftingPlugin.addShapedRecipe(stack,
                             "CCC",
                             "CCC",
                             "CCC",
@@ -459,7 +459,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 BlastFurnaceCrafter.INSTANCE.postInit();
                 //TODO this is not right
                 if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
-                    RollingMachineCraftingManager.copyRecipesToWorkbench();
+                    RollingMachineCrafter.copyRecipesToWorkbench();
                 if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
@@ -544,7 +544,7 @@ public class ModuleFactory extends RailcraftModulePayload {
         setDisabledEventHandler(new ModuleEventHandler() {
             @Override
             public void postInit() {
-                RollingMachineCraftingManager.copyRecipesToWorkbench();
+                RollingMachineCrafter.copyRecipesToWorkbench();
                 registerAltSteelFurnaceRecipe();
             }
         });

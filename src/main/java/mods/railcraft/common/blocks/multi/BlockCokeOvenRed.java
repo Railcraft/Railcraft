@@ -26,7 +26,7 @@ public final class BlockCokeOvenRed extends BlockCokeOven {
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
         ItemStack redSand = new ItemStack(Blocks.SAND, 1, 1);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "MBM",
                 "BMB",
                 "MBM",

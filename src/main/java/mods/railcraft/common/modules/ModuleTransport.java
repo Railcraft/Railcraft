@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,7 +46,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                     ItemStack detector = EnumDetector.ITEM.getStack();
                     if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(stack,
+                    CraftingPlugin.addShapedRecipe(stack,
                             "SSS",
                             "SLS",
                             "SDS",
@@ -56,7 +56,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                     itemLoader = ManipulatorVariant.ITEM_LOADER_ADVANCED;
                     if (itemLoader.isAvailable())
-                        CraftingPlugin.addRecipe(itemLoader.getStack(),
+                        CraftingPlugin.addShapedRecipe(itemLoader.getStack(),
                                 "IRI",
                                 "RLR",
                                 "ISI",
@@ -72,7 +72,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                     ItemStack detector = EnumDetector.ITEM.getStack();
                     if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(stack,
+                    CraftingPlugin.addShapedRecipe(stack,
                             "SSS",
                             "SDS",
                             "SLS",
@@ -82,7 +82,7 @@ public class ModuleTransport extends RailcraftModulePayload {
 
                     itemUnloader = ManipulatorVariant.ITEM_UNLOADER_ADVANCED;
                     if (itemUnloader.isAvailable())
-                        CraftingPlugin.addRecipe(itemUnloader.getStack(),
+                        CraftingPlugin.addShapedRecipe(itemUnloader.getStack(),
                                 "IRI",
                                 "RLR",
                                 "ISI",
@@ -98,7 +98,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                     ItemStack detector = EnumDetector.TANK.getStack();
                     if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(liquidLoader.getStack(),
+                    CraftingPlugin.addShapedRecipe(liquidLoader.getStack(),
                             "GLG",
                             "G G",
                             "GDG",
@@ -112,7 +112,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                     ItemStack detector = EnumDetector.TANK.getStack();
                     if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(liquidUnloader.getStack(),
+                    CraftingPlugin.addShapedRecipe(liquidUnloader.getStack(),
                             "GDG",
                             "G G",
                             "GLG",

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -45,7 +45,7 @@ public class ModuleRF extends RailcraftModulePayload {
                     ItemStack detector = EnumDetector.ADVANCED.getStack();
                     if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(gamma.getStack(),
+                    CraftingPlugin.addShapedRecipe(gamma.getStack(),
                             "RLR",
                             "LRL",
                             "RDR",
@@ -59,7 +59,7 @@ public class ModuleRF extends RailcraftModulePayload {
                     ItemStack detector = EnumDetector.ADVANCED.getStack();
                     if (InvTools.isEmpty(detector))
                         detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
-                    CraftingPlugin.addRecipe(gamma.getStack(),
+                    CraftingPlugin.addShapedRecipe(gamma.getStack(),
                             "RDR",
                             "LRL",
                             "RLR",

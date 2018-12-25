@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ public class ItemTurbineRotor extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "DDD",
                 'D', RailcraftItems.TURBINE_DISK);
     }

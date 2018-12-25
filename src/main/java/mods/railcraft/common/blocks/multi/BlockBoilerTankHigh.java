@@ -28,7 +28,7 @@ public final class BlockBoilerTankHigh extends BlockBoilerTank<TileBoilerTankHig
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 2);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "P",
                 "I",
                 "P",

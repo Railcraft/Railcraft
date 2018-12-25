@@ -98,8 +98,8 @@ public class BlockWire extends BlockCharge implements IPostConnection {
 
     @Override
     public void defineRecipes() {
-        Crafters.rollingMachine().addRecipe(
-                getStack(8, null),
+        Crafters.rollingMachine().newRecipe(
+                getStack(8, null)).shaped(
                 "LPL",
                 "PCP",
                 "LPL",
@@ -107,8 +107,8 @@ public class BlockWire extends BlockCharge implements IPostConnection {
                 'P', Items.PAPER,
                 'L', "ingotLead");
 
-        Crafters.rollingMachine().addRecipe(
-                getStack(8, null),
+        Crafters.rollingMachine().newRecipe(
+                getStack(8, null)).shaped(
                 "LPL",
                 "PCP",
                 "LPL",

@@ -18,7 +18,6 @@ import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Locale;
 
@@ -47,90 +46,56 @@ public class ItemGear extends ItemRailcraftSubtyped {
     public void defineRecipes() {
         RailcraftItems gear = RailcraftItems.GEAR;
 
-        CraftingPlugin.addRecipe(gear.getStack(1, EnumGear.BUSHING),
+        CraftingPlugin.addShapedRecipe(gear.getStack(1, EnumGear.BUSHING),
                 "TT",
                 "TT",
                 'T', "ingotBronze");
-        CraftingPlugin.addRecipe(gear.getStack(1, EnumGear.BUSHING),
+        CraftingPlugin.addShapedRecipe(gear.getStack(1, EnumGear.BUSHING),
                 "TT",
                 "TT",
                 'T', "ingotBrass");
 
-        Ingredient ingotBronze = new OreIngredient("ingotBronze");
-        Ingredient plateBronze = new OreIngredient("plateBronze");
-        Ingredient ingotBrass = new OreIngredient("ingotBrass");
-        Ingredient plateBrass = new OreIngredient("plateBrass");
+        // FIXME this conflicts with the plate recipes... not sure what GeneralCamo was thinking here
+//        Crafters.rollingMachine().newRecipe(getStack(2, EnumGear.BUSHING))
+//                .time(200)
+//                .shaped(
+//                        "II",
+//                        "II",
+//                        'I', Ingredients.from("ingotBronze", "ingotBrass"));
 
-        Crafters.rollingMachine().newShapedRecipeBuilder()
-                .output(getStack(2, EnumGear.BUSHING))
-                .ingredients(
-                        ingotBronze, ingotBronze,
-                        ingotBronze, ingotBronze
-                )
-                .height(2)
-                .width(2)
-                .time(200)
-                .buildAndRegister();
-
-        Crafters.rollingMachine().newShapedRecipeBuilder()
-                .output(getStack(2, EnumGear.BUSHING))
-                .ingredients(
-                        ingotBrass, ingotBrass,
-                        ingotBrass, ingotBrass
-                )
-                .height(2)
-                .width(2)
-                .time(200)
-                .buildAndRegister();
-
-        Crafters.rollingMachine().newShapedRecipeBuilder()
-                .output(getStack(2, EnumGear.BUSHING))
-                .ingredients(
-                        plateBronze, plateBronze,
-                        plateBronze, plateBronze
-                )
-                .height(2)
-                .width(2)
+        Crafters.rollingMachine().newRecipe(getStack(2, EnumGear.BUSHING))
                 .time(100)
-                .buildAndRegister();
+                .shaped(
+                        "II",
+                        "II",
+                        'I', Ingredients.from("plateBronze", "plateBrass"));
 
-        Crafters.rollingMachine().newShapedRecipeBuilder()
-                .output(getStack(2, EnumGear.BUSHING))
-                .ingredients(
-                        plateBrass, plateBrass,
-                        plateBrass, plateBrass
-                )
-                .height(2)
-                .width(2)
-                .time(100)
-                .buildAndRegister();
-
-        CraftingPlugin.addRecipe(gear.getStack(EnumGear.BRASS),
+        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.BRASS),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotBrass",
                 'B', "gearBushing");
-        CraftingPlugin.addRecipe(gear.getStack(EnumGear.IRON),
+        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.IRON),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotIron",
                 'B', "gearBushing");
 
-        CraftingPlugin.addRecipe(gear.getStack(EnumGear.STEEL),
+        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.STEEL),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotSteel",
                 'B', "gearBushing");
-        CraftingPlugin.addRecipe(gear.getStack(EnumGear.BRONZE),
+        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.BRONZE),
                 " I ",
                 "IBI",
                 " I ",
                 'I', "ingotBronze",
                 'B', "gearBushing");
-        CraftingPlugin.addRecipe(gear.getStack(EnumGear.INVAR),
+        CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.INVAR),
                 " I ",
                 "IBI",
                 " I ",

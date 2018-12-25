@@ -16,7 +16,6 @@ import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.oredict.OreIngredient;
 
 import java.util.Locale;
 
@@ -35,76 +34,44 @@ public class ItemCharge extends ItemRailcraftSubtyped {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(COIL),
+        CraftingPlugin.addShapedRecipe(getStack(COIL),
                 "CCC",
                 "III",
                 "CCC",
                 'C', RailcraftItems.CHARGE, SPOOL_SMALL,
                 'I', "plateIron");
 
-        CraftingPlugin.addRecipe(getStack(TERMINAL),
+        CraftingPlugin.addShapedRecipe(getStack(TERMINAL),
                 " P ",
                 "BBB",
                 'B', "ingotBrass",
                 'P', "plateBrass");
 
-        CraftingPlugin.addRecipe(getStack(3, SPOOL_SMALL),
+        CraftingPlugin.addShapedRecipe(getStack(3, SPOOL_SMALL),
                 "W",
                 'W', getStack(SPOOL_MEDIUM));
 
-        CraftingPlugin.addRecipe(getStack(3, SPOOL_MEDIUM),
+        CraftingPlugin.addShapedRecipe(getStack(3, SPOOL_MEDIUM),
                 "W",
                 'W', getStack(SPOOL_LARGE));
 
-        Ingredient ingotCopper = new OreIngredient("ingotCopper");
-        Ingredient ingotConductiveIron = new OreIngredient("ingotConductiveIron");
-
 
         //TODO configure time
-        Crafters.rollingMachine().newShapelessRecipeBuilder()
-                .output(getStack(SPOOL_SMALL))
-                .add(ingotCopper)
-                .time(100)
-                .buildAndRegister();
+        Crafters.rollingMachine().newRecipe(getStack(SPOOL_SMALL))
+                .shapeless("ingotCopper");
 
-        Crafters.rollingMachine().newShapelessRecipeBuilder()
-                .output(getStack(SPOOL_SMALL))
-                .add(ingotConductiveIron)
-                .time(100)
-                .buildAndRegister();
+        Crafters.rollingMachine().newRecipe(getStack(SPOOL_SMALL))
+                .shapeless("ingotConductiveIron");
 
-//        Crafters.rollingMachine.addRecipe(
-//                getStack(SPOOL_SMALL),
-//                "C",
-//                'C', "ingotCopper");
-
-        Ingredient blockCopper = new OreIngredient("blockCopper");
-        Ingredient blockConductiveIron = new OreIngredient("blockConductiveIron");
-
-        //TODO configure time
-        Crafters.rollingMachine().newShapelessRecipeBuilder()
-                .output(getStack(SPOOL_LARGE))
-                .add(blockCopper)
+        Crafters.rollingMachine().newRecipe(getStack(SPOOL_LARGE))
                 .time(300)
-                .buildAndRegister();
+                .shapeless("blockCopper");
 
-        Crafters.rollingMachine().newShapelessRecipeBuilder()
-                .output(getStack(SPOOL_LARGE))
-                .add(blockConductiveIron)
+        Crafters.rollingMachine().newRecipe(getStack(SPOOL_LARGE))
                 .time(300)
-                .buildAndRegister();
+                .shapeless("blockConductiveIron");
 
-//        Crafters.rollingMachine().addRecipe(
-//                getStack(SPOOL_LARGE),
-//                "C",
-//                'C', "blockConductiveIron");
-//
-//        Crafters.rollingMachine().addRecipe(
-//                getStack(SPOOL_LARGE),
-//                "C",
-//                'C', "blockCopper");
-
-        CraftingPlugin.addRecipe(getStack(MOTOR),
+        CraftingPlugin.addShapedRecipe(getStack(MOTOR),
                 " S ",
                 "PCP",
                 " T ",
@@ -113,36 +80,36 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 'T', RailcraftItems.CHARGE, TERMINAL,
                 'P', "plateTin");
 
-        Crafters.rollingMachine().addRecipe(
-                getStack(ELECTRODE_NICKEL),
+        Crafters.rollingMachine().newRecipe(
+                getStack(ELECTRODE_NICKEL)).shaped(
                 " P ",
                 " P ",
                 " P ",
                 'P', "plateNickel");
 
-        Crafters.rollingMachine().addRecipe(
-                getStack(ELECTRODE_IRON),
+        Crafters.rollingMachine().newRecipe(
+                getStack(ELECTRODE_IRON)).shaped(
                 " P ",
                 " P ",
                 " P ",
                 'P', "plateIron");
 
-        Crafters.rollingMachine().addRecipe(
-                getStack(ELECTRODE_ZINC),
+        Crafters.rollingMachine().newRecipe(
+                getStack(ELECTRODE_ZINC)).shaped(
                 " P ",
                 " P ",
                 " P ",
                 'P', "plateZinc");
 
-        Crafters.rollingMachine().addRecipe(
-                getStack(ELECTRODE_CARBON),
+        Crafters.rollingMachine().newRecipe(
+                getStack(ELECTRODE_CARBON)).shaped(
                 " P ",
                 " P ",
                 " P ",
                 'P', "coal");
 
-        Crafters.rollingMachine().addRecipe(
-                getStack(ELECTRODE_SILVER),
+        Crafters.rollingMachine().newRecipe(
+                getStack(ELECTRODE_SILVER)).shaped(
                 " P ",
                 " P ",
                 " P ",

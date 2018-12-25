@@ -33,7 +33,7 @@ public class ItemCoke extends ItemRailcraft {
     public void defineRecipes() {
         Crafters.blastFurnace().addFuel(getRegistryName(), getIngredient(), COKE_HEAT);
         if (RailcraftConfig.coalCokeTorchOutput() > 0) {
-            CraftingPlugin.addRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
+            CraftingPlugin.addShapedRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                     "C",
                     "S",
                     'C', "fuelCoke",

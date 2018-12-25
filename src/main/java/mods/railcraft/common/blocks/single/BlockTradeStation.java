@@ -57,7 +57,7 @@ public class BlockTradeStation extends BlockEntityDelegate<TileTradeStation> {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "PGP",
                 "EDE",
                 "PGP",

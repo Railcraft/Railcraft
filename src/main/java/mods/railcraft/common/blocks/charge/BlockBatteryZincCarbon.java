@@ -28,7 +28,7 @@ public class BlockBatteryZincCarbon extends BlockBatteryDisposable {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "TWT",
                 "ASC",
                 "ABC",

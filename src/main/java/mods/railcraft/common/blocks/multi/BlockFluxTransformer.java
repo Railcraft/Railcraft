@@ -80,7 +80,7 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge<TileFluxTr
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 2);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "CGC",
                 "GRG",
                 "CTC",

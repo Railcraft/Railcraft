@@ -19,12 +19,12 @@ import net.minecraft.item.crafting.Ingredient;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class IngredientRailcraft extends Ingredient {
-    public IngredientRailcraft(int size) {
+public class RailcraftIngredient extends Ingredient {
+    public RailcraftIngredient(int size) {
         super(size);
     }
 
-    public IngredientRailcraft(ItemStack... stacks) {
+    public RailcraftIngredient(ItemStack... stacks) {
         super(stacks);
     }
 

@@ -40,7 +40,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_ABYSSAL.isEnabled()) {
-                CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+                CraftingPlugin.addShapedRecipe(new ItemStack(block, 1, 2),
                         "II",
                         "II",
                         'I', EnumGeneric.STONE_ABYSSAL.getStack());
@@ -68,13 +68,13 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     FROSTBOUND(RailcraftBlocks.BRICK_FROST_BOUND, MapColor.BLUE) {
         @Override
         public void initRecipes(BlockBrick block) {
-            CraftingPlugin.addRecipe(new ItemStack(block, 8, 2),
+            CraftingPlugin.addShapedRecipe(new ItemStack(block, 8, 2),
                     "III",
                     "ILI",
                     "III",
                     'I', new ItemStack(Blocks.ICE),
                     'L', "gemLapis");
-            CraftingPlugin.addRecipe(new ItemStack(block, 8, 2),
+            CraftingPlugin.addShapedRecipe(new ItemStack(block, 8, 2),
                     "III",
                     "ILI",
                     "III",
@@ -86,7 +86,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         public void initRecipes(BlockBrick block) {
 //            ((ReplacerCube) EnumCube.INFERNAL_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
-            CraftingPlugin.addRecipe(new ItemStack(block, 2, 2),
+            CraftingPlugin.addShapedRecipe(new ItemStack(block, 2, 2),
                     "MB",
                     "BM",
                     'B', new ItemStack(Blocks.NETHER_BRICK),
@@ -97,7 +97,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_QUARRIED.isEnabled()) {
-                CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+                CraftingPlugin.addShapedRecipe(new ItemStack(block, 1, 2),
                         "II",
                         "II",
                         'I', EnumGeneric.STONE_QUARRIED.getStack());
@@ -111,7 +111,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         @Override
         public void initRecipes(BlockBrick block) {
 //            ((ReplacerCube) EnumCube.SANDY_BRICK.getBlockDef()).replacementState = getBlock().getDefaultState().withProperty(BlockBrick.VARIANT, BrickVariant.BRICK);
-            CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+            CraftingPlugin.addShapedRecipe(new ItemStack(block, 1, 2),
                     "BM",
                     "MB",
                     'B', "ingotBrick",
@@ -121,7 +121,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     REDSANDY(RailcraftBlocks.BRICK_RED_SANDY, MapColor.DIRT) {
         @Override
         public void initRecipes(BlockBrick block) {
-            CraftingPlugin.addRecipe(new ItemStack(block, 1, 2),
+            CraftingPlugin.addShapedRecipe(new ItemStack(block, 1, 2),
                     "BM",
                     "MB",
                     'B', "ingotBrick",
@@ -293,7 +293,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     PEARLIZED(RailcraftBlocks.BRICK_PEARLIZED, MapColor.GREEN) {
         @Override
         public void initRecipes(BlockBrick block) {
-            CraftingPlugin.addRecipe(new ItemStack(block, 8, 2),
+            CraftingPlugin.addShapedRecipe(new ItemStack(block, 8, 2),
                     "SSS",
                     "SPS",
                     "SSS",

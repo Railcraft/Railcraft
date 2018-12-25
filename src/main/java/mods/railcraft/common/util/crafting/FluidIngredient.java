@@ -10,15 +10,20 @@
 
 package mods.railcraft.common.util.crafting;
 
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import mods.railcraft.common.fluids.FluidContainerHandler;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.nbt.NBTException;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -28,11 +33,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * An ingredient for fluids.
  */
-public final class IngredientFluid extends IngredientRailcraft {
+public final class FluidIngredient extends RailcraftIngredient {
 
     private final FluidStack fluidStack;
 
-    public IngredientFluid(FluidStack fluidStack) {
+    public FluidIngredient(FluidStack fluidStack) {
         super(FluidContainerHandler.INSTANCE.findCanDrain(fluidStack).toArray(new ItemStack[0]));
         this.fluidStack = fluidStack.copy();
     }
@@ -63,6 +68,8 @@ public final class IngredientFluid extends IngredientRailcraft {
 
     public static final class Factory implements IIngredientFactory {
 
+        private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
         /**
          * Invoked by forge via reflection.
          */
@@ -72,7 +79,36 @@ public final class IngredientFluid extends IngredientRailcraft {
 
         @Override
         public Ingredient parse(JsonContext context, JsonObject json) {
-            return new IngredientFluid(CraftingPlugin.getFluidStackFromRecipeFile(json));
+            return new FluidIngredient(getFluidStackFromRecipeFile(json));
+        }
+
+        private FluidStack getFluidStackFromRecipeFile(JsonObject json) {
+            String name = JsonUtils.getString(json, "fluid");
+
+            Fluid fluid = FluidRegistry.getFluid(name);
+
+            if (fluid == null)
+                throw new JsonSyntaxException("Unknown fluid '" + name + "'");
+
+            int amount = JsonUtils.getInt(json, "amount");
+
+            if (json.has("nbt")) {
+                // Lets hope this works? Needs test
+                try {
+                    JsonElement element = json.get("nbt");
+                    NBTTagCompound nbt;
+                    if (element.isJsonObject())
+                        nbt = JsonToNBT.getTagFromJson(GSON.toJson(element));
+                    else
+                        nbt = JsonToNBT.getTagFromJson(element.getAsString());
+
+                    return new FluidStack(fluid, amount, nbt);
+                } catch (NBTException e) {
+                    throw new JsonSyntaxException("Invalid NBT Entry: " + e);
+                }
+            }
+
+            return new FluidStack(fluid, amount);
         }
     }
 }

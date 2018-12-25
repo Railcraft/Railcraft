@@ -96,7 +96,7 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge<TileSteamTurb
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 3);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "BPB",
                 "PEP",
                 "BPB",

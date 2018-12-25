@@ -17,18 +17,18 @@ public class ItemConcrete extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(2),
+        CraftingPlugin.addShapedRecipe(getStack(2),
                 "GQ",
                 "QG",
                 'Q', Items.QUARTZ,
                 'G', Blocks.GRAVEL);
-        CraftingPlugin.addRecipe(getStack(2),
+        CraftingPlugin.addShapedRecipe(getStack(2),
                 "GS",
                 "QG",
                 'Q', Items.QUARTZ,
                 'S', RailcraftItems.DUST, ItemDust.EnumDust.SLAG,
                 'G', Blocks.GRAVEL);
-        CraftingPlugin.addRecipe(getStack(2),
+        CraftingPlugin.addShapedRecipe(getStack(2),
                 "GQ",
                 "SG",
                 'Q', Items.QUARTZ,

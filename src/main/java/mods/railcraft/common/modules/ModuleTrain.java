@@ -54,7 +54,7 @@ public class ModuleTrain extends RailcraftModulePayload {
             @Override
             public void init() {
                 if (RailcraftBlocks.DETECTOR.isLoaded()) {
-                    CraftingPlugin.addRecipe(EnumDetector.TRAIN.getStack(),
+                    CraftingPlugin.addShapedRecipe(EnumDetector.TRAIN.getStack(),
                             "XXX",
                             "XPX",
                             "XXX",
@@ -63,7 +63,7 @@ public class ModuleTrain extends RailcraftModulePayload {
                 }
                 ManipulatorVariant type = ManipulatorVariant.DISPENSER_TRAIN;
                 if (type.isAvailable() && ManipulatorVariant.DISPENSER_CART.isAvailable()) {
-                    CraftingPlugin.addRecipe(type.getStack(),
+                    CraftingPlugin.addShapedRecipe(type.getStack(),
                             "rcr",
                             "cdc",
                             "rcr",

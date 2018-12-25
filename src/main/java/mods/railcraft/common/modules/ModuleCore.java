@@ -13,7 +13,7 @@ import com.google.common.base.Throwables;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftModule;
-import mods.railcraft.api.crafting.CraftingApiAccess;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.helpers.Helpers;
 import mods.railcraft.api.signals.SignalTools;
@@ -37,6 +37,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.charge.CapabilityCartBatterySetup;
+import mods.railcraft.common.util.crafting.RollingMachineCrafter;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Code;
@@ -64,8 +65,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryModifiable;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,14 +85,13 @@ public class ModuleCore extends RailcraftModulePayload {
             public void construction() {
                 Code.setValue(CartToolsAPI.class, null, LinkageManager.INSTANCE, "linkageManager");
                 Code.setValue(CartToolsAPI.class, null, TrainTransferHelper.INSTANCE, "transferHelper");
+                Code.setValue(Crafters.class, null, RollingMachineCrafter.INSTANCE, "rollingMachine");
 
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandDebug());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandAdmin());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandTrack());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandTile());
                 Railcraft.ROOT_COMMAND.addChildCommand(new CommandCrafting());
-
-                CraftingApiAccess.initialize();
 
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
@@ -188,7 +187,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
                     testSet.add(Items.FURNACE_MINECART);
 
-                IForgeRegistry<IRecipe> registry = ForgeRegistries.RECIPES;
+                IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
                 Collection<ResourceLocation> toRemove = new ArrayList<>();
                 for (IRecipe each : registry) {
                     ItemStack output = InvTools.emptyStack();
@@ -202,7 +201,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 for (ResourceLocation each : toRemove) {
-                    registry.register(CraftingPlugin.createDummyRecipe(each));
+                    registry.remove(each);
                 }
 
                 // Vanilla ids:
@@ -281,19 +280,20 @@ public class ModuleCore extends RailcraftModulePayload {
             public void init() {
                 // Define Recipes
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
-                    IRecipe recipe = new ShapedOreRecipe(RailcraftConstantsAPI.locationOf("cart_bronze"), new ItemStack(Items.MINECART), false,
+                    CraftingPlugin.addShapedRecipe(RailcraftConstantsAPI.locationOf("cart_bronze"),
+                            new ItemStack(Items.MINECART),
+                            false,
                             "I I",
                             "III",
                             'I', "ingotBronze");
-                    CraftingPlugin.addRecipe(recipe);
                 }
 
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.steel")) {
-                    IRecipe recipe = new ShapedOreRecipe(RailcraftConstantsAPI.locationOf("cart_steel"), new ItemStack(Items.MINECART, 2), false,
+                    CraftingPlugin.addShapedRecipe(RailcraftConstantsAPI.locationOf("cart_steel"), new ItemStack(Items.MINECART, 2),
+                            false,
                             "I I",
                             "III",
                             'I', "ingotSteel");
-                    CraftingPlugin.addRecipe(recipe);
                 }
 
                 // Old rails
@@ -304,20 +304,20 @@ public class ModuleCore extends RailcraftModulePayload {
                     ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
                     Object woodRailbed = RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.WOOD);
-                    CraftingPlugin.addRecipe(stackRailNormal,
+                    CraftingPlugin.addShapedRecipe(stackRailNormal,
                             "I I",
                             "I#I",
                             "I I",
                             'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', woodRailbed);
-                    CraftingPlugin.addRecipe(stackRailBooster,
+                    CraftingPlugin.addShapedRecipe(stackRailBooster,
                             "I I",
                             "I#I",
                             "IrI",
                             'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
                             '#', woodRailbed,
                             'r', "dustRedstone");
-                    CraftingPlugin.addRecipe(stackRailDetector,
+                    CraftingPlugin.addShapedRecipe(stackRailDetector,
                             "IsI",
                             "I#I",
                             "IrI",
@@ -325,7 +325,7 @@ public class ModuleCore extends RailcraftModulePayload {
                             '#', Blocks.STONE_PRESSURE_PLATE,
                             'r', "dustRedstone",
                             's', woodRailbed);
-                    CraftingPlugin.addRecipe(stackRailActivator,
+                    CraftingPlugin.addShapedRecipe(stackRailActivator,
                             "ItI",
                             "I#I",
                             "ItI",

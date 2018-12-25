@@ -64,7 +64,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
         EquipmentVariant rollingManual = EquipmentVariant.ROLLING_MACHINE_MANUAL;
         if (rollingManual.isAvailable()) {
             ItemStack stack = rollingManual.getStack();
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "IPI",
                     "PCP",
                     "IPI",
@@ -76,7 +76,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
         EquipmentVariant rollingPowered = EquipmentVariant.ROLLING_MACHINE_POWERED;
         if (rollingPowered.isAvailable()) {
             ItemStack stack = rollingPowered.getStack();
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "IPI",
                     "PCP",
                     "IMI",
@@ -89,7 +89,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
         EquipmentVariant feed = EquipmentVariant.FEED_STATION;
         if (feed.isAvailable()) {
             ItemStack stack = feed.getStack();
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "PCP",
                     "CSC",
                     "PCP",
@@ -101,7 +101,7 @@ public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implem
         EquipmentVariant alpha = EquipmentVariant.SMOKER;
         if (alpha.isAvailable()) {
             ItemStack stack = alpha.getStack();
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     " N ",
                     "RCR",
                     'N', new ItemStack(Blocks.NETHERRACK),

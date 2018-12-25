@@ -39,7 +39,7 @@ public class BlockPostMetalPlatform extends BlockPostMetalBase {
     @Override
     public void defineRecipes() {
         for (EnumColor color : EnumColor.VALUES) {
-            CraftingPlugin.addRecipe(RailcraftBlocks.POST_METAL_PLATFORM.getStack(1, color),
+            CraftingPlugin.addShapedRecipe(RailcraftBlocks.POST_METAL_PLATFORM.getStack(1, color),
                     " T ",
                     " I ",
                     'T', "plateIron",

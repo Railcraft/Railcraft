@@ -72,7 +72,7 @@ public class BlockRCAnvil extends BlockAnvil implements IRailcraftBlock {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "BBB",
                 " I ",
                 "III",

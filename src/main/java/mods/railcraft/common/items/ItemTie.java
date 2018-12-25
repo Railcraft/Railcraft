@@ -39,7 +39,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
     public void defineRecipes() {
         ItemStack tieStone = RailcraftItems.TIE.getStack(1, EnumTie.STONE);
         FluidStack water = Fluids.WATER.getB(1);
-        CraftingPlugin.addRecipe(tieStone,
+        CraftingPlugin.addShapedRecipe(tieStone,
                 " O ",
                 "#r#",
                 'O', water,
@@ -51,7 +51,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
     public void finalizeDefinition() {
         ItemStack tieWood = RailcraftItems.TIE.getStack(1, EnumTie.WOOD);
         FluidStack creosote = Fluids.CREOSOTE.getB(1);
-        CraftingPlugin.addRecipe(tieWood,
+        CraftingPlugin.addShapedRecipe(tieWood,
                 " O ",
                 "###",
                 'O', creosote,

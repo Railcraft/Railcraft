@@ -29,7 +29,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Receiver Box
         SignalBoxVariant.RECEIVER.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         "ICI",
                         "IRI",
                         'I', "ingotIron",
@@ -38,7 +38,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Controller Box
         SignalBoxVariant.CONTROLLER.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         "ICI",
                         "IRI",
                         'I', "ingotIron",
@@ -47,7 +47,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Analog Controller Box
         SignalBoxVariant.ANALOG.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         "ICI",
                         "IQI",
                         'I', "ingotIron",
@@ -56,7 +56,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Capacitor Box
         SignalBoxVariant.CAPACITOR.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         "ICI",
                         "IRI",
                         'I', "ingotIron",
@@ -65,7 +65,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Signal Block Box
         SignalBoxVariant.RELAY.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         " C ",
                         "ICI",
                         "IRI",
@@ -75,7 +75,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Signal Sequencer Box
         SignalBoxVariant.SEQUENCER.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         "ICI",
                         "IRI",
                         'I', "ingotIron",
@@ -84,7 +84,7 @@ public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<Signal
 
         // Define Signal Interlock Box
         SignalBoxVariant.INTERLOCK.ifAvailable(box ->
-                CraftingPlugin.addRecipe(box.getStack(),
+                CraftingPlugin.addShapedRecipe(box.getStack(),
                         " L ",
                         "ICI",
                         "IRI",

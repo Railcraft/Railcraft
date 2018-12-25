@@ -94,7 +94,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     public void defineRecipes() {
         WorldspikeVariant worldspike = WorldspikeVariant.STANDARD;
         if (worldspike.isAvailable() && RailcraftConfig.canCraftStandardWorldspikes()) {
-            CraftingPlugin.addRecipe(worldspike.getStack(),
+            CraftingPlugin.addShapedRecipe(worldspike.getStack(),
                     "gog",
                     "dpd",
                     "gog",
@@ -106,7 +106,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
 
         worldspike = WorldspikeVariant.PERSONAL;
         if (worldspike.isAvailable() && RailcraftConfig.canCraftPersonalWorldspikes()) {
-            CraftingPlugin.addRecipe(worldspike.getStack(),
+            CraftingPlugin.addShapedRecipe(worldspike.getStack(),
                     "gog",
                     "dpd",
                     "gog",
@@ -118,7 +118,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
 
         worldspike = WorldspikeVariant.PASSIVE;
         if (worldspike.isAvailable() && RailcraftConfig.canCraftPassiveWorldspikes()) {
-            CraftingPlugin.addRecipe(worldspike.getStack(),
+            CraftingPlugin.addShapedRecipe(worldspike.getStack(),
                     "gog",
                     "dpd",
                     "gog",

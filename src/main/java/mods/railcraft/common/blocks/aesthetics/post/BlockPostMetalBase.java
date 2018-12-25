@@ -69,13 +69,13 @@ public abstract class BlockPostMetalBase extends BlockPostBase implements ColorP
 
         for (EnumColor color : EnumColor.values()) {
             ItemStack outputStack = getStack(8, color);
-            CraftingPlugin.addRecipe(outputStack,
+            CraftingPlugin.addShapedRecipe(outputStack,
                     "III",
                     "IDI",
                     "III",
                     'I', stackRaw,
                     'D', color.getDyeOreDictTag());
-            CraftingPlugin.addRecipe(outputStack,
+            CraftingPlugin.addShapedRecipe(outputStack,
                     "III",
                     "IDI",
                     "III",

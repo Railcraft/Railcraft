@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.api.crafting.IRollingMachineRecipe;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -24,13 +24,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
 public abstract class TileRollingMachine extends TileMachineBase {
 
-    public static final int PROCESS_TIME = 100;
     public static final int SLOT_RESULT = 0;
     public static final int[] SLOTS = InvTools.buildSlotArray(0, 10);
     private final RollingContainer matrixListener = new RollingContainer();
@@ -40,10 +40,9 @@ public abstract class TileRollingMachine extends TileMachineBase {
     protected final IInventory inv = InventoryConcatenator.make().add(invResult).add(craftMatrix);
     public boolean useLast;
     protected boolean isWorking, paused;
-    private @Nullable IRollingMachineRecipe currentRecipe;
-    private ItemStack currentRecipeOutput = ItemStack.EMPTY;
+    private Optional<IRollingMachineCrafter.IRollingRecipe> currentRecipe = Optional.empty();
     private int progress;
-    private int processTime = PROCESS_TIME;
+    private int processTime = IRollingMachineCrafter.DEFAULT_PROCESS_TIME;
 
     protected TileRollingMachine() {
     }
@@ -129,25 +128,27 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return;
 
         if (clock % 8 == 0) {
-            currentRecipe = Crafters.rollingMachine().findMatching(craftMatrix);
-            if (currentRecipe != null) {
-                currentRecipeOutput = currentRecipe.getOutput(craftMatrix);
+            currentRecipe = Crafters.rollingMachine().getRecipe(craftMatrix, world);
+            if (currentRecipe.isPresent()) {
+                processTime = currentRecipe.get().getTickTime();
                 findMoreStuff();
             } else {
-                currentRecipeOutput = ItemStack.EMPTY;
+                processTime = IRollingMachineCrafter.DEFAULT_PROCESS_TIME;
             }
         }
 
-        if (currentRecipe != null && canMakeMore()) {
-            if (progress >= currentRecipe.getTime()) {
+        if (currentRecipe.isPresent() && canMakeMore()) {
+            @SuppressWarnings("OptionalGetWithoutIsPresent")
+            IRollingMachineCrafter.IRollingRecipe r = currentRecipe.get();
+            if (progress >= r.getTickTime()) {
                 isWorking = false;
-                if (invResult.canFit(currentRecipeOutput)) {
-                    currentRecipe.consume(craftMatrix);
-                    invResult.addStack(currentRecipeOutput);
+                ItemStack result = r.getCraftingResult(craftMatrix);
+                if (invResult.canFit(result)) {
+                    InventoryIterator.get(craftMatrix).stream().forEach(IInvSlot::decreaseStack);
+                    invResult.addStack(result);
                     useLast = false;
                     progress = 0;
-                    currentRecipe = null;
-                    currentRecipeOutput = ItemStack.EMPTY;
+                    currentRecipe = Optional.empty();
                 }
             } else {
                 isWorking = true;
@@ -195,7 +196,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
     }
 
     public boolean canMakeMore() {
-        if (Crafters.rollingMachine().findMatching(craftMatrix) == null)
+        if (!Crafters.rollingMachine().getRecipe(craftMatrix, world).isPresent())
             return false;
         if (useLast)
             return true;

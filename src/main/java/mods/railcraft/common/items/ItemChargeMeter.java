@@ -63,7 +63,7 @@ public class ItemChargeMeter extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "T T",
                 "BGB",
                 " C ",

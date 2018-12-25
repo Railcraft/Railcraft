@@ -12,7 +12,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
 /**
@@ -27,7 +26,7 @@ public class ItemCartTradeStation extends ItemCart {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "T",
                 "M",
                 'T', RailcraftBlocks.TRADE_STATION,

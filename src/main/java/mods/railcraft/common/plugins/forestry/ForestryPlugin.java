@@ -23,7 +23,6 @@ import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.FilterBeesGenomeRecipe;
-import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -141,7 +140,7 @@ public class ForestryPlugin {
                 ItemStack backpack = trackmanT1.getStack();
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    CraftingPlugin.addRecipe(backpack,
+                    CraftingPlugin.addShapedRecipe(backpack,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -174,7 +173,7 @@ public class ForestryPlugin {
                 ItemStack backpack = signalmanT1.getStack();
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    CraftingPlugin.addRecipe(backpack,
+                    CraftingPlugin.addShapedRecipe(backpack,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -207,7 +206,7 @@ public class ForestryPlugin {
                 ItemStack backpack = icemanT1.getStack();
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
-                    CraftingPlugin.addRecipe(backpack,
+                    CraftingPlugin.addShapedRecipe(backpack,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -242,7 +241,7 @@ public class ForestryPlugin {
                 if (!InvTools.isEmpty(backpack)) {
                     addBackpackTooltip(backpack);
 //                if (!ThaumcraftPlugin.isModInstalled()) {
-                    CraftingPlugin.addRecipe(backpack,
+                    CraftingPlugin.addShapedRecipe(backpack,
                             "X#X",
                             "VYV",
                             "X#X",
@@ -273,10 +272,9 @@ public class ForestryPlugin {
             }
         }
 
-        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-        @Nullable
         @Override
-        public Item getBackpack(String backpackId, String type) {
+        @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
+        public @Nullable Item getBackpack(String backpackId, String type) {
             IBackpackInterface backMan = forestry.api.storage.BackpackManager.backpackInterface;
             if (backMan == null)
                 return null;
@@ -323,20 +321,21 @@ public class ForestryPlugin {
 
         @Override
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-        public void addCarpenterRecipe(String recipeTag, int packagingTime, @Nullable FluidStack liquid, ItemStack box, @Nullable ItemStack product, Object... materials) {
+        public void addCarpenterRecipe(String name, int packagingTime, @Nullable FluidStack liquid, ItemStack box, @Nullable ItemStack product, Object... materials) {
             if (product == null) {
-                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", the result was null or zero. Skipping", recipeTag);
+                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe {0}, the result was null or zero. Skipping", name);
                 return;
             }
+            ResourceLocation resource = new ResourceLocation(name);
+//            try {
+//                materials = CraftingPlugin.cleanRecipeArray(CraftingPlugin.RecipeType.SHAPED, product, materials);
+//            } catch (InvalidRecipeException ex) {
+//                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", some ingredients were missing. Skipping", recipeTag);
+//                Game.logTrace(Level.WARN, ex.getRawMessage());
+//                return;
+//            }
             try {
-                materials = CraftingPlugin.cleanRecipeArray(CraftingPlugin.RecipeType.SHAPED, product, materials);
-            } catch (InvalidRecipeException ex) {
-                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe \"{0}\", some ingredients were missing. Skipping", recipeTag);
-                Game.logTrace(Level.WARN, ex.getRawMessage());
-                return;
-            }
-            try {
-                if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + recipeTag))
+                if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + resource.getPath()))
                     forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, box, product, materials);
             } catch (Throwable error) {
                 Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);

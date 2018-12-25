@@ -31,6 +31,7 @@ import net.minecraft.item.crafting.Ingredient;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -129,7 +130,7 @@ public enum Metal implements IVariantEnum {
         return form.getState(this);
     }
 
-    public enum Form {
+    public enum Form implements IIngredientSource {
         NUGGET("nugget", RailcraftItems.NUGGET) {
             @Override
             public ItemStack getStack(Metal metal, int qty) {
@@ -263,6 +264,17 @@ public enum Metal implements IVariantEnum {
                     stack = OreDictPlugin.getOre(oreTag, qty);
             }
             return stack;
+        }
+
+        @Override
+        public Ingredient getIngredient() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Ingredient getIngredient(@Nullable IVariantEnum variant) {
+            Objects.requireNonNull(variant);
+            return Ingredients.from(getOreDictTag((Metal) variant));
         }
     }
 }

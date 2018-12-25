@@ -35,14 +35,10 @@ import mods.railcraft.common.plugins.jei.blastfurnace.BlastFurnaceRecipeMaker;
 import mods.railcraft.common.plugins.jei.cokeoven.CokeOvenCategory;
 import mods.railcraft.common.plugins.jei.cokeoven.CokeOvenRecipeMaker;
 import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
-import mods.railcraft.common.plugins.jei.crafting.ShapedFluidRecipeWrapper;
-import mods.railcraft.common.plugins.jei.crafting.ShapelessFluidRecipeWrapper;
 import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineCategory;
 import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineRecipeMaker;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
-import mods.railcraft.common.util.crafting.ShapedFluidRecipe;
-import mods.railcraft.common.util.crafting.ShapelessFluidRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,8 +63,6 @@ public class RailcraftJEIPlugin implements IModPlugin {
     public void register(IModRegistry registry) {
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         FluidRecipeInterpreter.init(registry.getJeiHelpers().getStackHelper(), registry.getIngredientRegistry());
-        registry.handleRecipes(ShapedFluidRecipe.class, ShapedFluidRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
-        registry.handleRecipes(ShapelessFluidRecipe.class, ShapelessFluidRecipeWrapper::new, VanillaRecipeCategoryUid.CRAFTING);
 
         registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
         registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROLLING);

@@ -17,6 +17,10 @@
       <option name="DONT_REPORT_TRUE_ASSERT_STATEMENTS" value="true" />
     </inspection_tool>
     <inspection_tool class="Convert2streamapi" enabled="true" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="EmptyStatementBody" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="m_reportEmptyBlocks" value="true" />
+      <option name="commentsAreContent" value="true" />
+    </inspection_tool>
     <inspection_tool class="EnumeratedConstantNamingConvention" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="m_regex" value="[A-Z][A-Z_\d]*" />
       <option name="m_minLength" value="3" />

@@ -37,7 +37,7 @@ public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDu
 
     @Override
     public void defineRecipes() {
-        SignalDualVariant.BLOCK.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+        SignalDualVariant.BLOCK.ifAvailable(v -> CraftingPlugin.addShapedRecipe(v.getStack(),
                 "LCI",
                 " BI",
                 "LRI",
@@ -47,7 +47,7 @@ public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDu
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));
 
-        SignalDualVariant.DISTANT.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+        SignalDualVariant.DISTANT.ifAvailable(v -> CraftingPlugin.addShapedRecipe(v.getStack(),
                 "LRI",
                 " BI",
                 "LRI",
@@ -56,7 +56,7 @@ public class BlockMachineSignalDualRailcraft extends BlockMachineSignal<SignalDu
                 'L', RailcraftItems.SIGNAL_LAMP,
                 'B', "dyeBlack"));
 
-        SignalDualVariant.TOKEN.ifAvailable(v -> CraftingPlugin.addRecipe(v.getStack(),
+        SignalDualVariant.TOKEN.ifAvailable(v -> CraftingPlugin.addShapedRecipe(v.getStack(),
                 "LCI",
                 " BI",
                 "LRI",

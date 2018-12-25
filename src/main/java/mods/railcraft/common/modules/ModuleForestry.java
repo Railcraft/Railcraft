@@ -69,18 +69,18 @@ public class ModuleForestry extends RailcraftModulePayload {
                 ForestryPlugin.instance().setupBackpackContents();
 
                 ItemStack stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.WOOD);
-                ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.CREOSOTE.get(750), ItemStack.EMPTY, stack,
+                ForestryPlugin.instance().addCarpenterRecipe("railcraft:ties", 40, Fluids.CREOSOTE.get(750), ItemStack.EMPTY, stack,
                         "###",
                         '#', "slabWood");
 
                 stack = RailcraftItems.TIE.getStack(1, ItemTie.EnumTie.STONE);
-                ForestryPlugin.instance().addCarpenterRecipe("ties", 40, Fluids.WATER.get(750), ItemStack.EMPTY, stack,
+                ForestryPlugin.instance().addCarpenterRecipe("railcraft:ties", 40, Fluids.WATER.get(750), ItemStack.EMPTY, stack,
                         "#r#",
                         '#', RailcraftItems.CONCRETE.getWildcard(),
                         'r', RailcraftItems.REBAR.getWildcard());
 
                 if (Fluids.CREOSOTE.isPresent() && RailcraftConfig.creosoteTorchOutput() > 0) {
-                    ForestryPlugin.instance().addCarpenterRecipe("torches", 10, Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
+                    ForestryPlugin.instance().addCarpenterRecipe("railcraft:torches", 10, Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME), ItemStack.EMPTY, new ItemStack(Blocks.TORCH, RailcraftConfig.creosoteTorchOutput()),
                             "#",
                             "|",
                             '#', Blocks.WOOL,
@@ -90,7 +90,7 @@ public class ModuleForestry extends RailcraftModulePayload {
                 if (RailcraftConfig.getRecipeConfig("forestry.misc.brass.casing")) {
                     ItemStack casing = ModItems.STURDY_CASING.getStack();
                     // todo broke!
-                    CraftingPlugin.addRecipe(casing,
+                    CraftingPlugin.addShapedRecipe(casing,
                             "III",
                             "I I",
                             "III",

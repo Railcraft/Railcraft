@@ -35,7 +35,7 @@ public class BlockBatteryNickelZinc extends BlockBattery {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "TWT",
                 "NSZ",
                 "NBZ",

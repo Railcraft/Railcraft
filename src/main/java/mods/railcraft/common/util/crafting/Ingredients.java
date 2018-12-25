@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.core.IIngredientSource;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,6 +22,9 @@ import net.minecraftforge.oredict.OreIngredient;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /**
  * Created by CovertJaguar on 12/21/2018 for Railcraft.
  *
@@ -28,14 +32,22 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Ingredients {
     public static Ingredient from(Object obj) {
+        Ingredient ingredient;
         if (obj instanceof IIngredientSource)
-            return ((IIngredientSource) obj).getIngredient();
-        if (obj instanceof FluidStack)
-            return new IngredientFluid((FluidStack) obj);
-        Ingredient ing = CraftingHelper.getIngredient(obj);
-        if (ing == null)
+            ingredient = ((IIngredientSource) obj).getIngredient();
+        else if (obj instanceof FluidStack)
+            ingredient = new FluidIngredient((FluidStack) obj);
+        else if (obj instanceof ItemStack && InvTools.isEmpty((ItemStack) obj))
+            ingredient = Ingredient.EMPTY;
+        else
+            ingredient = CraftingHelper.getIngredient(obj);
+        if (ingredient == null)
             return Ingredient.EMPTY;
-        return ing;
+        return ingredient;
+    }
+
+    public static Ingredient from(Object... obj) {
+        return new CompoundIngredient(Stream.of(obj).map(Ingredients::from).collect(Collectors.toList()));
     }
 
     public static Ingredient from(Item item, int meta) {

@@ -26,7 +26,7 @@ public final class BlockCokeOvenSandy extends BlockCokeOven {
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
         ItemStack sand = new ItemStack(Blocks.SAND, 1, 0);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "MBM",
                 "BMB",
                 "MBM",

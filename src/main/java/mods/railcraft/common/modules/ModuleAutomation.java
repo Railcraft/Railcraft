@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -64,7 +64,7 @@ public class ModuleAutomation extends RailcraftModulePayload {
 
                 ManipulatorVariant gamma = ManipulatorVariant.DISPENSER_CART;
                 if (gamma.isAvailable())
-                    CraftingPlugin.addRecipe(gamma.getStack(),
+                    CraftingPlugin.addShapedRecipe(gamma.getStack(),
                             "ML",
                             'M', Items.MINECART,
                             'L', Blocks.DISPENSER);

@@ -48,12 +48,12 @@ public class BlockPostMetal extends BlockPostMetalBase {
     @Override
     public void defineRecipes() {
         // TODO: Temp recipes, remove
-        Crafters.rollingMachine().addRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK),
+        Crafters.rollingMachine().newRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK)).shaped(
                 "III",
                 " I ",
                 "III",
                 'I', "ingotIron");
-        Crafters.rollingMachine().addRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK),
+        Crafters.rollingMachine().newRecipe(RailcraftBlocks.POST_METAL.getStack(16, EnumColor.BLACK)).shaped(
                 "I I",
                 "III",
                 "I I",

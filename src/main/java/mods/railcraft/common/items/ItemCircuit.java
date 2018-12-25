@@ -46,7 +46,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
         Object[] gemTypes = {"gemLapis", "gemQuartz", "crystalCertusQuartz"};
         for (Object glue : glueTypes) {
             for (Object gem : gemTypes) {
-                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
+                CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
                         " #S",
                         "BGR",
                         "SRL",
@@ -56,7 +56,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
                         'S', new ItemStack(Blocks.WOOL, 1, 14),
                         'R', "dustRedstone",
                         'B', glue);
-                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
+                CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.RECEIVER.ordinal()),
                         " #S",
                         "BGR",
                         "SRL",
@@ -66,7 +66,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
                         'S', new ItemStack(Blocks.WOOL, 1, 13),
                         'R', "dustRedstone",
                         'B', glue);
-                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
+                CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.SIGNAL.ordinal()),
                         " #S",
                         "BGR",
                         "SRL",
@@ -76,7 +76,7 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
                         'S', new ItemStack(Blocks.WOOL, 1, 4),
                         'R', "dustRedstone",
                         'B', glue);
-                CraftingPlugin.addRecipe(new ItemStack(this, 1, EnumCircuit.RADIO.ordinal()),
+                CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.RADIO.ordinal()),
                         " #S",
                         "BGR",
                         "SRL",

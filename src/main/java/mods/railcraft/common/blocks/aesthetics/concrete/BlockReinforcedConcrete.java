@@ -93,7 +93,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         super.finalizeDefinition();
         //TODO: Make it craft a powder ALA Vanilla? World interaction may not be such a bad idea, and we can get rid of the fluid crafting in exchange for crafting colors directly...
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
-        CraftingPlugin.addRecipe(getStack(8, EnumColor.SILVER),
+        CraftingPlugin.addShapedRecipe(getStack(8, EnumColor.SILVER),
                 "SIS",
                 "IWI",
                 "SIS",
@@ -105,7 +105,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
     @Override
     public void defineRecipes() {
         for (EnumColor color : EnumColor.VALUES) {
-            CraftingPlugin.addRecipe(getStack(8, color),
+            CraftingPlugin.addShapedRecipe(getStack(8, color),
                     "GGG",
                     "GDG",
                     "GGG",

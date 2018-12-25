@@ -27,7 +27,7 @@ public class ItemNugget extends ItemMetal {
     public void defineRecipes() {
         for (Metal m : getMetalBiMap().values()) {
             CraftingPlugin.addShapelessRecipe(m.getStack(Metal.Form.NUGGET, 9), m.getOreTag(Metal.Form.INGOT));
-            CraftingPlugin.addRecipe(m.getStack(Metal.Form.INGOT),
+            CraftingPlugin.addShapedRecipe(m.getStack(Metal.Form.INGOT),
                     "NNN",
                     "NNN",
                     "NNN",

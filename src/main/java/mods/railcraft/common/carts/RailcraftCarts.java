@@ -155,7 +155,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     private final Function<RailcraftCarts, Item> itemSupplier;
     private final Definition def;
     private final @Nullable Supplier<ItemStack> contentsSupplier;
-//    private Item item;
+    //    private Item item;
     private boolean isSetup;
     private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
 

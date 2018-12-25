@@ -61,7 +61,7 @@ public class BlockSteamOven extends BlockMultiBlockInventory<TileSteamOven> {
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 4);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "SSS",
                 "SFS",
                 "SSS",

@@ -73,7 +73,7 @@ public class BlockChestVoid extends BlockChestRailcraft<TileChestVoid> {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "OOO",
                 "OPO",
                 "OOO",

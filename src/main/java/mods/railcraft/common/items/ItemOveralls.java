@@ -58,7 +58,7 @@ public class ItemOveralls extends ItemRailcraftArmor implements IChargeProtectio
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "III",
                 "I I",
                 "I I",

@@ -30,7 +30,7 @@ public final class BlockBoilerTankLow extends BlockBoilerTank<TileBoilerTankLow>
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this, 2);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "P",
                 "I",
                 "P",

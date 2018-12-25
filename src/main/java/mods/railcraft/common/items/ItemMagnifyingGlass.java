@@ -88,7 +88,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 " G",
                 "S ",
                 'S', "stickWood",

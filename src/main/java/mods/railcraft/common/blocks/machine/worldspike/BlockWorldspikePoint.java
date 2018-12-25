@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,7 +96,7 @@ public class BlockWorldspikePoint extends BlockRailcraft {
     @Override
     public void defineRecipes() {
         if (RailcraftConfig.canCraftStandardWorldspikes()) {
-            CraftingPlugin.addRecipe(getStack(),
+            CraftingPlugin.addShapedRecipe(getStack(),
                     " p ",
                     " o ",
                     "ogo",

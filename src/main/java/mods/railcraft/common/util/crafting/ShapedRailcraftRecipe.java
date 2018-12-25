@@ -43,12 +43,12 @@ import static java.util.Objects.requireNonNull;
  * A shaped recipe which respects its ingredient's choice of remaining items.
  */
 @SuppressWarnings("unused")
-public final class RemainingItemShapedRecipe extends ShapedRecipes {
+public final class ShapedRailcraftRecipe extends ShapedRecipes {
 
     // is there a cleaner way to map Ingredients to ItemStacks?
-    @Nullable IngredientRailcraft[] bySlots;
+    @Nullable RailcraftIngredient[] bySlots;
 
-    public RemainingItemShapedRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result) {
+    public ShapedRailcraftRecipe(String group, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result) {
         super(group, width, height, ingredients, result);
     }
 
@@ -65,7 +65,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
         for (int i = 0; i < nonNullList.size(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
 
-            IngredientRailcraft ingredient = bySlots[i];
+            RailcraftIngredient ingredient = bySlots[i];
 
             if (ingredient != null) {
                 nonNullList.set(i, ingredient.getRemaining(itemstack));
@@ -82,7 +82,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
      */
     @Override
     public boolean matches(InventoryCrafting inv, @Nullable World worldIn) {
-        bySlots = new IngredientRailcraft[inv.getSizeInventory()];
+        bySlots = new RailcraftIngredient[inv.getSizeInventory()];
         return super.matches(inv, worldIn);
     }
 
@@ -102,8 +102,8 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
                     int index = p_77573_4_ ? this.recipeWidth - k - 1 + l * this.recipeWidth : k + l * this.recipeWidth;
                     ingredient = this.recipeItems.get(index);
 
-                    if (ingredient instanceof IngredientRailcraft) {
-                        bySlots[index] = (IngredientRailcraft) ingredient;
+                    if (ingredient instanceof RailcraftIngredient) {
+                        bySlots[index] = (RailcraftIngredient) ingredient;
                     }
                 }
 
@@ -181,7 +181,7 @@ public final class RemainingItemShapedRecipe extends ShapedRecipes {
 
             ItemStack result = CraftingHelper.getItemStack(JsonUtils.getJsonObject(json, "result"), context);
             // railcraft: changed the output
-            return new RemainingItemShapedRecipe(group, pattern[0].length(), pattern.length, input, result);
+            return new ShapedRailcraftRecipe(group, pattern[0].length(), pattern.length, input, result);
         }
     }
 

@@ -36,7 +36,7 @@ public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox<TileBoiler
     @Override
     public void defineRecipes() {
         ItemStack stack = new ItemStack(this);
-        CraftingPlugin.addRecipe(stack,
+        CraftingPlugin.addShapedRecipe(stack,
                 "PUP",
                 "BCB",
                 "PFP",

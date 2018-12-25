@@ -87,7 +87,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
                     ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
             }
 
-            CraftingPlugin.addRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
+            CraftingPlugin.addShapedRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
             Crafters.rockCrusher().makeRecipe("railcraft:stair", mat.getCraftingEquivalent())
                     .addOutput(mat.getSourceItem())
                     .register();

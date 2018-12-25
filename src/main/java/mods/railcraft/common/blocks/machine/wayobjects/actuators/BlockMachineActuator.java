@@ -121,7 +121,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         ActuatorVariant actuator = ActuatorVariant.LEVER;
         if (actuator.isAvailable()) {
             ItemStack stack = actuator.getStack();
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "RBW",
                     "PLI",
                     'W', "dyeWhite",
@@ -130,7 +130,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                     'P', Blocks.PISTON,
                     'B', "dyeBlack",
                     'R', "dyeRed");
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "RBW",
                     "ILP",
                     'W', "dyeWhite",
@@ -145,7 +145,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
         actuator = ActuatorVariant.MOTOR;
         if (actuator.isAvailable()) {
             ItemStack stack = actuator.getStack();
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "RBW",
                     "PCI",
                     'W', "dyeWhite",
@@ -154,7 +154,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                     'C', RailcraftItems.CIRCUIT.getIngredient(ItemCircuit.EnumCircuit.RECEIVER),
                     'B', "dyeBlack",
                     'R', "dyeRed");
-            CraftingPlugin.addRecipe(stack,
+            CraftingPlugin.addShapedRecipe(stack,
                     "RBW",
                     "ICP",
                     'W', "dyeWhite",

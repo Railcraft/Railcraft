@@ -13,24 +13,18 @@ package mods.railcraft.common.plugins.jei.rolling;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.api.crafting.IRollingMachineRecipe;
-import mods.railcraft.common.util.crafting.ShapedRollingMachineRecipe;
-import mods.railcraft.common.util.crafting.ShapelessRollingMachineRecipe;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public final class RollingMachineRecipeMaker {
 
     public static List<IRecipeWrapper> getRecipes(IJeiHelpers jeiHelpers) {
         List<IRecipeWrapper> wrappers = new ArrayList<>();
-        Collection<IRollingMachineRecipe> rawRecipes = Crafters.rollingMachine().getRecipes();
-        for (IRollingMachineRecipe recipe : rawRecipes) {
-            if(recipe instanceof ShapedRollingMachineRecipe)
-                wrappers.add(new ShapedRollingMachineRecipeWrapper((ShapedRollingMachineRecipe)recipe, jeiHelpers.getStackHelper()));
-            else if(recipe instanceof ShapelessRollingMachineRecipe)
-                wrappers.add(new ShapelessRollingMachineRecipeWrapper((ShapelessRollingMachineRecipe)recipe, jeiHelpers.getStackHelper()));
+        List<IRollingMachineCrafter.IRollingRecipe> rawRecipes = Crafters.rollingMachine().getRecipes();
+        for (IRollingMachineCrafter.IRollingRecipe recipe : rawRecipes) {
+            // TODO this needs rewriting for the new recipes
         }
 
         return wrappers;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -53,7 +53,7 @@ public class ItemSteelAxe extends ItemAxe implements IRailcraftItemSimple {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this), false,
+        CraftingPlugin.addShapedRecipe(new ItemStack(this), false,
                 "II ",
                 "IS ",
                 " S ",

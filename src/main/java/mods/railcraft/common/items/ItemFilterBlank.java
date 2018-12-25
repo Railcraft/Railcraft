@@ -23,7 +23,7 @@ public class ItemFilterBlank extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "PIP",
                 'P', Items.PAPER,
                 'I', EnumColor.BLACK

@@ -49,7 +49,7 @@ public class ModuleRouting extends RailcraftModulePayload {
                     CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
 
                 if (EnumDetector.ROUTING.isEnabled()) {
-                    CraftingPlugin.addRecipe(EnumDetector.ROUTING.getStack(),
+                    CraftingPlugin.addShapedRecipe(EnumDetector.ROUTING.getStack(),
                             "XXX",
                             "XPX",
                             "XXX",

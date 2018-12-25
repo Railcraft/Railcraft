@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,7 +28,7 @@ public class ItemCartWorldspikePersonal extends ItemCartWorldspike {
     @Override
     public void finalizeDefinition() {
         if (RailcraftConfig.canCraftPersonalWorldspikes()) {
-            CraftingPlugin.addRecipe(getStack(),
+            CraftingPlugin.addShapedRecipe(getStack(),
                     "A",
                     "M",
                     'A', WorldspikeVariant.PERSONAL.getStack(),

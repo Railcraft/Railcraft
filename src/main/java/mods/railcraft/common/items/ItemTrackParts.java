@@ -9,20 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.crafting.IRollingMachineCraftingManager;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.api.crafting.Crafters;
 
 public class ItemTrackParts extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        IRollingMachineCraftingManager cm = Crafters.rollingMachine();
-        cm.addShapelessRecipe(getStack(), "ingotBronze");
-        cm.addShapelessRecipe(getStack(), "ingotIron");
-        cm.addShapelessRecipe(getStack(2), "ingotSteel");
-        cm.addShapelessRecipe(getStack(3), "ingotTungsten");
-        cm.addShapelessRecipe(getStack(3), "ingotTitanium");
-        cm.addShapelessRecipe(getStack(4), "ingotTungstensteel");
+        IRollingMachineCrafter cm = Crafters.rollingMachine();
+        cm.newRecipe(getStack()).shapeless("ingotBronze");
+        cm.newRecipe(getStack()).shapeless("ingotIron");
+        cm.newRecipe(getStack(2)).shapeless("ingotSteel");
+        cm.newRecipe(getStack(3)).shapeless("ingotTungsten");
+        cm.newRecipe(getStack(3)).shapeless("ingotTitanium");
+        cm.newRecipe(getStack(4)).shapeless("ingotTungstensteel");
     }
 
 }

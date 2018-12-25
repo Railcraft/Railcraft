@@ -81,7 +81,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                     .register();
         }
 
-        CraftingPlugin.addRecipe(RailcraftItems.FIRESTONE_CUT.getStack(),
+        CraftingPlugin.addShapedRecipe(RailcraftItems.FIRESTONE_CUT.getStack(),
                 " P ",
                 "PFP",
                 " P ",
@@ -89,7 +89,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'F', RailcraftItems.FIRESTONE_RAW);
 
         FluidStack fluidStack = Fluids.LAVA.get(FluidTools.BUCKET_VOLUME);
-        CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+        CraftingPlugin.addShapedRecipe(ItemFirestoneRefined.getItemEmpty(),
                 "LRL",
                 "RFR",
                 "LRL",
@@ -98,7 +98,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'F', RailcraftItems.FIRESTONE_CUT);
 
         // FIXME: currently dupes stones!
-        CraftingPlugin.addRecipe(ItemFirestoneRefined.getItemEmpty(),
+        CraftingPlugin.addShapedRecipe(ItemFirestoneRefined.getItemEmpty(),
                 "LOL",
                 "RFR",
                 "LRL",

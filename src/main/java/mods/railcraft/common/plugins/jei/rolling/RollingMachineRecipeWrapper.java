@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,9 +11,9 @@
 package mods.railcraft.common.plugins.jei.rolling;
 
 import mezz.jei.api.recipe.IRecipeWrapper;
-import mods.railcraft.api.crafting.IRollingMachineRecipe;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 
-public abstract class RollingMachineRecipeWrapper<T extends IRollingMachineRecipe> implements IRecipeWrapper {
+public abstract class RollingMachineRecipeWrapper<T extends IRollingMachineCrafter.IRollingRecipe> implements IRecipeWrapper {
     protected T recipe;
 
     public RollingMachineRecipeWrapper(T recipe) {

@@ -96,7 +96,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
         Object[] frameTypes = {"ingotTin", "ingotNickel", "ingotInvar", "ingotBrass", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
         for (Object frame : frameTypes) {
-            CraftingPlugin.addRecipe(getStack(6, EnumColor.WHITE),
+            CraftingPlugin.addShapedRecipe(getStack(6, EnumColor.WHITE),
                     "GFG",
                     "GSG",
                     "GWG",
@@ -110,7 +110,7 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     @Override
     public void defineRecipes() {
         for (EnumColor color : EnumColor.VALUES) {
-            CraftingPlugin.addRecipe(getStack(8, color),
+            CraftingPlugin.addShapedRecipe(getStack(8, color),
                     "GGG",
                     "GDG",
                     "GGG",

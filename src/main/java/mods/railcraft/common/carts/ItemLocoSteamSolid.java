@@ -55,7 +55,7 @@ public class ItemLocoSteamSolid extends ItemLocomotive {
         if (InvTools.isEmpty(firebox))
             firebox = new ItemStack(Blocks.FURNACE);
 
-        CraftingPlugin.addRecipe(getStack(),
+        CraftingPlugin.addShapedRecipe(getStack(),
                 "TTF",
                 "TTF",
                 "BMM",

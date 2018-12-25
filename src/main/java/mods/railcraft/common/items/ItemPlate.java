@@ -26,7 +26,7 @@ public class ItemPlate extends ItemMetal {
         RailcraftItems plate = RailcraftItems.PLATE;
 
         for (Metal m : getMetalBiMap().values()) {
-            Crafters.rollingMachine().addRecipe(plate.getStack(4, m),
+            Crafters.rollingMachine().newRecipe(plate.getStack(4, m)).shaped(
                     "II",
                     "II",
                     'I', m.getOreTag(Form.INGOT));

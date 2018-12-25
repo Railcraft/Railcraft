@@ -32,7 +32,7 @@ public class BlockTankWater extends BlockMultiBlock<TileTankWater> {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(6),
+        CraftingPlugin.addShapedRecipe(getStack(6),
                 "WWW",
                 "BSB",
                 "WWW",

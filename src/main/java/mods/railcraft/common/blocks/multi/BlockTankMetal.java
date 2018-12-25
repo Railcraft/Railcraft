@@ -71,7 +71,7 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockMultiB
     private void addColorRecipes() {
         for (EnumColor color : EnumColor.VALUES) {
             ItemStack output = getStack(8, color);
-            CraftingPlugin.addRecipe(output,
+            CraftingPlugin.addShapedRecipe(output,
                     "OOO",
                     "ODO",
                     "OOO",
@@ -81,7 +81,7 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockMultiB
     }
 
     protected void addRecipe(Object... recipe) {
-        CraftingPlugin.addRecipe(getStack(8), recipe);
+        CraftingPlugin.addShapedRecipe(getStack(8), recipe);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,7 @@ public class ItemCartGift extends ItemCart {
     public void defineRecipes() {
         if (SeasonPlugin.CHRISTMAS) {
             Game.log(Level.INFO, "Activating Christmas Seasonal Pack");
-            CraftingPlugin.addRecipe(getStack(), "GGG",
+            CraftingPlugin.addShapedRecipe(getStack(), "GGG",
                     "WEW",
                     "WWW",
                     'G', new ItemStack(Items.GUNPOWDER),

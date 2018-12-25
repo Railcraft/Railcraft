@@ -354,7 +354,7 @@ public class RailcraftConfig {
         loadRecipeProperty("forestry.misc", "brass.casing", true, "change to '{t}=false' to disable the brass recipe for Forestry Sturdy Casing");
         loadRecipeProperty("forestry.carpenter", "ties", true, "change to '{t}=false' to disable the Carpenter Tie recipe");
         loadRecipeProperty("forestry.carpenter", "torches", true, "change to '{t}=false' to disable the Carpenter Creosote Torch recipe");
-        loadRecipeProperty("forestry.carpenter", "creosote.block", true, "change to '{t}=false' to disable the Carpenter Creosote Block recipe");
+        loadRecipeProperty("forestry.carpenter", "block_creosote", true, "change to '{t}=false' to disable the Carpenter Creosote Block recipe");
     }
 
     private static void loadWorldGen() {
@@ -654,7 +654,7 @@ public class RailcraftConfig {
     public static boolean getRecipeConfig(String tag) {
         Boolean recipe = recipes.get(tag);
         if (recipe == null)
-            throw new RuntimeException("Railcraft Recipe Config Entry does not exist: " + tag);
+            throw new IllegalArgumentException("Railcraft Recipe Config Entry does not exist: " + tag);
         return recipe;
     }
 

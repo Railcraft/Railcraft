@@ -69,7 +69,7 @@ public class BlockChargeTrap extends BlockCharge {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(getStack(1),
+        CraftingPlugin.addShapedRecipe(getStack(1),
                 "PGP",
                 "GBG",
                 "PGP",

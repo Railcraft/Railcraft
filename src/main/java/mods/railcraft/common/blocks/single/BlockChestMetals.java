@@ -20,7 +20,7 @@ public class BlockChestMetals extends BlockChestRailcraft<TileChestMetals> {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this),
+        CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "GPG",
                 "PAP",
                 "GPG",

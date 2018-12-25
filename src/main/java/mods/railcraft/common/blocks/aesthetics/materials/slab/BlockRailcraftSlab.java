@@ -104,20 +104,20 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft<TileSlab> implem
 
             switch (mat) {
                 case SNOW: // TODO: is this necessary?
-                    CraftingPlugin.addRecipe(getStack(3, mat),
+                    CraftingPlugin.addShapedRecipe(getStack(3, mat),
                             " T ",
                             "SSS",
                             'T', RailcraftItems.STONE_CARVER,
                             'S', Blocks.SNOW_LAYER);
                     break;
                 default:
-                    CraftingPlugin.addRecipe(getStack(6, mat),
+                    CraftingPlugin.addShapedRecipe(getStack(6, mat),
                             " T ",
                             "SSS",
                             'T', RailcraftItems.STONE_CARVER,
                             'S', mat.getSourceItem());
 
-                    CraftingPlugin.addRecipe(mat.getSourceItem(), "S", "S", 'S', getStack(1, mat));
+                    CraftingPlugin.addShapedRecipe(mat.getSourceItem(), "S", "S", 'S', getStack(1, mat));
             }
         }
     }

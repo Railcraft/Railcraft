@@ -58,7 +58,7 @@ public class ItemSteelShears extends ItemShears implements IRailcraftItemSimple 
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addRecipe(new ItemStack(this), false,
+        CraftingPlugin.addShapedRecipe(new ItemStack(this), false,
                 " I",
                 "I ",
                 'I', "ingotSteel");
