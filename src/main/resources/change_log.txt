@@ -1,3 +1,6 @@
+12.0.0-beta-2:
+    FIX: Attempt to fix Forestry crash.
+
 12.0.0-beta-1:
     INFO: "Love and joy come to you and to you good Christmas too and God bless you and send you a happy new year” —Here We Come A-Wassailing’
     FIX: Fix all the crafting things! I can say that right? I'm sure I missed nothing!
