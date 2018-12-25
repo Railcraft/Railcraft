@@ -245,7 +245,7 @@ public final class RailcraftModuleManager {
             IRailcraftModule module = classToInstanceMapping.get(moduleClass);
             boolean enabled = enabledModules.contains(moduleClass);
             try {
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     Game.log(Level.INFO, "Module performing stage {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
                 stage.passToModule(module.getModuleEventHandler(enabled));
             } catch (Throwable th) {

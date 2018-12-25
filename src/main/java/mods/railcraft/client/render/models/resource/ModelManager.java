@@ -50,7 +50,7 @@ public class ModelManager {
     }
 
     public static void registerItemModel(Item item, int meta, ModelResourceLocation location) {
-        if (Game.DEVELOPMENT_ENVIRONMENT)
+        if (Game.DEVELOPMENT_VERSION)
             Game.log(Level.INFO, "Registering item model: {0} meta:{1} location:{2}", item.getRegistryName(), meta, location);
         ModelLoader.setCustomModelResourceLocation(item, meta, location);
     }
@@ -60,14 +60,14 @@ public class ModelManager {
         if (item instanceof IRailcraftItemBlock) {
             ModelResourceLocation modelResourceLocation = ((IRailcraftItemBlock) item).getModelLocation(stack, state);
             int meta = stack.getItemDamage();
-            if (Game.DEVELOPMENT_ENVIRONMENT)
+            if (Game.DEVELOPMENT_VERSION)
                 Game.log(Level.INFO, "Registering block item model: {0} meta: {1} state: {2} location: {3}", item.getRegistryName(), meta, state, modelResourceLocation);
             ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
         }
     }
 
     public static void registerComplexItemModel(Item item, ItemMeshDefinition meshDefinition, ModelResourceLocation... locations) {
-        if (Game.DEVELOPMENT_ENVIRONMENT)
+        if (Game.DEVELOPMENT_VERSION)
             Game.log(Level.INFO, "Registering complex item model: {0} locations:{1}", item.getRegistryName(), Arrays.toString(locations));
         ModelLoader.setCustomMeshDefinition(item, meshDefinition);
         for (ModelResourceLocation location : locations) {

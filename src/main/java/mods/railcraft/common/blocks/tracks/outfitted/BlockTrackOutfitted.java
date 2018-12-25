@@ -463,7 +463,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
             super.neighborChanged(state, world, pos, neighborBlock, neighborPos);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
-            if (Game.DEVELOPMENT_ENVIRONMENT)
+            if (Game.DEVELOPMENT_VERSION)
                 throw error;
         }
     }

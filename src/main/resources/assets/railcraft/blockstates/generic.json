@@ -13,7 +13,6 @@
       "stone_abyssal": {"textures": {"all": "railcraft:blocks/stone_abyssal"}},
       "stone_quarried": {"textures": {"all": "railcraft:blocks/stone_quarried"}},
       "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
-
       "concrete": {"textures": {"all": "railcraft:blocks/concrete"}},
       "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
       "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},

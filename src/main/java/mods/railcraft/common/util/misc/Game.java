@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class Game {
     public static final boolean OBFUSCATED;
-    public static final boolean DEVELOPMENT_ENVIRONMENT;
+    public static final boolean DEVELOPMENT_VERSION;
     public static final boolean BUKKIT;
     /**
      * A logging level dedicated to debug reports. It is more prioritized than errors but less serious than fatal.
@@ -51,7 +51,7 @@ public final class Game {
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
         OBFUSCATED = !worldFound && !worldObjFound;
-        DEVELOPMENT_ENVIRONMENT = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
+        DEVELOPMENT_VERSION = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
             foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
@@ -146,7 +146,7 @@ public final class Game {
     }
 
     public static void logDebug(String msg, Object... args) {
-        if (!DEVELOPMENT_ENVIRONMENT)
+        if (!DEVELOPMENT_VERSION)
             return;
         log(Level.DEBUG, msg, args);
     }

@@ -55,7 +55,7 @@ public class DataManagerPlugin {
                 data.writeFluidStack(value.orElse(null));
             } catch (IOException e) {
                 Game.logThrowable("Error syncing Object", e);
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     throw new RuntimeException(e);
             }
         }
@@ -68,7 +68,7 @@ public class DataManagerPlugin {
                 return OptionalFluidStack.of(data.readFluidStack());
             } catch (IOException e) {
                 Game.logThrowable("Error syncing Object", e);
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     throw new RuntimeException(e);
             }
             return OptionalFluidStack.empty();
@@ -88,7 +88,7 @@ public class DataManagerPlugin {
                 data.writeEnum(value);
             } catch (IOException e) {
                 Game.logThrowable("Error syncing Object", e);
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     throw new RuntimeException(e);
             }
         }
@@ -101,7 +101,7 @@ public class DataManagerPlugin {
                 return data.readEnum(EnumColor.VALUES);
             } catch (IOException e) {
                 Game.logThrowable("Error syncing Object", e);
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     throw new RuntimeException(e);
             }
             return EnumColor.WHITE;
