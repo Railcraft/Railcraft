@@ -28,6 +28,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -65,36 +66,37 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
     }
 
     public static BeeFilter getBeeFilter(ItemStack stack) {
-        return InvToolsAPI.getRailcraftDataSubtag(stack, "filter")
-                .map(nbt -> {
-                    try {
-                        String typeName = nbt.getString("type");
-                        EnumBeeType type = null;
-                        try {
-                            type = EnumBeeType.valueOf(typeName);
-                        } catch (IllegalArgumentException ignored) {
-                        }
+        NBTTagCompound nbt = InvToolsAPI.getRailcraftDataSubtag(stack, "filter").orElse(null);
+        if (nbt != null) {
+            try {
+                String typeName = nbt.getString("type");
+                EnumBeeType type = null;
+                try {
+                    type = EnumBeeType.valueOf(typeName);
+                } catch (IllegalArgumentException ignored) {
+                }
 
-                        EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;
-                        try {
-                            chromosome = EnumBeeChromosome.valueOf(nbt.getString("chromosome"));
-                        } catch (IllegalArgumentException ignored) {
-                        }
+                EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;
+                try {
+                    chromosome = EnumBeeChromosome.valueOf(nbt.getString("chromosome"));
+                } catch (IllegalArgumentException ignored) {
+                }
 
-                        ItemStack active = NBTPlugin.readItemStack(nbt, "active");
-                        ItemStack inactive = NBTPlugin.readItemStack(nbt, "inactive");
-                        return new BeeFilter(type, chromosome, active, inactive);
-                    } catch (Throwable ignored) {
-                    }
-                    return null;
-                }).orElseGet(() -> new BeeFilter(null, EnumBeeChromosome.SPECIES, null, null));
+                ItemStack active = NBTPlugin.readItemStack(nbt, "active");
+                ItemStack inactive = NBTPlugin.readItemStack(nbt, "inactive");
+                return new BeeFilter(type, chromosome, active, inactive);
+            } catch (Throwable ignored) {
+            }
+        }
+        return new BeeFilter(null, EnumBeeChromosome.SPECIES, null, null);
     }
 
     @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        InvToolsAPI.getRailcraftDataSubtag(stack, "filter").ifPresent(nbt -> {
+        NBTTagCompound nbt = InvToolsAPI.getRailcraftDataSubtag(stack, "filter").orElse(null);
+        if (nbt != null) {
             try {
                 EnumBeeChromosome chromosome = EnumBeeChromosome.SPECIES;
                 try {
@@ -106,7 +108,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
             } catch (Throwable throwable) {
                 Game.logErrorAPI(Mod.FORESTRY.modId, throwable, EnumBeeChromosome.class);
             }
-        });
+        }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
     }
 
