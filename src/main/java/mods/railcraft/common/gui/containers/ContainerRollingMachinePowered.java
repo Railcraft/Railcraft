@@ -18,6 +18,6 @@ public class ContainerRollingMachinePowered extends ContainerRollingMachine {
 
     public ContainerRollingMachinePowered(final InventoryPlayer inventoryplayer, final TileRollingMachinePowered tile) {
         super(inventoryplayer, tile, 93, 17);
-        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 87, 54, 28, 14));
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 87, 54, 28, 14, 99, 65));
     }
 }

@@ -30,7 +30,7 @@ public class ContainerTurbine extends RailcraftContainer {
         super(tile.getInventory());
         this.tile = tile;
 
-        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 110, 38, 28, 14));
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 110, 38, 28, 14, 99, 65));
 
         addSlot(new SlotTurbine(tile.getInventory(), 0, 60, 24));
         for (int i = 0; i < 3; i++) {

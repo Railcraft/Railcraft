@@ -23,12 +23,30 @@ import org.lwjgl.opengl.GL11;
  */
 public class AnalogWidget extends MeterWidget {
 
-    public AnalogWidget(IIndicatorController controller, int x, int y, int w, int h) {
+    protected final int ox, oy, ou, ov;
+
+    public AnalogWidget(IIndicatorController controller, int x, int y, int w, int h, int ox, int oy, int ou, int ov) {
         super(controller, x, y, 0, 0, w, h);
+        this.ox = ox;
+        this.oy = oy;
+        this.ou = ou;
+        this.ov = ov;
     }
 
-    public AnalogWidget(IIndicatorController controller, int x, int y, int w, int h, boolean vertical) {
+    public AnalogWidget(IIndicatorController controller, int x, int y, int w, int h, int ox, int oy) {
+        this(controller, x, y, w, h, ox, oy, ox, oy);
+    }
+
+    public AnalogWidget(IIndicatorController controller, int x, int y, int w, int h, int ox, int oy, int ou, int ov, boolean vertical) {
         super(controller, x, y, 0, 0, w, h, vertical);
+        this.ox = ox;
+        this.oy = oy;
+        this.ou = ou;
+        this.ov = ov;
+    }
+
+    public AnalogWidget(IIndicatorController controller, int x, int y, int w, int h, int ox, int oy, boolean vertical) {
+        this(controller, x, y, w, h, ox, oy, ox, oy, vertical);
     }
 
     @Override
@@ -86,6 +104,6 @@ public class AnalogWidget extends MeterWidget {
         // resetting
         OpenGL.glEnable(GL11.GL_TEXTURE_2D);
 
-        gui.drawTexturedModalRect(guiX + 99, guiY + 65, 99, 65, 4, 3);
+        gui.drawTexturedModalRect(guiX + ox, guiY + oy, ou, ov, 4, 3);
     }
 }
