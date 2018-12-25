@@ -31,7 +31,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
     public ContainerRockCrusher(InventoryPlayer inventoryplayer, TileRockCrusher crusher) {
         super(crusher);
         this.tile = crusher;
-        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 74, 59, 28, 14));
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 74, 59, 28, 14, 99, 65));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
