@@ -177,19 +177,19 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 Set<Item> testSet = new HashSet<>();
-                if (!RailcraftConfig.vanillaTrackRecipes()) {
-                    testSet.add(Item.getItemFromBlock(Blocks.RAIL));
-                    testSet.add(Item.getItemFromBlock(Blocks.GOLDEN_RAIL));
-                    testSet.add(Item.getItemFromBlock(Blocks.DETECTOR_RAIL));
-                    testSet.add(Item.getItemFromBlock(Blocks.ACTIVATOR_RAIL));
-                }
+//                if (!RailcraftConfig.vanillaTrackRecipes()) {
+//                    testSet.add(Item.getItemFromBlock(Blocks.RAIL));
+//                    testSet.add(Item.getItemFromBlock(Blocks.GOLDEN_RAIL));
+//                    testSet.add(Item.getItemFromBlock(Blocks.DETECTOR_RAIL));
+//                    testSet.add(Item.getItemFromBlock(Blocks.ACTIVATOR_RAIL));
+//                }
 
                 if (!RailcraftConfig.getRecipeConfig("railcraft.cart.vanilla.furnace"))
                     testSet.add(Items.FURNACE_MINECART);
 
-                IForgeRegistryModifiable<IRecipe> registry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
+                IForgeRegistryModifiable<IRecipe> recipeRegistry = (IForgeRegistryModifiable<IRecipe>) ForgeRegistries.RECIPES;
                 Collection<ResourceLocation> toRemove = new ArrayList<>();
-                for (IRecipe each : registry) {
+                for (IRecipe each : recipeRegistry) {
                     ItemStack output = InvTools.emptyStack();
                     try {
                         output = each.getRecipeOutput();
@@ -201,7 +201,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 for (ResourceLocation each : toRemove) {
-                    registry.remove(each);
+                    recipeRegistry.remove(each);
                 }
 
                 // Vanilla ids:
@@ -304,20 +304,26 @@ public class ModuleCore extends RailcraftModulePayload {
                     ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
                     Object woodRailbed = RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.WOOD);
-                    CraftingPlugin.addShapedRecipe(stackRailNormal,
+                    CraftingPlugin.addShapedRecipe(
+                            "minecraft:rail",
+                            stackRailNormal,
                             "I I",
                             "I#I",
                             "I I",
                             'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                             '#', woodRailbed);
-                    CraftingPlugin.addShapedRecipe(stackRailBooster,
+                    CraftingPlugin.addShapedRecipe(
+                            "minecraft:golden_rail",
+                            stackRailBooster,
                             "I I",
                             "I#I",
                             "IrI",
                             'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
                             '#', woodRailbed,
                             'r', "dustRedstone");
-                    CraftingPlugin.addShapedRecipe(stackRailDetector,
+                    CraftingPlugin.addShapedRecipe(
+                            "minecraft:detector_rail",
+                            stackRailDetector,
                             "IsI",
                             "I#I",
                             "IrI",
@@ -325,7 +331,9 @@ public class ModuleCore extends RailcraftModulePayload {
                             '#', Blocks.STONE_PRESSURE_PLATE,
                             'r', "dustRedstone",
                             's', woodRailbed);
-                    CraftingPlugin.addShapedRecipe(stackRailActivator,
+                    CraftingPlugin.addShapedRecipe(
+                            "minecraft:activator_rail",
+                            stackRailActivator,
                             "ItI",
                             "I#I",
                             "ItI",
