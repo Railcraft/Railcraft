@@ -181,7 +181,7 @@ public final class Railcraft {
         proxy.finalizeClient();
 
         RailcraftConfig.postInit();
-        CraftingPlugin.areAllBuilderRegistered();
+        CraftingPlugin.areAllBuildersRegistered();
     }
 
     @Mod.EventHandler

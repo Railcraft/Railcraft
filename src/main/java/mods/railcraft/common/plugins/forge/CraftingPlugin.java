@@ -208,13 +208,13 @@ public class CraftingPlugin {
         recipeBuilders.add(builder);
     }
 
-    public static void areAllBuilderRegistered() {
+    public static void areAllBuildersRegistered() {
         Optional<ISimpleRecipeBuilder<?>> recipeBuilder =
                 recipeBuilders.stream().filter(ISimpleRecipeBuilder::notRegistered).findFirst();
         if (recipeBuilder.isPresent())
             throw new IllegalStateException(String.format("Incomplete recipe definition detected for %s.",
                     recipeBuilder.get().getName()));
-
+        recipeBuilders.clear();
     }
 
     private static class MissingIngredientException extends InvalidRecipeException {

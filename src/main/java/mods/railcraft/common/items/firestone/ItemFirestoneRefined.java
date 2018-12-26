@@ -52,7 +52,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 public class ItemFirestoneRefined extends ItemFirestone {
 
     public static final int CHARGES = 5000;
-    private static final int HEAT = 250;
+    public static final int HEAT = 250;
 
     protected int heat = HEAT;
 
@@ -138,7 +138,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
 
     @Override
     public final int getItemBurnTime(ItemStack stack) {
-        if (stack.getItemDamage() < stack.getMaxDamage())
+        if (stack.getItemDamage() < stack.getMaxDamage() || InvTools.isWildcard(stack))
             return heat;
         return 0;
     }
