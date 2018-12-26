@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -58,8 +57,11 @@ public enum TankDefinition {
         @Override
         public void defineRecipes(Block block) {
             // Smelting Recipe to turn Iron Tanks into Steel Ingots
-            Crafters.blastFurnace().addRecipe("railcraft:smelt_iron_tank", Ingredients.from(block), IBlastFurnaceCrafter.SMELT_TIME * 4,
-                    RailcraftItems.INGOT.getStack(4, Metal.STEEL), 4);
+            Crafters.blastFurnace().newRecipe(block)
+                    .name("railcraft:smelt_iron_tank")
+                    .time(IBlastFurnaceCrafter.SMELT_TIME * 4)
+                    .output(RailcraftItems.INGOT.getStack(4, Metal.STEEL)).slagOutput(4)
+                    .register();
         }
     },
     STEEL {

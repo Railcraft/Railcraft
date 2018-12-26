@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.BlockMetaTile;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
@@ -37,7 +36,9 @@ public final class BlockBoilerTankLow extends BlockBoilerTank<TileBoilerTankLow>
                 'P', RailcraftItems.PLATE, Metal.IRON,
                 'I', RailcraftItems.PLATE, Metal.INVAR); //todo: Replace with steam piping when implemented
 
-        Crafters.blastFurnace().addRecipe("railcraft:smelt_boiler_tank", Ingredients.from(this), 2560,
-                RailcraftItems.INGOT.getStack(1, Metal.STEEL), 1);
+        Crafters.blastFurnace().newRecipe(this)
+                .name("railcraft:smelt_boiler_tank")
+                .time(2560).output(RailcraftItems.INGOT.getStack(1, Metal.STEEL))
+                .slagOutput(1).register();
     }
 }

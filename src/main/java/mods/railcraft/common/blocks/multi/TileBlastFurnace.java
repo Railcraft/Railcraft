@@ -43,7 +43,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.blocks.multi.BlockBlastFurnace.ICON;
-import static mods.railcraft.common.util.inventory.InvTools.incSize;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public final class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
@@ -53,7 +52,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_FUEL = 1;
     public static final int SLOT_OUTPUT = 2;
-    public static final int SLOT_SECOND_OUTPUT = 3;
+    public static final int SLOT_SLAG = 3;
     private static final int FUEL_PER_TICK = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
@@ -108,7 +107,8 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
 
     private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_FUEL, 1);
     //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    //    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1);
+    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
+    private final InventoryMapper invSlag = new InventoryMapper(this, SLOT_SLAG, 1).ignoreItemChecks();
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileBlastFurnace)
             return false;
@@ -138,7 +138,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
             TileBlastFurnace master = (TileBlastFurnace) tile;
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
-            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SECOND_OUTPUT, secondOutput);
+            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SLAG, secondOutput);
             master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
         }
     }
@@ -276,32 +276,26 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
             return;
         }
 
-        cookTime = 0;
-        finishedAt = clock;
+        cookTime = currentRecipe.getTickTime();
 
-        ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
         ItemStack nextOutput = currentRecipe.getOutput();
 
-        if (!InvTools.canMerge(outputSlot, nextOutput, getInventoryStackLimit())) {
+        if (!invOutput.canFit(nextOutput)) {
             return;
         }
 
-        ItemStack secondOutputSlot = getStackInSlot(SLOT_SECOND_OUTPUT);
-        ItemStack nextSecondOutput = RailcraftItems.DUST.getStack(currentRecipe.getSlagOutput(), ItemDust.EnumDust.SLAG);
+        ItemStack nextSlag = RailcraftItems.DUST.getStack(currentRecipe.getSlagOutput(), ItemDust.EnumDust.SLAG);
 
-        if (!InvTools.canMerge(secondOutputSlot, nextSecondOutput, getInventoryStackLimit())) {
+        if (!invSlag.canFit(nextSlag)) {
             return;
         }
 
-        if (InvTools.isEmpty(outputSlot))
-            setInventorySlotContents(SLOT_OUTPUT, nextOutput);
-        else
-            incSize(outputSlot, nextOutput.getCount());
-        if (InvTools.isEmpty(secondOutputSlot))
-            setInventorySlotContents(SLOT_SECOND_OUTPUT, nextSecondOutput);
-        else
-            incSize(secondOutputSlot, nextSecondOutput.getCount());
+        invOutput.addStack(nextOutput);
+        invSlag.addStack(nextSlag);
         decrStackSize(SLOT_INPUT, 1);
+
+        cookTime = 0;
+        finishedAt = clock;
 
         // TODO fix mess
 //        if (!InvTools.isEmpty(input)) {
@@ -416,7 +410,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
             return false;
         switch (slot) {
             case SLOT_OUTPUT:
-            case SLOT_SECOND_OUTPUT:
+            case SLOT_SLAG:
                 return false;
             case SLOT_FUEL:
                 return FUEL_FILTER.test(stack);
@@ -445,7 +439,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
             case WEST:
                 return index == SLOT_OUTPUT;
         }
-        return index == SLOT_SECOND_OUTPUT;
+        return index == SLOT_SLAG;
     }
 
     @Override

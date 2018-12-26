@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -32,7 +31,8 @@ public final class BlockCokeOvenSandy extends BlockCokeOven {
                 "MBM",
                 'B', "ingotBrick",
                 'M', sand);
-        Crafters.rockCrusher().makeRecipe("railcraft:coke_oven_sandy", Ingredients.from(this))
+        Crafters.rockCrusher().makeRecipe(this)
+                .name("railcraft:coke_oven_sandy")
                 .addOutput(new ItemStack(Items.BRICK, 3))
                 .addOutput(new ItemStack(Items.BRICK), 0.5f)
                 .addOutput(sand, 0.25f)

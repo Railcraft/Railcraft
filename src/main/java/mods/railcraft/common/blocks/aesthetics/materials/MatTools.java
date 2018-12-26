@@ -57,7 +57,8 @@ public class MatTools {
         for (Materials mat : types) {
             if (!mat.isSourceValid())
                 continue;
-            Crafters.rockCrusher().makeRecipe("railcraft:recycle_material", source.getIngredient(mat))
+            Crafters.rockCrusher().makeRecipe(source.getIngredient(mat))
+                    .name("railcraft:recycle_material")
                     .addOutput(output)
                     .register();
         }

@@ -45,7 +45,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         'I', EnumGeneric.STONE_ABYSSAL.getStack());
                 if (COBBLE.isEnabled()) {
-                    Crafters.rockCrusher().makeRecipe("railcraft:stone_abyssal", EnumGeneric.STONE_ABYSSAL.getIngredient())
+                    Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_ABYSSAL)
+                            .name("railcraft:stone_abyssal")
                             .addOutput(getStack(COBBLE))
                             .register();
                 }
@@ -101,7 +102,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         "II",
                         'I', EnumGeneric.STONE_QUARRIED.getStack());
-                Crafters.rockCrusher().makeRecipe("railcraft:stone_quarried", EnumGeneric.STONE_QUARRIED.getIngredient())
+                Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_QUARRIED)
                         .addOutput(getStack(COBBLE))
                         .register();
             }

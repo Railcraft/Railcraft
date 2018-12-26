@@ -10,11 +10,11 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.multi.TileBlastFurnace;
+import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,10 +28,10 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
     public ContainerBlastFurnace(InventoryPlayer player, TileBlastFurnace tile) {
         super(tile);
         this.furnace = tile;
-        addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, 0, 56, 17));
-        addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, 1, 56, 53));
-        addSlot(new SlotFurnaceOutput(player.player, tile, 2, 116, 21));
-        addSlot(new SlotFurnaceOutput(player.player, tile, 3, 116, 53));
+        addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, TileBlastFurnace.SLOT_INPUT, 56, 17));
+        addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, TileBlastFurnace.SLOT_FUEL, 56, 53));
+        addSlot(new SlotOutput(tile, TileBlastFurnace.SLOT_OUTPUT, 116, 21));
+        addSlot(new SlotOutput(tile, TileBlastFurnace.SLOT_SLAG, 116, 53));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {

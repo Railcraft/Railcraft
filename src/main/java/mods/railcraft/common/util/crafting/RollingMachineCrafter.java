@@ -9,9 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
+import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -61,6 +63,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         private ResourceLocation name;
         private ResourceLocation group = DEFAULT_GROUP;
         private int time = DEFAULT_PROCESS_TIME;
+        private boolean registered;
 
         public RecipeBuilder(ItemStack output) {
             this.output = output.copy();
@@ -87,7 +90,16 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
 
         @Override
         public void recipe(IRecipe recipe) {
-            recipes.add(new RollingRecipe(recipe.setRegistryName(name), time));
+            registered = true;
+            try {
+                Preconditions.checkArgument(InvTools.nonEmpty(output),
+                        "Output was null or empty.");
+                Preconditions.checkArgument(name != null, "Recipe name not set.");
+                Preconditions.checkArgument(time > 0, "Process time was zero.");
+                recipes.add(new RollingRecipe(recipe.setRegistryName(name), time));
+            } catch (Throwable ex) {
+                handleException(ex);
+            }
         }
 
         @Override
@@ -95,7 +107,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
             try {
                 recipe(CraftingPlugin.makeShapedRecipe(name, group, output, recipeArray));
             } catch (InvalidRecipeException ex) {
-                Game.logTrace(Level.WARN, ex.getRawMessage());
+                handleException(ex);
             }
         }
 
@@ -104,8 +116,24 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
             try {
                 recipe(CraftingPlugin.makeShapelessRecipe(name, group, output, recipeArray));
             } catch (InvalidRecipeException ex) {
-                Game.logTrace(Level.WARN, ex.getRawMessage());
+                handleException(ex);
             }
+        }
+
+        @Override
+        public ResourceLocation getName() {
+            return name;
+        }
+
+        @Override
+        public boolean notRegistered() {
+            return !registered;
+        }
+
+        private void handleException(Throwable ex) {
+            Game.log(Level.WARN,
+                    "Tried, but failed to register {0} as a Rolling Machine recipe. Reason: {1}",
+                    name, ex.getMessage());
         }
     }
 

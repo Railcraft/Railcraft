@@ -88,7 +88,8 @@ public class BlockRailcraftStairs extends BlockStairs implements IMaterialBlock 
             }
 
             CraftingPlugin.addShapedRecipe(getStack(4, mat), "S  ", "SS ", "SSS", 'S', mat.getSourceItem());
-            Crafters.rockCrusher().makeRecipe("railcraft:stair", mat.getCraftingEquivalent())
+            Crafters.rockCrusher().makeRecipe(mat.getCraftingEquivalent())
+                    .name("railcraft:stair")
                     .addOutput(mat.getSourceItem())
                     .register();
         }

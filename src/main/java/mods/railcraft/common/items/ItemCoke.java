@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemCoke extends ItemRailcraft {
-    private static final int COKE_COOK_TIME = 1800;
     private static final int COKE_COOK_CREOSOTE = 500;
     public static final int COKE_HEAT = 3200;
 
@@ -31,7 +30,10 @@ public class ItemCoke extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        Crafters.blastFurnace().addFuel(getRegistryName(), getIngredient(), COKE_HEAT);
+        Crafters.blastFurnace().newFuel(getIngredient())
+                .name(getRegistryName())
+                .time(COKE_HEAT)
+                .register();
         if (RailcraftConfig.coalCokeTorchOutput() > 0) {
             CraftingPlugin.addShapedRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                     "C",
@@ -39,8 +41,11 @@ public class ItemCoke extends ItemRailcraft {
                     'C', "fuelCoke",
                     'S', "stickWood");
         }
-        Crafters.cokeOven().addRecipe("railcraft:coke", Ingredients.from(Items.COAL, 0),
-                getStack(), Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE), COKE_COOK_TIME);
+        Crafters.cokeOven().newRecipe(Ingredients.from(Items.COAL, 0))
+                .name("railcraft:coke")
+                .output(getStack())
+                .fluid(Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE))
+                .register();
     }
 
     @Override

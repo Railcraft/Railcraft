@@ -14,12 +14,15 @@ import com.google.common.collect.PeekingIterator;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.crafting.ISimpleRecipeBuilder;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.crafting.ShapedRailcraftRecipe;
 import mods.railcraft.common.util.crafting.ShapelessRailcraftRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -29,13 +32,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
@@ -46,6 +47,7 @@ import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
 public class CraftingPlugin {
     private static int numRecipes;
     private static ResourceLocation DEFAULT_GROUP = new ResourceLocation("railcraft", "crafting");
+    private static List<ISimpleRecipeBuilder<?>> recipeBuilders = new LinkedList<>();
 
     // TODO add descriptor
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
@@ -180,6 +182,39 @@ public class CraftingPlugin {
     public static ResourceLocation getName(ItemStack output) {
         ResourceLocation itemId = Objects.requireNonNull(output.getItem().getRegistryName());
         return new ResourceLocation(RailcraftConstantsAPI.MOD_ID, itemId.getPath() + "+" + output.getDisplayName() + "#" + numRecipes++);
+    }
+
+    public static @Nullable ResourceLocation guessName(Object input) {
+        if (input instanceof IForgeRegistryEntry) {
+            return ((IForgeRegistryEntry) input).getRegistryName();
+        } else if (input instanceof ItemStack) {
+            return ((ItemStack) input).getItem().getRegistryName();
+        } else if (input instanceof String) {
+            return new ResourceLocation("ore", (String) input);
+        } else if (input instanceof IRailcraftObjectContainer) {
+            IRailcraftObjectContainer<?> container = Code.cast(input);
+            return container.getRegistryName();
+        }
+        return null;
+    }
+
+    public static void tryGuessName(Object input, ISimpleRecipeBuilder<?> builder) {
+        ResourceLocation nameGuess = guessName(input);
+        if (nameGuess != null)
+            builder.name(nameGuess);
+    }
+
+    public static void addBuilder(ISimpleRecipeBuilder<?> builder) {
+        recipeBuilders.add(builder);
+    }
+
+    public static void areAllBuilderRegistered() {
+        Optional<ISimpleRecipeBuilder<?>> recipeBuilder =
+                recipeBuilders.stream().filter(ISimpleRecipeBuilder::notRegistered).findFirst();
+        if (recipeBuilder.isPresent())
+            throw new IllegalStateException(String.format("Incomplete recipe definition detected for %s.",
+                    recipeBuilder.get().getName()));
+
     }
 
     private static class MissingIngredientException extends InvalidRecipeException {

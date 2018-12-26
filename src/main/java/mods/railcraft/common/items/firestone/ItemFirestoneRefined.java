@@ -33,7 +33,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -76,7 +75,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
     public void defineRecipes() {
         ItemStack ore = EnumOreMagic.FIRESTONE.getStack();
         if (!ore.isEmpty()) {
-            Crafters.rockCrusher().makeRecipe("railcraft:firestone_ore", Ingredient.fromStacks(ore))
+            Crafters.rockCrusher().makeRecipe(ore).name("railcraft:firestone_ore")
                     .addOutput(RailcraftItems.FIRESTONE_RAW.getStack())
                     .register();
         }

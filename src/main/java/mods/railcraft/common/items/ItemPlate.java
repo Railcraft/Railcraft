@@ -10,7 +10,6 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.common.util.collections.CollectionTools;
 
 import static mods.railcraft.common.items.Metal.*;
@@ -32,7 +31,10 @@ public class ItemPlate extends ItemMetal {
                     'I', m.getOreTag(Form.INGOT));
         }
 
-        Crafters.blastFurnace().addRecipe("railcraft:smelt_plate", RailcraftItems.PLATE.getIngredient(IRON), IBlastFurnaceCrafter.SMELT_TIME,
-                Metal.STEEL.getStack(Form.INGOT), 1);
+        Crafters.blastFurnace().newRecipe(RailcraftItems.PLATE.getIngredient(IRON))
+                .name("railcraft:smelt_plate")
+                .output(Metal.STEEL.getStack(Form.INGOT))
+                .slagOutput(1)
+                .register();
     }
 }

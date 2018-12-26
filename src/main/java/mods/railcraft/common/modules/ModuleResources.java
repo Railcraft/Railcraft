@@ -27,7 +27,6 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.plugins.misc.Mod;
-import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -75,8 +74,12 @@ public class ModuleResources extends RailcraftModulePayload {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
-                        Crafters.blastFurnace().addRecipe("railcraft:smelt_block", Ingredients.from(Blocks.IRON_BLOCK), IBlastFurnaceCrafter.SMELT_TIME * 9,
-                                EnumMetal.BLOCK_STEEL.getStack(), 9);
+                        Crafters.blastFurnace().newRecipe(Blocks.IRON_BLOCK)
+                                .name("railcraft:smelt_block")
+                                .time(IBlastFurnaceCrafter.SMELT_TIME * 9)
+                                .output(EnumMetal.BLOCK_STEEL.getStack())
+                                .slagOutput(9)
+                                .register();
                     }
 
                     type = EnumMetal.BLOCK_COPPER;

@@ -9,16 +9,19 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
+import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.api.crafting.ISimpleRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
-import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -38,85 +41,38 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     private final List<@NotNull ISimpleRecipe> fuels = new ArrayList<>();
 
     public void postInit() {
-        addFuel("thaumcraft:alumentum", ThaumcraftPlugin.ITEMS.get("alumentum", 0));
-        addFuel("railcraft:block_coke", EnumGeneric.BLOCK_COKE.getStack());
-        addFuel("minecraft:charcoal", new ItemStack(Items.COAL, 1, 1));
-        addFuel(RailcraftItems.FIRESTONE_REFINED);
-        addFuel(RailcraftItems.FIRESTONE_CRACKED);
-        addFuel("ore:block_charcoal", OreDictPlugin.getOre("blockCharcoal", 1));
-    }
-
-    public void addFuel(IRailcraftObjectContainer<?> obj) {
-        addFuel(obj.getRegistryName(), obj.getWildcard());
-    }
-
-    public void addFuel(String name, ItemStack stack) {
-        addFuel(new ResourceLocation(name), stack);
+        newFuel(ThaumcraftPlugin.ITEMS.get("alumentum", 0)).name("thaumcraft:alumentum").register();
+        newFuel(EnumGeneric.BLOCK_COKE.getStack()).name("railcraft:block_coke").register();
+        newFuel(new ItemStack(Items.COAL, 1, 1)).name("minecraft:charcoal").register();
+        newFuel(RailcraftItems.FIRESTONE_REFINED).register();
+        newFuel(RailcraftItems.FIRESTONE_CRACKED).register();
+        newFuel("blockCharcoal")
+                .time(FuelPlugin.getBurnTime(new ItemStack(Blocks.COAL_BLOCK, 1))).register();
     }
 
     @Override
-    public void addFuel(@Nullable ResourceLocation name, ItemStack stack) {
-        addFuel(name, stack, FuelPlugin.getBurnTime(stack));
-    }
-
-    @Override
-    public void addFuel(@Nullable ResourceLocation name, Ingredient input, int cookTime) {
-        Objects.requireNonNull(name);
-        if (!input.apply(ItemStack.EMPTY)) {
-            fuels.add(new ISimpleRecipe() {
-                @Override
-                public ResourceLocation getName() {
-                    return name;
-                }
-
-                @Override
-                public Ingredient getInput() {
-                    return input;
-                }
-
-                @Override
-                public int getTickTime() {
-                    return cookTime;
-                }
-            });
-        } else {
-            Game.log(Level.WARN, "Tried, but failed to register {0} as a blast furnace fuel", name);
+    public IFuelBuilder newFuel(Object input) {
+        FuelBuilder builder = new FuelBuilder(Ingredients.from(input));
+        CraftingPlugin.tryGuessName(input, builder);
+        if (input instanceof ItemStack) {
+            builder.time((ItemStack) input);
+        } else if (input instanceof IRailcraftObjectContainer) {
+            IRailcraftObjectContainer<?> container = Code.cast(input);
+            builder.time(container.getWildcard());
         }
+        return builder;
     }
 
     @Override
-    public void addRecipe(@Nullable ResourceLocation name, Ingredient input, int cookTime, ItemStack output, int slagOutput) {
-        Objects.requireNonNull(name);
-        if (!input.apply(ItemStack.EMPTY)) {
-            recipes.add(new IRecipe() {
-                @Override
-                public ResourceLocation getName() {
-                    return name;
-                }
+    public IRecipeBuilder newRecipe(Object input) {
+        RecipeBuilder builder = new RecipeBuilder(Ingredients.from(input));
+        CraftingPlugin.tryGuessName(input, builder);
+        return builder;
+    }
 
-                @Override
-                public Ingredient getInput() {
-                    return input;
-                }
-
-                @Override
-                public int getTickTime() {
-                    return cookTime;
-                }
-
-                @Override
-                public ItemStack getOutput() {
-                    return output.copy();
-                }
-
-                @Override
-                public int getSlagOutput() {
-                    return slagOutput;
-                }
-            });
-        } else {
-            Game.log(Level.WARN, "Tried, but failed to register {0} as a blast furnace recipe", name);
-        }
+    @Deprecated
+    public void addRecipe(String name, Ingredient input, int cookTime, ItemStack output, int slagOutput) {
+        newRecipe(input).name(name).time(cookTime).output(output).slagOutput(1).register();
     }
 
     @Override
@@ -143,5 +99,165 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         return recipes.stream()
                 .filter(recipe -> recipe.getInput().test(stack))
                 .findFirst();
+    }
+
+    private class FuelBuilder implements IFuelBuilder {
+        private final Ingredient input;
+        private ResourceLocation name;
+        private int heatValue;
+        private boolean registered;
+
+        public FuelBuilder(Ingredient input) {
+            this.input = input;
+            CraftingPlugin.addBuilder(this);
+        }
+
+        @Override
+        public IFuelBuilder name(@Nullable ResourceLocation name) {
+            this.name = Objects.requireNonNull(name);
+            return this;
+        }
+
+        @Override
+        public IFuelBuilder time(int ticks) {
+            this.heatValue = ticks;
+            return this;
+        }
+
+        @Override
+        public IFuelBuilder time(ItemStack fuel) {
+            this.heatValue = FuelPlugin.getBurnTime(fuel);
+            return this;
+        }
+
+        @Override
+        public void register() {
+            registered = true;
+            try {
+                Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
+                        "Fuel input was null or empty.");
+                Preconditions.checkArgument(name != null, "Fuel name not set.");
+                Preconditions.checkArgument(heatValue > 0, "Heat value was zero.");
+                fuels.add(new ISimpleRecipe() {
+                    @Override
+                    public ResourceLocation getName() {
+                        return name;
+                    }
+
+                    @Override
+                    public Ingredient getInput() {
+                        return input;
+                    }
+
+                    @Override
+                    public int getTickTime() {
+                        return heatValue;
+                    }
+                });
+            } catch (Throwable ex) {
+                Game.log(Level.WARN,
+                        "Tried, but failed to register {0} as a Blast Furnace fuel. Reason: {1}",
+                        name, ex.getMessage());
+            }
+        }
+
+        @Override
+        public ResourceLocation getName() {
+            return name;
+        }
+
+        @Override
+        public boolean notRegistered() {
+            return !registered;
+        }
+    }
+
+    private class RecipeBuilder implements IRecipeBuilder {
+        private final Ingredient input;
+        private int slagOutput;
+        private ItemStack output = ItemStack.EMPTY;
+        private ResourceLocation name;
+        private int cookTime = SMELT_TIME;
+        private boolean registered;
+
+        public RecipeBuilder(Ingredient input) {
+            this.input = input;
+            CraftingPlugin.addBuilder(this);
+        }
+
+        @Override
+        public IRecipeBuilder slagOutput(int num) {
+            this.slagOutput = num;
+            return this;
+        }
+
+        @Override
+        public IRecipeBuilder output(ItemStack output) {
+            this.output = output.copy();
+            return this;
+        }
+
+        @Override
+        public IRecipeBuilder name(@Nullable ResourceLocation name) {
+            this.name = Objects.requireNonNull(name);
+            return this;
+        }
+
+        @Override
+        public IRecipeBuilder time(int ticks) {
+            this.cookTime = ticks;
+            return this;
+        }
+
+        @Override
+        public void register() {
+            registered = true;
+            try {
+                Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
+                        "Input was null or empty.");
+                Preconditions.checkArgument(name != null, "Recipe name not set.");
+                Preconditions.checkArgument(cookTime > 0, "Cook time was zero.");
+                recipes.add(new IRecipe() {
+                    @Override
+                    public ResourceLocation getName() {
+                        return name;
+                    }
+
+                    @Override
+                    public Ingredient getInput() {
+                        return input;
+                    }
+
+                    @Override
+                    public int getTickTime() {
+                        return cookTime;
+                    }
+
+                    @Override
+                    public ItemStack getOutput() {
+                        return output.copy();
+                    }
+
+                    @Override
+                    public int getSlagOutput() {
+                        return slagOutput;
+                    }
+                });
+            } catch (Throwable ex) {
+                Game.log(Level.WARN,
+                        "Tried, but failed to register {0} as a Blast Furnace recipe. Reason: {1}",
+                        name, ex.getMessage());
+            }
+        }
+
+        @Override
+        public ResourceLocation getName() {
+            return name;
+        }
+
+        @Override
+        public boolean notRegistered() {
+            return !registered;
+        }
     }
 }
