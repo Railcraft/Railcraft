@@ -329,6 +329,17 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
 
     @Override
     @SuppressWarnings("deprecation")
+    public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrackOutfitted) {
+            ITrackKitInstance track = ((TileTrackOutfitted) tile).getTrackKitInstance();
+            return track instanceof ITrackKitEmitter ? ((ITrackKitEmitter) track).getPowerOutput() : PowerPlugin.NO_POWER;
+        }
+        return PowerPlugin.NO_POWER;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
