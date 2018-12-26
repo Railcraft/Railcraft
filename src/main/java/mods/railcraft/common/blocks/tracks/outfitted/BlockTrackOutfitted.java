@@ -329,6 +329,17 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
 
     @Override
     @SuppressWarnings("deprecation")
+    public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        TileEntity tile = WorldPlugin.getBlockTile(world, pos);
+        if (tile instanceof TileTrackOutfitted) {
+            ITrackKitInstance track = ((TileTrackOutfitted) tile).getTrackKitInstance();
+            return track instanceof ITrackKitEmitter ? ((ITrackKitEmitter) track).getPowerOutput() : PowerPlugin.NO_POWER;
+        }
+        return PowerPlugin.NO_POWER;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean hasComparatorInputOverride(IBlockState state) {
         return true;
     }
@@ -463,7 +474,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
             super.neighborChanged(state, world, pos, neighborBlock, neighborPos);
         } catch (StackOverflowError error) {
             Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
-            if (Game.DEVELOPMENT_ENVIRONMENT)
+            if (Game.DEVELOPMENT_VERSION)
                 throw error;
         }
     }

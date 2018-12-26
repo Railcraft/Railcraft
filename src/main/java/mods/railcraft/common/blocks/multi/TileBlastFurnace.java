@@ -266,6 +266,19 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
             return;
         }
 
+        if (!isBurning()) {
+            return;
+        }
+
+        setCooking(true);
+        cookTime++;
+        if (cookTime < currentRecipe.getTickTime()) {
+            return;
+        }
+
+        cookTime = 0;
+        finishedAt = clock;
+
         ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
         ItemStack nextOutput = currentRecipe.getOutput();
 
@@ -279,19 +292,6 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         if (!InvTools.canMerge(secondOutputSlot, nextSecondOutput, getInventoryStackLimit())) {
             return;
         }
-
-        if (!isBurning()) {
-            return;
-        }
-
-        setCooking(true);
-        cookTime++;
-        if (cookTime < currentRecipe.getTickTime()) {
-            return;
-        }
-
-        cookTime = 0;
-        finishedAt = clock;
 
         if (InvTools.isEmpty(outputSlot))
             setInventorySlotContents(SLOT_OUTPUT, nextOutput);

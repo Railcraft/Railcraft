@@ -268,7 +268,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
-        if (Game.DEVELOPMENT_ENVIRONMENT && resourcePredicate.test(VanillaResourceType.TEXTURES))
+        if (Game.DEVELOPMENT_VERSION && resourcePredicate.test(VanillaResourceType.TEXTURES))
             Game.log(Game.DEBUG_REPORT, "Detected texture reload");
     }
 }

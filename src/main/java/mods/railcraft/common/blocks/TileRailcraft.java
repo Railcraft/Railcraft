@@ -72,7 +72,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
 
     public IBlockState getBlockState() {
         if (isInvalid()) {
-            if (Game.DEVELOPMENT_ENVIRONMENT) {
+            if (Game.DEVELOPMENT_VERSION) {
                 Game.log(Level.ERROR, "Tried to access invalid blockstate on " + getClass() + " at " + getPos() + " hashcode " + System.identityHashCode(this));
                 throw new RuntimeException();
             }
@@ -99,7 +99,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
             writePacketData(data);
         } catch (IOException e) {
             Game.logThrowable("Error constructing tile packet: {0}", e, getClass());
-            if (Game.DEVELOPMENT_ENVIRONMENT)
+            if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
         }
         nbt.setByteArray("sync", byteBuf.array());
@@ -114,7 +114,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
             readPacketData(data);
         } catch (IOException e) {
             Game.logThrowable("Error decoding tile packet: {0}", e, getClass());
-            if (Game.DEVELOPMENT_ENVIRONMENT)
+            if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
         }
     }
