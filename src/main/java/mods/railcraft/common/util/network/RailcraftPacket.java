@@ -55,7 +55,7 @@ public abstract class RailcraftPacket {
             return new FMLProxyPacket(new PacketBuffer(byteBuf), CHANNEL_NAME);
         } catch (IOException e) {
             Game.logThrowable("Error constructing packet: {0}", e, getClass());
-            if (Game.DEVELOPMENT_ENVIRONMENT)
+            if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
         }
         PacketBuffer buffer = new PacketBuffer(byteBuf);

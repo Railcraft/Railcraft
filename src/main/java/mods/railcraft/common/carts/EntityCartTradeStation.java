@@ -72,7 +72,7 @@ public class EntityCartTradeStation extends CartBaseContainer implements ILogicC
                     getDataManager().set(BYTE_BUFFER, byteArrayOutputStream.toByteArray());
                 } catch (IOException ex) {
                     Game.logThrowable("Error encoding output stream packet: {0}", ex);
-                    if (Game.DEVELOPMENT_ENVIRONMENT)
+                    if (Game.DEVELOPMENT_VERSION)
                         throw new UncheckedIOException(ex);
                 }
             }
@@ -137,7 +137,7 @@ public class EntityCartTradeStation extends CartBaseContainer implements ILogicC
                 logic.readPacketData(input);
             } catch (IOException ex) {
                 Game.logThrowable("Error decoding input stream packet: {0}", ex);
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     throw new UncheckedIOException(ex);
             }
         }

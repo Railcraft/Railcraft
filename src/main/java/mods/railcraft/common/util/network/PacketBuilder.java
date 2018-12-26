@@ -127,7 +127,7 @@ public final class PacketBuilder implements ISignalPacketBuilder {
                 PacketGuiWidget pkt = new PacketGuiWidget(windowId, widget, byteBuf.array());
                 PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
             } catch (IOException ex) {
-                if (Game.DEVELOPMENT_ENVIRONMENT)
+                if (Game.DEVELOPMENT_VERSION)
                     throw new RuntimeException(ex);
             }
         }

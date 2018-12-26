@@ -44,7 +44,7 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
         if (columns <= 1 && rows <= 1)
             return new ResourceLocation[] {new ResourceLocation(textureResource.getNamespace(), textureFolder + textureResource.getPath())};
 
-        if (Game.DEVELOPMENT_ENVIRONMENT)
+        if (Game.DEVELOPMENT_VERSION)
             Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
 
         int numIcons = rows * columns;

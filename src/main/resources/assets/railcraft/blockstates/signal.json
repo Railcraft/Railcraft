@@ -11,7 +11,7 @@
         "submodel": {
           "lamp": {"model": "railcraft:signal_single_lamp"},
           "con_down": {"model": "railcraft:signal_single_pillar"}
-      }
+        }
       }
     ],
     "connection_down": {
