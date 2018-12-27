@@ -21,7 +21,7 @@ labels:
 <!--If applicable, add screenshots and video to help explain your problem.-->
 
 **Logs & Environment**
-<!--Post your logs to https://gist.github.com/ or https://pastebin.com/ and link it below. Do not remove any part of the log!-->
+<!--Post your logs to https://gist.github.com/ or https://paste.ubuntu.com/ and link it below. Do not remove any part of the log!-->
 <!--Full logs are found at 'logs' folder in your game directory. Post fml-client-latest.log or fml-server-latest.log -->
  - Full log: 
 <!--Crash reports are found at 'crash-reports' folder in your game directory. Post the one with the most recent time in its name.-->
