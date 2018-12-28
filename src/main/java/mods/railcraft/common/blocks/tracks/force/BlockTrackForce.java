@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.tracks.force;
 
 import mods.railcraft.api.tracks.TrackType;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.single.BlockForceTrackEmitter;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
@@ -43,7 +43,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaTile(TileTrackForce.class)
+@BlockMeta.Tile(TileTrackForce.class)
 public final class BlockTrackForce extends BlockTrackTile<TileTrackForce> implements ColorPlugin.IColorHandlerBlock {
     public static final PropertyEnum<EnumRailDirection> SHAPE = PropertyEnum.create("shape", BlockRailBase.EnumRailDirection.class, EnumRailDirection.NORTH_SOUTH, EnumRailDirection.EAST_WEST);
 

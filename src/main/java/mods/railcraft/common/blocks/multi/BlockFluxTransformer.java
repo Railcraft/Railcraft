@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 import java.util.Map;
 import java.util.Random;
 
-@BlockMetaTile(TileFluxTransformer.class)
+@BlockMeta.Tile(TileFluxTransformer.class)
 public final class BlockFluxTransformer extends BlockMultiBlockCharge<TileFluxTransformer> {
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.5,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED, 500, 500, 1.0));

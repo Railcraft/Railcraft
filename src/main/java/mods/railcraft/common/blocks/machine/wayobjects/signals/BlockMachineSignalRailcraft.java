@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
-import mods.railcraft.common.blocks.BlockMetaVariant;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -26,7 +26,7 @@ import net.minecraft.world.IBlockAccess;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(SignalVariant.class)
+@BlockMeta.Variant(SignalVariant.class)
 public class BlockMachineSignalRailcraft extends BlockMachineSignal<SignalVariant> {
 
     public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-BLOCK_BOUNDS).raiseFloor(0.35).build();

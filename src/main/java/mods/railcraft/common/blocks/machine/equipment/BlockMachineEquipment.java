@@ -12,10 +12,10 @@ package mods.railcraft.common.blocks.machine.equipment;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.TileManager;
 import mods.railcraft.common.blocks.interfaces.ITileCharge;
 import mods.railcraft.common.blocks.machine.BlockMachine;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -45,7 +45,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(EquipmentVariant.class)
+@BlockMeta.Variant(EquipmentVariant.class)
 public class BlockMachineEquipment extends BlockMachine<EquipmentVariant> implements IChargeBlock {
     public BlockMachineEquipment() {
         super(Material.ROCK);

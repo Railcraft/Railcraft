@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -29,7 +29,7 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-@BlockMetaTile(TileTradeStation.class)
+@BlockMeta.Tile(TileTradeStation.class)
 public class BlockTradeStation extends BlockEntityDelegate<TileTradeStation> {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);

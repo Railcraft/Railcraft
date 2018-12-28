@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.machine.worldspike;
 
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.machine.BlockMachine;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -41,7 +41,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(WorldspikeVariant.class)
+@BlockMeta.Variant(WorldspikeVariant.class)
 public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     public static final PropertyBool ENABLED = PropertyBool.create("enabled");
 

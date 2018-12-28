@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -20,7 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
-@BlockMetaTile(TileBoilerFireboxFluid.class)
+@BlockMeta.Tile(TileBoilerFireboxFluid.class)
 public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox<TileBoilerFireboxFluid> {
 
     public BlockBoilerFireboxFluid() {

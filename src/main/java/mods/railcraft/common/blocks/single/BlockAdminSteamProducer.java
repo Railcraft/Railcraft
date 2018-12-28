@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.blocks.BlockEntityDelegate;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
-@BlockMetaTile(TileAdminSteamProducer.class)
+@BlockMeta.Tile(TileAdminSteamProducer.class)
 public class BlockAdminSteamProducer extends BlockEntityDelegate<TileAdminSteamProducer> {
 
     public static final PropertyBool POWERED = PropertyBool.create("powered");

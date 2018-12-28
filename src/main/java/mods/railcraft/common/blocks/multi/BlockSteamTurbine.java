@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -36,7 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Map;
 import java.util.Random;
 
-@BlockMetaTile(TileSteamTurbine.class)
+@BlockMeta.Tile(TileSteamTurbine.class)
 public final class BlockSteamTurbine extends BlockMultiBlockCharge<TileSteamTurbine> {
 
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");

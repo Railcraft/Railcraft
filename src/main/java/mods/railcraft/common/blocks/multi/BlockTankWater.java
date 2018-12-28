@@ -10,13 +10,13 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Tuple;
 
-@BlockMetaTile(TileTankWater.class)
+@BlockMeta.Tile(TileTankWater.class)
 public class BlockTankWater extends BlockMultiBlock<TileTankWater> {
 
     public BlockTankWater() {

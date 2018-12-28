@@ -31,7 +31,7 @@ import java.util.Optional;
 public interface IRailcraftBlockTile<T extends TileRailcraft> extends IRailcraftBlock, ITileEntityProvider {
 
     default Class<? extends T> getTileClass(IBlockState state) {
-        BlockMetaTile annotation = getClass().getAnnotation(BlockMetaTile.class);
+        BlockMeta.Tile annotation = getClass().getAnnotation(BlockMeta.Tile.class);
         Objects.requireNonNull(annotation);
         return Code.cast(annotation.value());
     }

@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
  */
 public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailcraftBlock {
     class VariantData<V extends Enum<V> & IVariantEnum> {
-        private BlockMetaVariant annotation;
+        private BlockMeta.Variant annotation;
         private Class<V> variantClass;
         private V[] variantValues;
         private PropertyEnum<V> variantProperty;
@@ -35,7 +35,7 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
 
     default VariantData<V> getVariantData() {
         VariantData<V> data = new VariantData<>();
-        data.annotation = getClass().getAnnotation(BlockMetaVariant.class);
+        data.annotation = getClass().getAnnotation(BlockMeta.Variant.class);
         //noinspection unchecked
         data.variantClass = (Class<V>) data.annotation.value();
         data.variantValues = data.variantClass.getEnumConstants();

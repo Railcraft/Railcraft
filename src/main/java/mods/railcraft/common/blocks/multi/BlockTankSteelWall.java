@@ -10,11 +10,11 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 
-@BlockMetaTile(TileTankSteelWall.class)
+@BlockMeta.Tile(TileTankSteelWall.class)
 public class BlockTankSteelWall extends BlockTankMetalWall<TileTankSteelWall> {
 
     @Override

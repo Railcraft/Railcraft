@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.common.blocks.BlockMetaVariant;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
 
-@BlockMetaVariant(BrickVariant.class)
+@BlockMeta.Variant(BrickVariant.class)
 public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     private final BrickTheme theme;
 

@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.boxes;
 
-import mods.railcraft.common.blocks.BlockMetaVariant;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -21,7 +21,7 @@ import net.minecraft.init.Items;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(SignalBoxVariant.class)
+@BlockMeta.Variant(SignalBoxVariant.class)
 public class BlockMachineSignalBoxRailcraft extends BlockMachineSignalBox<SignalBoxVariant> {
 
     @Override

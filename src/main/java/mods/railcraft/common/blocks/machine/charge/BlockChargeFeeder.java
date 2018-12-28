@@ -11,8 +11,8 @@
 package mods.railcraft.common.blocks.machine.charge;
 
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.TileManager;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -43,7 +43,7 @@ import java.util.Map;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(FeederVariant.class)
+@BlockMeta.Variant(FeederVariant.class)
 public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");

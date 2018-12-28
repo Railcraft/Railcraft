@@ -14,7 +14,7 @@ import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.core.IPostConnection;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.*;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.UnlistedProperty;
 import mods.railcraft.common.blocks.tracks.BlockTrackTile;
@@ -66,7 +66,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-@BlockMetaTile(TileTrackOutfitted.class)
+@BlockMeta.Tile(TileTrackOutfitted.class)
 public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> implements IPostConnection, IChargeBlock, IBlockTrackOutfitted {
     // TODO: Move to rail network
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.TRACK, 0.01);

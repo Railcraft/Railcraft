@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
-@BlockMetaTile(TileChestVoid.class)
+@BlockMeta.Tile(TileChestVoid.class)
 public class BlockChestVoid extends BlockChestRailcraft<TileChestVoid> {
 
     @SideOnly(Side.CLIENT)

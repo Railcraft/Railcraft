@@ -187,7 +187,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     RailcraftBlocks(String tag, Class<B> blockClass, @Nullable Supplier<B> blockSupplier,
                     @Nullable Function<B, I> itemSupplier, @Nullable Supplier<?> altRecipeObject) {
         this.def = new BlockDef<>(this, tag, blockClass, blockSupplier, itemSupplier, altRecipeObject);
-        BlockMetaVariant annotation = blockClass.getAnnotation(BlockMetaVariant.class);
+        BlockMeta.Variant annotation = blockClass.getAnnotation(BlockMeta.Variant.class);
         this.variantClass = annotation != null ? annotation.value() : null;
         conditions().add(RailcraftConfig::isBlockEnabled, () -> "disabled via config");
     }

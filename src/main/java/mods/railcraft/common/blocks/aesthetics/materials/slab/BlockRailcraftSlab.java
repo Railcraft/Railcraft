@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.materials.slab;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.client.particles.ParticleHelper;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.aesthetics.materials.IMaterialBlock;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.items.RailcraftItems;
@@ -62,7 +62,7 @@ import java.util.stream.Collectors;
 import static net.minecraft.util.EnumFacing.DOWN;
 import static net.minecraft.util.EnumFacing.UP;
 
-@BlockMetaTile(TileSlab.class)
+@BlockMeta.Tile(TileSlab.class)
 public class BlockRailcraftSlab extends BlockContainerRailcraft<TileSlab> implements IMaterialBlock {
 
     public static final IUnlistedProperty<Materials> TOP_MATERIAL = Properties.toUnlisted(PropertyEnum.create("top_material", Materials.class));

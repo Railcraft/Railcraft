@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.logbook;
 
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
@@ -41,7 +41,7 @@ import net.minecraftforge.common.ForgeHooks;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaTile(TileLogbook.class)
+@BlockMeta.Tile(TileLogbook.class)
 public final class BlockLogbook extends BlockContainerRailcraft<TileLogbook> {
     public static final PropertyEnum<EnumFacing.Axis> ROTATION = PropertyEnum.create("rotation", EnumFacing.Axis.class, EnumFacing.Axis.X, EnumFacing.Axis.Z);
 

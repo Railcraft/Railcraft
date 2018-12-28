@@ -11,7 +11,7 @@ package mods.railcraft.common.items.firestone;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -46,7 +46,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaTile(TileRitual.class)
+@BlockMeta.Tile(TileRitual.class)
 public class BlockRitual extends BlockContainerRailcraft<TileRitual> {
     public static final PropertyBool CRACKED = PropertyBool.create("cracked");
     public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().expandHorizontally(-0.3).raiseCeiling(0.0625F * -9.0).shiftY(0.0625F * 12.0).build();

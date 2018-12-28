@@ -10,8 +10,7 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.blocks.BlockContainerRailcraftSubtyped;
-import mods.railcraft.common.blocks.BlockMetaTile;
-import mods.railcraft.common.blocks.BlockMetaVariant;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickVariant;
 import mods.railcraft.common.plugins.forge.*;
@@ -45,8 +44,8 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.util.EnumFacing.NORTH;
 
-@BlockMetaTile(TileDetector.class)
-@BlockMetaVariant(EnumDetector.class)
+@BlockMeta.Tile(TileDetector.class)
+@BlockMeta.Variant(EnumDetector.class)
 public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector, EnumDetector> {
 
     public static final PropertyEnum<EnumFacing> FRONT = PropertyEnum.create("front", EnumFacing.class);

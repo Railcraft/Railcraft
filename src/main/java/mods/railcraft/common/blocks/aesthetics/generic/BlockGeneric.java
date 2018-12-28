@@ -10,9 +10,9 @@
 package mods.railcraft.common.blocks.aesthetics.generic;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -42,7 +42,7 @@ import java.util.Random;
 
 import static mods.railcraft.common.blocks.aesthetics.metals.EnumMetal.*;
 
-@BlockMetaVariant(EnumGeneric.class)
+@BlockMeta.Variant(EnumGeneric.class)
 public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     public BlockGeneric() {

@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -34,7 +34,7 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(EnumOreMagic.class)
+@BlockMeta.Variant(EnumOreMagic.class)
 public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
 
     public BlockOreMagic() {

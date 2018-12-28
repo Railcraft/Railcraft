@@ -13,7 +13,7 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
@@ -36,7 +36,7 @@ import static net.minecraft.util.EnumFacing.Axis.X;
 import static net.minecraft.util.EnumFacing.Axis.Z;
 
 @SuppressWarnings("unused")
-@BlockMetaTile(TileEngravingBench.class)
+@BlockMeta.Tile(TileEngravingBench.class)
 public class BlockEngravingBench extends BlockEntityDelegate<TileEngravingBench> implements IChargeBlock {
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.1);
     public static final PropertyEnum<Axis> AXIS = PropertyEnum.create("axis", Axis.class, X, Z);

@@ -11,10 +11,10 @@
 package mods.railcraft.common.blocks.aesthetics.concrete;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.interfaces.IBlockColored;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
@@ -46,7 +46,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-@BlockMetaVariant(EnumColor.class)
+@BlockMeta.Variant(EnumColor.class)
 public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> implements ColorPlugin.IColorHandlerBlock, IBlockColored {
 
     public BlockReinforcedConcrete() {

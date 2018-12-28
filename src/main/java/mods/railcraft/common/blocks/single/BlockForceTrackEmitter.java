@@ -13,7 +13,7 @@ package mods.railcraft.common.blocks.single;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockContainerRailcraft;
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
-@BlockMetaTile(TileForceTrackEmitter.class)
+@BlockMeta.Tile(TileForceTrackEmitter.class)
 public class BlockForceTrackEmitter extends BlockContainerRailcraft<TileForceTrackEmitter> implements IChargeBlock, ColorPlugin.IColorHandlerBlock {
 
     public static final EnumColor DEFAULT_COLOR = EnumColor.LIGHT_BLUE;

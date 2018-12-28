@@ -10,12 +10,12 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.init.Blocks;
 
-@BlockMetaTile(TileTankIronGauge.class)
+@BlockMeta.Tile(TileTankIronGauge.class)
 public class BlockTankIronGauge extends BlockTankMetalGauge<TileTankIronGauge> {
 
     @Override

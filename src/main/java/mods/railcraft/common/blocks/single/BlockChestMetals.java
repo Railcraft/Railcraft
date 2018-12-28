@@ -10,12 +10,12 @@
 
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-@BlockMetaTile(TileChestMetals.class)
+@BlockMeta.Tile(TileChestMetals.class)
 public class BlockChestMetals extends BlockChestRailcraft<TileChestMetals> {
 
     @Override

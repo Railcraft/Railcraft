@@ -10,8 +10,8 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.ISubtypedBlock;
-import mods.railcraft.common.blocks.BlockMetaVariant;
 import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -42,7 +42,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(EnumColor.class)
+@BlockMeta.Variant(EnumColor.class)
 public abstract class BlockTankMetal<T extends TileTankBase> extends BlockMultiBlock<T> implements ColorPlugin.IColorHandlerBlock, ISubtypedBlock<EnumColor> {
     private VariantData<EnumColor> variantData;
 

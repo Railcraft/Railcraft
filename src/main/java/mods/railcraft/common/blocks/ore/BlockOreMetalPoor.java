@@ -9,14 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
-import mods.railcraft.common.blocks.BlockMetaVariant;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@BlockMetaVariant(EnumOreMetalPoor.class)
+@BlockMeta.Variant(EnumOreMetalPoor.class)
 public class BlockOreMetalPoor extends BlockOreMetalBase<EnumOreMetalPoor> {
     public BlockOreMetalPoor() {
         setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumOreMetalPoor.COPPER));

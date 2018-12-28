@@ -10,14 +10,14 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockMetaTile;
+import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Tuple;
 
-@BlockMetaTile(TileBoilerTankHigh.class)
+@BlockMeta.Tile(TileBoilerTankHigh.class)
 public final class BlockBoilerTankHigh extends BlockBoilerTank<TileBoilerTankHigh> {
 
     @Override
