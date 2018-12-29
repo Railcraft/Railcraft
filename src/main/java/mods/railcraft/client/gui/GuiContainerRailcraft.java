@@ -69,7 +69,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 if (element.hidden)
                     continue;
                 ToolTip tips = element.getToolTip();
-                if (tips == null || tips.isEmpty())
+                if (tips == null)
                     continue;
                 boolean mouseOver = element.isMouseOver(mX, mY);
                 tips.onTick(mouseOver);
