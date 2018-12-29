@@ -15,9 +15,11 @@ import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -27,16 +29,22 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.util.Optional;
 
 /**
  * The basic logic class.
  */
-public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IWorldNameable {
+public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
+        RailcraftOutputStream>, IWorldNameable, IGuiReturnHandler {
     protected final Adapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
 
     Logic(Adapter adapter) {
         this.adapter = adapter;
+    }
+
+    public <L> Optional<L> getLogic(Class<L> logicClass) {
+        return Optional.of(logicClass.cast(this));
     }
 
     @Override
@@ -49,16 +57,15 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
             updateClient();
     }
 
-    @SuppressWarnings("EmptyMethod")
-    void updateClient() {
+    void updateClient() { }
 
+    void updateServer() { }
+
+    protected int clock() {
+        return clock;
     }
 
-    void updateServer() {
-
-    }
-
-    public boolean clock(int interval) {
+    protected boolean clock(int interval) {
         return clock % interval == 0;
     }
 
@@ -108,7 +115,10 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
         return data;
     }
 
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) { }
+
+    public boolean isBlock() {
+        return adapter instanceof Adapter.Tile;
     }
 
     public abstract static class Adapter implements IWorldSupplier, IWorldNameable {
@@ -123,57 +133,93 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
 
         abstract void sendUpdateToClient();
 
+        abstract Object getContainer();
+
+        @Nullable TileRailcraft tile() {
+            return null;
+        }
+
+        abstract boolean isUsableByPlayer(EntityPlayer player);
+
+        private static class Tile extends Adapter {
+            private final TileRailcraft tile;
+
+            public Tile(TileRailcraft tile) {
+                this.tile = tile;
+            }
+
+            @Override
+            Object getContainer() {
+                return tile;
+            }
+
+            @Override
+            public @Nullable World theWorld() {
+                return tile.theWorld();
+            }
+
+            @Override
+            double getX() {
+                return tile.getX() + 0.5;
+            }
+
+            @Override
+            double getY() {
+                return tile.getY() + 0.5;
+            }
+
+            @Override
+            double getZ() {
+                return tile.getZ() + 0.5;
+            }
+
+            @Override
+            BlockPos getPos() {
+                return tile.getPos();
+            }
+
+            @Override
+            public String getName() {
+                return tile.getName();
+            }
+
+            @Override
+            public ITextComponent getDisplayName() {
+                return tile.getDisplayName();
+            }
+
+            @Override
+            public boolean hasCustomName() {
+                return tile.hasCustomName();
+            }
+
+            @Override
+            void sendUpdateToClient() {
+                tile.sendUpdateToClient();
+            }
+
+            @Override
+            @Nullable TileRailcraft tile() {
+                return tile;
+            }
+
+            @Override
+            boolean isUsableByPlayer(EntityPlayer player) {
+                return TileRailcraft.isUsableByPlayerHelper(tile, player);
+            }
+        }
+
         public static Adapter of(TileRailcraft tile) {
-            return new Adapter() {
-                @Override
-                public @Nullable World theWorld() {
-                    return tile.theWorld();
-                }
-
-                @Override
-                double getX() {
-                    return tile.getX() + 0.5;
-                }
-
-                @Override
-                double getY() {
-                    return tile.getY() + 0.5;
-                }
-
-                @Override
-                double getZ() {
-                    return tile.getZ() + 0.5;
-                }
-
-                @Override
-                BlockPos getPos() {
-                    return tile.getPos();
-                }
-
-                @Override
-                public String getName() {
-                    return tile.getName();
-                }
-
-                @Override
-                public ITextComponent getDisplayName() {
-                    return tile.getDisplayName();
-                }
-
-                @Override
-                public boolean hasCustomName() {
-                    return tile.hasCustomName();
-                }
-
-                @Override
-                void sendUpdateToClient() {
-                    tile.sendUpdateToClient();
-                }
-            };
+            return new Tile(tile);
         }
 
         public static Adapter of(EntityMinecart entity) {
             return new Adapter() {
+                @Override
+                Object getContainer() {
+                    return entity;
+                }
+
                 @Override
                 double getX() {
                     return entity.posX;
@@ -217,6 +263,11 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
                 @Override
                 public @Nullable World theWorld() {
                     return entity.world;
+                }
+
+                @Override
+                boolean isUsableByPlayer(EntityPlayer player) {
+                    return !entity.isDead && player.getDistanceSq(entity) <= 64.0D;
                 }
             };
         }

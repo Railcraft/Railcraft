@@ -16,6 +16,7 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mods.railcraft.api.crafting.ICokeOvenCrafter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
@@ -47,7 +48,10 @@ public final class CokeOvenWrapper implements IRecipeWrapper {
 
     @Override
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        int cookTime = recipe.getTickTime();
-        minecraft.fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.jei.burntime", cookTime), -2, 41, Color.GRAY.getRGB());
+        ItemStack input = helpers.getStackHelper().toItemStackList(recipe.getInput()).get(0);
+        if (InvTools.nonEmpty(input)) {
+            int cookTime = recipe.getTickTime(input);
+            minecraft.fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.jei.burntime", cookTime), -2, 41, Color.GRAY.getRGB());
+        }
     }
 }

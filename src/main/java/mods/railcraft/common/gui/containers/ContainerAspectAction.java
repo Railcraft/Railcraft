@@ -69,15 +69,12 @@ public class ContainerAspectAction extends RailcraftContainer {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void updateString(byte id, String data) {
-        switch (id) {
-            case 0:
-                try {
-                    ownerName = data;
-                } catch (IllegalArgumentException ignored) {
-                }
-                break;
+        if (id == 0) {
+            try {
+                ownerName = data;
+            } catch (IllegalArgumentException ignored) {
+            }
         }
     }
 

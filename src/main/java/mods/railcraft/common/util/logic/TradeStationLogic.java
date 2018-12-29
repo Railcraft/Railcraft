@@ -18,7 +18,6 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.IMerchant;
@@ -36,6 +35,7 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +45,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 /**
  *
  */
-public abstract class TradeStationLogic extends InventoryLogic implements IGuiReturnHandler {
+public abstract class TradeStationLogic extends InventoryLogic {
     public enum GuiPacketType {
         NEXT_TRADE, SET_PROFESSION
     }
@@ -57,8 +57,8 @@ public abstract class TradeStationLogic extends InventoryLogic implements IGuiRe
     private final InventoryMapper invInput = InventoryMapper.make(inventory, 0, 10);
     private final InventoryMapper invOutput = InventoryMapper.make(inventory, 10, 6).ignoreItemChecks();
 
-    protected TradeStationLogic(Adapter adapter, IInventory inventory) {
-        super(adapter, inventory);
+    protected TradeStationLogic(Adapter adapter) {
+        super(adapter, 16);
     }
 
     public IInventory getRecipeSlots() {
@@ -210,5 +210,17 @@ public abstract class TradeStationLogic extends InventoryLogic implements IGuiRe
         if (p == null)
             p = VillagerRegistry.FARMER;
         return p;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+        return slot < 10;
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        if (slot < 10) return ItemStack.EMPTY;
+        return super.extractItem(slot, amount, simulate);
     }
 }

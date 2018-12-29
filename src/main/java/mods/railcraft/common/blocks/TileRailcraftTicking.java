@@ -42,4 +42,8 @@ public abstract class TileRailcraftTicking extends TileRailcraft implements ITic
         sendClientUpdate = true;
     }
 
+    protected boolean clock(int interval) {
+        return clock % interval == 0;
+    }
+
 }

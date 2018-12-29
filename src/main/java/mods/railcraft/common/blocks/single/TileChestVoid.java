@@ -17,23 +17,14 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChestVoid extends TileRailcraftChest<VoidChestLogic> {
+public class TileChestVoid extends TileChestRailcraft {
 
-    private final VoidChestLogic logic = new VoidChestLogic(Logic.Adapter.of(this), this);
-
-    @Override
-    public VoidChestLogic getLogic() {
-        return logic;
+    {
+        setLogic(new VoidChestLogic(Logic.Adapter.of(this)));
     }
 
     @Override
     public @Nullable EnumGui getGui() {
         return null;
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        logic.update();
     }
 }

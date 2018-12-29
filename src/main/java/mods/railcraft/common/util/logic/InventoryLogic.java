@@ -10,25 +10,35 @@
 
 package mods.railcraft.common.util.logic;
 
-import mods.railcraft.common.util.inventory.IInventoryComposite;
-import mods.railcraft.common.util.inventory.InventoryAdaptor;
-import mods.railcraft.common.util.inventory.InventoryComposite;
+import mods.railcraft.common.util.inventory.*;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.Iterator;
 
 /**
  *
  */
-public abstract class InventoryLogic extends Logic implements IInventoryComposite {
+public abstract class InventoryLogic extends Logic implements IItemHandlerImplementor {
 
-    protected final IInventory inventory;
+    protected final InventoryAdvanced inventory;
     protected final IInventoryComposite composite;
 
-    InventoryLogic(Adapter adapter, IInventory inventory) {
+    protected InventoryLogic(Adapter adapter, int sizeInv) {
         super(adapter);
-        this.inventory = inventory;
+        this.inventory = new InventoryAdvanced(sizeInv).callback(adapter.getContainer());
         this.composite = InventoryComposite.of(inventory);
+    }
+
+    protected void dropItem(ItemStack stack) {
+        InvTools.dropItem(stack, theWorldAsserted(), getX(), getY(), getZ());
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return adapter.isUsableByPlayer(player);
     }
 
     @Override
@@ -36,7 +46,20 @@ public abstract class InventoryLogic extends Logic implements IInventoryComposit
         return composite.iterator();
     }
 
+    @Override
     public IInventory getInventory() {
         return inventory;
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        inventory.writeToNBT("inv", data);
+        return super.writeToNBT(data);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        inventory.readFromNBT("inv", data);
     }
 }

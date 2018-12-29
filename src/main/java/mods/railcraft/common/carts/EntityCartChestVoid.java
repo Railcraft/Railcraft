@@ -12,20 +12,22 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.logic.Logic;
-import mods.railcraft.common.util.logic.InventoryLogic;
 import mods.railcraft.common.util.logic.VoidChestLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 
-public class EntityCartChestVoid extends EntityCartChestRailcraft {
+public class EntityCartChestVoid extends CartBaseLogicChest {
 
     public EntityCartChestVoid(World world) {
         super(world);
     }
 
-    @Override
-    protected InventoryLogic createLogic() {
-        return new VoidChestLogic(Logic.Adapter.of(this), this);
+    public EntityCartChestVoid(World world, double x, double y, double z) {
+        super(world, x, y, z);
+    }
+
+    {
+        setLogic(new VoidChestLogic(Logic.Adapter.of(this)));
     }
 
     @Override

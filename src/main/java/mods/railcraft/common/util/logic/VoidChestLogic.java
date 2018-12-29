@@ -10,16 +10,14 @@
 
 package mods.railcraft.common.util.logic;
 
-import net.minecraft.inventory.IInventory;
-
 /**
  * The logic behind the void chest.
  */
 public class VoidChestLogic extends InventoryLogic {
     private static final int TICK_PER_VOID = 8;
 
-    public VoidChestLogic(Adapter adapter, IInventory inventory) {
-        super(adapter, inventory);
+    public VoidChestLogic(Adapter adapter) {
+        super(adapter, 27);
     }
 
     @Override

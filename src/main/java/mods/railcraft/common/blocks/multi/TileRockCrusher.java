@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.multi;
 
 import buildcraft.api.statements.IActionExternal;
-import com.google.common.collect.Streams;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.charge.Charge;
@@ -24,7 +23,9 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
+import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
@@ -131,6 +132,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     private final Random random = new Random();
     private boolean isWorking;
     private boolean paused;
+    private int currentSlot;
 
     public TileRockCrusher() {
         super(18, patterns);
@@ -236,13 +238,25 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 if (paused)
                     return;
 
-                recipe = invInput.streamStacks()
-                        .flatMap(stack -> Streams.stream(Crafters.rockCrusher().getRecipe(stack)))
-                        .findFirst();
+                if (!isRecipeValid()) {
+                    recipe = Optional.empty();
+                    for (IInvSlot slot : InventoryIterator.get(invInput)) {
+                        if (slot.hasStack()) {
+                            ItemStack stack = slot.getStack();
+                            Optional<IRockCrusherCrafter.IRecipe> newRecipe = Crafters.rockCrusher().getRecipe(stack);
+                            if (newRecipe.isPresent()) {
+                                recipe = newRecipe;
+                                currentSlot = slot.getIndex();
+                                break;
+                            }
+                        }
+                    }
+                }
 
-                if (recipe.isPresent()) {
+                if (isRecipeValid()) {
+                    //noinspection OptionalGetWithoutIsPresent
                     IRockCrusherCrafter.IRecipe r = recipe.get();
-                    if (processTime >= r.getTickTime()) {
+                    if (processTime >= r.getTickTime(invInput.getStackInSlot(currentSlot))) {
                         isWorking = false;
                         InventoryCopy tempInv = new InventoryCopy(invOutput);
                         List<ItemStack> outputs = r.pollOutputs(random);
@@ -251,10 +265,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                                 .allMatch(InvTools::isEmpty);
 
                         if (hasRoom) {
-                            for (ItemStack output : outputs) {
-                                invOutput.addStack(output);
-                            }
-
+                            outputs.forEach(invOutput::addStack);
                             invInput.removeOneItem(r.getInput());
 
                             SoundHelper.playSound(world, null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH,
@@ -274,6 +285,11 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
                 }
             }
         }
+    }
+
+    private boolean isRecipeValid() {
+        return recipe.map(r -> r.getInput().apply(invInput.getStackInSlot(currentSlot)))
+                .orElse(false);
     }
 
     @Override
@@ -309,7 +325,8 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     }
 
     public int getProgressScaled(int i) {
-        return recipe.map(r -> (getProcessTime() * i) / r.getTickTime()).orElse(0);
+        // TODO this needs to be synced
+        return recipe.map(r -> (getProcessTime() * i) / r.getTickTime(getStackInSlot(currentSlot))).orElse(0);
     }
 
     @Override

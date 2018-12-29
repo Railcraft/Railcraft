@@ -87,11 +87,16 @@ public abstract class InventoryAdaptor implements IInventoryManipulator {
         return of(obj, null);
     }
 
-    // TODO: If we want to prefer IItemHandler, this is the place it needs to be done.
     static Optional<InventoryAdaptor> of(@Nullable Object obj, @Nullable EnumFacing side) {
         InventoryAdaptor inv = null;
         if (obj instanceof InventoryAdaptor) {
             inv = (InventoryAdaptor) obj;
+        } else if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
+            inv = of(
+                    Objects.requireNonNull(
+                            ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)
+                    )
+            );
         } else if (obj instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest) obj;
             inv = of(new ChestWrapper(chest));
@@ -99,12 +104,6 @@ public abstract class InventoryAdaptor implements IInventoryManipulator {
             inv = of(new SidedInventoryDecorator((ISidedInventory) obj, side));
         } else if (obj instanceof IInventory) {
             inv = of((IInventory) obj);
-        } else if (obj instanceof ICapabilityProvider && ((ICapabilityProvider) obj).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
-            inv = of(
-                    Objects.requireNonNull(
-                            ((ICapabilityProvider) obj).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)
-                    )
-            );
         }
         return Optional.ofNullable(inv);
     }

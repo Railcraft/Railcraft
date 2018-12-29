@@ -9,21 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IGenRule;
 import mods.railcraft.api.crafting.IOutputEntry;
 import mods.railcraft.api.crafting.IRockCrusherCrafter;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import org.apache.logging.log4j.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.*;
@@ -52,33 +48,16 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
         return builder;
     }
 
-    private class RecipeBuilder implements IRecipeBuilder {
-        private final Ingredient input;
-        private ResourceLocation name;
-        private List<IOutputEntry> outputs = new ArrayList<>();
-        private int processTime = PROCESS_TIME;
-        private boolean registered;
+    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
+        private final List<IOutputEntry> outputs = new ArrayList<>();
 
         public RecipeBuilder(Ingredient input) {
-            this.input = input;
-            CraftingPlugin.addBuilder(this);
-        }
-
-        @Override
-        public IRecipeBuilder name(@Nullable ResourceLocation name) {
-            this.name = Objects.requireNonNull(name);
-            return this;
-        }
-
-        @Override
-        public IRecipeBuilder time(int ticks) {
-            this.processTime = ticks;
-            return this;
+            super("Rock Crusher", input, stack -> PROCESS_TIME);
         }
 
         @Override
         public IRecipeBuilder addOutput(IOutputEntry entry) {
-            this.outputs.add(entry);
+            outputs.add(entry);
             return this;
         }
 
@@ -95,49 +74,28 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
         }
 
         @Override
-        public void register() {
-            registered = true;
-            try {
-                Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
-                        "Input was null or empty.");
-                Preconditions.checkArgument(name != null, "Recipe name not set.");
-                Preconditions.checkArgument(processTime > 0, "Process time was zero.");
-                recipes.add(new IRecipe() {
-                    @Override
-                    public Ingredient getInput() {
-                        return input;
-                    }
+        protected void registerRecipe() {
+            recipes.add(new IRecipe() {
+                @Override
+                public Ingredient getInput() {
+                    return input;
+                }
 
-                    @Override
-                    public List<IOutputEntry> getOutputs() {
-                        return outputs;
-                    }
+                @Override
+                public List<IOutputEntry> getOutputs() {
+                    return outputs;
+                }
 
-                    @Override
-                    public ResourceLocation getName() {
-                        return name;
-                    }
+                @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
 
-                    @Override
-                    public int getTickTime() {
-                        return processTime;
-                    }
-                });
-            } catch (Throwable ex) {
-                Game.log(Level.WARN,
-                        "Tried, but failed to register {0} as a Rock Crusher recipe. Reason: {1}",
-                        name, ex.getMessage());
-            }
-        }
-
-        @Override
-        public ResourceLocation getName() {
-            return name;
-        }
-
-        @Override
-        public boolean notRegistered() {
-            return !registered;
+                @Override
+                public int getTickTime(ItemStack input) {
+                    return timeFunction.apply(input);
+                }
+            });
         }
     }
 

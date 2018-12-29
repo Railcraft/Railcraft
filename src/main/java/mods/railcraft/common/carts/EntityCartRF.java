@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public final class EntityCartRF extends CartBase implements IWeightedCart {
@@ -118,7 +119,7 @@ public final class EntityCartRF extends CartBase implements IWeightedCart {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
             GuiHandler.openGui(EnumGui.CART_RF, player, world, this);
         return true;

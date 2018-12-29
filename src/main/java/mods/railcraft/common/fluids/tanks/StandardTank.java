@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
-import mods.railcraft.common.blocks.interfaces.ITileTank;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
@@ -43,9 +43,14 @@ public class StandardTank extends FluidTank {
         super(capacity);
     }
 
-    public StandardTank(int capacity, @Nullable ITileTank tile) {
+//    public StandardTank(int capacity, @Nullable ITileTank tile) {
+//        this(capacity);
+//        this.tile = tile != null ? tile.tile() : null;
+//    }
+
+    public StandardTank(int capacity, @Nullable TileRailcraft tile) {
         this(capacity);
-        this.tile = tile != null ? tile.tile() : null;
+        this.tile = tile;
     }
 
     public StandardTank setUpdateCallback(@Nullable Consumer<StandardTank> callback) {

@@ -67,6 +67,13 @@ public class StructureLogic extends Logic {
         components.add(tile);
     }
 
+    @Override
+    public <L> Optional<L> getLogic(Class<L> logicClass) {
+        if (logicClass.isInstance(this))
+            return Optional.of(logicClass.cast(this));
+        return getMasterLogic().map(m -> m.logic).map(logicClass::cast);
+    }
+
     public List<TileRailcraft> getComponents() {
         return getMasterLogic().map(m -> m.componentsView).orElseGet(Collections::emptyList);
     }
@@ -265,14 +272,6 @@ public class StructureLogic extends Logic {
         }
     }
 
-    private Function<TileEntity, Optional<StructureLogic>> tileToLogic() {
-        return t -> Optional.of(t)
-                .flatMap(Optionals.toType(ILogicContainer.class))
-                .map(ILogicContainer::getLogic)
-                .flatMap(Optionals.toType(StructureLogic.class))
-                .filter(this::canMatch);
-    }
-
     private void markChange(int depth) {
         depth--;
         if (depth < 0)
@@ -288,6 +287,13 @@ public class StructureLogic extends Logic {
 
     protected boolean canMatch(StructureLogic logic) {
         return logic.structureKey.equals(structureKey);
+    }
+
+    private Function<TileEntity, Optional<StructureLogic>> tileToLogic() {
+        return t -> Optional.of(t)
+                .flatMap(Optionals.toType(ILogicContainer.class))
+                .flatMap(c -> c.getLogic(StructureLogic.class))
+                .filter(this::canMatch);
     }
 
     @Override
@@ -362,7 +368,7 @@ public class StructureLogic extends Logic {
     public final Optional<StructureLogic> getMasterLogic() {
         if (masterPos != null) {
             return WorldPlugin.getTileEntity(theWorldAsserted(), masterPos, ILogicContainer.class, true)
-                    .map(t -> ((StructureLogic) t.getLogic()))
+                    .flatMap(t -> t.getLogic(StructureLogic.class))
                     .filter(StructureLogic::isValidMaster);
         }
         return Optional.empty();

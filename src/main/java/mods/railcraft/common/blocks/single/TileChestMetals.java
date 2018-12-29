@@ -17,19 +17,10 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileChestMetals extends TileRailcraftChest<MetalsChestLogic> {
+public class TileChestMetals extends TileChestRailcraft {
 
-    private final MetalsChestLogic logic = new MetalsChestLogic(Logic.Adapter.of(this), this);
-
-    @Override
-    public void update() {
-        super.update();
-        logic.update();
-    }
-
-    @Override
-    public MetalsChestLogic getLogic() {
-        return logic;
+    {
+        setLogic(new MetalsChestLogic(Logic.Adapter.of(this)));
     }
 
     @Override

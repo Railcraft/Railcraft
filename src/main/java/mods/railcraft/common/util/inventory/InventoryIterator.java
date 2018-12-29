@@ -14,6 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -30,7 +31,14 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
     }
 
     public static InventoryIterator<IInvSlot> get(IItemHandler inv) {
-        return new ItemHandlerInventoryIterator(inv);
+        return new ItemHandlerInventoryIterator.Standard(inv);
+    }
+
+    /**
+     * Only use this on inventories we control.
+     */
+    public static InventoryIterator<IExtInvSlot> get(IItemHandlerModifiable inv) {
+        return new ItemHandlerInventoryIterator.Modifiable(inv);
     }
 
     public static InventoryIterator<? extends IInvSlot> get(InventoryAdaptor inv) {
@@ -40,7 +48,7 @@ public abstract class InventoryIterator<T extends IInvSlot> implements Iterable<
         if (inv.getBackingObject() instanceof IInventory)
             return new StandardInventoryIterator((IInventory) inv.getBackingObject());
         if (inv.getBackingObject() instanceof IItemHandler)
-            return new ItemHandlerInventoryIterator((IItemHandler) inv.getBackingObject());
+            return new ItemHandlerInventoryIterator.Standard((IItemHandler) inv.getBackingObject());
         throw new IllegalArgumentException("Invalid Inventory Object");
     }
 

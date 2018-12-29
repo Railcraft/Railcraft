@@ -22,6 +22,7 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
 
     private final TileBlastFurnace furnace;
     private int lastCookTime;
+    private int lastCookTimeTotal;
     private int lastBurnTime;
     private int lastItemBurnTime;
 
@@ -48,8 +49,9 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
     public void addListener(IContainerListener player) {
         super.addListener(player);
         player.sendWindowProperty(this, 0, furnace.getCookTime());
-        player.sendWindowProperty(this, 1, furnace.burnTime);
-        player.sendWindowProperty(this, 2, furnace.currentItemBurnTime);
+        player.sendWindowProperty(this, 1, furnace.getTotalCookTime());
+        player.sendWindowProperty(this, 2, furnace.burnTime);
+        player.sendWindowProperty(this, 3, furnace.currentItemBurnTime);
     }
 
     /**
@@ -62,15 +64,18 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
         for (IContainerListener listener : listeners) {
             if (lastCookTime != furnace.getCookTime())
                 listener.sendWindowProperty(this, 0, furnace.getCookTime());
+            if (lastCookTimeTotal != furnace.getTotalCookTime())
+                listener.sendWindowProperty(this, 1, furnace.getTotalCookTime());
 
             if (lastBurnTime != furnace.burnTime)
-                listener.sendWindowProperty(this, 1, furnace.burnTime);
+                listener.sendWindowProperty(this, 2, furnace.burnTime);
 
             if (lastItemBurnTime != furnace.currentItemBurnTime)
-                listener.sendWindowProperty(this, 2, furnace.currentItemBurnTime);
+                listener.sendWindowProperty(this, 3, furnace.currentItemBurnTime);
         }
 
         lastCookTime = furnace.getCookTime();
+        lastCookTimeTotal = furnace.getTotalCookTime();
         lastBurnTime = furnace.burnTime;
         lastItemBurnTime = furnace.currentItemBurnTime;
     }
@@ -82,9 +87,12 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
             furnace.setCookTime(data);
 
         if (id == 1)
-            furnace.burnTime = data;
+            furnace.cookTimeTotal = data;
 
         if (id == 2)
+            furnace.burnTime = data;
+
+        if (id == 3)
             furnace.currentItemBurnTime = data;
     }
 

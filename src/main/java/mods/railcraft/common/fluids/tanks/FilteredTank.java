@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids.tanks;
 
-import mods.railcraft.common.blocks.interfaces.ITileTank;
+import mods.railcraft.common.blocks.TileRailcraft;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +25,7 @@ public class FilteredTank extends StandardTank {
         this(capacity, null);
     }
 
-    public FilteredTank(int capacity, @Nullable ITileTank tile) {
+    public FilteredTank(int capacity, @Nullable TileRailcraft tile) {
         super(capacity, tile);
     }
 

@@ -123,6 +123,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
      * keep the furnace burning for
      */
     public int currentItemBurnTime;
+    public int cookTimeTotal = IBlastFurnaceCrafter.SMELT_TIME;
     public boolean clientBurning;
     private int finishedAt;
     private ItemStack lastInput = ItemStack.EMPTY;
@@ -171,11 +172,7 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
 
     @Override
     public int getTotalCookTime() {
-        ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (InvTools.isEmpty(input))
-            return 1;
-        return Crafters.blastFurnace().getRecipe(input)
-                .map(IBlastFurnaceCrafter.IRecipe::getTickTime).orElse(1);
+        return cookTimeTotal;
     }
 
     public int getBurnProgressScaled(int i) {
@@ -272,11 +269,12 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
 
         setCooking(true);
         cookTime++;
-        if (cookTime < currentRecipe.getTickTime()) {
+        cookTimeTotal = currentRecipe.getTickTime(input);
+        if (cookTime < cookTimeTotal) {
             return;
         }
 
-        cookTime = currentRecipe.getTickTime();
+        cookTime = cookTimeTotal;
 
         ItemStack nextOutput = currentRecipe.getOutput();
 

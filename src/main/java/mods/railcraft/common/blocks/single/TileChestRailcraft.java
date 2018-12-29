@@ -9,11 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.blocks.TileSmartItemTicking;
+import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.interfaces.ITileInventory;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.logic.ILogicContainer;
-import mods.railcraft.common.util.logic.InventoryLogic;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -21,6 +20,7 @@ import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -33,15 +33,17 @@ import static net.minecraft.util.EnumFacing.DOWN;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 //TODO: investigate chest locking
-public abstract class TileRailcraftChest<L extends InventoryLogic> extends TileSmartItemTicking implements ITileRotate, ILogicContainer<L> {
+public abstract class TileChestRailcraft extends TileLogic implements ITileRotate, ITileInventory {
 
     private static final int TICK_PER_SYNC = 64;
     public float lidAngle;
     public float prevLidAngle;
     public int numUsingPlayers;
 
-    protected TileRailcraftChest() {
-        super(27);
+    @Override
+    public IInventory getInventory() {
+        //noinspection OptionalGetWithoutIsPresent
+        return getLogic(IInventory.class).get();
     }
 
     @Override
@@ -72,7 +74,7 @@ public abstract class TileRailcraftChest<L extends InventoryLogic> extends TileS
         else if (isCatOnChest())
             return false;
         if (Game.isHost(world))
-            player.displayGUIChest(this);
+            getLogic(IInventory.class).ifPresent(player::displayGUIChest);
         return true;
     }
 

@@ -100,7 +100,7 @@
       <option name="ignoreEmptySuperMethods" value="false" />
       <option name="onlyReportWhenAnnotated" value="true" />
     </inspection_tool>
-    <inspection_tool class="SameParameterValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="SameParameterValue" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="SameReturnValue" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="SimplifiableConditionalExpression" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SimplifiableEqualsExpression" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -119,7 +119,7 @@
       <option name="SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES" value="true" />
       <option name="SUGGEST_PRIVATE_FOR_INNERS" value="false" />
     </inspection_tool>
-    <inspection_tool class="unused" enabled="true" level="UNUSED ENTRY" enabled_by_default="true">
+    <inspection_tool class="unused" enabled="true" level="UNUSED ENTRY" enabled_by_default="true" ignoreAccessors="true">
       <option name="LOCAL_VARIABLE" value="true" />
       <option name="FIELD" value="true" />
       <option name="METHOD" value="true" />

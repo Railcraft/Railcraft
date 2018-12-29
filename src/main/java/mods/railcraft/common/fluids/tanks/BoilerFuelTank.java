@@ -10,7 +10,7 @@
 package mods.railcraft.common.fluids.tanks;
 
 import mods.railcraft.api.fuel.FluidFuelManager;
-import mods.railcraft.common.blocks.interfaces.ITileTank;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.fluids.Fluids;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class BoilerFuelTank extends StandardTank {
 
-    public BoilerFuelTank(int capacity, ITileTank tile) {
+    public BoilerFuelTank(int capacity, TileRailcraft tile) {
         super(capacity, tile);
     }
 
