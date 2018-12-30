@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.plugins.buildcraft.actions.Actions;

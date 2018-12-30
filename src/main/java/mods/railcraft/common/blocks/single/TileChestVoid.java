@@ -10,8 +10,8 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.logic.Logic;
-import mods.railcraft.common.util.logic.VoidChestLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.VoidChestLogic;
 import org.jetbrains.annotations.Nullable;
 
 /**

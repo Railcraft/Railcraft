@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;

@@ -12,7 +12,7 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCokeOven;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.logic.CokeOvenLogic;
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 

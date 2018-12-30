@@ -8,10 +8,21 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-@MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
-import mcp.MethodsReturnNonnullByDefault;
+/**
+ * The logic behind the void chest.
+ */
+public class VoidChestLogic extends InventoryLogic {
+    private static final int TICK_PER_VOID = 8;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+    public VoidChestLogic(Adapter adapter) {
+        super(adapter, 27);
+    }
+
+    @Override
+    public void updateServer() {
+        if (clock(TICK_PER_VOID))
+            removeOneItem();
+    }
+}

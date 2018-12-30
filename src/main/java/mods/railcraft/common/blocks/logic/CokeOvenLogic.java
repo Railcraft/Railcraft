@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.ICokeOvenCrafter;

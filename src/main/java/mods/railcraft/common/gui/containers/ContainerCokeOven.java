@@ -14,7 +14,7 @@ import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.util.logic.CokeOvenLogic;
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;

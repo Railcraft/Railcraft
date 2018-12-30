@@ -15,8 +15,8 @@ import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.util.collections.RevolvingList;
-import mods.railcraft.common.util.logic.TradeStationLogic;
-import mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
@@ -32,8 +32,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-import static mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType.NEXT_TRADE;
-import static mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType.SET_PROFESSION;
+import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.NEXT_TRADE;
+import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.SET_PROFESSION;
 
 public class GuiTradeStation extends GuiContainerRailcraft {
 

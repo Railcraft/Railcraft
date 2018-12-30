@@ -11,8 +11,8 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.util.logic.Logic;
-import mods.railcraft.common.util.logic.VoidChestLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.VoidChestLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 

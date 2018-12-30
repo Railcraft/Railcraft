@@ -16,8 +16,8 @@ import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAISearchForBlock;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchBlock;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.logic.Logic;
-import mods.railcraft.common.util.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import net.minecraft.entity.passive.EntityVillager;
 import org.jetbrains.annotations.Nullable;
 

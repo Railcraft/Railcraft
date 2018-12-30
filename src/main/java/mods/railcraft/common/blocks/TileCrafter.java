@@ -12,8 +12,8 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
-import mods.railcraft.common.util.logic.CrafterLogic;
-import mods.railcraft.common.util.logic.StructureLogic;
+import mods.railcraft.common.blocks.logic.CrafterLogic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
