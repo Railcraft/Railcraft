@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.client.render.tesr.TESRChest;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.SoundType;
@@ -30,7 +29,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -55,7 +53,6 @@ public abstract class BlockChestRailcraft<T extends TileChestRailcraft> extends 
     @Override
     public void initializeClient() {
         super.initializeClient();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new TESRChest(this));
         //noinspection ConstantConditions
         Item.getItemFromBlock(this).setTileEntityItemStackRenderer(new TileEntityItemStackRenderer() {
             private final TileChestRailcraft template = createTileEntity(null, getDefaultState());
