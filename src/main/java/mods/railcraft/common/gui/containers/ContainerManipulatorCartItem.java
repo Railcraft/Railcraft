@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
-import mods.railcraft.common.gui.slots.SlotFilter;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerManipulatorCartItem extends ContainerManipulatorCart<TileItemManipulator> {
@@ -23,7 +23,8 @@ public class ContainerManipulatorCartItem extends ContainerManipulatorCart<TileI
     protected void addSlots(TileItemManipulator tile) {
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                addSlot(new SlotFilter(tile.getItemFilters(), k + i * 3, 8 + k * 18, 26 + i * 18));
+                addSlot(new SlotRailcraft(tile.getItemFilters(), k + i * 3, 8 + k * 18, 26 + i * 18)
+                        .setPhantom());
             }
         }
 

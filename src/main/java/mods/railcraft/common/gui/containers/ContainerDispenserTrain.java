@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,16 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.manipulator.TileDispenserTrain;
-import mods.railcraft.common.gui.slots.SlotMinecart;
-import mods.railcraft.common.gui.slots.SlotMinecartFilter;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.gui.slots.SlotDispensableCart;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 public class ContainerDispenserTrain extends RailcraftContainer {
 
@@ -26,12 +22,13 @@ public class ContainerDispenserTrain extends RailcraftContainer {
         super(tile);
 
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotDispenserTrain(tile.getPattern(), i, 8 + i * 18, 31));
+            addSlot(new SlotDispensableCart(tile.getPattern(), i, 8 + i * 18, 31).setPhantom().setStackLimit(1));
         }
 
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 9; k++) {
-                addSlot(new SlotMinecart(tile, k + i * 9, 8 + k * 18, 67 + i * 18));
+                addSlot(new SlotStackFilter(StandardStackFilters.MINECART,
+                        tile, k + i * 9, 8 + k * 18, 67 + i * 18));
             }
         }
 
@@ -44,23 +41,5 @@ public class ContainerDispenserTrain extends RailcraftContainer {
         for (int j = 0; j < 9; j++) {
             addSlot(new Slot(playerInv, j, 8 + j * 18, 169));
         }
-    }
-
-    private class SlotDispenserTrain extends SlotMinecartFilter {
-
-        public SlotDispenserTrain(IInventory iinventory, int slotIndex, int posX, int posY) {
-            super(iinventory, slotIndex, posX, posY);
-            setStackLimit(1);
-        }
-
-        @Override
-        public boolean isItemValid(@Nullable ItemStack stack) {
-            if (InvTools.isEmpty(stack))
-                return false;
-            if (stack.getItem() instanceof IMinecartItem)
-                return ((IMinecartItem) stack.getItem()).canBePlacedByNonPlayer(stack);
-            return super.isItemValid(stack);
-        }
-
     }
 }

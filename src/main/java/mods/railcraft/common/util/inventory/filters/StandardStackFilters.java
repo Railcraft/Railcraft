@@ -17,9 +17,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.init.Items;
 import net.minecraft.item.*;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import java.util.function.Predicate;
@@ -62,18 +59,24 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
         }
 
     },
-    EMPTY_BUCKET {
+    //    EMPTY_BUCKET {
+//        @Override
+//        protected boolean testType(ItemStack stack) {
+//            if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
+//                return true;
+//            if (InvTools.isItem(stack, Items.BUCKET))
+//                return true;
+//            UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
+//            FluidStack fluidStack;
+//            return uBucket != null && StackFilters.of(UniversalBucket.class).test(stack) && (fluidStack = uBucket.getFluid(stack)) != null && fluidStack.amount <= 0;
+//        }
+//
+//    },
+    FLUID_CONTAINER {
         @Override
         protected boolean testType(ItemStack stack) {
-            if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
-                return true;
-            if (InvTools.isItem(stack, Items.BUCKET))
-                return true;
-            UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
-            FluidStack fluidStack;
-            return uBucket != null && StackFilters.of(UniversalBucket.class).test(stack) && (fluidStack = uBucket.getFluid(stack)) != null && fluidStack.amount <= 0;
+            return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
         }
-
     },
     FEED {
         @Override

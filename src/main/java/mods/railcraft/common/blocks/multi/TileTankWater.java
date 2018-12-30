@@ -18,14 +18,11 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.slots.SlotWaterOrEmpty;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -37,6 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -123,8 +121,8 @@ public class TileTankWater extends TileTank {
     }
 
     @Override
-    public Slot getInputSlot(IInventory inv, int id, int x, int y) {
-        return new SlotWaterOrEmpty(inv, id, x, y);
+    public Predicate<ItemStack> getInputFilter() {
+        return stack -> Fluids.WATER.isContained(stack) || FluidItemHelper.isEmptyContainer(stack);
     }
 
     @Override

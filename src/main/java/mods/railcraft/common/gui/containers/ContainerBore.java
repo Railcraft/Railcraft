@@ -1,18 +1,21 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.gui.slots.SlotBallast;
-import mods.railcraft.common.gui.slots.SlotBore;
 import mods.railcraft.common.gui.slots.SlotFuel;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.gui.slots.SlotTrack;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
+import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
@@ -29,14 +32,14 @@ public class ContainerBore extends RailcraftContainer {
         super(bore);
         this.bore = bore;
 
-        addSlot(new SlotBore(bore, 0, 17, 36));
+        addSlot(new SlotStackFilter(StackFilters.of(IBoreHead.class), bore, 0, 17, 36).setStackLimit(1));
 
         for (int i = 0; i < 6; i++) {
             addSlot(new SlotFuel(bore, i + 1, 62 + i * 18, 36));
         }
 
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotBallast(bore, i + 7, 8 + i * 18, 72));
+            addSlot(new SlotStackFilter(StandardStackFilters.BALLAST, bore, i + 7, 8 + i * 18, 72));
         }
 
         for (int i = 0; i < 9; i++) {
@@ -91,45 +94,4 @@ public class ContainerBore extends RailcraftContainer {
                 break;
         }
     }
-
-//    @Override
-//    public ItemStack transferStackInSlot(EntityPlayer player, int i) {
-//        ItemStack stackCopy = null;
-//        Slot slot = (Slot) inventorySlots.get(i);
-//        if (slot != null && slot.getHasStack()) {
-//            ItemStack stack = slot.getStack();
-//            stackCopy = stack.copy();
-//            if (i < 25) {
-//                if (!mergeItemStack(stack, 25, inventorySlots.size(), true)) {
-//                    return null;
-//                }
-//            } else {
-//                if (SlotBore.canPlaceItem(stack)) {
-//                    if (!mergeItemStack(stack, 0, 1, false)) {
-//                        return null;
-//                    }
-//                } else if (fuel.isItemValid(stack)) {
-//                    if (!mergeItemStack(stack, 1, 7, false)) {
-//                        return null;
-//                    }
-//                } else if (ballast.isItemValid(stack)) {
-//                    if (!mergeItemStack(stack, 7, 16, false)) {
-//                        return null;
-//                    }
-//                } else if (track.isItemValid(stack)) {
-//                    if (!mergeItemStack(stack, 16, 25, false)) {
-//                        return null;
-//                    }
-//                } else {
-//                    return null;
-//                }
-//            }
-//            if (stack.stackSize == 0) {
-//                slot.putStack(null);
-//            } else {
-//                slot.onSlotChanged();
-//            }
-//        }
-//        return stackCopy;
-//    }
 }

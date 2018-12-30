@@ -1,34 +1,33 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotOutput;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerTank extends RailcraftContainer {
 
-    private final ITankTile tile;
-
     public ContainerTank(InventoryPlayer inventoryplayer, ITankTile tile) {
         super(tile.getInventory());
-        this.tile = tile;
 
         StandardTank tank = tile.getTank();
         if (tank != null) {
             addWidget(new FluidGaugeWidget(tank, 35, 23, 176, 0, 48, 47));
         }
 
-        addSlot(tile.getInputSlot(tile.getInventory(), 0, 116, 21));
+        addSlot(new SlotStackFilter(tile.getInputFilter(), tile.getInventory(), 0, 116, 21));
         addSlot(new SlotOutput(tile.getInventory(), 1, 116, 56));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {

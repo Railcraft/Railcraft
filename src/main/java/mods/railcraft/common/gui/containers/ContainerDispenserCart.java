@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,16 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.blocks.machine.manipulator.TileDispenserCart;
-import mods.railcraft.common.gui.slots.SlotMinecart;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.gui.slots.SlotDispensableCart;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
-import org.jetbrains.annotations.Nullable;
 
 public class ContainerDispenserCart extends RailcraftContainer {
 
@@ -27,9 +21,9 @@ public class ContainerDispenserCart extends RailcraftContainer {
     public ContainerDispenserCart(InventoryPlayer inventoryplayer, TileDispenserCart tile) {
         super(tile);
         this.tile = tile;
-        addSlot(new SlotDispenserCart(tile, 0, 62, 24));
-        addSlot(new SlotDispenserCart(tile, 1, 80, 24));
-        addSlot(new SlotDispenserCart(tile, 2, 98, 24));
+        addSlot(new SlotDispensableCart(tile, 0, 62, 24));
+        addSlot(new SlotDispensableCart(tile, 1, 80, 24));
+        addSlot(new SlotDispensableCart(tile, 2, 98, 24));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
@@ -43,20 +37,4 @@ public class ContainerDispenserCart extends RailcraftContainer {
         }
     }
 
-    private class SlotDispenserCart extends SlotMinecart {
-
-        public SlotDispenserCart(IInventory iinventory, int slotIndex, int posX, int posY) {
-            super(iinventory, slotIndex, posX, posY);
-        }
-
-        @Override
-        public boolean isItemValid(@Nullable ItemStack stack) {
-            if (InvTools.isEmpty(stack))
-                return false;
-            if (stack.getItem() instanceof IMinecartItem)
-                return ((IMinecartItem) stack.getItem()).canBePlacedByNonPlayer(stack);
-            return super.isItemValid(stack);
-        }
-
-    }
 }
