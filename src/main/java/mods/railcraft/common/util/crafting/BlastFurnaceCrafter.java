@@ -38,8 +38,8 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         newFuel(ThaumcraftPlugin.ITEMS.get("alumentum", 0)).name("thaumcraft:alumentum").register();
         newFuel(EnumGeneric.BLOCK_COKE.getStack()).name("railcraft:block_coke").register();
         newFuel(new ItemStack(Items.COAL, 1, 1)).name("minecraft:charcoal").register();
-        newFuel(RailcraftItems.FIRESTONE_REFINED).register();
-        newFuel(RailcraftItems.FIRESTONE_CRACKED).register();
+        newFuel(RailcraftItems.FIRESTONE_REFINED).time(stack -> stack.getItem().getItemBurnTime(stack)).register();
+        newFuel(RailcraftItems.FIRESTONE_CRACKED).time(stack -> stack.getItem().getItemBurnTime(stack)).register();
         newFuel("blockCharcoal").register();
     }
 

@@ -63,9 +63,14 @@ public abstract class SimpleRecipeBuilder<B extends ISimpleRecipeBuilder> implem
             checkArguments();
             registerRecipe();
         } catch (Throwable ex) {
-            Game.log(Level.WARN,
-                    "Tried, but failed to register {0} as a {1} recipe. Reason: {2}",
-                    name, recipeType, ex.getMessage());
+            if (name == null)
+                Game.logThrowable(Level.WARN, 10, ex,
+                        "Tried, but failed to register a {1} recipe. Reason: {2}",
+                        recipeType, ex.getMessage());
+            else
+                Game.log(Level.WARN,
+                        "Tried, but failed to register {0} as a {1} recipe. Reason: {2}",
+                        name, recipeType, ex.getMessage());
         }
     }
 
@@ -74,9 +79,9 @@ public abstract class SimpleRecipeBuilder<B extends ISimpleRecipeBuilder> implem
         Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
                 "Input was null or empty.");
         Preconditions.checkArgument(name != null, "Recipe name not set.");
-        Preconditions.checkArgument(timeFunction != null
-                        && Stream.of(input.getMatchingStacks()).map(timeFunction).allMatch(time -> time > 0),
-                "No time function set.");
+        Preconditions.checkArgument(timeFunction != null, "Time function not set");
+        Preconditions.checkArgument(Stream.of(input.getMatchingStacks()).map(timeFunction).allMatch(time -> time > 0),
+                "Time set to zero.");
     }
 
     protected abstract void registerRecipe();
