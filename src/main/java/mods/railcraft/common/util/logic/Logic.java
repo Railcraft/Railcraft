@@ -13,12 +13,12 @@ package mods.railcraft.common.util.logic;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
+import mods.railcraft.common.carts.CartBaseLogic;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
@@ -44,7 +44,9 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
     }
 
     public <L> Optional<L> getLogic(Class<L> logicClass) {
-        return Optional.of(logicClass.cast(this));
+        if (logicClass.isInstance(this))
+            return Optional.of(logicClass.cast(this));
+        return Optional.empty();
     }
 
     @Override
@@ -213,61 +215,61 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             return new Tile(tile);
         }
 
-        public static Adapter of(EntityMinecart entity) {
+        public static Adapter of(CartBaseLogic cart) {
             return new Adapter() {
                 @Override
                 Object getContainer() {
-                    return entity;
+                    return cart;
                 }
 
                 @Override
                 double getX() {
-                    return entity.posX;
+                    return cart.posX;
                 }
 
                 @Override
                 double getY() {
-                    return entity.posY;
+                    return cart.posY;
                 }
 
                 @Override
                 double getZ() {
-                    return entity.posZ;
+                    return cart.posZ;
                 }
 
                 @Override
                 BlockPos getPos() {
-                    return entity.getPosition();
+                    return cart.getPosition();
                 }
 
                 @Override
                 public String getName() {
-                    return entity.getName();
+                    return cart.getName();
                 }
 
                 @Override
                 public ITextComponent getDisplayName() {
-                    return entity.getDisplayName();
+                    return cart.getDisplayName();
                 }
 
                 @Override
                 public boolean hasCustomName() {
-                    return entity.hasCustomName();
+                    return cart.hasCustomName();
                 }
 
                 @Override
                 void sendUpdateToClient() {
-                    // TODO
+                    cart.sendUpdateToClient();
                 }
 
                 @Override
                 public @Nullable World theWorld() {
-                    return entity.world;
+                    return cart.world;
                 }
 
                 @Override
                 boolean isUsableByPlayer(EntityPlayer player) {
-                    return !entity.isDead && player.getDistanceSq(entity) <= 64.0D;
+                    return !cart.isDead && player.getDistanceSq(cart) <= 64.0D;
                 }
             };
         }

@@ -19,19 +19,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GuiCartCargo extends EntityGui {
-
-    private final String label;
+public class GuiCartCargo extends GuiTitled {
 
     public GuiCartCargo(InventoryPlayer inv, EntityCartCargo cart) {
         super(cart, new ContainerCartCargo(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_cargo.png");
-        EntityCartCargo cart1 = cart;
-        label = cart.getName();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRenderer, label, 6);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         GuiTools.drawStringCenteredAtPos(fontRenderer, LocalizationPlugin.translate("gui.railcraft.filter"), 35, 22);
         fontRenderer.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }

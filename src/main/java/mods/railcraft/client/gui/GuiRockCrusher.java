@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerRockCrusher;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiRockCrusher extends TileGui {
+public class GuiRockCrusher extends GuiTitled {
 
     private TileRockCrusher crusher;
 

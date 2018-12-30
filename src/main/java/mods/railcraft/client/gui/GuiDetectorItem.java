@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
-public class GuiDetectorItem extends TileGui {
+public class GuiDetectorItem extends GuiTitled {
 
     private final TileDetector tile;
     private final DetectorItem detector;

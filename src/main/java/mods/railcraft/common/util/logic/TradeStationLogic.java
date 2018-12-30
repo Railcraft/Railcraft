@@ -70,7 +70,10 @@ public abstract class TradeStationLogic extends InventoryLogic {
     }
 
     public void setProfession(VillagerRegistry.VillagerProfession profession) {
-        this.profession = profession;
+        if (!Objects.equals(this.profession, profession)) {
+            this.profession = profession;
+            sendUpdateToClient();
+        }
     }
 
     @Override
@@ -91,7 +94,7 @@ public abstract class TradeStationLogic extends InventoryLogic {
         double y = getY();
         double z = getZ();
         AABBFactory area = AABBFactory.start().setBounds(x, y - 1, z, x + 1, y + 3, z + 1).expandHorizontally(range);
-        return EntitySearcher.find(EntityVillager.class).around(area).in(theWorldAsserted());
+        return EntitySearcher.find(EntityVillager.class).and(v -> v.getProfessionForge() == getProfession()).around(area).in(theWorldAsserted());
     }
 
     private void attemptTrade(List<EntityVillager> villagers, int tradeSet) {
@@ -189,11 +192,14 @@ public abstract class TradeStationLogic extends InventoryLogic {
                 break;
             case SET_PROFESSION:
                 setProfession(findProfession(data.readUTF()));
+                recipeSlots.clear();
                 sendUpdateToClient();
                 break;
         }
     }
 
+    //FIXME this function needs to be redesigned due to careers and levels,
+    // it currently picks a random career at level 1
     private void nextTrade(int tradeSet) {
         EntityVillager villager = new EntityVillager(theWorldAsserted());
         villager.setProfession(profession);

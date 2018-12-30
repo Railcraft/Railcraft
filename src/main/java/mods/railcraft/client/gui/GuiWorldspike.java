@@ -17,7 +17,7 @@ import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
-public class GuiWorldspike extends TileGui {
+public class GuiWorldspike extends GuiTitled {
 
     private final ContainerWorldspike container;
 
@@ -25,7 +25,6 @@ public class GuiWorldspike extends TileGui {
         super(worldspike, new ContainerWorldspike(playerInv, worldspike), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
         xSize = 176;
         ySize = 140;
-        TileWorldspike tile = worldspike;
         container = (ContainerWorldspike) inventorySlots;
     }
 

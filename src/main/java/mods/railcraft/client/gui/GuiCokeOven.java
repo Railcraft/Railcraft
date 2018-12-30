@@ -16,7 +16,7 @@ import mods.railcraft.common.util.logic.CokeOvenLogic;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiCokeOven extends TileGui {
+public class GuiCokeOven extends GuiTitled {
 
     private final CokeOvenLogic tile;
 

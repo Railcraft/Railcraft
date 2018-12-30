@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
-public class GuiRollingMachine extends TileGui {
+public class GuiRollingMachine extends GuiTitled {
 
     private final TileRollingMachine tile;
     private final int ay;

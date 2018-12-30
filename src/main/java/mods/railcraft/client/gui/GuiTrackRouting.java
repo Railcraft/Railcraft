@@ -22,7 +22,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiTrackRouting extends TileGui {
+public class GuiTrackRouting extends GuiTitled {
 
     private GuiMultiButton lockButton;
     private final TrackKitRouting track;

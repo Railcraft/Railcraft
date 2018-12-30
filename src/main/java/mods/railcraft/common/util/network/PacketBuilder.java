@@ -22,6 +22,7 @@ import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketKeyPress.EnumKeyBinding;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IContainerListener;
@@ -161,4 +162,8 @@ public final class PacketBuilder implements ISignalPacketBuilder {
         PacketDispatcher.sendToDimension(pkt, cart.world.provider.getDimension());
     }
 
+    public void sendEntitySync(Entity entity) {
+        PacketEntitySync pkt = new PacketEntitySync(entity);
+        PacketDispatcher.sendToDimension(pkt, entity.world.provider.getDimension());
+    }
 }

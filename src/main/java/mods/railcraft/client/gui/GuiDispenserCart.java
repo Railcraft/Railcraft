@@ -14,7 +14,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDispenserCart;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiDispenserCart extends TileGui {
+public class GuiDispenserCart extends GuiTitled {
 
     private final InventoryPlayer inv;
 
@@ -23,7 +23,6 @@ public class GuiDispenserCart extends TileGui {
         xSize = 176;
         ySize = 140;
         this.inv = inv;
-        TileDispenserCart tile1 = tile;
     }
 
     @Override

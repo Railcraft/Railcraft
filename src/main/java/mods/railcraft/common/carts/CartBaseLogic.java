@@ -10,6 +10,9 @@
 
 package mods.railcraft.common.carts;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.IExtInvSlot;
@@ -17,12 +20,14 @@ import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.logic.ILogicContainer;
 import mods.railcraft.common.util.logic.Logic;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -34,7 +39,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartBaseLogic extends CartBase implements ILogicContainer {
+public abstract class CartBaseLogic extends CartBase implements ILogicContainer, IEntityAdditionalSpawnData {
     private Logic logic;
 
     protected CartBaseLogic(World world) {
@@ -116,7 +121,24 @@ public abstract class CartBaseLogic extends CartBase implements ILogicContainer 
     }
 
     @Override
-    public void sendUpdateToClient() {
+    public void writeSpawnData(ByteBuf buffer) {
+        try {
+            writePacketData(new RailcraftOutputStream(new ByteBufOutputStream(buffer)));
+        } catch (IOException ignored) {
+        }
+    }
 
+    @Override
+    public void readSpawnData(ByteBuf buffer) {
+        try {
+            readPacketData(new RailcraftInputStream(new ByteBufInputStream(buffer)));
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Override
+    public void sendUpdateToClient() {
+        if (isAddedToWorld() && isEntityAlive())
+            PacketBuilder.instance().sendEntitySync(this);
     }
 }

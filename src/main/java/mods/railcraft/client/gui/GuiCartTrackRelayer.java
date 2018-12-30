@@ -17,24 +17,18 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GuiCartTrackRelayer extends EntityGui {
-
-    private final String label;
+public class GuiCartTrackRelayer extends GuiTitled {
 
     public GuiCartTrackRelayer(InventoryPlayer inv, EntityCartTrackRelayer cart) {
         super(cart, new ContainerCartTrackRelayer(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_track_relayer.png");
-        label = cart.getName();
-        EntityCartTrackRelayer cart1 = cart;
+
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        int sWidth = fontRenderer.getStringWidth(label);
-        int sPos = xSize / 2 - sWidth / 2;
-        fontRenderer.drawString(label, sPos, 6, 0x404040);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.track.relayer.pattern"), 38, 30, 0x404040);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.track.relayer.stock"), 125, 25, 0x404040);
         fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);

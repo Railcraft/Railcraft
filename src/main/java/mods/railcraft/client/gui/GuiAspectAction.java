@@ -73,6 +73,7 @@ public class GuiAspectAction extends GuiContainerRailcraft {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         GuiTools.drawCenteredString(fontRenderer, title, 15);
     }
 

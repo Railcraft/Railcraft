@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,8 +22,8 @@ import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientCustomPacketEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ServerCustomPacketEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 
 public class PacketHandler {
@@ -120,6 +120,9 @@ public class PacketHandler {
                 case STOP_RECORD:
                     pkt = new PacketStopRecord();
                     break;
+                case ENTITY_SYNC:
+                    pkt = new PacketEntitySync();
+                    break;
                 default:
                     return;
             }
@@ -135,7 +138,7 @@ public class PacketHandler {
                 try {
                     packet.readData(data);
                 } catch (IOException e) {
-                    Game.logThrowable("Exception in PacketHandler.readPacket", e);
+                    Game.logThrowable("Exception in PacketHandler.readPacket", 10, e);
                 }
             });
         }

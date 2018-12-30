@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,6 +44,7 @@ public abstract class RailcraftPacket {
         SHUNTING_AURA,
         MOVING_SOUND,
         STOP_RECORD,
+        ENTITY_SYNC
     }
 
     public FMLProxyPacket getPacket() {

@@ -21,7 +21,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-public class GuiManipulatorCartIC2Unloader extends TileGui {
+public class GuiManipulatorCartIC2Unloader extends GuiTitled {
 
     private final String button1Label = LocalizationPlugin.translate("gui.railcraft.energy.unloader.wait");
     //    private final String BUTTON1 = "Wait till Empty";
@@ -30,7 +30,6 @@ public class GuiManipulatorCartIC2Unloader extends TileGui {
     public GuiManipulatorCartIC2Unloader(InventoryPlayer inv, TileIC2Unloader tile) {
         super(tile, new ContainerEnergyLoader(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy_loader.png");
         this.tile = tile;
-        String label = tile.getName();
     }
 
     @Override

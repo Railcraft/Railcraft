@@ -133,7 +133,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @Override
     @OverridingMethodsMustInvokeSuper
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
-        logic.readPacketData(data);
+        logic.readGuiData(data, sender);
     }
 
     @Override

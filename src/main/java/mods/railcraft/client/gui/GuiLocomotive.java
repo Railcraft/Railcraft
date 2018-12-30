@@ -20,7 +20,6 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 @SideOnly(Side.CLIENT)
-public abstract class GuiLocomotive extends EntityGui {
+public abstract class GuiLocomotive extends GuiTitled {
 
     private final EntityLocomotive loco;
     private final String typeTag;
@@ -49,7 +48,6 @@ public abstract class GuiLocomotive extends EntityGui {
         super(loco, container, RailcraftConstants.GUI_TEXTURE_FOLDER + guiName);
         ySize = guiHeight;
         this.loco = loco;
-        EntityPlayer player = inv.player;
         this.typeTag = typeTag;
         loco.clientMode = loco.getMode();
         loco.clientSpeed = loco.getSpeed();
@@ -137,8 +135,7 @@ public abstract class GuiLocomotive extends EntityGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String name = loco.getName();
-        GuiTools.drawCenteredString(fontRenderer, name, 6);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 

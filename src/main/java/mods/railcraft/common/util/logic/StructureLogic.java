@@ -71,7 +71,7 @@ public class StructureLogic extends Logic {
     public <L> Optional<L> getLogic(Class<L> logicClass) {
         if (logicClass.isInstance(this))
             return Optional.of(logicClass.cast(this));
-        return getMasterLogic().map(m -> m.logic).map(logicClass::cast);
+        return getMasterLogic().map(m -> m.logic).filter(logicClass::isInstance).map(logicClass::cast);
     }
 
     public List<TileRailcraft> getComponents() {

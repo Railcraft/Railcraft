@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerBore;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiCartBore extends EntityGui {
+public class GuiCartBore extends GuiTitled {
 
     private final String HEAD = LocalizationPlugin.translate("gui.railcraft.bore.head");
     private final String FUEL = LocalizationPlugin.translate("gui.railcraft.bore.fuel");
@@ -32,7 +32,7 @@ public class GuiCartBore extends EntityGui {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRenderer, cart.getName(), 6);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(HEAD, 13, 26, 0x404040);
         fontRenderer.drawString(FUEL, 64, 26, 0x404040);
         fontRenderer.drawString(BALLAST, 10, 62, 0x404040);

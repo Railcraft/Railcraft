@@ -14,13 +14,12 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDispenserTrain;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiDispenserTrain extends TileGui {
+public class GuiDispenserTrain extends GuiTitled {
 
     public GuiDispenserTrain(InventoryPlayer inv, TileDispenserTrain tile) {
         super(tile, new ContainerDispenserTrain(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_dispenser_train.png");
         xSize = 176;
         ySize = 198;
-        TileDispenserTrain tile1 = tile;
     }
 
     @Override
