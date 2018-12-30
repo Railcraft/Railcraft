@@ -19,7 +19,6 @@ import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.IBoilerContainer;
@@ -135,8 +134,9 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
         boiler.tick(1);
 
-        if (StandardStackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
-            invFuel.moveOneItemTo(invOutput, StandardStackFilters.EMPTY_BUCKET);
+        // FIXME the bucket filter is broken
+//        if (StandardStackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
+//            invFuel.moveOneItemTo(invOutput, StandardStackFilters.EMPTY_BUCKET);
     }
 
     @Override

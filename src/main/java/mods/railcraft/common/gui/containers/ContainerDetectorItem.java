@@ -12,7 +12,7 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorItem;
-import mods.railcraft.common.gui.slots.SlotFilter;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -26,7 +26,8 @@ public class ContainerDetectorItem extends RailcraftContainer {
         this.detector = (DetectorItem) tile.getDetector();
 
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotFilter(detector.getFilters(), i, 8 + i * 18, 61, () -> detector.getPrimaryMode() == DetectorItem.PrimaryMode.FILTERED));
+            addSlot(new SlotRailcraft(detector.getFilters(), i, 8 + i * 18, 61)
+                    .setPhantom().setEnableCheck(() -> detector.getPrimaryMode() == DetectorItem.PrimaryMode.FILTERED));
         }
 
         for (int i = 0; i < 3; i++) {

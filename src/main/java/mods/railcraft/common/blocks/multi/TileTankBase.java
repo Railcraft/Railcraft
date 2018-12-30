@@ -20,7 +20,6 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.slots.SlotLiquidContainer;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.misc.Game;
@@ -32,7 +31,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -372,11 +370,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @Override
     public IInventory getInventory() {
         return inv;
-    }
-
-    @Override
-    public Slot getInputSlot(IInventory inv, int slotNum, int x, int y) {
-        return new SlotLiquidContainer(inv, slotNum, x, y);
     }
 
     @Override

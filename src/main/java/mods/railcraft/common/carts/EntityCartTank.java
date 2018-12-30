@@ -15,7 +15,6 @@ import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -233,6 +232,6 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
 
     @Override
     protected EnumGui getGuiType() {
-        return EnumGui.TANK;
+        return EnumGui.CART_TANK;
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,28 +13,41 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class SlotRailcraft extends Slot {
 
-    protected ToolTip toolTips;
+    protected @Nullable ToolTip toolTips;
     protected boolean isPhantom;
     protected boolean canAdjustPhantom = true;
     protected boolean canShift = true;
     protected int stackLimit = -1;
+    public BooleanSupplier isEnabled = () -> true;
 
     public SlotRailcraft(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
     }
 
+    @Override
+    public boolean isItemValid(ItemStack stack) {
+        return isEnabled.getAsBoolean() && super.isItemValid(stack);
+    }
+
+    public SlotRailcraft setEnableCheck(BooleanSupplier isEnabled) {
+        this.isEnabled = isEnabled;
+        return this;
+    }
+
     /**
      * @return the toolTips
      */
-    @Nullable
-    public ToolTip getToolTip() {
+    public @Nullable ToolTip getToolTip() {
         return toolTips;
     }
 
