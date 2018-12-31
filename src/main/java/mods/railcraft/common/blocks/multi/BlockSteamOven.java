@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.multi.TileSteamOven.Icon;
 import mods.railcraft.common.items.Metal;
@@ -30,7 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileSteamOven.class)
-public class BlockSteamOven extends BlockMultiBlockInventory<TileSteamOven> {
+public class BlockSteamOven extends BlockEntityDelegate<TileSteamOven> {
 
     public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final IProperty<TileSteamOven.Icon> ICON = PropertyEnum.create("icon", TileSteamOven.Icon.class);

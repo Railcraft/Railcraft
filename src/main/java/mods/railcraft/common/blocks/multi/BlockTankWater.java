@@ -10,14 +10,16 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
 
 @BlockMeta.Tile(TileTankWater.class)
-public class BlockTankWater extends BlockMultiBlock<TileTankWater> {
+public class BlockTankWater extends BlockEntityDelegate<TileTankWater> {
 
     public BlockTankWater() {
         super(Material.WOOD);
@@ -39,5 +41,10 @@ public class BlockTankWater extends BlockMultiBlock<TileTankWater> {
                 'B', "plateBronze",
                 'S', "slimeball",
                 'W', "plankWood");
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
     }
 }
