@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiBoilerSolid extends TileGui {
+public class GuiBoilerSolid extends GuiTitled {
 
     private final TileBoilerFireboxSolid tile;
 

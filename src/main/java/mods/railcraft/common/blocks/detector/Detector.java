@@ -103,6 +103,7 @@ public class Detector implements IGuiReturnHandler {
         return tile.getWorld();
     }
 
+    @Override
     public final World theWorldAsserted() {
         World world = tile.getWorld();
         assert world != null;

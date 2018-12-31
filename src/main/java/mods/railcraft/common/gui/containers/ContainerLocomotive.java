@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -129,12 +129,9 @@ public class ContainerLocomotive extends RailcraftContainer {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
     public void updateString(byte id, String data) {
-        switch (id) {
-            case 0:
-                ownerName = data;
-                break;
+        if (id == 0) {
+            ownerName = data;
         }
     }
 

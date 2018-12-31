@@ -10,7 +10,7 @@
 
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
 import mcp.MethodsReturnNonnullByDefault;
 

@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerTurbine;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiSteamTurbine extends TileGui {
+public class GuiSteamTurbine extends GuiTitled {
 
     private final TileSteamTurbine tile;
 

@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.multi;
 
+import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileCokeOven.class)
-public abstract class BlockCokeOven extends BlockMultiBlockInventory<TileCokeOven> {
+public abstract class BlockCokeOven extends BlockEntityDelegate<TileCokeOven> {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 

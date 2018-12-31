@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,7 +21,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-public class GuiManipulatorCartIC2Loader extends TileGui {
+public class GuiManipulatorCartIC2Loader extends GuiTitled {
 
     private final String BUTTON1 = LocalizationPlugin.translate("gui.railcraft.energy.loader.empty");
     private final String BUTTON2 = LocalizationPlugin.translate("gui.railcraft.energy.loader.fill");

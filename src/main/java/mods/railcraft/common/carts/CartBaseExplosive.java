@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
@@ -101,7 +102,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     @SuppressWarnings("WeakerAccess")
     protected void explode(float blastRadius) {
         isExploding = true;
-        if (Game.isHost(theWorld())) {
+        if (Game.isHost(theWorldAsserted())) {
             world.createExplosion(this, posX, posY, posZ, blastRadius, true);
             setDead();
         }
@@ -146,7 +147,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.inventory.getCurrentItem();
         if (!InvTools.isEmpty(stack)) {
             if (stack.getItem() == Items.FLINT_AND_STEEL

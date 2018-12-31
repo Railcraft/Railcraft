@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.client.render.tesr.TESRChest;
 import mods.railcraft.common.blocks.BlockEntityDelegate;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.SoundType;
@@ -30,11 +29,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class BlockChestRailcraft<T extends TileRailcraftChest> extends BlockEntityDelegate<T> {
+public abstract class BlockChestRailcraft<T extends TileChestRailcraft> extends BlockEntityDelegate<T> {
 
     public static final PropertyDirection FACING = BlockChest.FACING;
     private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
@@ -55,10 +53,9 @@ public abstract class BlockChestRailcraft<T extends TileRailcraftChest> extends 
     @Override
     public void initializeClient() {
         super.initializeClient();
-        ClientRegistry.bindTileEntitySpecialRenderer(TileChestMetals.class, new TESRChest(this));
         //noinspection ConstantConditions
         Item.getItemFromBlock(this).setTileEntityItemStackRenderer(new TileEntityItemStackRenderer() {
-            private final TileRailcraftChest template = createTileEntity(null, getDefaultState());
+            private final TileChestRailcraft template = createTileEntity(null, getDefaultState());
 
             @Override
             @SideOnly(Side.CLIENT)

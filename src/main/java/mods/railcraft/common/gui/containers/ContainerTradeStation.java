@@ -11,7 +11,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.util.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 

@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.blocks.TileRailcraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
@@ -46,6 +47,10 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
         this(size, null);
     }
 
+    public InventoryAdvanced callbackEntity(Entity callback) {
+        return callback(new CallbackEntity(callback));
+    }
+
     public InventoryAdvanced callbackInv(IInventory callback) {
         return callback(new CallbackInv(callback));
     }
@@ -61,6 +66,16 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
     public InventoryAdvanced callback(Callback callback) {
         this.callback = callback;
         addInventoryChangeListener(callback);
+        return this;
+    }
+
+    public InventoryAdvanced callback(Object callback) {
+        if (callback instanceof IInventory)
+            return callbackInv((IInventory) callback);
+        if (callback instanceof Entity)
+            return callbackEntity((Entity) callback);
+        if (callback instanceof TileRailcraft)
+            return callbackTile((TileRailcraft) callback);
         return this;
     }
 
@@ -229,6 +244,28 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
         @Override
         public Boolean hasCustomName() {
             return tile().map(TileRailcraft::hasCustomName).orElse(false);
+        }
+    }
+
+    public static class CallbackEntity extends Callback {
+
+        private final Entity entity;
+
+        public CallbackEntity(Entity entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void onInventoryChanged(IInventory invBasic) { }
+
+        @Override
+        public String getName() {
+            return entity.getName();
+        }
+
+        @Override
+        public Boolean hasCustomName() {
+            return entity.hasCustomName();
         }
     }
 }

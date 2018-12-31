@@ -22,6 +22,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,10 +71,10 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
 
     @Override
     public final boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)) || doInteract(player);
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)) || doInteract(player, hand);
     }
 
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         return true;
     }
 
@@ -117,7 +118,7 @@ public abstract class CartBase extends EntityMinecart implements IRailcraftCart,
         return false;
     }
 
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return world;
     }
 

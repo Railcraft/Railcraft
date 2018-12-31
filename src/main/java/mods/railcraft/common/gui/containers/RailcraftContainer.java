@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,11 +20,10 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
@@ -32,16 +31,19 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class RailcraftContainer extends Container {
-    @Nullable
-    private final IInventory callback;
+    private final Function<EntityPlayer, Boolean> isUsableByPlayer;
     private final List<Widget> widgets = new ArrayList<>();
 
     protected RailcraftContainer(IInventory inv) {
-        this.callback = inv;
+        this.isUsableByPlayer = inv::isUsableByPlayer;
+    }
+
+    protected RailcraftContainer(Function<EntityPlayer, Boolean> isUsableByPlayer) {
+        this.isUsableByPlayer = isUsableByPlayer;
     }
 
     protected RailcraftContainer() {
-        this.callback = null;
+        this.isUsableByPlayer = p -> true;
     }
 
     public List<Widget> getWidgets() {
@@ -83,17 +85,15 @@ public abstract class RailcraftContainer extends Container {
     public void sendUpdateToClient() {
     }
 
-    @SideOnly(Side.CLIENT)
     public void updateString(byte id, String data) {
     }
 
-    @SideOnly(Side.CLIENT)
     public void updateData(byte id, RailcraftInputStream data) {
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return callback == null || callback.isUsableByPlayer(entityplayer);
+        return isUsableByPlayer.apply(entityplayer);
     }
 
     //TODO: test new parameters
@@ -238,7 +238,7 @@ public abstract class RailcraftContainer extends Container {
                 if (slotIndex >= numSlots - 9 * 4 && slotIndex < numSlots - 9) {
                     if (!shiftItemStack(stackInSlot, numSlots - 9, numSlots))
                         return InvTools.emptyStack();
-                } else if (slotIndex >= numSlots - 9 && slotIndex < numSlots) {
+                } else if (slotIndex >= numSlots - 9) {
                     if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots - 9))
                         return InvTools.emptyStack();
                 } else if (!shiftItemStack(stackInSlot, numSlots - 9 * 4, numSlots))

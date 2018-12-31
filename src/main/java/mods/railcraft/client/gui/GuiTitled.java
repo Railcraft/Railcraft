@@ -13,38 +13,32 @@ import mods.railcraft.common.gui.containers.RailcraftContainer;
 import net.minecraft.world.IWorldNameable;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileGui extends GuiContainerRailcraft {
-    private final IWorldNameable tile;
+public abstract class GuiTitled extends GuiContainerRailcraft {
+    private final IWorldNameable nameable;
     private final @Nullable String name;
 
-    protected TileGui(IWorldNameable tile, RailcraftContainer container, String texture) {
-        this(tile, container, texture, null);
+    protected GuiTitled(IWorldNameable nameable, RailcraftContainer container, String texture) {
+        this(nameable, container, texture, null);
     }
 
-    protected TileGui(IWorldNameable tile, RailcraftContainer container, String texture, @Nullable String name) {
+    protected GuiTitled(IWorldNameable nameable, RailcraftContainer container, String texture, @Nullable String name) {
         super(container, texture);
-        this.tile = tile;
+        this.nameable = nameable;
         this.name = name;
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        if (name == null || tile.hasCustomName()) {
-            GuiTools.drawCenteredString(fontRenderer, tile);
+        if (name == null || nameable.hasCustomName()) {
+            GuiTools.drawCenteredString(fontRenderer, nameable);
         } else {
             GuiTools.drawCenteredString(fontRenderer, name);
         }
     }
-
-//    @Override
-//    public void updateScreen() {
-//        super.updateScreen();
-//        TileEntity t = tile.getWorld().getTileEntity(tile.x, tile.y, tile.z);
-//        if (t != tile) {
-//            mc.thePlayer.closeScreen();
-//        }
-//    }
 }

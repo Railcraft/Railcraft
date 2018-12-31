@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerSteamOven;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiSteamOven extends TileGui {
+public class GuiSteamOven extends GuiTitled {
 
     private final TileSteamOven tile;
 

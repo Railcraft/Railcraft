@@ -14,9 +14,9 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
-import mods.railcraft.common.util.logic.TradeStationLogic;
-import mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.util.collections.RevolvingList;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
@@ -32,18 +32,20 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-import static mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType.NEXT_TRADE;
-import static mods.railcraft.common.util.logic.TradeStationLogic.GuiPacketType.SET_PROFESSION;
+import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.NEXT_TRADE;
+import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.SET_PROFESSION;
 
-public class GuiTradeStation extends TileGui {
+public class GuiTradeStation extends GuiContainerRailcraft {
 
     private final IWorldNameable owner;
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
     private final EntityVillager villager;
+    private final IWorldNameable namer;
 
     public GuiTradeStation(InventoryPlayer playerInv, TradeStationLogic logic, IWorldNameable namer) {
-        super(namer, new ContainerTradeStation(playerInv, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+        super(new ContainerTradeStation(playerInv, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
         this.owner = namer;
+        this.namer = namer;
         xSize = 176;
         ySize = 214;
 
@@ -128,8 +130,9 @@ public class GuiTradeStation extends TileGui {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-
-        GuiTools.drawVillager(villager, 141, 79, 30, (float) (guiLeft + 87) - mouseX, (float) (guiTop + 91 - 50) - mouseY);
+        GuiTools.drawStringCenteredAtPos(fontRenderer, namer.getDisplayName().getFormattedText(), 55, 6);
+        GuiTools.drawStringCenteredAtPos(fontRenderer, villager.getDisplayName().getFormattedText(), 142, 14, 0xFFFFFF, true);
+        GuiTools.drawVillager(villager, 141, 79, 27, (float) (guiLeft + 87) - mouseX, (float) (guiTop + 91 - 50) - mouseY);
     }
 
 }

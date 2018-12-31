@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerDetectorLocomotive;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiDetectorLocomotive extends TileGui {
+public class GuiDetectorLocomotive extends GuiTitled {
 
     public GuiDetectorLocomotive(InventoryPlayer inv, TileDetector tile) {
         super(tile, new ContainerDetectorLocomotive(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_double_slot.png");

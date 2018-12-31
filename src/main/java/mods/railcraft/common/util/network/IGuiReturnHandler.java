@@ -19,10 +19,7 @@ import java.io.IOException;
  */
 public interface IGuiReturnHandler extends IWorldSupplier {
 
-    // @SideOnly(Side.CLIENT)
-    default void writeGuiData(RailcraftOutputStream data) throws IOException {
-    }
+    default void writeGuiData(RailcraftOutputStream data) throws IOException { }
 
-    default void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
-    }
+    default void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException { }
 }

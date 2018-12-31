@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.logic.StructureLogic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;

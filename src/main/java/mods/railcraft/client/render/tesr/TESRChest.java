@@ -10,7 +10,7 @@
 package mods.railcraft.client.render.tesr;
 
 import mods.railcraft.common.blocks.single.BlockChestRailcraft;
-import mods.railcraft.common.blocks.single.TileRailcraftChest;
+import mods.railcraft.common.blocks.single.TileChestRailcraft;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.GlStateManager;
@@ -23,7 +23,7 @@ import java.util.Objects;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TESRChest extends TileEntitySpecialRenderer<TileRailcraftChest> {
+public final class TESRChest extends TileEntitySpecialRenderer<TileChestRailcraft> {
 
     /**
      * The Ender Chest Chest's model.
@@ -40,7 +40,7 @@ public final class TESRChest extends TileEntitySpecialRenderer<TileRailcraftChes
      * Helps to render Ender Chest.
      */
     @Override
-    public void render(TileRailcraftChest tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+    public void render(TileChestRailcraft tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         final EnumFacing facing = tile.getFacing();
 
         if (destroyStage >= 0) {

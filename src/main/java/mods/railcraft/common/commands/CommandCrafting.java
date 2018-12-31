@@ -83,7 +83,7 @@ public final class CommandCrafting extends SubCommand {
             }
             EntityPlayerMP player = (EntityPlayerMP) sender;
             ItemStack input = player.getHeldItem(EnumHand.MAIN_HAND);
-            int time = Crafters.blastFurnace().getCookTime(input);
+            int time = Crafters.blastFurnace().getFuel(input).map(f -> f.getTickTime(input)).orElse(0);
             player.sendMessage(new TextComponentTranslation("command.railcraft.railcraft.crafting.blast.furnace.fuel.message",
                     input.getTextComponent(), time));
         }

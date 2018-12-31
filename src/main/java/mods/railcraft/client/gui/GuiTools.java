@@ -31,9 +31,7 @@ import java.util.List;
 public final class GuiTools {
 
     public static void drawCenteredString(FontRenderer fr, IWorldNameable nameable) {
-        ITextComponent name = nameable.getDisplayName();
-        if (name != null)
-            drawCenteredString(fr, nameable, 6);
+        drawCenteredString(fr, nameable, 6);
     }
 
     public static void drawCenteredString(FontRenderer fr, IWorldNameable nameable, int y) {

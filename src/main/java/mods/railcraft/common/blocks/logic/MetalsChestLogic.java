@@ -8,14 +8,13 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.EnumTools;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 import java.util.EnumMap;
@@ -43,8 +42,8 @@ public class MetalsChestLogic extends InventoryLogic {
 
     private Target target = Target.NUGGET_CONDENSE;
 
-    public MetalsChestLogic(Adapter adapter, IInventory inventory) {
-        super(adapter, inventory);
+    public MetalsChestLogic(Adapter adapter) {
+        super(adapter, 27);
     }
 
     @Override

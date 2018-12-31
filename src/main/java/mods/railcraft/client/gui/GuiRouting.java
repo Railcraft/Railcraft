@@ -25,7 +25,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.text.translation.I18n;
 
-public class GuiRouting extends TileGui {
+public class GuiRouting extends GuiTitled {
 
     private final IRouter router;
     private GuiMultiButton lockButton;

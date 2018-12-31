@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,7 @@ import net.minecraft.client.gui.GuiButton;
 
 import java.io.IOException;
 
-public class GuiManipulatorCart extends TileGui {
+public class GuiManipulatorCart extends GuiTitled {
 
     private final String CART_FILTER_LABEL = LocalizationPlugin.translate("gui.railcraft.filters.carts");
     private GuiMultiButton transferMode;

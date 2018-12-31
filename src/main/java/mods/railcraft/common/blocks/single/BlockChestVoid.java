@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.single;
 
+import mods.railcraft.client.render.tesr.TESRChest;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
@@ -22,6 +23,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,6 +31,11 @@ import java.util.Random;
 
 @BlockMeta.Tile(TileChestVoid.class)
 public class BlockChestVoid extends BlockChestRailcraft<TileChestVoid> {
+    @Override
+    public void initializeClient() {
+        super.initializeClient();
+        ClientRegistry.bindTileEntitySpecialRenderer(TileChestVoid.class, new TESRChest(this));
+    }
 
     @SideOnly(Side.CLIENT)
     @Override

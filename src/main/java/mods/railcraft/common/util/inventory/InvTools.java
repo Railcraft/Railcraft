@@ -137,11 +137,6 @@ public abstract class InvTools {
         return target.isEmpty() || source.isEmpty() || (isItemEqual(target, source) && target.getCount() + source.getCount() <= target.getMaxStackSize());
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean canMerge(ItemStack target, ItemStack source, int slotLimit) {
-        return canMerge(target, source) && target.getCount() + source.getCount() <= slotLimit;
-    }
-
     public static int[] buildSlotArray(int start, int size) {
         return IntStream.range(0, size).map(i -> start + i).toArray();
     }

@@ -11,50 +11,33 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
+import mods.railcraft.common.blocks.logic.CrafterLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.items.ItemDust;
-import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 import static mods.railcraft.common.blocks.multi.BlockBlastFurnace.ICON;
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
-public final class TileBlastFurnace extends TileMultiBlockOven implements ISidedInventory {
+public final class TileBlastFurnace extends TileCrafter implements INeedsFuel {
 
-    public static final Predicate<ItemStack> INPUT_FILTER = stack -> !InvTools.isEmpty(stack) && Crafters.blastFurnace().getRecipe(stack).isPresent();
-    public static final Predicate<ItemStack> FUEL_FILTER = stack -> Crafters.blastFurnace().getCookTime(stack) > 0;
-    public static final int SLOT_INPUT = 0;
-    public static final int SLOT_FUEL = 1;
-    public static final int SLOT_OUTPUT = 2;
-    public static final int SLOT_SLAG = 3;
-    private static final int FUEL_PER_TICK = 5;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 4);
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     static {
@@ -105,28 +88,11 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
 
-    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_FUEL, 1);
-    //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
-    private final InventoryMapper invSlag = new InventoryMapper(this, SLOT_SLAG, 1).ignoreItemChecks();
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileBlastFurnace)
             return false;
         return InventoryComposite.of(tile).slotCount() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
-    /**
-     * The number of ticks that the furnace will keep burning
-     */
-    public int burnTime;
-    /**
-     * The number of ticks that a fresh copy of the currently-burning item would
-     * keep the furnace burning for
-     */
-    public int currentItemBurnTime;
-    public boolean clientBurning;
-    private int finishedAt;
-    private ItemStack lastInput = ItemStack.EMPTY;
-    private @Nullable IBlastFurnaceCrafter.IRecipe currentRecipe;
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
@@ -135,56 +101,40 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
         if (tile instanceof TileBlastFurnace) {
-            TileBlastFurnace master = (TileBlastFurnace) tile;
-            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
-            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
-            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SLAG, secondOutput);
-            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
+            // FIXME this might not work if the structure isn't ready
+//            TileBlastFurnace master = (TileBlastFurnace) tile;
+//            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
+//            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
+//            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SLAG, secondOutput);
+//            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
         }
     }
 
-    public TileBlastFurnace() {
-        super(4, patterns);
-    }
+    {
+        setLogic(new StructureLogic("blast_furnace", this, patterns, new BlastFurnaceLogic(Logic.Adapter.of(this))) {
 
-    @Override
-    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState self = getBlockState();
-        IBlockState state = world.getBlockState(pos);
-        switch (mapPos) {
-            case 'O':
-                if (self != state)
-                    return true;
-                break;
-            case 'B':
-            case 'W':
-                if (self == state)
-                    return true;
-                break;
-            case 'A':
-                if (state.getBlock().isAir(state, world, pos) || state.getMaterial() == Material.LAVA)
-                    return true;
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public int getTotalCookTime() {
-        ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (InvTools.isEmpty(input))
-            return 1;
-        return Crafters.blastFurnace().getRecipe(input)
-                .map(IBlastFurnaceCrafter.IRecipe::getTickTime).orElse(1);
-    }
-
-    public int getBurnProgressScaled(int i) {
-        if (burnTime <= 0 || currentItemBurnTime <= 0)
-            return 0;
-        int scale = burnTime * i / currentItemBurnTime;
-        scale = Math.min(scale, i);
-        scale = Math.max(scale, 0);
-        return scale;
+            @Override
+            public boolean isMapPositionValid(BlockPos pos, char mapPos) {
+                IBlockState self = getBlockState();
+                IBlockState state = world.getBlockState(pos);
+                switch (mapPos) {
+                    case 'O':
+                        if (self != state)
+                            return true;
+                        break;
+                    case 'B':
+                    case 'W':
+                        if (self == state)
+                            return true;
+                        break;
+                    case 'A':
+                        if (state.getBlock().isAir(state, world, pos) || state.getMaterial() == Material.LAVA)
+                            return true;
+                        break;
+                }
+                return false;
+            }
+        });
     }
 
     private void setLavaIdle() {
@@ -220,232 +170,50 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
         if (Game.isClient(getWorld()))
             return;
 
-        TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
+        getLogic(BlastFurnaceLogic.class).map(l -> l.invFuel).ifPresent(invFuel -> {
+            invCache.getAdjacentInventories().moveOneItemTo(invFuel, BlastFurnaceLogic.FUEL_FILTER);
+        });
 
-        if (mBlock != null)
-            invCache.getAdjacentInventories().moveOneItemTo(mBlock.invFuel, FUEL_FILTER);
-
-        if (isValidMaster()) {
-            updateMaster();
+        if (getLogic(StructureLogic.class).map(StructureLogic::isValidMaster).orElse(false)) {
+            if (isBurning())
+                setLavaBurn();
+            else
+                setLavaIdle();
         }
     }
 
-    void updateMaster() {
-        boolean wasBurning = isBurning();
-
-        // cooking check
-        if (clock > finishedAt + 10 && cookTime <= 0)
-            setCooking(false);
-
-        if (burnTime >= FUEL_PER_TICK)
-            burnTime -= FUEL_PER_TICK;
-        else
-            burnTime = 0;
-
-        if (isBurning())
-            setLavaBurn();
-        else
-            setLavaIdle();
-
-        processRecipe();
-        loadFuel();
-
-        if (wasBurning != isBurning())
-            sendUpdateToClient();
-    }
-
-    void processRecipe() {
-        ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (input != lastInput) {
-            resetCooking();
-            lastInput = input;
-            currentRecipe = Crafters.blastFurnace().getRecipe(input).orElse(null);
-        }
-
-        if (currentRecipe == null) {
-            return;
-        }
-
-        if (!isBurning()) {
-            return;
-        }
-
-        setCooking(true);
-        cookTime++;
-        if (cookTime < currentRecipe.getTickTime()) {
-            return;
-        }
-
-        cookTime = currentRecipe.getTickTime();
-
-        ItemStack nextOutput = currentRecipe.getOutput();
-
-        if (!invOutput.canFit(nextOutput)) {
-            return;
-        }
-
-        ItemStack nextSlag = RailcraftItems.DUST.getStack(currentRecipe.getSlagOutput(), ItemDust.EnumDust.SLAG);
-
-        if (!invSlag.canFit(nextSlag)) {
-            return;
-        }
-
-        invOutput.addStack(nextOutput);
-        invSlag.addStack(nextSlag);
-        decrStackSize(SLOT_INPUT, 1);
-
-        cookTime = 0;
-        finishedAt = clock;
-
-        // TODO fix mess
-//        if (!InvTools.isEmpty(input)) {
-//            ItemStack outputSlot = getStackInSlot(SLOT_OUTPUT);
-//            IRecipe recipe = BlastFurnaceCrafter.getInstance().getRecipe(input);
-//
-//            if (recipe != null) {
-//                if (paused) return;
-//
-//                ItemStack nextOutput = recipe.getOutput();
-//
-//                if (InvTools.isItemEqual(outputSlot, nextOutput) && nextOutput.getCount() + outputSlot.getCount() <= Math.min(inv.getInventoryStackLimit(), outputSlot.getMaxStackSize())) {
-//
-//                    if (isBurning()) {
-//                        cookTime++;
-//                        setCooking(true);
-//
-//                        if (cookTime >= recipe.getCookTime()) {
-//                            cookTime = 0;
-//                            finishedAt = clock;
-//                            if (InvTools.isEmpty(outputSlot))
-//                                setInventorySlotContents(SLOT_OUTPUT, recipe.getOutput());
-//                            else
-//                                incSize(outputSlot, nextOutput.getCount());
-//                            decrStackSize(SLOT_INPUT, 1);
-//                        }
-//                    }
-//                }
-//            } else {
-//                resetCooking();
-//            }
-//        } else {
-//            resetCooking();
-//        }
-    }
-
-    void loadFuel() {
-        if (getStackInSlot(SLOT_INPUT).isEmpty()) {
-            return;
-        }
-
-        if (burnTime > FUEL_PER_TICK * 2) {
-            return;
-        }
-        ItemStack fuel = getStackInSlot(SLOT_FUEL);
-        if (fuel.isEmpty()) {
-            return;
-        }
-        int itemBurnTime = Crafters.blastFurnace().getCookTime(fuel);
-        if (itemBurnTime <= 0) {
-            return;
-        }
-        currentItemBurnTime = itemBurnTime + burnTime;
-        burnTime = currentItemBurnTime;
-        setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
-    }
-
-    void resetCooking() {
-        cookTime = 0;
-        setCooking(false);
+    private boolean isBurning() {
+        return getLogic(BlastFurnaceLogic.class).map(BlastFurnaceLogic::isBurning).orElse(false);
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-
-        data.setInteger("burnTime", burnTime);
-        data.setInteger("currentItemBurnTime", currentItemBurnTime);
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-
-        burnTime = data.getInteger("burnTime");
-        currentItemBurnTime = data.getInteger("currentItemBurnTime");
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-        data.writeBoolean(burnTime > 0);
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-        clientBurning = data.readBoolean();
+    public boolean hasFlames() {
+        return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(true)
+                && isBurning();
     }
 
     @Override
     public boolean needsFuel() {
-        ItemStack fuel = getStackInSlot(SLOT_FUEL);
-        return sizeOf(fuel) < 8;
+        return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
     }
 
     @Override
-    public boolean isBurning() {
-        TileBlastFurnace mBlock = (TileBlastFurnace) getMasterBlock();
-        if (mBlock != null)
-            if (world.isRemote)
-                return mBlock.clientBurning;
-            else
-                return mBlock.burnTime > 0;
-        return false;
+    public boolean hasWork() {
+        return getLogic(CrafterLogic.class).map(CrafterLogic::hasWork).orElse(false);
     }
 
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (!super.isItemValidForSlot(slot, stack))
-            return false;
-        switch (slot) {
-            case SLOT_OUTPUT:
-            case SLOT_SLAG:
-                return false;
-            case SLOT_FUEL:
-                return FUEL_FILTER.test(stack);
-            case SLOT_INPUT:
-                return INPUT_FILTER.test(stack);
-        }
-        return false;
-    }
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return SLOTS;
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        switch (direction) {
-            case NORTH:
-            case SOUTH:
-            case EAST:
-            case WEST:
-                return index == SLOT_OUTPUT;
-        }
-        return index == SLOT_SLAG;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return inv.isEmpty();
-    }
+    // FIXME this needs to be moved to the logic, but that will probably require redesigning how IItemHandlers are retrieved
+//    @Override
+//    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+//        switch (direction) {
+//            case NORTH:
+//            case SOUTH:
+//            case EAST:
+//            case WEST:
+//                return index == SLOT_OUTPUT;
+//        }
+//        return index == SLOT_SLAG;
+//    }
 
     @Override
     public EnumGui getGui() {
@@ -454,8 +222,8 @@ public final class TileBlastFurnace extends TileMultiBlockOven implements ISided
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return getPatternMarker() == 'W'
-                ? isBurning()
+        return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(false)
+                ? hasFlames()
                 ? base.withProperty(ICON, 2)
                 : base.withProperty(ICON, 1)
                 : base.withProperty(ICON, 0);

@@ -11,21 +11,23 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.util.logic.Logic;
-import mods.railcraft.common.util.logic.InventoryLogic;
-import mods.railcraft.common.util.logic.MetalsChestLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.MetalsChestLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 
-public class EntityCartChestMetals extends EntityCartChestRailcraft {
+public class EntityCartChestMetals extends CartBaseLogicChest {
 
     public EntityCartChestMetals(World world) {
         super(world);
     }
 
-    @Override
-    protected InventoryLogic createLogic() {
-        return new MetalsChestLogic(Logic.Adapter.of(this), this);
+    public EntityCartChestMetals(World world, double x, double y, double z) {
+        super(world, x, y, z);
+    }
+
+    {
+        setLogic(new MetalsChestLogic(Logic.Adapter.of(this)));
     }
 
     @Override

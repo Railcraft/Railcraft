@@ -10,12 +10,11 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.common.blocks.multi.TileCokeOven;
 import mods.railcraft.common.gui.slots.SlotFluidContainerEmpty;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
@@ -24,23 +23,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-
 public class ContainerCokeOven extends RailcraftContainer {
 
-    private final TileCokeOven tile;
-    private int lastCookTime, lastCookTimeTotal;
+    private int lastProgress, lastDuration;
+    private final CokeOvenLogic logic;
 
-    public ContainerCokeOven(InventoryPlayer inventoryplayer, TileCokeOven tile) {
-        super(tile);
-        lastCookTime = 0;
-        this.tile = tile;
+    public ContainerCokeOven(InventoryPlayer inventoryplayer, CokeOvenLogic logic) {
+        super(logic);
+        this.logic = logic;
 
-        addWidget(new FluidGaugeWidget(tile.getTankManager().get(0), 90, 24, 176, 0, 48, 47));
+        addWidget(new FluidGaugeWidget(logic.getTankManager().get(0), 90, 24, 176, 0, 48, 47));
 
-        addSlot(new SlotCokeOven(tile, 0, 16, 43));
-        addSlot(new SlotOutput(tile, 1, 62, 43));
-        addSlot(new SlotOutput(tile, 2, 149, 57));
-        addSlot(new SlotFluidContainerEmpty(tile, 3, 149, 22));
+        addSlot(new SlotCokeOven(logic, 0, 16, 43));
+        addSlot(new SlotOutput(logic, 1, 62, 43));
+        addSlot(new SlotOutput(logic, 2, 149, 57));
+        addSlot(new SlotFluidContainerEmpty(logic, 3, 149, 22));
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
                 addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
@@ -59,25 +56,25 @@ public class ContainerCokeOven extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener listener : listeners) {
-            int cookTime = tile.getCookTime();
-            if (lastCookTime != cookTime)
-                listener.sendWindowProperty(this, 10, cookTime);
+            int progress = logic.getProgress();
+            if (lastProgress != progress)
+                listener.sendWindowProperty(this, 10, progress);
 
-            int cookTimeTotal = tile.getTotalCookTime();
-            if (lastCookTimeTotal != cookTimeTotal)
-                listener.sendWindowProperty(this, 11, cookTimeTotal);
+            int duration = logic.getDuration();
+            if (lastDuration != duration)
+                listener.sendWindowProperty(this, 11, duration);
         }
 
-        lastCookTime = tile.getCookTime();
-        lastCookTimeTotal = tile.getTotalCookTime();
+        lastProgress = logic.getProgress();
+        lastDuration = logic.getDuration();
     }
 
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendWindowProperty(this, 10, tile.getCookTime());
-        listener.sendWindowProperty(this, 11, tile.getTotalCookTime());
+        listener.sendWindowProperty(this, 10, logic.getProgress());
+        listener.sendWindowProperty(this, 11, logic.getDuration());
     }
 
     @Override
@@ -86,10 +83,10 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         switch (id) {
             case 10:
-                tile.setCookTime(data);
+                logic.setProgress(data);
                 break;
             case 11:
-                tile.cookTimeTotal = data;
+                logic.setDuration(data);
         }
     }
 
@@ -101,7 +98,7 @@ public class ContainerCokeOven extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            return !InvTools.isEmpty(stack) && Crafters.cokeOven().getRecipe(stack) != null;
+            return Crafters.cokeOven().getRecipe(stack).isPresent();
         }
 
     }

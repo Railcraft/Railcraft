@@ -8,16 +8,18 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.logic;
+package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
+import mods.railcraft.common.carts.CartBaseLogic;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
@@ -27,16 +29,24 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.util.Optional;
 
 /**
  * The basic logic class.
  */
-public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IWorldNameable {
+public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
+        RailcraftOutputStream>, IWorldNameable, IGuiReturnHandler {
     protected final Adapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
 
     Logic(Adapter adapter) {
         this.adapter = adapter;
+    }
+
+    public <L> Optional<L> getLogic(Class<L> logicClass) {
+        if (logicClass.isInstance(this))
+            return Optional.of(logicClass.cast(this));
+        return Optional.empty();
     }
 
     @Override
@@ -49,16 +59,15 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
             updateClient();
     }
 
-    @SuppressWarnings("EmptyMethod")
-    void updateClient() {
+    void updateClient() { }
 
+    void updateServer() { }
+
+    protected int clock() {
+        return clock;
     }
 
-    void updateServer() {
-
-    }
-
-    public boolean clock(int interval) {
+    protected boolean clock(int interval) {
         return clock % interval == 0;
     }
 
@@ -108,7 +117,10 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
         return data;
     }
 
-    public void readFromNBT(NBTTagCompound data) {
+    public void readFromNBT(NBTTagCompound data) { }
+
+    public boolean isBlock() {
+        return adapter instanceof Adapter.Tile;
     }
 
     public abstract static class Adapter implements IWorldSupplier, IWorldNameable {
@@ -123,100 +135,141 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream, 
 
         abstract void sendUpdateToClient();
 
-        public static Adapter of(TileRailcraft tile) {
-            return new Adapter() {
-                @Override
-                public @Nullable World theWorld() {
-                    return tile.theWorld();
-                }
+        abstract Object getContainer();
 
-                @Override
-                double getX() {
-                    return tile.getX() + 0.5;
-                }
-
-                @Override
-                double getY() {
-                    return tile.getY() + 0.5;
-                }
-
-                @Override
-                double getZ() {
-                    return tile.getZ() + 0.5;
-                }
-
-                @Override
-                BlockPos getPos() {
-                    return tile.getPos();
-                }
-
-                @Override
-                public String getName() {
-                    return tile.getName();
-                }
-
-                @Override
-                public ITextComponent getDisplayName() {
-                    return tile.getDisplayName();
-                }
-
-                @Override
-                public boolean hasCustomName() {
-                    return tile.hasCustomName();
-                }
-
-                @Override
-                void sendUpdateToClient() {
-                    tile.sendUpdateToClient();
-                }
-            };
+        @Nullable TileRailcraft tile() {
+            return null;
         }
 
-        public static Adapter of(EntityMinecart entity) {
+        abstract boolean isUsableByPlayer(EntityPlayer player);
+
+        private static class Tile extends Adapter {
+            private final TileRailcraft tile;
+
+            public Tile(TileRailcraft tile) {
+                this.tile = tile;
+            }
+
+            @Override
+            Object getContainer() {
+                return tile;
+            }
+
+            @Override
+            public @Nullable World theWorld() {
+                return tile.theWorld();
+            }
+
+            @Override
+            double getX() {
+                return tile.getX() + 0.5;
+            }
+
+            @Override
+            double getY() {
+                return tile.getY() + 0.5;
+            }
+
+            @Override
+            double getZ() {
+                return tile.getZ() + 0.5;
+            }
+
+            @Override
+            BlockPos getPos() {
+                return tile.getPos();
+            }
+
+            @Override
+            public String getName() {
+                return tile.getName();
+            }
+
+            @Override
+            public ITextComponent getDisplayName() {
+                return tile.getDisplayName();
+            }
+
+            @Override
+            public boolean hasCustomName() {
+                return tile.hasCustomName();
+            }
+
+            @Override
+            void sendUpdateToClient() {
+                tile.sendUpdateToClient();
+            }
+
+            @Override
+            @Nullable TileRailcraft tile() {
+                return tile;
+            }
+
+            @Override
+            boolean isUsableByPlayer(EntityPlayer player) {
+                return TileRailcraft.isUsableByPlayerHelper(tile, player);
+            }
+        }
+
+        public static Adapter of(TileRailcraft tile) {
+            return new Tile(tile);
+        }
+
+        public static Adapter of(CartBaseLogic cart) {
             return new Adapter() {
                 @Override
+                Object getContainer() {
+                    return cart;
+                }
+
+                @Override
                 double getX() {
-                    return entity.posX;
+                    return cart.posX;
                 }
 
                 @Override
                 double getY() {
-                    return entity.posY;
+                    return cart.posY;
                 }
 
                 @Override
                 double getZ() {
-                    return entity.posZ;
+                    return cart.posZ;
                 }
 
                 @Override
                 BlockPos getPos() {
-                    return entity.getPosition();
+                    return cart.getPosition();
                 }
 
                 @Override
                 public String getName() {
-                    return entity.getName();
+                    return cart.getName();
                 }
 
                 @Override
                 public ITextComponent getDisplayName() {
-                    return entity.getDisplayName();
+                    return cart.getDisplayName();
                 }
 
                 @Override
                 public boolean hasCustomName() {
-                    return entity.hasCustomName();
+                    return cart.hasCustomName();
                 }
 
                 @Override
                 void sendUpdateToClient() {
-                    // TODO
+                    cart.sendUpdateToClient();
                 }
 
                 @Override
                 public @Nullable World theWorld() {
-                    return entity.world;
+                    return cart.world;
+                }
+
+                @Override
+                boolean isUsableByPlayer(EntityPlayer player) {
+                    return !cart.isDead && player.getDistanceSq(cart) <= 64.0D;
                 }
             };
         }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,7 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketGuiReturn;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiDetectorTank extends TileGui {
+public class GuiDetectorTank extends GuiTitled {
 
     private final TileDetector tile;
     private final DetectorTank detector;

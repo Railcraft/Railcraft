@@ -12,6 +12,10 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
+import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
@@ -31,9 +35,6 @@ import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.util.logic.ILogicContainer;
-import mods.railcraft.common.util.logic.TradeStationLogic;
-import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
@@ -92,9 +93,11 @@ public class FactoryGui {
                 case TRAIN_DISPENSER:
                     return new GuiDispenserTrain(inv, (TileDispenserTrain) obj);
                 case COKE_OVEN:
-                    return new GuiCokeOven(inv, (TileCokeOven) obj);
+                    return new GuiCokeOven(inv, ((ILogicContainer) obj).getLogic(CokeOvenLogic.class)
+                            .orElseThrow(NullPointerException::new));
                 case BLAST_FURNACE:
-                    return new GuiBlastFurnace(inv, (TileBlastFurnace) obj);
+                    return new GuiBlastFurnace(inv, ((ILogicContainer) obj).getLogic(BlastFurnaceLogic.class)
+                            .orElseThrow(NullPointerException::new));
                 case STEAN_OVEN:
                     return new GuiSteamOven(inv, (TileSteamOven) obj);
                 case TANK:
@@ -108,7 +111,8 @@ public class FactoryGui {
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new GuiTradeStation(inv, Code.<ILogicContainer<TradeStationLogic>>cast(obj).getLogic(), (IWorldNameable) obj);
+                    return new GuiTradeStation(inv, ((ILogicContainer) obj).getLogic(TradeStationLogic.class)
+                            .orElseThrow(NullPointerException::new), (IWorldNameable) obj);
                 case WORLDSPIKE:
                     return new GuiWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:

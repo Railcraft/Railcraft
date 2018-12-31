@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerFeedStation;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiFeedStation extends TileGui {
+public class GuiFeedStation extends GuiTitled {
 
     private final String feed = LocalizationPlugin.translate("gui.railcraft.feed.station.feed");
 
@@ -23,7 +23,6 @@ public class GuiFeedStation extends TileGui {
         super(tile, new ContainerFeedStation(playerInv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
         xSize = 176;
         ySize = 140;
-        TileFeedStation tile1 = tile;
     }
 
     @Override

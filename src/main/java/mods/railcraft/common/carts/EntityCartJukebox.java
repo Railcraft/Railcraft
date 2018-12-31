@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
@@ -42,12 +41,10 @@ public final class EntityCartJukebox extends CartBase {
     public static final String RECORD_DISPLAY_NAME = "record";
     private static final String RECORD_ITEM_KEY = "RecordItem";
 
-    @Nullable
-    private ItemStack record = emptyStack();
+    private @Nullable ItemStack record = emptyStack();
 
     @SideOnly(Side.CLIENT)
-    @Nullable
-    public JukeboxSound music;
+    public @Nullable JukeboxSound music;
 
     public EntityCartJukebox(World world) {
         super(world);
@@ -63,14 +60,13 @@ public final class EntityCartJukebox extends CartBase {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player) {
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world)) {
             if (!isEmpty(record)) {
                 entityDropItem(record.copy(), 0.5f);
                 record = emptyStack();
                 PacketBuilder.instance().stopRecord(this);
             }
-            EnumHand hand = player.getActiveHand();
             ItemStack heldItem = player.getHeldItem(hand);
             if (isEmpty(heldItem) || !(heldItem.getItem() instanceof ItemRecord))
                 return true;

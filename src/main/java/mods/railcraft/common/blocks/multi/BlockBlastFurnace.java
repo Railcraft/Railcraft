@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.material.Material;
@@ -25,7 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileBlastFurnace.class)
-public final class BlockBlastFurnace extends BlockMultiBlockInventory<TileBlastFurnace> {
+public final class BlockBlastFurnace extends BlockEntityDelegate<TileBlastFurnace> {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 

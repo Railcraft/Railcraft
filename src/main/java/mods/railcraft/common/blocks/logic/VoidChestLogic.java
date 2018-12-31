@@ -8,9 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.logic;
-
-import net.minecraft.inventory.IInventory;
+package mods.railcraft.common.blocks.logic;
 
 /**
  * The logic behind the void chest.
@@ -18,8 +16,8 @@ import net.minecraft.inventory.IInventory;
 public class VoidChestLogic extends InventoryLogic {
     private static final int TICK_PER_VOID = 8;
 
-    public VoidChestLogic(Adapter adapter, IInventory inventory) {
-        super(adapter, inventory);
+    public VoidChestLogic(Adapter adapter) {
+        super(adapter, 27);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2018
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.containers.ContainerDetectorSheep;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiDetectorSheep extends TileGui {
+public class GuiDetectorSheep extends GuiTitled {
 
     public GuiDetectorSheep(InventoryPlayer inv, TileDetector tile) {
         super(tile, new ContainerDetectorSheep(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");

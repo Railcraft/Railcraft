@@ -9,21 +9,21 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.multi.TileCokeOven;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCokeOven;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiCokeOven extends TileGui {
+public class GuiCokeOven extends GuiTitled {
 
-    private final TileCokeOven tile;
+    private final CokeOvenLogic tile;
 
-    public GuiCokeOven(InventoryPlayer inventoryplayer, TileCokeOven tile) {
-        super(tile, new ContainerCokeOven(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png",
+    public GuiCokeOven(InventoryPlayer inventoryplayer, CokeOvenLogic logic) {
+        super(logic, new ContainerCokeOven(inventoryplayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png",
                 LocalizationPlugin.translateFast("gui.railcraft.coke.oven"));
-        this.tile = tile;
+        this.tile = logic;
     }
 
     @Override
@@ -38,10 +38,11 @@ public class GuiCokeOven extends TileGui {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        if (tile.getCookTime() > 0) {
-            int burnProgress = tile.getBurnProgressScaled(12);
+        if (tile.getProgress() > 0) {
+            double progressPercent = tile.getProgressPercent();
+            int burnProgress = (int) ((1.0 - progressPercent) * 12);
             drawTexturedModalRect(x + 16, (y + 38) - burnProgress, 176, 59 - burnProgress, 14, burnProgress + 2);
-            int cookProgress = tile.getCookProgressScaled(20);
+            int cookProgress = (int) (progressPercent * 20);
             drawTexturedModalRect(x + 34, y + 43, 176, 61, cookProgress + 1, 16);
         }
     }

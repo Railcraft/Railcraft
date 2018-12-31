@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2018
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.IIC2EnergyCart;
@@ -13,21 +14,18 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCartEnergy;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiCartEnergy extends EntityGui {
+public class GuiCartEnergy extends GuiTitled {
 
     private final IIC2EnergyCart device;
 
     public GuiCartEnergy(InventoryPlayer inv, IIC2EnergyCart cart) {
-        super(cart.getEntity(), new ContainerCartEnergy(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy.png");
+        super(cart, new ContainerCartEnergy(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_energy.png");
         this.device = cart;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String entityName = device.getName();
-        int sWidth = fontRenderer.getStringWidth(entityName);
-        int sPos = xSize / 2 - sWidth / 2;
-        fontRenderer.drawString(entityName, sPos, 6, 0x404040);
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString("Power Level:", 80, 25, 0x404040);
         fontRenderer.drawString(Integer.toString((int) device.getEnergy()), 115, 35, 0x404040);
 

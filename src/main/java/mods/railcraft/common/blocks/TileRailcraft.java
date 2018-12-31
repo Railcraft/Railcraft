@@ -205,6 +205,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         PlayerPlugin.writeOwnerToNBT(data, owner);
@@ -216,6 +217,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         owner = PlayerPlugin.readOwnerFromNBT(data);

@@ -46,8 +46,13 @@ public class BlockTradeStation extends BlockEntityDelegate<TileTradeStation> {
     }
 
     @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return super.getStateFromMeta(meta).withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+    }
+
+    @Override
     public int getMetaFromState(IBlockState state) {
-        return 0;
+        return state.getValue(FACING).getHorizontalIndex();
     }
 
     @Override

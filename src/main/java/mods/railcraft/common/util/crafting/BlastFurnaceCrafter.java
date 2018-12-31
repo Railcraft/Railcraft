@@ -9,24 +9,19 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
-import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.api.crafting.ISimpleRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
-import mods.railcraft.common.util.misc.Code;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.init.Blocks;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,22 +39,15 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         newFuel(ThaumcraftPlugin.ITEMS.get("alumentum", 0)).name("thaumcraft:alumentum").register();
         newFuel(EnumGeneric.BLOCK_COKE.getStack()).name("railcraft:block_coke").register();
         newFuel(new ItemStack(Items.COAL, 1, 1)).name("minecraft:charcoal").register();
-        newFuel(RailcraftItems.FIRESTONE_REFINED).register();
-        newFuel(RailcraftItems.FIRESTONE_CRACKED).register();
-        newFuel("blockCharcoal")
-                .time(FuelPlugin.getBurnTime(new ItemStack(Blocks.COAL_BLOCK, 1))).register();
+        newFuel(RailcraftItems.FIRESTONE_REFINED).time(stack -> stack.getItem().getItemBurnTime(stack)).register();
+        newFuel(RailcraftItems.FIRESTONE_CRACKED).time(stack -> stack.getItem().getItemBurnTime(stack)).register();
+        newFuel("blockCharcoal").register();
     }
 
     @Override
     public IFuelBuilder newFuel(Object input) {
         FuelBuilder builder = new FuelBuilder(Ingredients.from(input));
         CraftingPlugin.tryGuessName(input, builder);
-        if (input instanceof ItemStack) {
-            builder.time((ItemStack) input);
-        } else if (input instanceof IRailcraftObjectContainer) {
-            IRailcraftObjectContainer<?> container = Code.cast(input);
-            builder.time(container.getWildcard());
-        }
         return builder;
     }
 
@@ -86,30 +74,24 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     }
 
     @Override
-    public int getCookTime(ItemStack stack) {
+    public Optional<ISimpleRecipe> getFuel(ItemStack stack) {
+        if (InvTools.isEmpty(stack)) return Optional.empty();
         return fuels.stream()
                 .filter(fuel -> fuel.getInput().test(stack))
-                .findFirst()
-                .map(ISimpleRecipe::getTickTime)
-                .orElse(0);
+                .findFirst();
     }
 
     @Override
     public Optional<IRecipe> getRecipe(ItemStack stack) {
+        if (InvTools.isEmpty(stack)) return Optional.empty();
         return recipes.stream()
                 .filter(recipe -> recipe.getInput().test(stack))
                 .findFirst();
     }
 
-    private class FuelBuilder implements IFuelBuilder {
-        private final Ingredient input;
-        private ResourceLocation name;
-        private int heatValue;
-        private boolean registered;
-
+    private class FuelBuilder extends SimpleRecipeBuilder<IFuelBuilder> implements IFuelBuilder {
         public FuelBuilder(Ingredient input) {
-            this.input = input;
-            CraftingPlugin.addBuilder(this);
+            super("Blast Furnace Fuel", input, FuelPlugin::getBurnTime);
         }
 
         @Override
@@ -119,70 +101,32 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         }
 
         @Override
-        public IFuelBuilder time(int ticks) {
-            this.heatValue = ticks;
-            return this;
-        }
+        protected void registerRecipe() {
+            fuels.add(new ISimpleRecipe() {
+                @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
 
-        @Override
-        public IFuelBuilder time(ItemStack fuel) {
-            this.heatValue = FuelPlugin.getBurnTime(fuel);
-            return this;
-        }
+                @Override
+                public Ingredient getInput() {
+                    return input;
+                }
 
-        @Override
-        public void register() {
-            registered = true;
-            try {
-                Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
-                        "Fuel input was null or empty.");
-                Preconditions.checkArgument(name != null, "Fuel name not set.");
-                Preconditions.checkArgument(heatValue > 0, "Heat value was zero.");
-                fuels.add(new ISimpleRecipe() {
-                    @Override
-                    public ResourceLocation getName() {
-                        return name;
-                    }
-
-                    @Override
-                    public Ingredient getInput() {
-                        return input;
-                    }
-
-                    @Override
-                    public int getTickTime() {
-                        return heatValue;
-                    }
-                });
-            } catch (Throwable ex) {
-                Game.log(Level.WARN,
-                        "Tried, but failed to register {0} as a Blast Furnace fuel. Reason: {1}",
-                        name, ex.getMessage());
-            }
-        }
-
-        @Override
-        public ResourceLocation getName() {
-            return name;
-        }
-
-        @Override
-        public boolean notRegistered() {
-            return !registered;
+                @Override
+                public int getTickTime(ItemStack input) {
+                    return timeFunction.apply(input);
+                }
+            });
         }
     }
 
-    private class RecipeBuilder implements IRecipeBuilder {
-        private final Ingredient input;
+    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
         private int slagOutput;
         private ItemStack output = ItemStack.EMPTY;
-        private ResourceLocation name;
-        private int cookTime = SMELT_TIME;
-        private boolean registered;
 
         public RecipeBuilder(Ingredient input) {
-            this.input = input;
-            CraftingPlugin.addBuilder(this);
+            super("Blast Furnace", input, stack -> SMELT_TIME);
         }
 
         @Override
@@ -198,66 +142,33 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         }
 
         @Override
-        public IRecipeBuilder name(@Nullable ResourceLocation name) {
-            this.name = Objects.requireNonNull(name);
-            return this;
-        }
+        public void registerRecipe() {
+            recipes.add(new IRecipe() {
+                @Override
+                public ResourceLocation getName() {
+                    return name;
+                }
 
-        @Override
-        public IRecipeBuilder time(int ticks) {
-            this.cookTime = ticks;
-            return this;
-        }
+                @Override
+                public Ingredient getInput() {
+                    return input;
+                }
 
-        @Override
-        public void register() {
-            registered = true;
-            try {
-                Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
-                        "Input was null or empty.");
-                Preconditions.checkArgument(name != null, "Recipe name not set.");
-                Preconditions.checkArgument(cookTime > 0, "Cook time was zero.");
-                recipes.add(new IRecipe() {
-                    @Override
-                    public ResourceLocation getName() {
-                        return name;
-                    }
+                @Override
+                public int getTickTime(ItemStack input) {
+                    return timeFunction.apply(input);
+                }
 
-                    @Override
-                    public Ingredient getInput() {
-                        return input;
-                    }
+                @Override
+                public ItemStack getOutput() {
+                    return output.copy();
+                }
 
-                    @Override
-                    public int getTickTime() {
-                        return cookTime;
-                    }
-
-                    @Override
-                    public ItemStack getOutput() {
-                        return output.copy();
-                    }
-
-                    @Override
-                    public int getSlagOutput() {
-                        return slagOutput;
-                    }
-                });
-            } catch (Throwable ex) {
-                Game.log(Level.WARN,
-                        "Tried, but failed to register {0} as a Blast Furnace recipe. Reason: {1}",
-                        name, ex.getMessage());
-            }
-        }
-
-        @Override
-        public ResourceLocation getName() {
-            return name;
-        }
-
-        @Override
-        public boolean notRegistered() {
-            return !registered;
+                @Override
+                public int getSlagOutput() {
+                    return slagOutput;
+                }
+            });
         }
     }
 }
