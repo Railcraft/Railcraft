@@ -17,9 +17,10 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.items.ItemCircuit;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.crafting.RoutingTableCopyRecipe;
-import mods.railcraft.common.util.crafting.RoutingTicketCopyRecipe;
+import mods.railcraft.common.util.crafting.Ingredients;
+import mods.railcraft.common.util.crafting.NBTCopyRecipe;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -43,10 +44,18 @@ public class ModuleRouting extends RailcraftModulePayload {
             @Override
             public void init() {
                 if (RailcraftItems.ROUTING_TABLE.isEnabled())
-                    CraftingPlugin.addRecipe(new RoutingTableCopyRecipe());
+                    CraftingPlugin.addRecipe(new NBTCopyRecipe("routing_table_copy",
+                            Ingredients.from(RailcraftItems.ROUTING_TABLE),
+                            Ingredients.from(RailcraftItems.ROUTING_TABLE),
+                            RailcraftItems.ROUTING_TABLE.getStack()
+                    ));
 
                 if (RailcraftItems.TICKET.isEnabled() && RailcraftItems.TICKET_GOLD.isEnabled())
-                    CraftingPlugin.addRecipe(new RoutingTicketCopyRecipe());
+                    CraftingPlugin.addRecipe(new NBTCopyRecipe("ticket_copy",
+                            Ingredients.from(RailcraftItems.TICKET_GOLD),
+                            Ingredients.from(RailcraftItems.TICKET, Items.PAPER),
+                            RailcraftItems.TICKET.getStack()
+                    ));
 
                 if (EnumDetector.ROUTING.isEnabled()) {
                     CraftingPlugin.addShapedRecipe(EnumDetector.ROUTING.getStack(),
