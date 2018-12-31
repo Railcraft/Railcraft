@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.ICokeOvenCrafter;
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.*;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -19,17 +20,20 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
+import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
  * Created by CovertJaguar on 12/27/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CokeOvenLogic extends CrafterLogic implements ITank {
+public class CokeOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
     public static final int SLOT_OUTPUT_FLUID = 2;
@@ -39,7 +43,8 @@ public class CokeOvenLogic extends CrafterLogic implements ITank {
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
-    private int finishedAt;
+    private @Nullable ICokeOvenCrafter.IRecipe recipe;
+    private ItemStack lastInput = emptyStack();
 
     public CokeOvenLogic(Adapter adapter) {
         super(adapter, 4);
@@ -48,49 +53,47 @@ public class CokeOvenLogic extends CrafterLogic implements ITank {
     }
 
     @Override
+    protected void setRecipe() {
+        ItemStack input = getStackInSlot(SLOT_INPUT);
+        if (!InvTools.isItemEqual(lastInput, input)) {
+            lastInput = input;
+            recipe = Crafters.cokeOven().getRecipe(input).orElse(null);
+            if (recipe == null && !input.isEmpty()) {
+                setInventorySlotContents(SLOT_INPUT, emptyStack());
+                dropItem(input);
+            }
+        }
+    }
+
+    @Override
+    protected boolean lacksRequirements() {
+        return recipe == null;
+    }
+
+    @Override
+    protected int calculateDuration() {
+        Objects.requireNonNull(recipe);
+        return recipe.getTickTime(getStackInSlot(SLOT_INPUT));
+    }
+
+    @Override
+    protected boolean sendToOutput() {
+        Objects.requireNonNull(recipe);
+        ItemStack output = recipe.getOutput();
+        FluidStack fluidOutput = recipe.getFluidOutput();
+        if (invOutput.canFit(output)
+                && (fluidOutput == null || tank.fill(fluidOutput, false) >= fluidOutput.amount)) {
+            decrStackSize(SLOT_INPUT, 1);
+            invOutput.addStack(output);
+            tank.fill(fluidOutput, true);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     void updateServer() {
         super.updateServer();
-        if (clock() > finishedAt + COOK_STEP_LENGTH + 5)
-            if (progress <= 0)
-                setProcessing(false);
-
-        ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (!InvTools.isEmpty(input)) {
-            if (!paused && clock(COOK_STEP_LENGTH)) {
-                ICokeOvenCrafter.IRecipe recipe = Crafters.cokeOven().getRecipe(input).orElse(null);
-
-                if (recipe != null) {
-                    ItemStack output = recipe.getOutput();
-                    FluidStack fluidOutput = recipe.getFluidOutput();
-                    if (invOutput.canFit(output)
-                            && (fluidOutput == null || tank.fill(fluidOutput, false) >= fluidOutput.amount)) {
-                        duration = recipe.getTickTime(input);
-                        progress += COOK_STEP_LENGTH;
-                        setProcessing(true);
-
-                        if (progress >= duration) {
-                            progress = 0;
-                            finishedAt = clock();
-                            decrStackSize(SLOT_INPUT, 1);
-                            invOutput.addStack(output);
-                            tank.fill(fluidOutput, true);
-                            sendUpdateToClient();
-                        }
-                    } else {
-                        progress = 0;
-                        setProcessing(false);
-                    }
-                } else {
-                    progress = 0;
-                    setProcessing(false);
-                    setInventorySlotContents(SLOT_INPUT, emptyStack());
-                    dropItem(input);
-                }
-            }
-        } else {
-            progress = 0;
-            setProcessing(false);
-        }
 
         ItemStack topSlot = getStackInSlot(SLOT_LIQUID_INPUT);
         if (!InvTools.isEmpty(topSlot) && !FluidItemHelper.isContainer(topSlot)) {
@@ -106,6 +109,12 @@ public class CokeOvenLogic extends CrafterLogic implements ITank {
 
         if (clock(FluidTools.BUCKET_FILL_TIME))
             FluidTools.fillContainers(getTankManager(), this, SLOT_LIQUID_INPUT, SLOT_OUTPUT_FLUID, Fluids.CREOSOTE.get());
+    }
+
+    @Override
+    public boolean needsFuel() {
+        ItemStack fuel = getStackInSlot(SLOT_INPUT);
+        return sizeOf(fuel) < 8;
     }
 
     @Override

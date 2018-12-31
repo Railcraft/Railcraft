@@ -11,11 +11,11 @@
 package mods.railcraft.common.blocks;
 
 import buildcraft.api.statements.IActionExternal;
-import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.blocks.logic.ILogicContainer;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -134,6 +134,13 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @OverridingMethodsMustInvokeSuper
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         logic.readGuiData(data, sender);
+    }
+
+    @Override
+    public boolean openGui(EntityPlayer player) {
+        if (getLogic(StructureLogic.class).map(StructureLogic::isStructureValid).orElse(true))
+            return ISmartTile.super.openGui(player);
+        return false;
     }
 
     @Override

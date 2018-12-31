@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.multi.TileBlastFurnace;
+import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,19 +20,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public final class ContainerBlastFurnace extends RailcraftContainer {
 
-    private final TileBlastFurnace furnace;
+    private final BlastFurnaceLogic logic;
     private int lastCookTime;
     private int lastCookTimeTotal;
     private int lastBurnTime;
     private int lastItemBurnTime;
 
-    public ContainerBlastFurnace(InventoryPlayer player, TileBlastFurnace tile) {
-        super(tile);
-        this.furnace = tile;
-        addSlot(new SlotStackFilter(TileBlastFurnace.INPUT_FILTER, tile, TileBlastFurnace.SLOT_INPUT, 56, 17));
-        addSlot(new SlotStackFilter(TileBlastFurnace.FUEL_FILTER, tile, TileBlastFurnace.SLOT_FUEL, 56, 53));
-        addSlot(new SlotOutput(tile, TileBlastFurnace.SLOT_OUTPUT, 116, 21));
-        addSlot(new SlotOutput(tile, TileBlastFurnace.SLOT_SLAG, 116, 53));
+    public ContainerBlastFurnace(InventoryPlayer player, BlastFurnaceLogic logic) {
+        super(logic);
+        this.logic = logic;
+        addSlot(new SlotStackFilter(BlastFurnaceLogic.INPUT_FILTER, logic, BlastFurnaceLogic.SLOT_INPUT, 56, 17));
+        addSlot(new SlotStackFilter(BlastFurnaceLogic.FUEL_FILTER, logic, BlastFurnaceLogic.SLOT_FUEL, 56, 53));
+        addSlot(new SlotOutput(logic, BlastFurnaceLogic.SLOT_OUTPUT, 116, 21));
+        addSlot(new SlotOutput(logic, BlastFurnaceLogic.SLOT_SLAG, 116, 53));
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
@@ -48,10 +48,10 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener player) {
         super.addListener(player);
-        player.sendWindowProperty(this, 0, furnace.getCookTime());
-        player.sendWindowProperty(this, 1, furnace.getTotalCookTime());
-        player.sendWindowProperty(this, 2, furnace.burnTime);
-        player.sendWindowProperty(this, 3, furnace.currentItemBurnTime);
+        player.sendWindowProperty(this, 0, logic.getProgress());
+        player.sendWindowProperty(this, 1, logic.getDuration());
+        player.sendWindowProperty(this, 2, logic.burnTime);
+        player.sendWindowProperty(this, 3, logic.currentItemBurnTime);
     }
 
     /**
@@ -62,38 +62,38 @@ public final class ContainerBlastFurnace extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener listener : listeners) {
-            if (lastCookTime != furnace.getCookTime())
-                listener.sendWindowProperty(this, 0, furnace.getCookTime());
-            if (lastCookTimeTotal != furnace.getTotalCookTime())
-                listener.sendWindowProperty(this, 1, furnace.getTotalCookTime());
+            if (lastCookTime != logic.getProgress())
+                listener.sendWindowProperty(this, 0, logic.getProgress());
+            if (lastCookTimeTotal != logic.getDuration())
+                listener.sendWindowProperty(this, 1, logic.getDuration());
 
-            if (lastBurnTime != furnace.burnTime)
-                listener.sendWindowProperty(this, 2, furnace.burnTime);
+            if (lastBurnTime != logic.burnTime)
+                listener.sendWindowProperty(this, 2, logic.burnTime);
 
-            if (lastItemBurnTime != furnace.currentItemBurnTime)
-                listener.sendWindowProperty(this, 3, furnace.currentItemBurnTime);
+            if (lastItemBurnTime != logic.currentItemBurnTime)
+                listener.sendWindowProperty(this, 3, logic.currentItemBurnTime);
         }
 
-        lastCookTime = furnace.getCookTime();
-        lastCookTimeTotal = furnace.getTotalCookTime();
-        lastBurnTime = furnace.burnTime;
-        lastItemBurnTime = furnace.currentItemBurnTime;
+        lastCookTime = logic.getProgress();
+        lastCookTimeTotal = logic.getDuration();
+        lastBurnTime = logic.burnTime;
+        lastItemBurnTime = logic.currentItemBurnTime;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
         if (id == 0)
-            furnace.setCookTime(data);
+            logic.setProgress(data);
 
         if (id == 1)
-            furnace.cookTimeTotal = data;
+            logic.setDuration(data);
 
         if (id == 2)
-            furnace.burnTime = data;
+            logic.burnTime = data;
 
         if (id == 3)
-            furnace.currentItemBurnTime = data;
+            logic.currentItemBurnTime = data;
     }
 
 }

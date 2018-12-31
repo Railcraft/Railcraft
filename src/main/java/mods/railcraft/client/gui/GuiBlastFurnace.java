@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.multi.TileBlastFurnace;
+import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -17,12 +17,12 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiBlastFurnace extends GuiTitled {
 
-    private final TileBlastFurnace tile;
+    private final BlastFurnaceLogic logic;
 
-    public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, TileBlastFurnace tile) {
-        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png",
+    public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, BlastFurnaceLogic logic) {
+        super(logic, new ContainerBlastFurnace(par1InventoryPlayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png",
                 LocalizationPlugin.translateFast("gui.railcraft.blast.furnace"));
-        this.tile = tile;
+        this.logic = logic;
     }
 
     /**
@@ -45,12 +45,12 @@ public class GuiBlastFurnace extends GuiTitled {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        if (tile.clientBurning) {
-            int scale = tile.getBurnProgressScaled(12);
+        if (logic.isBurning()) {
+            int scale = logic.getBurnProgressScaled(12);
             drawTexturedModalRect(x + 56, y + 36 + 12 - scale, 176, 12 - scale, 14, scale + 2);
         }
 
-        int scale = tile.getCookProgressScaled(24);
+        int scale = (int) (logic.getProgressPercent() * 24);
         drawTexturedModalRect(x + 79, y + 34, 176, 14, scale + 1, 16);
     }
 }

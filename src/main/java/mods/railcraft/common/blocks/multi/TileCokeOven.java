@@ -14,17 +14,16 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.ITank;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import mods.railcraft.common.blocks.logic.CrafterLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.ITank;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -34,9 +33,6 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 public final class TileCokeOven extends TileCrafter implements INeedsFuel {
 
@@ -134,11 +130,7 @@ public final class TileCokeOven extends TileCrafter implements INeedsFuel {
 
     @Override
     public boolean needsFuel() {
-        Optional<IInventory> inv = getLogic(IInventory.class);
-        if (!inv.isPresent())
-            return false;
-        ItemStack fuel = inv.get().getStackInSlot(CokeOvenLogic.SLOT_INPUT);
-        return sizeOf(fuel) < 8;
+        return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
     }
 
     @Override
@@ -153,13 +145,6 @@ public final class TileCokeOven extends TileCrafter implements INeedsFuel {
                 ? base.withProperty(BlockCokeOven.ICON, 2)
                 : base.withProperty(BlockCokeOven.ICON, 1)
                 : base.withProperty(BlockCokeOven.ICON, 0);
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        if (getLogic(StructureLogic.class).map(StructureLogic::isStructureValid).orElse(false))
-            return super.openGui(player);
-        return false;
     }
 
     @Override

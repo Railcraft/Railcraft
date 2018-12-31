@@ -11,6 +11,10 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
+import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
@@ -25,9 +29,6 @@ import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
-import mods.railcraft.common.blocks.logic.CokeOvenLogic;
-import mods.railcraft.common.blocks.logic.ILogicContainer;
-import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -81,7 +82,8 @@ public final class FactoryContainer {
                     return new ContainerCokeOven(inv, ((ILogicContainer) obj).getLogic(CokeOvenLogic.class)
                             .orElseThrow(NullPointerException::new));
                 case BLAST_FURNACE:
-                    return new ContainerBlastFurnace(inv, (TileBlastFurnace) obj);
+                    return new ContainerBlastFurnace(inv, ((ILogicContainer) obj).getLogic(BlastFurnaceLogic.class)
+                            .orElseThrow(NullPointerException::new));
                 case STEAN_OVEN:
                     return new ContainerSteamOven(inv, (TileSteamOven) obj);
                 case ROCK_CRUSHER:

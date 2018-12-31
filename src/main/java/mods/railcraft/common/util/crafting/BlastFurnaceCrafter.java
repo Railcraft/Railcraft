@@ -17,6 +17,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -73,16 +74,16 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     }
 
     @Override
-    public int getCookTime(ItemStack stack) {
+    public Optional<ISimpleRecipe> getFuel(ItemStack stack) {
+        if (InvTools.isEmpty(stack)) return Optional.empty();
         return fuels.stream()
                 .filter(fuel -> fuel.getInput().test(stack))
-                .findFirst()
-                .map(fuel -> fuel.getTickTime(stack))
-                .orElse(0);
+                .findFirst();
     }
 
     @Override
     public Optional<IRecipe> getRecipe(ItemStack stack) {
+        if (InvTools.isEmpty(stack)) return Optional.empty();
         return recipes.stream()
                 .filter(recipe -> recipe.getInput().test(stack))
                 .findFirst();

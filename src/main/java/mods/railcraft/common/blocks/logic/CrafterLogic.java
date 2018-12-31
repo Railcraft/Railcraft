@@ -28,10 +28,12 @@ import java.util.Set;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
+    public static int PROGRESS_STEP = 16;
     protected int progress;
     protected int duration;
     private boolean processing;
     protected boolean paused;
+    private int finishedAt;
     private final Set<Object> actions = new HashSet<>();
 
     protected CrafterLogic(Adapter adapter, int sizeInv) {
@@ -40,8 +42,9 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
     @Override
     void updateServer() {
-        if (clock(16)) {
+        if (clock(PROGRESS_STEP)) {
             processActions();
+            progressCrafting();
         }
     }
 
@@ -51,6 +54,12 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
     public void setProgress(int i) {
         progress = i;
+    }
+
+    protected void reset() {
+        setProgress(0);
+        setProcessing(false);
+        sendUpdateToClient();
     }
 
     public boolean isProcessing() {
@@ -70,6 +79,16 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
     public int getDuration() {
         return duration;
+    }
+
+    protected abstract int calculateDuration();
+
+    protected void setFinished() {
+        finishedAt = clock();
+    }
+
+    protected boolean isFinished() {
+        return processing && clock() > finishedAt + PROGRESS_STEP + 5;
     }
 
     public double getProgressPercent() {
@@ -93,6 +112,33 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
     public boolean hasWork() {
         return isProcessing();
     }
+
+    protected abstract void setRecipe();
+
+    protected boolean lacksRequirements() {
+        return false;
+    }
+
+    protected void progressCrafting() {
+        if (isFinished()) setProcessing(false);
+        if (paused) return;
+
+        setRecipe();
+
+        if (lacksRequirements()) return;
+
+        setProcessing(true);
+        progress += PROGRESS_STEP;
+        duration = calculateDuration();
+        if (progress < duration) return;
+
+        progress = duration;
+        setFinished();
+        if (sendToOutput())
+            reset();
+    }
+
+    protected abstract boolean sendToOutput();
 
     @Override
     @OverridingMethodsMustInvokeSuper
