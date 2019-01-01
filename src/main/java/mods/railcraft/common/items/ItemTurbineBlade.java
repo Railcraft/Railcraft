@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Created by CovertJaguar on 5/19/2016 for Railcraft.
- *
+ *e
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTurbineBlade extends ItemRailcraft {

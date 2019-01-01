@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -97,5 +97,13 @@ public class NBTCopyRecipe extends BaseRecipe {
     @Override
     public ItemStack getRecipeOutput() {
         return output.copy();
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        ingredients.add(getSource());
+        ingredients.add(getBlank());
+        return ingredients;
     }
 }

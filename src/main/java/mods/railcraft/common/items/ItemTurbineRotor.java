@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@
 package mods.railcraft.common.items;
 
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.RotorRepairRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.item.ItemStack;
@@ -40,5 +41,12 @@ public class ItemTurbineRotor extends ItemRailcraft {
         CraftingPlugin.addShapedRecipe(new ItemStack(this),
                 "DDD",
                 'D', RailcraftItems.TURBINE_DISK);
+
+        CraftingPlugin.addRecipe(new RotorRepairRecipe());
+
+        // Damaged Test Rotor recipe
+//        ItemStack rotor = RailcraftItems.TURBINE_ROTOR.getStack();
+//        rotor.setItemDamage(25000);
+//        CraftingPlugin.addShapelessRecipe(rotor, RailcraftItems.TURBINE_ROTOR.getStack());
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,10 +17,9 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
-import java.util.Arrays;
 
 /**
  * Created by CovertJaguar on 3/10/2016 for Railcraft.
@@ -29,27 +28,20 @@ import java.util.Arrays;
  */
 public class CartDisassemblyRecipe extends BaseRecipe {
     private final ItemStack contents;
-    private final Item fullCart, emptyCart;
+    private final Ingredient fullCart;
+    private final Item emptyCart;
 
     public CartDisassemblyRecipe(String name, ItemStack contents, Item fullCart, Item emptyCart) {
         super(name);
         this.contents = contents;
-        this.fullCart = fullCart;
+        this.fullCart = Ingredients.from(fullCart);
         this.emptyCart = emptyCart;
     }
 
     @Override
     public boolean matches(InventoryCrafting grid, World worldIn) {
-        int itemCount = 0;
-        boolean foundCart = false;
-        for (IInvSlot slot : InventoryIterator.get(grid)) {
-            if (slot.hasStack()) {
-                if (slot.containsItem(fullCart))
-                    foundCart = true;
-                itemCount++;
-            }
-        }
-        return itemCount == 1 && foundCart;
+        return InventoryIterator.get(grid).streamStacks().count() == 1
+                && InventoryIterator.get(grid).streamStacks().anyMatch(fullCart);
     }
 
     @Override
@@ -63,21 +55,27 @@ public class CartDisassemblyRecipe extends BaseRecipe {
     }
 
     @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        ingredients.add(Ingredients.from(fullCart));
+        return ingredients;
+    }
+
+    @Override
     public ItemStack getRecipeOutput() {
         return contents;
     }
 
     @Override
     public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
-        ItemStack[] grid = new ItemStack[inv.getSizeInventory()];
-        Arrays.fill(grid, ItemStack.EMPTY);
+        NonNullList<ItemStack> grid = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
         for (IInvSlot slot : InventoryIterator.get(inv)) {
-            if (slot.containsItem(fullCart))
-                grid[slot.getIndex()] = new ItemStack(emptyCart);
+            if (slot.matches(fullCart))
+                grid.set(slot.getIndex(), new ItemStack(emptyCart));
         }
 
-        return NonNullList.from(ItemStack.EMPTY, grid);
+        return grid;
     }
 
     public static class RailcraftVariant extends CartDisassemblyRecipe {

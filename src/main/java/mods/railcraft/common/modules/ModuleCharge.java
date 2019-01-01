@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,9 +12,7 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.charge.ChargeManager;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
@@ -58,11 +56,7 @@ public class ModuleCharge extends RailcraftModulePayload {
 //                            'P', RailcraftItems.PLATE, Metal.STEEL,
 //                            'B', "blockSteel");
 
-//                    CraftingPlugin.addRecipe(new RotorRepairRecipe());
 
-                ItemStack rotor = RailcraftItems.TURBINE_ROTOR.getStack();
-                rotor.setItemDamage(25000);
-                CraftingPlugin.addShapelessRecipe(rotor, RailcraftItems.TURBINE_ROTOR.getStack());
 //                }
 
 //                EnumMachineEpsilon epsilon = EnumMachineEpsilon.FORCE_TRACK_EMITTER;

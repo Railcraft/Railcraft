@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,15 +11,15 @@
 package mods.railcraft.common.plugins.jei;
 
 import mezz.jei.api.*;
+import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import mods.railcraft.client.gui.GuiBlastFurnace;
-import mods.railcraft.client.gui.GuiRockCrusher;
-import mods.railcraft.client.gui.GuiRollingMachine;
-import mods.railcraft.client.gui.GuiRollingMachinePowered;
+import mods.railcraft.client.gui.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
 import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
@@ -39,9 +39,17 @@ import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineCategory;
 import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineRecipeMaker;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
+import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by CovertJaguar on 10/7/2016 for Railcraft.
@@ -63,6 +71,37 @@ public class RailcraftJEIPlugin implements IModPlugin {
     public void register(IModRegistry registry) {
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         FluidRecipeInterpreter.init(registry.getJeiHelpers().getStackHelper(), registry.getIngredientRegistry());
+
+        registry.handleRecipes(CartDisassemblyRecipe.class, recipe ->
+                        new DefaultRecipeWrapper(registry, recipe, "gui.railcraft.jei.recipe.split") {
+                            @Override
+                            public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+                                super.drawInfo(minecraft, recipeWidth, recipeHeight, mouseX, mouseY);
+                                IDrawable drawable = registry.getJeiHelpers().getGuiHelper().createDrawableIngredient(new ItemStack(Items.MINECART));
+                                drawable.draw(minecraft, 65, 35);
+                            }
+                        },
+                VanillaRecipeCategoryUid.CRAFTING);
+
+        registry.handleRecipes(NBTCopyRecipe.class, recipe ->
+                        new DefaultRecipeWrapper(registry, recipe, "gui.railcraft.jei.recipe.copy"),
+                VanillaRecipeCategoryUid.CRAFTING);
+
+        registry.handleRecipes(LocomotivePaintingRecipe.class, recipe ->
+                        new DefaultRecipeWrapper(registry, recipe, "gui.railcraft.jei.recipe.paint"),
+                VanillaRecipeCategoryUid.CRAFTING);
+
+        registry.handleRecipes(FilterBeesGenomeRecipe.class, recipe ->
+                        new DefaultRecipeWrapper(registry, recipe, "gui.railcraft.jei.recipe.setup"),
+                VanillaRecipeCategoryUid.CRAFTING);
+
+        registry.handleRecipes(RotorRepairRecipe.class, recipe ->
+                        new DefaultRecipeWrapper(registry, recipe, "gui.railcraft.jei.recipe.repair")
+                                .modifyInputs(stack -> {
+                                    if (RailcraftItems.TURBINE_ROTOR.isEqual(stack))
+                                        stack.setItemDamage(RotorRepairRecipe.REPAIR_PER_BLADE);
+                                }),
+                VanillaRecipeCategoryUid.CRAFTING);
 
         registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
         registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROLLING);
@@ -107,40 +146,6 @@ public class RailcraftJEIPlugin implements IModPlugin {
         registry.addRecipeCategories(new BlastFurnaceMachineCategory(guiHelper));
     }
 
-//    @Override
-//    public void register(IModRegistry registry) {
-//        IJeiHelpers jeiHelpers = registry.getJeiHelpers();
-//        IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-//        FluidRecipeInterpreter.init(jeiHelpers.getStackHelper(), registry.getIngredientRegistry());
-//        registry.handleRecipes();
-//        addRecipeHandlers(new RollingMachineRecipeHandler(jeiHelpers));
-//        registry.addRecipeHandlers(new ShapedFluidRecipeHandler());
-//        registry.addRecipeHandlers(new ShapelessFluidRecipeHandler(jeiHelpers));
-//
-//        registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
-//        registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 36, 23, 9, ROLLING);
-//
-//        IRecipeTransferRegistry recipeTransferRegistry = registry.getRecipeTransferRegistry();
-//        recipeTransferRegistry.addRecipeTransferHandler(ContainerRollingMachine.class, ROLLING, 2, 9, 11, 36);
-//        recipeTransferRegistry.addRecipeTransferHandler(ContainerRollingMachinePowered.class, ROLLING, 2, 9, 11, 36);
-//
-//        boolean rolling = false;
-//        ItemStack stack = RailcraftBlocks.EQUIPMENT.getStack(EquipmentVariant.ROLLING_MACHINE_MANUAL);
-//        if (!InvTools.isEmpty(stack)) {
-//            registry.addRecipeCatalyst(stack, ROLLING);
-//            rolling = true;
-//        }
-//        stack = RailcraftBlocks.EQUIPMENT.getStack(EquipmentVariant.ROLLING_MACHINE_POWERED);
-//        if (!InvTools.isEmpty(stack)) {
-//            registry.addRecipeCatalyst(stack, ROLLING);
-//            rolling = true;
-//        }
-//
-//        if (rolling)
-//            registry.addRecipes(RollingMachineRecipeMaker.recipes(registry.getJeiHelpers()));
-//
-//    }
-
     private void addDescription(IModRegistry registry, ItemStack stack) {
         if (!InvTools.isEmpty(stack)) {
             String locTag = stack.getTranslationKey() + ".desc";
@@ -154,5 +159,43 @@ public class RailcraftJEIPlugin implements IModPlugin {
         Item trackOutfitted = RailcraftBlocks.TRACK_OUTFITTED.item();
         if (trackOutfitted != null)
             subtypeRegistry.registerSubtypeInterpreter(trackOutfitted, stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
+    }
+
+    private class DefaultRecipeWrapper implements IRecipeWrapper {
+        private final IModRegistry registry;
+        private final IRecipe recipe;
+        private final @Nullable String locTag;
+        private Consumer<ItemStack> stackModifier = stack -> {
+        };
+
+        public DefaultRecipeWrapper(IModRegistry registry, IRecipe recipe) {
+            this(registry, recipe, null);
+        }
+
+        public DefaultRecipeWrapper(IModRegistry registry, IRecipe recipe, @Nullable String locTag) {
+            this.registry = registry;
+            this.recipe = recipe;
+            this.locTag = locTag;
+        }
+
+        DefaultRecipeWrapper modifyInputs(Consumer<ItemStack> stackModifier) {
+            this.stackModifier = stackModifier;
+            return this;
+        }
+
+        @Override
+        public void getIngredients(IIngredients ingredients) {
+            List<List<ItemStack>> inputLists = registry.getJeiHelpers().getStackHelper()
+                    .expandRecipeItemStackInputs(recipe.getIngredients());
+            inputLists.forEach(l -> l.forEach(stackModifier));
+            ingredients.setInputLists(VanillaTypes.ITEM, inputLists);
+            ingredients.setOutput(VanillaTypes.ITEM, recipe.getRecipeOutput());
+        }
+
+        @Override
+        public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+            if (locTag != null)
+                GuiTools.drawStringCenteredAtPos(minecraft.fontRenderer, LocalizationPlugin.translate(locTag), 82, 0);
+        }
     }
 }

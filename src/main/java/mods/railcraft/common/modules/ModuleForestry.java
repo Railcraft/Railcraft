@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,15 +56,10 @@ public class ModuleForestry extends RailcraftModulePayload {
 
             @Override
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void init() {
+            public void postInit() {
                 if (RailcraftItems.FILTER_BEE_GENOME.isEnabled()) {
                     ForestryPlugin.instance().registerBeeFilterRecipe();
                 }
-            }
-
-            @Override
-            @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void postInit() {
                 ForestryPlugin.instance().defineBackpackRecipes();
                 ForestryPlugin.instance().setupBackpackContents();
 

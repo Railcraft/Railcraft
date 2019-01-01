@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,11 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 
 /**
@@ -24,56 +27,43 @@ public class RotorRepairRecipe extends BaseRecipe {
         super("rotor_repair");
     }
 
-    private static final int REPAIR_PER_BLADE = 2500;
-    private final ItemStack ROTOR = RailcraftItems.TURBINE_ROTOR.getStack();
-    private final ItemStack BLADE = RailcraftItems.TURBINE_BLADE.getStack();
+    public static final int REPAIR_PER_BLADE = 2500;
+    private final Ingredient ROTOR = RailcraftItems.TURBINE_ROTOR.getIngredient();
+    private final Ingredient BLADE = RailcraftItems.TURBINE_BLADE.getIngredient();
 
     @Override
     public boolean matches(InventoryCrafting grid, World world) {
-        boolean hasRotor = false;
-        boolean hasBlade = false;
-        for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
-            ItemStack stack = grid.getStackInSlot(slot);
-            if (InvTools.isItemEqual(stack, ROTOR)) {
-                hasRotor = true;
-            } else if (InvTools.isItemEqual(stack, BLADE)) {
-                hasBlade = true;
-            }
-        }
-        return hasBlade && hasRotor;
+        return InventoryIterator.get(grid).streamStacks().anyMatch(ROTOR) &&
+                InventoryIterator.get(grid).streamStacks().anyMatch(BLADE);
     }
 
     @Override
     public ItemStack getCraftingResult(InventoryCrafting grid) {
-        ItemStack rotor = InvTools.emptyStack();
-        int numBlades = 0;
-        for (int slot = 0; slot < grid.getSizeInventory(); slot++) {
-            ItemStack stack = grid.getStackInSlot(slot);
-            if (InvTools.isItemEqual(stack, ROTOR)) {
-                rotor = stack.copy();
-            } else if (InvTools.isItemEqual(stack, BLADE)) {
-                numBlades++;
-            }
-        }
-        if (InvTools.isEmpty(rotor)) {
-            return InvTools.emptyStack();
-        }
+        ItemStack rotor = InventoryIterator.get(grid).streamStacks().filter(ROTOR).findFirst().orElse(ItemStack.EMPTY);
+        int numBlades = (int) InventoryIterator.get(grid).streamStacks().filter(BLADE).count();
+        if (InvTools.isEmpty(rotor)) return InvTools.emptyStack();
         int damage = rotor.getItemDamage();
         damage -= REPAIR_PER_BLADE * numBlades;
-        if (damage < 0) {
-            damage = 0;
-        }
+        if (damage < 0) damage = 0;
         rotor.setItemDamage(damage);
         return rotor;
     }
 
     @Override
     public boolean canFit(int width, int height) {
-        return width >= 3 && height >= 3;
+        return width >= 2 && height >= 2;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.create();
+        ingredients.add(ROTOR);
+        ingredients.add(BLADE);
+        return ingredients;
     }
 
     @Override
     public ItemStack getRecipeOutput() {
-        return InvTools.emptyStack();
+        return RailcraftItems.TURBINE_ROTOR.getStack();
     }
 }

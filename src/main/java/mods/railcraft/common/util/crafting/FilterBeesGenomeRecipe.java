@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,16 +12,17 @@ package mods.railcraft.common.util.crafting;
 import forestry.api.apiculture.BeeManager;
 import forestry.api.apiculture.EnumBeeType;
 import mods.railcraft.common.items.ItemFilterBeeGenome;
+import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -29,15 +30,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class FilterBeesGenomeRecipe extends BaseRecipe {
-    private static final Predicate<ItemStack> FILTER = StackFilters.of(ItemFilterBeeGenome.class);
-    private static final Predicate<ItemStack> BEE = s -> ForestryPlugin.instance().isAnalyzedBee(s);
-    private static final char[] MAP = {
+    private final Ingredient FILTER = RailcraftItems.FILTER_BEE_GENOME.getIngredient();
+    private final Predicate<ItemStack> BEE = s -> ForestryPlugin.instance().isAnalyzedBee(s);
+    private final char[] MAP = {
             '_', 'B', '_',
             'B', 'F', 'B',
             '_', '_', '_'
@@ -98,7 +97,17 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
 
     @Override
     public boolean canFit(int width, int height) {
-        return true;
+        return width >= 3 && height >= 3;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.withSize(9, Ingredient.EMPTY);
+        ingredients.set(1, Ingredients.from(ModItems.BEE_QUEEN));
+        ingredients.set(3, Ingredients.from(ModItems.BEE_DRONE));
+        ingredients.set(4, FILTER);
+        ingredients.set(5, Ingredients.from(ModItems.BEE_DRONE));
+        return ingredients;
     }
 
     @Override
@@ -114,8 +123,7 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
         for (int i = 0; i < grid.length; ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             if (!InvTools.isEmpty(stack) && !FILTER.test(stack)) {
-                stack = stack.copy();
-                setSize(stack, 1);
+                stack = InvTools.copyOne(stack);
                 grid[i] = stack;
             }
         }

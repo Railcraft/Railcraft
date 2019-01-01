@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,16 +10,20 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.ItemLocomotive;
+import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -105,4 +109,19 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
         return locomotive;
     }
 
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> ingredients = NonNullList.withSize(9, Ingredient.EMPTY);
+        Ingredient dye = Ingredients.from(Stream.of(EnumColor.VALUES).map(EnumColor::getIngredient).toArray(Ingredient[]::new));
+        Ingredient locos = Ingredients.from(Stream.of(RailcraftCarts.VALUES)
+                .map(RailcraftCarts::getItem)
+                .filter(i -> i instanceof ItemLocomotive)
+                .map(i -> new ItemStack(i))
+                .map(s -> Ingredients.from(s))
+                .toArray(Ingredient[]::new));
+        ingredients.set(1, dye);
+        ingredients.set(4, locos);
+        ingredients.set(7, dye);
+        return ingredients;
+    }
 }
