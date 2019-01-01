@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,6 +37,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.LootPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
 import mods.railcraft.common.util.charge.CapabilityCartBatterySetup;
+import mods.railcraft.common.util.crafting.PrototypeRecipe;
 import mods.railcraft.common.util.crafting.RollingMachineCrafter;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -279,6 +280,8 @@ public class ModuleCore extends RailcraftModulePayload {
             @Override
             public void init() {
                 // Define Recipes
+                CraftingPlugin.addRecipe(new PrototypeRecipe());
+
                 if (RailcraftConfig.getRecipeConfig("railcraft.cart.bronze")) {
                     CraftingPlugin.addShapedRecipe(RailcraftConstantsAPI.locationOf("cart_bronze"),
                             new ItemStack(Items.MINECART),
