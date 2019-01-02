@@ -59,8 +59,10 @@ public class ItemDust extends ItemRailcraftSubtyped {
             if (RailcraftConfig.getRecipeConfig("ic2.macerator.ender")) {
                 IC2Plugin.addMaceratorRecipe(new ItemStack(Items.ENDER_PEARL), getStack(EnumDust.ENDER));
             }
-            if (RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
-                IC2Plugin.addMaceratorRecipe(ModItems.SLAG.getStack(), getStack(EnumDust.SLAG));
+            if (!Mod.IC2_CLASSIC.isLoaded()){
+                if (RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
+                    IC2Plugin.addMaceratorRecipe(ModItems.SLAG.getStack(), getStack(EnumDust.SLAG));
+                }
             }
         }
     }

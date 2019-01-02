@@ -21,6 +21,7 @@ README.txt
 .idea/modules.xml
 .idea/gradle.xml
 .idea/compiler.xml
+.idea
 *.iml
 run/
 private/
