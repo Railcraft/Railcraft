@@ -79,7 +79,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
 
         public RecipeBuilder(ItemStack output) {
             this.output = output.copy();
-            this.name = CraftingPlugin.getName(output);
+            this.name = CraftingPlugin.getNameFromOutput(output);
         }
 
         @Override

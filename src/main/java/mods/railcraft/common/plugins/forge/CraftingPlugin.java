@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.PeekingIterator;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
@@ -45,9 +47,9 @@ import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class CraftingPlugin {
-    private static int numRecipes;
     private static ResourceLocation DEFAULT_GROUP = new ResourceLocation("railcraft", "crafting");
     private static List<ISimpleRecipeBuilder<?>> recipeBuilders = new LinkedList<>();
+    private static Multiset<String> recipeNames = HashMultiset.create();
 
     // TODO add descriptor
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
@@ -105,7 +107,7 @@ public class CraftingPlugin {
     @Deprecated
     public static void addShapedRecipe(ItemStack result, Object... recipeArray) {
         InvTools.requiresNotEmpty(result);
-        addShapedRecipe(getName(result), DEFAULT_GROUP, result, recipeArray);
+        addShapedRecipe(getNameFromOutput(result), DEFAULT_GROUP, result, recipeArray);
     }
 
     public static void addShapedRecipe(String name, ItemStack result, Object... recipeArray) {
@@ -130,7 +132,7 @@ public class CraftingPlugin {
     @Deprecated
     public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
         InvTools.requiresNotEmpty(result);
-        addShapelessRecipe(getName(result), DEFAULT_GROUP, result, recipeArray);
+        addShapelessRecipe(getNameFromOutput(result), DEFAULT_GROUP, result, recipeArray);
     }
 
     public static void addShapelessRecipe(String name, ItemStack result, Object... recipeArray) {
@@ -179,9 +181,13 @@ public class CraftingPlugin {
             throw new IllegalStateException("Recipe registered too soon.");
     }
 
-    public static ResourceLocation getName(ItemStack output) {
+    public static ResourceLocation getNameFromOutput(ItemStack output) {
         ResourceLocation itemId = Objects.requireNonNull(output.getItem().getRegistryName());
-        return new ResourceLocation(RailcraftConstantsAPI.MOD_ID, itemId.getPath() + "+" + output.getDisplayName() + "#" + numRecipes++);
+        String itemName = itemId.getPath();
+        if (output.getHasSubtypes())
+            itemName += "#" + output.getMetadata();
+        recipeNames.add(itemName);
+        return new ResourceLocation(RailcraftConstantsAPI.MOD_ID, itemName + "$" + recipeNames.count(itemName));
     }
 
     public static @Nullable ResourceLocation guessName(Object input) {
