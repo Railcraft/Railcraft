@@ -38,7 +38,6 @@ import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
 import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineCategory;
 import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineRecipeMaker;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
-import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeMaker;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.client.Minecraft;
@@ -103,8 +102,11 @@ public class RailcraftJEIPlugin implements IModPlugin {
                                 }),
                 VanillaRecipeCategoryUid.CRAFTING);
 
+        registry.handleRecipes(IRecipe.class, recipe ->
+                new DefaultRecipeWrapper(registry, recipe), ROLLING);
+
         registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
-        registry.addRecipes(RollingMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROLLING);
+        registry.addRecipes(RollingMachineCrafter.INSTANCE.getValidRecipes(), ROLLING);
         registry.addRecipes(RockCrusherMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROCK_CRUSHER);
         registry.addRecipes(BlastFurnaceRecipeMaker.getRecipes(registry.getJeiHelpers()), BLAST_FURNACE);
 

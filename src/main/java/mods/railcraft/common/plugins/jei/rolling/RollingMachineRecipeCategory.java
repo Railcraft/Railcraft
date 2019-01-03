@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,11 +29,11 @@ import java.util.List;
 
 public class RollingMachineRecipeCategory implements IRecipeCategory<IRecipeWrapper> {
 
-    private static final int craftOutputSlot = 0;
-    private static final int craftInputSlot1 = 1;
+    private static final int CRAFT_OUTPUT_SLOT = 0;
+    private static final int CRAFT_INPUT_SLOT1 = 1;
 
-    public static final int width = 116;
-    public static final int height = 54;
+    public static final int WIDTH = 116;
+    public static final int HEIGHT = 54;
 
     private final IDrawable background;
     private final String localizedName;
@@ -41,9 +41,9 @@ public class RollingMachineRecipeCategory implements IRecipeCategory<IRecipeWrap
 
     public RollingMachineRecipeCategory(IGuiHelper guiHelper) {
         ResourceLocation location = new ResourceLocation("minecraft", "textures/gui/container/crafting_table.png");
-        background = guiHelper.createDrawable(location, 29, 16, width, height);
+        background = guiHelper.createDrawable(location, 29, 16, WIDTH, HEIGHT);
         localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.rolling");
-        craftingGridHelper = guiHelper.createCraftingGridHelper(craftInputSlot1, craftOutputSlot);
+        craftingGridHelper = guiHelper.createCraftingGridHelper(CRAFT_INPUT_SLOT1, CRAFT_OUTPUT_SLOT);
     }
 
     @Override
@@ -72,20 +72,18 @@ public class RollingMachineRecipeCategory implements IRecipeCategory<IRecipeWrap
 
         List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
         List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
-        guiItemStacks.init(craftOutputSlot, false, 94, 18);
-        guiItemStacks.set(craftOutputSlot, outputs.get(0));
+        guiItemStacks.init(CRAFT_OUTPUT_SLOT, false, 94, 18);
+        guiItemStacks.set(CRAFT_OUTPUT_SLOT, outputs.get(0));
+
 
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 3; ++x) {
-                int index = craftInputSlot1 + x + (y * 3);
+                int index = CRAFT_INPUT_SLOT1 + x + (y * 3);
                 guiItemStacks.init(index, true, x * 18, y * 18);
-                if (inputs.size() > index-1)
-                    guiItemStacks.set(index, inputs.get(index-1));
-                else
-                    guiItemStacks.set(index, ItemStack.EMPTY);
             }
         }
 
+        craftingGridHelper.setInputs(guiItemStacks, inputs);
 
     }
 

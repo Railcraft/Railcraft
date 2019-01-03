@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
@@ -23,12 +24,14 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreIngredient;
 import org.apache.logging.log4j.Level;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public enum RollingMachineCrafter implements IRollingMachineCrafter {
     INSTANCE;
@@ -56,6 +59,15 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
     @Override
     public List<IRollingRecipe> getRecipes() {
         return CollectionTools.removeOnlyList(recipes);
+    }
+
+    public List<IRollingRecipe> getValidRecipes() {
+        return recipes.stream().filter(recipe -> {
+            NonNullList<Ingredient> ingredients = recipe.getIngredients();
+            return ingredients.stream()
+                    .flatMap(Streams.toType(OreIngredient.class))
+                    .noneMatch(ore -> ore.getMatchingStacks().length == 0);
+        }).collect(Collectors.toList());
     }
 
     private class RecipeBuilder implements IRecipeBuilder {
