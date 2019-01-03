@@ -10,7 +10,6 @@
 package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.common.carts.ItemLocomotive;
-import mods.railcraft.common.carts.RailcraftCarts;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.InventoryCrafting;
@@ -112,15 +111,9 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.withSize(9, Ingredient.EMPTY);
-        Ingredient dye = Ingredients.from(Stream.of(EnumColor.VALUES).map(EnumColor::getIngredient).toArray(Ingredient[]::new));
-        Ingredient locos = Ingredients.from(Stream.of(RailcraftCarts.VALUES)
-                .map(RailcraftCarts::getItem)
-                .filter(i -> i instanceof ItemLocomotive)
-                .map(i -> new ItemStack(i))
-                .map(s -> Ingredients.from(s))
-                .toArray(Ingredient[]::new));
+        Ingredient dye = Ingredients.from(Stream.of(EnumColor.VALUES).map(EnumColor::getIngredient).toArray(Object[]::new));
         ingredients.set(1, dye);
-        ingredients.set(4, locos);
+        ingredients.set(4, Ingredients.from(locomotive));
         ingredients.set(7, dye);
         return ingredients;
     }
