@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Optionals;
 import mods.railcraft.common.util.misc.Timer;
@@ -81,8 +82,8 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     protected void onPatternChanged() {
         tile.markBlockForUpdate();
-//        if (!isMaster && this instanceof IInventory)
-//            InvTools.spewInventory(InventoryMapper.make((IInventory) this), theWorldAsserted(), getPos());
+        if (!isMaster)
+            getLogic(InventoryLogic.class).ifPresent(inv -> InvTools.spewInventory(inv, theWorldAsserted(), getPos()));
     }
 
     public final char getPatternMarker() {

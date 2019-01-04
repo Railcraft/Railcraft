@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.InventoryLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
@@ -27,7 +28,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -151,7 +151,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
-                && getLogic(IItemHandler.class).isPresent())
+                && getLogic(InventoryLogic.class).isPresent())
             return true;
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
                 && getLogic(IFluidHandler.class).isPresent())
@@ -162,9 +162,9 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @Override
     public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            Optional<IItemHandler> inv = getLogic(IItemHandler.class);
+            Optional<InventoryLogic> inv = getLogic(InventoryLogic.class);
             if (inv.isPresent())
-                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inv.get());
+                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inv.get().getItemHandler(facing));
         }
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             Optional<IFluidHandler> tank = getLogic(IFluidHandler.class);

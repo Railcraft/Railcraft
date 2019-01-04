@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -201,19 +201,6 @@ public final class TileBlastFurnace extends TileCrafter implements INeedsFuel {
     public boolean hasWork() {
         return getLogic(CrafterLogic.class).map(CrafterLogic::hasWork).orElse(false);
     }
-
-    // FIXME this needs to be moved to the logic, but that will probably require redesigning how IItemHandlers are retrieved
-//    @Override
-//    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-//        switch (direction) {
-//            case NORTH:
-//            case SOUTH:
-//            case EAST:
-//            case WEST:
-//                return index == SLOT_OUTPUT;
-//        }
-//        return index == SLOT_SLAG;
-//    }
 
     @Override
     public EnumGui getGui() {

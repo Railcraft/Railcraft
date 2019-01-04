@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,10 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -131,12 +134,17 @@ public class CokeOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
         }
     }
 
-    @Nonnull
     @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (slot != SLOT_OUTPUT && slot != SLOT_OUTPUT_FLUID)
-            return ItemStack.EMPTY;
-        return super.extractItem(slot, amount, simulate);
+    public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
+        return new InvWrapper(this) {
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot != SLOT_OUTPUT && slot != SLOT_OUTPUT_FLUID)
+                    return ItemStack.EMPTY;
+                return super.extractItem(slot, amount, simulate);
+            }
+        };
     }
 
     @Override

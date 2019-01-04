@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,12 +26,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
@@ -223,10 +226,15 @@ public abstract class TradeStationLogic extends InventoryLogic {
         return slot < 10;
     }
 
-    @Nonnull
     @Override
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (slot < 10) return ItemStack.EMPTY;
-        return super.extractItem(slot, amount, simulate);
+    public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
+        return new InvWrapper(this) {
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot < 10) return ItemStack.EMPTY;
+                return super.extractItem(slot, amount, simulate);
+            }
+        };
     }
 }

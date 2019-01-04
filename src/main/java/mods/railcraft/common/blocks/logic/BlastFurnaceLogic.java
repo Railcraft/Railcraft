@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,8 +21,12 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -167,6 +171,19 @@ public class BlastFurnaceLogic extends CrafterLogic implements INeedsFuel {
                 return INPUT_FILTER.test(stack);
         }
         return false;
+    }
+
+    @Override
+    public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
+        return new InvWrapper(this) {
+            @Nonnull
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot != SLOT_OUTPUT && slot != SLOT_SLAG)
+                    return ItemStack.EMPTY;
+                return super.extractItem(slot, amount, simulate);
+            }
+        };
     }
 
     @Override

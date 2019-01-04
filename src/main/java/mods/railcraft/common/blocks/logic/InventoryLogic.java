@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,13 +15,16 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
 /**
  *
  */
-public abstract class InventoryLogic extends Logic implements IItemHandlerImplementor {
+public abstract class InventoryLogic extends Logic implements IInventoryImplementor {
 
     protected final InventoryAdvanced inventory;
     protected final IInventoryComposite composite;
@@ -49,6 +52,10 @@ public abstract class InventoryLogic extends Logic implements IItemHandlerImplem
     @Override
     public IInventory getInventory() {
         return inventory;
+    }
+
+    public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
+        return ItemHandlerFactory.wrap(this, side);
     }
 
     @Override
