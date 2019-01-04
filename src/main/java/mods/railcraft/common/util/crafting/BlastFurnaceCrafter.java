@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -89,7 +89,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
                 .findFirst();
     }
 
-    private class FuelBuilder extends SimpleRecipeBuilder<IFuelBuilder> implements IFuelBuilder {
+    private class FuelBuilder extends SingleInputRecipeBuilder<IFuelBuilder> implements IFuelBuilder {
         public FuelBuilder(Ingredient input) {
             super("Blast Furnace Fuel", input, FuelPlugin::getBurnTime);
         }
@@ -121,7 +121,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
         }
     }
 
-    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
+    private class RecipeBuilder extends SingleInputRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
         private int slagOutput;
         private ItemStack output = ItemStack.EMPTY;
 

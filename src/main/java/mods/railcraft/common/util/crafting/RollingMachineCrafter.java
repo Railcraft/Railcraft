@@ -70,22 +70,14 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         }).collect(Collectors.toList());
     }
 
-    private class RecipeBuilder implements IRecipeBuilder {
+    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
         private final ItemStack output;
-        private ResourceLocation name;
         private ResourceLocation group = DEFAULT_GROUP;
-        private int time = DEFAULT_PROCESS_TIME;
-        private boolean registered;
+        private IRecipe recipe;
 
         public RecipeBuilder(ItemStack output) {
+            super("Rolling Machine", stack -> DEFAULT_PROCESS_TIME);
             this.output = output.copy();
-            this.name = CraftingPlugin.getNameFromOutput(output);
-        }
-
-        @Override
-        public IRecipeBuilder name(ResourceLocation name) {
-            this.name = name;
-            return this;
         }
 
         @Override
@@ -95,23 +87,25 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         }
 
         @Override
-        public IRecipeBuilder time(int time) {
-            this.time = time;
-            return this;
+        protected void checkArguments() {
+            Preconditions.checkArgument(InvTools.nonEmpty(output),
+                    "Output was null or empty.");
+            if (name == null)
+                this.name = CraftingPlugin.getNameFromOutput(output);
+            super.checkArguments();
+            Preconditions.checkArgument(timeFunction.apply(ItemStack.EMPTY) > 0,
+                    "Time set to zero.");
+        }
+
+        @Override
+        protected void registerRecipe() {
+            recipes.add(new RollingRecipe(recipe.setRegistryName(name), timeFunction.apply(ItemStack.EMPTY)));
         }
 
         @Override
         public void recipe(IRecipe recipe) {
-            registered = true;
-            try {
-                Preconditions.checkArgument(InvTools.nonEmpty(output),
-                        "Output was null or empty.");
-                Preconditions.checkArgument(name != null, "Recipe name not set.");
-                Preconditions.checkArgument(time > 0, "Process time was zero.");
-                recipes.add(new RollingRecipe(recipe.setRegistryName(name), time));
-            } catch (Throwable ex) {
-                handleException(ex);
-            }
+            this.recipe = recipe;
+            register();
         }
 
         @Override
@@ -130,16 +124,6 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
             } catch (InvalidRecipeException ex) {
                 handleException(ex);
             }
-        }
-
-        @Override
-        public ResourceLocation getName() {
-            return name;
-        }
-
-        @Override
-        public boolean notRegistered() {
-            return !registered;
         }
 
         private void handleException(Throwable ex) {

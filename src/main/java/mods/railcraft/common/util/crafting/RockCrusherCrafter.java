@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -48,7 +48,7 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
         return builder;
     }
 
-    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
+    private class RecipeBuilder extends SingleInputRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
         private final List<IOutputEntry> outputs = new ArrayList<>();
 
         public RecipeBuilder(Ingredient input) {

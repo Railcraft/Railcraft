@@ -23,7 +23,6 @@ import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
 import mods.railcraft.common.util.crafting.ShapedRailcraftRecipe;
 import mods.railcraft.common.util.crafting.ShapelessRailcraftRecipe;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
@@ -96,18 +95,28 @@ public class CraftingPlugin {
         return newParameters.toArray();
     }
 
-    private static Object[] processRecipe(ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
+    private static void validateOutput(ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
         if (isEmpty(output)) {
             throw new InvalidRecipeException("Tried to define invalid recipe named {0}, the output was null or zero. Skipping. Recipe Array: {1}", name, recipeArray);
         }
+    }
+
+    private static ResourceLocation checkName(@Nullable ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
+        if (name != null)
+            return name;
+        validateOutput(new ResourceLocation("unknown:unknown"), output, recipeArray);
+        return getNameFromOutput(output);
+    }
+
+    private static Object[] processRecipe(ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
+        validateOutput(name, output, recipeArray);
         return cleanRecipeArray(name, recipeArray);
     }
 
     // TODO replace all this junk with a builder
     @Deprecated
     public static void addShapedRecipe(ItemStack result, Object... recipeArray) {
-        InvTools.requiresNotEmpty(result);
-        addShapedRecipe(getNameFromOutput(result), DEFAULT_GROUP, result, recipeArray);
+        addShapedRecipe(null, DEFAULT_GROUP, result, recipeArray);
     }
 
     public static void addShapedRecipe(String name, ItemStack result, Object... recipeArray) {
@@ -118,10 +127,11 @@ public class CraftingPlugin {
         addShapedRecipe(name, DEFAULT_GROUP, result, recipeArray);
     }
 
-    public static void addShapedRecipe(ResourceLocation name, ResourceLocation group, ItemStack result, Object... recipeArray) {
+    public static void addShapedRecipe(@Nullable ResourceLocation name, ResourceLocation group, ItemStack output, Object... recipeArray) {
         IRecipe recipe;
         try {
-            recipe = makeShapedRecipe(name, group, result, recipeArray);
+            name = checkName(name, output, recipeArray);
+            recipe = makeShapedRecipe(name, group, output, recipeArray);
         } catch (InvalidRecipeException ex) {
             Game.logTrace(Level.WARN, ex.getRawMessage());
             return;
@@ -131,18 +141,18 @@ public class CraftingPlugin {
 
     @Deprecated
     public static void addShapelessRecipe(ItemStack result, Object... recipeArray) {
-        InvTools.requiresNotEmpty(result);
-        addShapelessRecipe(getNameFromOutput(result), DEFAULT_GROUP, result, recipeArray);
+        addShapelessRecipe(null, DEFAULT_GROUP, result, recipeArray);
     }
 
     public static void addShapelessRecipe(String name, ItemStack result, Object... recipeArray) {
         addShapelessRecipe(new ResourceLocation(name), DEFAULT_GROUP, result, recipeArray);
     }
 
-    public static void addShapelessRecipe(ResourceLocation name, ResourceLocation group, ItemStack result, Object... recipeArray) {
+    public static void addShapelessRecipe(@Nullable ResourceLocation name, ResourceLocation group, ItemStack output, Object... recipeArray) {
         IRecipe recipe;
         try {
-            recipe = makeShapelessRecipe(name, group, result, recipeArray);
+            name = checkName(name, output, recipeArray);
+            recipe = makeShapelessRecipe(name, group, output, recipeArray);
         } catch (InvalidRecipeException ex) {
             Game.log(Level.WARN, ex.getRawMessage());
             return;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.api.crafting.ISimpleRecipeBuilder;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Created by CovertJaguar on 12/26/2018 for Railcraft.
@@ -33,14 +31,12 @@ import java.util.stream.Stream;
 @SuppressWarnings("unchecked")
 public abstract class SimpleRecipeBuilder<B extends ISimpleRecipeBuilder> implements ISimpleRecipeBuilder<B> {
     private final String recipeType;
-    protected final Ingredient input;
-    protected ResourceLocation name;
+    protected @Nullable ResourceLocation name;
     protected Function<ItemStack, Integer> timeFunction;
     private boolean registered;
 
-    protected SimpleRecipeBuilder(String recipeType, Ingredient input, Function<ItemStack, Integer> defaultTimeFunction) {
+    protected SimpleRecipeBuilder(String recipeType, Function<ItemStack, Integer> defaultTimeFunction) {
         this.recipeType = recipeType;
-        this.input = input;
         this.timeFunction = defaultTimeFunction;
         CraftingPlugin.addBuilder(this);
     }
@@ -57,7 +53,7 @@ public abstract class SimpleRecipeBuilder<B extends ISimpleRecipeBuilder> implem
         return (B) this;
     }
 
-    public void register() {
+    public final void register() {
         registered = true;
         try {
             checkArguments();
@@ -76,19 +72,15 @@ public abstract class SimpleRecipeBuilder<B extends ISimpleRecipeBuilder> implem
 
     @OverridingMethodsMustInvokeSuper
     protected void checkArguments() {
-        Preconditions.checkArgument(input != null && !input.apply(ItemStack.EMPTY),
-                "Input was null or empty.");
         Preconditions.checkArgument(name != null, "Recipe name not set.");
         Preconditions.checkArgument(timeFunction != null, "Time function not set");
-        Preconditions.checkArgument(Stream.of(input.getMatchingStacks()).map(timeFunction).allMatch(time -> time > 0),
-                "Time set to zero.");
     }
 
     protected abstract void registerRecipe();
 
     @Override
     public ResourceLocation getName() {
-        return name;
+        return Objects.requireNonNull(name);
     }
 
     @Override

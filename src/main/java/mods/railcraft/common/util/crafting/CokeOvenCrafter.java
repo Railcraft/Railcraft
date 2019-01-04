@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,7 +51,7 @@ public enum CokeOvenCrafter implements ICokeOvenCrafter {
                 .findFirst();
     }
 
-    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
+    private class RecipeBuilder extends SingleInputRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
         private ItemStack output = ItemStack.EMPTY;
         private @Nullable FluidStack outputFluid;
 
