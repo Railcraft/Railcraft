@@ -1,3 +1,15 @@
+12.0.0-beta-3:
+    FIX: Migrate Blast Furnace and Coke Oven to new structure logic framework and clean up various bugs with both.
+    FIX: Add JEI translators for Rolling Machine and custom recipe types.
+    FIX: Disabling the Charge module should no longer crash.
+    FIX: Fix metals and void chest rendering.
+    FIX: Fix GUI widget tooltips.
+    FIX: Fix Locking Track crash.
+    FIX: Fix Firestone in Blast Furnace.
+    FIX: Fix Tank model issues. (liach)
+    API: Rewrite crafting API again.
+    BROKEN: Boilers are known to crash your game. Will be fixed when they get migrated to the logic framework.
+
 12.0.0-beta-2:
     FIX: Attempt to fix Forestry crash.
 
