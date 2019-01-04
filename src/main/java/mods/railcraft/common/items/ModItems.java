@@ -19,10 +19,12 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
-import static mods.railcraft.common.util.inventory.InvTools.setSize;
+import java.util.Objects;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -61,12 +63,15 @@ public enum ModItems implements IIngredientSource {
     CRUSHED_LEAD(Mod.IC2, "crushed#lead"),
     DUST_LEAD(Mod.IC2, "dust#lead"),
     CRUSHED_URANIUM(Mod.IC2, "crushed#uranium"),
-    URANIUM_DROP(Mod.IC2, "nuclear#uranium_235"),;
+    URANIUM_DROP(Mod.IC2, "nuclear#uranium_235"),
+    ;
+    private static ResourceLocation IC2_CLASSIC_NO_USE = new ResourceLocation("ic2", "itemnouse");
     private final Mod mod;
     public final String itemTag;
     public final int meta;
     private boolean needsInit = true;
-    private ItemStack stack;
+    // This is nullable because can't always be sure what other mods will give us.
+    private @Nullable ItemStack stack = ItemStack.EMPTY;
 
     ModItems(Mod mod, String itemTag) {
         this(mod, itemTag, -1);
@@ -86,12 +91,7 @@ public enum ModItems implements IIngredientSource {
     @Override
     public ItemStack getStack(int qty) {
         init();
-        if (!InvTools.isEmpty(stack)) {
-            stack = stack.copy();
-            setSize(stack, Math.min(qty, stack.getMaxStackSize()));
-            return stack;
-        }
-        return ItemStack.EMPTY;
+        return InvTools.copy(stack, qty);
     }
 
     @Override
@@ -111,9 +111,11 @@ public enum ModItems implements IIngredientSource {
                 throw new RuntimeException("Don't use ModItems before POST_INIT");
             if (mod.isLoaded()) {
                 needsInit = false;
-                if (mod == Mod.IC2)
-                    stack = IC2Plugin.getItem(itemTag);
-                else if (mod == Mod.FORESTRY)
+                if (mod == Mod.IC2) {
+                    ItemStack s = IC2Plugin.getItem(itemTag);
+                    if (!InvTools.isEmpty(s) && !Objects.equals(s.getItem().getRegistryName(), IC2_CLASSIC_NO_USE))
+                        stack = s;
+                } else if (mod == Mod.FORESTRY)
                     stack = ForestryPlugin.getItem(itemTag);
                 if (InvTools.isEmpty(stack))
                     Game.log(Level.DEBUG, "Searched for but failed to find {0} item {1}", mod.name(), itemTag);

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -118,14 +118,14 @@ public abstract class InvTools {
         return stack;
     }
 
-    public static ItemStack copy(ItemStack stack) {
-        return stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
+    public static ItemStack copy(@Nullable ItemStack stack) {
+        return isEmpty(stack) ? emptyStack() : stack.copy();
     }
 
-    public static ItemStack copy(ItemStack stack, int newSize) {
+    public static ItemStack copy(@Nullable ItemStack stack, int newSize) {
         ItemStack ret = copy(stack);
         if (!isEmpty(ret))
-            ret.setCount(newSize);
+            ret.setCount(Math.min(newSize, ret.getMaxStackSize()));
         return ret;
     }
 
