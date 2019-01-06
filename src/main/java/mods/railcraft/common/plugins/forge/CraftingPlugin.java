@@ -16,7 +16,7 @@ import com.google.common.collect.PeekingIterator;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
-import mods.railcraft.api.crafting.ISimpleRecipeBuilder;
+import mods.railcraft.api.crafting.IRecipeBuilder;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.crafting.Ingredients;
@@ -47,7 +47,7 @@ import static mods.railcraft.common.util.inventory.InvTools.isEmpty;
  */
 public class CraftingPlugin {
     private static ResourceLocation DEFAULT_GROUP = new ResourceLocation("railcraft", "crafting");
-    private static List<ISimpleRecipeBuilder<?>> recipeBuilders = new LinkedList<>();
+    private static List<IRecipeBuilder<?>> recipeBuilders = new LinkedList<>();
     private static Multiset<String> recipeNames = HashMultiset.create();
 
     // TODO add descriptor
@@ -95,9 +95,11 @@ public class CraftingPlugin {
         return newParameters.toArray();
     }
 
-    private static void validateOutput(ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
+    private static void validateOutput(@Nullable ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
         if (isEmpty(output)) {
-            throw new InvalidRecipeException("Tried to define invalid recipe named {0}, the output was null or zero. Skipping. Recipe Array: {1}", name, recipeArray);
+            if (name == null)
+                name = Game.getActiveModResource("unknown");
+            throw new InvalidRecipeException("Tried to define invalid recipe named {0}, the output was null or zero. Skipping.", name);
         }
     }
 
@@ -108,7 +110,7 @@ public class CraftingPlugin {
         return getNameFromOutput(output);
     }
 
-    private static Object[] processRecipe(ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
+    private static Object[] processRecipe(@Nullable ResourceLocation name, ItemStack output, Object[] recipeArray) throws InvalidRecipeException {
         validateOutput(name, output, recipeArray);
         return cleanRecipeArray(name, recipeArray);
     }
@@ -173,13 +175,13 @@ public class CraftingPlugin {
         addRecipe(recipe.setRegistryName(name));
     }
 
-    public static IRecipe makeShapedRecipe(ResourceLocation name, ResourceLocation group, ItemStack output, Object... components) throws InvalidRecipeException {
+    public static IRecipe makeShapedRecipe(@Nullable ResourceLocation name, ResourceLocation group, ItemStack output, Object... components) throws InvalidRecipeException {
         Object[] cleanArray = processRecipe(name, output, components);
         CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(cleanArray);
         return new ShapedRailcraftRecipe(group.toString(), primer.width, primer.height, primer.input, output);
     }
 
-    public static IRecipe makeShapelessRecipe(ResourceLocation name, ResourceLocation group, ItemStack output, Object... components) throws InvalidRecipeException {
+    public static IRecipe makeShapelessRecipe(@Nullable ResourceLocation name, ResourceLocation group, ItemStack output, Object... components) throws InvalidRecipeException {
         Object[] cleanArray = processRecipe(name, output, components);
         return new ShapelessRailcraftRecipe(group.toString(), output,
                 Arrays.stream(cleanArray).map(Ingredients::from)
@@ -200,7 +202,7 @@ public class CraftingPlugin {
         return new ResourceLocation(RailcraftConstantsAPI.MOD_ID, itemName + "$" + recipeNames.count(itemName));
     }
 
-    public static @Nullable ResourceLocation guessName(Object input) {
+    public static @Nullable ResourceLocation guessName(@Nullable Object input) {
         if (input instanceof IForgeRegistryEntry) {
             return ((IForgeRegistryEntry) input).getRegistryName();
         } else if (input instanceof ItemStack) {
@@ -214,19 +216,13 @@ public class CraftingPlugin {
         return null;
     }
 
-    public static void tryGuessName(Object input, ISimpleRecipeBuilder<?> builder) {
-        ResourceLocation nameGuess = guessName(input);
-        if (nameGuess != null)
-            builder.name(nameGuess);
-    }
-
-    public static void addBuilder(ISimpleRecipeBuilder<?> builder) {
+    public static void addBuilder(IRecipeBuilder<?> builder) {
         recipeBuilders.add(builder);
     }
 
     public static void areAllBuildersRegistered() {
-        Optional<ISimpleRecipeBuilder<?>> recipeBuilder =
-                recipeBuilders.stream().filter(ISimpleRecipeBuilder::notRegistered).findFirst();
+        Optional<IRecipeBuilder<?>> recipeBuilder =
+                recipeBuilders.stream().filter(IRecipeBuilder::notRegistered).findFirst();
         if (recipeBuilder.isPresent())
             throw new IllegalStateException(String.format("Incomplete recipe definition detected for %s.",
                     recipeBuilder.get().getName()));

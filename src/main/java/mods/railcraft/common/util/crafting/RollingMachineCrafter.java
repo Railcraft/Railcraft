@@ -15,6 +15,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -26,16 +27,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreIngredient;
 import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public enum RollingMachineCrafter implements IRollingMachineCrafter {
     INSTANCE;
-    private static ResourceLocation DEFAULT_GROUP = new ResourceLocation("railcraft", "rolling");
+    private static final ResourceLocation DEFAULT_GROUP = new ResourceLocation("railcraft", "rolling");
     private final List<IRollingRecipe> recipes = new ArrayList<>();
 
     /**
@@ -47,8 +49,8 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
     }
 
     @Override
-    public IRecipeBuilder newRecipe(ItemStack output) {
-        return new RecipeBuilder(output);
+    public IRollingMachineRecipeBuilder newRecipe(ItemStack output) {
+        return new RollingMachineRecipeBuilder(output).name(output);
     }
 
     @Override
@@ -70,36 +72,40 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         }).collect(Collectors.toList());
     }
 
-    private class RecipeBuilder extends SimpleRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
-        private final ItemStack output;
+    private class RollingMachineRecipeBuilder extends RecipeBuilder<IRollingMachineRecipeBuilder> implements IRollingMachineRecipeBuilder {
         private ResourceLocation group = DEFAULT_GROUP;
         private IRecipe recipe;
 
-        public RecipeBuilder(ItemStack output) {
-            super("Rolling Machine", stack -> DEFAULT_PROCESS_TIME);
-            this.output = output.copy();
+        public RollingMachineRecipeBuilder(ItemStack output) {
+            super("Rolling Machine");
+            addFeature(new SingleItemStackOutputFeature<>(this, true));
+            addFeature(new TimeFeature<>(this, stack -> DEFAULT_PROCESS_TIME));
+            output(output);
         }
 
         @Override
-        public IRecipeBuilder group(ResourceLocation group) {
+        public IRollingMachineRecipeBuilder group(ResourceLocation group) {
             this.group = group;
             return this;
         }
 
         @Override
         protected void checkArguments() {
-            Preconditions.checkArgument(InvTools.nonEmpty(output),
-                    "Output was null or empty.");
-            if (name == null)
+            ItemStack output = getOutput();
+            if (name == null && InvTools.nonEmpty(output))
                 this.name = CraftingPlugin.getNameFromOutput(output);
             super.checkArguments();
-            Preconditions.checkArgument(timeFunction.apply(ItemStack.EMPTY) > 0,
-                    "Time set to zero.");
+            getFeature(TimeFeature.class).ifPresent(feature -> {
+                ToIntFunction<ItemStack> f = Code.cast(feature.timeFunction);
+                Preconditions.checkArgument(f.applyAsInt(ItemStack.EMPTY) > 0,
+                        "Time set to zero.");
+            });
         }
 
         @Override
         protected void registerRecipe() {
-            recipes.add(new RollingRecipe(recipe.setRegistryName(name), timeFunction.apply(ItemStack.EMPTY)));
+            final ToIntFunction<ItemStack> timeFunction = getTimeFunction();
+            recipes.add(new RollingRecipe(recipe.setRegistryName(name), timeFunction.applyAsInt(ItemStack.EMPTY)));
         }
 
         @Override
@@ -111,7 +117,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         @Override
         public void shaped(Object... recipeArray) {
             try {
-                recipe(CraftingPlugin.makeShapedRecipe(name, group, output, recipeArray));
+                recipe(CraftingPlugin.makeShapedRecipe(name, group, getOutput(), recipeArray));
             } catch (InvalidRecipeException ex) {
                 handleException(ex);
             }
@@ -120,7 +126,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         @Override
         public void shapeless(Object... recipeArray) {
             try {
-                recipe(CraftingPlugin.makeShapelessRecipe(name, group, output, recipeArray));
+                recipe(CraftingPlugin.makeShapelessRecipe(name, group, getOutput(), recipeArray));
             } catch (InvalidRecipeException ex) {
                 handleException(ex);
             }
@@ -179,8 +185,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         public IRecipe setRegistryName(ResourceLocation name) {return getRecipe().setRegistryName(name);}
 
         @Override
-        @Nullable
-        public ResourceLocation getRegistryName() {return getRecipe().getRegistryName();}
+        public @Nullable ResourceLocation getRegistryName() {return getRecipe().getRegistryName();}
 
         @Override
         public Class<IRecipe> getRegistryType() {return getRecipe().getRegistryType();}

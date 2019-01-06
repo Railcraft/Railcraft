@@ -9,10 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
+import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IGenRule;
 import mods.railcraft.api.crafting.IOutputEntry;
 import mods.railcraft.api.crafting.IRockCrusherCrafter;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
@@ -23,6 +23,7 @@ import net.minecraft.util.text.TextComponentString;
 
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.function.ToIntFunction;
 
 public enum RockCrusherCrafter implements IRockCrusherCrafter {
     INSTANCE;
@@ -42,39 +43,48 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
     }
 
     @Override
-    public IRecipeBuilder makeRecipe(Object input) {
-        RecipeBuilder builder = new RecipeBuilder(Ingredients.from(input));
-        CraftingPlugin.tryGuessName(input, builder);
-        return builder;
+    public IRockCrusherRecipeBuilder makeRecipe(Object input) {
+        return new RockCrusherRecipeBuilder(Ingredients.from(input)).name(input);
     }
 
-    private class RecipeBuilder extends SingleInputRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
+    private class RockCrusherRecipeBuilder extends RecipeBuilder<IRockCrusherRecipeBuilder> implements IRockCrusherRecipeBuilder {
         private final List<IOutputEntry> outputs = new ArrayList<>();
 
-        public RecipeBuilder(Ingredient input) {
-            super("Rock Crusher", input, stack -> PROCESS_TIME);
+        public RockCrusherRecipeBuilder(Ingredient input) {
+            super("Rock Crusher");
+            addFeature(new SingleInputFeature<>(this, input));
+            addFeature(new TimeFeature<>(this, stack -> PROCESS_TIME));
         }
 
         @Override
-        public IRecipeBuilder addOutput(IOutputEntry entry) {
+        public IRockCrusherRecipeBuilder addOutput(IOutputEntry entry) {
             outputs.add(entry);
             return this;
         }
 
         @Override
-        public IRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
+        public IRockCrusherRecipeBuilder addOutput(ItemStack output, IGenRule rule) {
             if (output.isEmpty())
                 return this;
             return addOutput(new OutputEntry(output, rule));
         }
 
         @Override
-        public IRecipeBuilder addOutput(ItemStack output, float chance) {
+        public IRockCrusherRecipeBuilder addOutput(ItemStack output, float chance) {
             return addOutput(output, new RandomChanceGenRule(chance));
         }
 
         @Override
+        protected void checkArguments() {
+            super.checkArguments();
+            Preconditions.checkArgument(!outputs.stream().map(IOutputEntry::getOutput).allMatch(InvTools::isEmpty),
+                    "No outputs defined");
+        }
+
+        @Override
         protected void registerRecipe() {
+            final Ingredient input = getInput();
+            final ToIntFunction<ItemStack> timeFunction = getTimeFunction();
             recipes.add(new IRecipe() {
                 @Override
                 public Ingredient getInput() {
@@ -88,12 +98,12 @@ public enum RockCrusherCrafter implements IRockCrusherCrafter {
 
                 @Override
                 public ResourceLocation getName() {
-                    return name;
+                    return Objects.requireNonNull(name);
                 }
 
                 @Override
                 public int getTickTime(ItemStack input) {
-                    return timeFunction.apply(input);
+                    return timeFunction.applyAsInt(input);
                 }
             });
         }

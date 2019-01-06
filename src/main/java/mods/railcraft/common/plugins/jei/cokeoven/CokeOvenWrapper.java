@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,7 +51,7 @@ public final class CokeOvenWrapper implements IRecipeWrapper {
         ItemStack input = helpers.getStackHelper().toItemStackList(recipe.getInput()).get(0);
         if (InvTools.nonEmpty(input)) {
             int cookTime = recipe.getTickTime(input);
-            minecraft.fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.jei.burntime", cookTime), -2, 41, Color.GRAY.getRGB());
+            minecraft.fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.jei.burntime", cookTime), -2, 43, Color.GRAY.getRGB());
         }
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -145,7 +145,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                 {
                     IRockCrusherCrafter rc = Crafters.rockCrusher();
                     if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled() || RailcraftItems.DUST.isEnabled()) {
-                        IRockCrusherCrafter.IRecipeBuilder builder = rc.makeRecipe(Blocks.OBSIDIAN)
+                        IRockCrusherCrafter.IRockCrusherRecipeBuilder builder = rc.makeRecipe(Blocks.OBSIDIAN)
                                 .name("railcraft:obsidian");
                         if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled())
                             builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
@@ -433,8 +433,9 @@ public class ModuleFactory extends RailcraftModulePayload {
                 }
             }
 
-            private IRockCrusherCrafter.IRecipeBuilder getWorldSpikeBuilder(String name, Ingredient ingredient) {
-                IRockCrusherCrafter.IRecipeBuilder builder = Crafters.rockCrusher().makeRecipe(ingredient).name(name);
+            private IRockCrusherCrafter.IRockCrusherRecipeBuilder getWorldSpikeBuilder(String name, Ingredient ingredient) {
+                IRockCrusherCrafter.IRockCrusherRecipeBuilder builder =
+                        Crafters.rockCrusher().makeRecipe(ingredient).name(name);
                 if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
                     builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
                     builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);

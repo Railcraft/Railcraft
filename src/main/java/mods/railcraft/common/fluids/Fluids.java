@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -59,7 +59,7 @@ public enum Fluids implements Supplier<Fluid> {
     }
 
     @Contract("null -> false")
-    public static boolean isNotEmpty(@Nullable FluidStack fluidStack) {
+    public static boolean nonEmpty(@Nullable FluidStack fluidStack) {
         return fluidStack != null && fluidStack.amount > 0;
     }
 

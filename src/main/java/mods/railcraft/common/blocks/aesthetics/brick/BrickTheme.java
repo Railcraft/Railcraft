@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -103,6 +103,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                         "II",
                         'I', EnumGeneric.STONE_QUARRIED.getStack());
                 Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_QUARRIED)
+                        .name("railrcraft:stone_quarried")
                         .addOutput(getStack(COBBLE))
                         .register();
             }

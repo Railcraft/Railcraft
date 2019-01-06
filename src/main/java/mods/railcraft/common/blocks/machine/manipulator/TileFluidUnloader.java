@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,7 +51,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
         AdvancedFluidHandler tankCart = getFluidHandler(cart, EnumFacing.DOWN);
         if (tankCart != null) {
             FluidStack moved = FluidUtil.tryFluidTransfer(tank, tankCart, RailcraftConfig.getTankCartFillRate(), true);
-            setProcessing(Fluids.isNotEmpty(moved));
+            setProcessing(Fluids.nonEmpty(moved));
         }
     }
 

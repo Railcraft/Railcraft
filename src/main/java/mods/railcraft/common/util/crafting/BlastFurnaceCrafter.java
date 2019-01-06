@@ -9,11 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.crafting;
 
+import com.google.common.base.Preconditions;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.api.crafting.ISimpleRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
 import mods.railcraft.common.util.collections.CollectionTools;
@@ -23,12 +23,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.ToIntFunction;
 
 public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     INSTANCE;
@@ -46,16 +46,12 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
 
     @Override
     public IFuelBuilder newFuel(Object input) {
-        FuelBuilder builder = new FuelBuilder(Ingredients.from(input));
-        CraftingPlugin.tryGuessName(input, builder);
-        return builder;
+        return new FuelBuilder(Ingredients.from(input)).name(input);
     }
 
     @Override
-    public IRecipeBuilder newRecipe(Object input) {
-        RecipeBuilder builder = new RecipeBuilder(Ingredients.from(input));
-        CraftingPlugin.tryGuessName(input, builder);
-        return builder;
+    public IBlastFurnaceRecipeBuilder newRecipe(Object input) {
+        return new BlastFurnaceRecipeBuilder(Ingredients.from(input)).name(input);
     }
 
     @Deprecated
@@ -89,23 +85,21 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
                 .findFirst();
     }
 
-    private class FuelBuilder extends SingleInputRecipeBuilder<IFuelBuilder> implements IFuelBuilder {
+    private class FuelBuilder extends RecipeBuilder<IFuelBuilder> implements IFuelBuilder {
         public FuelBuilder(Ingredient input) {
-            super("Blast Furnace Fuel", input, FuelPlugin::getBurnTime);
-        }
-
-        @Override
-        public IFuelBuilder name(@Nullable ResourceLocation name) {
-            this.name = Objects.requireNonNull(name);
-            return this;
+            super("Blast Furnace Fuel");
+            addFeature(new SingleInputFeature<>(this, input));
+            addFeature(new TimeFeature<>(this, FuelPlugin::getBurnTime));
         }
 
         @Override
         protected void registerRecipe() {
+            final Ingredient input = getInput();
+            final ToIntFunction<ItemStack> timeFunction = getTimeFunction();
             fuels.add(new ISimpleRecipe() {
                 @Override
                 public ResourceLocation getName() {
-                    return name;
+                    return Objects.requireNonNull(name);
                 }
 
                 @Override
@@ -115,38 +109,44 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
 
                 @Override
                 public int getTickTime(ItemStack input) {
-                    return timeFunction.apply(input);
+                    return timeFunction.applyAsInt(input);
                 }
             });
         }
     }
 
-    private class RecipeBuilder extends SingleInputRecipeBuilder<IRecipeBuilder> implements IRecipeBuilder {
+    private class BlastFurnaceRecipeBuilder extends RecipeBuilder<IBlastFurnaceRecipeBuilder> implements IBlastFurnaceRecipeBuilder {
         private int slagOutput;
-        private ItemStack output = ItemStack.EMPTY;
 
-        public RecipeBuilder(Ingredient input) {
-            super("Blast Furnace", input, stack -> SMELT_TIME);
+        public BlastFurnaceRecipeBuilder(Ingredient input) {
+            super("Blast Furnace");
+            addFeature(new SingleInputFeature<>(this, input));
+            addFeature(new SingleItemStackOutputFeature<>(this, false));
+            addFeature(new TimeFeature<>(this, stack -> SMELT_TIME));
         }
 
         @Override
-        public IRecipeBuilder slagOutput(int num) {
+        public IBlastFurnaceRecipeBuilder slagOutput(int num) {
             this.slagOutput = num;
             return this;
         }
 
         @Override
-        public IRecipeBuilder output(ItemStack output) {
-            this.output = output.copy();
-            return this;
+        protected void checkArguments() {
+            super.checkArguments();
+            Preconditions.checkArgument(InvTools.nonEmpty(getOutput()) || slagOutput > 0,
+                    "No outputs defined.");
         }
 
         @Override
         public void registerRecipe() {
+            final Ingredient input = getInput();
+            final ItemStack output = getOutput();
+            final ToIntFunction<ItemStack> timeFunction = getTimeFunction();
             recipes.add(new IRecipe() {
                 @Override
                 public ResourceLocation getName() {
-                    return name;
+                    return Objects.requireNonNull(name);
                 }
 
                 @Override
@@ -156,7 +156,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
 
                 @Override
                 public int getTickTime(ItemStack input) {
-                    return timeFunction.apply(input);
+                    return timeFunction.applyAsInt(input);
                 }
 
                 @Override

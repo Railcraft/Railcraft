@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -112,8 +112,8 @@ public class ItemFirestoneRefined extends ItemFirestone {
         if (!isInCreativeTab(tab))
             return;
         ItemStack noDamage = new ItemStack(this, 1, 0);
-        list.add(new ItemStack(this, 1, noDamage.getMaxDamage()));
         list.add(noDamage);
+        list.add(new ItemStack(this, 1, noDamage.getMaxDamage() - 1));
     }
 
     @Override
