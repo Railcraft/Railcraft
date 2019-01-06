@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,7 @@ public class ItemCartPumpkin extends ItemCart {
     @Override
     public void defineRecipes() {
         if (SeasonPlugin.HARVEST) {
-            Game.log(Level.INFO, "Activating Halloween Seasonal Pack");
+            Game.log().msg(Level.INFO, "Activating Halloween Seasonal Pack");
             CraftingPlugin.addShapedRecipe(getStack(), "GGG",
                     "WPW",
                     "WWW",

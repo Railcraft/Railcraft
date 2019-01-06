@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -52,7 +52,7 @@ public final class RailcraftModuleManager {
 
     public static void loadModules(ASMDataTable asmDataTable) {
         setStage(Stage.LOADING);
-        Game.log(Level.TRACE, "Loading Modules.");
+        Game.log().msg(Level.TRACE, "Loading Modules.");
         String annotationName = RailcraftModule.class.getCanonicalName();
         for (ASMDataTable.ASMData asmData : asmDataTable.getAll(annotationName)) {
             try {
@@ -60,7 +60,7 @@ public final class RailcraftModuleManager {
                 classToInstanceMapping.put(moduleClass, moduleClass.newInstance());
                 nameToClassMapping.put(getModuleName(moduleClass), moduleClass);
             } catch (Exception ex) {
-                Game.log(Level.ERROR, "Failed to load Railcraft Module: {0}", asmData.getClassName(), ex);
+                Game.log().msg(Level.ERROR, "Failed to load Railcraft Module: {0}", asmData.getClassName(), ex);
             }
         }
     }
@@ -98,7 +98,7 @@ public final class RailcraftModuleManager {
 
     public static void preInit() {
         setStage(Stage.DEPENDENCY_CHECKING);
-        Game.log(Level.TRACE, "Checking Module dependencies and config.");
+        Game.log().msg(Level.TRACE, "Checking Module dependencies and config.");
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
 
@@ -122,13 +122,13 @@ public final class RailcraftModuleManager {
             IRailcraftModule module = entry.getValue();
             String moduleName = getModuleName(module);
             if (!isConfigured(config, module)) {
-                Game.log(Level.INFO, "Module disabled: {0}", module);
+                Game.log().msg(Level.INFO, "Module disabled: {0}", module);
                 continue;
             }
             try {
                 module.checkPrerequisites();
             } catch (IRailcraftModule.MissingPrerequisiteException ex) {
-                Game.logThrowable(Level.INFO, 0, ex, "Module failed prerequisite check, disabling: {0}", moduleName);
+                Game.log().throwable(Level.INFO, 0, ex, "Module failed prerequisite check, disabling: {0}", moduleName);
                 toDisable.add(module.getClass());
                 continue;
             }
@@ -155,7 +155,7 @@ public final class RailcraftModuleManager {
 
         // Tell the user which modules are missing dependencies
         for (Class<? extends IRailcraftModule> moduleClass : toEnable) {
-            Game.log(Level.WARN, "Module is missing dependencies, disabling: {0} -> {1}", getDependencies(moduleClass), getModuleName(moduleClass));
+            Game.log().msg(Level.WARN, "Module is missing dependencies, disabling: {0} -> {1}", getDependencies(moduleClass), getModuleName(moduleClass));
         }
 
         // Add modules missing dependencies to the disabled list
@@ -240,16 +240,16 @@ public final class RailcraftModuleManager {
 
     private static void processStage(Stage s) {
         setStage(s);
-        Game.log(Level.TRACE, "Performing {0} on Modules.", stage.name());
+        Game.log().msg(Level.TRACE, "Performing {0} on Modules.", stage.name());
         for (Class<? extends IRailcraftModule> moduleClass : loadOrder) {
             IRailcraftModule module = classToInstanceMapping.get(moduleClass);
             boolean enabled = enabledModules.contains(moduleClass);
             try {
                 if (Game.DEVELOPMENT_VERSION)
-                    Game.log(Level.INFO, "Module performing stage {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
+                    Game.log().msg(Level.INFO, "Module performing stage {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
                 stage.passToModule(module.getModuleEventHandler(enabled));
             } catch (Throwable th) {
-                Game.logThrowable(Level.ERROR, 3, th, "Module failed during {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
+                Game.log().throwable(Level.ERROR, 3, th, "Module failed during {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
                 throw th;
             }
         }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -106,7 +106,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
                 chromosome = EnumTools.next(chromosome, EnumBeeChromosome.values());
                 nbt.setString("chromosome", chromosome.name());
             } catch (Throwable throwable) {
-                Game.logErrorAPI(Mod.FORESTRY.modId, throwable, EnumBeeChromosome.class);
+                Game.log().api(Mod.FORESTRY.modId, throwable, EnumBeeChromosome.class);
             }
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack.copy());
@@ -154,7 +154,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
                 inactive = wildcard();
             info.add(tr("item.railcraft.filter.bee.genome.tips.inactive", inactive));
         } catch (Throwable throwable) {
-            Game.logErrorAPI(Mod.FORESTRY.modId, throwable, BeeManager.class);
+            Game.log().api(Mod.FORESTRY.modId, throwable, BeeManager.class);
         }
     }
 
@@ -271,7 +271,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
                         return false;
                 }
             } catch (Throwable throwable) {
-                Game.logErrorAPI(Mod.FORESTRY.modId, throwable, BeeManager.class);
+                Game.log().api(Mod.FORESTRY.modId, throwable, BeeManager.class);
                 return false;
             }
             return true;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,7 +67,7 @@ public abstract class TileMachineBase extends TileRailcraftTicking implements IS
             }
 
             if (getBlockType() != getMachineType().block()) {
-                Game.log(Level.INFO, "Updating Machine Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
+                Game.log().msg(Level.INFO, "Updating Machine Block: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), getBlockType(), getMachineType().block(), getPos());
                 world.setBlockState(getPos(), getMachineType().getDefaultState(), 3);
                 validate();
                 world.setTileEntity(getPos(), this);
@@ -81,7 +81,7 @@ public abstract class TileMachineBase extends TileRailcraftTicking implements IS
                 world.setBlockState(getPos(), newState, 3);
                 validate();
                 world.setTileEntity(getPos(), this);
-                Game.log(Level.INFO, "Updating Machine State: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), oldState, newState, getPos());
+                Game.log().msg(Level.INFO, "Updating Machine State: {0} {1}->{2}, [{3}]", getClass().getSimpleName(), oldState, newState, getPos());
                 updateContainingBlockInfo();
             }
         }

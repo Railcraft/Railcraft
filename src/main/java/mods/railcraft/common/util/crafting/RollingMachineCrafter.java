@@ -133,7 +133,7 @@ public enum RollingMachineCrafter implements IRollingMachineCrafter {
         }
 
         private void handleException(Throwable ex) {
-            Game.log(Level.WARN,
+            Game.log().msg(Level.WARN,
                     "Tried, but failed to register {0} as a Rolling Machine recipe. Reason: {1}",
                     name, ex.getMessage());
         }

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui;
 
 import mods.railcraft.client.gui.FactoryGui;
@@ -53,7 +54,7 @@ public class GuiHandler implements IGuiHandler {
         if (y < 0) {
             Entity entity = world.getEntityByID(x);
             if (entity == null) {
-                Game.log(Level.WARN, "[Server] Entity not found when opening GUI: {0}", x);
+                Game.log().msg(Level.WARN, "[Server] Entity not found when opening GUI: {0}", x);
                 return null;
             }
             return FactoryContainer.build(EnumGui.fromOrdinal(ID), player.inventory, entity, world, x, y, z);
@@ -67,7 +68,7 @@ public class GuiHandler implements IGuiHandler {
         if (y < 0) {
             Entity entity = world.getEntityByID(x);
             if (entity == null) {
-                Game.log(Level.WARN, "[Client] Entity not found when opening GUI: {0}", x);
+                Game.log().msg(Level.WARN, "[Client] Entity not found when opening GUI: {0}", x);
                 return null;
             }
             return FactoryGui.build(EnumGui.fromOrdinal(ID), player.inventory, entity, world, x, y, z);

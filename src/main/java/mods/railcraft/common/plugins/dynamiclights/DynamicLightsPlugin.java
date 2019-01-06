@@ -1,11 +1,12 @@
-/*
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- *
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.dynamiclights;
 
 import atomicstryker.dynamiclights.client.IDynamicLightSource;
@@ -109,7 +110,7 @@ public final class DynamicLightsPlugin {
                     }
                 });
             } catch (IllegalAccessException | InvocationTargetException e) {
-                Game.logThrowable(Level.ERROR, 10, e, "Dynamic Light plugin encountered a problem, please report to Railcraft");
+                Game.log().throwable(Level.ERROR, 10, e, "Dynamic Light plugin encountered a problem, please report to Railcraft");
             }
         }
     }

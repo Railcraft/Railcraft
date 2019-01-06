@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,7 +50,7 @@ public class WorldPlugin {
         // see flowerpot source code
         if (pos.getY() < 0) {
             // dunno if this will be triggered by tiles at y=0
-            Game.log(Level.INFO, "Attempted to access tile entity in an invalid position");
+            Game.log().msg(Level.INFO, "Attempted to access tile entity in an invalid position");
         }
         return world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
     }

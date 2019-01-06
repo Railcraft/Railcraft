@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,7 +28,7 @@ public class BoreOreHandler {
             return;
         if (ore.getItem() instanceof ItemBlock && oreClass.startsWith("ore")) {
             if (EntityTunnelBore.mineableOreTags.add(oreClass))
-                Game.log(Level.DEBUG, "Automation Module: Ore Tag Detected, adding to blocks Tunnel Bore can mine: {0}", oreClass);
+                Game.log().msg(Level.DEBUG, "Automation Module: Ore Tag Detected, adding to blocks Tunnel Bore can mine: {0}", oreClass);
         }
     }
 

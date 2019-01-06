@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,7 +46,7 @@ class PacketTicketGui extends RailcraftPacket {
             if (!InvTools.isEmpty(heldItem) && RailcraftItems.TICKET_GOLD.isEqual(heldItem))
                 Minecraft.getMinecraft().displayGuiScreen(new GuiTicket(player, heldItem));
         } catch (Exception exception) {
-            Game.logThrowable("Error reading Golden Ticket Gui Packet", exception);
+            Game.log().throwable("Error reading Golden Ticket Gui Packet", exception);
         }
     }
 

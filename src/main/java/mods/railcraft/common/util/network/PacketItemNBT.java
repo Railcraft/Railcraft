@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,8 +20,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import org.apache.logging.log4j.Level;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.stream.Stream;
 
@@ -144,20 +144,20 @@ public abstract class PacketItemNBT extends RailcraftPacket {
             IEditableItem eItem = (IEditableItem) readStack.getItem();
 
             if (!eItem.canPlayerEdit(player, targetStack)) {
-                Game.log(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetStack.getItem().getTranslationKey());
+                Game.log().msg(Level.WARN, "{0} attempted to edit an item he is not allowed to edit {0}.", Railcraft.proxy.getPlayerUsername(player), targetStack.getItem().getTranslationKey());
                 return;
             }
 
             NBTTagCompound nbt = readStack.getTagCompound();
             if (nbt == null || !eItem.validateNBT(nbt)) {
-                Game.log(Level.WARN, "Item NBT not valid!");
+                Game.log().msg(Level.WARN, "Item NBT not valid!");
                 return;
             }
 
             targetStack.setTagCompound(readStack.getTagCompound());
             updateTargetStack(targetStack);
         } catch (Exception exception) {
-            Game.logThrowable("Error reading Item NBT packet", exception);
+            Game.log().throwable("Error reading Item NBT packet", exception);
         }
     }
 

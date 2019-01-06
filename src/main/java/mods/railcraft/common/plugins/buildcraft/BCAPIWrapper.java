@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,7 +26,7 @@ public class BCAPIWrapper {
             StatementManager.registerTriggerProvider(new TriggerProvider());
             StatementManager.registerActionProvider(new ActionProvider());
         } catch (Throwable error) {
-            Game.logErrorAPI("Buildcraft", error, StatementManager.class);
+            Game.log().api("Buildcraft", error, StatementManager.class);
         }
     }
 

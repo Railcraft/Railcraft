@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,7 +65,7 @@ public class CommandDebug extends SubCommand {
         } else {
             msgObj = msgFactory.newMessage(msg, args);
         }
-        Game.log(DEBUG_LEVEL, msgObj);
+        Game.log().msg(DEBUG_LEVEL, msgObj);
         sender.sendMessage(ChatPlugin.makeMessage(msgObj.getFormattedMessage()));
     }
 

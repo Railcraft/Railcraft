@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class ItemBackpackWrapper extends ItemWrapper {
             Set<Object> list = (Set<Object>) itemColorList.get(ForestryAPI.modelManager);
             list.add(getObject());
         } catch (NoSuchFieldException | IllegalAccessException | ClassCastException ex) {
-            Game.logErrorAPI(Mod.FORESTRY.modId, ex, ForestryAPI.modelManager.getClass());
+            Game.log().api(Mod.FORESTRY.modId, ex, ForestryAPI.modelManager.getClass());
         }
     }
 }

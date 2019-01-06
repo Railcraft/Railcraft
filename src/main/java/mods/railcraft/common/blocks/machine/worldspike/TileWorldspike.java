@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -285,7 +285,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
             if (clock % 64 == 0) {
                 int numChunks = chunks == null ? 0 : chunks.size();
                 ChatPlugin.sendLocalizedChatToAllFromServer(world, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), world.provider.getDimension(), world.getWorldTime());
-                Game.log(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), world.provider.getDimension(), world.getWorldTime());
+                Game.log().msg(Level.DEBUG, "{0} has loaded {1} chunks and is ticking at <{2}> in dim:{3} - logged on tick {4}", getName(), numChunks, getPos(), world.provider.getDimension(), world.getWorldTime());
             }
     }
 

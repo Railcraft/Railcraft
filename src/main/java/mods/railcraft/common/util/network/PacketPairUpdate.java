@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -75,7 +75,7 @@ public class PacketPairUpdate extends RailcraftPacket {
             try {
                 pairing.clearPairings();
             } catch (Throwable error) {
-                Game.logErrorAPI(Railcraft.NAME, error, AbstractPair.class);
+                Game.log().api(Railcraft.NAME, error, AbstractPair.class);
             }
             int size = data.readByte();
             for (int i = 0; i < size; i++) {

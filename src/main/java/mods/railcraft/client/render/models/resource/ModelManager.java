@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,8 +50,7 @@ public class ModelManager {
     }
 
     public static void registerItemModel(Item item, int meta, ModelResourceLocation location) {
-        if (Game.DEVELOPMENT_VERSION)
-            Game.log(Level.INFO, "Registering item model: {0} meta:{1} location:{2}", item.getRegistryName(), meta, location);
+        Game.log("models").msg(Level.INFO, "Registering item model: {0} meta:{1} location:{2}", item.getRegistryName(), meta, location);
         ModelLoader.setCustomModelResourceLocation(item, meta, location);
     }
 
@@ -60,15 +59,13 @@ public class ModelManager {
         if (item instanceof IRailcraftItemBlock) {
             ModelResourceLocation modelResourceLocation = ((IRailcraftItemBlock) item).getModelLocation(stack, state);
             int meta = stack.getItemDamage();
-            if (Game.DEVELOPMENT_VERSION)
-                Game.log(Level.INFO, "Registering block item model: {0} meta: {1} state: {2} location: {3}", item.getRegistryName(), meta, state, modelResourceLocation);
+            Game.log("models").msg(Level.INFO, "Registering block item model: {0} meta: {1} state: {2} location: {3}", item.getRegistryName(), meta, state, modelResourceLocation);
             ModelLoader.setCustomModelResourceLocation(item, meta, modelResourceLocation);
         }
     }
 
     public static void registerComplexItemModel(Item item, ItemMeshDefinition meshDefinition, ModelResourceLocation... locations) {
-        if (Game.DEVELOPMENT_VERSION)
-            Game.log(Level.INFO, "Registering complex item model: {0} locations:{1}", item.getRegistryName(), Arrays.toString(locations));
+        Game.log("models").msg(Level.INFO, "Registering complex item model: {0} locations:{1}", item.getRegistryName(), Arrays.toString(locations));
         ModelLoader.setCustomMeshDefinition(item, meshDefinition);
         for (ModelResourceLocation location : locations) {
             ModelBakery.registerItemVariants(item, location);
@@ -81,7 +78,7 @@ public class ModelManager {
             model = ModelLoaderRegistry.getModel(location);
         } catch (Exception ex) {
             model = ModelLoaderRegistry.getMissingModel();
-            Game.logThrowable("Missing model: " + location, ex);
+            Game.log().throwable("Missing model: " + location, ex);
         }
         return model;
     }

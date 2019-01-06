@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -199,7 +199,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                     return itemStack;
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
+            Game.log().api(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
         }
         return new ItemStack(this);
     }
@@ -221,7 +221,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                 return ((TileTrackOutfitted) tile).getTrackKitInstance().getTrackKit();
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         return TrackRegistry.getMissingTrackKit();
     }
@@ -237,7 +237,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                     return ((ITrackKitCustomShape) track).getCollisionBoundingBox(state);
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         return null;
     }
@@ -253,7 +253,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                     return ((ITrackKitCustomShape) track).getSelectedBoundingBox();
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         return getBoundingBox(state, world, pos).offset(pos);
     }
@@ -269,7 +269,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                     return ((ITrackKitCustomShape) track).collisionRayTrace(startVec, endVec);
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         return super.collisionRayTrace(state, world, pos, startVec, endVec);
     }
@@ -284,7 +284,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                     return !((ITrackKitMovementBlocker) track).blocksMovement();
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class, ITrackKitMovementBlocker.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class, ITrackKitMovementBlocker.class);
         }
         return super.isPassable(world, pos);
     }
@@ -404,7 +404,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
             if (tile instanceof TileTrackOutfitted)
                 items.addAll(((TileTrackOutfitted) tile).getTrackKitInstance().getDrops(fortune));
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class, TrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class, TrackKitInstance.class);
         }
     }
 
@@ -454,7 +454,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                 ((TileTrackOutfitted) tile).getTrackKitInstance().onBlockRemoved();
 
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, ITrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, ITrackKitInstance.class);
         }
         super.breakBlock(world, pos, state);
         Charge.distribution.network(world).removeNode(pos);
@@ -473,7 +473,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
             }
             super.neighborChanged(state, world, pos, neighborBlock, neighborPos);
         } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
+            Game.log().throwable(Level.ERROR, 10, error, "Stack Overflow Error in BlockTrack.onNeighborBlockChange()");
             if (Game.DEVELOPMENT_VERSION)
                 throw error;
         }
@@ -511,7 +511,7 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
                     return ((IPostConnection) track).connectsToPost(world, pos, state, side);
             }
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.MOD_ID, error, IPostConnection.class, ITrackKitInstance.class);
+            Game.log().api(Railcraft.MOD_ID, error, IPostConnection.class, ITrackKitInstance.class);
         }
         return ConnectStyle.NONE;
     }

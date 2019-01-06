@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -204,7 +204,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
                 emitterDelegate = new TileIC2MultiEmitterDelegate(this);
                 IC2Plugin.addTileToNet(emitterDelegate);
             } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error);
+                Game.log().api("IndustrialCraft", error);
             }
     }
 

@@ -173,7 +173,7 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 if (RailcraftConfig.useCollisionHandler()) {
                     if (EntityMinecart.getCollisionHandler() != null)
-                        Game.log(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
+                        Game.log().msg(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
                     EntityMinecart.setCollisionHandler(MinecartHooks.INSTANCE);
                 }
 
@@ -253,7 +253,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         .tracker(80, 2, true)
                         .build();
                 ForgeRegistries.ENTITIES.register(substitute);
-                Game.log(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
+                Game.log().msg(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
 
                 if (original != null) {
                     BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());

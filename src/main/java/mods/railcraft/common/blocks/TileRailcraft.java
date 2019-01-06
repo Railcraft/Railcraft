@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -73,7 +73,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
     public IBlockState getBlockState() {
         if (isInvalid()) {
             if (Game.DEVELOPMENT_VERSION) {
-                Game.log(Level.ERROR, "Tried to access invalid blockstate on " + getClass() + " at " + getPos() + " hashcode " + System.identityHashCode(this));
+                Game.log().msg(Level.ERROR, "Tried to access invalid blockstate on " + getClass() + " at " + getPos() + " hashcode " + System.identityHashCode(this));
                 throw new RuntimeException();
             }
             return Blocks.AIR.getDefaultState();
@@ -98,7 +98,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
              RailcraftOutputStream data = new RailcraftOutputStream(out)) {
             writePacketData(data);
         } catch (IOException e) {
-            Game.logThrowable("Error constructing tile packet: {0}", e, getClass());
+            Game.log().throwable("Error constructing tile packet: {0}", e, getClass());
             if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
         }
@@ -113,7 +113,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
              RailcraftInputStream data = new RailcraftInputStream(in)) {
             readPacketData(data);
         } catch (IOException e) {
-            Game.logThrowable("Error decoding tile packet: {0}", e, getClass());
+            Game.log().throwable("Error decoding tile packet: {0}", e, getClass());
             if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
         }

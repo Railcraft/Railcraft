@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -109,7 +109,7 @@ public final class ShapelessRailcraftRecipe extends ShapelessRecipes {
          * Invoked by forge via reflection.
          */
         public Factory() {
-            Game.log(Level.INFO, "Remaining item shaped recipe factory loaded");
+            Game.log().msg(Level.INFO, "Remaining item shaped recipe factory loaded");
         }
 
         @Override

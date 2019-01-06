@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -94,7 +94,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
             try {
                 sinkDelegate = new TileIC2SinkDelegate(this);
             } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error);
+                Game.log().api("IndustrialCraft", error);
             }
         return sinkDelegate;
     }

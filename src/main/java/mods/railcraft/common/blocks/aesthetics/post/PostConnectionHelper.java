@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,7 +74,7 @@ public class PostConnectionHelper {
             if (block instanceof IPostConnection && ((IPostConnection) block).connectsToPost(world, pos, state, side) == ConnectStyle.NONE)
                 return ConnectStyle.NONE;
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.NAME, error, IPostConnection.class);
+            Game.log().api(Railcraft.NAME, error, IPostConnection.class);
             return ConnectStyle.NONE;
         }
 
@@ -92,7 +92,7 @@ public class PostConnectionHelper {
             if (otherBlock instanceof IPostConnection)
                 return ((IPostConnection) otherBlock).connectsToPost(world, otherPos, otherState, oppositeSide);
         } catch (Error error) {
-            Game.logErrorAPI(Railcraft.NAME, error, IPostConnection.class);
+            Game.log().api(Railcraft.NAME, error, IPostConnection.class);
         }
 
         if (otherBlock instanceof BlockPostBase)

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -52,7 +52,7 @@ public final class ChargeSaveData extends WorldSavedData {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         if (RailcraftConfig.printChargeDebug())
-            Game.log(Level.INFO, "Saving Charge Battery data...");
+            Game.log().msg(Level.INFO, "Saving Charge Battery data...");
         NBTTagList list = new NBTTagList();
         for (Map.Entry<BlockPos, Double> entry : chargeLevels.entrySet()) {
             NBTTagCompound dataEntry = new NBTTagCompound();
@@ -67,7 +67,7 @@ public final class ChargeSaveData extends WorldSavedData {
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         if (RailcraftConfig.printChargeDebug())
-            Game.log(Level.INFO, "Loading Charge Battery data...");
+            Game.log().msg(Level.INFO, "Loading Charge Battery data...");
         List<NBTTagCompound> list = NBTPlugin.getNBTList(nbt, "batteries", NBTTagCompound.class);
         for (NBTTagCompound entry : list) {
             BlockPos pos = NBTPlugin.readBlockPos(entry, "pos");

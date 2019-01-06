@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,8 +21,8 @@ import net.minecraftforge.fml.common.event.FMLModIdMappingEvent;
 import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.Level;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -102,7 +102,7 @@ public enum Remapper {
 //                    if (mapping.getAction() != FMLMissingMappingsEvent.Action.DEFAULT)
 //                        break;
                 } catch (Exception ex) {
-                    Game.logThrowable("Remapper Error", ex);
+                    Game.log().throwable("Remapper Error", ex);
                 }
             }
         }
@@ -134,7 +134,7 @@ public enum Remapper {
 //                mapping.remap((Item) object);
 //            else
 //                throw new IllegalArgumentException("unknown object");
-            Game.log(Level.WARN, "Remapping " + mapping.registry + " named " + mapping.key + " to " + object.getRegistryName());
+            Game.log().msg(Level.WARN, "Remapping " + mapping.registry + " named " + mapping.key + " to " + object.getRegistryName());
         }
     }
 }

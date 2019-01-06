@@ -90,7 +90,7 @@ public class FilterBeesGenomeRecipe extends BaseRecipe {
 
             return ItemFilterBeeGenome.setBeeFilter(filter, typeName, active, inactive);
         } catch (Throwable error) {
-            Game.logErrorAPI(Mod.FORESTRY.modId, error, BeeManager.class);
+            Game.log().api(Mod.FORESTRY.modId, error, BeeManager.class);
             return InvTools.emptyStack();
         }
     }

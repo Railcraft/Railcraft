@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -107,7 +107,7 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
             }
             return toolTip;
         } catch (RuntimeException ex) {
-            Game.logThrowable("Failed to parse tooltip: " + tipTag, ex);
+            Game.log().throwable("Failed to parse tooltip: " + tipTag, ex);
             throw ex;
         }
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,9 +17,9 @@ import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAIMateBreeding;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
-import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -160,7 +160,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                 return true;
             }
         } catch (Throwable ex) {
-            Game.log(Level.ERROR, "Feed Station encountered error, {0}", ex);
+            Game.log().msg(Level.ERROR, "Feed Station encountered error, {0}", ex);
         }
         return false;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -93,7 +93,7 @@ public class ItemChargeMeter extends ItemRailcraft {
                     event.setCanceled(true);
                 });
             } catch (Throwable er) {
-                Game.logErrorAPI(Railcraft.MOD_ID, er, IBatteryCart.class);
+                Game.log().api(Railcraft.MOD_ID, er, IBatteryCart.class);
                 ChatPlugin.sendLocalizedChatFromServer(player, "chat.railcraft.api.error");
             }
     }

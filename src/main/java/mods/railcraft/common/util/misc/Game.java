@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,9 +14,12 @@ import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.Level;
@@ -25,6 +28,10 @@ import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -59,7 +66,7 @@ public final class Game {
         }
         BUKKIT = foundBukkit;
         if (BUKKIT)
-            log(Level.INFO, "Bukkit detected, disabling Tile Entity caching because Bukkit doesn't seem to invalid Tile Entities properly!");
+            Game.log().msg(Level.INFO, "Bukkit detected, disabling Tile Entity caching because Bukkit doesn't seem to invalid Tile Entities properly!");
     }
 
     public static boolean isHost(final World world) {
@@ -94,81 +101,155 @@ public final class Game {
         return OBFUSCATED;
     }
 
-    private static Message getMessage(String msg, Object... args) {
-        return new MessageFormatMessage(msg, args);
-    }
-
-    public static void log(Level level, @Nullable String msg, Object... args) {
-        if (msg != null)
-            log(level, getMessage(msg, args));
-    }
-
-    public static void log(Level level, Message msg) {
-        LogManager.getLogger(Railcraft.MOD_ID).log(level, msg);
-    }
-
-    public static void logTrace(Level level, String msg, Object... args) {
-        logTrace(level, getMessage(msg, args));
-    }
-
-    public static void logTrace(Level level, Message message) {
-        Game.logTrace(level, 5, message);
-    }
-
-    public static void logTrace(Level level, int lines, String msg, Object... args) {
-        log(level, getMessage(msg, args));
-        logTrace(level, lines, 2, Thread.currentThread().getStackTrace());
-    }
-
-    public static void logTrace(Level level, int lines, Message message) {
-        log(level, message);
-        logTrace(level, lines, 2, Thread.currentThread().getStackTrace());
-    }
-
-    private static void logTrace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {
-        for (int i = skipLines; i < stackTrace.length && i < skipLines + lines; i++) {
-            log(level, stackTrace[i].toString());
-        }
-    }
-
-    public static void logThrowable(String msg, Throwable error, Object... args) {
-        logThrowable(Level.ERROR, 3, error, msg, args);
-    }
-
-    public static void logThrowable(String msg, int lines, Throwable error, Object... args) {
-        logThrowable(Level.ERROR, lines, error, msg, args);
-    }
-
-    public static void logThrowable(Level level, int lines, Throwable error, String msg, Object... args) {
-        log(level, msg, args);
-        log(level, new SimpleMessage(error.toString()));
-        logTrace(level, lines, 0, error.getStackTrace());
-    }
-
-    public static void logDebug(String msg, Object... args) {
-        if (!DEVELOPMENT_VERSION)
-            return;
-        log(Level.DEBUG, msg, args);
-    }
-
-    public static void logErrorAPI(String mod, Throwable error, Class<?>... classFiles) {
-        StringBuilder msg = new StringBuilder(mod);
-        msg.append(" API error, please update your mods. Error: ").append(error);
-        logThrowable(Level.ERROR, 2, error, msg.toString());
-
-        for (Class<?> classFile : classFiles) {
-            if (classFile != null) {
-                msg = new StringBuilder(mod);
-                msg.append(" API error: ").append(classFile.getSimpleName()).append(" is loaded from ").append(classFile.getProtectionDomain().getCodeSource().getLocation());
-                log(Level.ERROR, msg.toString());
-            }
-        }
-    }
-
-    public static void logErrorFingerprint(String mod) {
-        log(Level.FATAL, "{0} failed validation, terminating. Please re-download {0} from an official source.", mod);
+    public static ResourceLocation getActiveModResource(String path) {
+        ModContainer mod = Loader.instance().activeModContainer();
+        String modId = mod != null ? mod.getModId() : "unknown";
+        return new ResourceLocation(modId, path);
     }
 
     private Game() {
+    }
+
+    private static final Set<String> enabledCategories = new HashSet<>(Arrays.asList(
+//                "registry",
+//                "models",
+            "default"
+    ));
+
+    public static ILogger log() {
+        return log("default");
+    }
+
+    public static ILogger log(String category) {
+        if (enabledCategories.contains(category))
+            return Logger.INSTANCE;
+        return NULL_LOGGER;
+    }
+
+    private static ILogger NULL_LOGGER = new ILogger() {};
+
+    public enum Logger implements ILogger {
+        INSTANCE;
+
+        private Message getMessage(String msg, Object... args) {
+            return new MessageFormatMessage(msg, args);
+        }
+
+        @Override
+        public void msg(Level level, @Nullable String msg, Object... args) {
+            if (msg != null)
+                msg(level, getMessage(msg, args));
+        }
+
+        @Override
+        public void msg(Level level, Message msg) {
+            LogManager.getLogger(Railcraft.MOD_ID).log(level, msg);
+        }
+
+        @Override
+        public void trace(Level level, String msg, Object... args) {
+            trace(level, getMessage(msg, args));
+        }
+
+        @Override
+        public void trace(Level level, Message message) {
+            trace(level, 5, message);
+        }
+
+        @Override
+        public void trace(Level level, int lines, String msg, Object... args) {
+            msg(level, getMessage(msg, args));
+            trace(level, lines, 2, Thread.currentThread().getStackTrace());
+        }
+
+        @Override
+        public void trace(Level level, int lines, Message message) {
+            msg(level, message);
+            trace(level, lines, 2, Thread.currentThread().getStackTrace());
+        }
+
+        @Override
+        public void trace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {
+            for (int i = skipLines; i < stackTrace.length && i < skipLines + lines; i++) {
+                msg(level, stackTrace[i].toString());
+            }
+        }
+
+        @Override
+        public void throwable(String msg, Throwable error, Object... args) {
+            throwable(Level.ERROR, 3, error, msg, args);
+        }
+
+        @Override
+        public void throwable(String msg, int lines, Throwable error, Object... args) {
+            throwable(Level.ERROR, lines, error, msg, args);
+        }
+
+        @Override
+        public void throwable(Level level, int lines, Throwable error, String msg, Object... args) {
+            msg(level, msg, args);
+            msg(level, new SimpleMessage(error.toString()));
+            trace(level, lines, 0, error.getStackTrace());
+        }
+
+        @Override
+        public void debug(String msg, Object... args) {
+            if (!Game.DEVELOPMENT_VERSION)
+                return;
+            msg(Level.DEBUG, msg, args);
+        }
+
+        @Override
+        public void api(String mod, Throwable error, Class<?>... classFiles) {
+            StringBuilder msg = new StringBuilder(mod);
+            msg.append(" API error, please update your mods. Error: ").append(error);
+            throwable(Level.ERROR, 2, error, msg.toString());
+
+            for (Class<?> classFile : classFiles) {
+                if (classFile != null) {
+                    msg = new StringBuilder(mod);
+                    msg.append(" API error: ").append(classFile.getSimpleName()).append(" is loaded from ").append(classFile.getProtectionDomain().getCodeSource().getLocation());
+                    msg(Level.ERROR, msg.toString());
+                }
+            }
+        }
+
+        @Override
+        public void fingerprint(String mod) {
+            msg(Level.FATAL, "{0} failed validation, terminating. Please re-download {0} from an official source.", mod);
+        }
+    }
+
+    /**
+     * Created by CovertJaguar on 1/6/2019 for Railcraft.
+     *
+     * @author CovertJaguar <http://www.railcraft.info>
+     */
+    public interface ILogger {
+        default void msg(Level level, @Nullable String msg, Object... args) {}
+
+        default void msg(Level level, Message msg) {}
+
+        default void trace(Level level, String msg, Object... args) {}
+
+        default void trace(Level level, Message message) {}
+
+        default void trace(Level level, int lines, String msg, Object... args) {}
+
+        default void trace(Level level, int lines, Message message) {}
+
+        default void trace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {}
+
+        default void throwable(String msg, Throwable error, Object... args) {}
+
+        default void throwable(String msg, int lines, Throwable error, Object... args) {}
+
+        default void throwable(Level level, int lines, Throwable error, String msg, Object... args) {}
+
+        default void debug(String msg, Object... args) {}
+
+        default void api(String mod, Throwable error, Class<?>... classFiles) {}
+
+        default void fingerprint(String mod) {}
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,10 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
-import mods.railcraft.common.core.*;
+import mods.railcraft.common.core.IRailcraftObject;
+import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.Railcraft;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail.EnumRail;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -188,7 +191,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
                 TrackRegistry.TRACK_KIT.register(trackKit);
                 TRACK_KITS.add(trackKit);
             } catch (Exception error) {
-                Game.logErrorAPI(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
+                Game.log().api(Railcraft.MOD_ID, error, TrackRegistry.class, TrackKit.class);
             }
         }
     }

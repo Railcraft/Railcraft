@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -52,7 +52,7 @@ public enum LinkageManager implements ILinkageManager {
 
     public static void printDebug(String msg, Object... args) {
         if (RailcraftConfig.printLinkingDebug())
-            Game.log(Level.DEBUG, msg, args);
+            Game.log().msg(Level.DEBUG, msg, args);
     }
 
     /**
@@ -298,7 +298,7 @@ public enum LinkageManager implements ILinkageManager {
         boolean cart2Linked = id1.equals(getLinkA(cart2)) || id1.equals(getLinkB(cart2));
 
         if (cart1Linked != cart2Linked) {
-            Game.log(Game.DEVELOPMENT_VERSION ? Game.DEBUG_REPORT : Level.WARN,
+            Game.log().msg(Game.DEVELOPMENT_VERSION ? Game.DEBUG_REPORT : Level.WARN,
                     "Linking discrepancy between carts {0}({1}) and {2}({3}): The first cart reports {4} for linked while the second one reports {5}!",
                     getLinkageId(cart1), cart1.getDisplayName(), getLinkageId(cart2), cart2.getDisplayName(), cart1Linked, cart2Linked);
         }
@@ -387,7 +387,7 @@ public enum LinkageManager implements ILinkageManager {
      */
     private void breakLinkInternal(EntityMinecart one, EntityMinecart two, @Nullable LinkType linkOne, @Nullable LinkType linkTwo) {
         if ((linkOne == null) != (linkTwo == null)) {
-            Game.log(Game.DEVELOPMENT_VERSION ? Game.DEBUG_REPORT : Level.WARN,
+            Game.log().msg(Game.DEVELOPMENT_VERSION ? Game.DEBUG_REPORT : Level.WARN,
                     "Linking discrepancy between carts {0}({1}) and {2}({3}): The first cart reports {4} for linked while the second one reports {5}!",
                     getLinkageId(one), one.getDisplayName(), getLinkageId(two), two.getDisplayName(), linkOne == null, linkTwo == null);
         }

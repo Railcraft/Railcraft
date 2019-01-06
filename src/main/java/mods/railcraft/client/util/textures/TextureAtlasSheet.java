@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -42,10 +42,9 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
         int columns = textureDimensions.getFirst();
         int rows = textureDimensions.getSecond();
         if (columns <= 1 && rows <= 1)
-            return new ResourceLocation[] {new ResourceLocation(textureResource.getNamespace(), textureFolder + textureResource.getPath())};
+            return new ResourceLocation[]{new ResourceLocation(textureResource.getNamespace(), textureFolder + textureResource.getPath())};
 
-        if (Game.DEVELOPMENT_VERSION)
-            Game.log(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
+        Game.log("models").msg(Level.INFO, "Unstitching texture sheet: {0} {1}x{2}", textureResource, columns, rows);
 
         int numIcons = rows * columns;
         ResourceLocation[] locations = new ResourceLocation[numIcons];
@@ -82,7 +81,7 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
         try (IResource resource = manager.getResource(fullLocation)) {
             image = ImageIO.read(resource.getInputStream());
         } catch (IOException ex) {
-            Game.log(Level.WARN, "Failed to load sub-texture from {0}: {1}", fullLocation.getPath(), ex.getLocalizedMessage());
+            Game.log().msg(Level.WARN, "Failed to load sub-texture from {0}: {1}", fullLocation.getPath(), ex.getLocalizedMessage());
             return true;
         }
 
@@ -96,7 +95,7 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
         try {
             subImage = image.getSubimage(x * size, y * size, size, size);
         } catch (RasterFormatException ex) {
-            Game.log(Level.WARN, "Failed to load sub-texture from {0} - {1}x{2}: {3}", fullLocation.getPath(), image.getWidth(), image.getHeight(), ex.getLocalizedMessage());
+            Game.log().msg(Level.WARN, "Failed to load sub-texture from {0} - {1}x{2}: {3}", fullLocation.getPath(), image.getWidth(), image.getHeight(), ex.getLocalizedMessage());
             return true;
         }
         this.height = subImage.getHeight();
@@ -108,7 +107,7 @@ public final class TextureAtlasSheet extends TextureAtlasSprite {
         framesTextureData.add(imageData);
 
         // Hack to use sheet textures for advancement backgrounds
-        Game.log(Level.INFO, "registering custom textures {0}", location);
+        Game.log("models").msg(Level.INFO, "registering custom textures {0}", location);
         Minecraft.getMinecraft().getTextureManager().loadTexture(location, new Texture(subImage));
 
         return false;

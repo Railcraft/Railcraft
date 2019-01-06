@@ -152,10 +152,10 @@ public abstract class TradeStationLogic extends InventoryLogic {
         ItemStack secondItem = recipe.getSecondItemToBuy();
         if (!InvTools.isEmpty(firstItem))
             if (!invInput.removeItems(sizeOf(firstItem), firstItem))
-                Game.log(Level.WARN, "Cannot remove first input item!");
+                Game.log().msg(Level.WARN, "Cannot remove first input item!");
         if (!InvTools.isEmpty(secondItem))
             if (!invInput.removeItems(sizeOf(secondItem), secondItem))
-                Game.log(Level.WARN, "Cannot remove second input item!");
+                Game.log().msg(Level.WARN, "Cannot remove second input item!");
         invOutput.addStack(InvTools.copy(recipe.getItemToSell()));
     }
 

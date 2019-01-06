@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -126,7 +126,7 @@ public class RailcraftConfig {
     public static Configuration configClient;
 
     public static void preInit() {
-        Game.log(Level.TRACE, "Railcraft Config: Doing pre-init parsing");
+        Game.log().msg(Level.TRACE, "Railcraft Config: Doing pre-init parsing");
 
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
@@ -194,7 +194,7 @@ public class RailcraftConfig {
     }
 
     public static void postInit() {
-        Game.log(Level.TRACE, "Railcraft Config: Doing post init configuration");
+        Game.log().msg(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
         worldspikeFuelStandard.putAll(BlockItemParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
         worldspikeFuelPersonal.putAll(BlockItemParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
@@ -1067,7 +1067,7 @@ public class RailcraftConfig {
         try {
             parsed = Integer.parseInt(value);
         } catch (NumberFormatException ex) {
-            Game.logThrowable(Level.WARN, 3, ex, "Failed to parse config tag, resetting to default: {0}", prop.getName());
+            Game.log().throwable(Level.WARN, 3, ex, "Failed to parse config tag, resetting to default: {0}", prop.getName());
             prop.set(defaultValue);
             return defaultValue;
         }
@@ -1080,7 +1080,7 @@ public class RailcraftConfig {
         try {
             parsed = Double.parseDouble(value);
         } catch (NumberFormatException ex) {
-            Game.logThrowable(Level.WARN, 3, ex, "Failed to parse config tag, resetting to default: {0}", prop.getName());
+            Game.log().throwable(Level.WARN, 3, ex, "Failed to parse config tag, resetting to default: {0}", prop.getName());
             prop.set(defaultValue);
             return defaultValue;
         }

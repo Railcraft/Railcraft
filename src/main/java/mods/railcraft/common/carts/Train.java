@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,7 +74,7 @@ public final class Train implements Iterable<EntityMinecart> {
 
     public static void printDebug(String msg, Object... args) {
         if (RailcraftConfig.printLinkingDebug())
-            Game.log(Level.DEBUG, msg, args);
+            Game.log().msg(Level.DEBUG, msg, args);
     }
 
     private static Optional<Manager> getManager(@Nullable World world) {
@@ -545,12 +545,12 @@ public final class Train implements Iterable<EntityMinecart> {
                 if (train != null)
                     trains.put(train.getUUID(), train);
             }
-            Game.log(Level.INFO, "Loaded {0} Trains...", trains.size());
+            Game.log().msg(Level.INFO, "Loaded {0} Trains...", trains.size());
         }
 
         @Override
         public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-            Game.log(Level.INFO, "Saving {0} Trains...", trains.size());
+            Game.log().msg(Level.INFO, "Saving {0} Trains...", trains.size());
             NBTTagList listTag = new NBTTagList();
             for (Train train : trains.values()) {
                 NBTTagCompound tag = new NBTTagCompound();

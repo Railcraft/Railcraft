@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,7 +55,7 @@ public abstract class RailcraftPacket {
             writeData(data);
             return new FMLProxyPacket(new PacketBuffer(byteBuf), CHANNEL_NAME);
         } catch (IOException e) {
-            Game.logThrowable("Error constructing packet: {0}", e, getClass());
+            Game.log().throwable("Error constructing packet: {0}", e, getClass());
             if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
         }

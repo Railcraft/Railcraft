@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -139,7 +139,7 @@ public final class ChunkManager implements OrderedLoadingCallback, PlayerOrdered
 
     private void printWorldspike(String type, int x, int y, int z) {
         if (RailcraftConfig.printWorldspikeLocations()) {
-            Game.log(Level.INFO, "{0} found at [{1}-{2}-{3}]", type, x, y, z);
+            Game.log().msg(Level.INFO, "{0} found at [{1}-{2}-{3}]", type, x, y, z);
         }
     }
 

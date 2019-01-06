@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -128,7 +128,7 @@ public class PacketHandler {
             }
             readPacket(pkt, data, listener);
         } catch (IOException e) {
-            Game.logThrowable("Exception in PacketHandler.onPacketData", e);
+            Game.log().throwable("Exception in PacketHandler.onPacketData", e);
         }
     }
 
@@ -138,7 +138,7 @@ public class PacketHandler {
                 try {
                     packet.readData(data);
                 } catch (IOException e) {
-                    Game.logThrowable("Exception in PacketHandler.readPacket", 10, e);
+                    Game.log().throwable("Exception in PacketHandler.readPacket", 10, e);
                 }
             });
         }

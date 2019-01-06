@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -296,7 +296,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
                 conditions().printFailureReason(this);
             }
         } else {
-            Game.log(Level.INFO, "{0} has been registered twice", this, new Throwable("Stacktrace"));
+            Game.log().msg(Level.INFO, "{0} has been registered twice", this, new Throwable("Stacktrace"));
         }
     }
 

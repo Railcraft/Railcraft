@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -172,7 +172,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
             try {
                 sinkDelegate = new TileIC2SinkDelegate(this);
             } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error);
+                Game.log().api("IndustrialCraft", error);
             }
         return sinkDelegate;
     }

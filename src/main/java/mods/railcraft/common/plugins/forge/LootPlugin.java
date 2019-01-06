@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -106,11 +106,11 @@ public final class LootPlugin {
         @Override
         public boolean testCondition(Random rand, LootContext context) {
             if (!RailcraftModuleManager.isModuleEnabled(module)) {
-                Game.log(Level.INFO, "disabled loot item {} for disabled module {}", name, module);
+                Game.log().msg(Level.INFO, "disabled loot item {} for disabled module {}", name, module);
                 return false;
             }
             if (ForgeRegistries.ITEMS.getValue(name) == null) {
-                Game.log(Level.INFO, "disabled loot item {} for missing in registry", name);
+                Game.log().msg(Level.INFO, "disabled loot item {} for missing in registry", name);
                 return false;
             }
             return true;
@@ -168,7 +168,7 @@ public final class LootPlugin {
                 try {
                     s = Resources.toString(url, Charsets.UTF_8);
                 } catch (IOException ioexception) {
-                    Game.logThrowable("Couldn\'t load loot table {0} from {1}", ioexception, resource, url);
+                    Game.log().throwable("Couldn\'t load loot table {0} from {1}", ioexception, resource, url);
                     return LootTable.EMPTY_LOOT_TABLE;
                 }
 
@@ -176,7 +176,7 @@ public final class LootPlugin {
                     // custom is false so that other mods can listen to the loot load event of rc custom tables
                     return ForgeHooks.loadLootTable(GSON_INSTANCE, resource, s, false, manager);
                 } catch (JsonParseException jsonparseexception) {
-                    Game.logThrowable("Couldn\'t load loot table {0} from {1}", jsonparseexception, resource, url);
+                    Game.log().throwable("Couldn\'t load loot table {0} from {1}", jsonparseexception, resource, url);
                     return LootTable.EMPTY_LOOT_TABLE;
                 }
             } else {

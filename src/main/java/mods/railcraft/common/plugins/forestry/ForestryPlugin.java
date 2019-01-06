@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,6 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.Level;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -315,7 +314,7 @@ public class ForestryPlugin {
                 ApothecariesBackpack.getInstance().setup();
                 SignalmanBackpack.getInstance().setup();
             } catch (Throwable error) {
-                Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.storage.BackpackManager.class);
+                Game.log().api(ForestryPlugin.FORESTRY_NAME, error, forestry.api.storage.BackpackManager.class);
             }
         }
 
@@ -323,7 +322,7 @@ public class ForestryPlugin {
         @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
         public void addCarpenterRecipe(String name, int packagingTime, @Nullable FluidStack liquid, ItemStack box, @Nullable ItemStack product, Object... materials) {
             if (product == null) {
-                Game.logTrace(Level.WARN, "Tried to define invalid Carpenter recipe {0}, the result was null or zero. Skipping", name);
+                Game.log().trace(Level.WARN, "Tried to define invalid Carpenter recipe {0}, the result was null or zero. Skipping", name);
                 return;
             }
             ResourceLocation resource = new ResourceLocation(name);
@@ -338,7 +337,7 @@ public class ForestryPlugin {
                 if (forestry.api.recipes.RecipeManagers.carpenterManager != null && RailcraftConfig.getRecipeConfig("forestry.carpenter." + resource.getPath()))
                     forestry.api.recipes.RecipeManagers.carpenterManager.addRecipe(packagingTime, liquid, box, product, materials);
             } catch (Throwable error) {
-                Game.logErrorAPI(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);
+                Game.log().api(ForestryPlugin.FORESTRY_NAME, error, forestry.api.recipes.RecipeManagers.class);
             }
         }
 

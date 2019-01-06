@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,7 +65,7 @@ public class BlockItemParser {
                 if ("".equals(line))
                     continue;
                 set.add(keyParser.apply(line));
-                Game.log(Level.DEBUG, logMessage, line);
+                Game.log().msg(Level.DEBUG, logMessage, line);
             }
             return set;
         } catch (IllegalArgumentException ex) {
@@ -83,7 +83,7 @@ public class BlockItemParser {
                     continue;
                 String[] entry = line.split("=");
                 map.put(keyParser.apply(entry[0]), valueParser.apply(entry[1]));
-                Game.log(Level.DEBUG, logMessage, line);
+                Game.log().msg(Level.DEBUG, logMessage, line);
             }
             return map;
         } catch (IllegalArgumentException ex) {
@@ -102,7 +102,7 @@ public class BlockItemParser {
                     continue;
                 String[] entry = line.split("=");
                 map.put(keyParser.apply(entry[0]), valueParser.apply(entry[1]));
-                Game.log(Level.DEBUG, logMessage, line);
+                Game.log().msg(Level.DEBUG, logMessage, line);
             }
             return map;
         } catch (IllegalArgumentException ex) {

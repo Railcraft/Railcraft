@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,7 +79,7 @@ public abstract class BlockContainerRailcraft<T extends TileRailcraft> extends B
         try {
             getTileEntity(state, worldIn, pos).ifPresent(t -> t.onNeighborBlockChange(state, neighborBlock, fromPos));
         } catch (StackOverflowError error) {
-            Game.logThrowable(Level.ERROR, 10, error, "Stack Overflow Error in {0}#onNeighborBlockChange", getClass());
+            Game.log().throwable(Level.ERROR, 10, error, "Stack Overflow Error in {0}#onNeighborBlockChange", getClass());
             if (Game.DEVELOPMENT_VERSION)
                 throw error;
         }

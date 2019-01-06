@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -183,7 +183,7 @@ public class FactoryGui {
                     return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }
         } catch (ClassCastException ex) {
-            Game.log(Level.WARN, "Error when attempting to build gui {0}: {1}", gui, ex);
+            Game.log().msg(Level.WARN, "Error when attempting to build gui {0}: {1}", gui, ex);
         }
         return null;
     }

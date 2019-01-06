@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -160,7 +160,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         if (!RailcraftItems.GOGGLES.isEnabled())
             MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);
 
-        Game.log(Level.TRACE, "Init Start: Renderer");
+        Game.log().msg(Level.TRACE, "Init Start: Renderer");
 
 
         LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid(), new ModelLocomotiveSteamSolid(0.125F)));
@@ -240,7 +240,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 //            VillagerRegistry.instance().registerVillagerSkin(id, ModuleWorld.VILLAGER_TEXTURE);
         }
 
-        Game.log(Level.TRACE, "Init Complete: Renderer");
+        Game.log().msg(Level.TRACE, "Init Complete: Renderer");
     }
 
     private <T extends TileEntity> void bindTESR(Class<T> tileClass, Supplier<TileEntitySpecialRenderer<? super T>> factory) {
@@ -269,6 +269,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     @Override
     public void onResourceManagerReload(IResourceManager resourceManager, Predicate<IResourceType> resourcePredicate) {
         if (Game.DEVELOPMENT_VERSION && resourcePredicate.test(VanillaResourceType.TEXTURES))
-            Game.log(Game.DEBUG_REPORT, "Detected texture reload");
+            Game.log().msg(Game.DEBUG_REPORT, "Detected texture reload");
     }
 }

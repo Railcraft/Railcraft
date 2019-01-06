@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,8 +32,8 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Predicate;
@@ -66,7 +66,7 @@ public class IC2Plugin {
                 return true;
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, EnergyTileLoadEvent.class);
+            Game.log().api("IC2", error, EnergyTileLoadEvent.class);
         }
         return false;
     }
@@ -76,7 +76,7 @@ public class IC2Plugin {
             if (tile instanceof IEnergyTile)
                 MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) tile));
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, EnergyTileUnloadEvent.class);
+            Game.log().api("IC2", error, EnergyTileUnloadEvent.class);
         }
     }
 
@@ -84,7 +84,7 @@ public class IC2Plugin {
         try {
             return !InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem;
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, IElectricItem.class);
+            Game.log().api("IC2", error, IElectricItem.class);
         }
         return false;
     }
@@ -97,7 +97,7 @@ public class IC2Plugin {
             if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem && energy > 0)
                 return ElectricItem.manager.charge(stack, energy, tier, false, false);
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, ElectricItem.class);
+            Game.log().api("IC2", error, ElectricItem.class);
         }
         return 0;
     }
@@ -110,7 +110,7 @@ public class IC2Plugin {
             if (!InvTools.isEmpty(stack) && stack.getItem() instanceof IElectricItem && ((IElectricItem) stack.getItem()).canProvideEnergy(stack))
                 return ElectricItem.manager.discharge(stack, energyNeeded, tier, false, true, false);
         } catch (Throwable error) {
-            Game.logErrorAPI("ic2", error, ElectricItem.class);
+            Game.log().api("ic2", error, ElectricItem.class);
         }
         return 0;
     }
@@ -122,7 +122,7 @@ public class IC2Plugin {
                 return tier >= battery.getTier(stack);
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("ic2", error, IElectricItem.class);
+            Game.log().api("ic2", error, IElectricItem.class);
         }
         return false;
     }
@@ -134,7 +134,7 @@ public class IC2Plugin {
                 return battery.canProvideEnergy(stack) && tier >= battery.getTier(stack);
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("ic2", error, IElectricItem.class);
+            Game.log().api("ic2", error, IElectricItem.class);
         }
         return false;
     }
@@ -151,7 +151,7 @@ public class IC2Plugin {
         try {
             Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, output);
         } catch (Throwable error) {
-            Game.logErrorAPI("IC2", error, Recipes.class);
+            Game.log().api("IC2", error, Recipes.class);
         }
     }
 
@@ -179,7 +179,7 @@ public class IC2Plugin {
                 }
             }
         } catch (Throwable error) {
-            Game.logErrorAPI("ic2", error, Recipes.class);
+            Game.log().api("ic2", error, Recipes.class);
         }
     }
 
@@ -189,7 +189,7 @@ public class IC2Plugin {
         try {
             Recipes.cannerBottle.addRecipe(Recipes.inputFactory.forStack(container), Recipes.inputFactory.forStack(input), output, true);
         } catch (Throwable error) {
-            Game.logErrorAPI("ic2", error, Recipes.class);
+            Game.log().api("ic2", error, Recipes.class);
         }
     }
 

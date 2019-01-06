@@ -81,7 +81,7 @@ public abstract class RecipeBuilder<B extends IRecipeBuilder> implements IRecipe
                         "Tried, but failed to register a {0} recipe. Reason: {1}",
                         recipeType, ex.getMessage());
             else
-                Game.log(Level.WARN,
+                Game.log().msg(Level.WARN,
                         "Tried, but failed to register {0} as a {1} recipe. Reason: {2}",
                         name, recipeType, ex.getMessage());
         }

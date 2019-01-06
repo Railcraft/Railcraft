@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class InitializationConditional {
     }
 
     public void printFailureReason(IRailcraftObjectContainer<?> objectContainer) {
-        Game.log(Level.INFO, new SimpleMessage(objectContainer + " cannot be defined because " + failureReason.get()));
+        Game.log().msg(Level.INFO, new SimpleMessage(objectContainer + " cannot be defined because " + failureReason.get()));
     }
 
     public void add(IRailcraftObjectContainer<?> objectContainer) {

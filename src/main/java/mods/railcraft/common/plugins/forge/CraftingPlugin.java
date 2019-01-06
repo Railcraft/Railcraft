@@ -54,14 +54,14 @@ public class CraftingPlugin {
     public static void addFurnaceRecipe(@Nullable ItemStack input, @Nullable ItemStack output, float xp) {
         if (isEmpty(input)) {
             if (isEmpty(output)) {
-                Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both empty. Skipping");
+                Game.log().trace(Level.WARN, "Tried to define invalid furnace recipe, the input and output were both empty. Skipping");
                 return;
             }
-            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the input was null. Skipping", output.getTranslationKey());
+            Game.log().trace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the input was null. Skipping", output.getTranslationKey());
             return;
         }
         if (isEmpty(output)) {
-            Game.logTrace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getTranslationKey());
+            Game.log().trace(Level.WARN, "Tried to define invalid furnace recipe for {0}, the output was null. Skipping", input.getTranslationKey());
             return;
         }
         canRegisterRecipes();
@@ -135,7 +135,7 @@ public class CraftingPlugin {
             name = checkName(name, output, recipeArray);
             recipe = makeShapedRecipe(name, group, output, recipeArray);
         } catch (InvalidRecipeException ex) {
-            Game.logTrace(Level.WARN, ex.getRawMessage());
+            Game.log().trace(Level.WARN, ex.getRawMessage());
             return;
         }
         addRecipe(name, recipe);
@@ -156,7 +156,7 @@ public class CraftingPlugin {
             name = checkName(name, output, recipeArray);
             recipe = makeShapelessRecipe(name, group, output, recipeArray);
         } catch (InvalidRecipeException ex) {
-            Game.log(Level.WARN, ex.getRawMessage());
+            Game.log().msg(Level.WARN, ex.getRawMessage());
             return;
         }
         addRecipe(name, recipe);

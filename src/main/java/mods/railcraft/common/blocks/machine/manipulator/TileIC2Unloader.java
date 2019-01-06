@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -166,7 +166,7 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
             try {
                 emitterDelegate = new TileIC2EmitterDelegate(this);
             } catch (Throwable error) {
-                Game.logErrorAPI("IndustrialCraft", error);
+                Game.log().api("IndustrialCraft", error);
             }
         return emitterDelegate;
     }

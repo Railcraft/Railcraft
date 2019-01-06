@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,7 @@ public final class APIErrorHandler {
 
     public static void versionMismatch(Class<?> type) {
         if (!printedWarnings.contains(type)) {
-            Game.log(Level.ERROR, "The Railcraft API (" + type.getSimpleName() + ") in one of the mods you are using needs updating, expect odd behavior.");
+            Game.log().msg(Level.ERROR, "The Railcraft API (" + type.getSimpleName() + ") in one of the mods you are using needs updating, expect odd behavior.");
             printedWarnings.add(type);
         }
     }

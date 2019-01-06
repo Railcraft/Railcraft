@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -71,7 +71,7 @@ public class FuelPlugin {
 
             return TileEntityFurnace.getItemBurnTime(stack);
         } catch (Exception ex) {
-            Game.logThrowable("Error in Fuel Handler! Is some mod creating items that are not compliant with standards?", ex);
+            Game.log().throwable("Error in Fuel Handler! Is some mod creating items that are not compliant with standards?", ex);
         }
         return 0;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -69,8 +69,7 @@ public final class RailcraftRegistry {
         if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION && RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.PRE_INIT)
             throw new RuntimeException("Items must be initialized in Construction or PreInit:" + item.getRegistryName());
         ForgeRegistries.ITEMS.register(item);
-        if (Game.DEVELOPMENT_VERSION)
-            Game.log(Level.INFO, "Item registered: {0}, {1}", item.getClass(), item.getRegistryName().toString());
+        Game.log("registry").msg(Level.INFO, "Item registered: {0}, {1}", item.getClass(), item.getRegistryName());
     }
 
     /**
@@ -87,8 +86,7 @@ public final class RailcraftRegistry {
         ForgeRegistries.BLOCKS.register(block);
         if (item != null)
             ForgeRegistries.ITEMS.register(item);
-        if (Game.DEVELOPMENT_VERSION)
-            Game.log(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName().toString());
+        Game.log("registry").msg(Level.INFO, "Block registered: {0}, {1}", block.getClass(), block.getRegistryName());
     }
 
     public static void register(Class<? extends TileEntity> tileEntity, String tag) {

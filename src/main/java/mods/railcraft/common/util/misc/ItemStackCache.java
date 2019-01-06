@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,7 +50,7 @@ public class ItemStackCache {
                 stack = findItem.apply(tag);
                 itemCache.put(tag, stack);
             } catch (Throwable error) {
-                Game.logErrorAPI(modId, error);
+                Game.log().api(modId, error);
             }
         }
         if (!InvTools.isEmpty(stack)) {

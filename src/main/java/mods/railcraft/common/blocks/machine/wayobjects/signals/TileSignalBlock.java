@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,7 @@ public class TileSignalBlock extends TileSignalBase implements IControllerTile, 
             sendUpdateToClient();
         }
         if (SignalTools.printSignalDebug && prevAspect != SignalAspect.BLINK_RED && controller.getAspect() == SignalAspect.BLINK_RED) {
-            Game.log(Level.INFO, "Signal Tile changed aspect to BLINK_RED: source:[{0}]", getPos());
+            Game.log().msg(Level.INFO, "Signal Tile changed aspect to BLINK_RED: source:[{0}]", getPos());
         }
     }
 
@@ -65,7 +65,7 @@ public class TileSignalBlock extends TileSignalBase implements IControllerTile, 
             signalBlock.writeToNBT(data);
             controller.writeToNBT(data);
         } catch (Throwable er) {
-            Game.logThrowable(Level.ERROR, 10, er, "Signal Tile crashed on write.");
+            Game.log().throwable(Level.ERROR, 10, er, "Signal Tile crashed on write.");
         }
         return data;
     }
@@ -77,7 +77,7 @@ public class TileSignalBlock extends TileSignalBase implements IControllerTile, 
             signalBlock.readFromNBT(data);
             controller.readFromNBT(data);
         } catch (Throwable er) {
-            Game.logThrowable(Level.ERROR, 10, er, "Signal Tile crashed on read.");
+            Game.log().throwable(Level.ERROR, 10, er, "Signal Tile crashed on read.");
         }
     }
 

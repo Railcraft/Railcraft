@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,7 +74,7 @@ public final class FluidIngredient extends RailcraftIngredient {
          * Invoked by forge via reflection.
          */
         public Factory() {
-            Game.log(Level.INFO, "Fluid ingredient factory loaded");
+            Game.log().msg(Level.INFO, "Fluid ingredient factory loaded");
         }
 
         @Override

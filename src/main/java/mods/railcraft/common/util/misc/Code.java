@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -52,7 +52,7 @@ public class Code {
             method = ObfuscationReflectionHelper
                     .findMethod(clazz, srgName, returnType, parameterTypes);
         } catch (Throwable ex) {
-            Game.logThrowable("Cannot find method {0}", ex, srgName);
+            Game.log().throwable("Cannot find method {0}", ex, srgName);
         }
         if (method != null) {
             methodCaller = new MethodCallerFunctional<>(method);
@@ -86,7 +86,7 @@ public class Code {
             try {
                 return Optional.ofNullable(cast(method.invoke(obj, args)));
             } catch (Throwable ex) {
-                Game.logThrowable("Cannot invoke method {0}", ex, method.getName());
+                Game.log().throwable("Cannot invoke method {0}", ex, method.getName());
             }
             return Optional.empty();
         }
