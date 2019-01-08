@@ -109,7 +109,7 @@ configurations {
 
 dependencies {
     // forestry
-    api "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
+    compileOnly "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
     runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
     // IC2
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
