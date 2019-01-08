@@ -1,16 +1,16 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.ic2;
 
 import ic2.api.energy.tile.IEnergyEmitter;
 import ic2.api.energy.tile.IEnergySink;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -42,6 +42,6 @@ public class TileIC2SinkDelegate extends TileIC2Delegate implements IEnergySink 
 
     @Override
     public boolean acceptsEnergyFrom(IEnergyEmitter emitter, EnumFacing direction) {
-        return delegate.acceptsEnergyFrom((TileEntity) emitter, direction);
+        return delegate.acceptsEnergyFrom(emitter, direction);
     }
 }

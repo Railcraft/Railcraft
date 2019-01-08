@@ -7,25 +7,16 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.plugins.ic2;
-
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 
 /**
+ * Created by CovertJaguar on 1/7/2019 for Railcraft.
  *
- * @author CovertJaguar <http://www.railcraft.info/>
+ * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IEmitterDelegate {
+@MethodsReturnNonnullByDefault
+@ParametersAreNonnullByDefault
+package mods.railcraft.common.plugins.ic2;
 
-    double getOfferedEnergy();
+import mcp.MethodsReturnNonnullByDefault;
 
-    void drawEnergy(double amount);
-
-    boolean emitsEnergyTo(Object receiver, EnumFacing direction);
-
-    TileEntity getTile();
-
-    int getSourceTier();
-
-}
+import javax.annotation.ParametersAreNonnullByDefault;

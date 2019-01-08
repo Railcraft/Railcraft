@@ -151,7 +151,7 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
+    public boolean emitsEnergyTo(Object receiver, EnumFacing direction) {
         return getFacing() != direction;
     }
 

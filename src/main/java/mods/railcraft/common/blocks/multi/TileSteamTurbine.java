@@ -318,7 +318,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
     }
 
     @Override
-    public boolean emitsEnergyTo(TileEntity receiver, EnumFacing direction) {
+    public boolean emitsEnergyTo(Object receiver, EnumFacing direction) {
         return true;
     }
 

@@ -85,7 +85,7 @@ public class TileChargeFeederIC2 extends TileCharge implements ISinkDelegate {
     }
 
     @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, EnumFacing direction) {
+    public boolean acceptsEnergyFrom(Object emitter, EnumFacing direction) {
         return !(emitter instanceof TileIC2MultiEmitterDelegate);
     }
 

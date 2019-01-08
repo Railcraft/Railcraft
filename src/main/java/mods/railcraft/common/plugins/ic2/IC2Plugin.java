@@ -54,8 +54,7 @@ public class IC2Plugin {
         return ITEMS.get(tag);
     }
 
-    @Nullable
-    public static IBlockState getBlockState(String name, String variant) {
+    public static @Nullable IBlockState getBlockState(String name, String variant) {
         return IC2Items.getItemAPI().getBlockState(name, variant);
     }
 
@@ -143,13 +142,13 @@ public class IC2Plugin {
         addMaceratorRecipe(input, 1, output, 1);
     }
 
-    public static void addMaceratorRecipe(@Nullable ItemStack input, int numinput, @Nullable ItemStack output, int numoutput) {
+    public static void addMaceratorRecipe(@Nullable ItemStack input, int numInput, @Nullable ItemStack output, int numOutput) {
         if (InvTools.isEmpty(input) || InvTools.isEmpty(output))
             return;
         output = output.copy();
-        setSize(output, numoutput);
+        setSize(output, numOutput);
         try {
-            Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numinput), null, false, output);
+            Recipes.macerator.addRecipe(Recipes.inputFactory.forStack(input, numInput), null, false, output);
         } catch (Throwable error) {
             Game.log().api("IC2", error, Recipes.class);
         }
@@ -194,27 +193,15 @@ public class IC2Plugin {
     }
 
     private static boolean doesRecipeRequire(IRecipeInput input, ItemStack... items) {
-        for (ItemStack stack : input.getInputs()) {
-            if (InvTools.isItemEqual(stack, items))
-                return true;
-        }
-        return false;
+        return input.getInputs().stream().anyMatch(stack -> InvTools.isItemEqual(stack, items));
     }
 
     private static boolean doesRecipeProduce(Collection<ItemStack> recipe, ItemStack... items) {
-        for (ItemStack output : recipe) {
-            if (InvTools.isItemEqual(output, items))
-                return true;
-        }
-        return false;
+        return recipe.stream().anyMatch(output -> InvTools.isItemEqual(output, items));
     }
 
     private static boolean isInputBlock(IRecipeInput input) {
-        for (ItemStack stack : input.getInputs()) {
-            if (!InvTools.isEmpty(stack) && Block.getBlockFromItem(stack.getItem()) != Blocks.AIR)
-                return true;
-        }
-        return false;
+        return input.getInputs().stream().anyMatch(stack -> !InvTools.isEmpty(stack) && Block.getBlockFromItem(stack.getItem()) != Blocks.AIR);
     }
 
     public static void nerfSyntheticCoal() {

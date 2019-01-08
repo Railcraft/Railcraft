@@ -136,7 +136,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
     }
 
     @Override
-    public boolean acceptsEnergyFrom(TileEntity emitter, EnumFacing direction) {
+    public boolean acceptsEnergyFrom(Object emitter, EnumFacing direction) {
         return getFacing() != direction;
     }
 
