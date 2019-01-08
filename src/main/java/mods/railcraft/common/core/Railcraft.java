@@ -49,8 +49,8 @@ import java.io.File;
                 + "after:buildcraftenergy;"
                 + "after:buildcraftbuilders;"
                 + "after:buildcraftfactory;"
-                + "after:BuildCraftAPI|statements@[1.0,);"
-                + "after:BuildCraftAPI|transport@[1.0,);"
+                + "after:buildcraftapi_statements@[1.0,);"
+                + "after:buildcraftapi_transport@[1.0,);"
                 + "after:forestry@[5.8.0.256,);"
                 + "after:thaumcraft;"
                 + "after:ic2@[2.8.67-ex112,);")
