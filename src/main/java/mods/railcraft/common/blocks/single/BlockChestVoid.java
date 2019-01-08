@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,6 +31,7 @@ import java.util.Random;
 
 @BlockMeta.Tile(TileChestVoid.class)
 public class BlockChestVoid extends BlockChestRailcraft<TileChestVoid> {
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
         super.initializeClient();

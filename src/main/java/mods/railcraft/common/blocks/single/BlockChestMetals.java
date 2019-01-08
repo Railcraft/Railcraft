@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,9 +16,12 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileChestMetals.class)
 public class BlockChestMetals extends BlockChestRailcraft<TileChestMetals> {
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
         super.initializeClient();

@@ -90,7 +90,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BATTERY_ZINC_SILVER("battery_zinc_silver", BlockBatteryZincSilver.class, ItemBattery::new),
     BRICK_ABYSSAL("brick_abyssal", BlockBrick.class, () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new) {{
         conditions().add(EnumGeneric.STONE_ABYSSAL);
-    }},,
+    }},
     BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),
     BRICK_BLEACHED_BONE("brick_bleachedbone", BlockBrick.class, () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
     BRICK_BLOOD_STAINED("brick_bloodstained", BlockBrick.class, () -> new BlockBrick(BrickTheme.BLOODSTAINED), ItemBrick::new),
