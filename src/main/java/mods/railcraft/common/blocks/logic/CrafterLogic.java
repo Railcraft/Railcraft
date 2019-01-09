@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -125,7 +125,10 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
         setRecipe();
 
-        if (lacksRequirements()) return;
+        if (lacksRequirements()) {
+            reset();
+            return;
+        }
 
         setProcessing(true);
         progress += PROGRESS_STEP;

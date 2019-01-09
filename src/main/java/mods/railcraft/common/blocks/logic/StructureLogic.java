@@ -24,6 +24,7 @@ import mods.railcraft.common.util.network.PacketTileRequest;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -82,8 +83,8 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     protected void onPatternChanged() {
         tile.markBlockForUpdate();
-        if (!isMaster)
-            getLogic(InventoryLogic.class).ifPresent(inv -> InvTools.spewInventory(inv, theWorldAsserted(), getPos()));
+        if (!isMaster && logic instanceof IInventory)
+            InvTools.spewInventory((IInventory) logic, theWorldAsserted(), getPos());
     }
 
     public final char getPatternMarker() {
