@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,10 +24,10 @@ import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class BlastFurnaceMachineCategory implements IRecipeCategory<BlastFurnaceRecipeWrapper> {
+public class BlastFurnaceMachineCategory implements IRecipeCategory<BlastFurnaceRecipeProvider.BFWrapper> {
 
-    public static final int width = 82;
-    public static final int height = 54;
+    public static final int WIDTH = 82;
+    public static final int HEIGHT = 54;
 
     private final IDrawable background;
     private final String localizedName;
@@ -36,7 +36,7 @@ public class BlastFurnaceMachineCategory implements IRecipeCategory<BlastFurnace
 
     public BlastFurnaceMachineCategory(IGuiHelper guiHelper) {
         ResourceLocation location = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png");
-        background = guiHelper.createDrawable(location, 55, 16, width, height);
+        background = guiHelper.createDrawable(location, 55, 16, WIDTH, HEIGHT);
         localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.blast_furnace");
         this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png"), 177, 14, 22, 15), 200, IDrawableAnimated.StartDirection.LEFT, false);
         this.flame = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png"), 176, 0, 14, 14), 200, IDrawableAnimated.StartDirection.TOP, true);
@@ -69,7 +69,7 @@ public class BlastFurnaceMachineCategory implements IRecipeCategory<BlastFurnace
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, BlastFurnaceRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, BlastFurnaceRecipeProvider.BFWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 0, 0);
         recipeLayout.getItemStacks().init(1, false, 60, 4);
         recipeLayout.getItemStacks().init(2, false, 60, 36);

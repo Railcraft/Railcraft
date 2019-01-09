@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,6 +30,7 @@ public final class RailcraftConstants {
     public static final String EMBLEM_URL = "https://dl.dropboxusercontent.com/u/38558957/Minecraft/Railcraft/Emblems/";
     public static final long TICKS_PER_HOUR = 72000;
     public static final long TICKS_PER_MIN = 1200;
+    public static final long TICKS_PER_SECOND = 20;
 
     public static final int BOOK_LINE_LENGTH = 37;
     public static final int BOOK_LINES_PER_PAGE = 13;

@@ -472,15 +472,12 @@ public class ModuleFactory extends RailcraftModulePayload {
                 if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
-                String[] logs = {"logWood", "woodRubber"};
-                for (String oreTag : logs) {
-                    Crafters.cokeOven().newRecipe(oreTag)
-                            .name("railcraft:" + oreTag)
-                            .output(new ItemStack(Items.COAL, 1, 1))
-                            .fluid(Fluids.CREOSOTE.get(250))
-                            .time(COKE_COOK_TIME)
-                            .register();
-                }
+                Crafters.cokeOven().newRecipe(Ingredients.from("logWood", "woodRubber"))
+                        .name("railcraft:logs")
+                        .output(new ItemStack(Items.COAL, 1, 1))
+                        .fluid(Fluids.CREOSOTE.get(250))
+                        .time(COKE_COOK_TIME)
+                        .register();
 
                 if (Mod.FORESTRY.isLoaded()) {
                     Crafters.rockCrusher().makeRecipe(Ingredient.fromStacks(ModItems.APATITE_ORE.getStack()))

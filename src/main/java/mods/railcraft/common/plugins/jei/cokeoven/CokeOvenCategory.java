@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,7 @@ import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
+public class CokeOvenCategory implements IRecipeCategory<CokeOvenRecipeProvider.COWrapper> {
     private static final int INPUT_SLOTS = 0;
     private static final int OUTPUT_SLOTS = 1;
     private static final int OUTPUT_TANKS = 0;
@@ -76,7 +76,7 @@ public class CokeOvenCategory implements IRecipeCategory<CokeOvenWrapper> {
     }
 
     @Override
-    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull CokeOvenWrapper recipeWrapper,
+    public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull CokeOvenRecipeProvider.COWrapper recipeWrapper,
                           @Nonnull IIngredients ingredients) {
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IGuiFluidStackGroup guiFluidStacks = recipeLayout.getFluidStacks();

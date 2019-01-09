@@ -28,12 +28,12 @@ import mods.railcraft.common.gui.containers.*;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.blastfurnace.BlastFurnaceMachineCategory;
-import mods.railcraft.common.plugins.jei.blastfurnace.BlastFurnaceRecipeMaker;
+import mods.railcraft.common.plugins.jei.blastfurnace.BlastFurnaceRecipeProvider;
 import mods.railcraft.common.plugins.jei.cokeoven.CokeOvenCategory;
-import mods.railcraft.common.plugins.jei.cokeoven.CokeOvenRecipeMaker;
+import mods.railcraft.common.plugins.jei.cokeoven.CokeOvenRecipeProvider;
 import mods.railcraft.common.plugins.jei.crafting.FluidRecipeInterpreter;
 import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineCategory;
-import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherMachineRecipeMaker;
+import mods.railcraft.common.plugins.jei.rockcrusher.RockCrusherRecipeProvider;
 import mods.railcraft.common.plugins.jei.rolling.RollingMachineRecipeCategory;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -102,10 +102,10 @@ public class RailcraftJEIPlugin implements IModPlugin {
         registry.handleRecipes(IRecipe.class, recipe ->
                 new DefaultRecipeWrapper(registry, recipe), ROLLING);
 
-        registry.addRecipes(CokeOvenRecipeMaker.getCokeOvenRecipe(registry), COKE);
+        registry.addRecipes(CokeOvenRecipeProvider.get(registry).getRecipes(), COKE);
         registry.addRecipes(RollingMachineCrafter.INSTANCE.getValidRecipes(), ROLLING);
-        registry.addRecipes(RockCrusherMachineRecipeMaker.getRecipes(registry.getJeiHelpers()), ROCK_CRUSHER);
-        registry.addRecipes(BlastFurnaceRecipeMaker.getRecipes(registry.getJeiHelpers()), BLAST_FURNACE);
+        registry.addRecipes(RockCrusherRecipeProvider.get(registry).getRecipes(), ROCK_CRUSHER);
+        registry.addRecipes(BlastFurnaceRecipeProvider.get(registry).getRecipes(), BLAST_FURNACE);
 
         registry.addRecipeCatalyst(RailcraftBlocks.STEAM_OVEN.getStack(), VanillaRecipeCategoryUid.SMELTING);
         registry.addRecipeCatalyst(RailcraftBlocks.COKE_OVEN.getStack(), COKE);

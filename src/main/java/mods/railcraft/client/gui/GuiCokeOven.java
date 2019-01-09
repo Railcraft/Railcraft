@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCokeOven;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -40,8 +40,10 @@ public class GuiCokeOven extends GuiTitled {
 
         if (tile.getProgress() > 0) {
             double progressPercent = tile.getProgressPercent();
-            int burnProgress = (int) ((1.0 - progressPercent) * 12);
-            drawTexturedModalRect(x + 16, (y + 38) - burnProgress, 176, 59 - burnProgress, 14, burnProgress + 2);
+            if (tile.isProcessing()) {
+                int burnProgress = (int) ((1.0 - progressPercent) * 12);
+                drawTexturedModalRect(x + 16, (y + 38) - burnProgress, 176, 59 - burnProgress, 14, burnProgress + 2);
+            }
             int cookProgress = (int) (progressPercent * 20);
             drawTexturedModalRect(x + 34, y + 43, 176, 61, cookProgress + 1, 16);
         }

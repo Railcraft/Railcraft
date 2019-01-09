@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,10 +29,10 @@ import net.minecraft.util.text.ITextComponent;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRecipeWrapper> {
+public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRecipeProvider.RCWrapper> {
 
-    public static final int width = 144;
-    public static final int height = 54;
+    public static final int WIDTH = 144;
+    public static final int HEIGHT = 54;
 
     private final IDrawable background;
     private final String localizedName;
@@ -40,7 +40,7 @@ public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRe
 
     public RockCrusherMachineCategory(IGuiHelper guiHelper) {
         ResourceLocation location = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
-        background = guiHelper.createDrawable(location, 0, 166, width, height);
+        background = guiHelper.createDrawable(location, 0, 166, WIDTH, HEIGHT);
         localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.crushing");
         this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 144, 166, 29, 53), 500, IDrawableAnimated.StartDirection.LEFT, false);
 
@@ -72,7 +72,7 @@ public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRe
     }
 
     @Override
-    public void setRecipe(IRecipeLayout recipeLayout, RockCrusherRecipeWrapper recipeWrapper, IIngredients ingredients) {
+    public void setRecipe(IRecipeLayout recipeLayout, RockCrusherRecipeProvider.RCWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 18, 18);
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
