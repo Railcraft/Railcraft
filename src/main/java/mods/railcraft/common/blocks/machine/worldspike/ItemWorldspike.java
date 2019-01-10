@@ -46,9 +46,9 @@ public class ItemWorldspike extends ItemMachine {
 
     private ToolTip addFuelInfo(ToolTip toolTip, ItemStack stack) {
         long fuel = ItemCartWorldspike.getFuel(stack);
-        double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
-        String format = LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining");
-        toolTip.add(String.format(format, hours));
+        double hours = ((double) fuel) / RailcraftConstants.TICKS_PER_HOUR;
+        String format = LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining", hours);
+        toolTip.add(format);
         return toolTip;
     }
 }

@@ -146,9 +146,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 //            return super.getStack(qty, meta);
 //        }
 
-        @Nullable
         @Override
-        public IBlockState getState(@Nullable BrickVariant variant) {
+        public @Nullable IBlockState getState(@Nullable BrickVariant variant) {
             if (variant == BrickVariant.BRICK)
                 return Blocks.NETHER_BRICK.getDefaultState();
             return super.getState(variant);
@@ -182,9 +181,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 //            return super.getStack(qty, meta);
 //        }
 
-        @Nullable
         @Override
-        public IBlockState getState(@Nullable BrickVariant variant) {
+        public @Nullable IBlockState getState(@Nullable BrickVariant variant) {
             if (variant == BrickVariant.BRICK)
                 return Blocks.RED_NETHER_BRICK.getDefaultState();
             return super.getState(variant);
@@ -218,9 +216,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 //            return super.getStack(qty, meta);
 //        }
 
-        @Nullable
         @Override
-        public IBlockState getState(@Nullable BrickVariant variant) {
+        public @Nullable IBlockState getState(@Nullable BrickVariant variant) {
             if (variant == BrickVariant.BLOCK)
                 return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH);
             return super.getState(variant);
@@ -248,9 +245,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 //            return super.getStack(qty, meta);
 //        }
 
-        @Nullable
         @Override
-        public IBlockState getState(@Nullable BrickVariant variant) {
+        public @Nullable IBlockState getState(@Nullable BrickVariant variant) {
             if (variant == BrickVariant.BLOCK)
                 return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.DIORITE_SMOOTH);
             return super.getState(variant);
@@ -278,9 +274,8 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 //            return super.getStack(qty, meta);
 //        }
 
-        @Nullable
         @Override
-        public IBlockState getState(@Nullable BrickVariant variant) {
+        public @Nullable IBlockState getState(@Nullable BrickVariant variant) {
             if (variant == BrickVariant.BLOCK)
                 return Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.GRANITE_SMOOTH);
             return super.getState(variant);
@@ -333,13 +328,14 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         return container;
     }
 
-    @Nullable
     public final BlockBrick getBlock() {
         return (BlockBrick) container.block();
     }
 
-    @Nullable
-    public IBlockState getState(@Nullable BrickVariant variant) {
+    public @Nullable IBlockState getState(@Nullable BrickVariant variant) {
+        if (!isLoaded()) {
+            return null;
+        }
         BlockBrick block = getBlock();
         if (block != null) {
             block.checkVariant(variant);

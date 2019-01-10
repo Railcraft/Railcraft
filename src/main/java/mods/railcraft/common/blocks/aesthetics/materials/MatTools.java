@@ -51,7 +51,7 @@ public class MatTools {
     }
 
     private static void addRockCrusherRecipe(IMaterialBlock source, BrickTheme brickTheme, Materials... types) {
-        if (brickTheme.getBlock() == null)
+        if (!brickTheme.isLoaded())
             return;
         ItemStack output = brickTheme.getStack(1, BrickVariant.COBBLE);
         for (Materials mat : types) {

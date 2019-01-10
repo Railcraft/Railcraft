@@ -166,7 +166,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
     @Override
     public void finalizeDefinition() {
         super.finalizeDefinition();
-        if (BrickTheme.INFERNAL.getBlock() != null)
+        if (BrickTheme.INFERNAL.isLoaded())
             CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumDetector.LOCOMOTIVE.ordinal()),
                     "XXX",
                     "XPX",
