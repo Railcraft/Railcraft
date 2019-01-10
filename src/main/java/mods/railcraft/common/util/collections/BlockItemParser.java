@@ -20,10 +20,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -95,7 +92,7 @@ public class BlockItemParser {
 
     public static <T, V> Map<T, V> parseDictionary(String[] list, String logMessage, Function<String, T> keyParser, Function<String, V> valueParser) {
         try {
-            Map<T, V> map = new HashMap<T, V>();
+            Map<T, V> map = new HashMap<>();
             for (String line : list) {
                 line = line.replaceAll("[{} ]", "");
                 if (StringUtils.isEmpty(line))
@@ -108,7 +105,7 @@ public class BlockItemParser {
         } catch (IllegalArgumentException ex) {
             throw ex;
         } catch (RuntimeException ex) {
-            throw new IllegalArgumentException("Invalid map while parsing config = " + list);
+            throw new IllegalArgumentException("Invalid map while parsing config = " + Arrays.toString(list));
         }
     }
 

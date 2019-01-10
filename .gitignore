@@ -20,6 +20,7 @@ README.txt
 .idea/tasks.xml
 .idea/modules.xml
 .idea/gradle.xml
+.idea/runConfigurations/
 .idea/compiler.xml
 *.iml
 run/

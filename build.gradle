@@ -1,3 +1,4 @@
+import groovy.xml.MarkupBuilder
 import net.minecraftforge.gradle.tasks.SignJar
 
 buildscript {
@@ -54,11 +55,6 @@ println 'Environment: ' + project.environment
 println '*************************************************************'
 println ''
 
-// Change the 4G in -Xmx4G to your desired max RAM and 4G in -Xms4G to your desired initial RAM
-def optimizedVmArgs = ['-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M']
-def assertionVmArgs = ['-ea:mods.railcraft...', '-ea:net.minecraft...', '-ea:net.minecraftforge...']
-def combinedVmArgs = [assertionVmArgs, optimizedVmArgs].flatten()
-
 minecraft {
     version = project.version_minecraft + "-" + project.version_forge
     runDir = "run"
@@ -67,7 +63,17 @@ minecraft {
 
     replace '@VERSION@', project.version
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+}
 
+def actualRunDir = project.file(minecraft.runDir)
+// Change the 4G in -Xmx4G to your desired max RAM and 4G in -Xms4G to your desired initial RAM
+def optimizedVmArgs = ['-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M']
+def assertionVmArgs = ['-ea:mods.railcraft...', '-ea:net.minecraft...', '-ea:net.minecraftforge...']
+def log4jVmArgs = ['-Dlog4j.configurationFile=' + new File(actualRunDir, 'log4j2.xml').toString()]
+def combinedVmArgs = [assertionVmArgs, optimizedVmArgs, log4jVmArgs].flatten()
+def extraEnvs = new LinkedHashMap() //['LOG4J_CONFIGURATION_FILE': "log4j2.xml"]
+
+minecraft {
     clientJvmArgs = combinedVmArgs
     serverJvmArgs = combinedVmArgs
 }
@@ -149,44 +155,71 @@ processResources {
     }
 }
 
-//tasks.genIntellijRuns.doLast {
-//    def runConfigurationsDir = new File(".idea/runConfigurations")
-//    runConfigurationsDir.mkdirs()
-//
-//    tasks.withType(JavaExec).each { task ->
-//        def taskName = task.name
-//        def mainClass = task.main
-//        def props = task.systemProperties.collect { k, v -> "-D$k=$v" }.join(' ')
-//        def args = task.args.join(" ")
-//
-//        def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
-//        def xml = new MarkupBuilder(writer)
-//
-//        xml.component(name: "ProjectRunConfigurationManager") {
-//            configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
-//                option(name: 'MAIN_CLASS_NAME', value: mainClass)
-//                option(name: 'VM_PARAMETERS', value: props)
-//                option(name: 'PROGRAM_PARAMETERS', value: args)
-//                option(name: 'WORKING_DIRECTORY', value: 'file://$PROJECT_DIR$')
-//                module(name: 'module-name', value: 'railcraft.main')
-//            }
-//        }
-//    }
-//}
-
 runClient {
     // in git bash, do (replace stuff in the <>) ./gradlew runClient -PmcUsername=<your minecraft login email> -PmcPassword=<your minecraft password>
     if (project.hasProperty('mcUsername') && project.hasProperty('mcPassword')) {
         args "--username=${project.mcUsername}"
         args "--password=${project.mcPassword}"
     }
-//    environment("LOG4J_CONFIGURATION_FILE", "../extras/log4j2.xml")
-    outputs.upToDateWhen { false }
 }
 
 runServer {
-//    environment("LOG4J_CONFIGURATION_FILE", "../extras/log4j2.xml")
+    doFirst {
+        new File(workingDir, "eula.txt").text = "eula=true"
+    }
+    args "nogui" // no server gui, we have console
+}
+
+task copyLog4jConfig(type: Copy) {
+    from('extras') {
+        include 'log4j2.xml'
+    }
+    into actualRunDir
+}
+
+tasks.withType(JavaExec) {
+    dependsOn copyLog4jConfig
+    environment extraEnvs
     outputs.upToDateWhen { false }
+    workingDir actualRunDir
+}
+
+genIntellijRuns {
+    dependsOn copyLog4jConfig
+    doLast {
+        def runConfigurationsDir = new File(".idea/runConfigurations")
+        runConfigurationsDir.mkdirs()
+
+        tasks.withType(JavaExec).each { task ->
+            def taskName = task.name
+            def mainClass = task.main
+            def props = combinedVmArgs.join(' ') // task.jvmArgs.join(' ') has too much trash
+            def args = task.args.join(' ')
+
+            def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
+            def xml = new MarkupBuilder(writer)
+
+            xml.component(name: "ProjectRunConfigurationManager") {
+                configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
+                    option(name: 'MAIN_CLASS_NAME', value: mainClass)
+                    option(name: 'VM_PARAMETERS', value: props)
+                    option(name: 'PROGRAM_PARAMETERS', value: args)
+                    option(name: 'WORKING_DIRECTORY', value: task.workingDir)
+                    envs() {
+                        extraEnvs.entrySet().each { envVar ->
+                            env(name: envVar.key, value: envVar.value)
+                        }
+                    }
+                    module(name: 'railcraft_main')
+                    // copy log4j config before running
+                    method(v: '2') {
+                        option(name: 'Make', enabled: 'true')
+                        option(name: 'Gradle.BeforeRunTask', enabled: 'true', tasks: 'copyLog4jConfig', externalProjectPath: '$PROJECT_DIR$')
+                    }
+                }
+            }
+        }
+    }
 }
 
 compileJava {

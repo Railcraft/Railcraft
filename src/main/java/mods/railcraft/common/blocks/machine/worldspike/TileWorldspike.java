@@ -66,7 +66,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     private static final int[] SLOTS_NO_ACCESS = {};
     private BlockPos pointPos = BlockPos.ORIGIN;
     private int prevX, prevY, prevZ;
-    private Set<ChunkPos> chunks;
+    private @Nullable Set<ChunkPos> chunks;
     private long fuel;
     private int fuelCycle;
     private boolean hasTicket;
@@ -117,8 +117,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         return super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
-    @Nullable
-    public static WorldCoordinate getTarget(EntityPlayer player) {
+    public static @Nullable WorldCoordinate getTarget(EntityPlayer player) {
         return pointPairingMap.get(player);
     }
 
@@ -335,8 +334,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         return !powered && (hasFuel() || !needsFuel());
     }
 
-    @Nullable
-    protected Ticket getTicketFromForge() {
+    protected @Nullable Ticket getTicketFromForge() {
         return ForgeChunkManager.requestTicket(Railcraft.getMod(), world, Type.NORMAL);
     }
 
@@ -358,8 +356,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         return getTicket() != null;
     }
 
-    @Nullable
-    public Ticket getTicket() {
+    public @Nullable Ticket getTicket() {
         return tickets.get(getUUID());
     }
 
@@ -473,7 +470,8 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
         powered = data.getBoolean("powered");
 
-        pointPos = NBTPlugin.readBlockPos(data, "point");
+        BlockPos pos = NBTPlugin.readBlockPos(data, "point");
+        pointPos = pos == null ? BlockPos.ORIGIN : pos;
 
         prevX = data.getInteger("prevX");
         prevY = data.getInteger("prevY");

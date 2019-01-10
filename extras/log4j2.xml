@@ -2,7 +2,12 @@
 <Configuration status="INFO">
     <Appenders>
         <Console name="SysOut" target="SYSTEM_OUT">
-            <LegacyXMLLayout />
+            <!--LegacyXMLLayout / note: this is for the stupid mojang launcher-->
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <OnStartupTriggeringPolicy />
+            </Policies>
         </Console>
         <RollingRandomAccessFile name="File" fileName="logs/latest.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
@@ -11,9 +16,21 @@
                 <OnStartupTriggeringPolicy />
             </Policies>
         </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="RailcraftFile" fileName="logs/railcraft.log" filePattern="logs/%d{yyyy-MM-dd}-%i.railcraft.log.gz">
+            <PatternLayout pattern="[%d{HH:mm:ss}] [%t/%level]: %msg%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <OnStartupTriggeringPolicy />
+            </Policies>
+        </RollingRandomAccessFile>
     </Appenders>
     <Loggers>
-        <Root level="trace">
+        <Logger name="railcraft" level="trace" additivity="false">
+            <AppenderRef ref="SysOut"/>
+            <AppenderRef ref="File"/>
+            <AppenderRef ref="RailcraftFile"/>
+        </Logger>
+        <Root level="debug">
             <filters>
                 <MarkerFilter marker="NETWORK_PACKETS" onMatch="DENY" onMismatch="NEUTRAL" />
             </filters>
