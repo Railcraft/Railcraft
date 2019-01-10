@@ -43,6 +43,7 @@ public class BlockItemParser {
         if (block == null)
             throw new IllegalArgumentException("Invalid Block Name while parsing config = " + line);
         int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : 0;
+        //noinspection deprecation
         return block.getStateFromMeta(meta);
     }
 
@@ -57,7 +58,7 @@ public class BlockItemParser {
 
     public static <T> Set<T> parseList(String list, String logMessage, Function<String, T> keyParser) {
         try {
-            Set<T> set = new HashSet<T>();
+            Set<T> set = new HashSet<>();
             for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
                 if ("".equals(line))
                     continue;
@@ -74,7 +75,7 @@ public class BlockItemParser {
 
     public static <T, V> Map<T, V> parseDictionary(String list, String logMessage, Function<String, T> keyParser, Function<String, V> valueParser) {
         try {
-            Map<T, V> map = new HashMap<T, V>();
+            Map<T, V> map = new HashMap<>();
             for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
                 if (StringUtils.isEmpty(line))
                     continue;
