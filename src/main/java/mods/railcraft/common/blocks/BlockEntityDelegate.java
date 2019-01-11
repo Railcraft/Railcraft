@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -138,8 +138,8 @@ public abstract class BlockEntityDelegate<T extends TileRailcraft & ISmartTile> 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
         WorldPlugin.getTileEntity(worldIn, pos, ISmartTile.class).ifPresent(ISmartTile::onBlockRemoval);
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

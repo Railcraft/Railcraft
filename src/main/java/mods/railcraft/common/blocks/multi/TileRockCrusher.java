@@ -127,7 +127,7 @@ public final class TileRockCrusher extends TileMultiBlockInventory implements IH
     private final InventoryMapper invInput = new InventoryMapper(this, 0, 9).ignoreItemChecks();
     private final InventoryMapper invOutput = new InventoryMapper(this, 9, 9).ignoreItemChecks();
     private final Set<Object> actions = new HashSet<>();
-    private Optional<IRockCrusherCrafter.IRecipe> recipe;
+    private Optional<IRockCrusherCrafter.IRecipe> recipe = Optional.empty();
     private int processTime;
     private final Random random = new Random();
     private boolean isWorking;

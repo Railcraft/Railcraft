@@ -1,5 +1,7 @@
 12.0.0-beta-4:
     FIX: Fix server startup crash.
+    FIX: Fix Blast Furnace outputs.
+    FIX: Fix block break inventory drops and other break effects.
 
 12.0.0-beta-3:
     FIX: Migrate Blast Furnace and Coke Oven to new structure logic framework and clean up various bugs with both.
