@@ -16,6 +16,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -98,6 +99,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
+        // TODO opposite facing?
         return FluidTools.getFluidHandler(getFacing(), cart) != null && super.canHandleCart(cart);
     }
 
@@ -114,10 +116,19 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Override
+    public @Nullable EnumGui getGui() {
+        return EnumGui.MANIPULATOR_FLUID;
+    }
+
+    @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == SLOT_INPUT) {
-            FluidStack filter;
-            return FluidItemHelper.isContainer(stack) && (FluidItemHelper.isEmptyContainer(stack) || (filter = getFilterFluid()) == null || FluidItemHelper.containsFluid(stack, filter));
+            boolean b1 = FluidItemHelper.isContainer(stack);
+            boolean b2 = FluidItemHelper.isEmptyContainer(stack);
+            FluidStack filter = getFilterFluid();
+            boolean b3 = filter == null;
+            boolean b4 = FluidItemHelper.containsFluid(stack, filter);
+            return b1 && (b2 || b3 || b4);
         }
         return false;
     }
@@ -186,4 +197,22 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
             return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
         return super.getCapability(capability, facing);
     }
+
+    @Override
+    public boolean canRotate() {
+        return false;
+    }
+
+    @Override
+    public boolean rotateBlock(EnumFacing axis) {
+        return false;
+    }
+
+    @Override
+    public @Nullable EnumFacing[] getValidRotations() {
+        return new EnumFacing[] {getDefaultFacing()};
+    }
+
+    @Override
+    public abstract EnumFacing getDefaultFacing();
 }

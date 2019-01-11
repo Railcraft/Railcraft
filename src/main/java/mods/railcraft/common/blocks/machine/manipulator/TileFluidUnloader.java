@@ -13,11 +13,8 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -32,7 +29,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
     }
 
     @Override
-    public EnumFacing getFacing() {
+    public EnumFacing getDefaultFacing() {
         return EnumFacing.UP;
     }
 
@@ -67,11 +64,4 @@ public class TileFluidUnloader extends TileFluidManipulator {
             return false;
         return !tankCart.areTanksEmpty();
     }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, world, getPos());
-        return true;
-    }
-
 }

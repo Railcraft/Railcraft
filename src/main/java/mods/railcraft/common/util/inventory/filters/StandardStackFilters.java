@@ -75,7 +75,7 @@ public enum StandardStackFilters implements Predicate<ItemStack> {
     FLUID_CONTAINER {
         @Override
         protected boolean testType(ItemStack stack) {
-            return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+            return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
         }
     },
     FEED {

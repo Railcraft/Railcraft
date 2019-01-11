@@ -79,14 +79,13 @@ public final class FluidItemHelper {
         return testContainerProperties(false, stack, p -> Fluids.contains(p.getContents(), fluidStack));
     }
 
-    @Nullable
-    public static FluidStack getFluidStackInContainer(ItemStack stack) {
+    public static @Nullable FluidStack getFluidStackInContainer(ItemStack stack) {
         return FluidUtil.getFluidContained(stack);
     }
 
-    @Nullable
+    // Use fluidstack version
     @Deprecated // Use fluidstack version
-    public static Fluid getFluidInContainer(ItemStack stack) {
+    public static @Nullable Fluid getFluidInContainer(ItemStack stack) {
         return Optional.ofNullable(FluidUtil.getFluidContained(stack)).map(FluidStack::getFluid).orElse(null);
     }
 

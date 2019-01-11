@@ -18,17 +18,15 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.IExtInvSlot;
 import mods.railcraft.common.util.inventory.InventoryIterator;
+import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -54,7 +52,7 @@ public class TileFluidLoader extends TileFluidManipulator {
     }
 
     @Override
-    public EnumFacing getFacing() {
+    public EnumFacing getDefaultFacing() {
         return EnumFacing.DOWN;
     }
 
@@ -118,12 +116,9 @@ public class TileFluidLoader extends TileFluidManipulator {
 
     @Override
     public @Nullable EntityMinecart getCart() {
-        needsPipe = false;
-        EntityMinecart cart = super.getCart();
-        if (cart == null) {
-            cart = EntitySearcher.findMinecarts().around(getPos().down(2)).outTo(-0.2f).in(world).any();
-            needsPipe = true;
-        }
+        AABBFactory factory = AABBFactory.start().createBoxForTileAt(getPos().down(2)).raiseCeiling(1).grow(-0.1f);
+        EntityMinecart cart = EntitySearcher.findMinecarts().around(factory).in(world).any();
+        needsPipe = cart != null && getPos().getY() - cart.posY > 1D;
         return cart;
     }
 
@@ -161,10 +156,11 @@ public class TileFluidLoader extends TileFluidManipulator {
         else
             retractPipe();
 
-        setProcessing(false);
         if (cartNeedsFilling && (!needsPipe || pipeIsExtended())) {
             FluidStack moved = FluidUtil.tryFluidTransfer(tankCart, tank, RailcraftConfig.getTankCartFillRate(), true);
             setProcessing(Fluids.nonEmpty(moved));
+        } else {
+            setProcessing(false);
         }
 
         if (isProcessing())
@@ -190,6 +186,8 @@ public class TileFluidLoader extends TileFluidManipulator {
         if (tankCart == null)
             return false;
         FluidStack fluid = getFluidHandled();
+        if (fluid == null)
+            return false;
         switch (redstoneController().getButtonState()) {
             case COMPLETE:
                 return !tankCart.isTankFull(fluid);
@@ -262,11 +260,5 @@ public class TileFluidLoader extends TileFluidManipulator {
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         setPipeLength(data.readFloat());
-    }
-
-    @Override
-    public boolean openGui(EntityPlayer player) {
-        GuiHandler.openGui(EnumGui.MANIPULATOR_FLUID, player, world, getPos());
-        return true;
     }
 }

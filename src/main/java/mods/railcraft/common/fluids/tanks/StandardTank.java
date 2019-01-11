@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
+import mods.railcraft.common.util.misc.Conditions;
 import net.minecraft.item.EnumRarity;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -34,7 +35,7 @@ public class StandardTank extends FluidTank {
             refreshTooltip();
         }
     };
-    protected @Nullable Supplier<FluidStack> filter;
+    protected @Nullable Supplier<@Nullable FluidStack> filter;
     private int tankIndex;
     private boolean hidden;
     private @Nullable Consumer<StandardTank> updateCallback;
@@ -105,8 +106,11 @@ public class StandardTank extends FluidTank {
     }
 
     public boolean matchesFilter(@Nullable FluidStack fluidStack) {
+        if (fluidStack == null) {
+            return filter == null || filter.get() == null;
+        }
         if (filter != null) {
-            return Fluids.areEqual(filter.get(), fluidStack);
+            return Conditions.check(filter.get(), fluidStack, Fluids::areEqual);
         }
         return true;
     }
