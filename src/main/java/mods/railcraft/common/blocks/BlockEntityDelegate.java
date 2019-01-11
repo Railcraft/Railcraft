@@ -227,7 +227,6 @@ public abstract class BlockEntityDelegate<T extends TileRailcraft & ISmartTile> 
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return WorldPlugin.getTileEntity(world, pos, ISmartTile.class).map(t -> t.getExtendedState(state)).orElseGet(() -> super.getExtendedState(state, world, pos));
     }

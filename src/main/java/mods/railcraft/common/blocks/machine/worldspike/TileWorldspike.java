@@ -209,7 +209,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     @Override
     public List<ItemStack> getDrops(int fortune) {
-        ArrayList<ItemStack> items = new ArrayList<>();
+        List<ItemStack> items = new ArrayList<>();
         ItemStack drop = getMachineType().getStack();
         if (needsFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();

@@ -12,6 +12,9 @@ package mods.railcraft.common.util.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +35,16 @@ public final class JsonTools {
 
     public static @Nullable Boolean nullableBoolean(JsonObject object, String tag) {
         return object.has(tag) ? object.get(tag).getAsBoolean() : null;
+    }
+
+    @Contract("_, _, _, !null -> !null")
+    public static @Nullable <T extends IForgeRegistryEntry<T>> T getFromRegistryWhenPresent(JsonObject object, String tag, IForgeRegistry<T> registry, @Nullable T fallback) {
+        if (object.has(tag)) {
+            String string = object.get(tag).getAsString();
+            T ret = registry.getValue(new ResourceLocation(string));
+            return ret == null ? fallback : ret;
+        }
+        return fallback;
     }
 
     private JsonTools() {
