@@ -17,6 +17,7 @@ import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.modules.orehandlers.BoreOreHandler;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraftforge.common.MinecraftForge;
@@ -59,10 +60,8 @@ public class ModuleAutomation extends RailcraftModulePayload {
             public void init() {
                 ManipulatorVariant gamma = ManipulatorVariant.DISPENSER_CART;
                 if (gamma.isAvailable())
-                    CraftingPlugin.addShapedRecipe(gamma.getStack(),
-                            "ML",
-                            'M', Items.MINECART,
-                            'L', Blocks.DISPENSER);
+                    CraftingPlugin.addShapelessRecipe(gamma.getStack(),
+                            Ingredients.catalyst(Items.MINECART), Blocks.DISPENSER);
 
 //                EnumMachineAlpha alpha = EnumMachineAlpha.TRADE_STATION;
 //                if (alpha.isAvailable()) {

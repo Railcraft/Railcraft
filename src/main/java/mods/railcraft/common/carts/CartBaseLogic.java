@@ -13,13 +13,15 @@ package mods.railcraft.common.carts;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.inventory.IExtInvSlot;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.inventory.InventoryIterator;
-import mods.railcraft.common.blocks.logic.ILogicContainer;
-import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Optionals;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -28,7 +30,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
@@ -56,13 +57,13 @@ public abstract class CartBaseLogic extends CartBase implements ILogicContainer,
 
     @Override
     public <L> Optional<L> getLogic(Class<L> logicClass) {
-        return Optional.of(logicClass.cast(logic));
+        return Optional.of(logic).flatMap(Optionals.toType(logicClass));
     }
 
     @Override
     public void setDead() {
         if (Game.isClient(world))
-            getLogic(IItemHandlerModifiable.class).ifPresent(inv ->
+            getLogic(IInventoryImplementor.class).ifPresent(inv ->
                     InventoryIterator.get(inv).stream().forEach(IExtInvSlot::clear));
         super.setDead();
     }
