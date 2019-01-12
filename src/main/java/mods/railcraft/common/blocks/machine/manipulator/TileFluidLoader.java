@@ -56,6 +56,11 @@ public class TileFluidLoader extends TileFluidManipulator {
         return EnumFacing.DOWN;
     }
 
+    @Override
+    public EnumFacing getFacing() {
+        return getDefaultFacing();
+    }
+ 
     private void resetPipe() {
         pipeLength = 0;
     }
