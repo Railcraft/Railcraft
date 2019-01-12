@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,13 +10,15 @@
 
 package mods.railcraft.common.blocks;
 
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.interfaces.ITileLit;
-import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.blocks.logic.CrafterLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 
 import java.util.Random;
 
@@ -27,7 +29,8 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLit {
+@Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "buildcraftapi_statements")
+public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLit, INeedsFuel {
     private boolean wasBurning;
 
     @Override
@@ -72,5 +75,15 @@ public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLi
     public boolean hasFlames() {
         return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(true)
                 && getLogic(CrafterLogic.class).map(CrafterLogic::isProcessing).orElse(false);
+    }
+
+    @Override
+    public boolean needsFuel() {
+        return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
+    }
+
+    @Override
+    public boolean hasWork() {
+        return getLogic(CrafterLogic.class).map(CrafterLogic::hasWork).orElse(false);
     }
 }

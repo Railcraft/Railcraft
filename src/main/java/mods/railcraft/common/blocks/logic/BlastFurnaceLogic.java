@@ -29,9 +29,9 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 
-import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
@@ -39,7 +39,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlastFurnaceLogic extends CrafterLogic implements INeedsFuel {
+public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurnaceCrafter.IRecipe> implements INeedsFuel {
     public static final Predicate<ItemStack> INPUT_FILTER = stack -> Crafters.blastFurnace().getRecipe(stack).isPresent();
     public static final Predicate<ItemStack> FUEL_FILTER = stack -> Crafters.blastFurnace().getFuel(stack).isPresent();
     public static final int SLOT_INPUT = 0;
@@ -60,11 +60,9 @@ public class BlastFurnaceLogic extends CrafterLogic implements INeedsFuel {
      * keep the furnace burning for
      */
     public int currentItemBurnTime;
-    private ItemStack lastInput = ItemStack.EMPTY;
-    private @Nullable IBlastFurnaceCrafter.IRecipe recipe;
 
     public BlastFurnaceLogic(Adapter adapter) {
-        super(adapter, 4);
+        super(adapter, 4, SLOT_INPUT);
     }
 
     @Override
@@ -86,31 +84,17 @@ public class BlastFurnaceLogic extends CrafterLogic implements INeedsFuel {
     }
 
     @Override
-    protected void setRecipe() {
-        ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (!InvTools.isItemEqual(lastInput, input)) {
-            lastInput = input;
-            recipe = Crafters.blastFurnace().getRecipe(input).orElse(null);
-            if (recipe == null && !input.isEmpty()) {
-                setInventorySlotContents(SLOT_INPUT, emptyStack());
-                dropItem(input);
-            }
-        }
+    protected Optional getRecipe(ItemStack input) {
+        return Crafters.blastFurnace().getRecipe(input);
     }
 
     @Override
     protected boolean lacksRequirements() {
-        return recipe == null || !isBurning();
+        return super.lacksRequirements() || !isBurning();
     }
 
     @Override
-    protected int calculateDuration() {
-        Objects.requireNonNull(recipe);
-        return recipe.getTickTime(getStackInSlot(SLOT_INPUT));
-    }
-
-    @Override
-    protected boolean sendToOutput() {
+    protected boolean craftAndPush() {
         Objects.requireNonNull(recipe);
         ItemStack nextOutput = recipe.getOutput();
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -278,5 +278,10 @@ public class TileEngravingBench extends TileSmartItemTicking implements ISidedIn
     @Override
     public EnumFacing getFacing() {
         return flippedAxis ? EnumFacing.WEST : EnumFacing.NORTH;
+    }
+
+    @Override
+    public void setFacing(EnumFacing facing) {
+        flippedAxis = facing.getAxis() == EnumFacing.Axis.X;
     }
 }

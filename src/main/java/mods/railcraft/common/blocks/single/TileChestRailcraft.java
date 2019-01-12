@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -47,19 +47,14 @@ public abstract class TileChestRailcraft extends TileLogic implements ITileRotat
     }
 
     @Override
-    public final EnumFacing getFacing() {
-        return hasWorld() ? getBlockState().getValue(BlockChestRailcraft.FACING) : EnumFacing.NORTH;
+    public void setFacing(EnumFacing facing) {
+        if (hasWorld())
+            world.setBlockState(pos, getBlockState().withProperty(BlockChestRailcraft.FACING, facing));
     }
 
     @Override
-    public final boolean rotateBlock(EnumFacing face) {
-        if (face.getAxis().isVertical())
-            return false;
-        EnumFacing oldFace = getFacing();
-        EnumFacing target = oldFace == face ? face.getOpposite() : face;
-        world.setBlockState(pos, getBlockState().withProperty(BlockChestRailcraft.FACING, target));
-        markBlockForUpdate();
-        return true;
+    public final EnumFacing getFacing() {
+        return hasWorld() ? getBlockState().getValue(BlockChestRailcraft.FACING) : EnumFacing.NORTH;
     }
 
     @Override

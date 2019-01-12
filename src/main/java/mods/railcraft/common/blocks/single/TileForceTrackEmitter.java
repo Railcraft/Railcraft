@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -291,15 +291,10 @@ public class TileForceTrackEmitter extends TileRailcraftTicking implements ITile
             return false;
         if (state != State.RETRACTED)
             return false;
-        if (axis == EnumFacing.UP || axis == EnumFacing.DOWN)
-            return false;
-        if (facing == axis)
-            facing = axis.getOpposite();
-        else
-            facing = axis;
-        markBlockForUpdate();
-        notifyBlocksOfNeighborChange();
-        return true;
+        boolean rotate = ITileRotate.super.rotateBlock(axis);
+        if (rotate)
+            notifyBlocksOfNeighborChange();
+        return rotate;
     }
 
     @Override
@@ -401,4 +396,8 @@ public class TileForceTrackEmitter extends TileRailcraftTicking implements ITile
         return facing;
     }
 
+    @Override
+    public void setFacing(EnumFacing facing) {
+        this.facing = facing;
+    }
 }

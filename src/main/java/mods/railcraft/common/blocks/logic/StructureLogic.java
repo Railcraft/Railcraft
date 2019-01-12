@@ -47,7 +47,7 @@ public class StructureLogic extends Logic {
     private final Timer netTimer = new Timer();
     private final TileRailcraft tile;
     private final String structureKey;
-    private final Logic logic;
+    public final Logic logic;
     private final List<? extends MultiBlockPattern> patterns;
     private final List<TileRailcraft> components = new ArrayList<>();
     private final List<TileRailcraft> componentsView = Collections.unmodifiableList(components);
@@ -59,7 +59,7 @@ public class StructureLogic extends Logic {
     private @Nullable MultiBlockPattern currentPattern;
     private @Nullable BlockPos posInPattern;
 
-    protected StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic logic) {
+    public StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic logic) {
         super(Adapter.of(tile));
         this.structureKey = structureKey;
         this.tile = tile;

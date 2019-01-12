@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -192,5 +192,10 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
     @Override
     public EnumFacing getFacing() {
         return direction;
+    }
+
+    @Override
+    public void setFacing(EnumFacing facing) {
+        this.direction = facing;
     }
 }

@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.Optional;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
@@ -36,51 +37,30 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CokeOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
+public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafter.IRecipe> implements ITank, INeedsFuel {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
     public static final int SLOT_OUTPUT_FLUID = 2;
     public static final int SLOT_LIQUID_INPUT = 3;
-    private static final int COOK_STEP_LENGTH = 50;
     private static final int TANK_CAPACITY = 64 * FluidTools.BUCKET_VOLUME;
     private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
-    private @Nullable ICokeOvenCrafter.IRecipe recipe;
-    private ItemStack lastInput = emptyStack();
 
     public CokeOvenLogic(Adapter adapter) {
-        super(adapter, 4);
+        super(adapter, 4, SLOT_INPUT);
         tank = new StandardTank(TANK_CAPACITY, adapter.tile());
         tankManager.add(tank);
     }
 
     @Override
-    protected void setRecipe() {
-        ItemStack input = getStackInSlot(SLOT_INPUT);
-        if (!InvTools.isItemEqual(lastInput, input)) {
-            lastInput = input;
-            recipe = Crafters.cokeOven().getRecipe(input).orElse(null);
-            if (recipe == null && !input.isEmpty()) {
-                setInventorySlotContents(SLOT_INPUT, emptyStack());
-                dropItem(input);
-            }
-        }
+    protected Optional<ICokeOvenCrafter.IRecipe> getRecipe(ItemStack input) {
+        return Crafters.cokeOven().getRecipe(input);
     }
 
-    @Override
-    protected boolean lacksRequirements() {
-        return recipe == null;
-    }
 
     @Override
-    protected int calculateDuration() {
-        Objects.requireNonNull(recipe);
-        return recipe.getTickTime(getStackInSlot(SLOT_INPUT));
-    }
-
-    @Override
-    protected boolean sendToOutput() {
+    protected boolean craftAndPush() {
         Objects.requireNonNull(recipe);
         ItemStack output = recipe.getOutput();
         FluidStack fluidOutput = recipe.getFluidOutput();

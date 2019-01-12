@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.multi.TileSteamOven;
+import mods.railcraft.common.blocks.logic.SteamOvenLogic;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerSteamOven;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -17,11 +17,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiSteamOven extends GuiTitled {
 
-    private final TileSteamOven tile;
+    private final SteamOvenLogic logic;
 
-    public GuiSteamOven(InventoryPlayer invPlayer, TileSteamOven tile) {
-        super(tile, new ContainerSteamOven(invPlayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_oven.png");
-        this.tile = tile;
+    public GuiSteamOven(InventoryPlayer invPlayer, SteamOvenLogic logic) {
+        super(logic, new ContainerSteamOven(invPlayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_oven.png");
+        this.logic = logic;
     }
 
     @Override
@@ -35,8 +35,8 @@ public class GuiSteamOven extends GuiTitled {
         super.drawGuiContainerBackgroundLayer(f, i, j);
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        if (tile.getCookTime() > 0) {
-            int scale = tile.getCookProgressScaled(49);
+        if (logic.getProgress() > 0) {
+            int scale = (int) (logic.getProgressPercent() * 49);
             drawTexturedModalRect(w + 65, h + 18 + 49 - scale, 176, 47 + 49 - scale, 23, scale + 1);
         }
     }

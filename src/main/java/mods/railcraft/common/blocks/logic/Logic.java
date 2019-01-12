@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -135,6 +135,8 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
 
         abstract void sendUpdateToClient();
 
+        abstract void updateModels();
+
         abstract Object getContainer();
 
         @Nullable TileRailcraft tile() {
@@ -201,6 +203,11 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             }
 
             @Override
+            void updateModels() {
+                tile.markBlockForUpdate();
+            }
+
+            @Override
             @Nullable TileRailcraft tile() {
                 return tile;
             }
@@ -261,6 +268,9 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
                 void sendUpdateToClient() {
                     cart.sendUpdateToClient();
                 }
+
+                @Override
+                void updateModels() { }
 
                 @Override
                 public @Nullable World theWorld() {

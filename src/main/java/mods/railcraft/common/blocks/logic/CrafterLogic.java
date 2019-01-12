@@ -113,17 +113,19 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
         return isProcessing();
     }
 
-    protected abstract void setRecipe();
+    protected void setupCrafting() {}
 
     protected boolean lacksRequirements() {
         return false;
     }
 
+    protected boolean doProcessStep() {return true;}
+
     protected void progressCrafting() {
         if (isFinished()) setProcessing(false);
         if (paused) return;
 
-        setRecipe();
+        setupCrafting();
 
         if (lacksRequirements()) {
             reset();
@@ -131,17 +133,19 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
         }
 
         setProcessing(true);
-        progress += PROGRESS_STEP;
-        duration = calculateDuration();
-        if (progress < duration) return;
+        if (doProcessStep()) {
+            progress += PROGRESS_STEP;
+            duration = calculateDuration();
+            if (progress < duration) return;
 
-        progress = duration;
-        setFinished();
-        if (sendToOutput())
-            reset();
+            progress = duration;
+            setFinished();
+            if (craftAndPush())
+                reset();
+        }
     }
 
-    protected abstract boolean sendToOutput();
+    protected abstract boolean craftAndPush();
 
     @Override
     @OverridingMethodsMustInvokeSuper
@@ -163,8 +167,6 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
     @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-
-        data.writeInt(progress);
         data.writeBoolean(processing);
     }
 
@@ -172,8 +174,6 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
     @OverridingMethodsMustInvokeSuper
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-
-        progress = data.readInt();
         processing = data.readBoolean();
     }
 }
