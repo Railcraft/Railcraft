@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,6 +24,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
+ * Interface for blocks with Tile Entities.
+ *
+ * It handles creation and adds some helper methods.
+ *
  * Created by CovertJaguar on 11/28/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
