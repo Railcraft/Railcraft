@@ -21,7 +21,7 @@ In the words of **CovertJaguar**:
 * The Blog, Forums, and main download page: http://www.railcraft.info
 * The Wiki: http://railcraft.info/wiki
 * IRC: #railcraft on Esper.net - [WebChat](http://webchat.esper.net/?nick=RailcraftGithub...&channels=railcraft&prompt=1)
-* Discord: [Invite](https://discord.gg/Wr9zxmP) - Linked with #railcraft on IRC
+* Discord: [Invite](https://discord.gg/VyaUt2r) - Linked with #railcraft on IRC
 * Patreon Page: http://www.patreon.com/CovertJaguar
 
 <a href="http://www.patreon.com/CovertJaguar"> ![Patreon](http://www.railcraft.info/wp-content/uploads/2014/05/Patreon.png)</a>
