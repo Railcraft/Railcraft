@@ -54,10 +54,7 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     }
 
     public EnumFacing getDefaultFacing() {
-        EnumFacing[] validRotation = getValidRotations();
-        if (validRotation != null)
-            return validRotation[0];
-        return EnumFacing.DOWN;
+        return getValidRotations()[0];
     }
 
     @Override

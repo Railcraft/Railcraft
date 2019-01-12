@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -199,7 +199,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Override
-    public boolean canRotate() {
+    public boolean canRotate(EnumFacing axis) {
         return false;
     }
 
@@ -209,10 +209,15 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Override
-    public @Nullable EnumFacing[] getValidRotations() {
-        return new EnumFacing[] {getDefaultFacing()};
+    public EnumFacing[] getValidRotations() {
+        return new EnumFacing[]{getDefaultFacing()};
     }
 
     @Override
     public abstract EnumFacing getDefaultFacing();
+
+    @Override
+    public final EnumFacing getFacing() {
+        return getDefaultFacing();
+    }
 }
