@@ -11,11 +11,9 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
-import mods.railcraft.common.blocks.logic.CrafterLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.gui.EnumGui;
@@ -36,7 +34,7 @@ import java.util.List;
 
 import static mods.railcraft.common.blocks.multi.BlockBlastFurnace.ICON;
 
-public final class TileBlastFurnace extends TileCrafter implements INeedsFuel {
+public final class TileBlastFurnace extends TileCrafter {
 
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
@@ -190,16 +188,6 @@ public final class TileBlastFurnace extends TileCrafter implements INeedsFuel {
     public boolean hasFlames() {
         return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(true)
                 && isBurning();
-    }
-
-    @Override
-    public boolean needsFuel() {
-        return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
-    }
-
-    @Override
-    public boolean hasWork() {
-        return getLogic(CrafterLogic.class).map(CrafterLogic::hasWork).orElse(false);
     }
 
     @Override

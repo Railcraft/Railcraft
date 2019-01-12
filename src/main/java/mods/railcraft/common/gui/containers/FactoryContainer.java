@@ -11,10 +11,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
-import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
-import mods.railcraft.common.blocks.logic.CokeOvenLogic;
-import mods.railcraft.common.blocks.logic.ILogicContainer;
-import mods.railcraft.common.blocks.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
@@ -85,7 +82,8 @@ public final class FactoryContainer {
                     return new ContainerBlastFurnace(inv, ((ILogicContainer) obj).getLogic(BlastFurnaceLogic.class)
                             .orElseThrow(NullPointerException::new));
                 case STEAN_OVEN:
-                    return new ContainerSteamOven(inv, (TileSteamOven) obj);
+                    return new ContainerSteamOven(inv, ((ILogicContainer) obj).getLogic(SteamOvenLogic.class)
+                            .orElseThrow(NullPointerException::new));
                 case ROCK_CRUSHER:
                     return new ContainerRockCrusher(inv, (TileRockCrusher) obj);
                 case TANK:

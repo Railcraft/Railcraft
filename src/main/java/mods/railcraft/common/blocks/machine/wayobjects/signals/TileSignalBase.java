@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,32 +32,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
-import static net.minecraft.util.EnumFacing.DOWN;
-import static net.minecraft.util.EnumFacing.UP;
-
 public abstract class TileSignalBase extends TileMachineBase implements IAspectProvider, ITileRotate, ITileLit {
 
-    private static final EnumFacing[] UP_DOWN_AXES = {UP, DOWN};
     private EnumFacing facing = EnumFacing.NORTH;
     private int prevLightValue;
 
     @Override
-    public boolean rotateBlock(EnumFacing axis) {
-        if (axis == UP || axis == DOWN) {
-            return false;
-        }
-        if (facing == axis) {
-            facing = axis.getOpposite();
-        } else {
-            facing = axis;
-        }
-        markBlockForUpdate();
-        return true;
-    }
-
-    @Override
     public EnumFacing[] getValidRotations() {
-        return UP_DOWN_AXES;
+        return EnumFacing.HORIZONTALS;
     }
 
     @Override

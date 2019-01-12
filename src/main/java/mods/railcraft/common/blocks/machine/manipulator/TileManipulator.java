@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -42,7 +42,7 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase entityLiving, ItemStack stack) {
         super.onBlockPlacedBy(state, entityLiving, stack);
-        if (canRotate()) {
+        if (canRotate(EnumFacing.NORTH)) {
             EnumFacing newFacing = MiscTools.getSideFacingTrack(world, getPos());
             if (newFacing == null) {
                 if (entityLiving != null) {
@@ -73,7 +73,7 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        if (canRotate())
+        if (canRotate(EnumFacing.NORTH))
             data.setByte("direction", (byte) facing.ordinal());
         return data;
     }
@@ -81,21 +81,21 @@ public abstract class TileManipulator extends TileMachineItem implements ITileRo
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        if (canRotate())
+        if (canRotate(EnumFacing.NORTH))
             facing = EnumFacing.byIndex(data.getByte("direction"));
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
-        if (canRotate())
+        if (canRotate(EnumFacing.NORTH))
             data.writeByte(facing.ordinal());
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        if (canRotate())
+        if (canRotate(EnumFacing.NORTH))
             facing = EnumFacing.byIndex(data.readByte());
     }
 

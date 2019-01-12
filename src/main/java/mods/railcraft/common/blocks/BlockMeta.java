@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,9 +22,12 @@ import java.lang.annotation.*;
 public @interface BlockMeta {
 
     /**
+     * Associates a Tile Entity class with a block.
+     *
      * Created by CovertJaguar on 11/29/2018 for Railcraft.
      *
      * @author CovertJaguar <http://www.railcraft.info>
+     * @see IRailcraftBlockTile
      */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
@@ -34,6 +37,8 @@ public @interface BlockMeta {
     }
 
     /**
+     * Associates a variant enum with a block.
+     *
      * Created by CovertJaguar on 2/26/2017 for Railcraft.
      *
      * @author CovertJaguar <http://www.railcraft.info>

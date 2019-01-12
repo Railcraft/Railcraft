@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.logic.CokeOvenLogic;
-import mods.railcraft.common.blocks.logic.CrafterLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.fluids.FluidTools;
@@ -126,16 +125,6 @@ public final class TileCokeOven extends TileCrafter implements INeedsFuel {
         return getLogic(ITank.class)
                 .map(l -> FluidTools.interactWithFluidHandler(player, hand, l.getTankManager())).orElse(false)
                 || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
-    }
-
-    @Override
-    public boolean needsFuel() {
-        return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
-    }
-
-    @Override
-    public boolean hasWork() {
-        return getLogic(CrafterLogic.class).map(CrafterLogic::hasWork).orElse(false);
     }
 
     @Override

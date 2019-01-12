@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,8 @@
 package mods.railcraft.common.blocks.interfaces;
 
 import net.minecraft.util.EnumFacing;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
@@ -21,16 +22,14 @@ import org.jetbrains.annotations.Nullable;
 public interface ITileRotate extends ITile {
     EnumFacing getFacing();
 
-    default void setFacing(EnumFacing facing) {
-    }
+    void setFacing(EnumFacing facing);
 
-    default boolean canRotate() {
-        EnumFacing[] rotations = getValidRotations();
-        return rotations != null && rotations.length > 1;
+    default boolean canRotate(EnumFacing axis) {
+        return Arrays.asList(getValidRotations()).contains(axis);
     }
 
     default boolean rotateBlock(EnumFacing axis) {
-        if (!canRotate()) return false;
+        if (!canRotate(axis)) return false;
         if (getFacing() == axis)
             setFacing(axis.getOpposite());
         else
@@ -39,7 +38,7 @@ public interface ITileRotate extends ITile {
         return true;
     }
 
-    default @Nullable EnumFacing[] getValidRotations() {
+    default EnumFacing[] getValidRotations() {
         return EnumFacing.VALUES;
     }
 }

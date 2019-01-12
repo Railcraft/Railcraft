@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -205,7 +205,7 @@ public abstract class TileActuatorBase extends TileMachineBase implements ISwitc
     }
 
     @Override
-    public @Nullable EnumFacing[] getValidRotations() {
+    public EnumFacing[] getValidRotations() {
         return EnumFacing.HORIZONTALS;
     }
 

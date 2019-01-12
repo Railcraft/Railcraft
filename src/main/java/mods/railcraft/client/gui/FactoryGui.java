@@ -12,10 +12,7 @@ package mods.railcraft.client.gui;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
-import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
-import mods.railcraft.common.blocks.logic.CokeOvenLogic;
-import mods.railcraft.common.blocks.logic.ILogicContainer;
-import mods.railcraft.common.blocks.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
@@ -99,7 +96,8 @@ public class FactoryGui {
                     return new GuiBlastFurnace(inv, ((ILogicContainer) obj).getLogic(BlastFurnaceLogic.class)
                             .orElseThrow(NullPointerException::new));
                 case STEAN_OVEN:
-                    return new GuiSteamOven(inv, (TileSteamOven) obj);
+                    return new GuiSteamOven(inv, ((ILogicContainer) obj).getLogic(SteamOvenLogic.class)
+                            .orElseThrow(NullPointerException::new));
                 case TANK:
                     return new GuiTank(inv, (ITankTile) obj);
                 case ROCK_CRUSHER:
