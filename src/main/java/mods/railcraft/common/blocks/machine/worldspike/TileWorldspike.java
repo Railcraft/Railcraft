@@ -264,8 +264,8 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
                         setInventorySlotContents(0, InvTools.emptyStack());
                         releaseTicket();
                     } else if (getFuelMap().containsKey(stack)) {
-                        decrStackSize(0, 1);
                         fuel = (long) (getFuelMap().get(stack) * RailcraftConstants.TICKS_PER_HOUR);
+                        decrStackSize(0, 1); // this operation modifies the stack variable and must be done at last
                     }
                 }
             }
