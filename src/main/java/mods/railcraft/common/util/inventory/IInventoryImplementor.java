@@ -24,6 +24,9 @@ public interface IInventoryImplementor extends IInventory, IInventoryComposite {
     IInventory getInventory();
 
     @Override
+    boolean isUsableByPlayer(EntityPlayer player);
+
+    @Override
     default int getSizeInventory() {
         return getInventory().getSizeInventory();
     }

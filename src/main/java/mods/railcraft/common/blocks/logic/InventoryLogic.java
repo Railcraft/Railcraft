@@ -41,7 +41,7 @@ public abstract class InventoryLogic extends Logic implements IInventoryImplemen
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return adapter.isUsableByPlayer(player);
+        return true; //adapter.isUsableByPlayer(player); will cause infinite loop
     }
 
     @Override
