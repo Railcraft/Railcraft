@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
 
@@ -31,14 +31,14 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class RailcraftContainer extends Container {
-    private final Function<EntityPlayer, Boolean> isUsableByPlayer;
+    private final Predicate<EntityPlayer> isUsableByPlayer;
     private final List<Widget> widgets = new ArrayList<>();
 
     protected RailcraftContainer(IInventory inv) {
         this.isUsableByPlayer = inv::isUsableByPlayer;
     }
 
-    protected RailcraftContainer(Function<EntityPlayer, Boolean> isUsableByPlayer) {
+    protected RailcraftContainer(Predicate<EntityPlayer> isUsableByPlayer) {
         this.isUsableByPlayer = isUsableByPlayer;
     }
 
@@ -93,7 +93,7 @@ public abstract class RailcraftContainer extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer entityplayer) {
-        return isUsableByPlayer.apply(entityplayer);
+        return isUsableByPlayer.test(entityplayer);
     }
 
     //TODO: test new parameters

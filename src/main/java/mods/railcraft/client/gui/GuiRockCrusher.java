@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,18 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.multi.TileRockCrusher;
+import mods.railcraft.common.blocks.logic.RockCrusherLogic;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerRockCrusher;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiRockCrusher extends GuiTitled {
 
-    private TileRockCrusher crusher;
+    private RockCrusherLogic crusher;
 
-    public GuiRockCrusher(InventoryPlayer inventoryplayer, TileRockCrusher tile) {
-        super(tile, new ContainerRockCrusher(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
-        this.crusher = tile;
+    public GuiRockCrusher(InventoryPlayer inventoryplayer, RockCrusherLogic logic) {
+        super(logic, new ContainerRockCrusher(inventoryplayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
+        this.crusher = logic;
     }
 
     @Override
@@ -34,8 +34,8 @@ public class GuiRockCrusher extends GuiTitled {
         super.drawGuiContainerBackgroundLayer(f, i, j);
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
-        if (crusher.getProcessTime() > 0) {
-            int cookProgress = crusher.getProgressScaled(29);
+        if (crusher.getProgress() > 0) {
+            int cookProgress = (int) (crusher.getProgressPercent() * 29);
             drawTexturedModalRect(w + 73, h + 20, 176, 0, cookProgress + 1, 38);
         }
     }

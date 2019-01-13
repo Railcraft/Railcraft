@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.Nullable;
@@ -44,6 +45,18 @@ public class Ingredients {
         if (ingredient == null)
             return Ingredient.EMPTY;
         return ingredient;
+    }
+
+    public static Ingredient catalyst(Item item) {
+        return catalyst(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
+    }
+
+    public static Ingredient catalyst(Block block) {
+        return catalyst(Item.getItemFromBlock(block));
+    }
+
+    public static Ingredient catalyst(ItemStack... stacks) {
+        return new CatalystIngredient(stacks);
     }
 
     public static Ingredient from(Object... obj) {

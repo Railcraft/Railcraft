@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -98,7 +99,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        return FluidTools.getFluidHandler(getFacing(), cart) != null && super.canHandleCart(cart);
+        return FluidTools.getFluidHandler(getFacing().getOpposite(), cart) != null && super.canHandleCart(cart);
     }
 
     @Override
@@ -114,10 +115,19 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     }
 
     @Override
+    public @Nullable EnumGui getGui() {
+        return EnumGui.MANIPULATOR_FLUID;
+    }
+
+    @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == SLOT_INPUT) {
-            FluidStack filter;
-            return FluidItemHelper.isContainer(stack) && (FluidItemHelper.isEmptyContainer(stack) || (filter = getFilterFluid()) == null || FluidItemHelper.containsFluid(stack, filter));
+            if (!FluidItemHelper.isContainer(stack))
+                return false;
+            if (FluidItemHelper.isEmptyContainer(stack))
+                return true;
+            FluidStack filter = getFilterFluid();
+            return filter == null || FluidItemHelper.containsFluid(stack, filter);
         }
         return false;
     }
@@ -185,5 +195,28 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tankManager);
         return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean canRotate(EnumFacing axis) {
+        return false;
+    }
+
+    @Override
+    public boolean rotateBlock(EnumFacing axis) {
+        return false;
+    }
+
+    @Override
+    public EnumFacing[] getValidRotations() {
+        return new EnumFacing[]{getDefaultFacing()};
+    }
+
+    @Override
+    public abstract EnumFacing getDefaultFacing();
+
+    @Override
+    public final EnumFacing getFacing() {
+        return getDefaultFacing();
     }
 }

@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum Fluids implements Supplier<Fluid> {
+public enum Fluids implements Supplier<@Nullable Fluid> {
 
     WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
     private final String tag;
@@ -50,7 +50,7 @@ public enum Fluids implements Supplier<Fluid> {
     }
 
     public static boolean contains(@Nullable FluidStack pool, @Nullable FluidStack request) {
-        return pool == request || (pool != null && (request == null || pool.amount >= request.amount));
+        return pool == request || (pool != null && (request == null || FluidTools.matches(pool, request) && pool.amount >= request.amount));
     }
 
     @Contract("null -> true")

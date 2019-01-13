@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
-import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.logic.CokeOvenLogic;
@@ -33,7 +32,7 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TileCokeOven extends TileCrafter implements INeedsFuel {
+public final class TileCokeOven extends TileCrafter {
 
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 

@@ -29,7 +29,7 @@ public class FilteredTank extends StandardTank {
         super(capacity, tile);
     }
 
-    public FilteredTank setFilterFluid(Supplier<Fluid> filter) {
+    public FilteredTank setFilterFluid(Supplier<@Nullable Fluid> filter) {
         this.filter = () -> {
             Fluid fluid = filter.get();
             if (fluid == null)
@@ -39,7 +39,7 @@ public class FilteredTank extends StandardTank {
         return this;
     }
 
-    public FilteredTank setFilterFluidStack(Supplier<FluidStack> filter) {
+    public FilteredTank setFilterFluidStack(Supplier<@Nullable FluidStack> filter) {
         this.filter = filter;
         return this;
     }

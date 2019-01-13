@@ -112,14 +112,12 @@ public class AdvancedFluidHandler implements IFluidHandler {
     }
 
     @Override
-    @Nullable
-    public FluidStack drain(FluidStack resource, boolean doDrain) {
+    public @Nullable FluidStack drain(FluidStack resource, boolean doDrain) {
         return tankContainer.drain(resource, doDrain);
     }
 
     @Override
-    @Nullable
-    public FluidStack drain(int maxDrain, boolean doDrain) {
+    public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
         return tankContainer.drain(maxDrain, doDrain);
     }
 }

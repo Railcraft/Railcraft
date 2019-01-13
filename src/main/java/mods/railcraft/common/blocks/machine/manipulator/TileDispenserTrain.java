@@ -19,8 +19,8 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventoryManifest;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
+import mods.railcraft.common.util.inventory.InventoryManifest;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -38,7 +39,7 @@ public class TileDispenserTrain extends TileDispenserCart {
     private final InventoryAdvanced invPattern = new InventoryAdvanced(PATTERN_SIZE).callbackInv(this).phantom();
     private byte patternIndex;
     private boolean spawningTrain;
-    private EntityMinecart lastCart;
+    private @Nullable EntityMinecart lastCart;
 
     public TileDispenserTrain() {
         setInventorySize(BUFFER_SIZE);
@@ -84,7 +85,8 @@ public class TileDispenserTrain extends TileDispenserCart {
             if (!InvTools.isEmpty(cartItem)) {
                 EntityMinecart cartPlaced = CartTools.placeCart(getOwner(), cartItem, (WorldServer) world, offset);
                 if (cartPlaced != null) {
-                    CartToolsAPI.linkageManager().createLink(cartPlaced, lastCart);
+                    if (lastCart != null)
+                        CartToolsAPI.linkageManager().createLink(cartPlaced, lastCart);
                     lastCart = cartPlaced;
                     patternIndex++;
                     if (patternIndex >= getPattern().getSizeInventory())
@@ -101,6 +103,7 @@ public class TileDispenserTrain extends TileDispenserCart {
         patternIndex = 0;
         spawningTrain = false;
         timeSinceLastSpawn = 0;
+        lastCart = null;
     }
 
     @Override

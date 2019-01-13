@@ -104,8 +104,10 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
 
         if (Game.isClient(getWorld())) {
             boolean isProcessing = getLogic(CrafterLogic.class).map(CrafterLogic::isProcessing).orElse(false);
-            if (wasProcessing != isProcessing && !isProcessing)
-                EffectManager.instance.steamEffect(world, this, +0.25);
+            if (wasProcessing != isProcessing && !isProcessing) {
+                for (int i = 0; i < 16; i++)
+                    EffectManager.instance.steamEffect(world, this, +0.25);
+            }
             wasProcessing = isProcessing;
         }
     }

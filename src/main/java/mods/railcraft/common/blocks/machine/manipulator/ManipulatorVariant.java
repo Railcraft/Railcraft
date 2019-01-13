@@ -37,11 +37,13 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     DISPENSER_TRAIN(ModuleTrain.class, "dispenser_train", TileDispenserTrain.class),
     RF_LOADER(ModuleRF.class, "loader_rf", TileRFLoader.class),
     RF_UNLOADER(ModuleRF.class, "unloader_rf", TileRFUnloader.class);
-    private static final List<ManipulatorVariant> creativeList = new ArrayList<ManipulatorVariant>();
+    private static final List<ManipulatorVariant> creativeList = new ArrayList<>();
     public static final ManipulatorVariant[] VALUES = values();
 
     static {
+        // content fluid rendering
         FLUID_LOADER.def.passesLight = true;
+        FLUID_UNLOADER.def.passesLight = true;
 
         creativeList.add(ITEM_LOADER);
         creativeList.add(ITEM_UNLOADER);

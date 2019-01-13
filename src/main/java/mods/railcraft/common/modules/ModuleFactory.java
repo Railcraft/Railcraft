@@ -395,7 +395,7 @@ public class ModuleFactory extends RailcraftModulePayload {
 //                            'P', new ItemStack(Blocks.PISTON),
 //                            'G', "gearSteel");
                 if (RailcraftModuleManager.isModuleEnabled(ModuleStructures.class)) {
-                    if (RailcraftBlocks.BLAST_FURNACE.isLoaded() && BrickTheme.INFERNAL.getBlock() != null) {
+                    if (RailcraftBlocks.BLAST_FURNACE.isLoaded() && BrickTheme.INFERNAL.isLoaded()) {
 
                         ItemStack stack = RailcraftBlocks.BLAST_FURNACE.getStack(4);
                         CraftingPlugin.addShapedRecipe(stack,
@@ -405,7 +405,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 'B', BrickTheme.INFERNAL.getStack(1, BrickVariant.BRICK),
                                 'P', Items.MAGMA_CREAM);
                     }
-                    if (RailcraftBlocks.COKE_OVEN.isLoaded() && BrickTheme.SANDY.getBlock() != null) {
+                    if (RailcraftBlocks.COKE_OVEN.isLoaded() && BrickTheme.SANDY.isLoaded()) {
                         ItemStack stack = RailcraftBlocks.COKE_OVEN.getStack();
                         CraftingPlugin.addShapedRecipe(stack,
                                 " B ",
