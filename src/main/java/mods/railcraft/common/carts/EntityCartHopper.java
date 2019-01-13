@@ -157,7 +157,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         boolean emptySlot = false;
         // Push full stacks whenever possible
         for (IExtInvSlot slot : InventoryIterator.get(this)) {
-            if (slot.getStack().getCount() == slot.maxStackSize()) {
+            if (slot.getStack().getCount() == slot.getMaxStackSize()) {
                 ItemStack left = TrainTransferHelper.INSTANCE.pushStack(this, slot.getStack());
                 if (InvTools.isEmpty(left)) {
                     emptySlot = true;

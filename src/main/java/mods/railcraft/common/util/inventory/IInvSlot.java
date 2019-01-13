@@ -61,5 +61,9 @@ public interface IInvSlot {
 
     int getIndex();
 
-    int maxStackSize();
+    int maxSlotStackSize();
+
+    default int getMaxStackSize() {
+        return Math.min(maxSlotStackSize(), getStack().getMaxStackSize());
+    }
 }
