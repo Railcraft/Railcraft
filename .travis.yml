@@ -5,7 +5,10 @@ dist: trusty
 jdk:
   - openjdk8
   - oraclejdk8
-  
+
+git:
+  quiet: true
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -16,8 +19,8 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-install: ./gradlew setupCiWorkspace -S -i
-script: ./gradlew build -i
+install: ./gradlew setupCiWorkspace -S -q
+script: ./gradlew build test -q
 
 env:
   global:
