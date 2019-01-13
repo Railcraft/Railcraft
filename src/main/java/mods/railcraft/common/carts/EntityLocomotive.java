@@ -635,16 +635,16 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
-        data.writeByte(clientMode.ordinal());
-        data.writeByte(clientSpeed.ordinal());
-        data.writeByte(lockController.getCurrentState());
+        data.writeEnum(clientMode);
+        data.writeEnum(clientSpeed);
+        data.writeInt(lockController.getCurrentState());
     }
 
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
-        setMode(LocoMode.VALUES[data.readByte()]);
-        setSpeed(LocoSpeed.VALUES[data.readByte()]);
-        byte lock = data.readByte();
+        setMode(data.readEnum(LocoMode.VALUES));
+        setSpeed(data.readEnum(LocoSpeed.VALUES));
+        int lock = data.readInt();
         if (PlayerPlugin.isOwnerOrOp(getOwner(), sender.getGameProfile()))
             lockController.setCurrentState(lock);
     }

@@ -252,6 +252,14 @@ public class AABBFactory {
         return this;
     }
 
+    public AABBFactory growFlat(double distance) {
+        minX -= distance;
+        minZ -= distance;
+        maxX += distance;
+        maxZ += distance;
+        return this;
+    }
+
     public boolean isUndefined() {
         return minX == maxX
                 || minY == maxY

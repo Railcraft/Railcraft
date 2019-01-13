@@ -11,6 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
-public abstract class CartBaseLogicChest extends CartBaseLogic implements IInteractionObject {
+public abstract class CartBaseLogicChest extends CartBaseLogic implements IInteractionObject, IInventoryImplementor {
 
     protected CartBaseLogicChest(World world) {
         super(world);
@@ -73,5 +74,10 @@ public abstract class CartBaseLogicChest extends CartBaseLogic implements IInter
     @Override
     public String getGuiID() {
         return "minecraft:chest";
+    }
+
+    @Override
+    public IInventory getInventory() {
+        return getLogic(IInventory.class).orElseThrow(UnsupportedOperationException::new);
     }
 }

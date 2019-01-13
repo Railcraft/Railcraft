@@ -11,6 +11,10 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.entity.EntitySearcher;
+import mods.railcraft.common.util.inventory.IExtInvSlot;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -24,20 +28,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.IHopper;
 import net.minecraft.tileentity.TileEntityHopper;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Objects;
 
 public class EntityCartHopper extends CartBaseContainer implements IHopper {
-    /**
-     * Whether this hopper minecart is being blocked by an activator rail.
-     */
-    private boolean isBlocked = true;
-    private int transferTicker = -1;
-    private final BlockPos lastPosition = BlockPos.ORIGIN;
+    private boolean enabled = true;
+    private int transferCooldown = -1;
+    private @Nullable BlockPos lastPosition;
+    private int pushCounter;
 
     public EntityCartHopper(World worldIn) {
         super(worldIn);
@@ -80,33 +81,16 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
      */
     @Override
     public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
-        boolean flag = !receivingPower;
+        boolean shouldEnable = !receivingPower;
 
-        if (flag != this.getBlocked()) {
-            this.setBlocked(flag);
+        if (shouldEnable != enabled) {
+            enabled = shouldEnable;
         }
     }
 
-    /**
-     * Get whether this hopper minecart is being blocked by an activator rail.
-     */
-    public boolean getBlocked() {
-        return this.isBlocked;
-    }
-
-    /**
-     * Set whether this hopper minecart is being blocked by an activator rail.
-     */
-    public void setBlocked(boolean blocked) {
-        this.isBlocked = blocked;
-    }
-
-    /**
-     * Returns the world for this tileEntity.
-     */
     @Override
     public World getWorld() {
-        return this.world;
+        return world;
     }
 
     /**
@@ -114,7 +98,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
      */
     @Override
     public double getXPos() {
-        return this.posX;
+        return posX;
     }
 
     /**
@@ -122,7 +106,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
      */
     @Override
     public double getYPos() {
-        return this.posY + 0.5D;
+        return posY + 0.5D;
     }
 
     /**
@@ -130,7 +114,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
      */
     @Override
     public double getZPos() {
-        return this.posZ;
+        return posZ;
     }
 
     /**
@@ -140,38 +124,75 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     public void onUpdate() {
         super.onUpdate();
 
-        if (Game.isHost(world) && this.isEntityAlive() && this.getBlocked()) {
-            BlockPos blockpos = new BlockPos(this);
+        if (Game.isHost(world) && !isDead) {
+            BlockPos nowPos = new BlockPos(this);
+            if (enabled) {
+                // cooldown when transferring from a same block
+                if (Objects.equals(lastPosition, nowPos)) {
+                    if (transferCooldown > 0)
+                        transferCooldown--;
+                } else {
+                    transferCooldown = 0;
+                }
 
-            if (blockpos.equals(this.lastPosition)) {
-                --this.transferTicker;
-            } else {
-                this.setTransferTicker(0);
+                if (transferCooldown <= 0) {
+                    if (transferAndNeedsCooldown()) {
+                        transferCooldown = 4;
+                    }
+                }
             }
 
-            if (!this.canTransfer()) {
-                this.setTransferTicker(0);
+            if (pushCounter == 0) {
+                tryPushItem();
+            }
 
-                if (this.captureDroppedItems()) {
-                    this.setTransferTicker(4);
-                    this.markDirty();
+            pushCounter++;
+            if (pushCounter >= 5)
+                pushCounter = 0;
+            lastPosition = nowPos;
+        }
+    }
+
+    private void tryPushItem() {
+        boolean emptySlot = false;
+        // Push full stacks whenever possible
+        for (IExtInvSlot slot : InventoryIterator.get(this)) {
+            if (slot.getStack().getCount() == slot.maxStackSize()) {
+                ItemStack left = TrainTransferHelper.INSTANCE.pushStack(this, slot.getStack());
+                if (InvTools.isEmpty(left)) {
+                    emptySlot = true;
                 }
+                slot.setStack(left);
+            } else if (!slot.hasStack()) {
+                emptySlot = true;
+            }
+        }
+
+        if (emptySlot)
+            return;
+
+        // If all slots are occupied, try to clear one of the slots.
+        for (IExtInvSlot slot : InventoryIterator.get(this)) {
+            ItemStack left = TrainTransferHelper.INSTANCE.pushStack(this, slot.getStack());
+            slot.setStack(left);
+            if (InvTools.isEmpty(left)) {
+                return;
             }
         }
     }
 
-    public boolean captureDroppedItems() {
+    public boolean transferAndNeedsCooldown() {
         if (TileEntityHopper.pullItems(this)) {
+            markDirty();
             return true;
-        } else {
-            List<EntityItem> list = this.world.getEntitiesWithinAABB(EntityItem.class, this.getEntityBoundingBox().grow(0.25D, 0.0D, 0.25D), EntitySelectors.IS_ALIVE);
-
-            if (!list.isEmpty()) {
-                TileEntityHopper.putDropInInventoryAllSlots(null, this, list.get(0));
-            }
-
-            return false;
         }
+        EntityItem found = EntitySearcher.findItem().around(this).growFlat(0.25D).in(world).any();
+
+        if (found != null) {
+            TileEntityHopper.putDropInInventoryAllSlots(null, this, found);
+            markDirty();
+        }
+        return false;
     }
 
     /**
@@ -180,8 +201,8 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setInteger("TransferCooldown", this.transferTicker);
-        compound.setBoolean("Enabled", this.isBlocked);
+        compound.setInteger("TransferCooldown", transferCooldown);
+        compound.setBoolean("Enabled", enabled);
     }
 
     /**
@@ -190,22 +211,8 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-        this.transferTicker = compound.getInteger("TransferCooldown");
-        this.isBlocked = !compound.hasKey("Enabled") || compound.getBoolean("Enabled");
-    }
-
-    /**
-     * Sets the transfer ticker, used to determine the delay between transfers.
-     */
-    public void setTransferTicker(int p_98042_1_) {
-        this.transferTicker = p_98042_1_;
-    }
-
-    /**
-     * Returns whether the hopper cart can currently transfer an item.
-     */
-    public boolean canTransfer() {
-        return this.transferTicker > 0;
+        this.transferCooldown = compound.getInteger("TransferCooldown");
+        this.enabled = !compound.hasKey("Enabled") || compound.getBoolean("Enabled");
     }
 
     @Override

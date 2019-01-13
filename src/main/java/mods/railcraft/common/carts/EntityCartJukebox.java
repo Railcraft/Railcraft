@@ -41,7 +41,7 @@ public final class EntityCartJukebox extends CartBase {
     public static final String RECORD_DISPLAY_NAME = "record";
     private static final String RECORD_ITEM_KEY = "RecordItem";
 
-    private @Nullable ItemStack record = emptyStack();
+    private ItemStack record = emptyStack();
 
     @SideOnly(Side.CLIENT)
     public @Nullable JukeboxSound music;

@@ -227,7 +227,7 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return invMappers.stream().filter(m -> m.containsSlot(index)).anyMatch(m -> m.filter().test(stack));
+        return invMappers.stream().filter(m -> m.containsSlot(index)).allMatch(m -> m.filter().test(stack));
     }
 
     /**
