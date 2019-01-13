@@ -73,7 +73,7 @@ public class StructureLogic extends Logic {
     public <L> Optional<L> getLogic(Class<L> logicClass) {
         if (logicClass.isInstance(this))
             return Optional.of(logicClass.cast(this));
-        return getMasterLogic().map(m -> m.logic).filter(logicClass::isInstance).map(logicClass::cast);
+        return getMasterLogic().map(m -> m.logic).map(Optionals.toType(logicClass));
     }
 
     public final Optional<StructureLogic> getMasterLogic() {
@@ -302,7 +302,7 @@ public class StructureLogic extends Logic {
 
     private Function<TileEntity, Optional<StructureLogic>> tileToLogic() {
         return t -> Optional.of(t)
-                .flatMap(Optionals.toType(ILogicContainer.class))
+                .map(Optionals.toType(ILogicContainer.class))
                 .flatMap(c -> c.getLogic(StructureLogic.class))
                 .filter(this::canMatch);
     }

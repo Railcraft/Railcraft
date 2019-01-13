@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -64,7 +64,7 @@ public abstract class CartBaseLogic extends CartBase implements ILogicContainer,
 
     @Override
     public <L> Optional<L> getLogic(Class<L> logicClass) {
-        return Optional.of(logic).flatMap(Optionals.toType(logicClass));
+        return Optional.of(logic).map(Optionals.toType(logicClass));
     }
 
     @Override

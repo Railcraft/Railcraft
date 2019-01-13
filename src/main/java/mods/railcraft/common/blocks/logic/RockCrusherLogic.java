@@ -87,7 +87,8 @@ public class RockCrusherLogic extends CrafterLogic {
     @Override
     void updateServer() {
         super.updateServer();
-        storedCharge += getNetwork().removeCharge(Math.max(0.0, MAX_STORED_CHARGE - storedCharge));
+        storedCharge += Charge.distribution.network(theWorldAsserted()).access(getPos())
+                .removeCharge(Math.max(0.0, MAX_STORED_CHARGE - storedCharge));
     }
 
     private boolean isRecipeValid() {
@@ -164,10 +165,6 @@ public class RockCrusherLogic extends CrafterLogic {
             return true;
         }
         return false;
-    }
-
-    private Charge.IAccess getNetwork() {
-        return Charge.distribution.network(theWorldAsserted()).access(getPos());
     }
 
     @Override

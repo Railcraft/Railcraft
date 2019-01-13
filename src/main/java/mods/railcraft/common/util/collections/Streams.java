@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,13 +19,14 @@ import java.util.stream.Stream;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class Streams {
+    /**
+     * Helper function to use when casting Streams.
+     *
+     * Works as both a mapper and a filter.
+     *
+     * Put it in a {@link Stream#flatMap(Function)} call.
+     */
     public static <T, U> Function<T, Stream<U>> toType(Class<U> clazz) {
-        return t -> {
-            if (clazz.isInstance(t)) {
-                return Stream.of(clazz.cast(t));
-            } else {
-                return Stream.empty();
-            }
-        };
+        return t -> clazz.isInstance(t) ? Stream.of(clazz.cast(t)) : Stream.empty();
     }
 }
