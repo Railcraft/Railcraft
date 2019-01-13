@@ -21,8 +21,23 @@ import net.minecraft.util.text.ITextComponent;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IInventoryImplementor extends IInventory, IInventoryComposite {
+    /**
+     * Gets the standalone inventory that backs this implementor.
+     *
+     * @return the delegate
+     */
     IInventory getInventory();
 
+    /**
+     * {@inheritDoc}
+     *
+     * <p>This method must be implemented without delegation as it is determined by factors
+     * outside of the standalone inventory; standalone inventories call the callback
+     * (usually the objects that hold these inventories) for this method.
+     *
+     * @param player the player to check
+     * @return true if the player can use this inventory
+     */
     @Override
     boolean isUsableByPlayer(EntityPlayer player);
 
