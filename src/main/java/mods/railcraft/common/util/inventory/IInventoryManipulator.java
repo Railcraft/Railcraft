@@ -257,13 +257,10 @@ public interface IInventoryManipulator {
      */
     default int calcRedstone() {
         double average = streamSlots()
-                .filter(IInvSlot::hasStack)
-                .mapToDouble(slot -> {
-                    ItemStack stack = slot.getStack();
-                    return (double) InvTools.sizeOf(stack) / (double) Math.min(stack.getMaxStackSize(), slot.maxStackSize());
-                }).sum();
+                .mapToDouble(slot -> (double) InvTools.sizeOf(slot.getStack()) / (double) slot.getMaxStackSize())
+                .summaryStatistics()
+                .getAverage();
 
-        average = average / (double) slotCount();
         return MathHelper.floor(average * 14.0F) + (hasNoItems() ? 0 : 1);
     }
 }

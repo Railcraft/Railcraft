@@ -15,6 +15,7 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -42,7 +43,7 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntitySearcher {
+public final class EntitySearcher {
 
     public static SearchParameters<EntityMinecart> findMinecarts() {
         return new SearchParameters<>(EntityMinecart.class);
@@ -58,6 +59,10 @@ public class EntitySearcher {
 
     public static SearchParameters<Entity> find() {
         return new SearchParameters<>(Entity.class);
+    }
+
+    public static SearchParameters<EntityItem> findItem() {
+        return new SearchParameters<>(EntityItem.class);
     }
 
     public static class SearchParameters<T extends Entity> {
@@ -97,6 +102,11 @@ public class EntitySearcher {
 
         public SearchParameters<T> around(Entity entity) {
             box.fromAABB(entity.getEntityBoundingBox());
+            return this;
+        }
+
+        public SearchParameters<T> growFlat(double distance) {
+            box.growFlat(distance);
             return this;
         }
 

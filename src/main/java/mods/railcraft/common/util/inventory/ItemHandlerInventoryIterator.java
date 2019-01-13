@@ -94,7 +94,7 @@ public class ItemHandlerInventoryIterator {
             }
 
             @Override
-            public int maxStackSize() {
+            public int maxSlotStackSize() {
                 return inv.getSlotLimit(getIndex());
             }
         }

@@ -129,7 +129,7 @@ public class StandardInventoryIterator extends InventoryIterator<IExtInvSlot> {
         }
 
         @Override
-        public int maxStackSize() {
+        public int maxSlotStackSize() {
             return inv.getInventoryStackLimit();
         }
 

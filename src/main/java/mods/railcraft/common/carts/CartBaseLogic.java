@@ -14,6 +14,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.InventoryLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -27,9 +28,15 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.items.CapabilityItemHandler;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
@@ -141,5 +148,31 @@ public abstract class CartBaseLogic extends CartBase implements ILogicContainer,
     public void sendUpdateToClient() {
         if (isAddedToWorld() && isEntityAlive())
             PacketBuilder.instance().sendEntitySync(this);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+                && getLogic(InventoryLogic.class).isPresent())
+            return true;
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+                && getLogic(IFluidHandler.class).isPresent())
+            return true;
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            Optional<InventoryLogic> inv = getLogic(InventoryLogic.class);
+            if (inv.isPresent())
+                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inv.get().getItemHandler(facing));
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            Optional<IFluidHandler> tank = getLogic(IFluidHandler.class);
+            if (tank.isPresent())
+                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank.get());
+        }
+        return super.getCapability(capability, facing);
     }
 }
