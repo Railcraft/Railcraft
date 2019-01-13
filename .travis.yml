@@ -20,7 +20,7 @@ cache:
     - $HOME/.gradle/wrapper/
 
 install: ./gradlew setupCiWorkspace -S -q
-script: ./gradlew build test -q
+script: ./gradlew build test
 
 env:
   global:

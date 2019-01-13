@@ -172,6 +172,14 @@ runServer {
 
 test {
     useJUnitPlatform()
+    
+    // listen to events in the test execution lifecycle
+    beforeTest { descriptor ->
+        logger.lifecycle("Running: $descriptor")
+    }
+
+    // Fail the 'test' task on the first test failure
+    failFast = true
 }
 
 task copyLog4jConfig(type: Copy) {
