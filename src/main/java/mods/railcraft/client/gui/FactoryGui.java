@@ -23,7 +23,10 @@ import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxAnalog;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxCapacitor;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
-import mods.railcraft.common.blocks.multi.*;
+import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
+import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
@@ -90,18 +93,15 @@ public class FactoryGui {
                 case TRAIN_DISPENSER:
                     return new GuiDispenserTrain(inv, (TileDispenserTrain) obj);
                 case COKE_OVEN:
-                    return new GuiCokeOven(inv, ((ILogicContainer) obj).getLogic(CokeOvenLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new GuiCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
                 case BLAST_FURNACE:
-                    return new GuiBlastFurnace(inv, ((ILogicContainer) obj).getLogic(BlastFurnaceLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new GuiBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
                 case STEAN_OVEN:
-                    return new GuiSteamOven(inv, ((ILogicContainer) obj).getLogic(SteamOvenLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new GuiSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
                 case TANK:
                     return new GuiTank(inv, (ITankTile) obj);
                 case ROCK_CRUSHER:
-                    return new GuiRockCrusher(inv, (TileRockCrusher) obj);
+                    return new GuiRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
                 case ROLLING_MACHINE_MANUAL:
                     return new GuiRollingMachine(inv, (TileRollingMachine) obj);
                 case ROLLING_MACHINE_POWERED:
@@ -109,8 +109,7 @@ public class FactoryGui {
                 case FEED_STATION:
                     return new GuiFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new GuiTradeStation(inv, ((ILogicContainer) obj).getLogic(TradeStationLogic.class)
-                            .orElseThrow(NullPointerException::new), (IWorldNameable) obj);
+                    return new GuiTradeStation(inv, Logic.get(TradeStationLogic.class, obj), (IWorldNameable) obj);
                 case WORLDSPIKE:
                     return new GuiWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:
@@ -180,7 +179,7 @@ public class FactoryGui {
                 default:
                     return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }
-        } catch (ClassCastException ex) {
+        } catch (Exception ex) {
             Game.log().msg(Level.WARN, "Error when attempting to build gui {0}: {1}", gui, ex);
         }
         return null;

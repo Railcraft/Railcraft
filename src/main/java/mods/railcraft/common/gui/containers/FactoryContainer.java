@@ -18,7 +18,10 @@ import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
-import mods.railcraft.common.blocks.multi.*;
+import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
+import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
+import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
@@ -76,16 +79,13 @@ public final class FactoryContainer {
                 case TRAIN_DISPENSER:
                     return new ContainerDispenserTrain(inv, (TileDispenserTrain) obj);
                 case COKE_OVEN:
-                    return new ContainerCokeOven(inv, ((ILogicContainer) obj).getLogic(CokeOvenLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new ContainerCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
                 case BLAST_FURNACE:
-                    return new ContainerBlastFurnace(inv, ((ILogicContainer) obj).getLogic(BlastFurnaceLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new ContainerBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
                 case STEAN_OVEN:
-                    return new ContainerSteamOven(inv, ((ILogicContainer) obj).getLogic(SteamOvenLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new ContainerSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
                 case ROCK_CRUSHER:
-                    return new ContainerRockCrusher(inv, (TileRockCrusher) obj);
+                    return new ContainerRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
                 case TANK:
                     return new ContainerTank(inv, (ITankTile) obj);
                 case ROLLING_MACHINE_MANUAL:
@@ -95,8 +95,7 @@ public final class FactoryContainer {
                 case FEED_STATION:
                     return new ContainerFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new ContainerTradeStation(inv, ((ILogicContainer) obj).getLogic(TradeStationLogic.class)
-                            .orElseThrow(NullPointerException::new));
+                    return new ContainerTradeStation(inv, Logic.get(TradeStationLogic.class, obj));
                 case WORLDSPIKE:
                     return new ContainerWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:
@@ -150,7 +149,7 @@ public final class FactoryContainer {
                 default:
                     return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
             }
-        } catch (ClassCastException ex) {
+        } catch (Exception ex) {
             Game.log().msg(Level.WARN, "Error when attempting to build gui container {0}: {1}", gui, ex);
         }
         return null;

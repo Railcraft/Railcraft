@@ -39,6 +39,18 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
     protected final Adapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
 
+    /**
+     * Helper function, for our ugly GUI factories mostly.
+     *
+     * Use with caution, will throw exceptions.
+     *
+     * @throws IllegalArgumentException if the logic doesn't implement the class or if the structure isn't valid.
+     */
+    public static <L extends Logic> L get(Class<L> logicClass, Object obj) {
+        return ((ILogicContainer) obj).getLogic(logicClass)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
     Logic(Adapter adapter) {
         this.adapter = adapter;
     }

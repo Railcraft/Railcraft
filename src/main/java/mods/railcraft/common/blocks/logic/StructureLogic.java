@@ -76,6 +76,15 @@ public class StructureLogic extends Logic {
         return getMasterLogic().map(m -> m.logic).filter(logicClass::isInstance).map(logicClass::cast);
     }
 
+    public final Optional<StructureLogic> getMasterLogic() {
+        if (masterPos != null) {
+            return WorldPlugin.getTileEntity(theWorldAsserted(), masterPos, ILogicContainer.class, true)
+                    .flatMap(t -> t.getLogic(StructureLogic.class))
+                    .filter(StructureLogic::isValidMaster);
+        }
+        return Optional.empty();
+    }
+
     public List<TileRailcraft> getComponents() {
         return getMasterLogic().map(m -> m.componentsView).orElseGet(Collections::emptyList);
     }
@@ -365,15 +374,6 @@ public class StructureLogic extends Logic {
 
     public final boolean isStructureValid() {
         return getMasterLogic().isPresent();
-    }
-
-    public final Optional<StructureLogic> getMasterLogic() {
-        if (masterPos != null) {
-            return WorldPlugin.getTileEntity(theWorldAsserted(), masterPos, ILogicContainer.class, true)
-                    .flatMap(t -> t.getLogic(StructureLogic.class))
-                    .filter(StructureLogic::isValidMaster);
-        }
-        return Optional.empty();
     }
 
     public List<? extends MultiBlockPattern> getPatterns() {

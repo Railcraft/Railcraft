@@ -48,11 +48,11 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
         }
     }
 
-    public int getProgress() {
+    public final int getProgress() {
         return progress;
     }
 
-    public void setProgress(int i) {
+    public final void setProgress(int i) {
         progress = i;
     }
 
@@ -62,49 +62,49 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
         sendUpdateToClient();
     }
 
-    public boolean isProcessing() {
+    public final boolean isProcessing() {
         return processing;
     }
 
-    protected void setProcessing(boolean c) {
+    protected final void setProcessing(boolean c) {
         if (processing != c) {
             processing = c;
             sendUpdateToClient();
         }
     }
 
-    public void setDuration(int duration) {
+    public final void setDuration(int duration) {
         this.duration = duration;
     }
 
-    public int getDuration() {
+    public final int getDuration() {
         return duration;
     }
 
     protected abstract int calculateDuration();
 
-    protected void setFinished() {
+    protected final void setFinished() {
         finishedAt = clock();
     }
 
-    protected boolean isFinished() {
+    protected final boolean isFinished() {
         return processing && clock() > finishedAt + PROGRESS_STEP + 5;
     }
 
-    public double getProgressPercent() {
+    public final double getProgressPercent() {
         if (getProgress() == 0 || getDuration() == 0) {
             return 0;
         }
         return (double) getProgress() / getDuration();
     }
 
-    protected void processActions() {
+    protected final void processActions() {
         paused = actions.stream().anyMatch(a -> a == Actions.PAUSE);
         actions.clear();
     }
 
     @Override
-    public void actionActivated(IActionExternal action) {
+    public final void actionActivated(IActionExternal action) {
         actions.add(action);
     }
 
@@ -121,7 +121,7 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
     protected boolean doProcessStep() {return true;}
 
-    protected void progressCrafting() {
+    protected final void progressCrafting() {
         if (isFinished()) setProcessing(false);
         if (paused) return;
 

@@ -122,7 +122,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
         transferRegistry.addRecipeTransferHandler(ContainerRockCrusher.class, ROCK_CRUSHER, 0, 9, 17, 36);
         transferRegistry.addRecipeTransferHandler(ContainerBlastFurnace.class, BLAST_FURNACE, 0, 1, 4, 36);
 
-        registry.addRecipeClickArea(GuiSteamOven.class, 65, 67, 23, 50, VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeClickArea(GuiSteamOven.class, 65, 18, 23, 50, VanillaRecipeCategoryUid.SMELTING);
         registry.addRecipeClickArea(GuiRollingMachine.class, 90, 45, 23, 9, ROLLING);
         registry.addRecipeClickArea(GuiRollingMachinePowered.class, 90, 36, 23, 9, ROLLING);
         registry.addRecipeClickArea(GuiCokeOven.class, 34, 43, 20, 16, COKE);
