@@ -99,8 +99,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
     @Override
     public boolean canHandleCart(EntityMinecart cart) {
-        // TODO opposite facing?
-        return FluidTools.getFluidHandler(getFacing(), cart) != null && super.canHandleCart(cart);
+        return FluidTools.getFluidHandler(getFacing().getOpposite(), cart) != null && super.canHandleCart(cart);
     }
 
     @Override
@@ -123,12 +122,12 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (slot == SLOT_INPUT) {
-            boolean b1 = FluidItemHelper.isContainer(stack);
-            boolean b2 = FluidItemHelper.isEmptyContainer(stack);
+            if (!FluidItemHelper.isContainer(stack))
+                return false;
+            if (FluidItemHelper.isEmptyContainer(stack))
+                return true;
             FluidStack filter = getFilterFluid();
-            boolean b3 = filter == null;
-            boolean b4 = FluidItemHelper.containsFluid(stack, filter);
-            return b1 && (b2 || b3 || b4);
+            return filter == null || FluidItemHelper.containsFluid(stack, filter);
         }
         return false;
     }
