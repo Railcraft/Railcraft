@@ -141,7 +141,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
     @Override
     public IBlockState getActualState(IBlockState base) {
         if (!isStructureValid())
-            return base.getBlock().getDefaultState();
+            return base;
         BlockPos pos = getPatternPosition();
         MultiBlockPattern pattern = requireNonNull(getPattern());
         for (EnumFacing facing : EnumFacing.VALUES) {

@@ -457,7 +457,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
             return base;
         }
         MultiBlockPattern currentPattern = requireNonNull(getCurrentPattern());
-        Axis axis = currentPattern.getAttachedData(Axis.X);
+        Axis axis = currentPattern.getAttachedDataOr(Axis.X);
         base = base.withProperty(BlockSteamTurbine.WINDOW, getPatternMarker() == 'W')
                 .withProperty(BlockSteamTurbine.LONG_AXIS, axis);
         BlockPos pos = getPatternPosition();

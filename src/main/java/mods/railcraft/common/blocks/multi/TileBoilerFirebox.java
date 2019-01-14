@@ -36,8 +36,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -57,7 +57,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     protected final TankManager tankManager = new TankManager();
     protected final FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
         @Override
-        public int fillInternal(@org.jetbrains.annotations.Nullable FluidStack resource, boolean doFill) {
+        public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
             if (!isValidMaster()) return 0;
             return super.fillInternal(onFillWater(resource), doFill);
         }
@@ -75,6 +75,9 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         tankManager.add(tankWater);
         tankManager.add(tankSteam);
 
+        tankWater.setCanDrain(false);
+        tankSteam.setCanFill(false);
+
         boiler = new SteamBoiler(tankWater, tankSteam);
         boiler.setTile(this);
     }
@@ -84,8 +87,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         int capacity = getNumTanks() * FluidTools.BUCKET_VOLUME;
         tankManager.setCapacity(TANK_STEAM, capacity * getSteamCapacityPerTank());
         tankManager.setCapacity(TANK_WATER, capacity * 4);
-        boiler.setMaxHeat(pattern.getAttachedData(BoilerData.EMPTY).maxHeat);
-        boiler.setTicksPerCycle(pattern.getAttachedData(BoilerData.EMPTY).ticksPerCycle);
+        boiler.setMaxHeat(pattern.getAttachedDataOr(BoilerData.EMPTY).maxHeat);
+        boiler.setTicksPerCycle(pattern.getAttachedDataOr(BoilerData.EMPTY).ticksPerCycle);
     }
 
     public boolean isBurning() {
@@ -325,9 +328,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
-    @Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+    public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
         }

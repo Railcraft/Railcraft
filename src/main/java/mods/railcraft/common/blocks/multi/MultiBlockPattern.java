@@ -126,9 +126,14 @@ public final class MultiBlockPattern {
         return masterOffset.equals(posInPattern);
     }
 
+    @SuppressWarnings("unchecked")
+    public @Nullable <T> T getAttachedData() {
+        return (T) attachedData;
+    }
+
     @Contract("!null -> !null")
     @SuppressWarnings("unchecked")
-    public @Nullable <T> T getAttachedData(@Nullable T backup) {
+    public @Nullable <T> T getAttachedDataOr(@Nullable T backup) {
         return attachedData == null ? backup : (T) attachedData;
     }
 
