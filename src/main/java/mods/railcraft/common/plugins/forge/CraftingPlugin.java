@@ -206,7 +206,7 @@ public class CraftingPlugin {
         if (input instanceof IForgeRegistryEntry) {
             return ((IForgeRegistryEntry) input).getRegistryName();
         } else if (input instanceof ItemStack) {
-            return ((ItemStack) input).getItem().getRegistryName();
+            return getNameFromOutput((ItemStack) input); // prevents duplicate names!
         } else if (input instanceof String) {
             return new ResourceLocation("ore", (String) input);
         } else if (input instanceof IRailcraftObjectContainer) {

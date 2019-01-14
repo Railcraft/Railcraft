@@ -35,8 +35,10 @@ public final class CollectionTools {
 
     public static <T> BiMap<Integer, T> createIndexedLookupTable(List<T> elements) {
         BiMap<Integer, T> biMap = HashBiMap.create();
-        for (int i = 0; i < elements.size(); i++) {
-            biMap.put(i, elements.get(i));
+        int i = 0;
+        for (T each : elements) {
+            biMap.put(i, each);
+            i++;
         }
         return biMap;
     }

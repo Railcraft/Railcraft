@@ -35,7 +35,7 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     private final List<@NotNull IRecipe> recipes = new ArrayList<>();
     private final List<@NotNull ISimpleRecipe> fuels = new ArrayList<>();
 
-    public void postInit() {
+    public void initFuel() {
         newFuel(ThaumcraftPlugin.ITEMS.get("alumentum", 0)).name("thaumcraft:alumentum").register();
         newFuel(EnumGeneric.BLOCK_COKE.getStack()).name("railcraft:block_coke").register();
         newFuel(new ItemStack(Items.COAL, 1, 1)).name("minecraft:charcoal").register();
