@@ -339,7 +339,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     private float calculateMaxSpeed() {
-        double locoBoost = Math.min(0.0, getNumRunningLocomotives() - 1.0) * 0.075;
+        double locoBoost = Math.max(0.0, getNumRunningLocomotives() - 1.0) * 0.075;
         return (float) (double) stream()
                 .mapToDouble(c -> Math.min(c.getMaxCartSpeedOnRail(), softMaxSpeed(c) + locoBoost)).min().orElse(1.2F);
     }
