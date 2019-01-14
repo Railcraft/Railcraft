@@ -68,29 +68,18 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
     @Override
     void updateServer() {
         super.updateServer();
-
-        boolean wasBurning = isBurning();
-
-        if (burnTime >= FUEL_PER_TICK)
-            burnTime -= FUEL_PER_TICK;
-        else
-            burnTime = 0;
-
-
-        loadFuel();
-
-        if (wasBurning != isBurning())
-            sendUpdateToClient();
+        setBurnTime(burnTime - FUEL_PER_TICK);
     }
 
     @Override
-    protected Optional getRecipe(ItemStack input) {
+    protected Optional<IBlastFurnaceCrafter.IRecipe> getRecipe(ItemStack input) {
         return Crafters.blastFurnace().getRecipe(input);
     }
 
     @Override
-    protected boolean lacksRequirements() {
-        return super.lacksRequirements() || !isBurning();
+    protected boolean doProcessStep() {
+        loadFuel();
+        return isBurning();
     }
 
     @Override
@@ -124,8 +113,16 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
         int itemBurnTime = Crafters.blastFurnace().getFuel(fuel).map(f -> f.getTickTime(fuel)).orElse(0);
         if (itemBurnTime <= 0) return;
         currentItemBurnTime = itemBurnTime + burnTime;
-        burnTime = currentItemBurnTime;
+        setBurnTime(currentItemBurnTime);
         setInventorySlotContents(SLOT_FUEL, InvTools.depleteItem(fuel));
+    }
+
+    public void setBurnTime(int burnTime) {
+        burnTime = Math.max(0, burnTime);
+        boolean wasBurning = isBurning();
+        this.burnTime = burnTime;
+        if (wasBurning != isBurning())
+            sendUpdateOrUpdateModels();
     }
 
     public boolean isBurning() {
@@ -196,7 +193,7 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
-        burnTime = data.readInt();
+        setBurnTime(data.readInt());
     }
 
 }

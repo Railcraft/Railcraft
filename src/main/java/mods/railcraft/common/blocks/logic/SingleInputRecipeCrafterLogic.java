@@ -15,6 +15,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -38,6 +39,7 @@ public abstract class SingleInputRecipeCrafterLogic<R extends ISimpleRecipe> ext
     protected abstract Optional<R> getRecipe(ItemStack input);
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected void setupCrafting() {
         ItemStack input = getStackInSlot(inputSlot);
         if (!InvTools.isItemEqual(lastInput, input)) {
@@ -51,12 +53,13 @@ public abstract class SingleInputRecipeCrafterLogic<R extends ISimpleRecipe> ext
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected boolean lacksRequirements() {
         return recipe == null;
     }
 
     @Override
-    protected int calculateDuration() {
+    protected final int calculateDuration() {
         Objects.requireNonNull(recipe);
         return recipe.getTickTime(getStackInSlot(inputSlot));
     }

@@ -125,6 +125,13 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
         adapter.sendUpdateToClient();
     }
 
+    public void sendUpdateOrUpdateModels() {
+        if (Game.isHost(theWorldAsserted()))
+            adapter.sendUpdateToClient();
+        else
+            adapter.updateModels();
+    }
+
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         return data;
     }

@@ -58,7 +58,6 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
         return Crafters.cokeOven().getRecipe(input);
     }
 
-
     @Override
     protected boolean craftAndPush() {
         Objects.requireNonNull(recipe);
