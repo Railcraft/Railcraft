@@ -11,6 +11,7 @@
 package mods.railcraft.common.util.steam;
 
 import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import net.minecraftforge.fluids.FluidStack;
@@ -29,7 +30,7 @@ public interface IBoilerContainer extends ITemperature, INeedsFuel {
     void steamExplosion(FluidStack resource);
 
     default @Nullable FluidStack onFillWater(@Nullable FluidStack resource) {
-        if (!Fluids.isEmpty(resource)) {
+        if (RailcraftConfig.enableSteamExplosion() && !Fluids.isEmpty(resource)) {
             SteamBoiler boiler = getBoiler();
             if (boiler != null && boiler.isSuperHeated()) {
                 FluidStack water = boiler.getTankWater().getFluid();

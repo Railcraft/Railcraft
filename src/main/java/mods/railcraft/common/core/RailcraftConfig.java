@@ -99,6 +99,7 @@ public class RailcraftConfig {
     private static boolean enablePolarExpress;
     private static boolean generateDefaultOreConfigs;
     private static boolean nerfWaterBottle;
+    private static boolean enableSteamExplosion;
     private static int minecartTankCapacity = 32;
     private static int minecartTankFillRate = 32;
     private static int launchRailMaxForce;
@@ -259,6 +260,7 @@ public class RailcraftConfig {
         boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler, min=0.2, default=1.0, max=10.0");
 
         fuelPerSteamMultiplier = get(CAT_TWEAKS + ".steam", "fuelPerSteamMultiplier", 0.2F, 1.0F, 6.0F, "adjust the amount of fuel used to create Steam, min=0.2, default=1.0, max=6.0");
+        enableSteamExplosion = get(CAT_TWEAKS + ".steam", "explosion", true, "change to '{t}=false' to disable steam explosions");
     }
 
     private static void loadItemTweaks() {
@@ -808,6 +810,10 @@ public class RailcraftConfig {
 
     public static boolean nerfWaterBottle() {
         return nerfWaterBottle;
+    }
+
+    public static boolean enableSteamExplosion() {
+        return enableSteamExplosion;
     }
 
     public static float getMaxHighSpeed() {
