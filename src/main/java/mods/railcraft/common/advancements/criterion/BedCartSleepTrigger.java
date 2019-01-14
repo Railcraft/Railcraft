@@ -29,29 +29,12 @@ final class BedCartSleepTrigger extends BaseTrigger<Instance> {
         return new Instance(predicate);
     }
 
-    void trigger(EntityPlayerMP player, EntityMinecart cart) {
-        PlayerAdvancements advancements = player.getAdvancements();
-        Collection<Listener<Instance>> done = new ArrayList<>();
-        for (Listener<Instance> listener : manager.get(advancements)) {
-            if (listener.getCriterionInstance().test(player, cart)) {
-                done.add(listener);
-            }
-        }
-        for (Listener<Instance> listener : done) {
-            listener.grantCriterion(advancements);
-        }
-    }
-
     static final class Instance implements ICriterionInstance {
 
         final CartPredicate cartPredicate;
 
         Instance(CartPredicate predicate) {
             this.cartPredicate = predicate;
-        }
-
-        boolean test(EntityPlayerMP player, EntityMinecart cart) {
-            return cartPredicate.test(player, cart);
         }
 
         @Override

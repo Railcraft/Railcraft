@@ -3,11 +3,17 @@ package mods.railcraft.common.advancements.criterion;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.Tuple;
+
+import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Implements 3 methods to make life easier.
  */
-abstract class BaseTrigger<T extends ICriterionInstance> implements ICriterionTrigger<T> {
+public abstract class BaseTrigger<T extends ICriterionInstance> implements ICriterionTrigger<T> {
 
     protected final ListenerManager<T> manager = new ListenerManager<>();
 
@@ -24,5 +30,24 @@ abstract class BaseTrigger<T extends ICriterionInstance> implements ICriterionTr
     @Override
     public void removeAllListeners(PlayerAdvancements playerAdvancementsIn) {
         manager.remove(playerAdvancementsIn);
+    }
+
+    void trigger(EntityPlayerMP player, Predicate<? super T> predicate) {
+        PlayerAdvancements advancements = player.getAdvancements();
+        Collection<Listener<T>> done = manager.get(advancements).parallelStream()
+                .filter(listener -> predicate.test(listener.getCriterionInstance()))
+                .collect(Collectors.toList());
+        for (Listener<T> listener : done) {
+            listener.grantCriterion(advancements);
+        }
+    }
+
+    void trigger(Predicate<? super T> predicate) {
+        Collection<Tuple<PlayerAdvancements, Listener<T>>> done = manager.allStream()
+                .filter(tuple -> predicate.test(tuple.getSecond().getCriterionInstance()))
+                .collect(Collectors.toList());
+        for (Tuple<PlayerAdvancements, Listener<T>> tuple : done) {
+            tuple.getSecond().grantCriterion(tuple.getFirst());
+        }
     }
 }

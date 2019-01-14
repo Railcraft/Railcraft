@@ -1,18 +1,25 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
-import mods.railcraft.common.advancements.criterion.SurpriseTrigger.Instance;
 import mods.railcraft.common.util.json.JsonTools;
 import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 
-final class SurpriseTrigger extends BaseTrigger<Instance> {
+final class KilledByLocomotiveTrigger extends BaseTrigger<KilledByLocomotiveTrigger.Instance> {
 
-    static final ResourceLocation ID = RailcraftConstantsAPI.locationOf("surprise");
+    static final ResourceLocation ID = RailcraftConstantsAPI.locationOf("killed_by_locomotive");
 
     @Override
     public ResourceLocation getId() {
@@ -27,14 +34,10 @@ final class SurpriseTrigger extends BaseTrigger<Instance> {
 
     static final class Instance implements ICriterionInstance {
 
-        final CartPredicate cartPredicate;
+        final CartPredicate predicate;
 
         Instance(CartPredicate predicate) {
-            this.cartPredicate = predicate;
-        }
-
-        boolean test(EntityPlayerMP player, EntityMinecart cart) {
-            return cartPredicate.test(player, cart);
+            this.predicate = predicate;
         }
 
         @Override

@@ -73,12 +73,12 @@ public abstract class BlockChestRailcraft<T extends TileChestRailcraft> extends 
     @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+        return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).ordinal();
+        return state.getValue(FACING).getHorizontalIndex();
     }
 
     @Override

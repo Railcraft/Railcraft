@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:armor_overalls"
+    },
+    "title": {
+      "translate": "advancements.railcraft.carts.struck.by.locomotive.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.carts.struck.by.locomotive.desc"
+    }
+  },
+  "parent": "railcraft:carts/locomotive",
+  "criteria": {
+    "struck": {
+      "trigger": "railcraft:killed_by_locomotive",
+      "conditions": {}
+    }
+  }
+}
