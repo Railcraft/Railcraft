@@ -3,9 +3,11 @@ package mods.railcraft.common.carts;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.util.misc.AABBFactory;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
@@ -32,6 +34,8 @@ public final class BedCartEventListener {
     @SubscribeEvent
     public void onPlayerSleep(PlayerSleepInBedEvent event) {
         EntityPlayer player = event.getEntityPlayer();
+        if (Game.isClient(player.world))
+            return;
         // Hmm, player is most likely right, although we cannot really guarantee yet!
         Entity riding = player.getRidingEntity();
         if (!(riding instanceof EntityCartBed)) {
@@ -49,7 +53,7 @@ public final class BedCartEventListener {
             cart.sleeping = new WeakReference<>(player);
             cart.rideAfterSleep = true;
             riderToBed.put(player, cart);
-            RailcraftAdvancementTriggers.getInstance().onPlayerSleepInCart(player, cart);
+            RailcraftAdvancementTriggers.getInstance().onPlayerSleepInCart((EntityPlayerMP) player, cart);
         }
     }
 

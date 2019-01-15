@@ -142,8 +142,8 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.FAIL;
         }
         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
+        RailcraftAdvancementTriggers.getInstance().onSpikeMaulUsageSuccess((EntityPlayerMP) playerIn, worldIn, pos, stack);
         stack.damageItem(1, playerIn);
-        RailcraftAdvancementTriggers.getInstance().onSpikeMaulUsageSuccess((EntityPlayerMP) playerIn, worldIn, pos);
         return EnumActionResult.SUCCESS;
     }
 

@@ -32,23 +32,9 @@ final class JukeboxCartPlayMusicTrigger extends BaseTrigger<Instance> {
         return new Instance(sound, cart);
     }
 
-    void trigger(EntityPlayerMP player, EntityMinecart cart, ResourceLocation music) {
-        PlayerAdvancements advancements = player.getAdvancements();
-        Collection<Listener<Instance>> done = new ArrayList<>();
-        for (Listener<Instance> listener : manager.get(advancements)) {
-            if (listener.getCriterionInstance().test(player, cart, music)) {
-                done.add(listener);
-            }
-        }
-        for (Listener<Instance> listener : done) {
-            listener.grantCriterion(advancements);
-        }
-    }
-
     static final class Instance implements ICriterionInstance {
 
-        @Nullable
-        final ResourceLocation music;
+        final @Nullable ResourceLocation music;
         final CartPredicate cart;
 
         Instance(@Nullable ResourceLocation music, CartPredicate cart) {

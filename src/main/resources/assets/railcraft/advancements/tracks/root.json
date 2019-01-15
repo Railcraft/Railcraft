@@ -9,7 +9,7 @@
     "description": {
       "translate": "advancements.railcraft.tracks.root.desc"
     },
-    "background": "railcraft:textures/blocks/coke_oven_0.png",
+    "background": "railcraft:textures/blocks/brick_sandy_1.png",
     "show_toast": false,
     "announce_to_chat": false
   },

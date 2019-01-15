@@ -17,9 +17,14 @@ import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.advancements.criterion.MultiBlockFormedTrigger.Instance;
 import mods.railcraft.common.blocks.multi.IMultiBlockTile;
 import mods.railcraft.common.events.MultiBlockEvent;
+import mods.railcraft.common.util.json.JsonTools;
+import mods.railcraft.common.util.misc.Conditions;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.advancements.critereon.NBTPredicate;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
@@ -58,17 +63,19 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
         } else {
             type = null;
         }
+        NBTPredicate nbt = JsonTools.whenPresent(json, "nbt", NBTPredicate::deserialize, NBTPredicate.ANY);
 
-        return new Instance(type);
+        return new Instance(type, nbt);
     }
 
     @SubscribeEvent
     public void onMultiBlockForm(MultiBlockEvent.Form event) {
         IMultiBlockTile tile = event.getMultiBlock();
         GameProfile owner = tile.getOwner();
-        EntityPlayerMP player = requireNonNull(FMLCommonHandler.instance().getMinecraftServerInstance()).getPlayerList().getPlayerByUUID(owner.getId());
+        MinecraftServer server = requireNonNull(FMLCommonHandler.instance().getMinecraftServerInstance());
+        EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(owner.getId());
         if (player == null) {
-            return;
+            return; // Offline
         }
         PlayerAdvancements advancements = player.getAdvancements();
         Collection<Listener<Instance>> done = manager.get(advancements).stream()
@@ -82,14 +89,16 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
     static final class Instance implements ICriterionInstance {
 
         final @Nullable Class<? extends TileEntity> clazz;
+        final NBTPredicate nbt;
 
-        Instance(@Nullable Class<? extends TileEntity> type) {
+        Instance(@Nullable Class<? extends TileEntity> type, NBTPredicate nbtPredicate) {
             this.clazz = type;
+            this.nbt = nbtPredicate;
         }
 
         // FIXME: This used to use the master class, but I removed that function and probably broke it. - CovertJaguar
         boolean matches(IMultiBlockTile tile) {
-            return clazz == null || tile.getClass() == clazz;
+            return Conditions.check(clazz, tile.getClass()) && nbt.test(((TileEntity) tile).writeToNBT(new NBTTagCompound()));
         }
 
         @Override

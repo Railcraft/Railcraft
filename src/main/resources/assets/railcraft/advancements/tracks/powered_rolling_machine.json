@@ -2,23 +2,23 @@
   "display": {
     "icon": {
       "item": "railcraft:equipment",
-      "data": 0
+      "data": 1
     },
     "title": {
-      "translate": "advancements.railcraft.tracks.manual_rolling_machine.name"
+      "translate": "advancements.railcraft.tracks.powered_rolling_machine.name"
     },
     "description": {
-      "translate": "advancements.railcraft.tracks.manual_rolling_machine.desc"
+      "translate": "advancements.railcraft.tracks.powered_rolling_machine.desc"
     }
   },
-  "parent": "railcraft:tracks/coke_oven",
+  "parent": "railcraft:tracks/blast_furnace",
   "criteria": {
     "manual": {
       "trigger": "minecraft:placed_block",
       "conditions": {
         "item": {
           "item": "railcraft:equipment",
-          "data": 0
+          "data": 1
         }
       }
     }

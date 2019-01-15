@@ -1,10 +1,10 @@
 package mods.railcraft.common.advancements.criterion;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -24,6 +24,7 @@ public final class RailcraftAdvancementTriggers {
     private final SpikeMaulUseTrigger spikeMaulUse = new SpikeMaulUseTrigger();
     private final UseTrackKitTrigger useTrackKit = new UseTrackKitTrigger();
     private final CartRidingTrigger cartRiding = new CartRidingTrigger();
+    private final KilledByLocomotiveTrigger killedByLocomotive = new KilledByLocomotiveTrigger();
 
     public static RailcraftAdvancementTriggers getInstance() {
         return Holder.INSTANCE;
@@ -39,35 +40,37 @@ public final class RailcraftAdvancementTriggers {
         CriteriaTriggers.register(spikeMaulUse);
         CriteriaTriggers.register(useTrackKit);
         CriteriaTriggers.register(cartRiding);
+        CriteriaTriggers.register(killedByLocomotive);
         ItemPredicates.register(RailcraftConstantsAPI.locationOf("is_cart"), (json) -> new CartItemPredicate());
         ItemPredicates.register(RailcraftConstantsAPI.locationOf("is_track"), TrackItemPredicate.DESERIALIZER);
     }
 
-    public void onJukeboxCartPlay(EntityPlayer player, EntityMinecart cart, ResourceLocation music) {
-        jukeboxCartPlayMusic.trigger((EntityPlayerMP) player, cart, music);
+    public void onJukeboxCartPlay(EntityPlayerMP player, EntityMinecart cart, ResourceLocation music) {
+        jukeboxCartPlayMusic.trigger(player, instance -> instance.test(player, cart, music));
     }
 
-    public void onPlayerSleepInCart(EntityPlayer player, EntityMinecart cart) {
-        if (player.world.isRemote) {
-            return;
-        }
-        bedCartSleep.trigger((EntityPlayerMP) player, cart);
+    public void onPlayerSleepInCart(EntityPlayerMP player, EntityMinecart cart) {
+        bedCartSleep.trigger(player, instance -> instance.cartPredicate.test(player, cart));
     }
 
     public void onSurpriseExplode(EntityPlayerMP owner, EntityMinecart cart) {
-        surprise.trigger(owner, cart);
+        surprise.trigger(owner, instance -> instance.test(owner, cart));
     }
 
     public void onSeasonSet(EntityPlayerMP player, EntityMinecart cart, SeasonPlugin.Season season) {
-        setSeason.trigger(player, cart, season);
+        setSeason.trigger(player, instance -> instance.test(player, cart, season));
     }
 
-    public void onSpikeMaulUsageSuccess(EntityPlayerMP player, World world, BlockPos pos) {
-        spikeMaulUse.trigger(player, world, pos);
+    public void onSpikeMaulUsageSuccess(EntityPlayerMP player, World world, BlockPos pos, ItemStack tool) {
+        spikeMaulUse.trigger(player, instance -> instance.test(tool, (WorldServer) world, pos));
     }
 
     public void onTrackKitUse(EntityPlayerMP player, World world, BlockPos pos, ItemStack stack) {
-        useTrackKit.trigger(player, (WorldServer) world, pos, stack);
+        useTrackKit.trigger(player, instance -> instance.test((WorldServer) world, pos, stack));
+    }
+
+    public void onKilledByLocomotive(EntityPlayerMP player, EntityLocomotive loco) {
+        killedByLocomotive.trigger(player, instance -> instance.predicate.test(player, loco));
     }
 
     RailcraftAdvancementTriggers() {
