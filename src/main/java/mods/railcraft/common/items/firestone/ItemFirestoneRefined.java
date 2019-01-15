@@ -17,6 +17,7 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -96,7 +97,6 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'L', fluidStack,
                 'F', RailcraftItems.FIRESTONE_CUT);
 
-        // FIXME: currently dupes stones!
         CraftingPlugin.addShapedRecipe(ItemFirestoneRefined.getItemEmpty(),
                 "LOL",
                 "RFR",
@@ -104,7 +104,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 'R', "blockRedstone",
                 'L', fluidStack,
                 'O', RailcraftItems.FIRESTONE_RAW,
-                'F', RailcraftItems.FIRESTONE_CRACKED.getWildcard());
+                'F', Ingredients.consumingContainer(RailcraftItems.FIRESTONE_CRACKED.getWildcard()));
     }
 
     @Override
