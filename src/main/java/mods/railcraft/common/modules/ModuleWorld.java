@@ -35,6 +35,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerCareer;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
@@ -52,7 +53,7 @@ public class ModuleWorld extends RailcraftModulePayload {
     public static final String ZOMBIE_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/zombie_trackman.png";
     public static final String VILLAGER_ID = RailcraftConstants.RESOURCE_DOMAIN + ":trackman";
 
-    public static VillagerRegistry.VillagerProfession villagerTrackman;
+    public static @Nullable VillagerRegistry.VillagerProfession villagerTrackman;
 
     public ModuleWorld() {
         setEnabledEventHandler(new ModuleEventHandler() {
@@ -152,10 +153,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                                 new ItemStack(Blocks.DIRT));
                     }
                 }
-                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
-                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
+                if (RailcraftConfig.isWorldGenEnabled("villager")) {
                     VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-                    villagerRegistry.registerVillageCreationHandler(workshop);
 
                     villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
                     ForgeRegistries.VILLAGER_PROFESSIONS.register(villagerTrackman); //TODO registry event
@@ -173,6 +172,11 @@ public class ModuleWorld extends RailcraftModulePayload {
                         VillagerTrades.addTradeForAlloyer(alloyer);
                         VillagerTrades.addTradeForSteelForger(steelForger);
                     }
+                }
+                if (RailcraftConfig.isWorldGenEnabled("workshop")) {
+                    WorkshopCreationHandler workshop = new WorkshopCreationHandler();
+                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
+                    villagerRegistry.registerVillageCreationHandler(workshop);
 
                     try {
                         MapGenStructureIO.registerStructureComponent(ComponentWorkshop.class, "railcraft:workshop");

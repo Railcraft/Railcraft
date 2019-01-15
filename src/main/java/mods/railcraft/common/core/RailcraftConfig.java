@@ -380,6 +380,7 @@ public class RailcraftConfig {
         worldGen.put("quarried", get(configMain, CAT_WORLD_GEN + ".generate", "quarried.stone", true, "spawns on the surface in forests"));
 
         worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "village.workshop", true, "village building"));
+        worldGen.put("villager", get(configMain, CAT_WORLD_GEN + ".generate", "village.villager", true, "villager careers and professions"));
 
 //        worldGen.put("iron", get(configMain, CAT_WORLD_GEN + ".generate", "mineIron", true, "Iron Mine, spawns a cloud of ore over a large but localized region"));
 //        worldGen.put("gold", get(configMain, CAT_WORLD_GEN + ".generate", "mineGold", true, "Gold Mine, spawns a cloud of ore over a large but localized region"));
