@@ -254,9 +254,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     @Override
     protected VillagerRegistry.VillagerProfession chooseForgeProfession(int count, VillagerRegistry.VillagerProfession prof) {
         // leave null pointer exceptions on different lines
-        return count == 0 || random.nextBoolean()
-                ? checkNotNull(ModuleWorld.villagerTrackman)
-                : checkNotNull(smith);
+        return ModuleWorld.villagerTrackman == null ? checkNotNull(smith) : count == 0 || random.nextBoolean()
+                ? ModuleWorld.villagerTrackman : checkNotNull(smith);
     }
 
     private BlockPos getPosWithOffset(int x, int y, int z) {
