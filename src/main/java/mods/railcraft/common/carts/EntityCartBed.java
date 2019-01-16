@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.carts;
 
 import mods.railcraft.client.core.SleepKeyHandler;
@@ -117,10 +127,11 @@ public class EntityCartBed extends EntityCartBasic {
         }
     }
 
-    @Override
-    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
-        //No rider removal!
-    }
+// Handled by super class
+//    @Override
+//    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
+//        //No rider removal!
+//    }
 
     private void sendPlayerRiding(EntityPlayerMP player) {
         player.connection.sendPacket(new SPacketSetPassengers(this));
