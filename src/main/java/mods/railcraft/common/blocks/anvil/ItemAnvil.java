@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,6 @@ import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAnvilBlock;
-
 import org.jetbrains.annotations.Nullable;
 
 /**

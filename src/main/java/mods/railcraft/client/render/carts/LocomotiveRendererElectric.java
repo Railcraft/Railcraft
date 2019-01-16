@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,9 +19,8 @@ import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>

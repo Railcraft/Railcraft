@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonDeserializationContext;
@@ -7,19 +17,14 @@ import mods.railcraft.common.advancements.criterion.UseTrackKitTrigger.Instance;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.json.JsonTools;
 import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.advancements.critereon.NBTPredicate;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 final class UseTrackKitTrigger extends BaseTrigger<Instance> {
 

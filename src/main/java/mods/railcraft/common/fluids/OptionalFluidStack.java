@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.fluids;
 
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Contract;
-
 import org.jetbrains.annotations.Nullable;
 
 /**

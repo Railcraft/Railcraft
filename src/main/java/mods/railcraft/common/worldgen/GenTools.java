@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,9 @@
 
 package mods.railcraft.common.worldgen;
 
+import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-
-import com.google.common.base.Predicate;
 
 /**
  * Created by CovertJaguar on 4/22/2016 for Railcraft.

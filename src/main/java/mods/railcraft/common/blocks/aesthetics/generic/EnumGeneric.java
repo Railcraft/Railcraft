@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,8 +17,8 @@ import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.modules.ModuleStructures;
 import mods.railcraft.common.modules.ModuleWorld;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
