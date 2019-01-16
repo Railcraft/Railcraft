@@ -28,7 +28,7 @@ public class CircularVectorQueue extends ForwardingQueue<CircularVectorQueue.Vec
     public CircularVectorQueue(int maxSize) {
         this.maxSize = maxSize;
         pool = new Vector[maxSize * 2];
-        queue = new ArrayDeque<Vector>(maxSize);
+        queue = new ArrayDeque<>(maxSize);
     }
 
     @Override

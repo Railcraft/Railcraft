@@ -56,7 +56,7 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     BLOCK_BRASS(ModuleResources.class, "brass", new SimpleCube(), 3f, 10f),
     ;
     public static final EnumGeneric[] VALUES = values();
-    private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
+    private static final List<EnumGeneric> creativeList = new ArrayList<>();
 
     static {
         creativeList.add(BLOCK_CREOSOTE);

@@ -38,7 +38,7 @@ public abstract class SubCommand implements IModCommand {
     }
 
     private final String name;
-    private final List<String> aliases = new ArrayList<String>();
+    private final List<String> aliases = new ArrayList<>();
     private PermLevel permLevel = PermLevel.EVERYONE;
     private IModCommand parent;
     private final NavigableSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);

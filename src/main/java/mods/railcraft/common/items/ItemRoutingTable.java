@@ -102,7 +102,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         NBTTagCompound nbt = routingTable.getTagCompound();
         if (nbt == null)
             return null;
-        Deque<String> contents = new LinkedList<String>();
+        Deque<String> contents = new LinkedList<>();
         List<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTTagList.class);
         for (NBTTagList page : pages) {
             List<NBTTagString> lines = NBTPlugin.asList(page);

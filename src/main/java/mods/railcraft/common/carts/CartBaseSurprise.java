@@ -223,15 +223,15 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.world.getDifficultyForLocation(new BlockPos(entity)), null), null);
+            return new SurpriseEntity<>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.world.getDifficultyForLocation(new BlockPos(entity)), null), null);
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup, null);
+            return new SurpriseEntity<>(entityType, weight, numToSpawn, setup, null);
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup, BiConsumer<CartBaseSurprise, T> postSpawn) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup, postSpawn);
+            return new SurpriseEntity<>(entityType, weight, numToSpawn, setup, postSpawn);
         }
 
         @Override

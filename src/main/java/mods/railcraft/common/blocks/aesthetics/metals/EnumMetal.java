@@ -34,7 +34,7 @@ public enum EnumMetal implements IVariantEnumBlock<EnumMetal> {
     BLOCK_ZINC(ModuleResources.class, "zinc", new SimpleCube(), 3f, 10f),
     BLOCK_BRASS(ModuleResources.class, "brass", new SimpleCube(), 3f, 10f),;
     public static final EnumMetal[] VALUES = values();
-    private static final List<EnumMetal> creativeList = new ArrayList<EnumMetal>();
+    private static final List<EnumMetal> creativeList = new ArrayList<>();
 
     static {
         creativeList.add(BLOCK_COPPER);

@@ -35,7 +35,7 @@ public enum LocomotiveRenderType {
     STEAM_MAGIC("cart.loco.steam.magic"),
     ELECTRIC("cart.loco.electric"),
     CREATIVE("cart.loco.electric");
-    private final Map<String, LocomotiveModelRenderer> renderers = new HashMap<String, LocomotiveModelRenderer>();
+    private final Map<String, LocomotiveModelRenderer> renderers = new HashMap<>();
     private final String cartTag;
 
     LocomotiveRenderType(String cartTag) {

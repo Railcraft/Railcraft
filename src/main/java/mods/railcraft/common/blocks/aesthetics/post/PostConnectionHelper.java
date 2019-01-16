@@ -32,8 +32,8 @@ import java.util.Set;
  */
 public class PostConnectionHelper {
 
-    private static final Set<Block> canConnect = new HashSet<Block>();
-    private static final Set<Block> noConnect = new HashSet<Block>();
+    private static final Set<Block> canConnect = new HashSet<>();
+    private static final Set<Block> noConnect = new HashSet<>();
 
     static {
         canConnect.add(Blocks.GLOWSTONE);

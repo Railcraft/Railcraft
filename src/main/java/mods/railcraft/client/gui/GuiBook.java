@@ -118,7 +118,7 @@ public class GuiBook extends GuiScreen {
         Keyboard.enableRepeatEvents(true);
 
         if (editable) {
-            List<GuiSimpleButton> buttons = new ArrayList<GuiSimpleButton>();
+            List<GuiSimpleButton> buttons = new ArrayList<>();
             buttons.add(buttonSign = new GuiSimpleButton(3, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate(locTag + "name")));
             buttons.add(buttonHelp = new GuiSimpleButton(4, 0, 4 + bookImageHeight, 65, LocalizationPlugin.translate("gui.railcraft.help")));
             buttons.add(buttonDone = new GuiSimpleButton(0, 0, 4 + bookImageHeight, 65, I18n.translateToLocal("gui.done")));
@@ -219,7 +219,7 @@ public class GuiBook extends GuiScreen {
 
     private void addNewPage() {
         if (bookPages.size() < RailcraftConstants.BOOK_MAX_PAGES) {
-            LinkedList<String> page = new LinkedList<String>();
+            LinkedList<String> page = new LinkedList<>();
             page.add("");
             bookPages.add(page);
             bookModified = true;
