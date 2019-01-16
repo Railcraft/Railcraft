@@ -36,7 +36,7 @@ public class ItemAnvil extends ItemAnvilBlock implements IRailcraftItemBlock {
     @Nullable
     @Override
     public Class<? extends IVariantEnum> getVariantEnum() {
-        return ((IRailcraftObject) block).getVariantEnum();
+        return ((BlockRCAnvil) block).getVariantEnum();
     }
 
     @Nullable

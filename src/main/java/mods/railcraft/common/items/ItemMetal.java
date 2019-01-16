@@ -74,6 +74,7 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariant(variant);
+        //noinspection SuspiciousMethodCalls
         Integer meta = metalBiMap.inverse().get(variant);
         if (meta == null)
             meta = 0;

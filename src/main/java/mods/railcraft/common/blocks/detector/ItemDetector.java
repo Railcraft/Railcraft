@@ -10,7 +10,6 @@
 package mods.railcraft.common.blocks.detector;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,9 +18,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemDetector extends ItemBlockRailcraftSubtyped {
+public class ItemDetector extends ItemBlockRailcraftSubtyped<BlockDetector> {
 
-    public ItemDetector(Block block) {
+    public ItemDetector(BlockDetector block) {
         super(block);
     }
 

@@ -255,10 +255,10 @@ public class GuiBook extends GuiScreen {
                 String currentLine = getLine(currLine);
                 if (!currentLine.isEmpty() && currChar > 0)
                     setLine(currPage, currLine, currentLine.substring(0, currChar - 1) + currentLine.substring(currChar--));
-                else if (currLine > 0 && currChar == 0 && getLine(currLine - 1).length() == 0) {
+                else if (currLine > 0 && currChar == 0 && getLine(currLine - 1).isEmpty()) {
                     List<String> page = getPage(currPage);
                     page.remove(--currLine);
-                } else if (currLine > 0 && currChar == 0 && currentLine.length() == 0) {
+                } else if (currLine > 0 && currChar == 0 && currentLine.isEmpty()) {
                     List<String> page = getPage(currPage);
                     page.remove(currLine--);
                     currChar = getLine(currLine).length();
@@ -273,13 +273,13 @@ public class GuiBook extends GuiScreen {
                 }
                 List<String> page = getPage(currPage);
                 if (currLine < page.size() - 1) {
-                    if (text.length() == 0) {
+                    if (text.isEmpty()) {
                         page.remove(currLine);
                         currChar = 0;
                         return;
                     }
                     text = getLine(currLine + 1);
-                    if (text.length() == 0) {
+                    if (text.isEmpty()) {
                         page.remove(currLine + 1);
                         return;
                     }

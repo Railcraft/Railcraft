@@ -29,7 +29,7 @@ public final class FluidContainerHandler {
 
     public static final FluidContainerHandler INSTANCE = new FluidContainerHandler();
 
-    private boolean initialized = false;
+    private boolean initialized;
     private List<ItemStack> candidates = new ArrayList<>();
 
     public void init() {

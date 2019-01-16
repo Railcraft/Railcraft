@@ -101,9 +101,7 @@ public class ParticleFireSpark extends ParticleBase {
         }
         this.particleAge++;
 
-        /**
-         * Called to spawn smoke particles with the entity
-         */
+        // Called to spawn smoke particles with the entity
         float f = (float)this.particleAge / (float)this.particleMaxAge;
 
         if (this.rand.nextFloat() > f)

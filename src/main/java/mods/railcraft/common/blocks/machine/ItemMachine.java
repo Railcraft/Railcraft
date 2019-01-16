@@ -19,13 +19,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemMachine extends ItemBlockRailcraftSubtyped {
+public class ItemMachine extends ItemBlockRailcraftSubtyped<BlockMachine<? extends IEnumMachine>> {
 
     private final BlockMachine<? extends IEnumMachine> machineBlock;
 
-    public ItemMachine(Block block) {
+    public ItemMachine(BlockMachine<? extends IEnumMachine> block) {
         super(block);
-        this.machineBlock = (BlockMachine<? extends IEnumMachine>) block;
+        this.machineBlock = block;
     }
 
     public IEnumMachine<?> getMachine(ItemStack stack) {

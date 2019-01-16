@@ -38,10 +38,10 @@ import java.util.UUID;
 public class EntityCartBed extends EntityCartBasic {
 
     WeakReference<EntityPlayer> sleeping = new WeakReference<>(null);
-    boolean wokeUp = false;
-    boolean rideAfterSleep = false;
-    boolean shouldSleep = false;
-    private boolean notifyRider = false;
+    boolean wokeUp;
+    boolean rideAfterSleep;
+    boolean shouldSleep;
+    private boolean notifyRider;
 
     public EntityCartBed(World world) {
         super(world);

@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class TrackKitThrottle extends TrackKitPowered {
     private LocoSpeed speed = LocoSpeed.MAX;
-    private boolean reverse = false;
+    private boolean reverse;
 
     @Override
     public TrackKits getTrackKitContainer() {

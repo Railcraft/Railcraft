@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 public class SlotLinked extends Slot {
 
     private Slot masterSlot;
-    private boolean allowNull = false;
+    private boolean allowNull;
 
     public SlotLinked(IInventory iinventory, int slotIndex, int posX, int posY, Slot masterSlot) {
         super(iinventory, slotIndex, posX, posY);

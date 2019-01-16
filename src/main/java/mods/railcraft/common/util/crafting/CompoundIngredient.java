@@ -46,7 +46,7 @@ public class CompoundIngredient extends Ingredient {
             List<ItemStack> tmp = Lists.newArrayList();
             for (Ingredient child : children)
                 Collections.addAll(tmp, child.getMatchingStacks());
-            stacks = tmp.toArray(new ItemStack[tmp.size()]);
+            stacks = tmp.toArray(new ItemStack[0]);
 
         }
         return stacks;

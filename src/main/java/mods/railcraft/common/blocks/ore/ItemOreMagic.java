@@ -12,15 +12,14 @@ package mods.railcraft.common.blocks.ore;
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemOreMagic extends ItemBlockRailcraftSubtyped {
+public class ItemOreMagic extends ItemBlockRailcraftSubtyped<BlockOreMagic> {
 
-    public ItemOreMagic(Block block) {
+    public ItemOreMagic(BlockOreMagic block) {
         super(block);
     }
 

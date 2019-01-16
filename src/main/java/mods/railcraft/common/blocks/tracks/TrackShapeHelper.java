@@ -30,11 +30,11 @@ public final class TrackShapeHelper {
     }
 
     public static boolean isEastWest(@Nullable BlockRailBase.EnumRailDirection dir) {
-        return dir != null && (dir == EAST_WEST || dir == ASCENDING_EAST || dir == ASCENDING_WEST);
+        return (dir == EAST_WEST || dir == ASCENDING_EAST || dir == ASCENDING_WEST);
     }
 
     public static boolean isNorthSouth(@Nullable BlockRailBase.EnumRailDirection dir) {
-        return dir != null && (dir == NORTH_SOUTH || dir == ASCENDING_NORTH || dir == ASCENDING_SOUTH);
+        return (dir == NORTH_SOUTH || dir == ASCENDING_NORTH || dir == ASCENDING_SOUTH);
     }
 
     public static boolean isAscending(@Nullable BlockRailBase.EnumRailDirection dir) {
