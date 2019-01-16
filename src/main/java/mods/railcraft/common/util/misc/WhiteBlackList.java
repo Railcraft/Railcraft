@@ -46,7 +46,7 @@ public final class WhiteBlackList<T> {
 
     public void disableWhiteList() {
         this.whitelistEnabled = false;
-        this.whitelist.clear();
+        whitelist.clear();
     }
 
     public void enableWhiteList() {

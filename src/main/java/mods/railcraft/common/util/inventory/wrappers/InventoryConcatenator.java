@@ -82,11 +82,7 @@ public final class InventoryConcatenator implements IInventory {
 
     @Override
     public boolean isEmpty() {
-        for (IInventory inv : invSet) {
-            if (!inv.isEmpty())
-                return false;
-        }
-        return true;
+        return invSet.stream().allMatch(IInventory::isEmpty);
     }
 
     @Override

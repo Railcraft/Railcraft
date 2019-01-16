@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ParticleHelperCallback {
+public interface IParticleHelperCallback {
 
     @SideOnly(Side.CLIENT)
     void addHitEffects(ParticleDigging fx, World world, BlockPos pos, IBlockState state);

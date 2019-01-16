@@ -107,19 +107,11 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     private boolean isShiftRotation(Class<? extends Block> cls) {
-        for (Class<? extends Block> shift : shiftRotations) {
-            if (shift.isAssignableFrom(cls))
-                return true;
-        }
-        return false;
+        return shiftRotations.stream().anyMatch(shift -> shift.isAssignableFrom(cls));
     }
 
     private boolean isBannedRotation(Class<? extends Block> cls) {
-        for (Class<? extends Block> banned : bannedRotations) {
-            if (banned.isAssignableFrom(cls))
-                return true;
-        }
-        return false;
+        return bannedRotations.stream().anyMatch(banned -> banned.isAssignableFrom(cls));
     }
 
     @Override

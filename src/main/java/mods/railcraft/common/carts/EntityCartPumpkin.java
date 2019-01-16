@@ -74,9 +74,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
 
         if (ModuleWorld.villagerTrackman != null) {
             MOBS.add(SurpriseEntity.create(EntityZombieVillager.class, 200, 1,
-                    (cart, villager) -> {
-                        villager.setForgeProfession(ModuleWorld.villagerTrackman);
-                    }
+                    (cart, villager) -> villager.setForgeProfession(ModuleWorld.villagerTrackman)
             ));
         }
     }

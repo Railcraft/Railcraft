@@ -65,7 +65,7 @@ public class TrackKitThrottle extends TrackKitPowered {
     }
 
     public void setReverse(boolean state) {
-        if (this.reverse != state) {
+        if (reverse != state) {
             this.reverse = state;
             if (Game.isClient(theWorldAsserted()))
                 markBlockNeedsUpdate();

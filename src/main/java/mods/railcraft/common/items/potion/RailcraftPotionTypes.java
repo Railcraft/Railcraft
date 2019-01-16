@@ -38,15 +38,15 @@ public final class RailcraftPotionTypes {
 
         @Override
         public Definition getDef() {
-            return this.def;
+            return def;
         }
 
         @Override
         public void register() {
             this.potion = checkNotNull(supplier.get());
-            this.potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
-            this.potion.initializeDefinition();
-            ForgeRegistries.POTION_TYPES.register(this.potion);
+            potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
+            potion.initializeDefinition();
+            ForgeRegistries.POTION_TYPES.register(potion);
         }
 
         @Override

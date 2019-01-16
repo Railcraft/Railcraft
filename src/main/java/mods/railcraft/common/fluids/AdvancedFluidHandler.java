@@ -14,6 +14,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+
 /**
  * This class provides some convenience functions for IFluidHandler
  *
@@ -30,13 +32,10 @@ public class AdvancedFluidHandler implements IFluidHandler {
     public int getFluidQty(@Nullable FluidStack fluid) {
         if (fluid == null)
             return 0;
-        int amount = 0;
-        for (IFluidTankProperties tank : getTankProperties()) {
-            FluidStack content = tank.getContents();
-            if (FluidTools.matches(fluid, content))
-                amount += content.amount;
-        }
-        return amount;
+        return Arrays.stream(getTankProperties())
+                .map(IFluidTankProperties::getContents)
+                .filter(content -> FluidTools.matches(fluid, content))
+                .mapToInt(content -> content.amount).sum();
     }
 
     public boolean isTankEmpty(@Nullable FluidStack fluid) {
@@ -53,11 +52,8 @@ public class AdvancedFluidHandler implements IFluidHandler {
     }
 
     public boolean areTanksFull() {
-        for (IFluidTankProperties tank : getTankProperties()) {
-            if (tank.getContents() == null || tank.getContents().amount < tank.getCapacity())
-                return false;
-        }
-        return true;
+        return Arrays.stream(getTankProperties())
+                .noneMatch(tank -> tank.getContents() == null || tank.getContents().amount < tank.getCapacity());
     }
 
     public boolean areTanksEmpty() {

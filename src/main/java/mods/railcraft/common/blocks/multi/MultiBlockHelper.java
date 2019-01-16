@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.helpers.StructureHelper;
+import mods.railcraft.api.helpers.IStructureHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public final class MultiBlockHelper implements StructureHelper {
+public final class MultiBlockHelper implements IStructureHelper {
 
     @Override
     public void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable List<ItemStack> fuel) {

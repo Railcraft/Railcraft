@@ -31,7 +31,7 @@ public class ParticleHelper {
     public static final Random RANDOM = new Random();
 
     @SideOnly(Side.CLIENT)
-    public static boolean addHitEffects(World world, Block block, RayTraceResult target, ParticleManager manager, @Nullable ParticleHelperCallback callback) {
+    public static boolean addHitEffects(World world, Block block, RayTraceResult target, ParticleManager manager, @Nullable IParticleHelperCallback callback) {
 //        BlockPos pos = target.getBlockPos();
 //        int x = pos.getX();
 //        int y = pos.getY();
@@ -84,7 +84,7 @@ public class ParticleHelper {
      * @return True to prevent vanilla break particles from spawning.
      */
     @SideOnly(Side.CLIENT)
-    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, ParticleManager manager, @Nullable ParticleHelperCallback callback) {
+    public static boolean addDestroyEffects(World world, Block block, BlockPos pos, IBlockState state, ParticleManager manager, @Nullable IParticleHelperCallback callback) {
 //        if (!WorldPlugin.isBlockAt(world, pos, block)) return true;
 //        byte its = 4;
 //        int x = pos.getX();

@@ -32,7 +32,7 @@ public final class ModuleCondition implements BooleanSupplier {
 
     @Override
     public boolean getAsBoolean() {
-        return RailcraftModuleManager.isModuleEnabled(this.moduleName);
+        return RailcraftModuleManager.isModuleEnabled(moduleName);
     }
 
     public static final class Factory implements IConditionFactory {

@@ -39,16 +39,16 @@ public final class RailcraftPotions {
 
         @Override
         public Definition getDef() {
-            return this.def;
+            return def;
         }
 
         @Override
         public void register() {
             this.potion = checkNotNull(supplier.get());
-            this.potion.setPotionName("potion." + Railcraft.MOD_ID + '.' + getBaseTag());
-            this.potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
-            this.potion.initializeDefinition();
-            ForgeRegistries.POTIONS.register(this.potion);
+            potion.setPotionName("potion." + Railcraft.MOD_ID + '.' + getBaseTag());
+            potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
+            potion.initializeDefinition();
+            ForgeRegistries.POTIONS.register(potion);
         }
 
         @Override

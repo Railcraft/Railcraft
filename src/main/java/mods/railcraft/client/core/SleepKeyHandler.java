@@ -52,6 +52,6 @@ public final class SleepKeyHandler {
     }
 
     public String getKeyDisplayName() {
-        return this.sleepKey.getDisplayName();
+        return sleepKey.getDisplayName();
     }
 }

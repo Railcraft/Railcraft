@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
 
 public abstract class CartBaseSurprise extends EntityCartTNTWood {
 
-    protected static final Surprise COAL = new SurpriseItem(new ItemStack(Items.COAL), 100);
+    protected static final ISurprise COAL = new SurpriseItem(new ItemStack(Items.COAL), 100);
     private static final byte SPAWN_DIST = 2;
     private static final Multimap<Class<? extends CartBaseSurprise>, SurpriseCategory> SURPRISES = HashMultimap.create();
 
@@ -79,7 +79,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
     }
 
-    protected interface Surprise {
+    protected interface ISurprise {
 
         void spawn(CartBaseSurprise cart);
 
@@ -88,7 +88,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
     }
 
     protected static final class SurpriseCategory {
-        private final List<Surprise> surprises = new ArrayList<>();
+        private final List<ISurprise> surprises = new ArrayList<>();
         final int chance;
         private int numberToSpawn = 1;
 
@@ -100,12 +100,12 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             this.numberToSpawn = amount;
         }
 
-        protected Surprise getWeightedSurprise(Random rand) {
+        protected ISurprise getWeightedSurprise(Random rand) {
             if (surprises.isEmpty())
                 return COAL;
             while (true) {
                 int index = rand.nextInt(surprises.size());
-                Surprise surprise = surprises.get(index);
+                ISurprise surprise = surprises.get(index);
                 int weight = rand.nextInt(100);
                 if (surprise.getWeight() >= weight)
                     return surprise;
@@ -118,7 +118,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             }
         }
 
-        protected void add(Surprise surprise) {
+        protected void add(ISurprise surprise) {
             surprises.add(surprise);
         }
 
@@ -147,7 +147,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
     }
 
-    protected abstract static class SurpriseItemStack implements Surprise {
+    protected abstract static class SurpriseItemStack implements ISurprise {
         public final int weight;
 
         protected SurpriseItemStack(int weight) {
@@ -207,7 +207,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
     }
 
-    protected static class SurpriseEntity<T extends EntityLiving> implements Surprise {
+    protected static class SurpriseEntity<T extends EntityLiving> implements ISurprise {
         public final Class<T> entityType;
         public final int weight;
         public final int numToSpawn;

@@ -38,7 +38,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * A shaped recipe which respects its ingredient's choice of remaining items.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnnecessaryThis"})
 public final class ShapelessRailcraftRecipe extends ShapelessRecipes {
 
     private @Nullable int[] lastResult;

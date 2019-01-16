@@ -105,6 +105,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         return true;
     }
 
+    @SuppressWarnings("UnnecessaryThis")
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state) {
         final double oldPushX = pushX;

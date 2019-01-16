@@ -96,7 +96,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         }
     }
 
-    private void renderLines(T tile, double x, double y, double z, Collection<BlockPos> endPoints, ColorSupplier colorProfile) {
+    private void renderLines(T tile, double x, double y, double z, Collection<BlockPos> endPoints, IColorSupplier colorProfile) {
         if (endPoints.isEmpty()) {
             return;
         }
@@ -132,11 +132,11 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
     }
 
     @FunctionalInterface
-    public interface ColorSupplier {
+    public interface IColorSupplier {
         int getColor(TileEntity tile, BlockPos source, BlockPos target);
     }
 
-    public enum ColorProfile implements ColorSupplier {
+    public enum ColorProfile implements IColorSupplier {
         COORD_RAINBOW {
             private final BlockPos[] coords = new BlockPos[2];
 
