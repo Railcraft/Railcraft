@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,11 +16,13 @@ import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.util.collections.ItemMap;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author CovertJaguar
@@ -29,24 +31,24 @@ public enum WorldspikeVariant implements IEnumMachine<WorldspikeVariant> {
     ADMIN("admin", TileWorldspikeAdmin.class),
     PASSIVE("passive", TileWorldspikePassive.class) {
         @Override
-        public ItemMap<Float> getFuelList() {
+        public Map<Ingredient, Float> getFuelList() {
             return RailcraftConfig.worldspikeFuelPassive;
         }
     },
     PERSONAL("personal", TileWorldspikePersonal.class) {
         @Override
-        public ItemMap<Float> getFuelList() {
+        public Map<Ingredient, Float> getFuelList() {
             return RailcraftConfig.worldspikeFuelPersonal;
         }
     },
     STANDARD("standard", TileWorldspike.class) {
         @Override
-        public ItemMap<Float> getFuelList() {
+        public Map<Ingredient, Float> getFuelList() {
             return RailcraftConfig.worldspikeFuelStandard;
         }
     };
 
-    private static final List<WorldspikeVariant> creativeList = new ArrayList<WorldspikeVariant>();
+    private static final List<WorldspikeVariant> creativeList = new ArrayList<>();
     public static final WorldspikeVariant[] VALUES = values();
 
     static {
@@ -77,8 +79,8 @@ public enum WorldspikeVariant implements IEnumMachine<WorldspikeVariant> {
         return def;
     }
 
-    public ItemMap<Float> getFuelList() {
-        return ItemMap.emptyMap();
+    public Map<Ingredient, Float> getFuelList() {
+        return Collections.emptyMap();
     }
 
     @Override
@@ -105,6 +107,5 @@ public enum WorldspikeVariant implements IEnumMachine<WorldspikeVariant> {
     public IRailcraftBlockContainer getContainer() {
         return RailcraftBlocks.WORLDSPIKE;
     }
-
 
 }

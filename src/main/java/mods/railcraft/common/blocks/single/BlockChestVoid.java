@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.single;
 
 import mods.railcraft.client.render.tesr.TESRChest;
+import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
@@ -49,7 +50,7 @@ public class BlockChestVoid extends BlockChestRailcraft<TileChestVoid> {
     @SideOnly(Side.CLIENT)
     private void spawnVoidFaceParticles(World worldIn, BlockPos pos) {
         Random random = worldIn.rand;
-        double pixel = 0.0625D;
+        double pixel = RenderTools.PIXEL;
 
         IBlockState state = WorldPlugin.getBlockState(worldIn, pos);
 

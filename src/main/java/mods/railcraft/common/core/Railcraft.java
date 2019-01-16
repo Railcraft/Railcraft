@@ -93,40 +93,46 @@ public final class Railcraft {
     public void processIMCRequests(FMLInterModComms.IMCEvent event) {
         Splitter splitter = Splitter.on("@").trimResults();
         for (FMLInterModComms.IMCMessage mess : event.getMessages()) {
-            if ("ballast".equals(mess.key)) {
-                String[] tokens = Iterables.toArray(splitter.split(mess.getStringValue()), String.class);
-                if (tokens.length != 2) {
-                    Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
-                    continue;
-                }
-                String blockName = tokens[0];
-                Integer metadata = Ints.tryParse(tokens[1]);
-                if (blockName == null || metadata == null) {
-                    Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
-                    continue;
-                }
-                BallastRegistry.registerBallast(Block.getBlockFromName(blockName), metadata);
-                Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
-            } else if ("fluid-fuel".equals(mess.key)) {
-                FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());
-                int fuel = mess.getNBTValue().getInteger("Fuel");
-                if (fuel == 0) {
-                    Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a fluid fuel, but failed: %s", mess.getSender(), mess.getNBTValue()));
-                    continue;
-                }
-                FluidFuelManager.addFuel(fluidStack, fuel);
-                Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getNBTValue()));
-            } else if ("rock-crusher".equals(mess.key)) {
-                throw new UnsupportedOperationException("rock crusher");
-            } else if ("high-speed-explosion-excluded-entities".equals(mess.key)) {
-                NBTTagCompound nbt = mess.getNBTValue();
-                if (nbt.hasKey("entities")) {
-                    String entities = nbt.getString("entities");
-                    Iterable<String> split = splitter.split(entities);
-                    RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
-                } else {
-                    Game.log().msg(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions, but failed: %s", mess.getSender(), nbt);
-                }
+            switch (mess.key) {
+                case "ballast":
+                    String[] tokens = Iterables.toArray(splitter.split(mess.getStringValue()), String.class);
+                    if (tokens.length != 2) {
+                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
+                        continue;
+                    }
+                    String blockName = tokens[0];
+                    Integer metadata = Ints.tryParse(tokens[1]);
+                    Block block;
+                    if (blockName == null || metadata == null || (block = Block.getBlockFromName(blockName)) == null) {
+                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
+                        continue;
+                    }
+                    BallastRegistry.registerBallast(block, metadata);
+                    Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
+                    break;
+                case "fluid-fuel":
+                    FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());
+                    int fuel = mess.getNBTValue().getInteger("Fuel");
+                    if (fuel == 0 || fluidStack == null) {
+                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a fluid fuel, but failed: %s", mess.getSender(), mess.getNBTValue()));
+                        continue;
+                    }
+                    FluidFuelManager.addFuel(fluidStack, fuel);
+                    Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getNBTValue()));
+                    break;
+                case "rock-crusher":
+                    // TODO Add crafter support for everything
+                    throw new UnsupportedOperationException("rock crusher");
+                case "high-speed-explosion-excluded-entities":
+                    NBTTagCompound nbt = mess.getNBTValue();
+                    if (nbt.hasKey("entities")) {
+                        String entities = nbt.getString("entities");
+                        Iterable<String> split = splitter.split(entities);
+                        RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
+                    } else {
+                        Game.log().msg(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions, but failed: %s", mess.getSender(), nbt);
+                    }
+                    break;
             }
         }
     }
@@ -176,11 +182,11 @@ public final class Railcraft {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
 //        Game.log(Level.FINE, "Post-Init Phase");
+        RailcraftConfig.postInit();
         RailcraftModuleManager.postInit();
 
         proxy.finalizeClient();
 
-        RailcraftConfig.postInit();
         CraftingPlugin.areAllBuildersRegistered();
     }
 

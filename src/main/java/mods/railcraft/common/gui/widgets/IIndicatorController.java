@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,6 +23,8 @@ public interface IIndicatorController {
     double getMeasurement();
 
     double getServerValue();
+
+    double getClientValue();
 
     void setClientValue(double value);
 }

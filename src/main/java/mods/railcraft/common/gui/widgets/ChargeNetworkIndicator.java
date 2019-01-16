@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -53,4 +53,8 @@ public class ChargeNetworkIndicator extends IndicatorController {
         chargePercent = value;
     }
 
+    @Override
+    public double getClientValue() {
+        return chargePercent;
+    }
 }

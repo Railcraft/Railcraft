@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -29,7 +29,7 @@ public class InventoryMapper extends InvWrapperBase {
     private final int start;
     private final int size;
     private int stackSizeLimit = -1;
-    private Predicate<ItemStack> filter = StandardStackFilters.ALL;
+    private Predicate<ItemStack> filter = StackFilters.ALL;
 
     public static InventoryMapper make(IInventory inv) {
         return new InventoryMapper(inv, 0, inv.getSizeInventory());

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,11 +10,9 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityCartWorldspike;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerWorldspike;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -29,8 +27,7 @@ public class GuiCartWorldspike extends GuiTitled {
     }
 
     public GuiCartWorldspike(InventoryPlayer playerInv, EntityCartWorldspike worldspike) {
-        super(worldspike, new ContainerWorldspike(playerInv, worldspike), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
-        xSize = 176;
+        super(worldspike, new ContainerWorldspike(playerInv, worldspike), "gui_single_slot.png");
         ySize = 140;
         container = (ContainerWorldspike) inventorySlots;
     }
@@ -39,8 +36,8 @@ public class GuiCartWorldspike extends GuiTitled {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel"), 85, 24, 0x404040);
-        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining", timeFormatter.format((double) container.minutesRemaining / 60.0)), 85, 35, 0x404040);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining",
+                timeFormatter.format((double) container.minutesRemaining / 60.0)), 85, 35, 0x404040);
     }
 
 }

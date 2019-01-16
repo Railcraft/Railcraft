@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,14 +11,14 @@ package mods.railcraft.common.util.crafting;
 
 import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.InventoryComposite;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Arrays;
 import java.util.function.Predicate;
 

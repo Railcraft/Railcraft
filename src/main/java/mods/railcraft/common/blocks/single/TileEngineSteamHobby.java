@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -135,8 +135,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
         boiler.tick(1);
 
         // FIXME the bucket filter is broken
-//        if (StandardStackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
-//            invFuel.moveOneItemTo(invOutput, StandardStackFilters.EMPTY_BUCKET);
+//        if (StackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
+//            invFuel.moveOneItemTo(invOutput, StackFilters.EMPTY_BUCKET);
     }
 
     @Override

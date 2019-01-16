@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,19 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class EntityCartCargo extends CartBaseFiltered {
@@ -76,9 +72,7 @@ public class EntityCartCargo extends CartBaseFiltered {
         ItemStack filter = getFilterItem();
         if (!InvTools.isItemEqual(stack, filter))
             return false;
-        if (!RailcraftConfig.chestAllowLiquids())
-            return getStackInSlot(slot).isEmpty() || !FluidItemHelper.isContainer(stack);
-        return true;
+        return StackFilters.CARGO.test(stack);
     }
 
     @Override

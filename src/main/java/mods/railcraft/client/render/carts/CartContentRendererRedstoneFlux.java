@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class CartContentRendererRedstoneFlux extends CartContentRenderer<EntityC
 
         JSONModelRenderer.INSTANCE.renderModel(FRAME_MODEL);
 
-        float bright = 0.5F + 0.5F * (float) ((double) cart.getRF() / (double) cart.getMaxRF());
+        float bright = 0.5F + 0.5F * (float) ((double) cart.getEnergyStorage().getEnergyStored() / (double) cart.getEnergyStorage().getMaxEnergyStored());
         RenderTools.setBrightness(bright);
         JSONModelRenderer.INSTANCE.renderModel(CORE_MODEL);
         RenderTools.resetBrightness();

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,19 +11,20 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.gui.widgets.AnalogWidget;
 import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 public class ContainerTurbine extends RailcraftContainer {
 
-    public TileSteamTurbine tile;
+    public static final int GUI_HEIGHT = 140;
+    public final TileSteamTurbine tile;
     private int lastOutput;
 
     public ContainerTurbine(InventoryPlayer inventoryplayer, TileSteamTurbine tile) {
@@ -32,17 +33,10 @@ public class ContainerTurbine extends RailcraftContainer {
 
         addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 110, 38, 28, 14, 99, 65));
 
-        addSlot(new SlotTurbine(tile.getInventory(), 0, 60, 24));
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 58 + i * 18));
-            }
+        addSlot(new SlotStackFilter(StackFilters.of(RailcraftItems.TURBINE_ROTOR), tile.getInventory(), 0, 60, 24)
+                .setStackLimit(1));
 
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 116));
-        }
+        addPlayerSlots(inventoryplayer, GUI_HEIGHT);
     }
 
     @Override
@@ -63,10 +57,8 @@ public class ContainerTurbine extends RailcraftContainer {
 
     @Override
     public void updateProgressBar(int id, int data) {
-        switch (id) {
-            case 0:
-                tile.output = data;
-                break;
+        if (id == 0) {
+            tile.output = data;
         }
     }
 
@@ -78,7 +70,7 @@ public class ContainerTurbine extends RailcraftContainer {
         }
 
         @Override
-        public boolean isItemValid(@Nullable ItemStack stack) {
+        public boolean isItemValid(ItemStack stack) {
             return RailcraftItems.TURBINE_ROTOR.isEqual(stack);
         }
 

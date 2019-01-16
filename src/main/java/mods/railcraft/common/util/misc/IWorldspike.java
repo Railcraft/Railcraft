@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,17 +9,27 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
-import mods.railcraft.common.util.collections.ItemMap;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IWorldspike extends IInventory {
 
     long getFuelAmount();
 
-    ItemMap<Float> getFuelMap();
+    Map<Ingredient, Float> getFuelMap();
+
+    default Optional<Float> getFuelValue(ItemStack stack) {
+        return getFuelMap().entrySet().stream()
+                .filter(e -> e.getKey().apply(stack))
+                .map(Map.Entry::getValue)
+                .findFirst();
+    }
 
 }

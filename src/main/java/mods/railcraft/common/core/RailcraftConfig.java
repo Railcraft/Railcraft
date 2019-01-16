@@ -21,12 +21,12 @@ import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleChunkLoading;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.collections.BlockItemParser;
-import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -38,9 +38,10 @@ import java.io.File;
 import java.util.*;
 
 public class RailcraftConfig {
-    public static final ItemMap<Float> worldspikeFuelStandard = new ItemMap<>();
-    public static final ItemMap<Float> worldspikeFuelPersonal = new ItemMap<>();
-    public static final ItemMap<Float> worldspikeFuelPassive = new ItemMap<>();
+    public static final Map<Ingredient, Float> worldspikeFuelStandard = new HashMap<>();
+    public static final Map<Ingredient, Float> worldspikeFuelPersonal = new HashMap<>();
+    public static final Map<Ingredient, Float> worldspikeFuelPassive = new HashMap<>();
+    public static final List<Ingredient> cargoBlacklist = new ArrayList<>();
     private static final String COMMENT_PREFIX = "\n";
     private static final String COMMENT_SUFFIX = "\n";
     //    private static final String COMMENT_PREFIX = "\n\n   # ";
@@ -74,9 +75,10 @@ public class RailcraftConfig {
     private static String[] worldspikeFuelStandardArray;
     private static String[] worldspikeFuelPersonalArray;
     private static String[] worldspikeFuelPassiveArray;
+    private static String[] cargoBlacklistArray;
     private static String boreMineableBlocksString;
     private static float maxHighSpeed = 1.1f;
-    private static boolean boreDestroysBlocks;
+    private static boolean borePreserveStacks = true;
     private static boolean boreMinesAllBlocks;
     private static boolean locomotiveDamageMobs;
     private static boolean printLinkingDebug;
@@ -88,7 +90,7 @@ public class RailcraftConfig {
     private static boolean printWorldspikes;
     private static boolean minecartsBreakOnDrop;
     private static boolean adjustBasicCartDrag;
-    private static boolean chestAllowLiquids;
+    private static boolean chestAllowFluids;
     private static boolean minecartsCollideWithItems;
     private static boolean registerCollisionHandler;
     private static boolean cartsAreSolid;
@@ -196,9 +198,10 @@ public class RailcraftConfig {
     public static void postInit() {
         Game.log().msg(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
-        worldspikeFuelStandard.putAll(BlockItemParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
-        worldspikeFuelPersonal.putAll(BlockItemParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
-        worldspikeFuelPassive.putAll(BlockItemParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel = {0}", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelStandard.putAll(BlockItemParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel: {0}", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelPersonal.putAll(BlockItemParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel: {0}", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelPassive.putAll(BlockItemParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel: {0}", BlockItemParser::parseItem, Float::parseFloat));
+        cargoBlacklist.addAll(BlockItemParser.parseList(cargoBlacklistArray, "Blacklisting Cargo: {0}", BlockItemParser::parseItem));
         EntityTunnelBore.mineableStates.addAll(BlockItemParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemParser::parseBlock));
     }
 
@@ -224,10 +227,11 @@ public class RailcraftConfig {
 
 
         configMain.addCustomCategoryComment(CAT_WORLDSPIKES_FUEL,
-                "the number of hours that an item will power a Worldspike or Worldspike Cart\n"
-                        + "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n"
-                        + "if the list is empty, Worldspikes will not require fuel\n"
-                        + "Entry Format: <modid>:<itemname>[#<metadata>]=<value>");
+                "the number of hours that an item will power a Worldspike or Worldspike Cart\n" +
+                        "this is an approximation only, actual duration is affected by number of chunks loaded and tick rate\n" +
+                        "if the list is empty, Worldspikes will not require fuel\n" +
+                        "Entry Format: <modId>:<itemName>[#<metadata>[-<metadata>]]=<value> || <oreTag>=<value>" +
+                        "Regular expressions in the item name are supported.");
 
         String[] fuelDefault = {
                 "railcraft:dust#0=2",
@@ -244,11 +248,11 @@ public class RailcraftConfig {
     }
 
     private static void loadBlockTweaks() {
-        cartDispenserDelay = get(CAT_TWEAKS_BLOCKS + ".cartdispenser", "delay", 0, 0, Integer.MAX_VALUE, "set the minimum number of seconds between cart dispensing, default=0");
+        cartDispenserDelay = get(CAT_TWEAKS_BLOCKS + ".cart_dispenser", "delay", 0, 0, Integer.MAX_VALUE, "set the minimum number of seconds between cart dispensing, default=0");
 
-        maxTankSize = get(CAT_TWEAKS_BLOCKS + ".irontank", "maxsize", 3, 9, 9, "Allows you to set the max Iron Tank base dimension, valid values are 3, 5, 7, and 9");
+        maxTankSize = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "maxsize", 3, 9, 9, "Allows you to set the max Iron Tank base dimension, valid values are 3, 5, 7, and 9");
 
-        allowTankStacking = get(CAT_TWEAKS_BLOCKS + ".irontank", "allow.stacking", true, "Change to '{t}=false' to disable the stacking of Iron Tanks");
+        allowTankStacking = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "allow.stacking", true, "Change to '{t}=false' to disable the stacking of Iron Tanks");
 
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
@@ -296,9 +300,27 @@ public class RailcraftConfig {
 
         adjustBasicCartDrag = get(CAT_TWEAKS_CARTS + ".basic", "adjustDrag", true, "change to '{t}=false' to give basic carts the original vanilla drag values, after changing you may need to replace the carts to see any change in game");
 
-        chestAllowLiquids = get(CAT_TWEAKS_CARTS + ".chest", "allowLiquids", false, "change to '{t}=true' to allow you put cans/capsules in Chest Carts");
+        chestAllowFluids = get(CAT_TWEAKS_CARTS + ".chest", "allowFluidContainers", false, "change to '{t}=true' to allow fluid containers in Chest and Cargo Carts");
 
-        boreDestroysBlocks = get(CAT_TWEAKS_CARTS + ".bore", "destroyBlocks", false, "change to '{t}=true' to cause the Bore to destroy the blocks it mines instead of dropping them");
+        @SuppressWarnings("SpellCheckingInspection") String[] defaultBlacklist = {
+                "minecraft:.*_shulker_box",
+                "minecraft:.*_bucket",
+                "forge:bucketfilled",
+                "ic2:.*bat((pack)|(tery))",
+                "ic2:.*_crystal",
+                "ic2:jetpack_electric",
+                "ic2:energy_pack",
+                "ic2:lappack",
+                "ic2:te#68-75",
+        };
+
+        cargoBlacklistArray = configMain.getStringList("cargoBlacklist", CAT_TWEAKS_CARTS + ".chest", defaultBlacklist,
+                "These items cannot be placed in Chest or Cargo carts.\n" +
+                        "Entry Format: <modId>:<itemName>[#<metadata>[-<metadata>]] || <oreTag>\n" +
+                        "Regular expressions in the item name are supported."
+        );
+
+        borePreserveStacks = !get(CAT_TWEAKS_CARTS + ".bore", "destroyBlocks", false, "change to '{t}=true' to cause the Bore to destroy the blocks it mines instead of dropping them");
         boreMinesAllBlocks = get(CAT_TWEAKS_CARTS + ".bore", "mineAllBlocks", true, "change to '{t}=false' to enable mining checks, use true setting with caution, especially on servers");
         boreMiningSpeedMultiplier = get(CAT_TWEAKS_CARTS + ".bore", "miningSpeed", 0.1f, 1.0f, 50.0f, "adjust the speed at which the Bore mines blocks, min=0.1, default=1.0, max=50.0");
 
@@ -337,7 +359,7 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
-        coalCokeTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "coalcoke.torches", 0, 8, 32, "set the output of the coalcoke and stick recipe for torches, setting to 0 will disable'\nmin=0, default=8, max=32");
+        coalCokeTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "coal_coke.torches", 0, 8, 32, "set the output of the coal coke and stick recipe for torches, setting to 0 will disable'\nmin=0, default=8, max=32");
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "vanilla.furnace", true, "change to '{t}=false' to disable the Furnace Minecart recipe");
@@ -389,7 +411,7 @@ public class RailcraftConfig {
 //        worldGen.put("lead", get(configMain, CAT_WORLD_GEN + ".generate", "mineLead", true, "Lead Mine, spawns a cloud of ore over a large but localized region"));
 //        worldGen.put("silver", get(configMain, CAT_WORLD_GEN + ".generate", "mineSilver", true, "Silver Mine, spawns a cloud of ore over a large but localized region"));
 //        worldGen.put("nickel", get(configMain, CAT_WORLD_GEN + ".generate", "mineNickel", true, "Nickel Mine, spawns a cloud of ore over a large but localized region"));
-//        worldGen.put("zinc", get(configMain, CAT_WORLD_GEN + ".generate", "mineZinc", true, "Zinc Mine, spawns a cloud of ore over a lare but localized region"));
+//        worldGen.put("zinc", get(configMain, CAT_WORLD_GEN + ".generate", "mineZinc", true, "Zinc Mine, spawns a cloud of ore over a large but localized region"));
         worldGen.put("sky", get(configMain, CAT_WORLD_GEN + ".generate", "skyGen", false, "Spawns a copy of mines in the sky for easy configuration testing"));
 
 //        mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
@@ -647,7 +669,7 @@ public class RailcraftConfig {
         String tag = "mineableBlocks";
         Property prop = get(CAT_TWEAKS_CARTS + ".bore", tag, "{}", "add block ids to '{t}' in a common separated list to define non-vanilla blocks mineable by the tunnel bore \n"
                 + "ignored if 'tweaks.carts.bore.mineAllBlocks=true' \n"
-                + "metadata sensitive entries can be defined in the form 'modid:blockname#metadata' \n"
+                + "metadata sensitive entries can be defined in the form '<modId>:<blockname>[#<metadata>]' \n"
                 + "Example:{t}= { minecraft:stone, minecraft:stonebrick#3 }");
         boreMineableBlocksString = prop.getString();
     }
@@ -707,8 +729,8 @@ public class RailcraftConfig {
         return routingOpsOnly;
     }
 
-    public static boolean boreDestroysBlocks() {
-        return boreDestroysBlocks;
+    public static boolean borePreserveStacks() {
+        return borePreserveStacks;
     }
 
     public static boolean boreMinesAllBlocks() {
@@ -776,7 +798,7 @@ public class RailcraftConfig {
     }
 
     public static boolean chestAllowLiquids() {
-        return chestAllowLiquids;
+        return chestAllowFluids;
     }
 
     public static boolean doCartsCollideWithItems() {

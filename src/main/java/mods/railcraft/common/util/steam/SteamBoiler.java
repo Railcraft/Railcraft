@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -254,6 +254,11 @@ public class SteamBoiler {
 
         @Override
         public double getServerValue() {
+            return getHeat();
+        }
+
+        @Override
+        public double getClientValue() {
             return getHeat();
         }
 

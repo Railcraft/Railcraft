@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.client.gui;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.TileRailcraft;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerRouting;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -23,7 +22,6 @@ import mods.railcraft.common.util.routing.IRouter;
 import mods.railcraft.common.util.routing.RoutingLogic;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiRouting extends GuiTitled {
 
@@ -39,7 +37,7 @@ public class GuiRouting extends GuiTitled {
     private String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
     public GuiRouting(InventoryPlayer inv, TileRailcraft tile, IRouter router) {
-        super(tile, new ContainerRouting(inv, router), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_routing.png");
+        super(tile, new ContainerRouting(inv, router), "gui_routing.png");
         ySize = 160;
         this.tile = tile;
         this.router = router;
@@ -112,7 +110,6 @@ public class GuiRouting extends GuiTitled {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.routing.slot.label"), 64, 29, 0x404040);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

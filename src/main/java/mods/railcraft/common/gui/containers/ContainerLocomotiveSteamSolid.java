@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,8 +10,8 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.carts.EntityLocomotiveSteamSolid;
-import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotOutput;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.slots.SlotWaterLimited;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
@@ -47,10 +47,10 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
         addSlot(new SlotWaterLimited(loco, 0, 152, 20));
         addSlot(new SlotOutput(loco, 1, 152, 56));
         addSlot(new SlotOutput(loco, 2, 116, 56));
-        addSlot(new SlotFuel(loco, 3, 116, 20));
-        addSlot(new SlotFuel(loco, 4, 80, 20));
-        addSlot(new SlotFuel(loco, 5, 80, 38));
-        addSlot(new SlotFuel(loco, 6, 80, 56));
+        addSlot(new SlotRailcraft(loco, 3, 116, 20)); // Burn
+        addSlot(new SlotRailcraft(loco, 4, 80, 20)); // Fuel
+        addSlot(new SlotRailcraft(loco, 5, 80, 38)); // Fuel
+        addSlot(new SlotRailcraft(loco, 6, 80, 56)); // Fuel
     }
 
     @Override

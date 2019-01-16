@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,9 +17,9 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.InventoryComposite;
+import mods.railcraft.common.util.inventory.InventorySorter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
@@ -42,7 +42,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
     private static final int SLOT_FUEL_B = 4;
     private static final int SLOT_FUEL_C = 5;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 6);
-    private static final Predicate<ItemStack> NOT_FUEL = StandardStackFilters.FUEL.negate();
+    private static final Predicate<ItemStack> NOT_FUEL = StackFilters.FUEL.negate();
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileSteamOven)
             return true;
@@ -104,7 +104,7 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
             TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
 
             if (mBlock != null)
-                invCache.getAdjacentInventories().moveOneItemTo(mBlock.invFuel, StandardStackFilters.FUEL);
+                invCache.getAdjacentInventories().moveOneItemTo(mBlock.invFuel, StackFilters.FUEL);
         }
     }
 

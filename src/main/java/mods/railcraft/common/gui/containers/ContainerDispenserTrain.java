@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,34 +12,26 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.blocks.machine.manipulator.TileDispenserTrain;
 import mods.railcraft.common.gui.slots.SlotDispensableCart;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 public class ContainerDispenserTrain extends RailcraftContainer {
+    public static final int GUI_HEIGHT = 193;
 
     public ContainerDispenserTrain(InventoryPlayer playerInv, TileDispenserTrain tile) {
         super(tile);
 
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotDispensableCart(tile.getPattern(), i, 8 + i * 18, 31).setPhantom().setStackLimit(1));
+            addSlot(new SlotDispensableCart(tile.getPattern(), i, 8 + i * 18, 29).setPhantom().setStackLimit(1));
         }
 
         for (int i = 0; i < 2; i++) {
             for (int k = 0; k < 9; k++) {
-                addSlot(new SlotStackFilter(StandardStackFilters.MINECART,
-                        tile, k + i * 9, 8 + k * 18, 67 + i * 18));
+                addSlot(new SlotStackFilter(StackFilters.MINECART,
+                        tile, k + i * 9, 8 + k * 18, 61 + i * 18));
             }
         }
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(playerInv, k + i * 9 + 9, 8 + k * 18, 111 + i * 18));
-            }
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(playerInv, j, 8 + j * 18, 169));
-        }
+        addPlayerSlots(playerInv, GUI_HEIGHT);
     }
 }

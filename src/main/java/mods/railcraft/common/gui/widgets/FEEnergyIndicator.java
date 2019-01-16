@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,34 +9,39 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.widgets;
 
-import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class FEEnergyIndicator extends IndicatorController {
 
-    private final EnergyStorage energyStorage;
-    private int rf;
+    private final IEnergyStorage energyStorage;
+    private int energy;
 
-    public FEEnergyIndicator(EnergyStorage energyStorage) {
+    public FEEnergyIndicator(IEnergyStorage energyStorage) {
         this.energyStorage = energyStorage;
     }
 
     @Override
     protected void refreshToolTip() {
-        tip.text = String.format("%,d / %,d RF", rf, energyStorage.getMaxEnergyStored());
+        tip.text = String.format("%,d / %,d FE", energy, energyStorage.getMaxEnergyStored());
     }
 
     @Override
     public double getMeasurement() {
-        double e = Math.min(rf, energyStorage.getMaxEnergyStored());
+        double e = Math.min(energy, energyStorage.getMaxEnergyStored());
         return e / energyStorage.getMaxEnergyStored();
     }
 
     @Override
     public void setClientValue(double value) {
-        rf = (int) value;
+        energy = (int) value;
+    }
+
+    @Override
+    public double getClientValue() {
+        return energy;
     }
 
     @Override

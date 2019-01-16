@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.blocks.TileRailcraft;
+import mods.railcraft.common.util.misc.Optionals;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -229,6 +230,11 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
 
         public Optional<TileRailcraft> tile() {
             return Optional.ofNullable(tile.get());
+        }
+
+        @Override
+        public boolean isUsableByPlayer(EntityPlayer player) {
+            return Optionals.test(tile(), t -> TileRailcraft.isUsableByPlayerHelper(t, player));
         }
 
         @Override

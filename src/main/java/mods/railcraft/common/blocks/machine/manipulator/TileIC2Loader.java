@@ -45,18 +45,19 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
     protected void processCart(EntityMinecart cart) {
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
 
+        double energy = battery.getCharge();
         if (energy > 0 && energyCart.getEnergy() < energyCart.getCapacity()) {
             double usage = (int) (energyCart.getTransferLimit() * Math.pow(1.5, overclockerUpgrades));
             double injection = (int) (energyCart.getTransferLimit() * Math.pow(1.3, overclockerUpgrades));
             if (usage > energy) {
-                double ratio = (double) energy / usage;
+                double ratio = energy / usage;
                 usage = energy;
-                injection = (int) (injection * ratio);
+                injection = injection * ratio;
             }
 
-            transferRate = (int) injection;
+            transferRate = injection;
             double extra = energyCart.injectEnergy(this, injection, getTier(), true, false, false);
-            energy -= usage - extra;
+            battery.removeCharge(usage - extra);
             setProcessing(extra != injection);
         }
     }
@@ -131,7 +132,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
 
     @Override
     public double injectEnergy(EnumFacing directionFrom, double amount) {
-        energy += amount;
+        battery.addCharge(amount);
         return 0;
     }
 
@@ -158,7 +159,7 @@ public class TileIC2Loader extends TileIC2Manipulator implements ISinkDelegate {
 
     @Override
     public double getDemandedEnergy() {
-        return getCapacity() - energy;
+        return battery.room();
     }
 
     @Override

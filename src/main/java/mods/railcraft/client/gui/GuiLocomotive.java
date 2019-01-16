@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,14 +14,12 @@ import mods.railcraft.client.gui.buttons.GuiToggleButtonSmall;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoMode;
 import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerLocomotive;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -30,14 +28,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @SideOnly(Side.CLIENT)
 public abstract class GuiLocomotive extends GuiTitled {
 
     private final EntityLocomotive loco;
     private final String typeTag;
-    private Map<LocoMode, GuiToggleButtonSmall> modeButtons = new LinkedHashMap<>();
-    private List<GuiToggleButtonSmall> speedButtons = new ArrayList<>();
+    private final Map<LocoMode, GuiToggleButtonSmall> modeButtons = new LinkedHashMap<>();
+    private final List<GuiToggleButtonSmall> speedButtons = new ArrayList<>();
     private GuiMultiButton lockButton;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
@@ -45,7 +45,7 @@ public abstract class GuiLocomotive extends GuiTitled {
     private String locoOwner;
 
     protected GuiLocomotive(InventoryPlayer inv, EntityLocomotive loco, ContainerLocomotive container, String typeTag, String guiName, int guiHeight, boolean hasIdleMode) {
-        super(loco, container, RailcraftConstants.GUI_TEXTURE_FOLDER + guiName);
+        super(loco, container, guiName);
         ySize = guiHeight;
         this.loco = loco;
         this.typeTag = typeTag;
@@ -81,11 +81,7 @@ public abstract class GuiLocomotive extends GuiTitled {
         reverseButton.setStatusUpdater(b -> b.active = loco.isReverse());
         speedButtons.add(reverseButton);
         for (LocoSpeed speed : LocoSpeed.VALUES) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < speed.getLevel(); i++) {
-                builder.append('>');
-            }
-            String label = builder.toString();
+            String label = IntStream.range(0, speed.getLevel()).mapToObj(i -> ">").collect(Collectors.joining());
             GuiToggleButtonSmall button = new GuiToggleButtonSmall(id++, 0, h + ySize - 112, 7 + speed.getLevel() * 5, label, loco.clientSpeed == speed);
             button.setClickConsumer(b -> loco.clientSpeed = speed);
             button.setStatusUpdater(b -> b.active = loco.clientSpeed == speed);
@@ -132,11 +128,4 @@ public abstract class GuiLocomotive extends GuiTitled {
     private void sendUpdatePacket() {
         PacketBuilder.instance().sendGuiReturnPacket(loco);
     }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
-    }
-
 }

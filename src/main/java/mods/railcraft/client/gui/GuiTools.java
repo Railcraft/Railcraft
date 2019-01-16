@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.tracks.ITrackKitInstance;
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -20,6 +21,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorldNameable;
 import org.lwjgl.opengl.GL11;
@@ -69,10 +71,7 @@ public final class GuiTools {
     }
 
     public static void newButtonRowAuto(List<GuiButton> buttonList, int xStart, int xSize, Collection<? extends GuiBetterButton<?>> buttons) {
-        int buttonWidth = 0;
-        for (GuiBetterButton<?> b : buttons) {
-            buttonWidth += b.getWidth();
-        }
+        int buttonWidth = buttons.stream().mapToInt(GuiBetterButton::getWidth).sum();
         int remaining = xSize - buttonWidth;
         int spacing = remaining / (buttons.size() + 1);
         int pointer = 0;
@@ -85,10 +84,7 @@ public final class GuiTools {
     }
 
     public static void newButtonRowBookended(List<GuiButton> buttonList, int xStart, int xEnd, Collection<? extends GuiBetterButton<?>> buttons) {
-        int buttonWidth = 0;
-        for (GuiBetterButton<?> b : buttons) {
-            buttonWidth += b.getWidth();
-        }
+        int buttonWidth = buttons.stream().mapToInt(GuiBetterButton::getWidth).sum();
         int remaining = (xEnd - xStart) - buttonWidth;
         int spacing = remaining / (buttons.size() + 1);
         int pointer = 0;
@@ -144,4 +140,9 @@ public final class GuiTools {
         OpenGL.glPopAttrib();
     }
 
+    public static ResourceLocation findTexture(String texture) {
+        if (!texture.contains("/"))
+            texture = RailcraftConstants.GUI_TEXTURE_FOLDER + texture;
+        return new ResourceLocation(texture);
+    }
 }

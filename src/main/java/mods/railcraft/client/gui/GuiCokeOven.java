@@ -10,10 +10,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.logic.CokeOvenLogic;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCokeOven;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCokeOven extends GuiTitled {
@@ -21,15 +19,9 @@ public class GuiCokeOven extends GuiTitled {
     private final CokeOvenLogic tile;
 
     public GuiCokeOven(InventoryPlayer inventoryplayer, CokeOvenLogic logic) {
-        super(logic, new ContainerCokeOven(inventoryplayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_coke_oven.png",
+        super(logic, new ContainerCokeOven(inventoryplayer, logic), "gui_coke_oven.png",
                 LocalizationPlugin.translateFast("gui.railcraft.coke.oven"));
         this.tile = logic;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

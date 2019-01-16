@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,22 +12,25 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.blocks.machine.manipulator.TileIC2Manipulator;
 import mods.railcraft.common.gui.slots.SlotEnergy;
 import mods.railcraft.common.gui.slots.SlotUpgrade;
-import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.gui.widgets.ChargeBatteryIndicator;
+import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerEnergyLoader extends RailcraftContainer {
+public class ContainerManipulatorCartIC2 extends RailcraftContainer {
 
     private final TileIC2Manipulator device;
-    private int lastEnergy, lastTransferRate;
+    private int lastTransferRate;
     private short lastStorage, lastLapotron;
 
-    public ContainerEnergyLoader(InventoryPlayer inventoryplayer, TileIC2Manipulator device) {
+    public ContainerManipulatorCartIC2(InventoryPlayer inventoryplayer, TileIC2Manipulator device) {
         super(device);
         this.device = device;
+
+        addWidget(new IndicatorWidget(new ChargeBatteryIndicator(device.getBattery()), 31, 28, 176, 0, 24, 9, false));
+
         addSlot(new SlotEnergy(device, 0, 8, 17));
         addSlot(new SlotEnergy(device, 1, 8, 53));
 
@@ -36,25 +39,15 @@ public class ContainerEnergyLoader extends RailcraftContainer {
         addSlot(new SlotUpgrade(device, 4, 152, 44));
         addSlot(new SlotUpgrade(device, 5, 152, 62));
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-            }
-
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
-        }
+        addPlayerSlots(inventoryplayer);
     }
 
     @Override
     public void addListener(IContainerListener player) {
         super.addListener(player);
-        PacketBuilder.instance().sendGuiIntegerPacket(player, windowId, 0, (int) device.getEnergy());
         player.sendWindowProperty(this, 1, device.storageUpgrades);
         player.sendWindowProperty(this, 2, device.lapotronUpgrades);
-        player.sendWindowProperty(this, 3, device.transferRate);
+        player.sendWindowProperty(this, 3, (int) device.transferRate);
     }
 
     /**
@@ -65,9 +58,6 @@ public class ContainerEnergyLoader extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener listener : listeners) {
-            if (lastEnergy != device.getEnergy())
-                PacketBuilder.instance().sendGuiIntegerPacket(listener, windowId, 0, (int) device.getEnergy());
-
             if (lastStorage != device.storageUpgrades)
                 listener.sendWindowProperty(this, 1, device.storageUpgrades);
 
@@ -75,20 +65,17 @@ public class ContainerEnergyLoader extends RailcraftContainer {
                 listener.sendWindowProperty(this, 2, device.lapotronUpgrades);
 
             if (lastTransferRate != device.transferRate)
-                listener.sendWindowProperty(this, 3, device.transferRate);
+                listener.sendWindowProperty(this, 3, (int) device.transferRate);
         }
 
-        lastEnergy = (int) device.getEnergy();
         lastStorage = device.storageUpgrades;
         lastLapotron = device.lapotronUpgrades;
-        lastTransferRate = device.transferRate;
+        lastTransferRate = (int) device.transferRate;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
-        if (id == 0)
-            device.setEnergy(data);
         if (id == 1)
             device.storageUpgrades = (short) data;
         if (id == 2)

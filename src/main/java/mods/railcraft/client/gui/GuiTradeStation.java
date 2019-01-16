@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,13 +10,12 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
-import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
+import mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.util.collections.RevolvingList;
-import mods.railcraft.common.blocks.logic.TradeStationLogic;
-import mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
@@ -43,7 +42,7 @@ public class GuiTradeStation extends GuiContainerRailcraft {
     private final IWorldNameable namer;
 
     public GuiTradeStation(InventoryPlayer playerInv, TradeStationLogic logic, IWorldNameable namer) {
-        super(new ContainerTradeStation(playerInv, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+        super(new ContainerTradeStation(playerInv, logic), "gui_trade_station.png");
         this.owner = namer;
         this.namer = namer;
         xSize = 176;

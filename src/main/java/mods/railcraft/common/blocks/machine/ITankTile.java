@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +30,7 @@ public interface ITankTile extends ITileTank {
     String getTitle();
 
     default Predicate<ItemStack> getInputFilter() {
-        return StandardStackFilters.FLUID_CONTAINER;
+        return StackFilters.FLUID_CONTAINER;
     }
 
 }

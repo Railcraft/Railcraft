@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.client.gui;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorTank;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDetectorTank;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -27,7 +26,7 @@ public class GuiDetectorTank extends GuiTitled {
     private GuiMultiButton button;
 
     public GuiDetectorTank(InventoryPlayer inv, TileDetector tile) {
-        super(tile, new ContainerDetectorTank(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_detector_tank.png");
+        super(tile, new ContainerDetectorTank(inv, tile), "gui_detector_tank.png");
         this.tile = tile;
         this.detector = (DetectorTank) tile.getDetector();
         xSize = 176;

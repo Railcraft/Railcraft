@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,14 +34,14 @@ public class TileRFLoader extends TileRFManipulator {
     protected void processCart(EntityMinecart cart) {
         EntityCartRF rfCart = (EntityCartRF) cart;
 
-        if (energyStorage.getEnergyStored() > 0 && rfCart.getRF() < rfCart.getMaxRF()) {
+        if (energyStorage.getEnergyStored() > 0 && rfCart.getEnergyStorage().getEnergyStored() < rfCart.getEnergyStorage().getMaxEnergyStored()) {
             int injection = TRANSFER_RATE;
             if (injection > energyStorage.getEnergyStored()) {
                 injection = energyStorage.getEnergyStored();
             }
-            int used = rfCart.addRF(injection);
+            int used = rfCart.getEnergyStorage().receiveEnergy(injection, false);
             if (used > 0) {
-                energyStorage.extractEnergy(used,false);
+                energyStorage.extractEnergy(used, false);
                 setProcessing(true);
             }
         }
@@ -64,9 +64,9 @@ public class TileRFLoader extends TileRFManipulator {
         EntityCartRF rfCart = (EntityCartRF) cart;
         switch (redstoneController().getButtonState()) {
             case COMPLETE:
-                return rfCart.getRF() < rfCart.getMaxRF();
+                return rfCart.getEnergyStorage().getEnergyStored() < rfCart.getEnergyStorage().getMaxEnergyStored();
             case PARTIAL:
-                return rfCart.getRF() <= 0;
+                return rfCart.getEnergyStorage().getEnergyStored() <= 0;
         }
         return false;
     }

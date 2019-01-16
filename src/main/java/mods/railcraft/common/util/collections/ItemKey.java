@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,8 +43,8 @@ public final class ItemKey {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 73 * hash + this.item.hashCode();
-        hash = 73 * hash + this.metadata;
+        hash = 73 * hash + item.hashCode();
+        hash = 73 * hash + metadata;
         return hash;
     }
 
@@ -53,8 +53,15 @@ public final class ItemKey {
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
         final ItemKey other = (ItemKey) obj;
-        if (this.item != other.item) return false;
-        return this.metadata == other.metadata;
+        if (item != other.item) return false;
+        return metadata == other.metadata;
     }
 
+    @Override
+    public String toString() {
+        String s = item.name().toString();
+        if (metadata != -1)
+            s += "#" + metadata;
+        return s;
+    }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEngineSteamHobby;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiEngineSteamHobby extends GuiTitled {
 
@@ -21,7 +19,7 @@ public class GuiEngineSteamHobby extends GuiTitled {
     private final TileEngineSteamHobby tile;
 
     public GuiEngineSteamHobby(InventoryPlayer inv, TileEngineSteamHobby tile) {
-        super(tile, new ContainerEngineSteamHobby(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_engine_hobby.png");
+        super(tile, new ContainerEngineSteamHobby(inv, tile), "gui_engine_hobby.png");
         this.tile = tile;
     }
 
@@ -29,7 +27,6 @@ public class GuiEngineSteamHobby extends GuiTitled {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(String.format(OUTPUT, Math.round(tile.getCurrentOutput())), 55, 60, 0x404040);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

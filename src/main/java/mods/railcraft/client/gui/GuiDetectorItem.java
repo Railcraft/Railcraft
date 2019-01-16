@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.client.gui.buttons.GuiButtonSmall;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorItem;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDetectorItem;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
@@ -33,11 +32,10 @@ public class GuiDetectorItem extends GuiTitled {
     private GuiButton filterRight;
 
     public GuiDetectorItem(InventoryPlayer inv, TileDetector tile) {
-        super(tile, new ContainerDetectorItem(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_detector_item.png");
+        super(tile, new ContainerDetectorItem(inv, tile), "gui_detector_item.png");
         this.tile = tile;
         this.detector = (DetectorItem) tile.getDetector();
-        xSize = 176;
-        ySize = 166;
+        drawInvTitle = false;
     }
 
     @Override
@@ -113,11 +111,11 @@ public class GuiDetectorItem extends GuiTitled {
             OpenGL.glDisable(GL11.GL_LIGHTING);
             OpenGL.glDisable(GL11.GL_DEPTH_TEST);
             for (int slotNum = 0; slotNum < 9; slotNum++) {
-                Slot slot = this.inventorySlots.inventorySlots.get(slotNum);
+                Slot slot = inventorySlots.inventorySlots.get(slotNum);
 
                 int displayX = slot.xPos;
                 displayY = slot.yPos;
-                this.drawGradientRect(displayX, displayY, displayX + 16, displayY + 16, color.getRGB(), color.getRGB());
+                drawGradientRect(displayX, displayY, displayX + 16, displayY + 16, color.getRGB(), color.getRGB());
             }
             OpenGL.glEnable(GL11.GL_LIGHTING);
             OpenGL.glEnable(GL11.GL_DEPTH_TEST);

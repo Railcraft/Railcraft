@@ -1,70 +1,33 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.carts.IIC2EnergyCart;
+import mods.railcraft.api.charge.CapabilitiesCharge;
+import mods.railcraft.common.carts.CartBaseEnergy;
 import mods.railcraft.common.gui.slots.SlotEnergy;
-import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.gui.widgets.ChargeBatteryIndicator;
+import mods.railcraft.common.gui.widgets.IndicatorWidget;
+import mods.railcraft.common.util.misc.Capabilities;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCartEnergy extends RailcraftContainer {
 
-    private IIC2EnergyCart cart;
-    private int lastEnergy;
+    public ContainerCartEnergy(InventoryPlayer inventoryplayer, CartBaseEnergy cart) {
+        super(cart);
 
-    public ContainerCartEnergy(InventoryPlayer inventoryplayer, IIC2EnergyCart device) {
-        super(device);
-        this.cart = device;
-        addSlot(new SlotEnergy(device, 0, 56, 17));
-        addSlot(new SlotEnergy(device, 1, 56, 53));
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-            }
+        Capabilities.get(cart, CapabilitiesCharge.CART_BATTERY).ifPresent(bat ->
+                addWidget(new IndicatorWidget(new ChargeBatteryIndicator(bat), 79, 38, 176, 0, 24, 9, false)));
 
-        }
+        addSlot(new SlotEnergy(cart, 0, 56, 17));
+        addSlot(new SlotEnergy(cart, 1, 56, 53));
 
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
-        }
+        addPlayerSlots(inventoryplayer);
     }
-
-    @Override
-    public void addListener(IContainerListener player) {
-        super.addListener(player);
-        PacketBuilder.instance().sendGuiIntegerPacket(player, windowId, 0, (int) cart.getEnergy());
-    }
-
-    /**
-     * Updates crafting matrix; called from onCraftMatrixChanged. Args: none
-     */
-    @Override
-    public void sendUpdateToClient() {
-        super.sendUpdateToClient();
-
-        for (IContainerListener player : listeners) {
-            if (lastEnergy != cart.getEnergy())
-                PacketBuilder.instance().sendGuiIntegerPacket(player, windowId, 0, (int) cart.getEnergy());
-        }
-
-        lastEnergy = (int) cart.getEnergy();
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int id, int data) {
-        if (id == 0)
-            cart.setEnergy(data);
-    }
-
 }

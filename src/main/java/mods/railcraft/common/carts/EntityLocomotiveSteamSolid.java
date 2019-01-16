@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,16 +15,13 @@ import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -94,7 +91,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
         if (Game.isHost(world)) {
             invStock.moveOneItemTo(invBurn);
-            invBurn.moveOneItemTo(invWaterOutput, StandardStackFilters.FUEL.negate());
+            invBurn.moveOneItemTo(invWaterOutput, StackFilters.FUEL.negate());
             ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invStock));
             if (!InvTools.isEmpty(stack))
                 invStock.addStack(stack);
@@ -152,7 +149,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
             case SLOT_FUEL_A:
             case SLOT_FUEL_B:
             case SLOT_FUEL_C:
-                return StandardStackFilters.FUEL.test(stack);
+                return StackFilters.FUEL.test(stack);
             case SLOT_WATER_INPUT:
                 FluidStack fluidStack = FluidItemHelper.getFluidStackInContainer(stack);
                 if (fluidStack != null && fluidStack.amount > FluidTools.BUCKET_VOLUME)
@@ -167,7 +164,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
 
     @Override
     public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
-        return StandardStackFilters.FUEL.test(stack);
+        return StackFilters.FUEL.test(stack);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.manipulator;
 import mods.railcraft.api.carts.IEnergyTransfer;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
+import mods.railcraft.common.util.charge.Battery;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -36,10 +37,18 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
     private static final int MAX_OVERCLOCKS = 10;
     private static final int MAX_LAPOTRON = 6;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    public int transferRate;
+    public double transferRate;
     public short storageUpgrades;
     public short lapotronUpgrades;
-    protected int energy;
+    protected final Battery battery = new Battery(CAPACITY) {
+        @Override
+        public double getCapacity() {
+            int capacity = CAPACITY;
+            capacity += storageUpgrades * 10000;
+            capacity += lapotronUpgrades * 1000000;
+            return capacity;
+        }
+    };
     protected short transformerUpgrades;
     protected short overclockerUpgrades;
     private boolean addedToIC2EnergyNet;
@@ -125,17 +134,17 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
             addedToIC2EnergyNet = true;
         }
 
-        int capacity = getCapacity();
-        if (energy > capacity)
-            energy = capacity;
+        double capacity = battery.getCapacity();
+        if (battery.getCharge() > capacity)
+            battery.setCharge(capacity);
 
-        ItemStack charge = getStackInSlot(SLOT_CHARGE);
-        if (!InvTools.isEmpty(charge))
-            energy -= IC2Plugin.chargeItem(charge, energy, getTier());
+        ItemStack input = getStackInSlot(SLOT_CHARGE);
+        if (!InvTools.isEmpty(input))
+            battery.removeCharge(IC2Plugin.chargeItem(input, battery.getAvailableCharge(), getTier()));
 
-        ItemStack battery = getStackInSlot(SLOT_BATTERY);
-        if (!InvTools.isEmpty(battery) && energy < capacity)
-            energy += IC2Plugin.dischargeItem(battery, capacity - energy, getTier());
+        ItemStack output = getStackInSlot(SLOT_BATTERY);
+        if (!InvTools.isEmpty(output) && battery.needsCharging())
+            battery.addCharge(IC2Plugin.dischargeItem(output, capacity - battery.getCharge(), getTier()));
 
         if (clock % 64 == 0)
             countUpgrades();
@@ -161,14 +170,14 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        data.setInteger("energy", energy);
+        battery.writeToNBT(data);
         return data;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        energy = data.getInteger("energy");
+        battery.readFromNBT(data);
         countUpgrades();
     }
 
@@ -188,30 +197,15 @@ public abstract class TileIC2Manipulator extends TileManipulatorCart implements 
         lapotronUpgrades = data.readShort();
     }
 
-    public double getEnergy() {
-        return energy;
-    }
-
-    public void setEnergy(int energy) {
-        this.energy = energy;
-    }
-
-    public int getCapacity() {
-        int capacity = CAPACITY;
-        capacity += storageUpgrades * 10000;
-        capacity += lapotronUpgrades * 1000000;
-        return capacity;
+    public Battery getBattery() {
+        return battery;
     }
 
     public int getTier() {
         return TIER + transformerUpgrades;
     }
 
-    public int getTransferRate() {
+    public double getTransferRate() {
         return transferRate;
-    }
-
-    public int getEnergyBarScaled(int scale) {
-        return ((int) getEnergy() * scale) / getCapacity();
     }
 }

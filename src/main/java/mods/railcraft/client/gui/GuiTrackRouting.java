@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,14 +12,12 @@ package mods.railcraft.client.gui;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerTrackRouting;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiTrackRouting extends GuiTitled {
@@ -32,7 +30,7 @@ public class GuiTrackRouting extends GuiTitled {
     private String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
     public GuiTrackRouting(InventoryPlayer inv, TrackKitRouting track) {
-        super(track.getTile(), new ContainerTrackRouting(inv, track), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_track_routing.png");
+        super(track.getTile(), new ContainerTrackRouting(inv, track), "gui_track_routing.png");
         ySize = 140;
         this.track = track;
         lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + ownerName);
@@ -92,7 +90,6 @@ public class GuiTrackRouting extends GuiTitled {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.routing.track.slot.label"), 64, 29, 0x404040);
-        fontRenderer.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

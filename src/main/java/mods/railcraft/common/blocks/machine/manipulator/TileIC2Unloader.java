@@ -46,11 +46,11 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
     protected void processCart(EntityMinecart cart) {
         IEnergyTransfer energyCart = (IEnergyTransfer) cart;
 
-        if (energy < getCapacity() && energyCart.getEnergy() > 0) {
+        if (battery.needsCharging() && energyCart.getEnergy() > 0) {
             double usage = (energyCart.getTransferLimit() * Math.pow(1.5, overclockerUpgrades));
             double injection = (energyCart.getTransferLimit() * Math.pow(1.3, overclockerUpgrades));
 
-            double room = getCapacity() - getEnergy();
+            double room = battery.room();
             if (room < injection) {
                 double ratio = room / injection;
                 injection = room;
@@ -65,8 +65,8 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
                 injection = injection * ratio;
             }
 
-            transferRate = (int) injection;
-            energy += injection;
+            transferRate = injection;
+            battery.addCharge(injection);
             setProcessing(extract > 0);
         }
     }
@@ -137,7 +137,7 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
     @Override
     public double getOfferedEnergy() {
         int emit = transformerUpgrades > 0 ? OUTPUT_LEVELS[1] : OUTPUT_LEVELS[0];
-        return Math.min(energy, emit);
+        return Math.min(battery.getAvailableCharge(), emit);
     }
 
     @Override
@@ -147,7 +147,7 @@ public class TileIC2Unloader extends TileIC2Manipulator implements IEmitterDeleg
 
     @Override
     public void drawEnergy(double amount) {
-        energy -= amount;
+        battery.removeCharge(amount);
     }
 
     @Override
