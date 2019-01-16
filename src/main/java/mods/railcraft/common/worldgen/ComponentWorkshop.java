@@ -221,7 +221,6 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // machines
         if (EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) {
-            //noinspection ConstantConditions
             setBlockState(world, EquipmentVariant.ROLLING_MACHINE_MANUAL.getDefaultState(), 9, 1, 5, sbb);
         }
 

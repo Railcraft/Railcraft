@@ -43,7 +43,6 @@ public class EntityAISitBred extends EntityAISit {
             if (ownerId != null && owner == null)
                 return true;
 
-            //noinspection ConstantConditions
             if (owner != null && theEntity.getDistanceSq(owner) > 144.0D && owner.getRevengeTarget() != null)
                 return false;
 

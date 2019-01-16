@@ -86,7 +86,6 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
                 if (tileBelow instanceof TileTankIronValve) {
                     valveBelow = (TileTankIronValve) tileBelow;
                     if (valveBelow.isStructureValid() && valveBelow.getPatternMarker() == 'T') {
-                        //noinspection ConstantConditions
                         StandardTank tankBelow = valveBelow.getTankManager().get(0);
                         assert tankBelow != null;
                         FluidStack liquid = tankBelow.getFluid();

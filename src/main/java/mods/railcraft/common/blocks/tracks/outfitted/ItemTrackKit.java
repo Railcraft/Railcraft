@@ -82,7 +82,6 @@ public class ItemTrackKit extends ItemRailcraft {
         return getMetadata(stack);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         if (variant != null) {

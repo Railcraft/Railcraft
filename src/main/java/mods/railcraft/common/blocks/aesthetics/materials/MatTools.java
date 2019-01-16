@@ -64,8 +64,6 @@ public class MatTools {
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-
     public static ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         IMaterialBlock block = ((IMaterialBlock) state.getBlock());
         TileEntity tile = world.getTileEntity(pos);

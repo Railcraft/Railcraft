@@ -82,7 +82,6 @@ public class CrushedObsidian extends SimpleCube {
                 WorldPlugin.setBlockToAir(world, pos);
                 BlockPos blockPos;
 
-                //noinspection StatementWithEmptyBody
                 for (blockPos = pos.down(); canFallInto(world, blockPos) && blockPos.getY() > 0; blockPos = blockPos.down()) {
                     // NOOP
                 }

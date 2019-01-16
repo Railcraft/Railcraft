@@ -137,7 +137,6 @@ public class OutfittedTrackModel implements IModel {
                 bakeModels(format, bakedTextureGetter, unifiedModelsLocations));
     }
 
-    @SuppressWarnings("Guava")
     private Map<ModelResourceLocation, IBakedModel> bakeModels(
             VertexFormat format,
             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,

@@ -116,7 +116,6 @@ public abstract class BlockEntityDelegate<T extends TileRailcraft & ISmartTile> 
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock, BlockPos fromPos) {
         super.neighborChanged(state, worldIn, pos, neighborBlock, fromPos);
         if (needsSupport() && !worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {

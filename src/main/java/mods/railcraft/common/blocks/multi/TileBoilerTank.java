@@ -25,7 +25,6 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings("rawtypes")
 public abstract class TileBoilerTank extends TileBoiler {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);

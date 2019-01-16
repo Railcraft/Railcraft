@@ -169,7 +169,6 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         double mz = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * (double) partialTicks;
         Vec3d vec3d = getPos(cart, mx, my, mz);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * partialTicks;
-        //noinspection ConstantConditions
         if (vec3d != null) {
             double offset = 0.3;
             Vec3d vec3d1 = getPosOffset(cart, mx, my, mz, offset);

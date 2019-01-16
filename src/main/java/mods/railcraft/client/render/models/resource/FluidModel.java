@@ -41,7 +41,6 @@ import javax.vecmath.Vector4f;
 import java.util.*;
 import java.util.function.Function;
 
-@SuppressWarnings("Guava")
 public final class FluidModel implements IModel {
     public static final FluidModel WATER = new FluidModel(FluidRegistry.WATER, true);
     public static final FluidModel LAVA = new FluidModel(FluidRegistry.LAVA, true);
@@ -344,7 +343,6 @@ public final class FluidModel implements IModel {
             return ItemOverrideList.NONE;
         }
 
-        @SuppressWarnings("SimplifiableIfStatement")
         private class Key {
             private final boolean gas;
             private final boolean sideFlowing;

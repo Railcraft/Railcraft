@@ -71,7 +71,6 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return true;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public static boolean validBookTagPages(NBTTagCompound nbt) {
         if (!nbt.hasKey("pages"))
             return false;
@@ -97,7 +96,6 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return RoutingLogic.buildLogic(routingData);
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Nullable
     public static Deque<String> getContents(ItemStack routingTable) {
         if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
@@ -116,7 +114,6 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return contents;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Nullable
     public static List<List<String>> getPages(ItemStack routingTable) {
         if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))

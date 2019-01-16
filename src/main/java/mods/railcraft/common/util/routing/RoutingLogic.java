@@ -220,7 +220,6 @@ public final class RoutingLogic {
 
         protected void validateRegex(String line) throws RoutingLogicException {
             try {
-                //noinspection ResultOfMethodCallIgnored
                 Pattern.compile(value);
             } catch (PatternSyntaxException ex) {
                 throw new RoutingLogicException("gui.railcraft.routing.logic.regex.invalid", line);

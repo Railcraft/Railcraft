@@ -56,7 +56,6 @@ public class BlockTrackFlex extends BlockTrackStateless {
                 '#', getTrackType().getRailbed());
     }
 
-    @SuppressWarnings("ConstantConditions")
     public ItemStack getRecipeOutput() {
         return getStack(TrackConstants.FLEX_RECIPE_OUTPUT);
     }
