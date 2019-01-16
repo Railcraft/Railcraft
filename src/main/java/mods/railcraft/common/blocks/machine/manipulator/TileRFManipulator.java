@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.EnergyStorage;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -87,12 +88,12 @@ public abstract class TileRFManipulator extends TileManipulatorCart {
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == ENERGY || super.hasCapability(capability, facing);
     }
 
     @Override
-    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         return capability == ENERGY ? ENERGY.cast(energyStorage) : super.getCapability(capability, facing);
     }
 }

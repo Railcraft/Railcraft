@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -18,7 +19,7 @@ import net.minecraft.block.state.IBlockState;
 public abstract class TrackKitUnsupported extends TrackKitRailcraft {
 
     @Override
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock) {
+    public void onNeighborBlockChange(IBlockState state, @Nullable Block neighborBlock) {
     }
 
 }

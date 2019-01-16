@@ -169,7 +169,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
         return getVariant(world, pos).getResistance() * 3f / 5f;
     }
 

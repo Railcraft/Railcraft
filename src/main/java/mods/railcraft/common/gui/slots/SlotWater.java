@@ -15,7 +15,6 @@ import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
 
 public class SlotWater extends SlotRailcraft {
     public SlotWater(IInventory iinventory, int slotIndex, int posX, int posY) {
@@ -23,7 +22,7 @@ public class SlotWater extends SlotRailcraft {
     }
 
     @Override
-    public boolean isItemValid(@Nullable ItemStack stack) {
+    public boolean isItemValid(ItemStack stack) {
         if (InvTools.isEmpty(stack)) {
             return false;
         }

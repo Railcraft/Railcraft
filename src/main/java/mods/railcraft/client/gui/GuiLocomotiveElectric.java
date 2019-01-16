@@ -11,7 +11,6 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityLocomotiveElectric;
 import mods.railcraft.common.gui.containers.ContainerLocomotiveElectric;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,8 +20,6 @@ public class GuiLocomotiveElectric extends GuiLocomotive {
 
     public GuiLocomotiveElectric(InventoryPlayer inv, EntityLocomotiveElectric loco) {
         super(inv, loco, ContainerLocomotiveElectric.make(inv, loco), "electric", "gui_locomotive_electric.png", 161, false);
-        EntityLocomotiveElectric loco1 = loco;
-        EntityPlayer player = inv.player;
     }
 
 }

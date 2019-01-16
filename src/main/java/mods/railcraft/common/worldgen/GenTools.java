@@ -10,9 +10,10 @@
 
 package mods.railcraft.common.worldgen;
 
-import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+
+import java.util.function.Predicate;
 
 /**
  * Created by CovertJaguar on 4/22/2016 for Railcraft.

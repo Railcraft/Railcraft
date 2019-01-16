@@ -31,6 +31,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
@@ -83,7 +84,7 @@ public class BlockWorldspikePoint extends BlockRailcraft {
     }
 
     @Override
-    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
+    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
 //        return 60f * 3f / 5f;
         return 90f;
     }
