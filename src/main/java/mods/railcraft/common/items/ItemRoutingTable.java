@@ -96,8 +96,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return RoutingLogic.buildLogic(routingData);
     }
 
-    @Nullable
-    public static Deque<String> getContents(ItemStack routingTable) {
+    public static @Nullable Deque<String> getContents(ItemStack routingTable) {
         if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();
@@ -114,8 +113,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return contents;
     }
 
-    @Nullable
-    public static List<List<String>> getPages(ItemStack routingTable) {
+    public static @Nullable List<List<String>> getPages(ItemStack routingTable) {
         if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();

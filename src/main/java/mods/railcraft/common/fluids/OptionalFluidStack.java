@@ -37,8 +37,7 @@ public final class OptionalFluidStack {
     }
 
     @Contract("!null -> !null")
-    @Nullable
-    public FluidStack orElse(@Nullable FluidStack other) {
+    public @Nullable FluidStack orElse(@Nullable FluidStack other) {
         return fluidStack != null ? fluidStack : other;
     }
 

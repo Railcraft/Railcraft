@@ -53,8 +53,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     }
 
     @Override
-    @Nullable
-    public RayTraceResult collisionRayTrace(Vec3d start, Vec3d end) {
+    public @Nullable RayTraceResult collisionRayTrace(Vec3d start, Vec3d end) {
         IBlockAccess world = theWorldAsserted();
         BlockPos pos = getPos();
         List<RayTraceResult> list = Lists.newArrayList(
@@ -78,8 +77,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     }
 
     @Override
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
         return COLLISION_BOX;
     }
 

@@ -274,9 +274,8 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         checkBlock(world, level, pos.down(), player);
     }
 
-    @Nullable
     @Override
-    public String getOreTag(@Nullable IVariantEnum variant) {
+    public @Nullable String getOreTag(@Nullable IVariantEnum variant) {
         return ORE_TAG;
     }
 

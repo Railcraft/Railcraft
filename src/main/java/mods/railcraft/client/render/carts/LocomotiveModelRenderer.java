@@ -75,8 +75,7 @@ public abstract class LocomotiveModelRenderer {
      * @return model
      */
     //TODO: fix this?
-    @Nullable
-    public ModelResourceLocation getItemModel() {
+    public @Nullable ModelResourceLocation getItemModel() {
         return null;
     }
 

@@ -31,9 +31,8 @@ import java.io.IOException;
 public abstract class TrackKitSecured extends TrackKitRailcraft implements IGuiReturnHandler, ISecureObject<LockButtonState> {
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
-    @Nullable
     @Override
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return getTile().getWorld();
     }
 

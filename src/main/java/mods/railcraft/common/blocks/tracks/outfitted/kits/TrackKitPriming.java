@@ -36,9 +36,8 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
     public static final short MIN_FUSE = 0;
     private short fuse = 80;
 
-    @Nullable
     @Override
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return super.theWorld();
     }
 

@@ -57,9 +57,8 @@ public enum Actions implements IActionExternal {
         return LocalizationPlugin.translate("gates.action." + tag);
     }
 
-    @Nullable
     @Override
-    public ISprite getSprite() {
+    public @Nullable ISprite getSprite() {
         //TODO
         return null;
     }

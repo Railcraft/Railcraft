@@ -212,8 +212,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         public final int weight;
         public final int numToSpawn;
         private final BiConsumer<CartBaseSurprise, T> setup;
-        @Nullable
-        private final BiConsumer<CartBaseSurprise, T> postSpawn;
+        private final @Nullable BiConsumer<CartBaseSurprise, T> postSpawn;
 
         protected SurpriseEntity(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup, @Nullable BiConsumer<CartBaseSurprise, T> postSpawn) {
             this.entityType = entityType;

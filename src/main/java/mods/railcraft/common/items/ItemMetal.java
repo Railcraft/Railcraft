@@ -44,9 +44,8 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
         }
     }
 
-    @Nullable
     @Override
-    public IVariantEnum[] getVariants() {
+    public @Nullable IVariantEnum[] getVariants() {
         return variantArray;
     }
 

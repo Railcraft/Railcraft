@@ -64,9 +64,8 @@ public enum EnumOreMetalPoor implements IVariantEnumBlock<EnumOreMetalPoor> {
         return metal;
     }
 
-    @Nullable
     @Override
-    public String getOreTag() {
+    public @Nullable String getOreTag() {
         return metal.getOreTag(Metal.Form.POOR_ORE);
     }
 }

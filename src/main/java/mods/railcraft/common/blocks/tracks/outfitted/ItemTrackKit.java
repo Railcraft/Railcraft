@@ -67,8 +67,7 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
-    @Nullable
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return TrackKit.class;
     }
 

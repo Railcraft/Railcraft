@@ -65,9 +65,8 @@ public enum LocomotiveRenderType {
      * This function will return a Locomotive item with the skin identifier
      * saved in the NBT. Use it to create a recipe for your skin.
      */
-    @Nullable
     @Contract("_, null -> null; _, !null -> !null")
-    public ItemStack getItemWithRenderer(String rendererTag, @Nullable ItemStack stack) {
+    public @Nullable ItemStack getItemWithRenderer(String rendererTag, @Nullable ItemStack stack) {
         if (stack == null)
             return null;
         NBTTagCompound nbt = new NBTTagCompound();

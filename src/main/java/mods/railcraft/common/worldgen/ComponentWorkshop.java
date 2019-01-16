@@ -65,8 +65,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         setCoordBaseMode(facing);
     }
 
-    @Nullable
-    public static ComponentWorkshop buildComponent(Start villagePiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
+    public static @Nullable ComponentWorkshop buildComponent(Start villagePiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
         StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 11, 6, 11, facing);
         return canVillageGoDeeper(box) && StructureComponent.findIntersecting(pieces, box) == null ? new ComponentWorkshop(villagePiece, type, random, box, facing) : null;
     }

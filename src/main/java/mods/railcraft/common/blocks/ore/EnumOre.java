@@ -55,9 +55,8 @@ public enum EnumOre implements IVariantEnumBlock<EnumOre> {
         return VALUES[meta];
     }
 
-    @Nullable
     @Override
-    public String getOreTag() {
+    public @Nullable String getOreTag() {
         return oreTag;
     }
 }

@@ -51,8 +51,7 @@ public class GeneratorMine extends Generator {
             throw new OreGeneratorFactory.OreConfigurationException(config, "Core Ore not found or the block threw an error while generating the blockstate.");
     }
 
-    @Nullable
-    private WorldGenerator getGen(@Nullable IBlockState ore) {
+    private @Nullable WorldGenerator getGen(@Nullable IBlockState ore) {
         Predicate<IBlockState> genCheck = state -> RailcraftConfig.isWorldGenEnabled("sky") ? GenTools.AIR_STONE.test(state) : GenTools.STONE.test(state);
         WorldGenerator gen;
         if (ore == null)

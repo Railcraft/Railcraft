@@ -141,8 +141,7 @@ public class EntityCartBed extends EntityCartBasic {
         shouldSleep = true;
     }
 
-    @Nullable
-    protected Entity getFirstPassenger() {
+    protected @Nullable Entity getFirstPassenger() {
         List<Entity> passengers = getPassengers();
         return passengers.isEmpty() ? null : passengers.get(0);
     }

@@ -84,9 +84,8 @@ public class ItemDust extends ItemRailcraftSubtyped {
             this.oreTag = oreTag;
         }
 
-        @Nullable
         @Override
-        public String getOreTag() {
+        public @Nullable String getOreTag() {
             return oreTag;
         }
 

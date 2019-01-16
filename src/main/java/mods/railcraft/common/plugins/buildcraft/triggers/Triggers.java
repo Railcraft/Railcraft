@@ -79,9 +79,8 @@ public enum Triggers implements ITriggerExternal {
         return LocalizationPlugin.translate("gates.trigger." + tag);
     }
 
-    @Nullable
     @Override
-    public ISprite getSprite() {
+    public @Nullable ISprite getSprite() {
         return null; //TODO Implement this
     }
 

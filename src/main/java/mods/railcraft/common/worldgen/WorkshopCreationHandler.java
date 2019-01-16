@@ -33,9 +33,8 @@ public class WorkshopCreationHandler implements IVillageCreationHandler {
         return ComponentWorkshop.class;
     }
 
-    @Nullable
     @Override
-    public StructureVillagePieces.Village buildComponent(PieceWeight villagePiece, Start startPiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
+    public @Nullable StructureVillagePieces.Village buildComponent(PieceWeight villagePiece, Start startPiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
         return ComponentWorkshop.buildComponent(startPiece, pieces, random, x, y, z, facing, type);
     }
 

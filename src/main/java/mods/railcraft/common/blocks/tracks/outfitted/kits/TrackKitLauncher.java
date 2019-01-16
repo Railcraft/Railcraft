@@ -37,9 +37,8 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
     private static final float LAUNCH_THRESHOLD = 0.01f;
     private byte launchForce = 5;
 
-    @Nullable
     @Override
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return super.theWorld();
     }
 

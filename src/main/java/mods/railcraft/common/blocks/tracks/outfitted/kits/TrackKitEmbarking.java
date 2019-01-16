@@ -64,9 +64,8 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
 
     private byte area = 2;
 
-    @Nullable
     @Override
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return super.theWorld();
     }
 

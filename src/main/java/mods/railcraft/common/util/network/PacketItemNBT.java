@@ -97,8 +97,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
     }
 
     protected final EntityPlayer player;
-    @Nullable
-    protected final ItemStack sourceStack;
+    protected final @Nullable ItemStack sourceStack;
 
     protected PacketItemNBT(EntityPlayer player, @Nullable ItemStack stack) {
         this.player = player;
@@ -115,8 +114,7 @@ public abstract class PacketItemNBT extends RailcraftPacket {
     protected void readLocationData(RailcraftInputStream data) throws IOException {
     }
 
-    @Nullable
-    protected abstract ItemStack findTargetStack(ItemStack readStack) throws IOException;
+    protected abstract @Nullable ItemStack findTargetStack(ItemStack readStack) throws IOException;
 
     protected void updateTargetStack(ItemStack targetStack) {
     }

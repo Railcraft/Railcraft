@@ -28,14 +28,12 @@ public class SoundRegistry {
 
     private static final Map<IBlockState, SoundType> customSounds = new HashMap<>();
 
-    @Nullable
-    public static SoundType getBlockSound(World world, BlockPos pos) {
+    public static @Nullable SoundType getBlockSound(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         return getBlockSound(state, world, pos);
     }
 
-    @Nullable
-    public static SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
+    public static @Nullable SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
         SoundType soundType = customSounds.get(blockState);
         if (soundType == null) {
             return blockState.getBlock().getSoundType(blockState, world, pos, null);

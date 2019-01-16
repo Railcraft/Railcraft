@@ -94,9 +94,8 @@ public final class GuiMultiButton<T extends IMultiButtonState> extends GuiBetter
         return control;
     }
 
-    @Nullable
     @Override
-    public ToolTip getToolTip() {
+    public @Nullable ToolTip getToolTip() {
         ToolTip tip = control.getButtonState().getToolTip();
         if (tip != null) {
             return tip;

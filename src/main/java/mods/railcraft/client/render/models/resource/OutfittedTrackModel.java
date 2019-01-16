@@ -217,18 +217,15 @@ public class OutfittedTrackModel implements IModel {
             return quads;
         }
 
-        @Nullable
-        private IBakedModel getTrackTypeModel(TrackType trackType, BlockRailBase.EnumRailDirection shape) {
+        private @Nullable IBakedModel getTrackTypeModel(TrackType trackType, BlockRailBase.EnumRailDirection shape) {
             return trackTypeModels.get(getTrackTypeModelLocation(trackType, shape));
         }
 
-        @Nullable
-        private IBakedModel getTrackKitModel(TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
+        private @Nullable IBakedModel getTrackKitModel(TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
             return trackKitModels.get(getTrackKitModelLocation(trackKit, shape, state));
         }
 
-        @Nullable
-        private IBakedModel getUnifiedModel(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
+        private @Nullable IBakedModel getUnifiedModel(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
             return unifiedModels.get(getUnifiedModelLocation(trackType, trackKit, shape, state));
         }
 

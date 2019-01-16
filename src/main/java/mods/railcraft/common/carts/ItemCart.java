@@ -93,9 +93,8 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         return true;
     }
 
-    @Nullable
     @Override
-    public EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+    public @Nullable EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         return CartTools.placeCart(type, owner, cartStack, world, pos);
     }
 

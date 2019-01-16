@@ -50,8 +50,7 @@ public class ItemOreMagic extends ItemBlockRailcraftSubtyped<BlockOreMagic> {
      * @return A new Entity object to spawn or null
      */
     @Override
-    @Nullable
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
+    public @Nullable Entity createEntity(World world, Entity location, ItemStack stack) {
         if (!hasCustomEntity(stack))
             return null;
         EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
