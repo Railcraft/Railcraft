@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.items.ItemGoggles;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import net.minecraft.util.math.Vec3d;
@@ -69,7 +69,7 @@ public class ParticleChunkLoader extends ParticleBase {
             return;
         }
 
-        if (!EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.WORLDSPIKE)) {
+        if (!ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.WORLDSPIKE)) {
             setExpired();
             return;
         }

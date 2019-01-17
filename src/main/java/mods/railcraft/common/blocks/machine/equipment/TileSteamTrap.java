@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
@@ -17,7 +18,6 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
@@ -97,7 +97,7 @@ public abstract class TileSteamTrap extends TileMachineBase implements ISteamUse
             if (isJetting()) {
                 double speedFactor = 0.2;
                 for (int i = 0; i < 10; i++) {
-                    EffectManager.instance.steamJetEffect(world, this, new Vec3d(direction.getDirectionVec()).scale(speedFactor));
+                    ClientEffects.INSTANCE.steamJetEffect(world, this, new Vec3d(direction.getDirectionVec()).scale(speedFactor));
                 }
             }
             return;

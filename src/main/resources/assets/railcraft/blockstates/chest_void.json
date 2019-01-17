@@ -3,7 +3,7 @@
   "defaults": {
     "model": "railcraft:chest_void",
     "textures": {
-      "particle": "railcraft:blocks/chest_metals"
+      "particle": "railcraft:blocks/chest_void"
     }
   },
   "variants": {

@@ -17,6 +17,7 @@ import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomot
 import mods.railcraft.client.render.models.resource.*;
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.render.world.GoggleAuraWorldRenderer;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.client.util.sounds.RCSoundHandler;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
@@ -153,6 +154,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
         // Remove the vanilla EntityMinecartMobSpawner renderer!
         Minecraft.getMinecraft().getRenderManager().entityRenderMap.remove(EntityMinecartMobSpawner.class);
 
+        ClientEffects.init();
         SoundRegistry.setupBlockSounds();
 
         MinecraftForge.EVENT_BUS.register(LocomotiveKeyHandler.INSTANCE);
@@ -161,7 +163,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
             MinecraftForge.EVENT_BUS.register(AuraKeyHandler.INSTANCE);
 
         Game.log().msg(Level.TRACE, "Init Start: Renderer");
-
 
         LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.solid.default", new ModelLocomotiveSteamSolid(), new ModelLocomotiveSteamSolid(0.125F)));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:magic", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));

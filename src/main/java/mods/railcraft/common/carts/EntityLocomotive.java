@@ -15,6 +15,7 @@ import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
 import mods.railcraft.client.render.carts.LocomotiveRenderType;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.carts.LinkageManager.LinkType;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -31,7 +32,6 @@ import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -360,7 +360,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         if (Game.isClient(world)) {
             if (SeasonPlugin.isPolarExpress(this) && (!MathTools.nearZero(motionX) || !MathTools.nearZero(motionZ)))
-                EffectManager.instance.snowEffect(world, this, getEntityBoundingBox().minY - posY);
+                ClientEffects.INSTANCE.snowEffect(world, this, getEntityBoundingBox().minY - posY);
             return;
         }
 

@@ -14,7 +14,7 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.effects.HostEffects;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -37,8 +37,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -64,9 +64,8 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
 
     private byte area = 2;
 
-    @Nullable
     @Override
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return super.theWorld();
     }
 
@@ -87,7 +86,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
         return false;
     }
 
-    @Override
+    @Override // called on server thread only
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger("MountPrevention") <= 0) {
             int a = area;
@@ -117,7 +116,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
                 }
 
                 if (!entity.isRiding()) {
-                    EffectManager.instance.teleportEffect(entity, cart.getPositionVector());
+                    HostEffects.INSTANCE.teleportEffect(entity, cart.getPositionVector());
                     CartTools.addPassenger(cart, entity);
                 }
             }

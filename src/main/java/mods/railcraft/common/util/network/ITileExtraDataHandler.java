@@ -12,7 +12,6 @@ package mods.railcraft.common.util.network;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public interface ITileExtraDataHandler
-{
+public interface ITileExtraDataHandler {
     void onUpdatePacket(DataInputStream data) throws IOException;
 }

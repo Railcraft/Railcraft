@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
+import mods.railcraft.common.plugins.forge.VillagerPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -20,9 +21,12 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.IMerchant;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +35,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -50,18 +55,21 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  */
 public abstract class TradeStationLogic extends InventoryLogic {
     public enum GuiPacketType {
-        NEXT_TRADE, SET_PROFESSION
+        NEXT_TRADE, SET_PROFESSION, SET_CAREER
     }
 
     private static final int AREA = 6;
 
     private VillagerRegistry.VillagerProfession profession = VillagerRegistry.FARMER;
+    private VillagerRegistry.VillagerCareer career = profession.getCareer(0);
     private final InventoryAdvanced recipeSlots = new InventoryAdvanced(9).callbackInv(inventory).phantom();
     private final InventoryMapper invInput = InventoryMapper.make(inventory, 0, 10);
     private final InventoryMapper invOutput = InventoryMapper.make(inventory, 10, 6).ignoreItemChecks();
+    private int xpCollected;
 
     protected TradeStationLogic(Adapter adapter) {
         super(adapter, 16);
+        xpCollected = 0;
     }
 
     public IInventory getRecipeSlots() {
@@ -72,9 +80,21 @@ public abstract class TradeStationLogic extends InventoryLogic {
         return profession;
     }
 
+    public VillagerRegistry.VillagerCareer getCareer() {
+        return career;
+    }
+
     public void setProfession(VillagerRegistry.VillagerProfession profession) {
         if (!Objects.equals(this.profession, profession)) {
             this.profession = profession;
+            this.career = profession.getCareer(0);
+            sendUpdateToClient();
+        }
+    }
+
+    public void setCareer(VillagerRegistry.VillagerCareer career) {
+        if (!Objects.equals(this.career, career)) {
+            this.career = career;
             sendUpdateToClient();
         }
     }
@@ -86,18 +106,33 @@ public abstract class TradeStationLogic extends InventoryLogic {
         attemptTrade(villagers, 1);
         attemptTrade(villagers, 2);
 
-        if (clock(256))
+        if (clock(256)) {
             modifyNearbyAI();
+            absorbExperience();
+        }
     }
 
     protected abstract void modifyNearbyAI();
 
-    protected List<EntityVillager> findNearbyVillagers(int range) {
+    private void absorbExperience() {
+        double x = getX();
+        double y = getY();
+        double z = getZ();
+        AABBFactory area = AABBFactory.start().setBounds(x, y - 3, z, x + 1, y + 3, z + 1).expandHorizontally(10);
+        List<EntityXPOrb> orbs = EntitySearcher.find(EntityXPOrb.class).around(area).in(theWorldAsserted());
+        xpCollected += orbs.stream().mapToInt(EntityXPOrb::getXpValue).sum();
+        for (EntityXPOrb orb : orbs) {
+            SoundHelper.playSoundForEntity(orb, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+            orb.setDead();
+        }
+    }
+
+    protected EntitySearcher.SearchResult<EntityVillager> findNearbyVillagers(int range) {
         double x = getX();
         double y = getY();
         double z = getZ();
         AABBFactory area = AABBFactory.start().setBounds(x, y - 1, z, x + 1, y + 3, z + 1).expandHorizontally(range);
-        return EntitySearcher.find(EntityVillager.class).and(v -> v.getProfessionForge() == getProfession()).around(area).in(theWorldAsserted());
+        return EntitySearcher.find(EntityVillager.class).and(v -> v.getProfessionForge() == getProfession() && VillagerPlugin.getCareer(v).equals(getCareer())).around(area).in(theWorldAsserted());
     }
 
     private void attemptTrade(List<EntityVillager> villagers, int tradeSet) {
@@ -147,7 +182,10 @@ public abstract class TradeStationLogic extends InventoryLogic {
     }
 
     private void doTrade(IMerchant merchant, MerchantRecipe recipe) {
+        EntityPlayer originalCustomer = merchant.getCustomer();
+        merchant.setCustomer(getOwnerEntityOrFake());
         merchant.useRecipe(recipe);
+        merchant.setCustomer(originalCustomer);
         ItemStack firstItem = recipe.getItemToBuy();
         ItemStack secondItem = recipe.getSecondItemToBuy();
         if (!InvTools.isEmpty(firstItem))
@@ -159,11 +197,14 @@ public abstract class TradeStationLogic extends InventoryLogic {
         invOutput.addStack(InvTools.copy(recipe.getItemToSell()));
     }
 
+    protected abstract EntityPlayer getOwnerEntityOrFake();
+
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         recipeSlots.writeToNBT("recipe", data);
 
         data.setString("ProfessionName", Objects.requireNonNull(profession.getRegistryName()).toString());
+        data.setInteger("career", VillagerPlugin.getCareerId(career));
         return data;
     }
 
@@ -171,19 +212,25 @@ public abstract class TradeStationLogic extends InventoryLogic {
     public void readFromNBT(NBTTagCompound data) {
         recipeSlots.readFromNBT("recipe", data);
 
-        if (data.hasKey("ProfessionName")) {
+        if (data.hasKey("ProfessionName", Constants.NBT.TAG_STRING)) {
             setProfession(findProfession(data.getString("ProfessionName")));
+        }
+
+        if (data.hasKey("career", Constants.NBT.TAG_INT)) {
+            setCareer(getProfession().getCareer(data.getInteger("career")));
         }
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         data.writeUTF(Objects.requireNonNull(profession.getRegistryName()).toString());
+        data.writeInt(VillagerPlugin.getCareerId(career));
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         setProfession(findProfession(data.readUTF()));
+        setCareer(getProfession().getCareer(data.readInt()));
     }
 
     @Override
@@ -198,14 +245,21 @@ public abstract class TradeStationLogic extends InventoryLogic {
                 recipeSlots.clear();
                 sendUpdateToClient();
                 break;
+            case SET_CAREER:
+                setCareer(getProfession().getCareer(data.readInt()));
+                recipeSlots.clear();
+                sendUpdateToClient();
+                break;
         }
     }
 
     //FIXME this function needs to be redesigned due to careers and levels,
     // it currently picks a random career at level 1
     private void nextTrade(int tradeSet) {
-        EntityVillager villager = new EntityVillager(theWorldAsserted());
-        villager.setProfession(profession);
+        EntityVillager villager = findNearbyVillagers(AREA).any();
+        if (villager == null) {
+            villager = new EntityVillager(theWorldAsserted());
+        }
         MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) theWorldAsserted(), getX(), getY(), getZ()));
         assert recipes != null;
         MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
@@ -236,5 +290,13 @@ public abstract class TradeStationLogic extends InventoryLogic {
                 return super.extractItem(slot, amount, simulate);
             }
         };
+    }
+
+    public int getXpCollected() {
+        return xpCollected;
+    }
+
+    public void clearXp() {
+        this.xpCollected = 0;
     }
 }

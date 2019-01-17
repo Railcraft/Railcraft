@@ -10,6 +10,7 @@
 package mods.railcraft.client.util.effects;
 
 import mods.railcraft.api.charge.Charge;
+import mods.railcraft.api.signals.IPairEffectRenderer;
 import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.core.AuraKeyHandler;
 import mods.railcraft.client.particles.*;
@@ -19,19 +20,19 @@ import mods.railcraft.common.items.ItemGoggles.GoggleAura;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
-import mods.railcraft.common.util.effects.CommonEffectProxy;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.PacketEffect.Effect;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -45,8 +46,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.Set;
 
 import static net.minecraft.util.EnumParticleTypes.PORTAL;
@@ -54,19 +57,23 @@ import static net.minecraft.util.EnumParticleTypes.PORTAL;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-// TODO: Were you stupid when you decided to use a Proxy? Just no, no...
 @SideOnly(Side.CLIENT)
-@SuppressWarnings("unused")
-public class ClientEffectProxy extends CommonEffectProxy {
+public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRenderer {
     public static final short TELEPORT_PARTICLES = 64;
     public static final short TRACKING_DISTANCE = 32 * 32;
+    public static final ClientEffects INSTANCE = new ClientEffects();
 
-    public ClientEffectProxy() {
+    private final Minecraft mc = Minecraft.getMinecraft();
+    private final Random rand = new Random();
+
+    public static void init() {} //classloading
+
+    private ClientEffects() {
         SignalTools.effectManager = this;
         Code.setValue(Charge.class, null, this, "effects");
     }
 
-    private void doTeleport(RailcraftInputStream data) throws IOException {
+    public void doTeleport(RailcraftInputStream data) throws IOException {
         World world = Game.getWorld();
         if (world == null)
             return;
@@ -119,10 +126,9 @@ public class ClientEffectProxy extends CommonEffectProxy {
         return isGoggleAuraActive(GoggleAura.TUNING) || isGoggleAuraActive(GoggleAura.SIGNALLING);
     }
 
-    @Override
     public boolean isGoggleAuraActive(GoggleAura aura) {
         if (RailcraftItems.GOGGLES.isLoaded()) {
-            ItemStack goggles = ItemGoggles.getGoggles(Minecraft.getMinecraft().player);
+            ItemStack goggles = ItemGoggles.getGoggles(mc.player);
             return ItemGoggles.getCurrentAura(goggles) == aura;
         }
         return AuraKeyHandler.isAuraEnabled(aura);
@@ -153,11 +159,10 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
     }
 
-    @Override
     public void trailEffect(BlockPos start, TileEntity dest, long colorSeed) {
         if (thinParticles(false))
             return;
-        if (Minecraft.getMinecraft().player.getDistanceSq(start) > TRACKING_DISTANCE)
+        if (mc.player.getDistanceSq(start) > TRACKING_DISTANCE)
             return;
         if (rand.nextInt(3) == 0) {
             double px = start.getX() + 0.5 + rand.nextGaussian() * 0.1;
@@ -168,7 +173,6 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
     }
 
-    @Override
     public void fireSparkEffect(World world, Vec3d start, Vec3d end) {
         if (thinParticles(false))
             return;
@@ -178,37 +182,12 @@ public class ClientEffectProxy extends CommonEffectProxy {
         SoundHelper.playSoundClient(world, es.getPos(), SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, .2F + rand.nextFloat() * .2F, .9F + rand.nextFloat() * .15F);
     }
 
-    private void doFireSpark(RailcraftInputStream data) throws IOException {
+    public void doFireSpark(RailcraftInputStream data) throws IOException {
         Vec3d start = data.readVec3d();
         Vec3d destination = data.readVec3d();
-        fireSparkEffect(Minecraft.getMinecraft().world, start, destination);
+        fireSparkEffect(mc.world, start, destination);
     }
 
-    @Override
-    public void handleEffectPacket(RailcraftInputStream data) throws IOException {
-
-        byte effectId = data.readByte();
-        if (effectId < 0)
-            return;
-
-        Effect effect = Effect.VALUES[effectId];
-        switch (effect) {
-            case TELEPORT:
-                doTeleport(data);
-                break;
-            case FIRESPARK:
-                doFireSpark(data);
-                break;
-            case FORCE_SPAWN:
-                doForceSpawn(data);
-                break;
-            case ZAP_DEATH:
-                doZapDeath(data);
-                break;
-        }
-    }
-
-    @Override
     public void chunkLoaderEffect(World world, Object source, Set<ChunkPos> chunks) {
         if (!isGoggleAuraActive(GoggleAura.WORLDSPIKE))
             return;
@@ -237,7 +216,6 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
     }
 
-    @Override
     public void snowEffect(World world, Object source, double yOffset) {
         if (thinParticles(true))
             return;
@@ -249,7 +227,6 @@ public class ClientEffectProxy extends CommonEffectProxy {
         world.spawnParticle(EnumParticleTypes.SNOW_SHOVEL, start.x, start.y, start.z, vx, vy, vz);
     }
 
-    @Override
     public void steamEffect(World world, Object source, double yOffset) {
         if (thinParticles(true))
             return;
@@ -260,7 +237,6 @@ public class ClientEffectProxy extends CommonEffectProxy {
         spawnParticle(new ParticleSteam(world, es.getPosF().add(0.0, yOffset, 0.0), new Vec3d(vx, vy, vz)));
     }
 
-    @Override
     public void steamJetEffect(World world, Object source, Vec3d vel) {
         if (thinParticles(true))
             return;
@@ -271,14 +247,12 @@ public class ClientEffectProxy extends CommonEffectProxy {
         spawnParticle(fx);
     }
 
-    @Override
     public void chimneyEffect(World world, double x, double y, double z, EnumColor color) {
         if (thinParticles(false))
             return;
         spawnParticle(new ParticleChimney(world, new Vec3d(x, y, z), color));
     }
 
-    @Override
     public void locomotiveEffect(World world, double x, double y, double z) {
         if (thinParticles(false))
             return;
@@ -293,7 +267,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         if (thinParticles(false))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
-        if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(es.getPos()) > 400)
+        if (mc.getRenderViewEntity().getDistanceSq(es.getPos()) > 400)
             return;
         Vec3d vel = new Vec3d(
                 rand.nextDouble() - 0.5D,
@@ -306,13 +280,13 @@ public class ClientEffectProxy extends CommonEffectProxy {
     @Override
     public void zapEffectDeath(World world, Object source) {
         if (Game.isHost(world)) {
-            super.zapEffectDeath(world, source);
+            // oh naw
             return;
         }
         if (thinParticles(false))
             return;
         IEffectSource es = EffectManager.getEffectSource(source);
-        if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(es.getPos()) > 400)
+        if (mc.getRenderViewEntity().getDistanceSq(es.getPos()) > 400)
             return;
         SoundHelper.playSoundClient(world, es.getPos(), RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, 3F, 0.75F);
         for (int i = 0; i < 20; i++) {
@@ -324,16 +298,37 @@ public class ClientEffectProxy extends CommonEffectProxy {
         }
     }
 
-    private void doZapDeath(RailcraftInputStream data) throws IOException {
+    public void doZapDeath(RailcraftInputStream data) throws IOException {
         Vec3d pos = data.readVec3d();
-        zapEffectDeath(Minecraft.getMinecraft().world, pos);
+        zapEffectDeath(mc.world, pos);
+    }
+
+    public void doBlockParticle(RailcraftInputStream data) throws IOException {
+        BlockPos block = data.readBlockPos();
+        Vec3d pos = data.readVec3d();
+        Vec3d velocity = data.readVec3d();
+        IBlockState state = Block.getStateById(data.readInt());
+        boolean blockDust = data.readBoolean();
+        String location = data.readUTF();
+        ParticleBlockCrack crack = new ParticleBlockCrack(mc.world, pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z, state);
+
+        crack.setBlockPos(block);
+        TextureAtlasSprite sprite = mc.getTextureMapBlocks().getAtlasSprite(location);
+        if (sprite == mc.getTextureMapBlocks().getMissingSprite())
+            Game.log().msg(Level.WARN, "Cannot find sprite at {0} for block state {1}", location, state);
+        crack.setParticleTexture(sprite);
+        if (blockDust) {
+            crack.setVelocity(velocity);
+        }
+
+        spawnParticle(crack);
     }
 
     @Override
     public void zapEffectSurface(IBlockState stateIn, World worldIn, BlockPos pos) {
         if (thinParticles(false))
             return;
-        if (Minecraft.getMinecraft().getRenderViewEntity().getDistanceSq(pos) > 400)
+        if (mc.getRenderViewEntity().getDistanceSq(pos) > 400)
             return;
         SoundHelper.playSoundClient(worldIn, pos, RailcraftSoundEvents.MECHANICAL_ZAP, SoundCategory.BLOCKS, .1F + rand.nextFloat() * .2F, .9F + rand.nextFloat() * .15F);
         for (EnumFacing side : EnumFacing.VALUES) {
@@ -363,7 +358,6 @@ public class ClientEffectProxy extends CommonEffectProxy {
     }
 
     private boolean thinParticles(boolean canDisable) {
-        Minecraft mc = FMLClientHandler.instance().getClient();
         int particleSetting = mc.gameSettings.particleSetting;
         if (!canDisable && particleSetting > 1)
             particleSetting = 1;
@@ -372,9 +366,7 @@ public class ClientEffectProxy extends CommonEffectProxy {
         return particleSetting > 1;
     }
 
-    @Override
     protected void spawnParticle(Particle particle) {
-        Minecraft mc = FMLClientHandler.instance().getClient();
         mc.effectRenderer.addEffect(particle);
     }
 }

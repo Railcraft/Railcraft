@@ -12,13 +12,13 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
@@ -96,7 +96,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (Game.isClient(world)) {
             if (hasTicketFlag())
                 if (chunks != null)
-                    EffectManager.instance.chunkLoaderEffect(world, this, chunks);
+                    ClientEffects.INSTANCE.chunkLoaderEffect(world, this, chunks);
                 else
                     setupChunks(chunkCoordX, chunkCoordZ);
             return;

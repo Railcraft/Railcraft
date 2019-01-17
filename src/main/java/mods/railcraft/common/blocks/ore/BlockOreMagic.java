@@ -9,12 +9,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -76,7 +76,7 @@ public class BlockOreMagic extends BlockRailcraftSubtyped<EnumOreMagic> {
             BlockPos start = new BlockPos(pos.getX() - 10 + rand.nextInt(20), pos.getY(), pos.getZ() - 10 + rand.nextInt(20));
             Vec3d startPosition = new Vec3d(pos).add(0.5, 0.8, 0.5);
             Vec3d endPosition = new Vec3d(start).add(0.5, 0.5, 0.5);
-            EffectManager.instance.fireSparkEffect(worldIn, startPosition, endPosition);
+            ClientEffects.INSTANCE.fireSparkEffect(worldIn, startPosition, endPosition);
             spawnBurningFaceParticles(worldIn, pos);
         }
     }

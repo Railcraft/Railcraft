@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
@@ -19,7 +20,6 @@ import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.SteamOvenLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.steam.ISteamUser;
@@ -106,7 +106,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
             boolean isProcessing = getLogic(CrafterLogic.class).map(CrafterLogic::isProcessing).orElse(false);
             if (wasProcessing != isProcessing && !isProcessing) {
                 for (int i = 0; i < 16; i++)
-                    EffectManager.instance.steamEffect(world, this, +0.25);
+                    ClientEffects.INSTANCE.steamEffect(world, this, +0.25);
             }
             wasProcessing = isProcessing;
         }

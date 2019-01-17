@@ -14,10 +14,10 @@ import mods.railcraft.api.signals.*;
 import mods.railcraft.client.render.tools.CubeRenderer.RenderInfo;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalToken;
 import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.color.EnumColor;
-import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -48,24 +48,24 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
     public void render(T tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         if (tile instanceof IControllerTile) {
             Collection<BlockPos> pairs = ((IControllerTile) tile).getController().getPairs();
-            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
+            if (ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.TUNING)) {
                 renderLines(tile, x, y, z, pairs, ColorProfile.COORD_RAINBOW);
-            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
+            } else if (ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
                 renderLines(tile, x, y, z, pairs, ColorProfile.CONTROLLER_ASPECT);
             }
         }
         if (tile instanceof ISignalTileBlock) {
             Collection<BlockPos> pairs = ((ISignalTileBlock) tile).getSignalBlock().getPairs();
-            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
+            if (ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
                 renderLines(tile, x, y, z, pairs, ColorProfile.COORD_RAINBOW);
-            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
+            } else if (ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
                 renderLines(tile, x, y, z, pairs, ColorProfile.CONSTANT_BLUE);
             }
         } else if (tile instanceof TileSignalToken) {
             Collection<BlockPos> centroid = Collections.singletonList(((TileSignalToken) tile).getTokenRingCentroid());
-            if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
+            if (ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.SURVEYING)) {
                 renderLines(tile, x, y, z, centroid, (t, s, d) -> ((TileSignalToken) t).getTokenRingUUID().hashCode());
-            } else if (EffectManager.instance.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
+            } else if (ClientEffects.INSTANCE.isGoggleAuraActive(ItemGoggles.GoggleAura.SIGNALLING)) {
                 renderLines(tile, x, y, z, centroid, ColorProfile.CONSTANT_BLUE);
             }
         }

@@ -16,6 +16,7 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.effects.HostEffects;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -97,6 +98,7 @@ public class TileRitual extends TileRailcraftTicking {
 //        }
     }
 
+    // logical server
     private boolean coolLava(BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
         if (Fluids.LAVA.is(block)) {
@@ -104,7 +106,7 @@ public class TileRitual extends TileRailcraftTicking {
             if (placed) {
                 Vec3d startPosition = new Vec3d(pos).add(0.5, 0.5, 0.5);
                 Vec3d endPosition = new Vec3d(getPos()).add(0.5, 0.8, 0.5);
-                EffectManager.instance.fireSparkEffect(world, startPosition, endPosition);
+                HostEffects.INSTANCE.fireSparkEffect(world, startPosition, endPosition);
                 queueAdjacent(pos);
                 expandQueue();
                 return true;

@@ -9,20 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.effects;
 
-import mods.railcraft.common.core.Railcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.common.SidedProxy;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class EffectManager {
-
-    @SidedProxy(modId = Railcraft.MOD_ID, clientSide = "mods.railcraft.client.util.effects.ClientEffectProxy", serverSide = "mods.railcraft.common.util.effects.CommonEffectProxy")
-    public static IEffectManager instance;
 
     public interface IEffectSource {
 

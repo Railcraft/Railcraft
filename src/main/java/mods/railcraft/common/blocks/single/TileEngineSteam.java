@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -16,7 +17,6 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -91,7 +91,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
         if (isActive() || getEnergyStage() == EnergyStage.OVERHEAT) {
             int steamRate = getParticleRate();
             for (int i = 0; i < steamRate; i++) {
-                EffectManager.instance.steamEffect(world, this, 0);
+                ClientEffects.INSTANCE.steamEffect(world, this, 0);
             }
         }
     }
