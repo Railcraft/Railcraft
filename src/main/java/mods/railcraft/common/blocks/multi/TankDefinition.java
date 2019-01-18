@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
@@ -51,7 +52,7 @@ public enum TankDefinition {
 
         @Override
         public int getCapacityPerBlock() {
-            return 16 * FluidTools.BUCKET_VOLUME;
+            return RailcraftConfig.tankPerBlockCapacity() * FluidTools.BUCKET_VOLUME;
         }
 
         @Override
@@ -88,7 +89,7 @@ public enum TankDefinition {
 
         @Override
         public int getCapacityPerBlock() {
-            return 32 * FluidTools.BUCKET_VOLUME;
+            return 2 * RailcraftConfig.tankPerBlockCapacity() * FluidTools.BUCKET_VOLUME;
         }
     };
 

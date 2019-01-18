@@ -114,6 +114,7 @@ public class RailcraftConfig {
     private static String[] enchantments;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
+    private static int tankPerBlockCapacity;
     private static float boreMiningSpeedMultiplier = 1F;
     private static float chargeLossMultiplier = 1F;
     private static float boilerMultiplierFuel = 1F;
@@ -253,6 +254,8 @@ public class RailcraftConfig {
         maxTankSize = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "maxsize", 3, 9, 9, "Allows you to set the max Iron Tank base dimension, valid values are 3, 5, 7, and 9");
 
         allowTankStacking = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "allow.stacking", true, "Change to '{t}=false' to disable the stacking of Iron Tanks");
+
+        tankPerBlockCapacity = get(CAT_TWEAKS_BLOCKS + ".irontank", "capacity.per.block", 1, 16, 1600, "Allows you to set how many buckets (1000 milibucket) of fluid each iron tank block can carry, min=1, default=16, max=1600");
 
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
@@ -751,6 +754,10 @@ public class RailcraftConfig {
 
     public static int locomotiveLightLevel() {
         return locomotiveLightLevel;
+    }
+
+    public static int tankPerBlockCapacity() {
+        return tankPerBlockCapacity;
     }
 
     public static boolean printLinkingDebug() {

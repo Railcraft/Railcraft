@@ -31,10 +31,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -143,24 +140,24 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         explode = true;
     }
 
+    BoilerData boilerData() {
+        return Optional.ofNullable(getPattern()).<BoilerData>map(MultiBlockPattern::getAttachedData).orElse(BoilerData.EMPTY);
+    }
+
     public int getNumTanks() {
-        MultiBlockPattern pattern = getPattern();
-        return pattern.getAttachedData(BoilerData.EMPTY).numTanks;
+        return boilerData().numTanks;
     }
 
     public float getMaxHeat() {
-        MultiBlockPattern pattern = getPattern();
-        return pattern.getAttachedData(BoilerData.EMPTY).maxHeat;
+        return boilerData().maxHeat;
     }
 
     public int getTicksPerConversion() {
-        MultiBlockPattern pattern = getPattern();
-        return pattern.getAttachedData(BoilerData.EMPTY).ticksPerCycle;
+        return boilerData().ticksPerCycle;
     }
 
     public int getSteamCapacityPerTank() {
-        MultiBlockPattern pattern = getPattern();
-        return pattern.getAttachedData(BoilerData.EMPTY).steamCapacity;
+        return boilerData().steamCapacity;
     }
 
     @Override
@@ -266,19 +263,3 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     }
 }
 
-final class BoilerData {
-
-    static final BoilerData EMPTY = new BoilerData(0, 0, 0f, 0);
-
-    final int numTanks;
-    final int ticksPerCycle;
-    final float maxHeat;
-    final int steamCapacity;
-
-    BoilerData(int tanks, int ticks, float heat, int capacity) {
-        this.numTanks = tanks;
-        this.ticksPerCycle = ticks;
-        this.maxHeat = heat;
-        this.steamCapacity = capacity;
-    }
-}

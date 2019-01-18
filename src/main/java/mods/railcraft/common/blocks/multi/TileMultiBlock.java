@@ -458,10 +458,10 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
 
     @Override
     public final boolean isStructureValid() {
-        boolean valid = masterBlock != null && masterBlock.state == MultiBlockState.VALID;
+        boolean valid = masterBlock != null && masterBlock.state == MultiBlockState.VALID && !masterBlock.isInvalid();
         if (valid) {
             assert masterBlock.isMaster;
-            assert !masterBlock.isInvalid();
+            // assert !masterBlock.isInvalid(); May be invalid if the block is suddenly broken by a player, etc.
         }
         return masterBlock != null && masterBlock.state == MultiBlockState.VALID && masterBlock.isMaster && !masterBlock.isInvalid();
     }
