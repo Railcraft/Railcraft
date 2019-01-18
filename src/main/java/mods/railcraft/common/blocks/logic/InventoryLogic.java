@@ -45,8 +45,8 @@ public abstract class InventoryLogic extends Logic implements IInventoryImplemen
     }
 
     @Override
-    public Iterator<InventoryAdaptor> iterator() {
-        return composite.iterator();
+    public Iterator<InventoryAdaptor> adaptors() {
+        return composite.adaptors();
     }
 
     @Override

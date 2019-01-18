@@ -266,7 +266,7 @@ public abstract class InvTools {
 
     static boolean tryRemove(IInventoryComposite comp, int amount, Predicate<ItemStack> filter, InvOp op) {
         int amountNeeded = amount;
-        for (InventoryAdaptor inv : comp) {
+        for (InventoryAdaptor inv : comp.iterable()) {
             List<ItemStack> stacks = inv.extractItems(amountNeeded, filter, op);
             amountNeeded -= stacks.stream().mapToInt(InvTools::sizeOf).sum();
             if (amountNeeded <= 0)
