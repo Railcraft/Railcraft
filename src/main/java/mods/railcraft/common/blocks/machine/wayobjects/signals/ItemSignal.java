@@ -11,9 +11,7 @@
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
 import mods.railcraft.common.blocks.machine.BlockMachine;
-import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
