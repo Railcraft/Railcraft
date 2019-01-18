@@ -119,10 +119,10 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     DUST(ItemDust::new, "dust"),
     GEAR(ItemGear::new, "gear"),
     GOGGLES(ItemGoggles::new, "armor_goggles"),
-    FILTER_BEE(ItemFilterBee::new, "filter_bee") {{
+    FILTER_BEE(SafeReference.makeItem("ItemFilterBee"), "filter_bee") {{
         conditions().add(Mod.FORESTRY);
     }},
-    FILTER_BEE_GENOME(ItemFilterBeeGenome::new, "filter_bee_genome") {{
+    FILTER_BEE_GENOME(SafeReference.makeItem("ItemFilterBeeGenome"), "filter_bee_genome") {{
         conditions().add(Mod.FORESTRY);
     }},
     FILTER_BLANK(ItemFilterBlank::new, "filter_blank"),
