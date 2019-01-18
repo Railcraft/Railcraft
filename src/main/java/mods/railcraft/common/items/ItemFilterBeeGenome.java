@@ -50,7 +50,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
     private static final String WILDCARD = "item.railcraft.filter.bee.genome.tips.wildcard";
 
     @Override
-    public void finalizeDefinition() {
+    public void defineRecipes() {
         CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEY_COMB);
     }
 
@@ -65,6 +65,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
         return filter;
     }
 
+    @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     public static BeeFilter getBeeFilter(ItemStack stack) {
         NBTTagCompound nbt = InvToolsAPI.getRailcraftDataSubtag(stack, "filter").orElse(null);
         if (nbt != null) {
@@ -162,6 +163,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
         return LocalizationPlugin.translate(tag, args);
     }
 
+    @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     private String translateType(@Nullable EnumBeeType type) {
         if (type == null)
             return WILDCARD;
@@ -178,6 +180,7 @@ public class ItemFilterBeeGenome extends ItemRailcraft implements IFilterItem {
         return "";
     }
 
+    @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
     private String translateChromosome(EnumBeeChromosome chromosome) {
         switch (chromosome) {
             case SPECIES:
