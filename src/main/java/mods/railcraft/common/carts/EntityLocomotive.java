@@ -16,7 +16,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
 import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.client.util.effects.ClientEffects;
-import mods.railcraft.common.advancements.criterion.RailcraftA
+import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.carts.LinkageManager.LinkType;
 import mods.railcraft.common.core.RailcraftConfig;
