@@ -19,6 +19,7 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
+import mods.railcraft.common.util.effects.HostEffects;
 import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
 import mods.railcraft.common.util.misc.Game;
@@ -175,6 +176,8 @@ public final class Railcraft {
 //        Game.log(Level.FINE, "Init Phase");
 
         RailcraftModuleManager.init();
+
+        HostEffects.init();
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
     }

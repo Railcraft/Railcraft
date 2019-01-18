@@ -663,7 +663,7 @@ public class ChargeNetwork implements Charge.INetwork {
                 }
                 if (remainingDamage > 0.1 && entity.attackEntityFrom(origin == Charge.DamageOrigin.BLOCK ? RailcraftDamageSource.ELECTRIC : RailcraftDamageSource.TRACK_ELECTRIC, remainingDamage)) {
                     removeCharge(chargeCost);
-                    HostEffects.INSTANCE.zapEffectDeath(entity.world, entity);
+                    Charge.hostEffects().zapEffectDeath(entity.world, entity);
                 }
             }
         }

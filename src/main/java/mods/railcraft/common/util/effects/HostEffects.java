@@ -10,7 +10,9 @@
 
 package mods.railcraft.common.util.effects;
 
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.util.collections.ThrowingConsumer;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketEffect;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -29,9 +31,15 @@ import java.io.IOException;
 /**
  * Effects done on the logical server.
  */
-public final class HostEffects {
+public final class HostEffects implements Charge.IHostZapEffect {
 
     public static final HostEffects INSTANCE = new HostEffects();
+
+    public static void init() {} // classloading
+
+    private HostEffects() {
+        Code.setValue(Charge.class, null, this, "hostEffects");
+    }
 
     public void teleportEffect(Entity entity, Vec3d destination) {
         if (Game.isClient(entity.world))
@@ -67,6 +75,7 @@ public final class HostEffects {
         });
     }
 
+    @Override
     public void zapEffectDeath(World world, Object source) {
         if (Game.isClient(world))
             return;
@@ -111,6 +120,4 @@ public final class HostEffects {
 
         return pkt;
     }
-
-    private HostEffects() {}
 }
