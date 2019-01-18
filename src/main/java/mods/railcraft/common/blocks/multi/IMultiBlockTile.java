@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.blocks.multi.TileMultiBlock.MultiBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -18,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public interface IMultiBlockTile extends IOwnable, ITile {
+public interface IMultiBlockTile extends ITile {
 
     boolean isStructureValid();
 

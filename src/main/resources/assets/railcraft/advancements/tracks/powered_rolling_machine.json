@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:equipment",
+      "data": 1
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.powered_rolling_machine.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.powered_rolling_machine.desc"
+    }
+  },
+  "parent": "railcraft:tracks/blast_furnace",
+  "criteria": {
+    "manual": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "item": {
+          "item": "railcraft:equipment",
+          "data": 1
+        }
+      }
+    }
+  }
+}

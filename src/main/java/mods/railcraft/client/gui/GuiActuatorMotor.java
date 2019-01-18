@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.client.gui;
 import com.google.common.collect.Lists;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.TileActuatorMotor;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +23,7 @@ public class GuiActuatorMotor extends GuiAspectAction {
     private GuiToggleButton redstoneButton;
 
     public GuiActuatorMotor(EntityPlayer player, TileActuatorMotor switchMotor, String title) {
-        super(player, switchMotor, title, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic_large.png");
+        super(player, switchMotor, title, "gui_basic_large.png");
         this.switchMotor = switchMotor;
         this.shouldSwitchOnRedstone = switchMotor.shouldSwitchOnRedstone();
         ySize = 113;

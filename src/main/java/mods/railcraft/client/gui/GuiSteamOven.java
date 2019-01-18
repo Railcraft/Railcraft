@@ -10,9 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.logic.SteamOvenLogic;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerSteamOven;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiSteamOven extends GuiTitled {
@@ -20,14 +18,8 @@ public class GuiSteamOven extends GuiTitled {
     private final SteamOvenLogic logic;
 
     public GuiSteamOven(InventoryPlayer invPlayer, SteamOvenLogic logic) {
-        super(logic, new ContainerSteamOven(invPlayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_oven.png");
+        super(logic, new ContainerSteamOven(invPlayer, logic), "gui_steam_oven.png");
         this.logic = logic;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(LocalizationPlugin.translateFast("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

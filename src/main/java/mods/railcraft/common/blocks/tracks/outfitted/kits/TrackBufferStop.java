@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,13 +22,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
-
-import org.jetbrains.annotations.Nullable;
 
 public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitReversible, ITrackKitCustomShape {
 
@@ -54,8 +53,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     }
 
     @Override
-    @Nullable
-    public RayTraceResult collisionRayTrace(Vec3d start, Vec3d end) {
+    public @Nullable RayTraceResult collisionRayTrace(Vec3d start, Vec3d end) {
         IBlockAccess world = theWorldAsserted();
         BlockPos pos = getPos();
         List<RayTraceResult> list = Lists.newArrayList(
@@ -79,8 +77,7 @@ public class TrackBufferStop extends TrackKitRailcraft implements ITrackKitRever
     }
 
     @Override
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
+    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState state) {
         return COLLISION_BOX;
     }
 

@@ -8,8 +8,7 @@
     },
     "description": {
       "translate": "advancements.railcraft.carts.locomotive.desc"
-    },
-    "hidden": true
+    }
   },
   "parent": "railcraft:carts/link_carts",
   "criteria": {
@@ -18,6 +17,14 @@
       "conditions": {
         "owned": {
           "type": "railcraft:locomotive_steam_solid"
+        }
+      }
+    },
+    "electric_loco": {
+      "trigger": "railcraft:cart_linking",
+      "conditions": {
+        "owned": {
+          "type": "railcraft:locomotive_electric"
         }
       }
     }

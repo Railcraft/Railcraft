@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -74,9 +74,7 @@ public class EntityCartPumpkin extends CartBaseSurprise {
 
         if (ModuleWorld.villagerTrackman != null) {
             MOBS.add(SurpriseEntity.create(EntityZombieVillager.class, 200, 1,
-                    (cart, villager) -> {
-                        villager.setForgeProfession(ModuleWorld.villagerTrackman);
-                    }
+                    (cart, villager) -> villager.setForgeProfession(ModuleWorld.villagerTrackman)
             ));
         }
     }

@@ -168,9 +168,8 @@ public final class TileBlastFurnace extends TileCrafter {
         if (Game.isClient(getWorld()))
             return;
 
-        getLogic(BlastFurnaceLogic.class).map(l -> l.invFuel).ifPresent(invFuel -> {
-            invCache.getAdjacentInventories().moveOneItemTo(invFuel, BlastFurnaceLogic.FUEL_FILTER);
-        });
+        getLogic(BlastFurnaceLogic.class).map(l -> l.invFuel).ifPresent(invFuel ->
+                invCache.getAdjacentInventories().moveOneItemTo(invFuel, BlastFurnaceLogic.FUEL_FILTER));
 
         if (getLogic(StructureLogic.class).map(StructureLogic::isValidMaster).orElse(false)) {
             if (isBurning())

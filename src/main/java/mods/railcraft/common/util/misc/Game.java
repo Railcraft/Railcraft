@@ -110,6 +110,7 @@ public final class Game {
     private Game() {
     }
 
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     private static final Set<String> enabledCategories = new HashSet<>(Arrays.asList(
 //                "registry",
 //                "models",

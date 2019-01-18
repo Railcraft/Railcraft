@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -12,7 +22,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -48,9 +57,8 @@ public enum Actions implements IActionExternal {
         return LocalizationPlugin.translate("gates.action." + tag);
     }
 
-    @Nullable
     @Override
-    public ISprite getSprite() {
+    public @Nullable ISprite getSprite() {
         //TODO
         return null;
     }

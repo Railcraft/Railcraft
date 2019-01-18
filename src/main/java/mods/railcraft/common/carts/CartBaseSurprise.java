@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,7 @@ import java.util.function.BiConsumer;
 
 public abstract class CartBaseSurprise extends EntityCartTNTWood {
 
-    protected static final Surprise COAL = new SurpriseItem(new ItemStack(Items.COAL), 100);
+    protected static final ISurprise COAL = new SurpriseItem(new ItemStack(Items.COAL), 100);
     private static final byte SPAWN_DIST = 2;
     private static final Multimap<Class<? extends CartBaseSurprise>, SurpriseCategory> SURPRISES = HashMultimap.create();
 
@@ -79,7 +79,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
     }
 
-    protected interface Surprise {
+    protected interface ISurprise {
 
         void spawn(CartBaseSurprise cart);
 
@@ -88,7 +88,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
     }
 
     protected static final class SurpriseCategory {
-        private final List<Surprise> surprises = new ArrayList<>();
+        private final List<ISurprise> surprises = new ArrayList<>();
         final int chance;
         private int numberToSpawn = 1;
 
@@ -100,12 +100,12 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             this.numberToSpawn = amount;
         }
 
-        protected Surprise getWeightedSurprise(Random rand) {
+        protected ISurprise getWeightedSurprise(Random rand) {
             if (surprises.isEmpty())
                 return COAL;
             while (true) {
                 int index = rand.nextInt(surprises.size());
-                Surprise surprise = surprises.get(index);
+                ISurprise surprise = surprises.get(index);
                 int weight = rand.nextInt(100);
                 if (surprise.getWeight() >= weight)
                     return surprise;
@@ -118,7 +118,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
             }
         }
 
-        protected void add(Surprise surprise) {
+        protected void add(ISurprise surprise) {
             surprises.add(surprise);
         }
 
@@ -147,7 +147,7 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
     }
 
-    protected abstract static class SurpriseItemStack implements Surprise {
+    protected abstract static class SurpriseItemStack implements ISurprise {
         public final int weight;
 
         protected SurpriseItemStack(int weight) {
@@ -207,13 +207,12 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
     }
 
-    protected static class SurpriseEntity<T extends EntityLiving> implements Surprise {
+    protected static class SurpriseEntity<T extends EntityLiving> implements ISurprise {
         public final Class<T> entityType;
         public final int weight;
         public final int numToSpawn;
         private final BiConsumer<CartBaseSurprise, T> setup;
-        @Nullable
-        private final BiConsumer<CartBaseSurprise, T> postSpawn;
+        private final @Nullable BiConsumer<CartBaseSurprise, T> postSpawn;
 
         protected SurpriseEntity(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup, @Nullable BiConsumer<CartBaseSurprise, T> postSpawn) {
             this.entityType = entityType;
@@ -224,15 +223,15 @@ public abstract class CartBaseSurprise extends EntityCartTNTWood {
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.world.getDifficultyForLocation(new BlockPos(entity)), null), null);
+            return new SurpriseEntity<>(entityType, weight, numToSpawn, (cart, entity) -> entity.onInitialSpawn(cart.world.getDifficultyForLocation(new BlockPos(entity)), null), null);
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup, null);
+            return new SurpriseEntity<>(entityType, weight, numToSpawn, setup, null);
         }
 
         public static <T extends EntityLiving> SurpriseEntity<T> create(Class<T> entityType, int weight, int numToSpawn, BiConsumer<CartBaseSurprise, T> setup, BiConsumer<CartBaseSurprise, T> postSpawn) {
-            return new SurpriseEntity<T>(entityType, weight, numToSpawn, setup, postSpawn);
+            return new SurpriseEntity<>(entityType, weight, numToSpawn, setup, postSpawn);
         }
 
         @Override

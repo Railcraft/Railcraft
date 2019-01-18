@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class GuiTradeStation extends GuiContainerRailcraft {
     private final IWorldNameable namer;
 
     public GuiTradeStation(InventoryPlayer playerInv, TradeStationLogic logic, IWorldNameable namer) {
-        super(new ContainerTradeStation(playerInv, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_trade_station.png");
+        super(new ContainerTradeStation(playerInv, logic), "gui_trade_station.png");
         this.owner = namer;
         this.namer = namer;
         xSize = 176;

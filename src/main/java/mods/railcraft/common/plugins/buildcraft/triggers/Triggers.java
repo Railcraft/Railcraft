@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -69,9 +79,8 @@ public enum Triggers implements ITriggerExternal {
         return LocalizationPlugin.translate("gates.trigger." + tag);
     }
 
-    @Nullable
     @Override
-    public ISprite getSprite() {
+    public @Nullable ISprite getSprite() {
         return null; //TODO Implement this
     }
 

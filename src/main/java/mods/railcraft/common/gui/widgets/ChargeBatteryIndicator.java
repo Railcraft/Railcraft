@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.gui.widgets;
 
 import mods.railcraft.api.charge.IBattery;
+import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,8 +30,12 @@ public class ChargeBatteryIndicator extends IndicatorController {
     @Override
     protected void refreshToolTip() {
         double capacity = battery.getCapacity();
-        double chargeLevel = capacity <= 0.0 ? 0.0 : (Math.min(charge, capacity) / capacity) * 100.0;
-        tip.text = String.format("%.0f%%", chargeLevel);
+        double current = Math.min(charge, capacity);
+        double chargeLevel = capacity <= 0.0 ? 0.0 : (current / capacity) * 100.0;
+        tips.clear();
+        tips.add(String.format("%.0f%%", chargeLevel));
+        tips.add(HumanReadableNumberFormatter.format(current));
+        tips.add("/ " + HumanReadableNumberFormatter.format(capacity));
     }
 
     @Override
@@ -44,6 +49,11 @@ public class ChargeBatteryIndicator extends IndicatorController {
     @Override
     public double getServerValue() {
         return battery.getCharge();
+    }
+
+    @Override
+    public double getClientValue() {
+        return charge;
     }
 
     @Override

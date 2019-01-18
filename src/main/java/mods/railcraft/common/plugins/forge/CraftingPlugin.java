@@ -18,6 +18,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.crafting.IRecipeBuilder;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.crafting.InvalidRecipeException;
@@ -195,23 +196,28 @@ public class CraftingPlugin {
 
     public static ResourceLocation getNameFromOutput(ItemStack output) {
         ResourceLocation itemId = Objects.requireNonNull(output.getItem().getRegistryName());
-        String itemName = itemId.getPath();
-        if (output.getHasSubtypes())
-            itemName += "#" + output.getMetadata();
-        recipeNames.add(itemName);
-        return new ResourceLocation(RailcraftConstantsAPI.MOD_ID, itemName + "$" + recipeNames.count(itemName));
+        if (output.getHasSubtypes()) {
+            return getNameFromOutput(new ResourceLocation(itemId.getNamespace(), itemId.getPath() + "#" + output.getMetadata()));
+        }
+        return getNameFromOutput(itemId);
+    }
+
+    public static ResourceLocation getNameFromOutput(ResourceLocation location) {
+        String name = location.getNamespace().equals(Railcraft.MOD_ID) ? location.getPath() : location.getNamespace() + "_" + location.getPath();
+        recipeNames.add(name);
+        return new ResourceLocation(RailcraftConstantsAPI.MOD_ID, name + "$" + recipeNames.count(name));
     }
 
     public static @Nullable ResourceLocation guessName(@Nullable Object input) {
         if (input instanceof IForgeRegistryEntry) {
-            return ((IForgeRegistryEntry) input).getRegistryName();
+            return getNameFromOutput(Objects.requireNonNull(((IForgeRegistryEntry) input).getRegistryName()));
         } else if (input instanceof ItemStack) {
-            return ((ItemStack) input).getItem().getRegistryName();
+            return getNameFromOutput((ItemStack) input);
         } else if (input instanceof String) {
-            return new ResourceLocation("ore", (String) input);
+            return getNameFromOutput(new ResourceLocation("ore", (String) input));
         } else if (input instanceof IRailcraftObjectContainer) {
             IRailcraftObjectContainer<?> container = Code.cast(input);
-            return container.getRegistryName();
+            return getNameFromOutput(container.getRegistryName());
         }
         return null;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -82,11 +82,7 @@ public final class InventoryConcatenator implements IInventory {
 
     @Override
     public boolean isEmpty() {
-        for (IInventory inv : invSet) {
-            if (!inv.isEmpty())
-                return false;
-        }
-        return true;
+        return invSet.stream().allMatch(IInventory::isEmpty);
     }
 
     @Override

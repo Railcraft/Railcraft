@@ -6,6 +6,11 @@
     <option name="JD_KEEP_EMPTY_PARAMETER" value="false" />
     <option name="JD_KEEP_EMPTY_EXCEPTION" value="false" />
     <option name="JD_KEEP_EMPTY_RETURN" value="false" />
+    <option name="DO_NOT_FORMAT">
+      <list>
+        <fileSet type="namedScope" name="Other api" pattern="(src[railcraft_api]:atomicstryker.dynamiclights.client.*||src[railcraft_api]:thaumcraft.api..*||src[railcraft_api]:*..*)&amp;&amp;!src[railcraft_api]:mods.railcraft.api..*" />
+      </list>
+    </option>
     <JSON>
       <option name="OBJECT_WRAPPING" value="0" />
       <option name="ARRAY_WRAPPING" value="0" />

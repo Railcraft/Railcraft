@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -63,8 +63,6 @@ public class MatTools {
                     .register();
         }
     }
-
-    @SuppressWarnings("ConstantConditions")
 
     public static ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
         IMaterialBlock block = ((IMaterialBlock) state.getBlock());

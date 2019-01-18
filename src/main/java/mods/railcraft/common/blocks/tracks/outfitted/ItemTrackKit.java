@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,8 +67,7 @@ public class ItemTrackKit extends ItemRailcraft {
     }
 
     @Override
-    @Nullable
-    public Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
         return TrackKit.class;
     }
 
@@ -82,7 +81,6 @@ public class ItemTrackKit extends ItemRailcraft {
         return getMetadata(stack);
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         if (variant != null) {

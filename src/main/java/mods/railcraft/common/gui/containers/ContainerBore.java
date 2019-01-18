@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,18 +11,16 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.gui.slots.SlotFuel;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
-import mods.railcraft.common.gui.slots.SlotTrack;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBore extends RailcraftContainer {
+    public static final int GUI_HEIGHT = 222;
 
     private final EntityTunnelBore bore;
     private int lastBurnTime;
@@ -34,27 +32,22 @@ public class ContainerBore extends RailcraftContainer {
 
         addSlot(new SlotStackFilter(StackFilters.of(IBoreHead.class), bore, 0, 17, 36).setStackLimit(1));
 
+        // Fuel
         for (int i = 0; i < 6; i++) {
-            addSlot(new SlotFuel(bore, i + 1, 62 + i * 18, 36));
+            addSlot(new SlotRailcraft(bore, i + 1, 62 + i * 18, 36));
         }
 
+        // Ballast
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotStackFilter(StandardStackFilters.BALLAST, bore, i + 7, 8 + i * 18, 72));
+            addSlot(new SlotRailcraft(bore, i + 7, 8 + i * 18, 72));
         }
 
+        // Track
         for (int i = 0; i < 9; i++) {
-            addSlot(new SlotTrack(bore, i + 16, 8 + i * 18, 108));
+            addSlot(new SlotRailcraft(bore, i + 16, 8 + i * 18, 108));
         }
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(playerInv, k + i * 9 + 9, 8 + k * 18, 140 + i * 18));
-            }
-        }
-
-        for (int i = 0; i < 9; i++) {
-            addSlot(new Slot(playerInv, i, 8 + i * 18, 198));
-        }
+        addPlayerSlots(playerInv, GUI_HEIGHT);
     }
 
     @Override

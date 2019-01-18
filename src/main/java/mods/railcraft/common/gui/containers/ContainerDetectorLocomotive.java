@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,12 +19,10 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerDetectorLocomotive extends RailcraftContainer {
 
-    private final TileDetector tile;
     private final DetectorLocomotive detector;
 
     public ContainerDetectorLocomotive(InventoryPlayer inventoryplayer, TileDetector tile) {
         super(((DetectorLocomotive) tile.getDetector()).getFilters());
-        this.tile = tile;
         this.detector = (DetectorLocomotive) tile.getDetector();
         addSlot(new SlotColorFilter(detector.getFilters(), 0, 35, 26));
         addSlot(new SlotColorFilter(detector.getFilters(), 1, 35, 52));

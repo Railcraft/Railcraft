@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
+import mods.railcraft.common.blocks.machine.BlockMachine;
+import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -24,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemSignal extends ItemMachine {
-    public ItemSignal(Block block) {
+    public ItemSignal(BlockMachine<?> block) {
         super(block);
     }
 

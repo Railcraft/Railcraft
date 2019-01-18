@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.client.gui;
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -38,7 +37,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class GuiTicket extends GuiScreen {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "ticket_gold.png");
+    public static final ResourceLocation TEXTURE = GuiTools.findTexture("ticket_gold.png");
     public static final int WRAP_WIDTH = 226;
     private static final int IMAGE_WIDTH = 256;
     private static final int IMAGE_HEIGHT = 136;
@@ -53,7 +52,7 @@ public class GuiTicket extends GuiScreen {
      * Update ticks since the gui was opened
      */
     private int updateCount;
-    private String dest = "";
+    private String dest;
     private GuiSimpleButton buttonCancel;
     private GuiSimpleButton buttonDone;
     private GuiSimpleButton buttonHelp;
@@ -81,7 +80,7 @@ public class GuiTicket extends GuiScreen {
         buttonList.clear();
         Keyboard.enableRepeatEvents(true);
 
-        List<GuiSimpleButton> buttons = new ArrayList<GuiSimpleButton>();
+        List<GuiSimpleButton> buttons = new ArrayList<>();
         buttons.add(buttonDone = new GuiSimpleButton(0, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.done")));
         buttons.add(buttonHelp = new GuiSimpleButton(1, 0, IMAGE_HEIGHT + 25, 65, LocalizationPlugin.translate("gui.railcraft.help")));
         buttons.add(buttonCancel = new GuiSimpleButton(2, 0, IMAGE_HEIGHT + 25, 65, I18n.translateToLocal("gui.cancel")));
@@ -138,6 +137,7 @@ public class GuiTicket extends GuiScreen {
      * Fired when a key is typed. This is the equivalent of
      * KeyListener.keyTyped(KeyEvent e).
      */
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
     @Override
     protected void keyTyped(char c, int key) throws IOException {
         super.keyTyped(c, key);

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,8 +65,7 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
         setCoordBaseMode(facing);
     }
 
-    @Nullable
-    public static ComponentWorkshop buildComponent(Start villagePiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
+    public static @Nullable ComponentWorkshop buildComponent(Start villagePiece, List<StructureComponent> pieces, Random random, int x, int y, int z, EnumFacing facing, int type) {
         StructureBoundingBox box = StructureBoundingBox.getComponentToAddBoundingBox(x, y, z, 0, 0, 0, 11, 6, 11, facing);
         return canVillageGoDeeper(box) && StructureComponent.findIntersecting(pieces, box) == null ? new ComponentWorkshop(villagePiece, type, random, box, facing) : null;
     }
@@ -221,7 +220,6 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
 
         // machines
         if (EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable()) {
-            //noinspection ConstantConditions
             setBlockState(world, EquipmentVariant.ROLLING_MACHINE_MANUAL.getDefaultState(), 9, 1, 5, sbb);
         }
 
@@ -254,9 +252,8 @@ public class ComponentWorkshop extends StructureVillagePieces.Village {
     @Override
     protected VillagerRegistry.VillagerProfession chooseForgeProfession(int count, VillagerRegistry.VillagerProfession prof) {
         // leave null pointer exceptions on different lines
-        return count == 0 || random.nextBoolean()
-                ? checkNotNull(ModuleWorld.villagerTrackman)
-                : checkNotNull(smith);
+        return ModuleWorld.villagerTrackman == null ? checkNotNull(smith) : count == 0 || random.nextBoolean()
+                ? ModuleWorld.villagerTrackman : checkNotNull(smith);
     }
 
     private BlockPos getPosWithOffset(int x, int y, int z) {

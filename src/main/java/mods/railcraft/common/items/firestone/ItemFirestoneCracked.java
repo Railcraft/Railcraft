@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,6 @@ public class ItemFirestoneCracked extends ItemFirestoneRefined {
     public void defineRecipes() {
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public ItemStack getContainerItem(ItemStack stack) {
         double damageLevel = (double) stack.getItemDamage() / (double) stack.getMaxDamage();

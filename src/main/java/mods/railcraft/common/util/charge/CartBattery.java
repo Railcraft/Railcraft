@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,17 +37,14 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class CartBattery implements IBatteryCart {
+public class CartBattery extends Battery implements IBatteryCart {
 
     static final int DRAW_INTERVAL = 8;
     protected static final Random rand = new Random();
 
     protected final Type type;
-    protected final double capacity;
     protected final double lossPerTick;
-    protected double charge;
     protected double draw;
-    protected double lastTickDraw;
     protected int clock = rand.nextInt();
     protected int drewFromTrack;
 
@@ -60,26 +57,23 @@ public class CartBattery implements IBatteryCart {
     }
 
     public CartBattery(Type type, double capacity, double lossPerTick) {
+        super(capacity);
         this.type = type;
-        this.capacity = capacity;
         this.lossPerTick = lossPerTick;
     }
 
     @Override
-    public double getCharge() {
-        return charge;
-    }
-
-    @Override
     public void setCharge(double charge) {
-        if (type == Type.USER)
+        if (type == IBatteryCart.Type.USER)
             return;
-        this.charge = charge;
+        super.setCharge(charge);
     }
 
     @Override
-    public double getCapacity() {
-        return capacity;
+    public void addCharge(double charge) {
+        if (type == IBatteryCart.Type.USER)
+            return;
+        super.addCharge(charge);
     }
 
     @Override
@@ -95,35 +89,6 @@ public class CartBattery implements IBatteryCart {
     @Override
     public Type getType() {
         return type;
-    }
-
-    @Override
-    public void addCharge(double charge) {
-        if (type == Type.USER)
-            return;
-        this.charge += charge;
-    }
-
-    /**
-     * Remove up to the requested amount of charge and returns the amount
-     * removed.
-     * <p/>
-     *
-     * @return charge removed
-     */
-    @Override
-    public double removeCharge(double request) {
-        if (request <= 0.0)
-            return 0.0;
-        if (charge >= request) {
-            charge -= request;
-            lastTickDraw += request;
-            return request;
-        }
-        double ret = charge;
-        charge = 0.0;
-        lastTickDraw += ret;
-        return ret;
     }
 
     protected void removeLosses() {
@@ -161,8 +126,8 @@ public class CartBattery implements IBatteryCart {
         clock++;
         removeLosses();
 
-        draw = (draw * 24.0 + lastTickDraw) / 25.0;
-        lastTickDraw = 0.0;
+        draw = (draw * 24.0 + chargeDrawnThisTick) / 25.0;
+        chargeDrawnThisTick = 0.0;
 
         if (drewFromTrack > 0)
             drewFromTrack--;

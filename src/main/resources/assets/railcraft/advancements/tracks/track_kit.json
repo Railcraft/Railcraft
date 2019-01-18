@@ -16,11 +16,9 @@
     "build": {
       "trigger": "railcraft:use_track_kit",
       "conditions": {
-        "items": [
-          {
-            "item": "railcraft:track_kit"
-          }
-        ]
+        "used": {
+          "item": "railcraft:track_kit"
+        }
       }
     }
   }

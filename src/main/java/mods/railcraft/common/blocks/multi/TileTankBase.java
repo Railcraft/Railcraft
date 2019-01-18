@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -438,7 +438,6 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         super.onMasterChanged();
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty())
-            //noinspection ConstantConditions
             tMan.get(0).setFluid(null);
     }
 

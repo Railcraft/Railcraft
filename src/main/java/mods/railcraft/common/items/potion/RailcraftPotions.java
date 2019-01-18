@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.items.potion;
 
 import mods.railcraft.api.core.RailcraftConstantsAPI;
@@ -29,16 +39,16 @@ public final class RailcraftPotions {
 
         @Override
         public Definition getDef() {
-            return this.def;
+            return def;
         }
 
         @Override
         public void register() {
             this.potion = checkNotNull(supplier.get());
-            this.potion.setPotionName("potion." + Railcraft.MOD_ID + '.' + getBaseTag());
-            this.potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
-            this.potion.initializeDefinition();
-            ForgeRegistries.POTIONS.register(this.potion);
+            potion.setPotionName("potion." + Railcraft.MOD_ID + '.' + getBaseTag());
+            potion.setRegistryName(RailcraftConstantsAPI.locationOf(name));
+            potion.initializeDefinition();
+            ForgeRegistries.POTIONS.register(potion);
         }
 
         @Override

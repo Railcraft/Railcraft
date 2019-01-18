@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,8 +17,8 @@ import mods.railcraft.common.modules.ModuleFactory;
 import mods.railcraft.common.modules.ModuleResources;
 import mods.railcraft.common.modules.ModuleStructures;
 import mods.railcraft.common.modules.ModuleWorld;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +56,7 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     BLOCK_BRASS(ModuleResources.class, "brass", new SimpleCube(), 3f, 10f),
     ;
     public static final EnumGeneric[] VALUES = values();
-    private static final List<EnumGeneric> creativeList = new ArrayList<EnumGeneric>();
+    private static final List<EnumGeneric> creativeList = new ArrayList<>();
 
     static {
         creativeList.add(BLOCK_CREOSOTE);

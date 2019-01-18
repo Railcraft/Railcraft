@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -113,7 +113,6 @@ public class BlockFrame extends BlockRailcraft implements IPostConnection {
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
         if (RailcraftBlocks.WIRE.isEqual(heldItem))
-            //noinspection ConstantConditions
             if (WorldPlugin.setBlockState(worldIn, pos, RailcraftBlocks.WIRE.getDefaultState().withProperty(BlockWire.ADDON, BlockWire.Addon.FRAME), 2)) {
                 if (!playerIn.capabilities.isCreativeMode)
                     playerIn.setHeldItem(hand, InvTools.depleteItem(heldItem));

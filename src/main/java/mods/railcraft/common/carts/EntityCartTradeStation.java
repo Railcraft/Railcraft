@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,13 +11,13 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import mods.railcraft.common.blocks.single.BlockTradeStation;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.AIPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAISearchForEntity;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchEntity;
-import mods.railcraft.common.blocks.logic.Logic;
-import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;

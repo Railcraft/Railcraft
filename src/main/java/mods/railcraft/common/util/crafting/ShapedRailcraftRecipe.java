@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 /**
  * A shaped recipe which respects its ingredient's choice of remaining items.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "UnnecessaryThis"})
 public final class ShapedRailcraftRecipe extends ShapedRecipes {
 
     // is there a cleaner way to map Ingredients to ItemStacks?

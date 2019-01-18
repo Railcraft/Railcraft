@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -45,9 +45,8 @@ public class TileAdminSteamProducer extends TileRailcraftTicking implements ISma
             return new IFluidTankProperties[] {new IFluidTankProperties() {
                 final FluidStack steam = Fluids.STEAM.getB(4);
 
-                @Nullable
                 @Override
-                public FluidStack getContents() {
+                public @Nullable FluidStack getContents() {
                     return steam;
                 }
 
@@ -83,15 +82,13 @@ public class TileAdminSteamProducer extends TileRailcraftTicking implements ISma
             return 0;
         }
 
-        @Nullable
         @Override
-        public FluidStack drain(FluidStack resource, boolean doDrain) {
+        public @Nullable FluidStack drain(FluidStack resource, boolean doDrain) {
             return Fluids.STEAM.is(resource) ? resource : null;
         }
 
-        @Nullable
         @Override
-        public FluidStack drain(int maxDrain, boolean doDrain) {
+        public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
             return Fluids.STEAM.get(maxDrain);
         }
     };
@@ -148,9 +145,8 @@ public class TileAdminSteamProducer extends TileRailcraftTicking implements ISma
         }
     }
 
-    @Nullable
     @Override
-    public EnumGui getGui() {
+    public @Nullable EnumGui getGui() {
         return null;
     }
 

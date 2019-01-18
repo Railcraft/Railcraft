@@ -19,7 +19,7 @@ import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -89,7 +89,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
 
         if (clock % (MIN_FEED_INTERVAL / 4) == 0 && (feed.isEmpty() || sizeOf(feed) < feed.getMaxStackSize())) {
             InventoryComposite chests = invCache.getAdjacentInventories();
-            chests.moveOneItemTo(this, StandardStackFilters.FEED);
+            chests.moveOneItemTo(this, StackFilters.FEED);
         }
 
         feed = getStackInSlot(0);
@@ -147,7 +147,6 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                     player = null;
                 }
 
-                //noinspection ConstantConditions
                 animal.setInLove(player);
 
                 for (int i = 0; i < 7; i++) {

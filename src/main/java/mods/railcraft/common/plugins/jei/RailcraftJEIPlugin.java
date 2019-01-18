@@ -15,10 +15,12 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.ingredients.VanillaTypes;
+import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.client.gui.*;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.equipment.EquipmentVariant;
@@ -44,6 +46,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -58,6 +61,8 @@ public class RailcraftJEIPlugin implements IModPlugin {
     public static final String BLAST_FURNACE = "railcraft.blast.furnace";
     public static final String ROCK_CRUSHER = "railcraft.rock.crusher";
     public static final String COKE = "railcraft.coke";
+
+    private final List<IRecipeCategory<?>> categories = new ArrayList<>();
 
     @Override
     public void registerIngredients(IModIngredientRegistration registry) {
@@ -98,6 +103,9 @@ public class RailcraftJEIPlugin implements IModPlugin {
                                         stack.setItemDamage(RotorRepairRecipe.REPAIR_PER_BLADE);
                                 }),
                 VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(IRollingMachineCrafter.IRollingRecipe.class,
+                recipe -> new DefaultRecipeWrapper(registry, recipe),
+                VanillaRecipeCategoryUid.CRAFTING); // Rolling machine recipe copying
 
         registry.handleRecipes(IRecipe.class, recipe ->
                 new DefaultRecipeWrapper(registry, recipe), ROLLING);
@@ -107,12 +115,20 @@ public class RailcraftJEIPlugin implements IModPlugin {
         registry.addRecipes(RockCrusherRecipeProvider.get(registry).getRecipes(), ROCK_CRUSHER);
         registry.addRecipes(BlastFurnaceRecipeProvider.get(registry).getRecipes(), BLAST_FURNACE);
 
-        registry.addRecipeCatalyst(RailcraftBlocks.STEAM_OVEN.getStack(), VanillaRecipeCategoryUid.SMELTING);
-        registry.addRecipeCatalyst(RailcraftBlocks.COKE_OVEN.getStack(), COKE);
-        registry.addRecipeCatalyst(EquipmentVariant.ROLLING_MACHINE_MANUAL.getStack(), ROLLING);
-        registry.addRecipeCatalyst(EquipmentVariant.ROLLING_MACHINE_POWERED.getStack(), ROLLING);
-        registry.addRecipeCatalyst(RailcraftBlocks.BLAST_FURNACE.getStack(), BLAST_FURNACE);
-        registry.addRecipeCatalyst(RailcraftBlocks.ROCK_CRUSHER.getStack(), ROCK_CRUSHER);
+        if (RailcraftBlocks.STEAM_OVEN.isLoaded())
+            registry.addRecipeCatalyst(RailcraftBlocks.STEAM_OVEN.getStack(), VanillaRecipeCategoryUid.SMELTING);
+        if (RailcraftBlocks.COKE_OVEN.isLoaded())
+            registry.addRecipeCatalyst(RailcraftBlocks.COKE_OVEN.getStack(), COKE);
+        if (RailcraftBlocks.COKE_OVEN_RED.isLoaded())
+            registry.addRecipeCatalyst(RailcraftBlocks.COKE_OVEN_RED.getStack(), COKE);
+        if (EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable())
+            registry.addRecipeCatalyst(EquipmentVariant.ROLLING_MACHINE_MANUAL.getStack(), ROLLING);
+        if (EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
+            registry.addRecipeCatalyst(EquipmentVariant.ROLLING_MACHINE_POWERED.getStack(), ROLLING);
+        if (RailcraftBlocks.BLAST_FURNACE.isLoaded())
+            registry.addRecipeCatalyst(RailcraftBlocks.BLAST_FURNACE.getStack(), BLAST_FURNACE);
+        if (RailcraftBlocks.ROCK_CRUSHER.isLoaded())
+            registry.addRecipeCatalyst(RailcraftBlocks.ROCK_CRUSHER.getStack(), ROCK_CRUSHER);
 
         IRecipeTransferRegistry transferRegistry = registry.getRecipeTransferRegistry();
         transferRegistry.addRecipeTransferHandler(ContainerSteamOven.class, VanillaRecipeCategoryUid.SMELTING, 0, 9, 9, 36);
@@ -143,10 +159,12 @@ public class RailcraftJEIPlugin implements IModPlugin {
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
-        registry.addRecipeCategories(new RollingMachineRecipeCategory(guiHelper));
-        registry.addRecipeCategories(new CokeOvenCategory(guiHelper));
-        registry.addRecipeCategories(new RockCrusherMachineCategory(guiHelper));
-        registry.addRecipeCategories(new BlastFurnaceMachineCategory(guiHelper));
+        categories.add(new RollingMachineRecipeCategory(guiHelper));
+        categories.add(new CokeOvenCategory(guiHelper));
+        categories.add(new RockCrusherMachineCategory(guiHelper));
+        categories.add(new BlastFurnaceMachineCategory(guiHelper));
+
+        registry.addRecipeCategories(categories.toArray(new IRecipeCategory[0]));
     }
 
     private void addDescription(IModRegistry registry, ItemStack stack) {
@@ -162,6 +180,17 @@ public class RailcraftJEIPlugin implements IModPlugin {
         Item trackOutfitted = RailcraftBlocks.TRACK_OUTFITTED.item();
         if (trackOutfitted != null)
             subtypeRegistry.registerSubtypeInterpreter(trackOutfitted, stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        IRecipeRegistry recipeRegistry = jeiRuntime.getRecipeRegistry();
+
+        for (IRecipeCategory<?> category : categories) {
+            if (recipeRegistry.getRecipeCatalysts(category).isEmpty()) {
+                recipeRegistry.hideRecipeCategory(category.getUid());
+            }
+        }
     }
 
     private class DefaultRecipeWrapper implements IRecipeWrapper {

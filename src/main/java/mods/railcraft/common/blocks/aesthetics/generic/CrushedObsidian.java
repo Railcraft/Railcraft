@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -82,7 +82,6 @@ public class CrushedObsidian extends SimpleCube {
                 WorldPlugin.setBlockToAir(world, pos);
                 BlockPos blockPos;
 
-                //noinspection StatementWithEmptyBody
                 for (blockPos = pos.down(); canFallInto(world, blockPos) && blockPos.getY() > 0; blockPos = blockPos.down()) {
                     // NOOP
                 }

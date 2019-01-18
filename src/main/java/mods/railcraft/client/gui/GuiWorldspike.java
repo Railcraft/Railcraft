@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,21 +10,18 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerWorldspike;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiWorldspike extends GuiTitled {
 
     private final ContainerWorldspike container;
 
     public GuiWorldspike(InventoryPlayer playerInv, TileWorldspike worldspike) {
-        super(worldspike, new ContainerWorldspike(playerInv, worldspike), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_single_slot.png");
-        xSize = 176;
-        ySize = 140;
+        super(worldspike, new ContainerWorldspike(playerInv, worldspike), "gui_single_slot.png");
+        ySize = ContainerWorldspike.GUI_HEIGHT;
         container = (ContainerWorldspike) inventorySlots;
     }
 
@@ -34,7 +31,6 @@ public class GuiWorldspike extends GuiTitled {
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel"), 85, 24, 0x404040);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining",
                 HumanReadableNumberFormatter.format((double) container.minutesRemaining / 60.0)), 85, 35, 0x404040);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -41,7 +41,6 @@ import javax.vecmath.Vector4f;
 import java.util.*;
 import java.util.function.Function;
 
-@SuppressWarnings("Guava")
 public final class FluidModel implements IModel {
     public static final FluidModel WATER = new FluidModel(FluidRegistry.WATER, true);
     public static final FluidModel LAVA = new FluidModel(FluidRegistry.LAVA, true);
@@ -99,8 +98,9 @@ public final class FluidModel implements IModel {
 //    }
 
     public static final class BakedFluid implements IBakedModel {
-        private static final int x[] = {0, 0, 1, 1};
-        private static final int z[] = {0, 1, 1, 0};
+        private static final int[] x = {0, 0, 1, 1};
+        private static final int[] z = {0, 1, 1, 0};
+        @SuppressWarnings("FieldNamingConvention")
         private static final float eps = 1e-3f;
         private final Optional<TRSRTransformation> transformation;
         private final VertexFormat format;
@@ -344,7 +344,6 @@ public final class FluidModel implements IModel {
             return ItemOverrideList.NONE;
         }
 
-        @SuppressWarnings("SimplifiableIfStatement")
         private class Key {
             private final boolean gas;
             private final boolean sideFlowing;

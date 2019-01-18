@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,15 +12,16 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.carts.EntityCartCargo;
 import mods.railcraft.common.gui.slots.SlotLinked;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 public class ContainerCartCargo extends RailcraftContainer {
 
     public ContainerCartCargo(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
         super(cart);
 
-        SlotRailcraft filter = new SlotRailcraft(cart.getFilterInv(), 0, 26, 36)
+        SlotRailcraft filter = new SlotStackFilter(StackFilters.CARGO, cart.getFilterInv(), 0, 26, 36)
                 .setPhantom().setStackLimit(1).setEnableCheck(cart::hasNoItems);
         addSlot(filter);
 
@@ -30,14 +31,6 @@ public class ContainerCartCargo extends RailcraftContainer {
             }
         }
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-            }
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
-        }
+        addPlayerSlots(inventoryplayer);
     }
 }

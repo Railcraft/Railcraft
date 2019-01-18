@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.Block;
@@ -27,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemMachineActuator extends ItemMachine {
-    public ItemMachineActuator(Block block) {
+    public ItemMachineActuator(BlockMachine<?> block) {
         super(block);
     }
 

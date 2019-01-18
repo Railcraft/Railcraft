@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,8 +35,10 @@ public final class CollectionTools {
 
     public static <T> BiMap<Integer, T> createIndexedLookupTable(List<T> elements) {
         BiMap<Integer, T> biMap = HashBiMap.create();
-        for (int i = 0; i < elements.size(); i++) {
-            biMap.put(i, elements.get(i));
+        int i = 0;
+        for (T each : elements) {
+            biMap.put(i, each);
+            i++;
         }
         return biMap;
     }

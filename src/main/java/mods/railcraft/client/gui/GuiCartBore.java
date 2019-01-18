@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBore;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -21,13 +20,12 @@ public class GuiCartBore extends GuiTitled {
     private final String FUEL = LocalizationPlugin.translate("gui.railcraft.bore.fuel");
     private final String BALLAST = LocalizationPlugin.translate("gui.railcraft.bore.ballast");
     private final String TRACK = LocalizationPlugin.translate("gui.railcraft.bore.track");
-    private EntityTunnelBore cart;
+    private final EntityTunnelBore cart;
 
     public GuiCartBore(InventoryPlayer inv, EntityTunnelBore cart) {
-        super(cart, new ContainerBore(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_bore.png");
+        super(cart, new ContainerBore(inv, cart), "gui_bore.png");
         this.cart = cart;
-        xSize = 176;
-        ySize = 222;
+        ySize = ContainerBore.GUI_HEIGHT;
     }
 
     @Override

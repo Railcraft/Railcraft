@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorAnimal;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketDispatcher;
@@ -23,7 +22,7 @@ public class GuiDetectorAnimal extends GuiBasic {
     private final TileDetector tile;
 
     protected GuiDetectorAnimal(TileDetector tile) {
-        super(LocalizationPlugin.translate(tile.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_long.png", 256, 88);
+        super(LocalizationPlugin.translate(tile.getName()), "gui_long.png", 256, 88);
         this.tile = tile;
         DetectorAnimal detector = (DetectorAnimal) tile.getDetector();
     }
@@ -53,9 +52,6 @@ public class GuiDetectorAnimal extends GuiBasic {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (tile == null) {
-            return;
-        }
 //        switch (button.id) {
 //            case 0:
 //                detector.chicken = !detector.chicken;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,12 +10,12 @@
 package mods.railcraft.common.items;
 
 import ic2.api.item.IBoxable;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.items.ISpikeMaulTarget;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
-import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
@@ -142,8 +142,8 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.FAIL;
         }
         SoundHelper.playPlaceSoundForBlock(worldIn, pos);
+        RailcraftAdvancementTriggers.getInstance().onSpikeMaulUsageSuccess((EntityPlayerMP) playerIn, worldIn, pos, stack);
         stack.damageItem(1, playerIn);
-        RailcraftAdvancementTriggers.getInstance().onSpikeMaulUsageSuccess((EntityPlayerMP) playerIn, worldIn, pos);
         return EnumActionResult.SUCCESS;
     }
 

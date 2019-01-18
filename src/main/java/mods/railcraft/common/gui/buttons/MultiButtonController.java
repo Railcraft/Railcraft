@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,11 +34,11 @@ public class MultiButtonController<T extends IMultiButtonState> {
 
     @SafeVarargs
     public static <T extends IMultiButtonState> MultiButtonController<T> create(int startState, T... validStates) {
-        return new MultiButtonController<T>(startState, validStates);
+        return new MultiButtonController<>(startState, validStates);
     }
 
     public static <T extends IMultiButtonState> MultiButtonController<T> create(MultiButtonController<T> controller) {
-        return new MultiButtonController<T>(controller);
+        return new MultiButtonController<>(controller);
     }
 
     public MultiButtonController<T> copy() {

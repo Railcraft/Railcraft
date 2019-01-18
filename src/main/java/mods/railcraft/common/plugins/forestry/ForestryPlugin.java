@@ -109,8 +109,7 @@ public class ForestryPlugin {
                                    Object... materials) {
     }
 
-    @Nullable
-    public Item getBackpack(String backpackId, String type) {
+    public @Nullable Item getBackpack(String backpackId, String type) {
         return null;
     }
 

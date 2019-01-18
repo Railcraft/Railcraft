@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,7 +28,7 @@ public enum ActuatorVariant implements IEnumMachine<ActuatorVariant> {
     MOTOR(ModuleTracks.class, "motor", TileActuatorMotor.class),
     ROUTING(ModuleRouting.class, "routing", TileActuatorRouting.class);
 
-    private static final List<ActuatorVariant> creativeList = new ArrayList<ActuatorVariant>();
+    private static final List<ActuatorVariant> creativeList = new ArrayList<>();
     public static final ActuatorVariant[] VALUES = values();
 
     static {

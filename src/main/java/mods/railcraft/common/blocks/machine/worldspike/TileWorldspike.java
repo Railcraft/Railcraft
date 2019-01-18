@@ -26,6 +26,7 @@ import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.ItemMap;
+import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
@@ -38,6 +39,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -263,9 +265,12 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
                     if (InvTools.isEmpty(stack)) {
                         setInventorySlotContents(0, InvTools.emptyStack());
                         releaseTicket();
-                    } else if (getFuelMap().containsKey(stack)) {
-                        fuel = (long) (getFuelMap().get(stack) * RailcraftConstants.TICKS_PER_HOUR);
-                        decrStackSize(0, 1); // this operation modifies the stack variable and must be done at last
+                    } else {
+                        Optional<Float> fuelValue = getFuelValue(stack);
+                        if (fuelValue.isPresent()) {
+                            fuel = (long) (fuelValue.get() * RailcraftConstants.TICKS_PER_HOUR);
+                            decrStackSize(0, 1); // this operation modifies the stack variable and must be done at last
+                        }
                     }
                 }
             }
@@ -326,8 +331,8 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     }
 
     @Override
-    public ItemMap<Float> getFuelMap() {
-        return RailcraftConfig.worldspikeFuelStandard;
+    public final Map<Ingredient, Float> getFuelMap() {
+        return getMachineType().getFuelList();
     }
 
     protected boolean meetsTicketRequirements() {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -70,8 +70,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
         }
     }
 
-    @Nullable
-    public static ItemStack getGoggles(@Nullable EntityPlayer player) {
+    public static @Nullable ItemStack getGoggles(@Nullable EntityPlayer player) {
         if (player == null)
             return null;
         ItemStack helm = player.getItemStackFromSlot(EntityEquipmentSlot.HEAD);

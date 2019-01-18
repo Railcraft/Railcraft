@@ -11,12 +11,13 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.logic.RockCrusherLogic;
 import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.gui.slots.SlotPassThrough;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.AnalogWidget;
 import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerRockCrusher extends ContainerCrafter {
+    public static final int GUI_HEIGHT = 171;
 
     public ContainerRockCrusher(InventoryPlayer invPlayer, RockCrusherLogic crusher) {
         super(crusher);
@@ -24,7 +25,7 @@ public class ContainerRockCrusher extends ContainerCrafter {
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                addSlot(new SlotPassThrough(crusher, i * 3 + k, 17 + k * 18, 21 + i * 18));
+                addSlot(new SlotRailcraft(crusher, i * 3 + k, 17 + k * 18, 21 + i * 18));
             }
         }
         for (int i = 0; i < 3; i++) {
@@ -33,6 +34,6 @@ public class ContainerRockCrusher extends ContainerCrafter {
             }
         }
 
-        addPlayerSlots(invPlayer);
+        addPlayerSlots(invPlayer, GUI_HEIGHT);
     }
 }

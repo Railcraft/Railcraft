@@ -33,6 +33,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -52,14 +53,16 @@ public final class FactoryContainer {
 
         try {
             switch (gui) {
+                case CHEST:
+                    return new ContainerRCChest(inv, (IInventory) obj);
                 case MANIPULATOR_ITEM:
                     return new ContainerManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
                     return new ContainerManipulatorCartFluid(inv, (TileFluidManipulator) obj);
                 case LOADER_ENERGY:
-                    return new ContainerEnergyLoader(inv, (TileIC2Loader) obj);
+                    return new ContainerManipulatorCartIC2(inv, (TileIC2Loader) obj);
                 case UNLOADER_ENERGY:
-                    return new ContainerEnergyLoader(inv, (TileIC2Unloader) obj);
+                    return new ContainerManipulatorCartIC2(inv, (TileIC2Unloader) obj);
                 case MANIPULATOR_RF:
                     return new ContainerManipulatorCartRF((TileRFManipulator) obj);
                 case DETECTOR_ITEM:
@@ -82,7 +85,7 @@ public final class FactoryContainer {
                     return new ContainerCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
                 case BLAST_FURNACE:
                     return new ContainerBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
-                case STEAN_OVEN:
+                case STEAM_OVEN:
                     return new ContainerSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
                 case ROCK_CRUSHER:
                     return new ContainerRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
@@ -113,8 +116,8 @@ public final class FactoryContainer {
                 case CART_BORE:
                     return new ContainerBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new ContainerCartEnergy(inv, (IIC2EnergyCart) obj);
-                case CART_RF:
+                    return new ContainerCartEnergy(inv, (CartBaseEnergy) obj);
+                case CART_FE:
                     return new ContainerCartRF((EntityCartRF) obj);
                 case CART_TANK:
                     return new ContainerCartTank(inv, (EntityCartTank) obj);

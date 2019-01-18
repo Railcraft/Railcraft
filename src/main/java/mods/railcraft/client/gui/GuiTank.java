@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.ITankTile;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerTank;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,18 +19,8 @@ import net.minecraft.entity.player.InventoryPlayer;
  */
 public class GuiTank extends GuiTitled {
 
-    private ITankTile tile;
-
     public GuiTank(InventoryPlayer inv, ITankTile tile) {
-        super(tile, new ContainerTank(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_tank_water.png");
-        this.tile = tile;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-//        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate(tile.getTitle()));
-//        fontRenderer.drawString(RailcraftLanguage.translate("railcraft.gui.liquid.capacity") + ": " + tile.getTanks()[0].getCapacity(), 30, 100, 0x404040);
-        fontRenderer.drawString(LocalizationPlugin.translate("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        super(tile, new ContainerTank(inv, tile), "gui_tank_water.png",
+                LocalizationPlugin.translate(tile.getTitle()));
     }
 }

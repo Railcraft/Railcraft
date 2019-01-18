@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -61,9 +61,8 @@ public enum EnumOreMetal implements IVariantEnumBlock<EnumOreMetal> {
         return metal;
     }
 
-    @Nullable
     @Override
-    public String getOreTag() {
+    public @Nullable String getOreTag() {
         return metal.getOreTag(Metal.Form.ORE);
     }
 }

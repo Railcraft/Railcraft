@@ -125,8 +125,7 @@ public final class VillagerTrades {
 
     private static class Offer {
 
-        @Nullable
-        public final Object obj;
+        public final @Nullable Object obj;
         public final int min, max;
 
         public Offer(@Nullable Object obj, int min, int max) {

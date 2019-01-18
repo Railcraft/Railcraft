@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerRollingMachine;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiRollingMachine extends GuiTitled {
 
@@ -21,19 +19,13 @@ public class GuiRollingMachine extends GuiTitled {
     private final int ay;
 
     public GuiRollingMachine(InventoryPlayer inventoryplayer, TileRollingMachine tile) {
-        this(tile, new ContainerRollingMachine(inventoryplayer, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rolling_manual.png", 45);
+        this(tile, new ContainerRollingMachine(inventoryplayer, tile), "gui_rolling_manual.png", 45);
     }
 
     protected GuiRollingMachine(TileRollingMachine tile, ContainerRollingMachine container, String texture, int ay) {
         super(tile, container, texture);
         this.tile = tile;
         this.ay = ay;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

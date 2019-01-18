@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -31,15 +31,18 @@ public final class Predicates {
 
     @SafeVarargs
     public static <T> Predicate<T> and(Predicate<? super T> predicate, Predicate<? super T>... predicates) {
-        return new AndPredicate<>(predicate, predicates);
+        return new AndPredicate<>(Lists.asList(predicate, predicates));
+    }
+
+    public static <T> Predicate<T> and(Collection<? extends Predicate<? super T>> predicates) {
+        return new AndPredicate<>(predicates);
     }
 
     private static class AndPredicate<T> implements Predicate<T> {
-        private final List<Predicate<? super T>> components;
+        private final Collection<? extends Predicate<? super T>> components;
 
-        @SafeVarargs
-        private AndPredicate(Predicate<? super T> predicate, Predicate<? super T>... predicates) {
-            components = Lists.asList(predicate, predicates);
+        private AndPredicate(Collection<? extends Predicate<? super T>> predicates) {
+            components = predicates;
         }
 
         @Override

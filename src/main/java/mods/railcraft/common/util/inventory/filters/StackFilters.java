@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,32 +7,108 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-
 package mods.railcraft.common.util.inventory.filters;
 
 import mods.railcraft.api.carts.IMinecart;
+import mods.railcraft.api.items.IMinecartItem;
+import mods.railcraft.api.items.ITrackItem;
+import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.forge.OreDictPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.IInventoryComposite;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.BallastRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.Items;
+import net.minecraft.item.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
- * Created by CovertJaguar on 3/31/2016 for Railcraft.
+ * A collection of helper methods for creating {@code Predicate<ItemStack>} objects.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class StackFilters {
-    private StackFilters() {
-    }
+public enum StackFilters implements Predicate<ItemStack> {
+
+    ALL,
+    FUEL {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return FuelPlugin.getBurnTime(stack) > 0;
+        }
+
+    },
+    TRACK {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockStateFromStack(stack)));
+        }
+
+    },
+    MINECART {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ItemMinecart || stack.getItem() instanceof IMinecartItem;
+        }
+
+    },
+    BALLAST {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return BallastRegistry.isItemBallast(stack);
+        }
+
+    },
+    //    EMPTY_BUCKET {
+//        @Override
+//        protected boolean testType(ItemStack stack) {
+//            if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
+//                return true;
+//            if (InvTools.isItem(stack, Items.BUCKET))
+//                return true;
+//            UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
+//            FluidStack fluidStack;
+//            return uBucket != null && of(UniversalBucket.class).test(stack) && (fluidStack = uBucket.getFluid(stack)) != null && fluidStack.amount <= 0;
+//        }
+//
+//    },
+    FLUID_CONTAINER {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        }
+    },
+    FEED {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ItemFood || stack.getItem() == Items.WHEAT || stack.getItem() instanceof ItemSeeds;
+        }
+
+    },
+    CARGO {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return (RailcraftConfig.chestAllowLiquids() || !FluidItemHelper.isContainer(stack)) && RailcraftConfig.cargoBlacklist.stream().noneMatch(ing -> ing.apply(stack));
+        }
+
+    },
+    RAW_METAL {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return Stream.of(Metal.VALUES).anyMatch(m -> m.ingotFilter.test(stack) || m.blockFilter.test(stack) || m.nuggetFilter.test(stack));
+        }
+    };
 
     /**
      * Matches against the provided ItemStack.
@@ -186,5 +262,14 @@ public final class StackFilters {
             ItemStack cartItem = cart.getCartItem();
             return !InvTools.isEmpty(stack) && InvTools.isCartItemEqual(stack, cartItem, true);
         };
+    }
+
+    protected boolean testType(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public boolean test(ItemStack stack) {
+        return !InvTools.isEmpty(stack) && testType(stack);
     }
 }

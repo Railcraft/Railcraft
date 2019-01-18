@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,16 +19,15 @@ import net.minecraft.util.math.MathHelper;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BatteryBlock implements IBatteryBlock {
+public class BatteryBlock extends Battery implements IBatteryBlock {
 
     private final BlockPos pos;
     private final Spec batterySpec;
     private StateImpl stateImpl = StateImpl.RECHARGEABLE;
     private State state = State.RECHARGEABLE;
-    private double chargeDrawnThisTick;
-    private double charge;
 
     public BatteryBlock(BlockPos pos, Spec batterySpec) {
+        super(batterySpec.getCapacity());
         this.pos = pos;
         this.batterySpec = batterySpec;
         setState(batterySpec.getInitialState());
@@ -58,6 +57,7 @@ public class BatteryBlock implements IBatteryBlock {
         return stateImpl.getCharge(this);
     }
 
+    @Override
     public double getEfficiency() {
         return batterySpec.getEfficiency();
     }
@@ -74,18 +74,8 @@ public class BatteryBlock implements IBatteryBlock {
     }
 
     @Override
-    public void setCharge(double charge) {
-        this.charge = charge;
-    }
-
-    @Override
     public double getCapacity() {
         return stateImpl.getCapacity(this);
-    }
-
-    @Override
-    public void addCharge(double charge) {
-        this.charge += charge;
     }
 
     /**
@@ -99,6 +89,11 @@ public class BatteryBlock implements IBatteryBlock {
         return stateImpl.removeCharge(this, request);
     }
 
+    @SuppressWarnings("MethodOnlyUsedFromInnerClass")
+    private double oldRemoveCharge(double request) {
+        return super.removeCharge(request);
+    }
+
     public double getPotentialDraw() {
         return MathHelper.clamp(getMaxDraw(), 0.0, getCharge());
     }
@@ -108,6 +103,7 @@ public class BatteryBlock implements IBatteryBlock {
      *
      * @return The amount of charge that can be withdraw from the battery right now
      */
+    @Override
     public double getAvailableCharge() {
         return MathHelper.clamp(getMaxDraw() - chargeDrawnThisTick, 0.0, getCharge() * getEfficiency());
     }
@@ -171,10 +167,7 @@ public class BatteryBlock implements IBatteryBlock {
         }
 
         public double removeCharge(BatteryBlock battery, double desiredAmount) {
-            double amountToDraw = Math.min(desiredAmount, battery.getAvailableCharge());
-            battery.charge -= amountToDraw / battery.getEfficiency();
-            battery.chargeDrawnThisTick += amountToDraw;
-            return amountToDraw;
+            return battery.oldRemoveCharge(desiredAmount);
         }
     }
 }

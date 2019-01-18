@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,8 @@
 package mods.railcraft.common.blocks.machine.worldspike;
 
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
@@ -35,11 +33,6 @@ public class TileWorldspikePersonal extends TileWorldspike {
     @Override
     protected Ticket getTicketFromForge() {
         return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), PlayerPlugin.getUsername(world, getOwner()), world, Type.NORMAL);
-    }
-
-    @Override
-    public ItemMap<Float> getFuelMap() {
-        return RailcraftConfig.worldspikeFuelPersonal;
     }
 
     @Override

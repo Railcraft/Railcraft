@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui.buttons;
 
+import mods.railcraft.client.gui.GuiTools;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import net.minecraft.client.Minecraft;
@@ -19,21 +19,19 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.function.Consumer;
 
 @SideOnly(Side.CLIENT)
 @SuppressWarnings("unchecked")
 public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiButton {
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
+    private static final ResourceLocation TEXTURE = GuiTools.findTexture("gui_basic.png");
     protected final IButtonTextureSet texture;
     private ToolTip toolTip;
-    @Nullable
-    private Consumer<? super T> clickConsumer;
-    @Nullable
-    private Consumer<? super T> statusUpdater;
+    private @Nullable Consumer<? super T> clickConsumer;
+    private @Nullable Consumer<? super T> statusUpdater;
 
     protected GuiBetterButton(int id, int x, int y, int width, IButtonTextureSet texture, String label) {
         super(id, x, y, width, texture.getHeight(), label);
@@ -102,8 +100,7 @@ public abstract class GuiBetterButton<T extends GuiBetterButton<T>> extends GuiB
         drawCenteredString(fontrenderer, displayString, x + width / 2, y + (h - 8) / 2, getTextColor(mouseOver));
     }
 
-    @Nullable
-    public ToolTip getToolTip() {
+    public @Nullable ToolTip getToolTip() {
         return toolTip;
     }
 

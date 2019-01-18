@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,20 +7,22 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.gui.slots;
 
-import net.minecraft.inventory.IInventory;
+package mods.railcraft.common.util.crafting;
+
 import net.minecraft.item.ItemStack;
 
-public class SlotPassThrough extends SlotRailcraft {
+/**
+ * An ingredient that consumes the container of an item stack.
+ */
+class ContainerConsumingIngredient extends RailcraftIngredient {
 
-    public SlotPassThrough(IInventory inv, int slotIndex, int posX, int posY) {
-        super(inv, slotIndex, posX, posY);
+    ContainerConsumingIngredient(ItemStack... stacks) {
+        super(stacks);
     }
 
     @Override
-    public boolean isItemValid(ItemStack stack) {
-        return inventory.isItemValidForSlot(getSlotIndex(), stack);
+    public ItemStack getRemaining(ItemStack original) {
+        return ItemStack.EMPTY;
     }
-
 }

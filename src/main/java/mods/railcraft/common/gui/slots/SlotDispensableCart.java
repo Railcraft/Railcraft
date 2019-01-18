@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -34,7 +34,7 @@ public class SlotDispensableCart extends SlotRailcraft {
             return false;
         if (stack.getItem() instanceof IMinecartItem)
             return ((IMinecartItem) stack.getItem()).canBePlacedByNonPlayer(stack);
-        return StandardStackFilters.MINECART.test(stack);
+        return StackFilters.MINECART.test(stack);
     }
 
 }

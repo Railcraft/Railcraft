@@ -1,33 +1,35 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.api.helpers.StructureHelper;
+import mods.railcraft.api.helpers.IStructureHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public final class MultiBlockHelper implements StructureHelper {
+public final class MultiBlockHelper implements IStructureHelper {
 
     @Override
-    public void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
+    public void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable List<ItemStack> fuel) {
         TileBoilerFireboxSolid.placeSolidBoiler(world, pos, width, height, highPressure, water, fuel);
     }
 
     @Override
-    public void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
+    public void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, @Nullable FluidStack fuel) {
         TileBoilerFireboxFluid.placeFluidBoiler(world, pos, width, height, highPressure, water, fuel);
     }
 
@@ -57,12 +59,12 @@ public final class MultiBlockHelper implements StructureHelper {
     }
 
     @Override
-    public void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
+    public void placeIronTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid) {
         TileTankBase.placeIronTank(world, pos, patternIndex, fluid);
     }
 
     @Override
-    public void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
+    public void placeSteelTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid) {
         TileTankBase.placeSteelTank(world, pos, patternIndex, fluid);
     }
 

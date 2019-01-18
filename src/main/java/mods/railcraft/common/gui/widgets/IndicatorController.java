@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,14 +19,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public abstract class IndicatorController implements IIndicatorController {
 
-    private final ToolTip tips = new ToolTip() {
+    protected final ToolTip tips = new ToolTip() {
         @Override
         public void refresh() {
             refreshToolTip();
         }
 
     };
-    protected ToolTipLine tip = new ToolTipLine();
+    protected final ToolTipLine tip = new ToolTipLine();
 
     protected IndicatorController() {
         tips.add(tip);

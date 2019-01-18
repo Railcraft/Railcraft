@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,10 +16,13 @@ import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import mods.railcraft.common.util.collections.ItemMap;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -56,12 +59,12 @@ public class EntityCartWorldspikePersonal extends EntityCartWorldspike {
     }
 
     @Override
-    protected ForgeChunkManager.Ticket getTicketFromForge() {
+    protected @Nullable ForgeChunkManager.Ticket getTicketFromForge() {
         return ForgeChunkManager.requestPlayerTicket(Railcraft.getMod(), CartToolsAPI.getCartOwner(this).getName(), world, ForgeChunkManager.Type.ENTITY);
     }
 
     @Override
-    public ItemMap<Float> getFuelMap() {
+    public Map<Ingredient, Float> getFuelMap() {
         return RailcraftConfig.worldspikeFuelPersonal;
     }
 

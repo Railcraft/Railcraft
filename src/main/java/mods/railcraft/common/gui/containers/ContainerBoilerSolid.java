@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,14 +10,12 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
-import mods.railcraft.common.gui.slots.SlotFuel;
 import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.gui.slots.SlotWater;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -37,22 +35,14 @@ public class ContainerBoilerSolid extends RailcraftContainer {
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
 
-        addSlot(new SlotWater(tile, 0, 143, 21));
+        addSlot(new SlotRailcraft(tile, 0, 143, 21)); // Water
         addSlot(new SlotOutput(tile, 1, 143, 56));
-        addSlot(new SlotFuel(tile, 2, 62, 39));
-        addSlot(new SlotFuel(tile, 3, 89, 20));
-        addSlot(new SlotFuel(tile, 4, 89, 38));
-        addSlot(new SlotFuel(tile, 5, 89, 56));
+        addSlot(new SlotRailcraft(tile, 2, 62, 39)); // Fuel
+        addSlot(new SlotRailcraft(tile, 3, 89, 20)); // Fuel
+        addSlot(new SlotRailcraft(tile, 4, 89, 38)); // Fuel
+        addSlot(new SlotRailcraft(tile, 5, 89, 56)); // Fuel
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-            }
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
-        }
+        addPlayerSlots(inventoryplayer);
     }
 
     @Override

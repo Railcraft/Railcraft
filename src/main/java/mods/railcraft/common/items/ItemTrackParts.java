@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
-import mods.railcraft.api.crafting.IRollingMachineCrafter;
 import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.api.crafting.IRollingMachineCrafter;
 
 public class ItemTrackParts extends ItemRailcraft {
 

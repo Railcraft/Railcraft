@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,7 @@ public class AuraKeyHandler {
     private static EnumMap<GoggleAura, KeyBinding> keyBindings;
 
     private AuraKeyHandler() {
-        keyBindings = new EnumMap<GoggleAura, KeyBinding>(GoggleAura.class);
+        keyBindings = new EnumMap<>(GoggleAura.class);
         keyBindings.put(GoggleAura.WORLDSPIKE, new KeyBinding("railcraft.keybind.aura.worldspike", Keyboard.KEY_F9, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.TUNING, new KeyBinding("railcraft.keybind.aura.tuning", Keyboard.KEY_P, Railcraft.MOD_ID));
         keyBindings.put(GoggleAura.SURVEYING, new KeyBinding("railcraft.keybind.aura.surveying", Keyboard.KEY_O, Railcraft.MOD_ID));

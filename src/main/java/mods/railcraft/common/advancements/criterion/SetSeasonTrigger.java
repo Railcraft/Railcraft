@@ -1,21 +1,27 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.advancements.criterion;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.advancements.criterion.SetSeasonTrigger.Instance;
-import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin.Season;
 import mods.railcraft.common.util.json.JsonTools;
+import mods.railcraft.common.util.misc.Conditions;
 import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 final class SetSeasonTrigger extends BaseTrigger<Instance> {
 
@@ -33,23 +39,9 @@ final class SetSeasonTrigger extends BaseTrigger<Instance> {
         return new Instance(season, cartPredicate);
     }
 
-    void trigger(EntityPlayerMP player, EntityMinecart cart, SeasonPlugin.Season season) {
-        PlayerAdvancements advancements = player.getAdvancements();
-        Collection<Listener<Instance>> done = new ArrayList<>();
-        for (Listener<Instance> listener : manager.get(advancements)) {
-            if (listener.getCriterionInstance().test(player, cart, season)) {
-                done.add(listener);
-            }
-        }
-        for (Listener<Instance> listener : done) {
-            listener.grantCriterion(advancements);
-        }
-    }
-
     static final class Instance implements ICriterionInstance {
 
-        @Nullable
-        final Season season;
+        final @Nullable Season season;
         final CartPredicate cartPredicate;
 
         Instance(@Nullable Season season, CartPredicate predicate) {
@@ -58,7 +50,7 @@ final class SetSeasonTrigger extends BaseTrigger<Instance> {
         }
 
         boolean test(EntityPlayerMP player, EntityMinecart cart, Season target) {
-            return (season == null || season == target) && cartPredicate.test(player, cart);
+            return Conditions.check(season, target) && cartPredicate.test(player, cart);
         }
 
         @Override

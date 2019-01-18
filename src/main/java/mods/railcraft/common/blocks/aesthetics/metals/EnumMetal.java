@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.blocks.aesthetics.metals;
 
 import mods.railcraft.api.core.IRailcraftModule;
@@ -24,7 +34,7 @@ public enum EnumMetal implements IVariantEnumBlock<EnumMetal> {
     BLOCK_ZINC(ModuleResources.class, "zinc", new SimpleCube(), 3f, 10f),
     BLOCK_BRASS(ModuleResources.class, "brass", new SimpleCube(), 3f, 10f),;
     public static final EnumMetal[] VALUES = values();
-    private static final List<EnumMetal> creativeList = new ArrayList<EnumMetal>();
+    private static final List<EnumMetal> creativeList = new ArrayList<>();
 
     static {
         creativeList.add(BLOCK_COPPER);
@@ -85,6 +95,5 @@ public enum EnumMetal implements IVariantEnumBlock<EnumMetal> {
     public float getResistance() {
         return resistance;
     }
-
 
 }

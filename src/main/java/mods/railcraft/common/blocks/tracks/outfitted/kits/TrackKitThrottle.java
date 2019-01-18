@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class TrackKitThrottle extends TrackKitPowered {
     private LocoSpeed speed = LocoSpeed.MAX;
-    private boolean reverse = false;
+    private boolean reverse;
 
     @Override
     public TrackKits getTrackKitContainer() {
@@ -65,7 +65,7 @@ public class TrackKitThrottle extends TrackKitPowered {
     }
 
     public void setReverse(boolean state) {
-        if (this.reverse != state) {
+        if (reverse != state) {
             this.reverse = state;
             if (Game.isClient(theWorldAsserted()))
                 markBlockNeedsUpdate();

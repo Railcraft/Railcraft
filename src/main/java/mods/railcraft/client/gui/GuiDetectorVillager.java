@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.client.gui.buttons.GuiToggleButtonSmall;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorVillager;
 import mods.railcraft.common.blocks.detector.types.DetectorVillager.Mode;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.collections.RevolvingList;
 import mods.railcraft.common.util.misc.Game;
@@ -37,7 +36,7 @@ public class GuiDetectorVillager extends GuiBasic {
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
 
     public GuiDetectorVillager(TileDetector t) {
-        super(LocalizationPlugin.translate(t.getName()), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_detector_villager.png", 176, 105);
+        super(LocalizationPlugin.translate(t.getName()), "gui_detector_villager.png", 176, 105);
         this.tile = t;
         this.detector = (DetectorVillager) tile.getDetector();
         villager = new EntityVillager(tile.getWorld());

@@ -1,11 +1,12 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
 import net.minecraft.block.Block;
@@ -14,6 +15,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -42,19 +45,13 @@ public final class PowerPlugin {
     }
 
     public static boolean isBlockBeingPoweredByRepeater(World world, BlockPos pos) {
-        for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (isBlockBeingPoweredByRepeater(world, pos, side))
-                return true;
-        }
-        return false;
+        return Arrays.stream(EnumFacing.HORIZONTALS).anyMatch(side -> isBlockBeingPoweredByRepeater(world, pos, side));
     }
 
     public static boolean isRedstonePowered(World world, BlockPos pos) {
-        for (EnumFacing side : EnumFacing.VALUES) {
-            if (isRedstonePowering(world, pos, 0, side) || isRedstonePowering(world, pos, -1, side))
-                return true;
-        }
-        return false;
+        return Arrays.stream(EnumFacing.VALUES)
+                .anyMatch(side -> isRedstonePowering(world, pos, 0, side)
+                        || isRedstonePowering(world, pos, -1, side));
     }
 
     private static boolean isRedstonePowering(World world, BlockPos pos, int yOffset, EnumFacing side) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.*;
 import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.client.util.effects.ClientEffects;
+import mods.railcraft.common.advancements.criterion.RailcraftA
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.carts.LinkageManager.LinkType;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -48,6 +49,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumDyeColor;
@@ -525,6 +527,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                 if (living.getHealth() > 0) {
                     float yaw = (rotationYaw - 90) * (float) Math.PI / 180.0F;
                     living.addVelocity(-MathHelper.sin(yaw) * KNOCKBACK * 0.5F, 0.2D, MathHelper.cos(yaw) * KNOCKBACK * 0.5F);
+                } else {
+                    if (living instanceof EntityPlayerMP)
+                        RailcraftAdvancementTriggers.getInstance().onKilledByLocomotive((EntityPlayerMP) living, this);
                 }
                 return;
             }
