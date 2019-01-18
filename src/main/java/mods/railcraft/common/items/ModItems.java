@@ -107,8 +107,8 @@ public enum ModItems implements IIngredientSource {
     protected void init() {
         if (needsInit) {
             RailcraftModuleManager.Stage stage = RailcraftModuleManager.getStage();
-            if (!(stage == RailcraftModuleManager.Stage.POST_INIT || stage == RailcraftModuleManager.Stage.FINISHED))
-                throw new RuntimeException("Don't use ModItems before POST_INIT");
+            if (stage.compareTo(RailcraftModuleManager.Stage.INIT) < 0)
+                throw new RuntimeException("Don't use ModItems before INIT");
             if (mod.isLoaded()) {
                 needsInit = false;
                 if (mod == Mod.IC2) {

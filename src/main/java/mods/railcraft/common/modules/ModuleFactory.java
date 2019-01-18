@@ -384,16 +384,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
 
-                //TODO class declaration
-//                EnumMachineBeta metalsChest = EnumMachineBeta.METALS_CHEST;
-//                if (metalsChest.isAvailable())
-//                    CraftingPlugin.addRecipe(metalsChest.getStack(),
-//                            "GPG",
-//                            "PAP",
-//                            "GPG",
-//                            'A', new ItemStack(Blocks.ANVIL),
-//                            'P', new ItemStack(Blocks.PISTON),
-//                            'G', "gearSteel");
                 if (RailcraftModuleManager.isModuleEnabled(ModuleStructures.class)) {
                     if (RailcraftBlocks.BLAST_FURNACE.isLoaded() && BrickTheme.INFERNAL.isLoaded()) {
 
@@ -431,44 +421,8 @@ public class ModuleFactory extends RailcraftModulePayload {
                             'C', RailcraftItems.COKE);
                     CraftingPlugin.addShapelessRecipe(RailcraftItems.COKE.getStack(9), stack);
                 }
-            }
 
-            private IRockCrusherCrafter.IRockCrusherRecipeBuilder getWorldSpikeBuilder(String name, Ingredient ingredient) {
-                IRockCrusherCrafter.IRockCrusherRecipeBuilder builder =
-                        Crafters.rockCrusher().makeRecipe(ingredient).name(name);
-                if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
-                    builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
-                    builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);
-                } else {
-                    builder.addOutput(new ItemStack(Blocks.OBSIDIAN));
-                    builder.addOutput(new ItemStack(Blocks.OBSIDIAN), 0.5f);
-                }
-                builder.addOutput(new ItemStack(Blocks.OBSIDIAN), 0.25f);
-                if (RailcraftItems.DUST.isEnabled()) {
-                    builder.addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
-                }
-                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 16));
-                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
-                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
-                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 4), 0.5f);
-                return builder;
-            }
-
-            private void registerCrushedOreRecipe(Ingredient ore, ItemStack dust) {
-                if (InvTools.isEmpty(dust))
-                    return;
-
-                Crafters.rockCrusher().makeRecipe(ore).name("ic2:crushedOre")
-                        .addOutput(InvTools.copy(dust, 2))
-                        .register();
-            }
-
-            @Override
-            public void postInit() {
-                BlastFurnaceCrafter.INSTANCE.postInit();
-                //TODO this is not right
-                if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
-                    RollingMachineCrafter.copyRecipesToWorkbench();
+                BlastFurnaceCrafter.INSTANCE.initFuel();
                 if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
 
@@ -550,6 +504,43 @@ public class ModuleFactory extends RailcraftModulePayload {
                         IC2Plugin.removeMaceratorDustRecipes(crushedIron, crushedGold, crushedCopper, crushedTin, crushedSilver, crushedLead, crushedUranium);
                     }
                 }
+            }
+
+            private IRockCrusherCrafter.IRockCrusherRecipeBuilder getWorldSpikeBuilder(String name, Ingredient ingredient) {
+                IRockCrusherCrafter.IRockCrusherRecipeBuilder builder =
+                        Crafters.rockCrusher().makeRecipe(ingredient).name(name);
+                if (EnumGeneric.CRUSHED_OBSIDIAN.isEnabled()) {
+                    builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack());
+                    builder.addOutput(EnumGeneric.CRUSHED_OBSIDIAN.getStack(), 0.5f);
+                } else {
+                    builder.addOutput(new ItemStack(Blocks.OBSIDIAN));
+                    builder.addOutput(new ItemStack(Blocks.OBSIDIAN), 0.5f);
+                }
+                builder.addOutput(new ItemStack(Blocks.OBSIDIAN), 0.25f);
+                if (RailcraftItems.DUST.isEnabled()) {
+                    builder.addOutput(RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN), 0.25f);
+                }
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 16));
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 8), 0.5f);
+                builder.addOutput(new ItemStack(Items.GOLD_NUGGET, 4), 0.5f);
+                return builder;
+            }
+
+            private void registerCrushedOreRecipe(Ingredient ore, ItemStack dust) {
+                if (InvTools.isEmpty(dust))
+                    return;
+
+                Crafters.rockCrusher().makeRecipe(ore).name("ic2:crushedOre")
+                        .addOutput(InvTools.copy(dust, 2))
+                        .register();
+            }
+
+            @Override
+            public void postInit() {
+                // how about moving this to inter-mod communication event?
+                if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() && !EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable())
+                    RollingMachineCrafter.copyRecipesToWorkbench();
             }
         });
         setDisabledEventHandler(new ModuleEventHandler() {
