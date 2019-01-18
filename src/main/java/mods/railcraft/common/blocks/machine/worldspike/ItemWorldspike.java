@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.machine.worldspike;
 
+import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.blocks.machine.ItemMachine;
 import mods.railcraft.common.carts.ItemCartWorldspike;
 import mods.railcraft.common.core.RailcraftConstants;
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemWorldspike extends ItemMachine {
-    public ItemWorldspike(Block block) {
+    public ItemWorldspike(BlockMachine<?> block) {
         super(block);
     }
 
