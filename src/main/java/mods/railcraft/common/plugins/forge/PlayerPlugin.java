@@ -11,6 +11,7 @@ package mods.railcraft.common.plugins.forge;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -22,7 +23,9 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerProfileCache;
 import net.minecraft.server.management.UserListOpsEntry;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.StringUtils;
@@ -61,6 +64,15 @@ public final class PlayerPlugin {
                 return player;
         }
         return null;
+    }
+
+    public static EntityPlayer getOwnerEntity(GameProfile owner, WorldServer world, BlockPos pos) {
+        EntityPlayer player = null;
+        if (!RailcraftConstantsAPI.UNKNOWN_PLAYER.equals(owner.getName()))
+            player = PlayerPlugin.getPlayer(world, owner);
+        if (player == null)
+            player = RailcraftFakePlayer.get(world, pos);
+        return player;
     }
 
     public static String getUsername(World world, GameProfile gameProfile) {

@@ -25,6 +25,8 @@ import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Map;
 import java.util.Random;
@@ -41,6 +43,7 @@ public final class BlockFluxTransformer extends BlockMultiBlockCharge<TileFluxTr
         setHarvestLevel("pickaxe", 1);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
         Charge.effects().throwSparks(state, worldIn, pos, rand, 50);

@@ -9,26 +9,20 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.network;
 
-import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.client.util.effects.ClientEffects;
+import mods.railcraft.common.util.effects.RemoteEffectType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class PacketEffect extends RailcraftPacket {
 
-    public enum Effect {
-
-        TELEPORT,
-        FIRESPARK,
-        FORCE_SPAWN,
-        ZAP_DEATH;
-        public static final Effect[] VALUES = values();
-    }
-
-    private Effect effect;
+    private RemoteEffectType effect;
     private ByteArrayOutputStream bytes;
     private RailcraftOutputStream outStream;
 
@@ -36,7 +30,7 @@ public class PacketEffect extends RailcraftPacket {
 
     }
 
-    public PacketEffect(Effect effect) {
+    public PacketEffect(RemoteEffectType effect) {
         this.effect = effect;
     }
 
@@ -62,13 +56,14 @@ public class PacketEffect extends RailcraftPacket {
 
     @Override
     public void writeData(RailcraftOutputStream data) throws IOException {
-        data.writeByte(effect.ordinal());
+        data.writeEnum(effect);
         data.write(bytes.toByteArray());
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void readData(RailcraftInputStream data) throws IOException {
-        EffectManager.instance.handleEffectPacket(data);
+        data.readEnum(RemoteEffectType.VALUES).handle(ClientEffects.INSTANCE, data);
     }
 
     @Override

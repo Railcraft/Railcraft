@@ -24,6 +24,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.common.util.effects.HostEffects;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -222,11 +223,11 @@ public class TileForceTrackEmitter extends TileRailcraftTicking implements ITile
         }
     }
 
+    // always logical server
     private void spawnParticles(BlockPos pos) {
-        EffectManager.instance.forceTrackSpawnEffect(world, pos, color.getHexColor());
+        HostEffects.INSTANCE.forceTrackSpawnEffect(world, pos, color.getHexColor());
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean placeTrack(BlockPos toPlace, IBlockState prevState, EnumRailDirection direction) {
         BlockTrackForce trackForce = (BlockTrackForce) TRACK_FORCE.block();
         if (trackForce != null && WorldPlugin.isBlockAir(getWorld(), toPlace, prevState)) {

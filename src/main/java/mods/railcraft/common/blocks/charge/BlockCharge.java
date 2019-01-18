@@ -19,6 +19,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -48,6 +50,7 @@ public abstract class BlockCharge extends BlockRailcraft implements IChargeBlock
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (isSparking(stateIn))
             Charge.effects().throwSparks(stateIn, worldIn, pos, rand, 50);

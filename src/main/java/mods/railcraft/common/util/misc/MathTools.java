@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3i;
 
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by CovertJaguar on 10/30/2016 for Railcraft.
@@ -24,6 +25,7 @@ import java.util.UUID;
 public final class MathTools {
 
     public static final UUID NIL_UUID = new UUID(0, 0);
+    private static final ThreadLocalRandom RAND = ThreadLocalRandom.current();
 
     public static boolean isNil(UUID uuid) {
         return NIL_UUID.equals(uuid);
@@ -59,5 +61,13 @@ public final class MathTools {
         y /= size;
         z /= size;
         return new BlockPos(x, y, z);
+    }
+
+    public static double gaussian() {
+        return RAND.nextGaussian();
+    }
+
+    public static float nextFloat() {
+        return RAND.nextFloat();
     }
 }

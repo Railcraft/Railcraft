@@ -9,13 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.interfaces.ITileCompare;
 import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -67,7 +67,7 @@ public class TileSmoker extends TileMachineBase implements ITileCompare, ITileNo
                 double px = getX() + rand.nextFloat();
                 double py = getY() + rand.nextFloat() * 0.5F + 1;
                 double pz = getZ() + rand.nextFloat();
-                EffectManager.instance.chimneyEffect(world, px, py, pz, color);
+                ClientEffects.INSTANCE.chimneyEffect(world, px, py, pz, color);
             }
         }
     }

@@ -7,11 +7,13 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.util.network;
 
-import java.io.DataInputStream;
-import java.io.IOException;
+package mods.railcraft.common.util.collections;
 
-public interface ITileExtraDataHandler {
-    void onUpdatePacket(DataInputStream data) throws IOException;
+/**
+ * A consumer that can throw errors.
+ */
+public interface ThrowingConsumer<T, E extends Throwable> {
+
+    void accept(T object) throws E;
 }

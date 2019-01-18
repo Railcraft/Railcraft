@@ -22,6 +22,7 @@ public abstract class RailcraftPacket {
 
     public static final String CHANNEL_NAME = "RC";
 
+    // todo add Function<EntityPlayer, RailcraftPacket> to param
     public enum PacketType {
 
         TILE_ENTITY,
@@ -68,7 +69,7 @@ public abstract class RailcraftPacket {
 
     public abstract void readData(RailcraftInputStream data) throws IOException;
 
-    public abstract int getID();
+    public abstract int getID(); // TODO use type
 
     @Override
     public String toString() {

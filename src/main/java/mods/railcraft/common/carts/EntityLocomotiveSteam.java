@@ -10,6 +10,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -18,7 +19,6 @@ import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
@@ -163,10 +163,10 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
             if (isSmoking()) {
                 double rads = renderYaw * Math.PI / 180D;
                 float offset = 0.4f;
-                EffectManager.instance.locomotiveEffect(world, posX - Math.cos(rads) * offset, posY + 1.5f, posZ - Math.sin(rads) * offset);
+                ClientEffects.INSTANCE.locomotiveEffect(world, posX - Math.cos(rads) * offset, posY + 1.5f, posZ - Math.sin(rads) * offset);
             }
             if (isSteaming())
-                EffectManager.instance.steamEffect(world, this, getEntityBoundingBox().minY - posY - 0.3);
+                ClientEffects.INSTANCE.steamEffect(world, this, getEntityBoundingBox().minY - posY - 0.3);
         }
     }
 

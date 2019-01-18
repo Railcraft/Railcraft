@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.particles;
 
-import mods.railcraft.common.util.effects.EffectManager;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.util.effects.EffectManager.EffectSourceEntity;
 import mods.railcraft.common.util.effects.EffectManager.IEffectSource;
 import net.minecraft.util.math.Vec3d;
@@ -76,7 +76,7 @@ public class ParticleTuningAura extends ParticleBase {
             return;
         }
 
-        if (!EffectManager.instance.isTuningAuraActive()) {
+        if (!ClientEffects.INSTANCE.isTuningAuraActive()) {
             setExpired();
             return;
         }

@@ -16,6 +16,7 @@ import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -55,7 +56,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 
-    private GameProfile owner = new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER);
+    private GameProfile owner = RailcraftFakePlayer.UNKNOWN_USER_PROFILE;
     private @Nullable UUID uuid;
 
     private String customName = "";
@@ -172,7 +173,7 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
     }
 
     public final void clearOwner() {
-        setOwner(new GameProfile(null, RailcraftConstantsAPI.RAILCRAFT_PLAYER));
+        setOwner(RailcraftFakePlayer.UNKNOWN_USER_PROFILE);
     }
 
     protected final void setOwner(GameProfile profile) {

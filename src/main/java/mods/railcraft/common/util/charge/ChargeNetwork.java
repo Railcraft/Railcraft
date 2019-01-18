@@ -22,6 +22,7 @@ import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.effects.HostEffects;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.Game;
@@ -635,7 +636,7 @@ public class ChargeNetwork implements Charge.INetwork {
         public void zap(Entity entity, Charge.DamageOrigin origin, float damage) {
             if (Game.isClient(entity.world))
                 return;
-
+            // logical server
             if (!RCEntitySelectors.KILLABLE.test(entity))
                 return;
 
@@ -662,7 +663,7 @@ public class ChargeNetwork implements Charge.INetwork {
                 }
                 if (remainingDamage > 0.1 && entity.attackEntityFrom(origin == Charge.DamageOrigin.BLOCK ? RailcraftDamageSource.ELECTRIC : RailcraftDamageSource.TRACK_ELECTRIC, remainingDamage)) {
                     removeCharge(chargeCost);
-                    Charge.effects().zapEffectDeath(entity.world, entity);
+                    Charge.hostEffects().zapEffectDeath(entity.world, entity);
                 }
             }
         }

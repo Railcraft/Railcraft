@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.machine.worldspike;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.items.IToolCrowbar;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.carts.ItemCartWorldspike;
@@ -24,6 +25,7 @@ import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.collections.ItemMap;
 import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.ChunkManager;
@@ -232,7 +234,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         super.update();
         if (Game.isClient(world)) {
             if (chunks != null)
-                EffectManager.instance.chunkLoaderEffect(world, this, chunks);
+                ClientEffects.INSTANCE.chunkLoaderEffect(world, this, chunks);
             return;
         }
 

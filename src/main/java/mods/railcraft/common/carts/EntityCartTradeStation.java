@@ -20,7 +20,9 @@ import mods.railcraft.common.util.entity.ai.EntityAISearchForEntity;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 /**
@@ -45,12 +47,33 @@ public class EntityCartTradeStation extends CartBaseLogic {
                     AIPlugin.addAITask(villager, 9, new EntityAISearchForEntity(villager, entity -> entity instanceof EntityCartTradeStation, 16, 0.002F));
                 }
             }
+
+            @Override
+            protected EntityPlayer getOwnerEntityOrFake() {
+                return CartTools.getCartOwnerEntity(EntityCartTradeStation.this);
+            }
         });
     }
 
     @Override
     public IBlockState getDefaultDisplayTile() {
         return RailcraftBlocks.TRADE_STATION.getDefaultState().withProperty(BlockTradeStation.FACING, EnumFacing.WEST);
+    }
+
+    @Override
+    public boolean doInteract(EntityPlayer player, EnumHand hand) {
+        if (!super.doInteract(player, hand))
+            return false;
+        getLogic(TradeStationLogic.class).ifPresent(logic -> {
+            player.addExperience(logic.getXpCollected());
+            logic.clearXp();
+        });
+        return true;
+    }
+
+    @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        super.openRailcraftGui(player);
     }
 
     @Override

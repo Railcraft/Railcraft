@@ -15,6 +15,7 @@ import mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.plugins.forge.VillagerPlugin;
 import mods.railcraft.common.util.collections.RevolvingList;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.PacketBuilder;
@@ -31,13 +32,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.NEXT_TRADE;
-import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.SET_PROFESSION;
+import static mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType.*;
 
 public class GuiTradeStation extends GuiContainerRailcraft {
 
     private final IWorldNameable owner;
     private final RevolvingList<VillagerRegistry.VillagerProfession> professions = new RevolvingList<>();
+    private final RevolvingList<VillagerRegistry.VillagerCareer> careers = new RevolvingList<>();
     private final EntityVillager villager;
     private final IWorldNameable namer;
 
@@ -51,9 +52,24 @@ public class GuiTradeStation extends GuiContainerRailcraft {
         villager = new EntityVillager(logic.theWorldAsserted());
 
         professions.addAll(ForgeRegistries.VILLAGER_PROFESSIONS.getValuesCollection());
+        VillagerRegistry.VillagerProfession profession = logic.getProfession();
+        professions.setCurrent(profession);
 
-        professions.setCurrent(logic.getProfession());
-        villager.setProfession(professions.getCurrent());
+        VillagerRegistry.VillagerCareer career = logic.getCareer();
+        setupCareer(profession, career);
+
+        villager.setProfession(profession);
+        VillagerPlugin.setCareer(villager, career);
+    }
+
+    private void setupCareer(VillagerRegistry.VillagerProfession profession) {
+        setupCareer(profession, profession.getCareer(0));
+    }
+
+    private void setupCareer(VillagerRegistry.VillagerProfession profession, VillagerRegistry.VillagerCareer career) {
+        careers.clear();
+        careers.addAll(VillagerPlugin.getCareers(profession));
+        careers.setCurrent(career);
     }
 
     @Override
@@ -63,8 +79,10 @@ public class GuiTradeStation extends GuiContainerRailcraft {
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
 
-        buttonList.add(new GuiSimpleButton(0, w + 118, h + 64, 10, StandardButtonTextureSets.LEFT_BUTTON, ""));
-        buttonList.add(new GuiSimpleButton(1, w + 156, h + 64, 10, StandardButtonTextureSets.RIGHT_BUTTON, ""));
+        buttonList.add(new GuiSimpleButton(0, w + 118, h + 48, 10, StandardButtonTextureSets.LEFT_BUTTON, ""));
+        buttonList.add(new GuiSimpleButton(1, w + 156, h + 48, 10, StandardButtonTextureSets.RIGHT_BUTTON, ""));
+        buttonList.add(new GuiSimpleButton(5, w + 118, h + 64, 10, StandardButtonTextureSets.LEFT_BUTTON, ""));
+        buttonList.add(new GuiSimpleButton(6, w + 156, h + 64, 10, StandardButtonTextureSets.RIGHT_BUTTON, ""));
 
         GuiSimpleButton[] dice = new GuiSimpleButton[3];
 
@@ -77,21 +95,25 @@ public class GuiTradeStation extends GuiContainerRailcraft {
             dice[b].setToolTip(tip);
             buttonList.add(dice[b]);
         }
-
     }
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         super.actionPerformed(button);
 
+        VillagerRegistry.VillagerProfession profession;
         switch (button.id) {
             case 0:
                 professions.rotateLeft();
-                sendUpdate(SET_PROFESSION, professions.getCurrent());
+                profession = professions.getCurrent();
+                setupCareer(profession);
+                sendUpdate(SET_PROFESSION, profession);
                 break;
             case 1:
                 professions.rotateRight();
-                sendUpdate(SET_PROFESSION, professions.getCurrent());
+                profession = professions.getCurrent();
+                setupCareer(profession);
+                sendUpdate(SET_PROFESSION, profession);
                 break;
             case 2:
                 sendUpdate(NEXT_TRADE, (byte) 0);
@@ -102,9 +124,18 @@ public class GuiTradeStation extends GuiContainerRailcraft {
             case 4:
                 sendUpdate(NEXT_TRADE, (byte) 2);
                 break;
+            case 5:
+                careers.rotateLeft();
+                sendUpdate(SET_CAREER, careers.getCurrent());
+                break;
+            case 6:
+                careers.rotateRight();
+                sendUpdate(SET_CAREER, careers.getCurrent());
+                break;
         }
 
         villager.setProfession(professions.getCurrent());
+        VillagerPlugin.setCareer(villager, careers.getCurrent());
     }
 
     public void sendUpdate(GuiPacketType type, Object... args) {
@@ -119,6 +150,8 @@ public class GuiTradeStation extends GuiContainerRailcraft {
                     data.writeByte((Byte) arg);
                 else if (arg instanceof VillagerRegistry.VillagerProfession) {
                     data.writeUTF(Objects.requireNonNull(((VillagerRegistry.VillagerProfession) arg).getRegistryName()).toString());
+                } else if (arg instanceof VillagerRegistry.VillagerCareer) {
+                    data.writeInt(VillagerPlugin.getCareerId((VillagerRegistry.VillagerCareer) arg));
                 }
             }
         } catch (IOException ignored) {
