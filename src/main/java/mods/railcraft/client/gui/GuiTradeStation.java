@@ -12,7 +12,6 @@ package mods.railcraft.client.gui;
 import mods.railcraft.client.gui.buttons.GuiSimpleButton;
 import mods.railcraft.common.blocks.logic.TradeStationLogic;
 import mods.railcraft.common.blocks.logic.TradeStationLogic.GuiPacketType;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.StandardButtonTextureSets;
 import mods.railcraft.common.gui.containers.ContainerTradeStation;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -68,6 +67,7 @@ public class GuiTradeStation extends GuiContainerRailcraft {
     }
 
     private void setupCareer(VillagerRegistry.VillagerProfession profession, VillagerRegistry.VillagerCareer career) {
+        careers.clear();
         careers.addAll(VillagerPlugin.getCareers(profession));
         careers.setCurrent(career);
     }
@@ -135,6 +135,7 @@ public class GuiTradeStation extends GuiContainerRailcraft {
         }
 
         villager.setProfession(professions.getCurrent());
+        VillagerPlugin.setCareer(villager, careers.getCurrent());
     }
 
     public void sendUpdate(GuiPacketType type, Object... args) {

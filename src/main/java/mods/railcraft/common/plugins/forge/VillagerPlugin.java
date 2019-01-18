@@ -41,7 +41,7 @@ public final class VillagerPlugin {
 
     public static void setCareer(EntityVillager villager, VillagerRegistry.VillagerCareer career) {
         try {
-            CAREER.setInt(villager, ID.getInt(career));
+            CAREER.setInt(villager, ID.getInt(career) + 1);
         } catch (IllegalAccessException ex) {
             throw new UnsupportedOperationException(ex);
         }
@@ -49,12 +49,13 @@ public final class VillagerPlugin {
 
     public static VillagerRegistry.VillagerCareer getCareer(EntityVillager villager) {
         try {
-            return villager.getProfessionForge().getCareer(CAREER.getInt(villager));
+            return villager.getProfessionForge().getCareer(CAREER.getInt(villager) - 1);
         } catch (IllegalAccessException ex) {
             throw new UnsupportedOperationException(ex);
         }
     }
 
+    // Forge career id starts with 0; vanilla starts with 1; we use forge id
     public static int getCareerId(VillagerRegistry.VillagerCareer career) {
         try {
             return ID.getInt(career);

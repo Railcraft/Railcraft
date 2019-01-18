@@ -45,6 +45,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -127,7 +128,7 @@ public abstract class TradeStationLogic extends InventoryLogic {
         }
     }
 
-    protected EntitySearcher.SearchResult<EntityVillager> findNearbyVillagers(int range) {
+    protected List<EntityVillager> findNearbyVillagers(int range) {
         double x = getX();
         double y = getY();
         double z = getZ();
@@ -253,12 +254,14 @@ public abstract class TradeStationLogic extends InventoryLogic {
         }
     }
 
-    //FIXME this function needs to be redesigned due to careers and levels,
-    // it currently picks a random career at level 1
     private void nextTrade(int tradeSet) {
-        EntityVillager villager = findNearbyVillagers(AREA).any();
-        if (villager == null) {
+        List<EntityVillager> villagers = findNearbyVillagers(AREA);
+        Collections.shuffle(villagers);
+        EntityVillager villager;
+        if (villagers.isEmpty()) {
             villager = new EntityVillager(theWorldAsserted());
+        } else {
+            villager = villagers.iterator().next();
         }
         MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) theWorldAsserted(), getX(), getY(), getZ()));
         assert recipes != null;
