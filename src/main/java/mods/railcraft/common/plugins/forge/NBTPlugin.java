@@ -32,7 +32,7 @@ public final class NBTPlugin {
         if (profile == null || (profile.getName() == null && profile.getId() == null))
             return null;
         NBTTagCompound nbt = new NBTTagCompound();
-        NBTUtil.writeGameProfile(nbt, profile);
+        NBTUtil.writeGameProfile(nbt, new GameProfile(profile.getId(), profile.getName()));
         return nbt;
     }
 
