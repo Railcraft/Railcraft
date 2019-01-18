@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.VoidChestLogic;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -21,10 +19,5 @@ public class TileChestVoid extends TileChestRailcraft {
 
     {
         setLogic(new VoidChestLogic(Logic.Adapter.of(this)));
-    }
-
-    @Override
-    public @Nullable EnumGui getGui() {
-        return null;
     }
 }

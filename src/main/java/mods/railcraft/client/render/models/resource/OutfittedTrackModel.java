@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,6 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -138,7 +137,6 @@ public class OutfittedTrackModel implements IModel {
                 bakeModels(format, bakedTextureGetter, unifiedModelsLocations));
     }
 
-    @SuppressWarnings("Guava")
     private Map<ModelResourceLocation, IBakedModel> bakeModels(
             VertexFormat format,
             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
@@ -219,18 +217,15 @@ public class OutfittedTrackModel implements IModel {
             return quads;
         }
 
-        @Nullable
-        private IBakedModel getTrackTypeModel(TrackType trackType, BlockRailBase.EnumRailDirection shape) {
+        private @Nullable IBakedModel getTrackTypeModel(TrackType trackType, BlockRailBase.EnumRailDirection shape) {
             return trackTypeModels.get(getTrackTypeModelLocation(trackType, shape));
         }
 
-        @Nullable
-        private IBakedModel getTrackKitModel(TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
+        private @Nullable IBakedModel getTrackKitModel(TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
             return trackKitModels.get(getTrackKitModelLocation(trackKit, shape, state));
         }
 
-        @Nullable
-        private IBakedModel getUnifiedModel(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
+        private @Nullable IBakedModel getUnifiedModel(TrackType trackType, TrackKit trackKit, BlockRailBase.EnumRailDirection shape, int state) {
             return unifiedModels.get(getUnifiedModelLocation(trackType, trackKit, shape, state));
         }
 

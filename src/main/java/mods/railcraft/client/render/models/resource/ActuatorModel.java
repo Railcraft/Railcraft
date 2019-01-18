@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -98,7 +98,6 @@ public class ActuatorModel implements IModel {
                 bakeModels(format, bakedTextureGetter, whiteFlagModelLocations));
     }
 
-    @SuppressWarnings("Guava")
     private Map<ModelResourceLocation, IBakedModel> bakeModels(
             VertexFormat format,
             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,

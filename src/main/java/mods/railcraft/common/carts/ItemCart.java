@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,8 +34,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;
@@ -93,9 +93,8 @@ public class ItemCart extends ItemMinecart implements IMinecartItem, IRailcraftI
         return true;
     }
 
-    @Nullable
     @Override
-    public EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
+    public @Nullable EntityMinecart placeCart(GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         return CartTools.placeCart(type, owner, cartStack, world, pos);
     }
 

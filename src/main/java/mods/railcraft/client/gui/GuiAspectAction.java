@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.api.signals.SignalAspect;
 import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.client.gui.buttons.GuiToggleButton;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.buttons.LockButtonState;
 import mods.railcraft.common.gui.containers.ContainerAspectAction;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -38,7 +37,7 @@ public class GuiAspectAction extends GuiContainerRailcraft {
     public String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
     public GuiAspectAction(EntityPlayer player, ITileAspectResponder actionManager, String title) {
-        this(player, actionManager, title, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
+        this(player, actionManager, title, "gui_basic.png");
         ySize = 88;
     }
 

@@ -39,6 +39,7 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
@@ -60,6 +61,8 @@ public class FactoryGui {
 
         try {
             switch (gui) {
+                case CHEST:
+                    return new GuiRCChest(inv, ((IInventory) obj));
                 case MANIPULATOR_ITEM:
                     return new GuiManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
@@ -96,7 +99,7 @@ public class FactoryGui {
                     return new GuiCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
                 case BLAST_FURNACE:
                     return new GuiBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
-                case STEAN_OVEN:
+                case STEAM_OVEN:
                     return new GuiSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
                 case TANK:
                     return new GuiTank(inv, (ITankTile) obj);
@@ -151,9 +154,9 @@ public class FactoryGui {
                 case CART_BORE:
                     return new GuiCartBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new GuiCartEnergy(inv, (IIC2EnergyCart) obj);
-                case CART_RF:
-                    return new GuiCartRF((EntityCartRF) obj);
+                    return new GuiCartEnergy(inv, (CartBaseEnergy) obj);
+                case CART_FE:
+                    return new GuiCartForgeEnergy((EntityCartRF) obj);
                 case CART_TANK:
                     return new GuiCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,7 +40,7 @@ public abstract class DetectorEntity<T> extends Detector {
                 .filter(classObject::isAssignableFrom)
                 .<Class<? extends T>>map(e -> e.asSubclass(classObject))
                 .collect(Collectors.toList());
-        currentEntity = this.entities.stream().findAny().orElse(defaultEntity);
+        currentEntity = entities.stream().findAny().orElse(defaultEntity);
     }
 
     public Class<? extends T> getCurrentEntity() {

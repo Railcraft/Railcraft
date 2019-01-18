@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -105,6 +105,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         return true;
     }
 
+    @SuppressWarnings("UnnecessaryThis")
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state) {
         final double oldPushX = pushX;

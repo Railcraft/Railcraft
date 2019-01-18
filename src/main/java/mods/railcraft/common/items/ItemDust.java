@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -84,9 +84,8 @@ public class ItemDust extends ItemRailcraftSubtyped {
             this.oreTag = oreTag;
         }
 
-        @Nullable
         @Override
-        public String getOreTag() {
+        public @Nullable String getOreTag() {
             return oreTag;
         }
 

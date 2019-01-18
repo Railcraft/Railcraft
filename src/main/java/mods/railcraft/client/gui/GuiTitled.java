@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.gui.containers.RailcraftContainer;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.world.IWorldNameable;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +22,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 public abstract class GuiTitled extends GuiContainerRailcraft {
     private final IWorldNameable nameable;
     private final @Nullable String name;
+    protected boolean drawInvTitle = true;
 
     protected GuiTitled(IWorldNameable nameable, RailcraftContainer container, String texture) {
         this(nameable, container, texture, null);
@@ -40,5 +42,7 @@ public abstract class GuiTitled extends GuiContainerRailcraft {
         } else {
             GuiTools.drawCenteredString(fontRenderer, name);
         }
+        if (drawInvTitle)
+            fontRenderer.drawString(LocalizationPlugin.translateFast("container.inventory"), 8, ySize - 94, 0x404040);
     }
 }

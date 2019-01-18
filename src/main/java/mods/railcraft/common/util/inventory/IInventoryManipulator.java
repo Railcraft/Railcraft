@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.util.inventory;
 
 import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -131,7 +130,7 @@ public interface IInventoryManipulator {
      * @return An ItemStack
      */
     default ItemStack removeOneItem() {
-        return removeOneItem(StandardStackFilters.ALL);
+        return removeOneItem(StackFilters.ALL);
     }
 
     /**
@@ -174,7 +173,7 @@ public interface IInventoryManipulator {
     }
 
     default int countStacks() {
-        return countStacks(StandardStackFilters.ALL);
+        return countStacks(StackFilters.ALL);
     }
 
     default int countStacks(Predicate<ItemStack> filter) {
@@ -207,7 +206,7 @@ public interface IInventoryManipulator {
      * @return the number of items in the inventory
      */
     default int countItems() {
-        return countItems(StandardStackFilters.ALL);
+        return countItems(StackFilters.ALL);
     }
 
     /**

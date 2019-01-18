@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -141,5 +141,10 @@ public class MetalsChestLogic extends InventoryLogic {
             return EnumTools.next(this, VALUES);
         }
 
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        return StackFilters.RAW_METAL.test(stack);
     }
 }

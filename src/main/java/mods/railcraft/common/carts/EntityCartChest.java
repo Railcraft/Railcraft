@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,21 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class EntityCartChest extends CartBaseContainer {
@@ -67,7 +60,7 @@ public class EntityCartChest extends CartBaseContainer {
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return RailcraftConfig.chestAllowLiquids() || getStackInSlot(slot).isEmpty() || !FluidItemHelper.isContainer(stack);
+        return StackFilters.CARGO.test(stack);
     }
 
     @Override
@@ -86,23 +79,8 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
-    public String getGuiID() {
-        return "minecraft:chest";
-    }
-
-    @Override
-    protected void openRailcraftGui(EntityPlayer player) {
-        player.displayGUIChest(this);
-    }
-
-    @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerChest(playerInventory, this, playerIn);
-    }
-
-    @Override
     protected EnumGui getGuiType() {
-        throw new UnsupportedOperationException("Should not be called");
+        return EnumGui.CHEST;
     }
 
 }

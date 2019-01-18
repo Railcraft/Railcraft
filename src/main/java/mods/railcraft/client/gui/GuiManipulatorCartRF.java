@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.manipulator.TileRFManipulator;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerManipulatorCartRF;
 import net.minecraft.tileentity.TileEntity;
 
@@ -19,7 +18,7 @@ public class GuiManipulatorCartRF extends GuiManipulatorCart {
     private TileRFManipulator tile;
 
     public GuiManipulatorCartRF(TileRFManipulator tile) {
-        super(tile, new ContainerManipulatorCartRF(tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_rf_device.png");
+        super(tile, new ContainerManipulatorCartRF(tile), "gui_rf_device.png");
         this.tile = tile;
         ySize = 88;
     }

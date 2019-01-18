@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("UnnecessaryThis")
 public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCart {
 
     public EntityCartBasic(World world) {
@@ -316,5 +317,20 @@ public class EntityCartBasic extends EntityMinecartEmpty implements IRailcraftCa
         mX = MathHelper.clamp(mX, -max, max);
         mZ = MathHelper.clamp(mZ, -max, max);
         move(MoverType.SELF, mX, 0.0D, mZ);
+    }
+
+    /**
+     * Called every tick the minecart is on an activator rail.
+     *
+     * We change this to disable the passenger removal. Use Disembarking Kits instead.
+     */
+    @Override
+    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
+        if (receivingPower && getRollingAmplitude() == 0) {
+            setRollingDirection(-getRollingDirection());
+            setRollingAmplitude(10);
+            setDamage(50.0F);
+            markVelocityChanged();
+        }
     }
 }

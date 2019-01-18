@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,8 +16,8 @@ import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.Map;
 
 import static mods.railcraft.common.items.Metal.Form;
@@ -44,9 +44,8 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
         }
     }
 
-    @Nullable
     @Override
-    public IVariantEnum[] getVariants() {
+    public @Nullable IVariantEnum[] getVariants() {
         return variantArray;
     }
 
@@ -74,6 +73,7 @@ public abstract class ItemMetal extends ItemRailcraftSubtyped {
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
         checkVariant(variant);
+        //noinspection SuspiciousMethodCalls
         Integer meta = metalBiMap.inverse().get(variant);
         if (meta == null)
             meta = 0;

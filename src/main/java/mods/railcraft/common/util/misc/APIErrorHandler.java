@@ -18,7 +18,7 @@ import java.util.Set;
  * This class is used for printing API related errors to the log files.
  *
  * Generally, new API functions should be surround by try/catch blocks that
- * catch <code>Error</code> throws. This ensures that the game doesn't crash if
+ * catch {@code Error} throws. This ensures that the game doesn't crash if
  * the incorrect API version is loaded first.
  *
  * @author CovertJaguar <http://www.railcraft.info>

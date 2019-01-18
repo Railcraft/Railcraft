@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.multi.TileSteamTurbine;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerTurbine;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -21,10 +20,9 @@ public class GuiSteamTurbine extends GuiTitled {
 
     public GuiSteamTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
         super(tile, new ContainerTurbine(playerInv, tile),
-                RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_steam_turbine.png",
+                "gui_steam_turbine.png",
                 LocalizationPlugin.translate("gui.railcraft.steam.turbine"));
-        xSize = 176;
-        ySize = 140;
+        ySize = ContainerTurbine.GUI_HEIGHT;
         this.tile = tile;
     }
 

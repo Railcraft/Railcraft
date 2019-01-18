@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,7 +35,6 @@ public abstract class BlockOreMetalBase<V extends Enum<V> & IVariantEnumBlock<V>
         EntityTunnelBore.addMineableBlock(this);
         HarvestPlugin.setBlockHarvestLevel("pickaxe", 1, this);
 
-        //noinspection ConstantConditions
         for (IVariantEnumBlock<V> ore : getVariants()) {
             ForestryPlugin.addBackpackItem("forestry.miner", ore.getStack());
             if (ore.isEnabled())

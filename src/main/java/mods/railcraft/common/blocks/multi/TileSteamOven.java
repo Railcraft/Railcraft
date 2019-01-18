@@ -139,7 +139,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
 
     @Override
     public EnumGui getGui() {
-        return EnumGui.STEAN_OVEN;
+        return EnumGui.STEAM_OVEN;
     }
 
     enum Icon implements IStringSerializable {
@@ -162,6 +162,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
         IBlockState actualState = base.withProperty(FACING, side);
         return getLogic(StructureLogic.class).filter(StructureLogic::isStructureValid).map(l -> {
             BlockPos pos = l.getPatternPosition();
+            assert pos != null;
             int x = pos.getX();
             int y = pos.getY();
             int z = pos.getZ();

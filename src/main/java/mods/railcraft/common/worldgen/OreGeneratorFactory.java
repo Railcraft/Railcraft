@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.misc.WhiteBlackList;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -110,9 +111,9 @@ public class OreGeneratorFactory {
 
             this.skyGen = RailcraftConfig.isWorldGenEnabled("sky");
 
-            config.setCategoryComment(CAT + ".ore", "The ore blocks to be generated. Format: <modid>:<blockname>#<meta>");
-            fringeOre = BlockItemParser.parseBlock(config.getString("fringe", CAT + ".ore", defaultFringeOre, "The ore block generated on the fringe of the mine."));
-            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine."));
+            config.setCategoryComment(CAT + ".ore", "The ore blocks to be generated. Format: <modId>:<blockname>#<meta>");
+            fringeOre = BlockItemParser.parseBlock(config.getString("fringe", CAT + ".ore", defaultFringeOre, "The ore block generated on the fringe of the mine.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
+            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
 
             noiseSeed = config.getInt("seed", CAT, defaultSeed, 0, Integer.MAX_VALUE, "The seed used to create the noise map. Generally it is set to the atomic number of the element being generated, but it can be anything you want. Should be unique for each generator or your mines will generate in the same places, which can be desirable if you want to mix ores like Iron and Nickel.");
             cloudScale = config.getFloat("cloud", CAT + ".scale", 0.0018F, 0.000001F, 1F, "The scale of the noise map used to determine the boundaries of the mine. Very small changes can have drastic effects. Smaller numbers result in larger mines. Recommended to not change this.");
@@ -165,8 +166,8 @@ public class OreGeneratorFactory {
 
             config.setCategoryComment(CAT + ".biomes", "Expects fully qualified Biome registry names.\n" +
                     "See Biome.java in Minecraft/Forge for the names.\n" +
-                    "Format: <modid>:<biome_registry_name>.\n" +
-                    "'<modid>:all' can be used to specify all Biomes from a specific mod.");
+                    "Format: <modId>:<biome_registry_name>.\n" +
+                    "'<modId>:all' can be used to specify all Biomes from a specific mod.");
             String[] biomeBlacklistNames = config.getStringList("blacklist", CAT + ".biomes", new String[]{}, "Biome registry names where the ore will will not generate. Takes priority over the whitelist and types.");
 //            biomeBlacklist = Collections.unmodifiableSet(Arrays.stream(biomeBlacklistNames).flatMap(this::getBiomes).collect(Collectors.toSet()));
             String[] biomeWhitelistNames = config.getStringList("whitelist", CAT + ".biomes", new String[]{}, "Biome registry names where the ore will generate. Takes priority over types.");
@@ -184,7 +185,7 @@ public class OreGeneratorFactory {
             validBiomeTypes = makeDoubleList(BiomeDictionary.Type::getType, biomeTypeBlacklistNames, biomeTypeWhitelistNames);
 
             config.setCategoryComment(CAT + ".rich", "Biomes where the ore will generator more richly.");
-            String[] richBiomeNames = config.getStringList("biomes", CAT + ".rich", new String[]{"minecraft:mesa"}, "Biomes where the ore will generator more richly. Expects fully qualified Biome registry names. '<modid>:all' can be used to specify all Biomes from a specific mod.");
+            String[] richBiomeNames = config.getStringList("biomes", CAT + ".rich", new String[]{"minecraft:mesa"}, "Biomes where the ore will generator more richly. Expects fully qualified Biome registry names. '<modId>:all' can be used to specify all Biomes from a specific mod.");
             richBiomes = makeSingleList(biomeFactory, richBiomeNames);
 
             String[] richBiomeTypeNames = config.getStringList("biomeTypes", CAT + ".rich", new String[]{"MOUNTAIN", "MESA", "HILLS"}, "Biome Dictionary types where the ore will generator more richly. You can use 'ALL' to specify all types.");
@@ -198,12 +199,8 @@ public class OreGeneratorFactory {
             if (level != WhiteBlackList.PermissionLevel.DEFAULT)
                 return level == WhiteBlackList.PermissionLevel.WHITELISTED;
 
-            for (BiomeDictionary.Type type : BiomeDictionary.getTypes(biome)) {
-                if (!validBiomeTypes.permits(type)) {
-                    return false;
-                }
-            }
-            return true;
+            // FIXME this is wrong, it doesn't have to match all
+            return BiomeDictionary.getTypes(biome).stream().allMatch(validBiomeTypes::permits);
         }
 
         public boolean isRichBiome(Biome biome) {
@@ -212,12 +209,8 @@ public class OreGeneratorFactory {
             if (level != WhiteBlackList.PermissionLevel.DEFAULT)
                 return level == WhiteBlackList.PermissionLevel.WHITELISTED;
 
-            for (BiomeDictionary.Type type : BiomeDictionary.getTypes(biome)) {
-                if (!richBiomeTypes.permits(type)) {
-                    return false;
-                }
-            }
-            return true;
+            // FIXME this is wrong, it doesn't have to match all
+            return BiomeDictionary.getTypes(biome).stream().allMatch(richBiomeTypes::permits);
         }
 
 //        private Stream<Biome> getBiomes(String name) {

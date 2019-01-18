@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -116,11 +116,9 @@ public class CrowbarHandler {
     private void boostCart(EntityPlayer player, EnumHand hand, ItemStack stack, EntityMinecart cart, IToolCrowbar crowbar) {
         player.addExhaustion(.25F);
 
-        //noinspection StatementWithEmptyBody
         if (player.getRidingEntity() != null) {
             // NOOP
-        } else //noinspection StatementWithEmptyBody
-            if (cart instanceof EntityTunnelBore) {
+        } else if (cart instanceof EntityTunnelBore) {
                 // NOOP
             } else if (cart instanceof IDirectionalCart)
                 ((IDirectionalCart) cart).reverse();

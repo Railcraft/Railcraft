@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -94,9 +94,8 @@ public final class GuiMultiButton<T extends IMultiButtonState> extends GuiBetter
         return control;
     }
 
-    @Nullable
     @Override
-    public ToolTip getToolTip() {
+    public @Nullable ToolTip getToolTip() {
         ToolTip tip = control.getButtonState().getToolTip();
         if (tip != null) {
             return tip;

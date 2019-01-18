@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,6 +36,7 @@ public class ModelLowSidesMinecart extends ModelBase {
         byte heightSides = 6;
         byte width = 16;
         byte yOffset = 4;
+        //noinspection SuspiciousNameCombination
         sideModels[0].addBox((float) (-length / 2), (float) (-width / 2), -1.0F, length, width, 2, scale);
         sideModels[0].setRotationPoint(0.0F, (float) yOffset, 0.0F);
         sideModels[5].addBox((float) (-length / 2 + 1), (float) (-width / 2 + 1), -1.0F, length - 2, width - 2, 1, scale);

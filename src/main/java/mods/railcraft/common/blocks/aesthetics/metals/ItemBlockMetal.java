@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,12 +10,11 @@
 package mods.railcraft.common.blocks.aesthetics.metals;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockMetal extends ItemBlockRailcraft {
+public class ItemBlockMetal extends ItemBlockRailcraft<BlockMetal> {
 
-    public ItemBlockMetal(Block block) {
+    public ItemBlockMetal(BlockMetal block) {
         super(block);
         setMaxDamage(0);
         setHasSubtypes(true);

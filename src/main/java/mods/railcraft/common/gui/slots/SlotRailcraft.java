@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,7 +36,7 @@ public class SlotRailcraft extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return isEnabled.getAsBoolean() && super.isItemValid(stack);
+        return isEnabled.getAsBoolean() && inventory.isItemValidForSlot(getSlotIndex(), stack);
     }
 
     public SlotRailcraft setEnableCheck(BooleanSupplier isEnabled) {

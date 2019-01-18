@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.client.gui;
 
 import com.google.common.base.Strings;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemRoutingTable;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.network.PacketDispatcher;
@@ -29,10 +28,9 @@ import org.jetbrains.annotations.Nullable;
 @SideOnly(Side.CLIENT)
 public class GuiBookRoutingTable extends GuiBook {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "routing_table.png");
+    public static final ResourceLocation TEXTURE = GuiTools.findTexture("routing_table.png");
     public static final String TABLE_LOC_TAG = "gui.railcraft.routing.table.";
-    @Nullable
-    private final TileEntity tile;
+    private final @Nullable TileEntity tile;
     private final ItemStack bookStack;
     /**
      * The player editing the book

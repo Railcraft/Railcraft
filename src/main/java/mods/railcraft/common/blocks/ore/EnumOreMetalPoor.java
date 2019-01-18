@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.modules.ModuleWorld;
-
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -65,9 +64,8 @@ public enum EnumOreMetalPoor implements IVariantEnumBlock<EnumOreMetalPoor> {
         return metal;
     }
 
-    @Nullable
     @Override
-    public String getOreTag() {
+    public @Nullable String getOreTag() {
         return metal.getOreTag(Metal.Form.POOR_ORE);
     }
 }

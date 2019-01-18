@@ -26,6 +26,7 @@
       <w>bonemeal</w>
       <w>borehead</w>
       <w>boxable</w>
+      <w>bucketfilled</w>
       <w>buildcraft</w>
       <w>buildcraftapi</w>
       <w>buildcraftbuilders</w>
@@ -112,6 +113,7 @@
       <w>railcraft</w>
       <w>railrcraft</w>
       <w>randomizer</w>
+      <w>rcrgmark</w>
       <w>rebar</w>
       <w>recv</w>
       <w>redstone</w>
@@ -120,11 +122,14 @@
       <w>relayer</w>
       <w>remapper</w>
       <w>renderers</w>
+      <w>retrogen</w>
       <w>rideable</w>
       <w>routable</w>
+      <w>shulker</w>
       <w>slimeball</w>
       <w>spawner</w>
       <w>spigotmc</w>
+      <w>spliterator</w>
       <w>stonebrick</w>
       <w>subblocks</w>
       <w>submodel</w>
@@ -133,6 +138,7 @@
       <w>tarberry</w>
       <w>teleport</w>
       <w>teleported</w>
+      <w>terpo</w>
       <w>tessellator</w>
       <w>thaumcraft</w>
       <w>thaumium</w>

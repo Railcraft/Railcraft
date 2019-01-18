@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -101,14 +101,12 @@ public class ParticleFireSpark extends ParticleBase {
         }
         this.particleAge++;
 
-        /**
-         * Called to spawn smoke particles with the entity
-         */
-        float f = (float)this.particleAge / (float)this.particleMaxAge;
+        // Called to spawn smoke particles with the entity
+        float f = (float) particleAge / (float) particleMaxAge;
 
-        if (this.rand.nextFloat() > f)
+        if (rand.nextFloat() > f)
         {
-            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY, this.posZ, this.motionX, this.motionY, this.motionZ, 0);
+            world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY, posZ, motionX, motionY, motionZ, 0);
         }
 
         double dist = getPos().squareDistanceTo(end);

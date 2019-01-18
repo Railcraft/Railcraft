@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,19 +10,17 @@
 
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.blocks.logic.InventoryLogic;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.IInteractionObject;
 import net.minecraft.world.World;
 
-public abstract class CartBaseLogicChest extends CartBaseLogic implements IInteractionObject {
+public abstract class CartBaseLogicChest extends CartBaseLogic implements IInventoryImplementor {
 
     protected CartBaseLogicChest(World world) {
         super(world);
@@ -30,6 +28,16 @@ public abstract class CartBaseLogicChest extends CartBaseLogic implements IInter
 
     protected CartBaseLogicChest(World world, double x, double y, double z) {
         super(world, x, y, z);
+    }
+
+    @Override
+    public IInventory getInventory() {
+        return getLogic(IInventory.class).orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer player) {
+        return getLogic(InventoryLogic.class).map(logic -> logic.isUsableByPlayer(player)).orElse(false);
     }
 
     @Override
@@ -56,22 +64,7 @@ public abstract class CartBaseLogicChest extends CartBaseLogic implements IInter
     }
 
     @Override
-    protected void openRailcraftGui(EntityPlayer player) {
-        getLogic(IInventory.class).ifPresent(player::displayGUIChest);
-    }
-
-    @Override
-    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return new ContainerChest(playerInventory, getLogic(IInventory.class).orElseThrow(NullPointerException::new), playerIn);
-    }
-
-    @Override
     protected final EnumGui getGuiType() {
-        throw new UnsupportedOperationException("Should not be called");
-    }
-
-    @Override
-    public String getGuiID() {
-        return "minecraft:chest";
+        return EnumGui.CHEST;
     }
 }

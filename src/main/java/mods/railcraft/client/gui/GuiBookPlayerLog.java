@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class GuiBookPlayerLog extends GuiBook {
 
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "logbook.png");
+    public static final ResourceLocation TEXTURE = GuiTools.findTexture("logbook.png");
     public static final String LOG_TAG = "gui.railcraft.logbook.";
 
     public GuiBookPlayerLog(Multimap<LocalDate, GameProfile> log) {

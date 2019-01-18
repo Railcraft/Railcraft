@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
@@ -81,7 +82,7 @@ public final class EntityCartJukebox extends CartBase {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setString(RECORD_DISPLAY_NAME, display);
             PacketBuilder.instance().sendMovingSoundPacket(sound, SoundCategory.RECORDS, this, SoundHelper.MovingSoundType.RECORD, tag);
-            RailcraftAdvancementTriggers.getInstance().onJukeboxCartPlay(player, this, sound.soundName);
+            RailcraftAdvancementTriggers.getInstance().onJukeboxCartPlay((EntityPlayerMP) player, this, sound.soundName);
         }
         return true;
     }

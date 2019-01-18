@@ -19,6 +19,7 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.gui.containers.ContainerRockCrusher;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.RailcraftJEIPlugin;
 import net.minecraft.client.Minecraft;
@@ -40,9 +41,9 @@ public class RockCrusherMachineCategory implements IRecipeCategory<RockCrusherRe
 
     public RockCrusherMachineCategory(IGuiHelper guiHelper) {
         ResourceLocation location = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
-        background = guiHelper.createDrawable(location, 0, 166, WIDTH, HEIGHT);
+        background = guiHelper.createDrawable(location, 0, ContainerRockCrusher.GUI_HEIGHT, WIDTH, HEIGHT);
         localizedName = LocalizationPlugin.translate("gui.railcraft.jei.category.crushing");
-        this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 144, 166, 29, 53), 500, IDrawableAnimated.StartDirection.LEFT, false);
+        this.progress = guiHelper.createAnimatedDrawable(guiHelper.createDrawable(new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png"), 144, ContainerRockCrusher.GUI_HEIGHT, 29, 53), 500, IDrawableAnimated.StartDirection.LEFT, false);
 
     }
 

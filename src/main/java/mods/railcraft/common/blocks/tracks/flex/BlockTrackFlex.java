@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,7 +56,6 @@ public class BlockTrackFlex extends BlockTrackStateless {
                 '#', getTrackType().getRailbed());
     }
 
-    @SuppressWarnings("ConstantConditions")
     public ItemStack getRecipeOutput() {
         return getStack(TrackConstants.FLEX_RECIPE_OUTPUT);
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,14 +28,12 @@ public class SoundRegistry {
 
     private static final Map<IBlockState, SoundType> customSounds = new HashMap<>();
 
-    @Nullable
-    public static SoundType getBlockSound(World world, BlockPos pos) {
+    public static @Nullable SoundType getBlockSound(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         return getBlockSound(state, world, pos);
     }
 
-    @Nullable
-    public static SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
+    public static @Nullable SoundType getBlockSound(IBlockState blockState, World world, BlockPos pos) {
         SoundType soundType = customSounds.get(blockState);
         if (soundType == null) {
             return blockState.getBlock().getSoundType(blockState, world, pos, null);

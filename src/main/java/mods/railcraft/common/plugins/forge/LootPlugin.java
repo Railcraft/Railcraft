@@ -158,8 +158,7 @@ public final class LootPlugin {
                 .registerTypeHierarchyAdapter(LootContext.EntityTarget.class, new LootContext.EntityTarget.Serializer())
                 .create();
 
-        @Nullable
-        public static LootTable loadBuiltinLootTable(ResourceLocation resource, LootTableManager manager) {
+        public static @Nullable LootTable loadBuiltinLootTable(ResourceLocation resource, LootTableManager manager) {
             URL url = LootTableLoader.class.getResource("/assets/" + resource.getNamespace() + "/loot_tables/" + resource.getPath() + ".json");
 
             if (url != null) {

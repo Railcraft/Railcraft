@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,16 +12,14 @@ package mods.railcraft.common.blocks.ore;
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
 import mods.railcraft.common.util.inventory.InvTools;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
 import org.jetbrains.annotations.Nullable;
 
-public class ItemOreMagic extends ItemBlockRailcraftSubtyped {
+public class ItemOreMagic extends ItemBlockRailcraftSubtyped<BlockOreMagic> {
 
-    public ItemOreMagic(Block block) {
+    public ItemOreMagic(BlockOreMagic block) {
         super(block);
     }
 
@@ -52,8 +50,7 @@ public class ItemOreMagic extends ItemBlockRailcraftSubtyped {
      * @return A new Entity object to spawn or null
      */
     @Override
-    @Nullable
-    public Entity createEntity(World world, Entity location, ItemStack stack) {
+    public @Nullable Entity createEntity(World world, Entity location, ItemStack stack) {
         if (!hasCustomEntity(stack))
             return null;
         EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);

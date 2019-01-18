@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.UUID;
@@ -43,7 +44,7 @@ public class TrackKitSwitchWye extends TrackKitSwitch {
     }
 
     @Override
-    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, EntityMinecart cart) {
+    public BlockRailBase.EnumRailDirection getRailDirection(IBlockState state, @Nullable EntityMinecart cart) {
         BlockRailBase.EnumRailDirection dir = super.getRailDirection(state, cart);
         if (cart != null) {
             if (dir == NORTH_SOUTH) {

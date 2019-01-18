@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.manipulator.TileItemManipulator;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerManipulatorCartItem;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -21,8 +20,8 @@ public class GuiManipulatorCartItem extends GuiManipulatorCart {
     private final String BUFFER_LABEL = LocalizationPlugin.translate("gui.railcraft.manipulator.buffer");
 
     public GuiManipulatorCartItem(InventoryPlayer inv, TileItemManipulator tile) {
-        super(tile, new ContainerManipulatorCartItem(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_item_loader.png");
-        TileItemManipulator tile1 = tile;
+        super(tile, new ContainerManipulatorCartItem(inv, tile), "gui_item_loader.png");
+        drawInvTitle = false;
     }
 
     @Override

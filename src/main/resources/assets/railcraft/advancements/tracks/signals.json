@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "railcraft:signal",
+      "data": 0
+    },
+    "title": {
+      "translate": "advancements.railcraft.tracks.signals.name"
+    },
+    "description": {
+      "translate": "advancements.railcraft.tracks.signals.desc"
+    }
+  },
+  "parent": "railcraft:tracks/regular_track",
+  "criteria": {
+    "place_signal": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "item": {
+          "item": "railcraft:signal"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.gui.widgets.IIndicatorController;
-import mods.railcraft.common.gui.widgets.IndicatorController;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,34 +19,12 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public final class EntityCartRF extends CartBase implements IWeightedCart {
-    private static final DataParameter<Integer> RF = DataManagerPlugin.create(DataSerializers.VARINT);
-    private static final int RF_CAP = 2000000;
-    public final IIndicatorController rfIndicator = new IndicatorController() {
-        private int rf;
-
-        @Override
-        protected void refreshToolTip() {
-            tip.text = String.format("%,d / %,d RF", rf, getMaxRF());
-        }
-
-        @Override
-        public double getMeasurement() {
-            double e = Math.min(rf, getMaxRF());
-            return e / getMaxRF();
-        }
-
-        @Override
-        public void setClientValue(double value) {
-            rf = (int) value;
-        }
-
-        @Override
-        public double getServerValue() {
-            return getRF();
-        }
-    };
+    private static final DataParameter<Integer> FE = DataManagerPlugin.create(DataSerializers.VARINT);
+    private static final int CAPACITY = 2000000;
+    private final CartStorage storage = new CartStorage();
 
     public EntityCartRF(World world) {
         super(world);
@@ -66,45 +42,11 @@ public final class EntityCartRF extends CartBase implements IWeightedCart {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(RF, 0);
+        dataManager.register(FE, 0);
     }
 
-    public int addRF(int amount) {
-        if (amount <= 0)
-            return 0;
-        if (getRF() >= RF_CAP)
-            return 0;
-        if (RF_CAP - getRF() >= amount) {
-            setRF(getRF() + amount);
-            return amount;
-        }
-        int used = RF_CAP - getRF();
-        setRF(RF_CAP);
-        return used;
-    }
-
-    public int removeRF(int request) {
-        if (request <= 0)
-            return 0;
-        if (getRF() >= request) {
-            setRF(getRF() - request);
-            return request;
-        }
-        int ret = getRF();
-        setRF(0);
-        return ret;
-    }
-
-    public void setRF(int amount) {
-        dataManager.set(RF, amount);
-    }
-
-    public int getRF() {
-        return dataManager.get(RF);
-    }
-
-    public int getMaxRF() {
-        return RF_CAP;
+    public IEnergyStorage getEnergyStorage() {
+        return storage;
     }
 
     @Override
@@ -114,14 +56,14 @@ public final class EntityCartRF extends CartBase implements IWeightedCart {
         if (Game.isClient(world))
             return;
 
-        if (getRF() > RF_CAP)
-            setRF(RF_CAP);
+        if (storage.getEnergyStored() > CAPACITY)
+            storage.setEnergyStored(CAPACITY);
     }
 
     @Override
     public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world))
-            GuiHandler.openGui(EnumGui.CART_RF, player, world, this);
+            GuiHandler.openGui(EnumGui.CART_FE, player, world, this);
         return true;
     }
 
@@ -133,18 +75,63 @@ public final class EntityCartRF extends CartBase implements IWeightedCart {
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
-        setRF(nbt.getInteger("fe"));
+        storage.setEnergyStored(nbt.getInteger("fe"));
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
-        nbt.setInteger("fe", getRF());
+        nbt.setInteger("fe", storage.getEnergyStored());
     }
 
-//    @Override
-//    public Block func_145820_n() {
-//        return Blocks.REDSTONE_BLOCK;
-//    }
+    private class CartStorage implements IEnergyStorage {
 
+        @Override
+        public int getEnergyStored() {
+            return dataManager.get(FE);
+        }
+
+        public void setEnergyStored(int amount) {
+            dataManager.set(FE, amount);
+        }
+
+        @Override
+        public int receiveEnergy(int maxReceive, boolean simulate) {
+            if (!canReceive())
+                return 0;
+
+            int energyStored = getEnergyStored();
+            int energyReceived = Math.min(CAPACITY - energyStored, maxReceive);
+            if (!simulate)
+                setEnergyStored(energyStored + energyReceived);
+            return energyReceived;
+        }
+
+        @Override
+        public int extractEnergy(int maxExtract, boolean simulate) {
+            if (!canExtract())
+                return 0;
+
+            int energyStored = getEnergyStored();
+            int energyExtracted = Math.min(energyStored, maxExtract);
+            if (!simulate)
+                setEnergyStored(energyStored - energyExtracted);
+            return energyExtracted;
+        }
+
+        @Override
+        public int getMaxEnergyStored() {
+            return CAPACITY;
+        }
+
+        @Override
+        public boolean canExtract() {
+            return true;
+        }
+
+        @Override
+        public boolean canReceive() {
+            return true;
+        }
+    }
 }

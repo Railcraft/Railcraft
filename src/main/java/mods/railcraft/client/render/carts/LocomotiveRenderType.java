@@ -1,8 +1,11 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
 
- This work (the API) is licensed under the "MIT" License,
- see LICENSE.md for details.
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
 package mods.railcraft.client.render.carts;
@@ -32,7 +35,7 @@ public enum LocomotiveRenderType {
     STEAM_MAGIC("cart.loco.steam.magic"),
     ELECTRIC("cart.loco.electric"),
     CREATIVE("cart.loco.electric");
-    private final Map<String, LocomotiveModelRenderer> renderers = new HashMap<String, LocomotiveModelRenderer>();
+    private final Map<String, LocomotiveModelRenderer> renderers = new HashMap<>();
     private final String cartTag;
 
     LocomotiveRenderType(String cartTag) {
@@ -62,9 +65,8 @@ public enum LocomotiveRenderType {
      * This function will return a Locomotive item with the skin identifier
      * saved in the NBT. Use it to create a recipe for your skin.
      */
-    @Nullable
     @Contract("_, null -> null; _, !null -> !null")
-    public ItemStack getItemWithRenderer(String rendererTag, @Nullable ItemStack stack) {
+    public @Nullable ItemStack getItemWithRenderer(String rendererTag, @Nullable ItemStack stack) {
         if (stack == null)
             return null;
         NBTTagCompound nbt = new NBTTagCompound();

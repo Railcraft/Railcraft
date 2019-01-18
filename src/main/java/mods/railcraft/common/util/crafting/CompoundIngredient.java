@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.util.crafting;
 
-import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntComparators;
 import it.unimi.dsi.fastutil.ints.IntList;
@@ -19,10 +18,11 @@ import net.minecraft.item.crafting.Ingredient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
+@SuppressWarnings("UnnecessaryThis")
 public class CompoundIngredient extends Ingredient {
     private Collection<Ingredient> children;
     private ItemStack[] stacks;
@@ -33,21 +33,14 @@ public class CompoundIngredient extends Ingredient {
         super(0);
         this.children = children;
 
-        boolean simple = true;
-        for (Ingredient child : children)
-            simple &= child.isSimple();
-        this.isSimple = simple;
+        this.isSimple = children.stream().map(Ingredient::isSimple).reduce(true, (a, b) -> a && b);
     }
 
     @Override
     @Nonnull
     public ItemStack[] getMatchingStacks() {
         if (stacks == null) {
-            List<ItemStack> tmp = Lists.newArrayList();
-            for (Ingredient child : children)
-                Collections.addAll(tmp, child.getMatchingStacks());
-            stacks = tmp.toArray(new ItemStack[tmp.size()]);
-
+            stacks = children.stream().flatMap(child -> Arrays.stream(child.getMatchingStacks())).toArray(ItemStack[]::new);
         }
         return stacks;
     }
@@ -71,11 +64,7 @@ public class CompoundIngredient extends Ingredient {
         if (target == null)
             return false;
 
-        for (Ingredient child : children)
-            if (child.apply(target))
-                return true;
-
-        return false;
+        return children.stream().anyMatch(child -> child.apply(target));
     }
 
     @Override

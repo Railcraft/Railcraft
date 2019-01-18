@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,24 +9,21 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorSheep;
-import mods.railcraft.common.gui.slots.SlotWoolFilter;
-import net.minecraft.entity.player.EntityPlayer;
+import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Slot;
 
 public class ContainerDetectorSheep extends RailcraftContainer {
 
-    private final TileDetector tile;
-    private final DetectorSheep detector;
-
     public ContainerDetectorSheep(InventoryPlayer inventoryplayer, TileDetector tile) {
         super(((DetectorSheep) tile.getDetector()).getFilters());
-        this.tile = tile;
-        this.detector = (DetectorSheep) tile.getDetector();
-        addSlot(new SlotWoolFilter(detector.getFilters(), 0, 60, 24));
+        DetectorSheep detector = (DetectorSheep) tile.getDetector();
+        addSlot(new SlotStackFilter(StackFilters.of(Blocks.WOOL), detector.getFilters(), 0, 60, 24)
+                .setPhantom().setStackLimit(1));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
@@ -39,10 +36,4 @@ public class ContainerDetectorSheep extends RailcraftContainer {
             addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 116));
         }
     }
-
-    @Override
-    public boolean canInteractWith(EntityPlayer entityplayer) {
-        return TileRailcraft.isUsableByPlayerHelper(detector.getTile(), entityplayer);
-    }
-
 }

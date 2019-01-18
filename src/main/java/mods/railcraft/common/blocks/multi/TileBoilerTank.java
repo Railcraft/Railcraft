@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,6 @@ import static java.util.Objects.requireNonNull;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@SuppressWarnings("rawtypes")
 public abstract class TileBoilerTank extends TileBoiler {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);

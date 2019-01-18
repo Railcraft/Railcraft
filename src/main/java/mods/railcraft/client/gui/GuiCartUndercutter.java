@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,11 +10,9 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.carts.EntityCartUndercutter;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerCartUndercutter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -22,7 +20,7 @@ import net.minecraft.util.text.translation.I18n;
 public class GuiCartUndercutter extends GuiTitled {
 
     public GuiCartUndercutter(InventoryPlayer inv, EntityCartUndercutter cart) {
-        super(cart, new ContainerCartUndercutter(inv, cart), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_undercutter.png");
+        super(cart, new ContainerCartUndercutter(inv, cart), "gui_cart_undercutter.png");
         ySize = 205;
     }
 
@@ -33,6 +31,5 @@ public class GuiCartUndercutter extends GuiTitled {
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.undercutter.transfer.stock.name"), 125, 30, 0x404040);
         GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.cart.undercutter.under"), 32);
         GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.cart.undercutter.sides"), 74);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 }

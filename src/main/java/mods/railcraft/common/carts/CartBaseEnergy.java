@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,23 +15,19 @@ import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.IBatteryCart;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.ic2.IC2Plugin;
 import mods.railcraft.common.util.charge.CartBattery;
 import mods.railcraft.common.util.misc.APIErrorHandler;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
 
-abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IIC2EnergyCart, IWeightedCart {
+public abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IWeightedCart {
 
     private final IBatteryCart cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 
@@ -64,15 +60,15 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
             return;
 
         if (getEnergy() > getCapacity())
-            setEnergy(getCapacity());
+            cartBattery.setCharge(getCapacity());
 
         ItemStack stack = getStackInSlot(0);
         if (IC2Plugin.isEnergyItem(stack) && getEnergy() > 0)
-            setEnergy(getEnergy() - IC2Plugin.chargeItem(stack, getEnergy(), getTier()));
+            cartBattery.removeCharge(IC2Plugin.chargeItem(stack, getEnergy(), getTier()));
 
         stack = getStackInSlot(1);
         if (IC2Plugin.isEnergyItem(stack) && getEnergy() < getCapacity())
-            setEnergy(getEnergy() + IC2Plugin.dischargeItem(stack, getCapacity() - getEnergy(), getTier()));
+            cartBattery.addCharge(IC2Plugin.dischargeItem(stack, getCapacity() - getEnergy(), getTier()));
     }
 
     @Override
@@ -94,16 +90,15 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound nbt) {
-        super.readEntityFromNBT(nbt);
-        SafeNBTWrapper safe = new SafeNBTWrapper(nbt);
-        setEnergy(safe.getDouble("energy"));
+    protected void readEntityFromNBT(NBTTagCompound data) {
+        super.readEntityFromNBT(data);
+        cartBattery.readFromNBT(data);
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-        super.writeEntityToNBT(nbttagcompound);
-        nbttagcompound.setDouble("energy", getEnergy());
+    protected void writeEntityToNBT(NBTTagCompound data) {
+        super.writeEntityToNBT(data);
+        cartBattery.writeToNBT(data);
     }
 
     @Override
@@ -122,7 +117,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
             e = capacity;
         }
         if (!simulate)
-            setEnergy(e);
+            cartBattery.setCharge(e);
 
         if (!passAlong)
             return extra;
@@ -156,7 +151,7 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
         if (e < 0)
             e = 0;
         if (!simulate)
-            setEnergy(e);
+            cartBattery.setCharge(e);
 
         if (!passAlong)
             return provide;
@@ -175,18 +170,8 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     }
 
     @Override
-    public int getEnergyBarScaled(int scale) {
-        return ((int) getEnergy() * scale) / getCapacity();
-    }
-
-    @Override
     public double getEnergy() {
         return cartBattery.getCharge();
-    }
-
-    @Override
-    public void setEnergy(double energy) {
-        cartBattery.setCharge(energy);
     }
 
     @Override
@@ -197,11 +182,6 @@ abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransf
     @Override
     public boolean canInjectEnergy() {
         return true;
-    }
-
-    @Override
-    public EntityMinecart getEntity() {
-        return this;
     }
 
     @Override

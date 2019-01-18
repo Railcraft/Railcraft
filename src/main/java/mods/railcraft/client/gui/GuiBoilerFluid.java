@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiBoilerFluid extends GuiTitled {
@@ -21,14 +19,9 @@ public class GuiBoilerFluid extends GuiTitled {
     private final TileBoilerFireboxFluid tile;
 
     public GuiBoilerFluid(InventoryPlayer inv, TileBoilerFireboxFluid tile) {
-        super(tile, new ContainerBoilerFluid(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_boiler_liquid.png");
+        super(tile, new ContainerBoilerFluid(inv, tile), "gui_boiler_liquid.png",
+                LocalizationPlugin.translate("gui.railcraft.steam.boiler"));
         this.tile = tile;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.steam.boiler"), 6);
-        fontRenderer.drawString(I18n.format("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.client.gui.buttons.GuiBetterButton;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.collections.Streams;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,21 +28,14 @@ public abstract class GuiBasic extends GuiScreen {
     protected final ResourceLocation texture;
 
     protected GuiBasic(String label) {
-        this.label = label;
-        xSize = 176;
-        ySize = 88;
-        texture = new ResourceLocation(RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_basic.png");
+        this(label, "gui_basic.png", 176, 88);
     }
 
     protected GuiBasic(String label, String texture, int x, int y) {
-        this(label, new ResourceLocation(texture), x, y);
-    }
-
-    protected GuiBasic(String label, ResourceLocation texture, int x, int y) {
         this.label = label;
         xSize = x;
         ySize = y;
-        this.texture = texture;
+        this.texture = GuiTools.findTexture(texture);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -57,6 +57,18 @@ public class Ingredients {
 
     public static Ingredient catalyst(ItemStack... stacks) {
         return new CatalystIngredient(stacks);
+    }
+
+    public static Ingredient consumingContainer(Item item) {
+        return consumingContainer(new ItemStack(item, 1, OreDictionary.WILDCARD_VALUE));
+    }
+
+    public static Ingredient consumingContainer(Block block) {
+        return consumingContainer(Item.getItemFromBlock(block));
+    }
+
+    public static Ingredient consumingContainer(ItemStack... stacks) {
+        return new ContainerConsumingIngredient(stacks);
     }
 
     public static Ingredient from(Object... obj) {

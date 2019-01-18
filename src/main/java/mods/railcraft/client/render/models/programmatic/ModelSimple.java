@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,10 +19,8 @@ import net.minecraft.entity.Entity;
 public class ModelSimple extends ModelBase {
 
     protected final ModelRenderer renderer;
-    private final String name;
 
     public ModelSimple(String name) {
-        this.name = name;
         this.renderer = new ModelRenderer(this, name);
     }
 

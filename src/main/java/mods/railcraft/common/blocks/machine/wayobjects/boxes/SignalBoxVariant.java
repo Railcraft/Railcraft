@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,7 @@ public enum SignalBoxVariant implements IEnumMachine<SignalBoxVariant> {
     RELAY(ModuleSignals.class, "relay", TileBoxRelay.class),
     SEQUENCER(ModuleSignals.class, "sequencer", TileBoxSequencer.class),;
 
-    private static final List<SignalBoxVariant> creativeList = new ArrayList<SignalBoxVariant>();
+    private static final List<SignalBoxVariant> creativeList = new ArrayList<>();
     public static final SignalBoxVariant[] VALUES = values();
 
     static {

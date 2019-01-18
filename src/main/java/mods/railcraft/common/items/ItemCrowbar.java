@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -41,8 +41,8 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,19 +107,11 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
     }
 
     private boolean isShiftRotation(Class<? extends Block> cls) {
-        for (Class<? extends Block> shift : shiftRotations) {
-            if (shift.isAssignableFrom(cls))
-                return true;
-        }
-        return false;
+        return shiftRotations.stream().anyMatch(shift -> shift.isAssignableFrom(cls));
     }
 
     private boolean isBannedRotation(Class<? extends Block> cls) {
-        for (Class<? extends Block> banned : bannedRotations) {
-            if (banned.isAssignableFrom(cls))
-                return true;
-        }
-        return false;
+        return bannedRotations.stream().anyMatch(banned -> banned.isAssignableFrom(cls));
     }
 
     @Override
@@ -274,9 +266,8 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
         checkBlock(world, level, pos.down(), player);
     }
 
-    @Nullable
     @Override
-    public String getOreTag(@Nullable IVariantEnum variant) {
+    public @Nullable String getOreTag(@Nullable IVariantEnum variant) {
         return ORE_TAG;
     }
 

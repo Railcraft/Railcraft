@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,6 @@ import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
-import mods.railcraft.common.util.inventory.filters.StandardStackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.BallastRegistry;
@@ -171,9 +170,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         replaceableBlocks.addAll(Arrays.asList(replaceable));
     }
 
-    public final InventoryMapper invFuel = InventoryMapper.make(this, 1, 6).withFilters(StandardStackFilters.FUEL);
-    public final InventoryMapper invBallast = InventoryMapper.make(this, 7, 9).withFilters(StandardStackFilters.BALLAST);
-    public final InventoryMapper invRails = InventoryMapper.make(this, 16, 9).withFilters(StandardStackFilters.TRACK);
+    public final InventoryMapper invFuel = InventoryMapper.make(this, 1, 6).withFilters(StackFilters.FUEL);
+    public final InventoryMapper invBallast = InventoryMapper.make(this, 7, 9).withFilters(StackFilters.BALLAST);
+    public final InventoryMapper invRails = InventoryMapper.make(this, 16, 9).withFilters(StackFilters.TRACK);
     //    protected static final int WATCHER_ID_BURN_TIME = 22;
     protected int delay;
     protected boolean placeRail;
@@ -700,7 +699,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                             if (!WorldPlugin.isBlockAir(world, searchPos, state) && !state.getMaterial().isLiquid()) {
                                 // Break other blocks first
                                 WorldPlugin.playerRemoveBlock(world, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
-                                        world.getGameRules().getBoolean("doTileDrops") && !RailcraftConfig.boreDestroysBlocks());
+                                        world.getGameRules().getBoolean("doTileDrops") && RailcraftConfig.borePreserveStacks());
                             }
                         }
                     }
@@ -851,9 +850,9 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return false;
         // End of Event Fire
 
-        if (!RailcraftConfig.boreDestroysBlocks() && world.getGameRules().getBoolean("doTileDrops")) {
+        if (RailcraftConfig.borePreserveStacks() && world.getGameRules().getBoolean("doTileDrops")) {
             for (ItemStack stack : items) {
-                if (StandardStackFilters.FUEL.test(stack))
+                if (StackFilters.FUEL.test(stack))
                     stack = invFuel.addStack(stack);
 
                 if (!InvTools.isEmpty(stack) && InvTools.isStackEqualToBlock(stack, Blocks.GRAVEL))

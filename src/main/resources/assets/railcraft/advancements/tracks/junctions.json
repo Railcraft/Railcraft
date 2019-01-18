@@ -13,10 +13,18 @@
   },
   "parent": "railcraft:tracks/regular_track",
   "criteria": {
-    "build": {
+    "maul": {
       "trigger": "railcraft:spike_maul_use",
       "conditions": {
         "_comment": "Will add world and pos predicates later"
+      }
+    },
+    "actuator": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "item": {
+          "item": "railcraft:actuator"
+        }
       }
     }
   }

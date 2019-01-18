@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,10 +10,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.single.TileEngineSteam;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerEngineSteam;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiEngineSteam extends GuiTitled {
 
@@ -21,7 +19,7 @@ public class GuiEngineSteam extends GuiTitled {
     private final TileEngineSteam tile;
 
     public GuiEngineSteam(InventoryPlayer inv, TileEngineSteam tile) {
-        super(tile, new ContainerEngineSteam(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_engine_steam.png");
+        super(tile, new ContainerEngineSteam(inv, tile), "gui_engine_steam.png");
         this.tile = tile;
     }
 
@@ -29,7 +27,6 @@ public class GuiEngineSteam extends GuiTitled {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(String.format(OUTPUT, Math.round(tile.getCurrentOutput())), 120, 40, 0x404040);
-        fontRenderer.drawString(I18n.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
     }
 
 }

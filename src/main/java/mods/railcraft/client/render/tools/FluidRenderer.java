@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,8 +32,7 @@ public class FluidRenderer {
         FLOWING
     }
 
-    @Nullable
-    private static ResourceLocation findFluidTexture(@Nullable FluidStack fluidStack, FlowState flowState) {
+    private static @Nullable ResourceLocation findFluidTexture(@Nullable FluidStack fluidStack, FlowState flowState) {
         if (fluidStack == null)
             return null;
         return flowState == FlowState.FLOWING ? fluidStack.getFluid().getFlowing(fluidStack) : fluidStack.getFluid().getStill(fluidStack);

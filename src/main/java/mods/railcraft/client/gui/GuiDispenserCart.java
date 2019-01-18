@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.machine.manipulator.TileDispenserCart;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerDispenserCart;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -19,7 +18,7 @@ public class GuiDispenserCart extends GuiTitled {
     private final InventoryPlayer inv;
 
     public GuiDispenserCart(InventoryPlayer inv, TileDispenserCart tile) {
-        super(tile, new ContainerDispenserCart(inv, tile), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_dispenser_cart.png");
+        super(tile, new ContainerDispenserCart(inv, tile), "gui_dispenser_cart.png");
         xSize = 176;
         ySize = 140;
         this.inv = inv;

@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.plugins.jei.crafting;
 
 import mezz.jei.api.ingredients.IIngredientRegistry;
@@ -6,15 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  *
@@ -29,30 +36,28 @@ public final class FluidRecipeInterpreter {
         FluidRecipeInterpreter.ingredientRegistry = registry;
     }
 
-    public static List<List<ItemStack>> expand(List<Object> inputs) {
-        List<List<ItemStack>> ret = new ArrayList<>(inputs.size());
-        for (Object input : inputs) {
-            ret.add(getPossibilities(input));
-        }
-        return ret;
-    }
-
-    public static List<ItemStack> getPossibilities(Object input) {
-        if (input instanceof ItemStack) {
-            ItemStack stack = (ItemStack) input;
-            if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
-                return helper.getSubtypes(stack);
-            }
-            return Collections.singletonList(stack);
-        } else if (input instanceof String) {
-            return OreDictionary.getOres((String) input);
-        } else if (input instanceof Iterable) {
-            return StreamSupport.stream(((Iterable<?>) input).spliterator(), false).flatMap((obj) -> getPossibilities(obj).stream()).collect(Collectors.toList());
-        } else if (input instanceof FluidStack) {
-            return getAllContainersFilledWith((FluidStack) input);
-        }
-        return Collections.emptyList();
-    }
+//    public static List<List<ItemStack>> expand(List<Object> inputs) {
+//        return inputs.stream()
+//                .map(FluidRecipeInterpreter::getPossibilities)
+//                .collect(Collectors.toList());
+//    }
+//
+//    public static List<ItemStack> getPossibilities(Object input) {
+//        if (input instanceof ItemStack) {
+//            ItemStack stack = (ItemStack) input;
+//            if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
+//                return helper.getSubtypes(stack);
+//            }
+//            return Collections.singletonList(stack);
+//        } else if (input instanceof String) {
+//            return OreDictionary.getOres((String) input);
+//        } else if (input instanceof Iterable) {
+//            return StreamSupport.stream(((Iterable<?>) input).spliterator(), false).flatMap((obj) -> getPossibilities(obj).stream()).collect(Collectors.toList());
+//        } else if (input instanceof FluidStack) {
+//            return getAllContainersFilledWith((FluidStack) input);
+//        }
+//        return Collections.emptyList();
+//    }
 
     public static List<ItemStack> getAllContainersFilledWith(@Nullable FluidStack fluid) {
         if (fluid == null)

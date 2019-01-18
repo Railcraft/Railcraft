@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerBlastFurnace;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -20,19 +19,9 @@ public class GuiBlastFurnace extends GuiTitled {
     private final BlastFurnaceLogic logic;
 
     public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, BlastFurnaceLogic logic) {
-        super(logic, new ContainerBlastFurnace(par1InventoryPlayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_blast_furnace.png",
+        super(logic, new ContainerBlastFurnace(par1InventoryPlayer, logic), "gui_blast_furnace.png",
                 LocalizationPlugin.translateFast("gui.railcraft.blast.furnace"));
         this.logic = logic;
-    }
-
-    /**
-     * Draw the foreground layer for the GuiContainer (everything in front of
-     * the items)
-     */
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(LocalizationPlugin.translateFast("container.inventory"), 8, ySize - 96 + 2, 4210752);
     }
 
     /**

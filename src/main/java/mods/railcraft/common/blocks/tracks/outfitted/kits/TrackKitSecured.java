@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2016
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,9 +31,8 @@ import java.io.IOException;
 public abstract class TrackKitSecured extends TrackKitRailcraft implements IGuiReturnHandler, ISecureObject<LockButtonState> {
     private final MultiButtonController<LockButtonState> lockController = MultiButtonController.create(0, LockButtonState.VALUES);
 
-    @Nullable
     @Override
-    public World theWorld() {
+    public @Nullable World theWorld() {
         return getTile().getWorld();
     }
 

@@ -9,105 +9,135 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.collections;
 
-import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.RailcraftBlocks;
+import com.google.common.collect.ContiguousSet;
+import com.google.common.collect.DiscreteDomain;
+import com.google.common.collect.Range;
+import mods.railcraft.common.util.crafting.Ingredients;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import org.apache.commons.lang3.StringUtils;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.util.Strings;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-//TODO: test this!
 public class BlockItemParser {
 
-    public static String toString(RailcraftBlocks block, IVariantEnum variant) {
-        return block.getRegistryName() + "#" + variant.ordinal();
+    public static String toString(Object obj) {
+        if (obj instanceof IBlockState) {
+            IBlockState state = (IBlockState) obj;
+            Block block = state.getBlock();
+            return block.getRegistryName() + "#" + block.getMetaFromState(state);
+        }
+        if (obj instanceof Ingredient) {
+            return Stream.of(((Ingredient) obj).getMatchingStacks())
+                    .map(stack -> {
+                        String name = Optional.ofNullable(stack.getItem().getRegistryName()).map(Objects::toString).orElse("Null");
+                        if (stack.getHasSubtypes() && !InvTools.isWildcard(stack))
+                            name += "#" + stack.getMetadata();
+                        return name;
+                    })
+                    .collect(Collectors.toList()).toString();
+        }
+        return obj.toString();
     }
 
-    public static String toString(IBlockState state) {
-        return state.getBlock().getRegistryName() + "#" + state.getBlock().getMetaFromState(state);
-    }
-
-    public static IBlockState parseBlock(String line) {
+    public static Set<IBlockState> parseBlock(String line) {
         String[] tokens = line.split("#");
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tokens[0]));
         if (block == null)
-            throw new IllegalArgumentException("Invalid Block Name while parsing config = " + line);
+            throw new IllegalArgumentException("Invalid Block while parsing config line: " + line);
         int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : 0;
         //noinspection deprecation
-        return block.getStateFromMeta(meta);
+        return Collections.singleton(block.getStateFromMeta(meta));
     }
 
-    public static ItemKey parseItem(String line) {
-        String[] tokens = line.split("#");
-        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(tokens[0]));
-        if (item == null)
-            throw new IllegalArgumentException("Invalid Item Name while parsing config = " + line);
-        int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : -1;
-        return new ItemKey(item, meta);
-    }
-
-    public static <T> Set<T> parseList(String list, String logMessage, Function<String, T> keyParser) {
-        try {
-            Set<T> set = new HashSet<>();
-            for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
-                if ("".equals(line))
-                    continue;
-                set.add(keyParser.apply(line));
-                Game.log().msg(Level.DEBUG, logMessage, line);
+    public static Set<Ingredient> parseItem(String line) {
+        Ingredient ingredient;
+        if (line.contains(":")) {
+            String[] tokens = line.split("#");
+            String[] id = tokens[0].split(":");
+            Set<Item> items;
+            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(id[0], id[1]));
+            if (item != null) {
+                items = Collections.singleton(item);
+            } else {
+                items = ForgeRegistries.ITEMS.getEntries().stream()
+                        .filter(entry -> entry.getKey().getNamespace().equals(id[0]))
+                        .filter(entry -> entry.getKey().getPath().matches(id[1]))
+                        .map(Map.Entry::getValue)
+                        .collect(Collectors.toSet());
             }
-            return set;
-        } catch (IllegalArgumentException ex) {
-            throw ex;
-        } catch (RuntimeException ex) {
-            throw new IllegalArgumentException("Invalid list while parsing config = " + list);
-        }
+            if (items.isEmpty())
+                throw new IllegalArgumentException("Invalid Item while parsing config line: " + line);
+            Range<Integer> metadata;
+            if (tokens.length > 1) {
+                if (tokens[1].contains("-")) {
+                    String[] metaTokens = tokens[1].split("-");
+                    metadata = Range.closed(Integer.valueOf(metaTokens[0]), Integer.valueOf(metaTokens[1]));
+                } else {
+                    metadata = Range.singleton(Integer.valueOf(tokens[1]));
+                }
+            } else {
+                metadata = Range.singleton(OreDictionary.WILDCARD_VALUE);
+            }
+            ContiguousSet<Integer> metaSet = ContiguousSet.create(metadata, DiscreteDomain.integers());
+            ingredient = Ingredient.fromStacks(items.stream()
+                    .flatMap(i -> metaSet.stream().map(meta -> new ItemStack(i, 1, meta)))
+                    .toArray(ItemStack[]::new));
+        } else ingredient = Ingredients.from(line);
+        return Collections.singleton(ingredient);
     }
 
-    public static <T, V> Map<T, V> parseDictionary(String list, String logMessage, Function<String, T> keyParser, Function<String, V> valueParser) {
-        try {
-            Map<T, V> map = new HashMap<>();
-            for (String line : list.replaceAll("[{} ]", "").split("[,;]+")) {
-                if (StringUtils.isEmpty(line))
-                    continue;
+    public static <T> List<T> parseList(String list, String logMessage, Function<String, Collection<T>> keyParser) {
+        return parseList(list.replaceAll("[{} ]", "").split("[,;]+"), logMessage, keyParser);
+    }
+
+    public static <T> List<T> parseList(String[] list, String logMessage, Function<String, Collection<T>> keyParser) {
+        return streamLines(list).flatMap(line -> {
+            try {
+                Collection<T> entries = keyParser.apply(line);
+                entries.forEach(e -> Game.log().msg(Level.INFO, logMessage, toString(e)));
+                return entries.stream();
+            } catch (Exception ex) {
+                Game.log().throwable(Level.ERROR, 0, ex, "Invalid list entry while parsing line: {0}", line);
+            }
+            return Stream.empty();
+        }).collect(Collectors.toList());
+    }
+
+    public static <T, V> Map<T, V> parseDictionary(String[] list, String logMessage, Function<String, Collection<T>> keyParser, Function<String, V> valueParser) {
+        Map<T, V> map = new HashMap<>();
+        streamLines(list).forEach(line -> {
+            try {
                 String[] entry = line.split("=");
-                map.put(keyParser.apply(entry[0]), valueParser.apply(entry[1]));
-                Game.log().msg(Level.DEBUG, logMessage, line);
+                V value = valueParser.apply(entry[1]);
+                keyParser.apply(entry[0]).forEach(key -> {
+                    Game.log().msg(Level.INFO, logMessage, toString(key) + "=" + value);
+                    map.put(key, value);
+                });
+            } catch (Exception ex) {
+                Game.log().throwable(Level.ERROR, 0, ex, "Invalid map entry while parsing line: {0}", line);
             }
-            return map;
-        } catch (IllegalArgumentException ex) {
-            throw ex;
-        } catch (RuntimeException ex) {
-            throw new IllegalArgumentException("Invalid map while parsing config = " + list);
-        }
+        });
+        return map;
     }
 
-    public static <T, V> Map<T, V> parseDictionary(String[] list, String logMessage, Function<String, T> keyParser, Function<String, V> valueParser) {
-        try {
-            Map<T, V> map = new HashMap<>();
-            for (String line : list) {
-                line = line.replaceAll("[{} ]", "");
-                if (StringUtils.isEmpty(line))
-                    continue;
-                String[] entry = line.split("=");
-                map.put(keyParser.apply(entry[0]), valueParser.apply(entry[1]));
-                Game.log().msg(Level.DEBUG, logMessage, line);
-            }
-            return map;
-        } catch (IllegalArgumentException ex) {
-            throw ex;
-        } catch (RuntimeException ex) {
-            throw new IllegalArgumentException("Invalid map while parsing config = " + Arrays.toString(list));
-        }
+    private static Stream<String> streamLines(String[] list) {
+        return Arrays.stream(list).map(s -> s.replaceAll("[{} ]", "")).filter(Strings::isNotBlank);
     }
 
 }

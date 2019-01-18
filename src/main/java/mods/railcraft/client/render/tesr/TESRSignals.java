@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,8 +19,8 @@ import mods.railcraft.common.items.ItemGoggles;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.effects.EffectManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -96,7 +96,7 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
         }
     }
 
-    private void renderLines(T tile, double x, double y, double z, Collection<BlockPos> endPoints, ColorSupplier colorProfile) {
+    private void renderLines(T tile, double x, double y, double z, Collection<BlockPos> endPoints, IColorSupplier colorProfile) {
         if (endPoints.isEmpty()) {
             return;
         }
@@ -132,11 +132,11 @@ public class TESRSignals<T extends TileEntity> extends TileEntitySpecialRenderer
     }
 
     @FunctionalInterface
-    public interface ColorSupplier {
+    public interface IColorSupplier {
         int getColor(TileEntity tile, BlockPos source, BlockPos target);
     }
 
-    public enum ColorProfile implements ColorSupplier {
+    public enum ColorProfile implements IColorSupplier {
         COORD_RAINBOW {
             private final BlockPos[] coords = new BlockPos[2];
 

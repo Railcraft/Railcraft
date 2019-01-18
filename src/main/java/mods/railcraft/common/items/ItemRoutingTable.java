@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,8 +35,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -71,7 +71,6 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return true;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     public static boolean validBookTagPages(NBTTagCompound nbt) {
         if (!nbt.hasKey("pages"))
             return false;
@@ -97,15 +96,13 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return RoutingLogic.buildLogic(routingData);
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    @Nullable
-    public static Deque<String> getContents(ItemStack routingTable) {
+    public static @Nullable Deque<String> getContents(ItemStack routingTable) {
         if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();
         if (nbt == null)
             return null;
-        Deque<String> contents = new LinkedList<String>();
+        Deque<String> contents = new LinkedList<>();
         List<NBTTagList> pages = NBTPlugin.getNBTList(nbt, "pages", NBTTagList.class);
         for (NBTTagList page : pages) {
             List<NBTTagString> lines = NBTPlugin.asList(page);
@@ -116,9 +113,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
         return contents;
     }
 
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-    @Nullable
-    public static List<List<String>> getPages(ItemStack routingTable) {
+    public static @Nullable List<List<String>> getPages(ItemStack routingTable) {
         if (InvTools.isEmpty(routingTable) || !isRoutingTable(routingTable))
             return null;
         NBTTagCompound nbt = routingTable.getTagCompound();

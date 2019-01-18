@@ -10,23 +10,17 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.logic.RockCrusherLogic;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.containers.ContainerRockCrusher;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiRockCrusher extends GuiTitled {
 
-    private RockCrusherLogic crusher;
+    private final RockCrusherLogic crusher;
 
     public GuiRockCrusher(InventoryPlayer inventoryplayer, RockCrusherLogic logic) {
-        super(logic, new ContainerRockCrusher(inventoryplayer, logic), RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_crusher.png");
+        super(logic, new ContainerRockCrusher(inventoryplayer, logic), "gui_crusher.png");
         this.crusher = logic;
-    }
-
-    @Override
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-//        fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, (ySize - 96) + 2, 0x404040);
+        this.ySize = ContainerRockCrusher.GUI_HEIGHT;
     }
 
     @Override

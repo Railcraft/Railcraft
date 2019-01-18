@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,8 +15,8 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-
 import org.jetbrains.annotations.Nullable;
+
 import java.util.*;
 
 /**
@@ -38,7 +38,7 @@ public abstract class SubCommand implements IModCommand {
     }
 
     private final String name;
-    private final List<String> aliases = new ArrayList<String>();
+    private final List<String> aliases = new ArrayList<>();
     private PermLevel permLevel = PermLevel.EVERYONE;
     private IModCommand parent;
     private final NavigableSet<SubCommand> children = new TreeSet<>(SubCommand::compareTo);

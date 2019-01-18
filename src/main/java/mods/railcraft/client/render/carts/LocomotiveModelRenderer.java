@@ -1,10 +1,12 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.client.render.carts;
 
@@ -73,8 +75,7 @@ public abstract class LocomotiveModelRenderer {
      * @return model
      */
     //TODO: fix this?
-    @Nullable
-    public ModelResourceLocation getItemModel() {
+    public @Nullable ModelResourceLocation getItemModel() {
         return null;
     }
 

@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.carts;
 
 import mods.railcraft.client.core.SleepKeyHandler;
@@ -28,10 +38,10 @@ import java.util.UUID;
 public class EntityCartBed extends EntityCartBasic {
 
     WeakReference<EntityPlayer> sleeping = new WeakReference<>(null);
-    boolean wokeUp = false;
-    boolean rideAfterSleep = false;
-    boolean shouldSleep = false;
-    private boolean notifyRider = false;
+    boolean wokeUp;
+    boolean rideAfterSleep;
+    boolean shouldSleep;
+    private boolean notifyRider;
 
     public EntityCartBed(World world) {
         super(world);
@@ -117,10 +127,11 @@ public class EntityCartBed extends EntityCartBasic {
         }
     }
 
-    @Override
-    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
-        //No rider removal!
-    }
+// Handled by super class
+//    @Override
+//    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
+//        //No rider removal!
+//    }
 
     private void sendPlayerRiding(EntityPlayerMP player) {
         player.connection.sendPacket(new SPacketSetPassengers(this));
@@ -130,8 +141,7 @@ public class EntityCartBed extends EntityCartBasic {
         shouldSleep = true;
     }
 
-    @Nullable
-    protected Entity getFirstPassenger() {
+    protected @Nullable Entity getFirstPassenger() {
         List<Entity> passengers = getPassengers();
         return passengers.isEmpty() ? null : passengers.get(0);
     }

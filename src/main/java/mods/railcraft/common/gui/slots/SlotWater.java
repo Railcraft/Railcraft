@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2017
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,15 +16,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-import org.jetbrains.annotations.Nullable;
-
 public class SlotWater extends SlotRailcraft {
     public SlotWater(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
     }
 
     @Override
-    public boolean isItemValid(@Nullable ItemStack stack) {
+    public boolean isItemValid(ItemStack stack) {
         if (InvTools.isEmpty(stack)) {
             return false;
         }

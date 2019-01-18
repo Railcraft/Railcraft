@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -78,17 +78,14 @@ public interface IInventoryImplementor extends IInventory, IInventoryComposite {
 
     @Override
     default void markDirty() {
-        getInventory().markDirty();
     }
 
     @Override
     default void openInventory(EntityPlayer player) {
-        getInventory().openInventory(player);
     }
 
     @Override
     default void closeInventory(EntityPlayer player) {
-        getInventory().closeInventory(player);
     }
 
     @Override

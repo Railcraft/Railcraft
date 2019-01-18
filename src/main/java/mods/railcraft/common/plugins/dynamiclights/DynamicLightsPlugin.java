@@ -33,7 +33,7 @@ public final class DynamicLightsPlugin {
     public static final String MOD_ID = "DynamicLights";
     private static final DynamicLightsPlugin INSTANCE = new DynamicLightsPlugin();
 
-    private Handle handle;
+    private IHandle handle;
 
     public static DynamicLightsPlugin getInstance() {
         return INSTANCE;
@@ -58,18 +58,18 @@ public final class DynamicLightsPlugin {
         }
     }
 
-    private interface Handle {
+    private interface IHandle {
         void registerEntityLightSource(Class<? extends Entity> type, ToIntFunction<Entity> lightCalculator);
     }
 
-    private static final class AbsentHandle implements Handle {
+    private static final class AbsentHandle implements IHandle {
         @Override
         public void registerEntityLightSource(Class<? extends Entity> type, ToIntFunction<Entity> lightCalculator) {
 
         }
     }
 
-    private static final class PresentHandle implements Handle {
+    private static final class PresentHandle implements IHandle {
         private Method addLightSource;
         private Map<Class<? extends Entity>, ToIntFunction<Entity>> lightCalculatorMap;
 

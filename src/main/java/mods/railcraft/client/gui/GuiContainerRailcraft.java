@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,6 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
@@ -40,7 +41,7 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     protected GuiContainerRailcraft(RailcraftContainer container, String texture) {
         super(container);
         this.container = container;
-        this.texture = new ResourceLocation(texture);
+        this.texture = GuiTools.findTexture(texture);
     }
 
     /**
@@ -120,12 +121,15 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
         OpenGL.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         bindTexture(texture);
+
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
-        drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
+
+        drawGuiBackground(x, y);
 
         int mX = mouseX - guiLeft;
         int mY = mouseY - guiTop;
@@ -135,6 +139,10 @@ public abstract class GuiContainerRailcraft extends GuiContainer {
                 continue;
             element.draw(this, x, y, mX, mY);
         }
+    }
+
+    protected void drawGuiBackground(int x, int y) {
+        drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
     }
 
     @Override

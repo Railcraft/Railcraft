@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2018
+ Copyright (c) CovertJaguar, 2011-2019
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,6 +54,21 @@ public abstract class RailcraftContainer extends Container {
         addSlotToContainer(slot);
     }
 
+    protected final void addPlayerSlots(InventoryPlayer invPlayer) {
+        addPlayerSlots(invPlayer, 166);
+    }
+
+    protected final void addPlayerSlots(InventoryPlayer invPlayer, int guiHeight) {
+        for (int i = 0; i < 3; i++) {
+            for (int k = 0; k < 9; k++) {
+                addSlot(new Slot(invPlayer, k + i * 9 + 9, 8 + k * 18, guiHeight - 82 + i * 18));
+            }
+        }
+        for (int j = 0; j < 9; j++) {
+            addSlot(new Slot(invPlayer, j, 8 + j * 18, guiHeight - 24));
+        }
+    }
+
     public void addWidget(Widget widget) {
         widgets.add(widget);
         widget.addToContainer(this);
@@ -88,6 +103,7 @@ public abstract class RailcraftContainer extends Container {
     public void updateString(byte id, String data) {
     }
 
+    @SuppressWarnings("EmptyMethod")
     public void updateData(byte id, RailcraftInputStream data) {
     }
 

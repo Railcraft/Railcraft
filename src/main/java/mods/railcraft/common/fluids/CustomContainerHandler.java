@@ -1,3 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2019
+ http://railcraft.info
+
+ This code is the property of CovertJaguar
+ and may only be used with explicit written
+ permission unless otherwise specified on the
+ license page at http://railcraft.info/wiki/info:license.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.fluids;
 
 import com.google.common.collect.HashBasedTable;
@@ -89,8 +99,7 @@ public final class CustomContainerHandler {
         }
     }
 
-    @Nullable
-    private static RayTraceResult trace(EntityLivingBase entity, double length) {
+    private static @Nullable RayTraceResult trace(EntityLivingBase entity, double length) {
         Vec3d startPos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ);
         Vec3d endPos = startPos.add(new Vec3d(entity.getLookVec().x * length, entity.getLookVec().y * length, entity.getLookVec().z * length));
         return entity.world.rayTraceBlocks(startPos, endPos, true);
@@ -118,21 +127,18 @@ public final class CustomContainerHandler {
             return containerTable.contains(item, fluid.getFluid().getName());
         }
 
-        @Nullable
         @Override
-        public FluidStack drain(int maxDrain, boolean doDrain) {
+        public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
             return null;
         }
 
-        @Nullable
         @Override
-        public FluidStack getFluid() {
+        public @Nullable FluidStack getFluid() {
             return null;
         }
 
-        @Nullable
         @Override
-        public FluidStack drain(FluidStack resource, boolean doDrain) {
+        public @Nullable FluidStack drain(FluidStack resource, boolean doDrain) {
             return null;
         }
 
