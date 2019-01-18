@@ -21,9 +21,9 @@ import net.minecraft.world.World;
 
 public class ItemMachine extends ItemBlockRailcraftSubtyped<BlockMachine<? extends IEnumMachine>> {
 
-    private final BlockMachine<? extends IEnumMachine> machineBlock;
+    private final BlockMachine<?> machineBlock;
 
-    public ItemMachine(BlockMachine<? extends IEnumMachine> block) {
+    public ItemMachine(BlockMachine<?> block) {
         super(block);
         this.machineBlock = block;
     }
