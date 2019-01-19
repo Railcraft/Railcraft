@@ -42,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -73,6 +74,8 @@ public class ItemTrackKit extends ItemRailcraft {
 
     @Override
     public int getMetadata(ItemStack stack) {
+        if (super.getMetadata(stack) == OreDictionary.WILDCARD_VALUE)
+            return OreDictionary.WILDCARD_VALUE; // Keep this for the sake of forestry backpack item identification
         return TrackRegistry.TRACK_KIT.getId(TrackRegistry.TRACK_KIT.get(stack));
     }
 

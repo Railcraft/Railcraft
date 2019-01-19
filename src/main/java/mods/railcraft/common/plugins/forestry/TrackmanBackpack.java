@@ -11,6 +11,8 @@ package mods.railcraft.common.plugins.forestry;
 
 import mods.railcraft.api.items.IMinecartItem;
 import mods.railcraft.api.items.IToolCrowbar;
+import mods.railcraft.api.items.ITrackItem;
+import mods.railcraft.api.tracks.IItemTrack;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.items.RailcraftItems;
@@ -19,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -39,17 +42,13 @@ public class TrackmanBackpack extends BaseBackpack {
     }
 
     public void setup() {
-
-        for (ResourceLocation id : Block.REGISTRY.getKeys()) {
-            Block block = Block.REGISTRY.getObject(id);
-            if (block == null) continue;
+        for (Block block : ForgeRegistries.BLOCKS.getValuesCollection()) {
             if (TrackTools.isRailBlock(block))
                 add(block);
         }
 
-        for (ResourceLocation id : Item.REGISTRY.getKeys()) {
-            Item item = Item.REGISTRY.getObject(id);
-            if (item instanceof ItemMinecart || item instanceof IMinecartItem)
+        for (Item item : ForgeRegistries.ITEMS.getValuesCollection()) {
+            if (item instanceof ItemMinecart || item instanceof IMinecartItem || item instanceof ITrackItem || item instanceof IItemTrack)
                 add(item);
         }
 
