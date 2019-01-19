@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Spliterators;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -30,13 +31,17 @@ import java.util.stream.StreamSupport;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInventoryComposite extends Iterable<InventoryAdaptor>, IInventoryManipulator {
+// No iterable: some other mods may add iterable to minecarts or block entities!
+public interface IInventoryComposite extends /*Iterable<InventoryAdaptor>,*/ IInventoryManipulator {
 
-    @Override
-    default Iterator<InventoryAdaptor> iterator() {
+    default Iterator<InventoryAdaptor> adaptors() {
         return InventoryAdaptor.of(this)
                 .map(Iterators::singletonIterator)
                 .orElseThrow(UnsupportedOperationException::new);
+    }
+
+    default Iterable<InventoryAdaptor> iterable() {
+        return this::adaptors;
     }
 
     @Override
@@ -62,7 +67,7 @@ public interface IInventoryComposite extends Iterable<InventoryAdaptor>, IInvent
     default List<ItemStack> extractItems(int maxAmount, Predicate<ItemStack> filter, InvOp op) {
         int amountNeeded = maxAmount;
         List<ItemStack> stacks = new ArrayList<>();
-        for (InventoryAdaptor inv : this) {
+        for (InventoryAdaptor inv : iterable()) {
             List<ItemStack> tempStacks = inv.extractItems(amountNeeded, filter, op);
             amountNeeded -= tempStacks.stream().mapToInt(InvTools::sizeOf).sum();
             stacks.addAll(tempStacks);
@@ -122,7 +127,7 @@ public interface IInventoryComposite extends Iterable<InventoryAdaptor>, IInvent
      */
     @Override
     default ItemStack addStack(ItemStack stack, InvOp op) {
-        for (InventoryAdaptor inv : this) {
+        for (InventoryAdaptor inv : iterable()) {
             stack = inv.addStack(stack, op);
             if (InvTools.isEmpty(stack))
                 return InvTools.emptyStack();
@@ -131,7 +136,7 @@ public interface IInventoryComposite extends Iterable<InventoryAdaptor>, IInvent
     }
 
     default Stream<InventoryAdaptor> stream() {
-        return StreamSupport.stream(spliterator(), false);
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(adaptors(), 0), false);
     }
 
     @Override
