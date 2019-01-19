@@ -3,7 +3,7 @@
   "textures": {
     "end": "railcraft:blocks/boiler_tank_pressure_high_0",
     "side": "railcraft:blocks/boiler_tank_pressure_high_1",
-		"particle": "railcraft:blocks/boiler_tank_pressure_high_1"
+    "particle": "railcraft:blocks/boiler_tank_pressure_high_1"
   },
   "elements": [
     {
