@@ -24,7 +24,8 @@ import java.util.stream.StreamSupport;
 /**
  * Primary interface for inventories of all types.
  *
- * Supports treating multiple inventories as a single object.
+ * Supports treating multiple inventories as a single object,
+ * enabling one-to-one, many-to-many, many-to-one, and one-to-many interactions between inventories.
  *
  * Created by CovertJaguar on 5/28/2017 for Railcraft.
  *
@@ -33,6 +34,19 @@ import java.util.stream.StreamSupport;
 // No iterable: some other mods may add iterable to minecarts or block entities!
 public interface IInventoryComposite extends /*Iterable<InventoryAdaptor>,*/ IInventoryManipulator {
 
+    /**
+     * Each IInventoryComposite is comprised of a collection of InventoryAdaptor objects.
+     *
+     * This function provides an iterator for iterating over them.
+     *
+     * The default implementation assumes this interface is being implemented by an object that can be wrapped by
+     * an InventoryAdaptor and will return a singleton iterator for that object.
+     *
+     * If the implementing object cannot be wrapped by an InventoryAdaptor, it will thrown an exception
+     * and must override this function.
+     *
+     * @see InventoryAdaptor
+     */
     default Iterator<InventoryAdaptor> adaptors() {
         return InventoryAdaptor.of(this)
                 .map(Iterators::singletonIterator)

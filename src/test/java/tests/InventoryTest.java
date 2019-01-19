@@ -1,13 +1,23 @@
 package tests;
 
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
+import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.init.Bootstrap;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Created by CovertJaguar on 12/8/2018 for Railcraft.
@@ -29,6 +39,39 @@ class InventoryTest {
         ItemStack resultStack = inv.addStack(stack);
         Assertions.assertTrue(resultStack.isEmpty());
         Assertions.assertTrue(inv.contains(stack));
+    }
+
+    @Test
+    void buildAdapters() {
+        InventoryComposite invBasic = InventoryComposite.of(new InventoryBasic("Test", true, 4));
+        testComposite("InventoryBasic", invBasic);
+
+        InventoryComposite invAdvanced = InventoryComposite.of(new InventoryAdvanced(4));
+        testComposite("InventoryAdvanced", invAdvanced);
+
+        InventoryComposite invCap = InventoryComposite.of(new ICapabilityProvider() {
+            @Override
+            public boolean hasCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
+                return true;
+            }
+
+            @Override
+            public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+                //noinspection unchecked
+                return (T) new InvWrapper(new InventoryAdvanced(4));
+            }
+        });
+        testComposite("IItemHandler", invCap);
+    }
+
+    private void testComposite(String name, IInventoryComposite inv) {
+        try {
+            Assertions.assertNotNull(inv, name + " -> InventoryComposite returned null");
+            Assertions.assertNotEquals(0, inv.stream().count(), name + " -> InventoryComposite empty");
+            inv.iterable().forEach(adaptor -> adaptor.addStack(new ItemStack(Items.APPLE, 32)));
+        } catch (Throwable ex) {
+            Assertions.fail("Improper IInventoryComposite implementation for " + name, ex);
+        }
     }
 
     @Test
