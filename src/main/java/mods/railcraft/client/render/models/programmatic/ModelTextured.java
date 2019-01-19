@@ -12,7 +12,6 @@ package mods.railcraft.client.render.models.programmatic;
 import net.minecraft.util.ResourceLocation;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ModelTextured extends ModelSimple {

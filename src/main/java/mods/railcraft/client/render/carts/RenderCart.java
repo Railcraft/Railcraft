@@ -10,16 +10,17 @@
 package mods.railcraft.client.render.carts;
 
 import mods.railcraft.api.carts.IAlternateCartTexture;
-import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.api.carts.IRoutableCart;
 import mods.railcraft.client.render.tools.OpenGL;
-import mods.railcraft.common.carts.*;
+import mods.railcraft.common.carts.EntityLocomotive;
+import mods.railcraft.common.carts.IDirectionalCart;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderMinecart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -31,129 +32,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RenderCart extends Render<EntityMinecart> implements ICartRenderer {
+public class RenderCart extends RenderMinecart<EntityMinecart> {
 
     public static final ResourceLocation minecartTextures = new ResourceLocation("textures/entity/minecart.png");
-    private static final Map<Class<?>, CartModelRenderer> renderersCore = new HashMap<>();
-    private static final Map<Class<?>, CartContentRenderer<?>> renderersContent = new HashMap<>();
-    private static final CartModelRenderer defaultCoreRenderer = new CartModelRenderer();
-    private static final CartContentRenderer<EntityMinecart> defaultContentRenderer = new CartContentRenderer<>();
+    private static final Map<Class<?>, ICartRenderer> bodyRenderers = new HashMap<>();
+    private static final StandardCartBodyRenderer defaultBodyRenderer = new StandardCartBodyRenderer();
 
     static {
-        renderersCore.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
-
-        renderersContent.put(EntityCartCargo.class, new CartContentRendererCargo());
-        renderersContent.put(EntityCartTank.class, new CartContentRendererTank());
-        renderersContent.put(EntityCartRF.class, CartContentRendererRedstoneFlux.instance());
-        renderersContent.put(CartBaseExplosive.class, new CartContentRendererTNT());
-        renderersContent.put(CartBaseMaintenance.class, new CartContentRendererMaintenance());
-        renderersContent.put(EntityCartSpawner.class, new CartContentRendererSpawner());
+        bodyRenderers.put(EntityLocomotive.class, LocomotiveRenderer.INSTANCE);
     }
 
     public RenderCart(RenderManager renderManager) {
         super(renderManager);
-        shadowSize = 0.5F;
     }
-
-    // **********************************
-    // TODO: Fix Forge getRailDirectionRaw
-    // **********************************
-    private static final int[][][] MATRIX = {{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
-
-    private @Nullable Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
-        int i = MathHelper.floor(x);
-        int j = MathHelper.floor(y);
-        int k = MathHelper.floor(z);
-
-        if (BlockRailBase.isRailBlock(cart.world, new BlockPos(i, j - 1, k))) {
-            --j;
-        }
-
-        IBlockState iblockstate = cart.world.getBlockState(new BlockPos(i, j, k));
-
-        if (BlockRailBase.isRailBlock(iblockstate)) {
-            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.world, new BlockPos(i, j, k), iblockstate, cart);
-            y = (double) j;
-
-            if (blockrailbase$enumraildirection.isAscending()) {
-                y = (double) (j + 1);
-            }
-
-            int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
-            double d0 = (double) (aint[1][0] - aint[0][0]);
-            double d1 = (double) (aint[1][2] - aint[0][2]);
-            double d2 = Math.sqrt(d0 * d0 + d1 * d1);
-            d0 = d0 / d2;
-            d1 = d1 / d2;
-            x = x + d0 * offset;
-            z = z + d1 * offset;
-
-            if (aint[0][1] != 0 && MathHelper.floor(x) - i == aint[0][0] && MathHelper.floor(z) - k == aint[0][2]) {
-                y += (double) aint[0][1];
-            } else if (aint[1][1] != 0 && MathHelper.floor(x) - i == aint[1][0] && MathHelper.floor(z) - k == aint[1][2]) {
-                y += (double) aint[1][1];
-            }
-
-            return getPos(cart, x, y, z);
-        } else {
-            return null;
-        }
-    }
-
-    public @Nullable Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
-        int i = MathHelper.floor(p_70489_1_);
-        int j = MathHelper.floor(p_70489_3_);
-        int k = MathHelper.floor(p_70489_5_);
-
-        if (BlockRailBase.isRailBlock(cart.world, new BlockPos(i, j - 1, k))) {
-            --j;
-        }
-
-        IBlockState iblockstate = cart.world.getBlockState(new BlockPos(i, j, k));
-
-        if (BlockRailBase.isRailBlock(iblockstate)) {
-            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.world, new BlockPos(i, j, k), iblockstate, cart);
-            int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
-            double d0 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
-            double d1 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;
-            double d2 = (double) k + 0.5D + (double) aint[0][2] * 0.5D;
-            double d3 = (double) i + 0.5D + (double) aint[1][0] * 0.5D;
-            double d4 = (double) j + 0.0625D + (double) aint[1][1] * 0.5D;
-            double d5 = (double) k + 0.5D + (double) aint[1][2] * 0.5D;
-            double d6 = d3 - d0;
-            double d7 = (d4 - d1) * 2.0D;
-            double d8 = d5 - d2;
-            double d9;
-
-            if (d6 == 0.0D) {
-                d9 = p_70489_5_ - (double) k;
-            } else if (d8 == 0.0D) {
-                d9 = p_70489_1_ - (double) i;
-            } else {
-                double d10 = p_70489_1_ - d0;
-                double d11 = p_70489_5_ - d2;
-                d9 = (d10 * d6 + d11 * d8) * 2.0D;
-            }
-
-            p_70489_1_ = d0 + d6 * d9;
-            p_70489_3_ = d1 + d7 * d9;
-            p_70489_5_ = d2 + d8 * d9;
-
-            if (d7 < 0.0D) {
-                ++p_70489_3_;
-            }
-
-            if (d7 > 0.0D) {
-                p_70489_3_ += 0.5D;
-            }
-
-            return new Vec3d(p_70489_1_, p_70489_3_, p_70489_5_);
-        } else {
-            return null;
-        }
-    }
-
-    // ********************** END
 
     @Override
     public void doRender(EntityMinecart cart, double x, double y, double z, float yaw, float partialTicks) {
@@ -278,56 +169,29 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         OpenGL.glPopMatrix();
     }
 
-    private void doRender(EntityMinecart cart, float light, float partialTicks) {
+    private void doRender(EntityMinecart cart, float light, float time) {
         OpenGL.glPushMatrix();
-        boolean renderContents = renderCore(cart, light, partialTicks);
-
-        if (renderContents) {
-            float blockScale = 0.74F;
-            OpenGL.glScalef(blockScale, blockScale, blockScale);
-            renderContents(cart, light, partialTicks);
-        }
+        getBodyRenderer(cart.getClass()).render(this, cart, light, time);
         OpenGL.glPopMatrix();
     }
 
-    private boolean renderCore(EntityMinecart cart, float light, float time) {
-        return getCoreRenderer(cart.getClass()).render(this, cart, light, time);
-    }
-
-    private void renderContents(EntityMinecart cart, float light, float time) {
-        getContentRenderer(cart.getClass()).render(this, cart, light, time);
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public CartModelRenderer getCoreRenderer(Class<?> eClass) {
-        CartModelRenderer render = renderersCore.get(eClass);
+    public ICartRenderer<EntityMinecart> getBodyRenderer(Class<?> eClass) {
+        ICartRenderer render = bodyRenderers.get(eClass);
         if (render == null && eClass != EntityMinecart.class) {
-            render = getCoreRenderer(eClass.getSuperclass());
+            render = getBodyRenderer(eClass.getSuperclass());
+            //noinspection ConstantConditions
             if (render == null)
-                render = defaultCoreRenderer;
-            renderersCore.put(eClass, render);
+                render = defaultBodyRenderer;
+            bodyRenderers.put(eClass, render);
         }
+        //noinspection ConstantConditions,unchecked
         return render;
     }
 
-    @SuppressWarnings({"ConstantConditions", "unchecked"})
-    public <T extends EntityMinecart> CartContentRenderer<T> getContentRenderer(Class<? extends EntityMinecart> eClass) {
-        CartContentRenderer<? extends EntityMinecart> render = renderersContent.get(eClass);
-        if (render == null && eClass != EntityMinecart.class) {
-            render = getContentRenderer(eClass.getSuperclass().asSubclass(EntityMinecart.class));
-            if (render == null)
-                render = defaultContentRenderer;
-            renderersContent.put(eClass, render);
-        }
-        return (CartContentRenderer<T>) render;
-    }
-
-    @Override
     public void bindTex(ResourceLocation texture) {
         super.bindTexture(texture);
     }
 
-    @Override
     public void bindTex(EntityMinecart cart) {
         super.bindEntityTexture(cart);
     }
@@ -348,4 +212,107 @@ public class RenderCart extends Render<EntityMinecart> implements ICartRenderer 
         renderLivingLabel(entity, text, xOffset, yOffset, zOffset, viewDist);
     }
 
+    public ModelBase getMinecartModel() {
+        return modelMinecart;
+    }
+
+    // **********************************
+    // TODO: Fix Forge getRailDirectionRaw
+    // **********************************
+    private static final int[][][] MATRIX = {{{0, 0, -1}, {0, 0, 1}}, {{-1, 0, 0}, {1, 0, 0}}, {{-1, -1, 0}, {1, 0, 0}}, {{-1, 0, 0}, {1, -1, 0}}, {{0, 0, -1}, {0, -1, 1}}, {{0, -1, -1}, {0, 0, 1}}, {{0, 0, 1}, {1, 0, 0}}, {{0, 0, 1}, {-1, 0, 0}}, {{0, 0, -1}, {-1, 0, 0}}, {{0, 0, -1}, {1, 0, 0}}};
+
+    private @Nullable Vec3d getPosOffset(EntityMinecart cart, double x, double y, double z, double offset) {
+        int i = MathHelper.floor(x);
+        int j = MathHelper.floor(y);
+        int k = MathHelper.floor(z);
+
+        if (BlockRailBase.isRailBlock(cart.world, new BlockPos(i, j - 1, k))) {
+            --j;
+        }
+
+        IBlockState iblockstate = cart.world.getBlockState(new BlockPos(i, j, k));
+
+        if (BlockRailBase.isRailBlock(iblockstate)) {
+            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.world, new BlockPos(i, j, k), iblockstate, cart);
+            y = (double) j;
+
+            if (blockrailbase$enumraildirection.isAscending()) {
+                y = (double) (j + 1);
+            }
+
+            int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
+            double d0 = (double) (aint[1][0] - aint[0][0]);
+            double d1 = (double) (aint[1][2] - aint[0][2]);
+            double d2 = Math.sqrt(d0 * d0 + d1 * d1);
+            d0 = d0 / d2;
+            d1 = d1 / d2;
+            x = x + d0 * offset;
+            z = z + d1 * offset;
+
+            if (aint[0][1] != 0 && MathHelper.floor(x) - i == aint[0][0] && MathHelper.floor(z) - k == aint[0][2]) {
+                y += (double) aint[0][1];
+            } else if (aint[1][1] != 0 && MathHelper.floor(x) - i == aint[1][0] && MathHelper.floor(z) - k == aint[1][2]) {
+                y += (double) aint[1][1];
+            }
+
+            return getPos(cart, x, y, z);
+        } else {
+            return null;
+        }
+    }
+
+    public @Nullable Vec3d getPos(EntityMinecart cart, double p_70489_1_, double p_70489_3_, double p_70489_5_) {
+        int i = MathHelper.floor(p_70489_1_);
+        int j = MathHelper.floor(p_70489_3_);
+        int k = MathHelper.floor(p_70489_5_);
+
+        if (BlockRailBase.isRailBlock(cart.world, new BlockPos(i, j - 1, k))) {
+            --j;
+        }
+
+        IBlockState iblockstate = cart.world.getBlockState(new BlockPos(i, j, k));
+
+        if (BlockRailBase.isRailBlock(iblockstate)) {
+            BlockRailBase.EnumRailDirection blockrailbase$enumraildirection = ((BlockRailBase) iblockstate.getBlock()).getRailDirection(cart.world, new BlockPos(i, j, k), iblockstate, cart);
+            int[][] aint = MATRIX[blockrailbase$enumraildirection.getMetadata()];
+            double d0 = (double) i + 0.5D + (double) aint[0][0] * 0.5D;
+            double d1 = (double) j + 0.0625D + (double) aint[0][1] * 0.5D;
+            double d2 = (double) k + 0.5D + (double) aint[0][2] * 0.5D;
+            double d3 = (double) i + 0.5D + (double) aint[1][0] * 0.5D;
+            double d4 = (double) j + 0.0625D + (double) aint[1][1] * 0.5D;
+            double d5 = (double) k + 0.5D + (double) aint[1][2] * 0.5D;
+            double d6 = d3 - d0;
+            double d7 = (d4 - d1) * 2.0D;
+            double d8 = d5 - d2;
+            double d9;
+
+            if (d6 == 0.0D) {
+                d9 = p_70489_5_ - (double) k;
+            } else if (d8 == 0.0D) {
+                d9 = p_70489_1_ - (double) i;
+            } else {
+                double d10 = p_70489_1_ - d0;
+                double d11 = p_70489_5_ - d2;
+                d9 = (d10 * d6 + d11 * d8) * 2.0D;
+            }
+
+            p_70489_1_ = d0 + d6 * d9;
+            p_70489_3_ = d1 + d7 * d9;
+            p_70489_5_ = d2 + d8 * d9;
+
+            if (d7 < 0.0D) {
+                ++p_70489_3_;
+            }
+
+            if (d7 > 0.0D) {
+                p_70489_3_ += 0.5D;
+            }
+
+            return new Vec3d(p_70489_1_, p_70489_3_, p_70489_5_);
+        } else {
+            return null;
+        }
+    }
+
+    // ********************** END
 }

@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.models.programmatic.ModelSimple;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveElectric;
 import mods.railcraft.client.render.tools.OpenGL;
@@ -39,7 +38,7 @@ public class LocomotiveRendererElectric extends LocomotiveRendererDefault {
     }
 
     @Override
-    public void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
+    public void renderLocomotive(RenderCart renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
         super.renderLocomotive(renderer, cart, primaryColor, secondaryColor, emblemTexture, light, time);
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);

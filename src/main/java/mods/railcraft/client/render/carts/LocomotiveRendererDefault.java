@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -84,7 +83,7 @@ public class LocomotiveRendererDefault extends LocomotiveModelRenderer {
 //    }
 
     @Override
-    public void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
+    public void renderLocomotive(RenderCart renderer, EntityMinecart cart, int primaryColor, int secondaryColor, @Nullable ResourceLocation emblemTexture, float light, float time) {
         OpenGL.glPushMatrix();
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
 //        OpenGL.glEnable(GL11.GL_BLEND);

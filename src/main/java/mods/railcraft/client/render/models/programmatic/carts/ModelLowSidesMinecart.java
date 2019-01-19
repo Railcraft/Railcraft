@@ -10,16 +10,13 @@
 
 package mods.railcraft.client.render.models.programmatic.carts;
 
-import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelMinecart;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelLowSidesMinecart extends ModelBase {
-    public ModelRenderer[] sideModels = new ModelRenderer[7];
-
+public class ModelLowSidesMinecart extends ModelMinecart {
     public ModelLowSidesMinecart() {
         this(0f);
     }
@@ -54,17 +51,5 @@ public class ModelLowSidesMinecart extends ModelBase {
         sideModels[2].rotateAngleY = ((float) Math.PI / 2F);
         sideModels[3].rotateAngleY = (float) Math.PI;
         sideModels[5].rotateAngleX = -((float) Math.PI / 2F);
-    }
-
-    /**
-     * Sets the models various rotation angles then renders the model.
-     */
-    @Override
-    public void render(Entity p_78088_1_, float p_78088_2_, float p_78088_3_, float p_78088_4_, float p_78088_5_, float p_78088_6_, float p_78088_7_) {
-        sideModels[5].rotationPointY = 4.0F - p_78088_4_;
-
-        for (int i = 0; i < 6; ++i) {
-            sideModels[i].render(p_78088_7_);
-        }
     }
 }

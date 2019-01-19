@@ -10,7 +10,6 @@
 
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.ICartRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.ResourceLocation;
@@ -97,6 +96,6 @@ public abstract class LocomotiveModelRenderer {
      * @param secondaryColor the secondary color
      * @param emblemTexture  the emblem texture to render
      */
-    public abstract void renderLocomotive(ICartRenderer renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time);
+    public abstract void renderLocomotive(RenderCart renderer, EntityMinecart cart, int primaryColor, int secondaryColor, ResourceLocation emblemTexture, float light, float time);
 
 }

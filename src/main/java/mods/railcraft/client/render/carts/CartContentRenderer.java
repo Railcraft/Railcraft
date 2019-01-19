@@ -9,8 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
+import mods.railcraft.client.render.models.programmatic.ModelSimpleCube;
 import mods.railcraft.client.render.models.programmatic.ModelTextured;
+import mods.railcraft.client.render.models.programmatic.carts.ModelGift;
+import mods.railcraft.client.render.models.programmatic.carts.ModelMaintance;
 import mods.railcraft.client.render.tools.OpenGL;
+import mods.railcraft.common.carts.*;
+import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,11 +25,42 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CartContentRenderer<T extends EntityMinecart> {
+public class CartContentRenderer<T extends EntityMinecart> implements ICartRenderer<T> {
+    public static final Map<Class<?>, ModelTextured> modelsContents = new HashMap<>();
+    public static final ModelTextured emptyModel = new ModelTextured("empty");
 
+    static {
+        ModelTextured tank = new ModelSimpleCube();
+        tank.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_tank.png");
+        tank.doBackFaceCulling(false);
+        modelsContents.put(EntityCartTank.class, tank);
+
+        modelsContents.put(EntityCartGift.class, new ModelGift());
+
+        ModelTextured maint = new ModelMaintance();
+        maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_undercutter.png");
+        modelsContents.put(EntityCartUndercutter.class, maint);
+
+        maint = new ModelMaintance();
+        maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_relayer.png");
+        modelsContents.put(EntityCartTrackRelayer.class, maint);
+
+        maint = new ModelMaintance();
+        maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_layer.png");
+        modelsContents.put(EntityCartTrackLayer.class, maint);
+
+        maint = new ModelMaintance();
+        maint.setTexture(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_track_remover.png");
+        modelsContents.put(EntityCartTrackRemover.class, maint);
+    }
+
+    @Override
     public void render(RenderCart renderer, T cart, float light, float partialTicks) {
         int blockOffset = cart.getDisplayTileOffset();
 
@@ -39,13 +75,11 @@ public class CartContentRenderer<T extends EntityMinecart> {
             return;
         }
 
-        ModelTextured contents = CartModelManager.getContentModel(cart.getClass());
-        if (contents == CartModelManager.emptyModel)
+        ModelTextured contents = getContentModel(cart.getClass());
+        if (contents == emptyModel)
             return;
 
         ResourceLocation texture = contents.getTexture();
-        if (texture == null)
-            return;
         renderer.bindTex(texture);
 
         OpenGL.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -59,4 +93,12 @@ public class CartContentRenderer<T extends EntityMinecart> {
         OpenGL.glPopAttrib();
     }
 
+    public static ModelTextured getContentModel(Class<?> eClass) {
+        ModelTextured render = modelsContents.get(eClass);
+        if (render == null && eClass != EntityMinecart.class) {
+            render = getContentModel(eClass.getSuperclass());
+            modelsContents.put(eClass, render);
+        }
+        return render != null ? render : emptyModel;
+    }
 }

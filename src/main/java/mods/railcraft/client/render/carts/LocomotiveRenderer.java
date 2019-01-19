@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.render.carts;
 
-import mods.railcraft.api.carts.ICartRenderer;
 import mods.railcraft.client.emblems.EmblemToolsClient;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.plugins.color.EnumColor;
@@ -21,12 +20,12 @@ import net.minecraft.util.StringUtils;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class LocomotiveRenderer extends CartModelRenderer {
+public class LocomotiveRenderer implements ICartRenderer {
 
     public static final LocomotiveRenderer INSTANCE = new LocomotiveRenderer();
 
     @Override
-    public boolean render(ICartRenderer renderer, EntityMinecart cart, float light, float time) {
+    public void render(RenderCart renderer, EntityMinecart cart, float light, float time) {
         EntityLocomotive loco = (EntityLocomotive) cart;
 
         boolean ghost = SeasonPlugin.isGhostTrain(cart);
@@ -45,7 +44,6 @@ public class LocomotiveRenderer extends CartModelRenderer {
         LocomotiveModelRenderer locoRenderer = renderType.getRenderer(loco.getModel());
 
         locoRenderer.renderLocomotive(renderer, loco, primaryColor, secondaryColor, emblemTexture, light, time);
-        return false;
     }
 
 }

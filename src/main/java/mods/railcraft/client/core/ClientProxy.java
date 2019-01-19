@@ -44,6 +44,7 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartMobSpawner;
+import net.minecraft.entity.item.EntityMinecartTNT;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -151,8 +152,9 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 
     @Override
     public void finalizeClient() {
-        // Remove the vanilla EntityMinecartMobSpawner renderer!
+        // Remove the vanilla cart renderers!
         Minecraft.getMinecraft().getRenderManager().entityRenderMap.remove(EntityMinecartMobSpawner.class);
+        Minecraft.getMinecraft().getRenderManager().entityRenderMap.remove(EntityMinecartTNT.class);
 
         ClientEffects.init();
         SoundRegistry.setupBlockSounds();
