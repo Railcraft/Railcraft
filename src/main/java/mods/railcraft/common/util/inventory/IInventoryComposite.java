@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Spliterators;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -136,7 +135,7 @@ public interface IInventoryComposite extends /*Iterable<InventoryAdaptor>,*/ IIn
     }
 
     default Stream<InventoryAdaptor> stream() {
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(adaptors(), 0), false);
+        return StreamSupport.stream(iterable().spliterator(), false);
     }
 
     @Override

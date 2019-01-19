@@ -16,10 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,6 +42,16 @@ public final class InventoryComposite extends ForwardingList<InventoryAdaptor> i
     @Override
     protected List<InventoryAdaptor> delegate() {
         return list;
+    }
+
+    @Override
+    public Iterator<InventoryAdaptor> adaptors() {
+        return iterator();
+    }
+
+    @Override
+    public Iterable<InventoryAdaptor> iterable() {
+        return this;
     }
 
     public static InventoryComposite of(Object... objects) {
