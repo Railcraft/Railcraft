@@ -20,7 +20,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
@@ -56,6 +55,8 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     }
 
     public void add(IRailcraftObjectContainer objectContainer) {
+        if (!objectContainer.isLoaded())
+            return;
         add(objectContainer.getWildcard());
     }
 
@@ -80,7 +81,7 @@ public abstract class BaseBackpack implements IBackpackDefinition {
     @Override
     public String getName(ItemStack backpack) {
         Item item = backpack.getItem();
-        String name = ("" + I18n.translateToLocal(LocalizationPlugin.convertTag(item.getTranslationKey()) + ".name")).trim();
+        String name = LocalizationPlugin.translateFast(LocalizationPlugin.convertTag(item.getTranslationKey()) + ".name").trim();
 
         if (backpack.getTagCompound() != null && backpack.getTagCompound().hasKey("display", 10)) {
             NBTTagCompound nbt = backpack.getTagCompound().getCompoundTag("display");
