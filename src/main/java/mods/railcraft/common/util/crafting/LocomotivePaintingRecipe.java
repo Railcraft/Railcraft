@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -44,7 +43,7 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
     private @Nullable EnumColor getDye(ItemStack stack) {
         if (InvTools.isEmpty(stack))
             return null;
-        return Arrays.stream(EnumColor.VALUES).filter(color -> InvTools.isItemEqual(stack, color.getDyesStacks())).findFirst().orElse(null);
+        return EnumColor.dyeColorOf(stack).orElse(null);
     }
 
     private boolean isLocomotive(ItemStack loco) {
@@ -63,6 +62,7 @@ public class LocomotivePaintingRecipe extends BaseRecipe implements IShapedRecip
             ItemStack dyeSecondary = craftingGrid.getStackInRowAndColumn(i, 2);
             if (isDye(dyeSecondary))
                 return true;
+            // check other columns clear?
         }
         return false;
     }
