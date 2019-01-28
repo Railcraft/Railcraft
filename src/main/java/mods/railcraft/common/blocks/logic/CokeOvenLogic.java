@@ -13,12 +13,14 @@ package mods.railcraft.common.blocks.logic;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.ICokeOvenCrafter;
 import mods.railcraft.api.fuel.INeedsFuel;
-import mods.railcraft.common.fluids.*;
+import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -37,20 +39,19 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafter.IRecipe> implements ITank, INeedsFuel {
+public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafter.IRecipe> implements INeedsFuel {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
     public static final int SLOT_OUTPUT_FLUID = 2;
     public static final int SLOT_LIQUID_INPUT = 3;
     private static final int TANK_CAPACITY = 64 * FluidTools.BUCKET_VOLUME;
-    private final TankManager tankManager = new TankManager();
     private final StandardTank tank;
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
 
     public CokeOvenLogic(Adapter adapter) {
         super(adapter, 4, SLOT_INPUT);
         tank = new StandardTank(TANK_CAPACITY, adapter.tile());
-        tankManager.add(tank);
+        addSubLogic(new TankLogic(adapter).addTank(tank));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
     }
 
     @Override
-    void updateServer() {
+    protected void updateServer() {
         super.updateServer();
 
         ItemStack topSlot = getStackInSlot(SLOT_LIQUID_INPUT);
@@ -90,13 +91,17 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
         }
 
         if (clock(FluidTools.BUCKET_FILL_TIME))
-            FluidTools.fillContainers(getTankManager(), this, SLOT_LIQUID_INPUT, SLOT_OUTPUT_FLUID, Fluids.CREOSOTE.get());
+            FluidTools.fillContainers(tank, this, SLOT_LIQUID_INPUT, SLOT_OUTPUT_FLUID, Fluids.CREOSOTE.get());
     }
 
     @Override
     public boolean needsFuel() {
         ItemStack fuel = getStackInSlot(SLOT_INPUT);
         return sizeOf(fuel) < 8;
+    }
+
+    public StandardTank getTank() {
+        return tank;
     }
 
     @Override
@@ -127,19 +132,7 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
     }
 
     @Override
-    public TankManager getTankManager() {
-        return tankManager;
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        tankManager.writeTanksToNBT(data);
-        return super.writeToNBT(data);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        tankManager.readTanksFromNBT(data);
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.COKE_OVEN;
     }
 }

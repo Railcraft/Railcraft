@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ITank extends IFluidHandler {
+public interface IFluidHandlerImplementor extends IFluidHandler {
     TankManager getTankManager();
 
     @Override

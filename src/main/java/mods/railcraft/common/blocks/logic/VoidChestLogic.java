@@ -10,6 +10,9 @@
 
 package mods.railcraft.common.blocks.logic;
 
+import mods.railcraft.common.gui.EnumGui;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * The logic behind the void chest.
  */
@@ -24,5 +27,10 @@ public class VoidChestLogic extends InventoryLogic {
     public void updateServer() {
         if (clock(TICK_PER_VOID))
             removeOneItem();
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.CHEST;
     }
 }

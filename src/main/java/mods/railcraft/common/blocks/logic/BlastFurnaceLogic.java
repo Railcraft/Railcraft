@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.logic;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -27,6 +28,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
@@ -66,7 +68,7 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
     }
 
     @Override
-    void updateServer() {
+    protected void updateServer() {
         super.updateServer();
         setBurnTime(burnTime - FUEL_PER_TICK);
     }
@@ -168,15 +170,16 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
         data.setInteger("burnTime", burnTime);
         data.setInteger("currentItemBurnTime", currentItemBurnTime);
-        return data;
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
@@ -185,15 +188,21 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeInt(burnTime);
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         setBurnTime(data.readInt());
     }
 
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.BLAST_FURNACE;
+    }
 }

@@ -11,12 +11,8 @@ package mods.railcraft.common.blocks.machine;
 
 import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -28,9 +24,4 @@ public interface ITankTile extends ITileTank {
     IInventory getInventory();
 
     String getTitle();
-
-    default Predicate<ItemStack> getInputFilter() {
-        return StackFilters.FLUID_CONTAINER;
-    }
-
 }

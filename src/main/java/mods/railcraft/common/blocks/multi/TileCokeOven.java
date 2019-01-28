@@ -17,7 +17,7 @@ import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.ITank;
+import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
@@ -121,7 +121,7 @@ public final class TileCokeOven extends TileCrafter {
 
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return getLogic(ITank.class)
+        return getLogic(IFluidHandlerImplementor.class)
                 .map(l -> FluidTools.interactWithFluidHandler(player, hand, l.getTankManager())).orElse(false)
                 || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }

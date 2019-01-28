@@ -41,7 +41,7 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
     }
 
     @Override
-    void updateServer() {
+    protected void updateServer() {
         if (clock(PROGRESS_STEP)) {
             processActions();
             progressCrafting();
@@ -149,10 +149,10 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
         data.setInteger("cookTime", progress);
         data.setBoolean("cooking", processing);
-        return super.writeToNBT(data);
     }
 
     @Override

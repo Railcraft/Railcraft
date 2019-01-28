@@ -14,6 +14,7 @@ import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IOutputEntry;
 import mods.railcraft.api.crafting.IRockCrusherCrafter;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.IInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
@@ -32,6 +33,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -85,7 +87,7 @@ public class RockCrusherLogic extends CrafterLogic {
     }
 
     @Override
-    void updateServer() {
+    protected void updateServer() {
         super.updateServer();
         storedCharge += Charge.distribution.network(theWorldAsserted()).access(getPos())
                 .removeCharge(Math.max(0.0, MAX_STORED_CHARGE - storedCharge));
@@ -186,14 +188,21 @@ public class RockCrusherLogic extends CrafterLogic {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
         data.setDouble("charge", storedCharge);
-        return super.writeToNBT(data);
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         storedCharge = data.getDouble("charge");
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.ROCK_CRUSHER;
     }
 }

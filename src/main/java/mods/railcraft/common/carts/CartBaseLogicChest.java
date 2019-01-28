@@ -11,7 +11,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.logic.InventoryLogic;
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -61,10 +60,5 @@ public abstract class CartBaseLogicChest extends CartBaseLogic implements IInven
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return true;
-    }
-
-    @Override
-    protected final EnumGui getGuiType() {
-        return EnumGui.CHEST;
     }
 }

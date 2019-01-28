@@ -10,12 +10,14 @@
 
 package mods.railcraft.common.blocks.logic;
 
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.EnumTools;
 import net.minecraft.item.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -146,5 +148,10 @@ public class MetalsChestLogic extends InventoryLogic {
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         return StackFilters.RAW_METAL.test(stack);
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.CHEST;
     }
 }

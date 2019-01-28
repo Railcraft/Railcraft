@@ -79,16 +79,21 @@ public abstract class CartBaseLogic extends CartBase implements ILogicContainer,
     @OverridingMethodsMustInvokeSuper
     public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world)) {
-            openRailcraftGui(player);
+            if (!logic.interact(player, hand))
+                openRailcraftGui(player);
         }
         return true;
     }
 
     protected void openRailcraftGui(EntityPlayer player) {
-        GuiHandler.openGui(getGuiType(), player, world, this);
+        EnumGui gui = getGUI();
+        if (gui != null)
+            GuiHandler.openGui(gui, player, world, this);
     }
 
-    protected abstract EnumGui getGuiType();
+    protected @Nullable EnumGui getGUI() {
+        return logic.getGUI();
+    }
 
     @Override
     public void onUpdate() {
@@ -98,7 +103,7 @@ public abstract class CartBaseLogic extends CartBase implements ILogicContainer,
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        data = logic.writeToNBT(data);
+        logic.writeToNBT(data);
         return super.writeToNBT(data);
     }
 

@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.VillagerPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -31,6 +32,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
@@ -44,6 +46,7 @@ import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -98,6 +101,15 @@ public abstract class TradeStationLogic extends InventoryLogic {
             this.career = career;
             sendUpdateToClient();
         }
+    }
+
+    @Override
+    public boolean interact(EntityPlayer player, EnumHand hand) {
+        if (super.interact(player, hand))
+            return true;
+        player.addExperience(getXpCollected());
+        clearXp();
+        return true;
     }
 
     @Override
@@ -201,16 +213,19 @@ public abstract class TradeStationLogic extends InventoryLogic {
     protected abstract EntityPlayer getOwnerEntityOrFake();
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
         recipeSlots.writeToNBT("recipe", data);
 
         data.setString("ProfessionName", Objects.requireNonNull(profession.getRegistryName()).toString());
         data.setInteger("career", VillagerPlugin.getCareerId(career));
-        return data;
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
         recipeSlots.readFromNBT("recipe", data);
 
         if (data.hasKey("ProfessionName", Constants.NBT.TAG_STRING)) {
@@ -223,19 +238,25 @@ public abstract class TradeStationLogic extends InventoryLogic {
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
         data.writeUTF(Objects.requireNonNull(profession.getRegistryName()).toString());
         data.writeInt(VillagerPlugin.getCareerId(career));
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
         setProfession(findProfession(data.readUTF()));
         setCareer(getProfession().getCareer(data.readInt()));
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+        super.readGuiData(data, sender);
         GuiPacketType type = GuiPacketType.values()[data.readByte()];
         switch (type) {
             case NEXT_TRADE:
@@ -301,5 +322,10 @@ public abstract class TradeStationLogic extends InventoryLogic {
 
     public void clearXp() {
         this.xpCollected = 0;
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.TRADE_STATION;
     }
 }

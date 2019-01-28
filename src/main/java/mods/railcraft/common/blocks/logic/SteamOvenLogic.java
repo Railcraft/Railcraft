@@ -14,9 +14,10 @@ import com.google.common.base.Preconditions;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.ITank;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
+import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -36,6 +37,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 
 import static net.minecraft.util.EnumFacing.NORTH;
@@ -45,7 +47,7 @@ import static net.minecraft.util.EnumFacing.NORTH;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SteamOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
+public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
     private static final int STEAM_PER_STEP = 500; // total == 80000
@@ -62,7 +64,7 @@ public class SteamOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
     public SteamOvenLogic(Adapter adapter) {
         super(adapter, 18);
         tank = new FilteredTank(TANK_CAPACITY, adapter.tile()).setFilterFluid(Fluids.STEAM);
-        tankManager.add(tank);
+        addSubLogic(new TankLogic(adapter).addTank(tank));
         setDuration(TOTAL_COOK_TIME);
     }
 
@@ -122,6 +124,10 @@ public class SteamOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
         return !Fluids.contains(steam, DRAIN_STACK);
     }
 
+    public StandardTank getTank() {
+        return tank;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
@@ -147,11 +153,6 @@ public class SteamOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
         };
     }
 
-    @Override
-    public TankManager getTankManager() {
-        return tankManager;
-    }
-
     public EnumFacing getFacing() {
         return facing;
     }
@@ -162,26 +163,28 @@ public class SteamOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        tankManager.writeTanksToNBT(data);
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
         data.setByte("facing", (byte) facing.getHorizontalIndex());
-        return super.writeToNBT(data);
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        tankManager.readTanksFromNBT(data);
         facing = EnumFacing.byHorizontalIndex(data.getByte("facing"));
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         data.writeEnum(facing);
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         EnumFacing f = data.readEnum(EnumFacing.VALUES);
@@ -189,5 +192,10 @@ public class SteamOvenLogic extends CrafterLogic implements ITank, INeedsFuel {
             facing = f;
             adapter.updateModels();
         }
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.STEAM_OVEN;
     }
 }
