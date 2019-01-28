@@ -36,29 +36,22 @@ public class WaterGeneratorLogic extends Logic {
     protected void updateServer() {
         super.updateServer();
         World world = theWorldAsserted();
-        if (world.provider.getDimension() != -1 && clock(REFILL_INTERVAL)) {
+        if (clock(REFILL_INTERVAL)) {
 
             BlockPos up = getPos().up();
-
-            if (!world.canBlockSeeSky(up))
-                return;
-
-            double rate = RailcraftConfig.getBaseWaterGeneratorRate();
-            if (rate <= 0.0)
-                return;
-
+            double rate = 0.0;
             Biome biome = world.getBiome(getPos());
-            rate *= biome.getRainfall();
-
-            if (world.canSnowAt(up, false))
-                rate *= REFILL_PENALTY_FROZEN;
-            else if (world.isRainingAt(up))
-                rate *= REFILL_BOOST_RAIN;
-            else {
-                double temp = biome.getTemperature(up);
-                if (temp > 1.0)
-                    rate -= temp - 1.0;
+            if (world.canBlockSeeSky(up)) {
+                rate += RailcraftConfig.getBaseWaterGeneratorRate();
+                rate *= biome.getRainfall();
+                if (world.canSnowAt(up, false))
+                    rate *= REFILL_PENALTY_FROZEN;
+                else if (world.isRainingAt(up))
+                    rate *= REFILL_BOOST_RAIN;
             }
+            double temp = biome.getTemperature(up);
+            if (temp > 1.0)
+                rate -= temp - 1.0;
 
             final int rateFinal = MathHelper.floor(rate);
             getLogic(IFluidHandler.class).ifPresent(tank -> {
