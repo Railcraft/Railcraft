@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.collections.BlockItemParser;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.WhiteBlackList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -25,6 +26,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -76,6 +78,7 @@ public class OreGeneratorFactory {
                 this.settings = settings;
                 IWorldGenerator genImpl = new GeneratorMine(config, dimensionRules, biomeRules, settings);
                 worldGen = new GeneratorRailcraftOre(genImpl, retrogen, retrogenMarker).setRegistryName(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name));
+                Game.log().msg(Level.INFO, "Registered Mine Ore Generator at depth {0} called {1}", settings.depth, name);
                 break;
             case DIFFUSE:
             default:

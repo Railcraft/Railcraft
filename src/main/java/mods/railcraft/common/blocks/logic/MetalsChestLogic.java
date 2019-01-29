@@ -12,6 +12,9 @@ package mods.railcraft.common.blocks.logic;
 
 import com.google.common.collect.Lists;
 import mods.railcraft.api.items.IMetalsChestCondenseRule;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.items.Metal;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -20,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -47,5 +51,10 @@ public class MetalsChestLogic extends InventoryLogic {
                 }
             }
         }
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.CHEST;
     }
 }

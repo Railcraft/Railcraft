@@ -95,11 +95,11 @@ public class ModuleWorld extends RailcraftModulePayload {
                     generateDefaultMine(100, 60, 3, 8, 29, Metal.COPPER, "mine_copper.cfg");
                     generateDefaultMine(100, 15, 1, 1, 79, Metal.GOLD, "mine_gold.cfg");
                     generateDefaultMine(100, 40, 4, 16, 26, Metal.IRON, "mine_iron.cfg");
-                    generateDefaultMine(100, 30, 3, 6, 82, Metal.LEAD, "mine_lead.cfg");
                     generateDefaultMine(101, 40, 6, 4, 26, Metal.NICKEL, "mine_nickel.cfg"); // Same depth/seed as Iron so they will generate together
+                    generateDefaultMine(100, 30, 3, 6, 82, Metal.LEAD, "mine_lead.cfg");
+                    generateDefaultMine(101, 30, 4, 4, 82, Metal.ZINC, "mine_zinc.cfg"); // Same depth/seed as Lead so they will generate together
                     generateDefaultMine(100, 20, 2, 2, 47, Metal.SILVER, "mine_silver.cfg");
                     generateDefaultMine(100, 50, 2, 4, 50, Metal.TIN, "mine_tin.cfg");
-                    generateDefaultMine(100, 30, 3, 4, 30, Metal.ZINC, "mine_zinc.cfg");
                 }
 
                 File[] oreConfigs = oreConfigFolder.listFiles((dir, name) -> name != null && name.endsWith(".cfg"));
@@ -154,8 +154,6 @@ public class ModuleWorld extends RailcraftModulePayload {
                     }
                 }
                 if (RailcraftConfig.isWorldGenEnabled("villager")) {
-                    VillagerRegistry villagerRegistry = VillagerRegistry.instance();
-
                     villagerTrackman = new VillagerRegistry.VillagerProfession(VILLAGER_ID, VILLAGER_TEXTURE, ZOMBIE_TEXTURE);
                     ForgeRegistries.VILLAGER_PROFESSIONS.register(villagerTrackman); //TODO registry event
 

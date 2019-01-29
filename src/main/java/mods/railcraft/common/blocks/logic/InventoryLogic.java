@@ -19,12 +19,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.util.Iterator;
 
 /**
  *
  */
-public abstract class InventoryLogic extends Logic implements IInventoryImplementor {
+public class InventoryLogic extends Logic implements IInventoryImplementor {
 
     protected final InventoryAdvanced inventory;
     protected final IInventoryComposite composite;
@@ -59,12 +60,14 @@ public abstract class InventoryLogic extends Logic implements IInventoryImplemen
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
         inventory.writeToNBT("inv", data);
-        return super.writeToNBT(data);
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         inventory.readFromNBT("inv", data);

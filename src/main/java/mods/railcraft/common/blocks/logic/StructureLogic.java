@@ -14,6 +14,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -47,7 +48,7 @@ public class StructureLogic extends Logic {
     private final Timer netTimer = new Timer();
     private final TileRailcraft tile;
     private final String structureKey;
-    public final Logic logic;
+    public final Logic masterLogic;
     private final List<? extends MultiBlockPattern> patterns;
     private final List<TileRailcraft> components = new ArrayList<>();
     private final List<TileRailcraft> componentsView = Collections.unmodifiableList(components);
@@ -59,21 +60,22 @@ public class StructureLogic extends Logic {
     private @Nullable MultiBlockPattern currentPattern;
     private @Nullable BlockPos posInPattern;
 
-    public StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic logic) {
+    public StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic masterLogic) {
         super(Adapter.of(tile));
         this.structureKey = structureKey;
         this.tile = tile;
         this.patterns = patterns;
-        this.logic = logic;
+        this.masterLogic = masterLogic;
         state = StructureState.UNTESTED;
         components.add(tile);
     }
 
     @Override
     public <L> Optional<L> getLogic(Class<L> logicClass) {
-        if (logicClass.isInstance(this))
-            return Optional.of(logicClass.cast(this));
-        return getMasterLogic().map(m -> m.logic).map(Optionals.toType(logicClass));
+        Optional<L> imp = super.getLogic(logicClass);
+        if (imp.isPresent())
+            return imp;
+        return getMasterLogic().map(m -> m.masterLogic).flatMap(l -> l.getLogic(logicClass));
     }
 
     public final Optional<StructureLogic> getMasterLogic() {
@@ -92,8 +94,8 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     protected void onPatternChanged() {
         tile.markBlockForUpdate();
-        if (!isMaster && logic instanceof IInventory)
-            InvTools.spewInventory((IInventory) logic, theWorldAsserted(), getPos());
+        if (!isMaster && masterLogic instanceof IInventory)
+            InvTools.spewInventory((IInventory) masterLogic, theWorldAsserted(), getPos());
     }
 
     public final char getPatternMarker() {
@@ -157,7 +159,7 @@ public class StructureLogic extends Logic {
     public void update() {
         super.update();
         if (isValidMaster())
-            logic.update();
+            masterLogic.update();
     }
 
     @Override
@@ -308,16 +310,24 @@ public class StructureLogic extends Logic {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        data = logic.writeToNBT(data);
-        data.setBoolean("master", isMaster);
-        data.setByte("pattern", getPatternIndex());
-        return data;
+    public @Nullable EnumGui getGUI() {
+        return masterLogic.getGUI();
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        masterLogic.writeToNBT(data);
+        data.setBoolean("master", isMaster);
+        data.setByte("pattern", getPatternIndex());
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
-        logic.readFromNBT(data);
+        super.readFromNBT(data);
+        masterLogic.readFromNBT(data);
         isMaster = data.getBoolean("master");
         try {
             byte index = data.getByte("pattern");
@@ -328,16 +338,19 @@ public class StructureLogic extends Logic {
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         data.writeEnum(state);
         if (state == StructureState.VALID) {
             data.writeByte(getPatternIndex());
             data.writeBlockPos(Objects.requireNonNull(posInPattern));
         }
-        logic.writePacketData(data);
+        super.writePacketData(data);
+        masterLogic.writePacketData(data);
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void readPacketData(RailcraftInputStream data) throws IOException {
         requestPacket = false;
         state = data.readEnum(StructureState.VALUES);
@@ -359,7 +372,8 @@ public class StructureLogic extends Logic {
             setPattern(null, null);
         }
 
-        logic.readPacketData(data);
+        super.readPacketData(data);
+        masterLogic.readPacketData(data);
     }
 
     public final boolean isValidMaster() {

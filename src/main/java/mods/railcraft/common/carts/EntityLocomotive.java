@@ -643,6 +643,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         data.writeEnum(clientMode);
         data.writeEnum(clientSpeed);
         data.writeInt(lockController.getCurrentState());
+        data.writeBoolean(isReverse());
     }
 
     @Override
@@ -652,6 +653,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         int lock = data.readInt();
         if (PlayerPlugin.isOwnerOrOp(getOwner(), sender.getGameProfile()))
             lockController.setCurrentState(lock);
+        setReverse(data.readBoolean());
     }
 
     @Override

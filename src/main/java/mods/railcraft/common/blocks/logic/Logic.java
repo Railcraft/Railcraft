@@ -14,6 +14,8 @@ import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.carts.CartBaseLogic;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
@@ -21,6 +23,7 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -29,6 +32,10 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -38,6 +45,8 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
         RailcraftOutputStream>, IWorldNameable, IGuiReturnHandler {
     protected final Adapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
+    private List<Logic> subLogics = new ArrayList<>();
+    private Optional<Logic> parentLogic = Optional.empty();
 
     /**
      * Helper function, for our ugly GUI factories mostly.
@@ -56,9 +65,26 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
     }
 
     public <L> Optional<L> getLogic(Class<L> logicClass) {
+        if (parentLogic.isPresent())
+            return parentLogic.get().getLogic(logicClass);
         if (logicClass.isInstance(this))
             return Optional.of(logicClass.cast(this));
-        return Optional.empty();
+        return subLogics().stream().flatMap(Streams.toType(logicClass)).findFirst();
+    }
+
+    private Collection<Logic> subLogics() {
+        List<Logic> logics = new ArrayList<>();
+        logics.add(this);
+        for (Logic sub : subLogics) {
+            logics.addAll(sub.subLogics());
+        }
+        return logics;
+    }
+
+    public Logic addSubLogic(Logic logic) {
+        subLogics.add(logic);
+        logic.parentLogic = Optional.of(this);
+        return this;
     }
 
     @Override
@@ -69,11 +95,12 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             updateServer();
         else
             updateClient();
+        subLogics.forEach(Logic::update);
     }
 
-    void updateClient() { }
+    protected void updateClient() { }
 
-    void updateServer() { }
+    protected void updateServer() { }
 
     protected int clock() {
         return clock;
@@ -81,6 +108,14 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
 
     protected boolean clock(int interval) {
         return clock % interval == 0;
+    }
+
+    /**
+     * @return true if the interaction resulted in something changing.
+     */
+    @OverridingMethodsMustInvokeSuper
+    public boolean interact(EntityPlayer player, EnumHand hand) {
+        return subLogics.stream().map(l -> l.interact(player, hand)).filter(b -> b).findFirst().orElse(false);
     }
 
     @Override
@@ -120,6 +155,10 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
         return adapter.getDisplayName();
     }
 
+    public @Nullable EnumGui getGUI() {
+        return null;
+    }
+
     @Override
     public void sendUpdateToClient() {
         adapter.sendUpdateToClient();
@@ -132,11 +171,47 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             adapter.updateModels();
     }
 
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        return data;
+    @OverridingMethodsMustInvokeSuper
+    public void writeToNBT(NBTTagCompound data) {
+        subLogics.forEach(l -> l.writeToNBT(data));
     }
 
-    public void readFromNBT(NBTTagCompound data) { }
+    @OverridingMethodsMustInvokeSuper
+    public void readFromNBT(NBTTagCompound data) {
+        subLogics.forEach(l -> l.readFromNBT(data));
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        for (Logic l : subLogics) {
+            l.writePacketData(data);
+        }
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        for (Logic l : subLogics) {
+            l.readPacketData(data);
+        }
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
+        for (Logic l : subLogics) {
+            l.writeGuiData(data);
+        }
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
+        for (Logic l : subLogics) {
+            l.readGuiData(data, sender);
+        }
+    }
 
     public boolean isBlock() {
         return adapter instanceof Adapter.Tile;

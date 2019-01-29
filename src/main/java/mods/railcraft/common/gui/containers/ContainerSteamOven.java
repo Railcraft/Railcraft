@@ -10,7 +10,6 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.logic.SteamOvenLogic;
-import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.gui.slots.SlotSmelting;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -21,10 +20,7 @@ public class ContainerSteamOven extends ContainerCrafter {
     public ContainerSteamOven(InventoryPlayer invPlayer, SteamOvenLogic logic) {
         super(logic);
 
-        TankManager tMan = logic.getTankManager();
-        if (!tMan.isEmpty()) {
-            addWidget(new FluidGaugeWidget(tMan.get(0), 94, 20, 176, 0, 16, 47));
-        }
+        addWidget(new FluidGaugeWidget(logic.getTank(), 94, 20, 176, 0, 16, 47));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {

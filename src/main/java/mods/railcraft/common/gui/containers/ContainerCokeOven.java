@@ -21,7 +21,7 @@ public class ContainerCokeOven extends ContainerCrafter {
     public ContainerCokeOven(InventoryPlayer invPlayer, CokeOvenLogic logic) {
         super(logic);
 
-        addWidget(new FluidGaugeWidget(logic.getTankManager().get(0), 90, 24, 176, 0, 48, 47));
+        addWidget(new FluidGaugeWidget(logic.getTank(), 90, 24, 176, 0, 48, 47));
 
         addSlot(new SlotRailcraft(logic, 0, 16, 43));
         addSlot(new SlotOutput(logic, 1, 62, 43));

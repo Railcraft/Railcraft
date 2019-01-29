@@ -61,7 +61,7 @@ public final class SeasonPlugin {
         if (season == Season.DEFAULT)
             return (RailcraftConfig.isPolarExpressEnabled() && CHRISTMAS)
                     || cart.hasCustomName() && POLAR_EXPRESS.equals(cart.getCustomNameTag())
-                    || cart.world.getBiome(cart.getPosition()).isSnowyBiome();
+                    || cart.world.canSnowAt(cart.getPosition(), false);
         return season == Season.CHRISTMAS;
     }
 

@@ -15,7 +15,9 @@ import mods.railcraft.common.blocks.logic.ILogicContainer;
 import mods.railcraft.common.blocks.logic.InventoryLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -24,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -74,6 +77,13 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     }
 
     @Override
+    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (PlayerPlugin.doesItemBlockActivation(player, hand))
+            return false;
+        return logic.interact(player, hand) || openGui(player);
+    }
+
+    @Override
     @OverridingMethodsMustInvokeSuper
     public void onLoad() {
         super.onLoad();
@@ -101,7 +111,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @OverridingMethodsMustInvokeSuper
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         data = super.writeToNBT(data);
-        data = logic.writeToNBT(data);
+        logic.writeToNBT(data);
         return data;
     }
 
@@ -134,6 +144,11 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @OverridingMethodsMustInvokeSuper
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
         logic.readGuiData(data, sender);
+    }
+
+    @Override
+    public @Nullable EnumGui getGui() {
+        return logic.getGUI();
     }
 
     @Override

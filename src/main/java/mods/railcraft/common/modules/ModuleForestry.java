@@ -56,7 +56,7 @@ public class ModuleForestry extends RailcraftModulePayload {
 
             @Override
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void postInit() {
+            public void init() {
                 if (RailcraftItems.FILTER_BEE_GENOME.isEnabled()) {
                     ForestryPlugin.instance().registerBeeFilterRecipe();
                 }

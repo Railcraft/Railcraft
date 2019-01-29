@@ -115,6 +115,7 @@ public class RailcraftConfig {
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
     private static int tankPerBlockCapacity;
+    private static int baseWaterGeneratorRate;
     private static float boreMiningSpeedMultiplier = 1F;
     private static float chargeLossMultiplier = 1F;
     private static float boilerMultiplierFuel = 1F;
@@ -255,7 +256,9 @@ public class RailcraftConfig {
 
         allowTankStacking = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "allow.stacking", true, "Change to '{t}=false' to disable the stacking of Iron Tanks");
 
-        tankPerBlockCapacity = get(CAT_TWEAKS_BLOCKS + ".irontank", "capacity.per.block", 1, 16, 1600, "Allows you to set how many buckets (1000 milibucket) of fluid each iron tank block can carry, min=1, default=16, max=1600");
+        tankPerBlockCapacity = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "capacity.per.block", 1, 16, 1600, "Allows you to set how many buckets (1000 milliBuckets) of fluid each iron tank block can carry, min=1, default=16, max=1600");
+
+        baseWaterGeneratorRate = get(CAT_TWEAKS_BLOCKS + ".water_tank", "environmental.generation", 0, 4, 1000, "The base rate of water in milliBuckets that can be gathered from the local environment, applied every 16 ticks to every block that can see the sky, min=0, default=4, max=1000");
 
         SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
         SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
@@ -758,6 +761,10 @@ public class RailcraftConfig {
 
     public static int tankPerBlockCapacity() {
         return tankPerBlockCapacity;
+    }
+
+    public static int getBaseWaterGeneratorRate() {
+        return baseWaterGeneratorRate;
     }
 
     public static boolean printLinkingDebug() {
