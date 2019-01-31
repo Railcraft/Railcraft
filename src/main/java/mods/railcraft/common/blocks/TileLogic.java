@@ -22,6 +22,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
@@ -161,6 +162,11 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @Override
     public void actionActivated(IActionExternal action) {
         getLogic(IActionReceptor.class).ifPresent(l -> l.actionActivated(action));
+    }
+
+    @Override
+    public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
+        return getLogic(StructureLogic.class).map(l -> !(l.isStructureValid() && l.getPatternPosition() != null && l.getPatternPosition().getY() < 2)).orElse(true);
     }
 
     @Override

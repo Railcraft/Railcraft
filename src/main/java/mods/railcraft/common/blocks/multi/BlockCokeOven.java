@@ -10,18 +10,16 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileCokeOven.class)
-public abstract class BlockCokeOven extends BlockEntityDelegate<TileCokeOven> {
+public abstract class BlockCokeOven extends BlockStructure<TileCokeOven> {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
@@ -36,11 +34,6 @@ public abstract class BlockCokeOven extends BlockEntityDelegate<TileCokeOven> {
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
     public Tuple<Integer, Integer> getTextureDimensions() {
         return new Tuple<>(3, 1);
@@ -48,4 +41,5 @@ public abstract class BlockCokeOven extends BlockEntityDelegate<TileCokeOven> {
 
     @Override
     public abstract void defineRecipes();
+
 }

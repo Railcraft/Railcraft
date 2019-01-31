@@ -11,13 +11,11 @@
 package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.crafting.Crafters;
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -26,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileBlastFurnace.class)
-public final class BlockBlastFurnace extends BlockEntityDelegate<TileBlastFurnace> {
+public final class BlockBlastFurnace extends BlockStructure<TileBlastFurnace> {
 
     public static final PropertyInteger ICON = PropertyInteger.create("icon", 0, 2);
 
@@ -38,11 +36,6 @@ public final class BlockBlastFurnace extends BlockEntityDelegate<TileBlastFurnac
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, ICON);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
     }
 
     @Override

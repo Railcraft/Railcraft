@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.multi;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
@@ -36,7 +35,7 @@ import java.util.Map;
 import java.util.Random;
 
 @BlockMeta.Tile(TileRockCrusher.class)
-public final class BlockRockCrusher extends BlockEntityDelegate<TileRockCrusher> implements IChargeBlock {
+public final class BlockRockCrusher extends BlockStructure<TileRockCrusher> implements IChargeBlock {
 
     public static final IProperty<Character> ICON = PropertyCharacter.create("icon", new char[]{'O', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'B', 'D'});
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.025);
@@ -57,11 +56,6 @@ public final class BlockRockCrusher extends BlockEntityDelegate<TileRockCrusher>
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, ICON);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
     }
 
     @Override

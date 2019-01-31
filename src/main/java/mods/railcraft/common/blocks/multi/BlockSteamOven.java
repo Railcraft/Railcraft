@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.multi;
 
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.multi.TileSteamOven.Icon;
 import mods.railcraft.common.items.Metal;
@@ -22,7 +21,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -31,7 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @BlockMeta.Tile(TileSteamOven.class)
-public class BlockSteamOven extends BlockEntityDelegate<TileSteamOven> {
+public class BlockSteamOven extends BlockStructure<TileSteamOven> {
 
     public static final IProperty<EnumFacing> FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static final IProperty<TileSteamOven.Icon> ICON = PropertyEnum.create("icon", TileSteamOven.Icon.class);
@@ -46,11 +44,6 @@ public class BlockSteamOven extends BlockEntityDelegate<TileSteamOven> {
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, FACING, ICON);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
     }
 
     @Override
