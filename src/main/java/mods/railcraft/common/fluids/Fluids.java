@@ -30,11 +30,15 @@ import java.util.function.Supplier;
  */
 public enum Fluids implements Supplier<@Nullable Fluid> {
 
-    WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL, COAL, PYROTHEUM, FRESHWATER;
+    WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL("bio.ethanol"), COAL, PYROTHEUM, FRESHWATER, BIODIESEL, DIESEL, GASOLINE;
     private final String tag;
 
     Fluids() {
         tag = name().toLowerCase(Locale.ROOT);
+    }
+
+    Fluids(String fluidName) {
+        tag = fluidName;
     }
 
     public static boolean areEqual(@Nullable FluidStack fluidStack1, @Nullable FluidStack fluidStack2) {
