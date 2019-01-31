@@ -200,11 +200,11 @@ public class RailcraftConfig {
     public static void postInit() {
         Game.log().msg(Level.TRACE, "Railcraft Config: Doing post init configuration");
 
-        worldspikeFuelStandard.putAll(BlockItemParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel: {0}", BlockItemParser::parseItem, Float::parseFloat));
-        worldspikeFuelPersonal.putAll(BlockItemParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel: {0}", BlockItemParser::parseItem, Float::parseFloat));
-        worldspikeFuelPassive.putAll(BlockItemParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel: {0}", BlockItemParser::parseItem, Float::parseFloat));
-        cargoBlacklist.addAll(BlockItemParser.parseList(cargoBlacklistArray, "Blacklisting Cargo: {0}", BlockItemParser::parseItem));
-        EntityTunnelBore.mineableStates.addAll(BlockItemParser.parseList(boreMineableBlocksString, "Tunnel Bore: Adding block to mineable list: {0}", BlockItemParser::parseBlock));
+        worldspikeFuelStandard.putAll(BlockItemParser.parseDictionary(worldspikeFuelStandardArray, "Adding Standard Worldspike Fuel", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelPersonal.putAll(BlockItemParser.parseDictionary(worldspikeFuelPersonalArray, "Adding Personal Worldspike Fuel", BlockItemParser::parseItem, Float::parseFloat));
+        worldspikeFuelPassive.putAll(BlockItemParser.parseDictionary(worldspikeFuelPassiveArray, "Adding Passive Worldspike Fuel", BlockItemParser::parseItem, Float::parseFloat));
+        cargoBlacklist.addAll(BlockItemParser.parseList(cargoBlacklistArray, "Blacklisting Cargo", BlockItemParser::parseItem));
+        EntityTunnelBore.mineableStates.addAll(BlockItemParser.parseList(boreMineableBlocksString, "Adding block to Tunnel Bore mining whitelist", BlockItemParser::parseBlock));
     }
 
     private static void loadClient() {

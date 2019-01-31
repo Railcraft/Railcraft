@@ -110,10 +110,10 @@ public class BlockItemParser {
         return streamLines(list).flatMap(line -> {
             try {
                 Collection<T> entries = keyParser.apply(line);
-                entries.forEach(e -> Game.log().msg(Level.INFO, logMessage, toString(e)));
+                entries.forEach(e -> Game.log().msg(Level.INFO, logMessage + ": {0}", toString(e)));
                 return entries.stream();
             } catch (Exception ex) {
-                Game.log().throwable(Level.ERROR, 0, ex, "Invalid list entry while parsing line: {0}", line);
+                Game.log().throwable(Level.ERROR, 0, ex, "Invalid list entry while {0}: {1}", logMessage, line);
             }
             return Stream.empty();
         }).collect(Collectors.toList());
@@ -126,11 +126,11 @@ public class BlockItemParser {
                 String[] entry = line.split("=");
                 V value = valueParser.apply(entry[1]);
                 keyParser.apply(entry[0]).forEach(key -> {
-                    Game.log().msg(Level.INFO, logMessage, toString(key) + "=" + value);
+                    Game.log().msg(Level.INFO, logMessage + ": {0}", toString(key) + "=" + value);
                     map.put(key, value);
                 });
             } catch (Exception ex) {
-                Game.log().throwable(Level.ERROR, 0, ex, "Invalid map entry while parsing line: {0}", line);
+                Game.log().throwable(Level.ERROR, 0, ex, "Invalid map entry while {0}: {1}", logMessage, line);
             }
         });
         return map;
