@@ -101,19 +101,6 @@ public class ModuleWorld extends RailcraftModulePayload {
                     generateDefaultMine(100, 20, 2, 2, 47, Metal.SILVER, "mine_silver.cfg");
                     generateDefaultMine(100, 50, 2, 4, 50, Metal.TIN, "mine_tin.cfg");
                 }
-
-                File[] oreConfigs = oreConfigFolder.listFiles((dir, name) -> name != null && name.endsWith(".cfg"));
-                if (oreConfigs == null)
-                    throw new RuntimeException("'ore' directory does not exist or is not accessible.");
-                for (File oreConfigFile : oreConfigs) {
-                    Configuration oreConfig = new Configuration(oreConfigFile);
-                    oreConfig.load();
-
-                    OreGeneratorFactory genFactory = new OreGeneratorFactory(oreConfig);
-                    GameRegistry.registerWorldGenerator(genFactory.worldGen, genFactory.settings.weight);
-                    if (oreConfig.hasChanged())
-                        oreConfig.save();
-                }
             }
 
             private void generateDefaultMine(int defaultWeight, int defaultDepth, int defaultRange, int defaultBlockCount, int defaultSeed, Metal metal, String fileName) {
@@ -135,6 +122,19 @@ public class ModuleWorld extends RailcraftModulePayload {
 
             @Override
             public void init() {
+                File[] oreConfigs = oreConfigFolder.listFiles((dir, name) -> name != null && name.endsWith(".cfg"));
+                if (oreConfigs == null)
+                    throw new RuntimeException("'ore' directory does not exist or is not accessible.");
+                for (File oreConfigFile : oreConfigs) {
+                    Configuration oreConfig = new Configuration(oreConfigFile);
+                    oreConfig.load();
+
+                    OreGeneratorFactory genFactory = new OreGeneratorFactory(oreConfig);
+                    GameRegistry.registerWorldGenerator(genFactory.worldGen, genFactory.settings.weight);
+                    if (oreConfig.hasChanged())
+                        oreConfig.save();
+                }
+
                 if (RailcraftConfig.getRecipeConfig("railcraft.misc.gunpowder")) {
                     CraftingPlugin.addShapelessRecipe(new ItemStack(Items.GUNPOWDER, 2), "dustSaltpeter", "dustSaltpeter", "dustSulfur", "dustCharcoal");
                 }
