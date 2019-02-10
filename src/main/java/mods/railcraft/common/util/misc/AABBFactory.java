@@ -125,8 +125,8 @@ public class AABBFactory {
     }
 
     public AABBFactory clampToWorld() {
-        if (minY < 0)
-            minY = 0;
+//        if (minY < 0)
+//            minY = 0; // cubic chunks
         return this;
     }
 

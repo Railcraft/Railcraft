@@ -48,10 +48,10 @@ public class WorldPlugin {
 
     public static @Nullable TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
         // see flowerpot source code
-        if (pos.getY() < 0) {
-            // dunno if this will be triggered by tiles at y=0
-            Game.log().msg(Level.INFO, "Attempted to access tile entity in an invalid position");
-        }
+//        if (pos.getY() < 0) { // cubic chunks
+//            // dunno if this will be triggered by tiles at y=0
+//            Game.log().msg(Level.INFO, "Attempted to access tile entity in an invalid position");
+//        }
         return world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
     }
 
