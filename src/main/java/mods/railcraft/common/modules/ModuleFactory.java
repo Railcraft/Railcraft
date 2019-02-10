@@ -22,6 +22,7 @@ import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.core.InterModMessageRegistry;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemDust;
@@ -34,12 +35,17 @@ import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.*;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Code;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.Level;
 
 import java.util.List;
 
@@ -504,6 +510,57 @@ public class ModuleFactory extends RailcraftModulePayload {
                         IC2Plugin.removeMaceratorDustRecipes(crushedIron, crushedGold, crushedCopper, crushedTin, crushedSilver, crushedLead, crushedUranium);
                     }
                 }
+
+                InterModMessageRegistry.getInstance().register("rock-crusher", mess -> {
+                    NBTTagCompound tag = mess.getNBTValue();
+                    NBTTagCompound inputTag = tag.getCompoundTag("input");
+                    ItemStack input = new ItemStack(inputTag);
+                    if (InvTools.isEmpty(input)) {
+                        Game.log().msg(Level.WARN, "Mod {0} registered a rock crusher recipe with no input. NBT message: {1}", mess.key, tag);
+                        return;
+                    }
+                    boolean matchMeta = tag.getBoolean("matchMeta");
+                    boolean matchNbt = tag.getBoolean("matchNBT");
+
+                    if (!matchMeta) {
+                        input.setItemDamage(OreDictionary.WILDCARD_VALUE);
+                    }
+
+                    // todo ingredient needs much work to support nbt matching
+
+                    Ingredient ingredient = Ingredient.fromStacks(input);
+
+                    IRockCrusherCrafter.IRockCrusherRecipeBuilder builder = RockCrusherCrafter.INSTANCE.makeRecipe(ingredient);
+
+                    ResourceLocation rcName = CraftingPlugin.guessName(input);
+                    ResourceLocation name = rcName == null ? null : new ResourceLocation(mess.getSender(), rcName.getPath());
+                    builder.name(name);
+
+                    boolean erroneous = false;
+                    for (int i = 0; tag.hasKey("output" + i, Constants.NBT.TAG_COMPOUND); i++) {
+                        NBTTagCompound each = tag.getCompoundTag("output" + i);
+                        ItemStack eachStack = new ItemStack(each);
+                        float chance = each.getFloat("chance");
+                        if (chance > 0 && InvTools.nonEmpty(eachStack)) {
+                            builder.addOutput(eachStack, chance);
+                        } else {
+                            Game.log().msg(Level.WARN, "Invalid output {1} in rock crusher recipe from {0}", mess.getSender(), i);
+                            erroneous = true;
+                        }
+                    }
+
+                    if (erroneous) {
+                        Game.log().msg(Level.WARN, "Message from {0} has erroneous outputs set. Please report to its author. Content: {1}", mess.getSender(), tag);
+                        return;
+                    }
+
+                    builder.register();
+
+                    Game.log().msg(Level.DEBUG, "Mod {0} registered rock crusher recipe via IMC message named {1}", mess.getSender(), name);
+                });
+
+                if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() && !EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable())
+                    RollingMachineCrafter.copyRecipesToWorkbench();
             }
 
             private IRockCrusherCrafter.IRockCrusherRecipeBuilder getWorldSpikeBuilder(String name, Ingredient ingredient) {
@@ -534,13 +591,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                 Crafters.rockCrusher().makeRecipe(ore).name("ic2:crushedOre")
                         .addOutput(InvTools.copy(dust, 2))
                         .register();
-            }
-
-            @Override
-            public void postInit() {
-                // how about moving this to inter-mod communication event?
-                if (!EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable() && !EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable())
-                    RollingMachineCrafter.copyRecipesToWorkbench();
             }
         });
         setDisabledEventHandler(new ModuleEventHandler() {
