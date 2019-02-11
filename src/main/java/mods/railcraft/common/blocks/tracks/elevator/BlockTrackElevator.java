@@ -13,7 +13,6 @@ import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
-import mods.railcraft.common.items.ItemRailbed;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
@@ -94,7 +93,7 @@ public class BlockTrackElevator extends BlockRailcraft {
                 "ISI",
                 "IRI",
                 'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
-                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.STONE),
+                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                 'R', "dustRedstone");
     }
 
@@ -261,13 +260,14 @@ public class BlockTrackElevator extends BlockRailcraft {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         keepMinecartConnected(pos, state, cart);
         boolean hasPath;
-        if (getPowered(state)) {
+        boolean up = getPowered(state);
+        if (up) {
             hasPath = moveUp(world, state, cart, pos);
         } else {
             hasPath = moveDown(world, state, cart, pos);
         }
         if (!hasPath) {
-            pushMinecartOntoRail(world, pos, state, cart);
+            pushMinecartOntoRail(world, pos, state, cart, up);
         }
     }
 
@@ -353,18 +353,20 @@ public class BlockTrackElevator extends BlockRailcraft {
     /**
      * Pushes a Minecart onto a Railcraft block opposite the elevator if possible.
      */
-    private boolean pushMinecartOntoRail(World world, BlockPos pos, IBlockState state, EntityMinecart cart) {
+    private boolean pushMinecartOntoRail(World world, BlockPos pos, IBlockState state, EntityMinecart cart, boolean up) {
         cart.setCanUseRail(true);
         EnumFacing.Axis axis = getAxis(state);
-        for (EnumFacing.AxisDirection direction : EnumFacing.AxisDirection.values()) {
-            if (TrackTools.isRailBlockAt(world, pos.offset(EnumFacing.getFacingFromAxis(direction, axis)))) {
-                holdPosition(state, cart, pos);
-                double vel = direction.getOffset() * RIDE_VELOCITY;
-                if (axis == EnumFacing.Axis.Z)
-                    cart.motionZ = vel;
-                else
-                    cart.motionX = vel;
-                return true;
+        for (BlockPos target : new BlockPos[]{pos, up ? pos.up() : pos.down()}) {
+            for (EnumFacing.AxisDirection direction : EnumFacing.AxisDirection.values()) {
+                if (TrackTools.isRailBlockAt(world, target.offset(EnumFacing.getFacingFromAxis(direction, axis)))) {
+                    holdPosition(state, cart, target);
+                    double vel = direction.getOffset() * RIDE_VELOCITY;
+                    if (axis == EnumFacing.Axis.Z)
+                        cart.motionZ = vel;
+                    else
+                        cart.motionX = vel;
+                    return true;
+                }
             }
         }
         return false;
