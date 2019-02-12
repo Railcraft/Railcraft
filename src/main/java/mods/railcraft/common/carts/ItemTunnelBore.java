@@ -9,15 +9,21 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import com.google.common.collect.Iterables;
+import com.google.common.primitives.Ints;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.core.IInterModMessageHandler;
+import mods.railcraft.common.core.InterModMessageRegistry;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
+import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -30,6 +36,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;
@@ -39,6 +46,27 @@ public class ItemTunnelBore extends ItemCart {
     public ItemTunnelBore(IRailcraftCartContainer cart) {
         super(cart);
         maxStackSize = 1;
+    }
+
+    @Override
+    public void initializeDefinition() {
+        super.initializeDefinition();
+        InterModMessageRegistry.getInstance().register("ballast", mess -> {
+            String[] tokens = Iterables.toArray(IInterModMessageHandler.SPLITTER.split(mess.getStringValue()), String.class);
+            if (tokens.length != 2) {
+                Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
+                return;
+            }
+            String blockName = tokens[0];
+            Integer metadata = Ints.tryParse(tokens[1]);
+            Block block;
+            if (blockName == null || metadata == null || (block = Block.getBlockFromName(blockName)) == null) {
+                Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
+                return;
+            }
+            BallastRegistry.registerBallast(block, metadata);
+            Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
+        });
     }
 
     @Override

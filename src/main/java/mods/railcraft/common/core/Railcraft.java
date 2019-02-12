@@ -9,10 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.core;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.primitives.Ints;
-import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.common.commands.RootCommand;
 import mods.railcraft.common.items.Metal;
@@ -20,16 +16,12 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.effects.HostEffects;
-import mods.railcraft.common.util.misc.BallastRegistry;
 import mods.railcraft.common.util.misc.BlinkTick;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketHandler;
-import net.minecraft.block.Block;
 import net.minecraft.command.CommandHandler;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -63,8 +55,6 @@ public final class Railcraft {
     static final String VERSION = "@VERSION@";
     @Instance(Railcraft.MOD_ID)
     public static Railcraft instance;
-    //    public int totalMultiBlockUpdates = 0;
-//    public int ticksSinceLastMultiBlockPrint = 0;
     @SidedProxy(modId = Railcraft.MOD_ID, clientSide = "mods.railcraft.client.core.ClientProxy", serverSide = "mods.railcraft.common.core.CommonProxy")
     public static CommonProxy proxy;
     private File configFolder;
@@ -90,50 +80,15 @@ public final class Railcraft {
     }
 
     @Mod.EventHandler
-    //TODO move this around
     public void processIMCRequests(FMLInterModComms.IMCEvent event) {
-        Splitter splitter = Splitter.on("@").trimResults();
-        for (FMLInterModComms.IMCMessage mess : event.getMessages()) {
-            switch (mess.key) {
-                case "ballast":
-                    String[] tokens = Iterables.toArray(splitter.split(mess.getStringValue()), String.class);
-                    if (tokens.length != 2) {
-                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
-                        continue;
-                    }
-                    String blockName = tokens[0];
-                    Integer metadata = Ints.tryParse(tokens[1]);
-                    Block block;
-                    if (blockName == null || metadata == null || (block = Block.getBlockFromName(blockName)) == null) {
-                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a ballast, but failed: %s", mess.getSender(), mess.getStringValue()));
-                        continue;
-                    }
-                    BallastRegistry.registerBallast(block, metadata);
-                    Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid ballast", mess.getSender(), mess.getStringValue()));
-                    break;
-                case "fluid-fuel":
-                    FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());
-                    int fuel = mess.getNBTValue().getInteger("Fuel");
-                    if (fuel == 0 || fluidStack == null) {
-                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a fluid fuel, but failed: %s", mess.getSender(), mess.getNBTValue()));
-                        continue;
-                    }
-                    FluidFuelManager.addFuel(fluidStack, fuel);
-                    Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getNBTValue()));
-                    break;
-                case "rock-crusher":
-                    // TODO Add crafter support for everything
-                    throw new UnsupportedOperationException("rock crusher");
-                case "high-speed-explosion-excluded-entities":
-                    NBTTagCompound nbt = mess.getNBTValue();
-                    if (nbt.hasKey("entities")) {
-                        String entities = nbt.getString("entities");
-                        Iterable<String> split = splitter.split(entities);
-                        RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
-                    } else {
-                        Game.log().msg(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions, but failed: %s", mess.getSender(), nbt);
-                    }
-                    break;
+        InterModMessageRegistry messageRegistry = InterModMessageRegistry.getInstance();
+
+        for (FMLInterModComms.IMCMessage message : event.getMessages()) {
+            try {
+                messageRegistry.handle(message);
+            } catch (RuntimeException ex) {
+                Game.log().msg(Level.FATAL, "Failed to interpret IMC message from mod {0} with key {1}", message.getSender(), message.key);
+                throw ex;
             }
         }
     }
@@ -142,15 +97,12 @@ public final class Railcraft {
     public void fingerprintError(FMLFingerprintViolationEvent event) {
         if (Game.isObfuscated()) {
             Game.log().fingerprint(MOD_ID);
-//            FMLCommonHandler.instance().exitJava(1, false);
             throw new RuntimeException("Invalid Fingerprint");
         }
     }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-//        Game.log(Level.FINE, "Pre-Init Phase");
-
         RailcraftModuleManager.loadModules(event.getAsmData());
 
         configFolder = new File(event.getModConfigurationDirectory(), "railcraft");
@@ -163,9 +115,6 @@ public final class Railcraft {
 
         RailcraftModuleManager.preInit();
 
-        TrackRegistry.TRACK_TYPE.finalizeRegistry();
-        TrackRegistry.TRACK_KIT.finalizeRegistry();
-
         proxy.initializeClient();
 
         FMLInterModComms.sendMessage("OpenBlocks", "donateUrl", "http://www.railcraft.info/donate/");
@@ -173,7 +122,8 @@ public final class Railcraft {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-//        Game.log(Level.FINE, "Init Phase");
+        TrackRegistry.TRACK_TYPE.finalizeRegistry();
+        TrackRegistry.TRACK_KIT.finalizeRegistry();
 
         RailcraftModuleManager.init();
 
@@ -184,7 +134,6 @@ public final class Railcraft {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-//        Game.log(Level.FINE, "Post-Init Phase");
         RailcraftConfig.postInit();
         RailcraftModuleManager.postInit();
 

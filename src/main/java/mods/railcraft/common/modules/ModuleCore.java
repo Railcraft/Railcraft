@@ -24,6 +24,8 @@ import mods.railcraft.common.blocks.multi.MultiBlockHelper;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.*;
+import mods.railcraft.common.core.IInterModMessageHandler;
+import mods.railcraft.common.core.InterModMessageRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.CustomContainerHandler;
@@ -55,9 +57,11 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -175,6 +179,17 @@ public class ModuleCore extends RailcraftModulePayload {
                     if (EntityMinecart.getCollisionHandler() != null)
                         Game.log().msg(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
                     EntityMinecart.setCollisionHandler(MinecartHooks.INSTANCE);
+
+                    InterModMessageRegistry.getInstance().register("high-speed-explosion-excluded-entities", mess -> {
+                        NBTTagCompound nbt = mess.getNBTValue();
+                        if (nbt.hasKey("entities")) {
+                            String entities = nbt.getString("entities");
+                            Iterable<String> split = IInterModMessageHandler.SPLITTER.split(entities);
+                            RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
+                        } else {
+                            Game.log().msg(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions but failed: %s", mess.getSender(), nbt);
+                        }
+                    });
                 }
 
                 Set<Item> testSet = new HashSet<>();
@@ -353,6 +368,16 @@ public class ModuleCore extends RailcraftModulePayload {
                             Blocks.RAIL);
                 }
 
+                InterModMessageRegistry.getInstance().register("fluid-fuel", mess -> {
+                    FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());
+                    int fuel = mess.getNBTValue().getInteger("Fuel");
+                    if (fuel == 0 || fluidStack == null) {
+                        Game.log().msg(Level.WARN, String.format("Mod %s attempted to register a fluid fuel, but failed: %s", mess.getSender(), mess.getNBTValue()));
+                        return;
+                    }
+                    FluidFuelManager.addFuel(fluidStack, fuel);
+                    Game.log().msg(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getNBTValue()));
+                });
             }
 
             @Override
