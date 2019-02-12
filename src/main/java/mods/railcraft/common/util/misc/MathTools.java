@@ -14,6 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
 import java.util.Collection;
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -69,5 +70,26 @@ public final class MathTools {
 
     public static float nextFloat() {
         return RAND.nextFloat();
+    }
+
+    public static float signedFloat() {
+        return signedFloat(RAND);
+    }
+
+    public static float signedFloat(Random random) {
+        return unit(random) * random.nextFloat();
+    }
+
+    public static int unit() {
+        return unit(RAND);
+    }
+
+    /**
+     * Returns {@code 1} or {@code -1} by random.
+     *
+     * @param random the seed
+     */
+    public static int unit(Random random) {
+        return random.nextInt(2) * 2 - 1;
     }
 }
