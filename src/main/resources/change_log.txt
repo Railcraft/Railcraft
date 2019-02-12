@@ -1,3 +1,24 @@
+12.0.0-beta-5:
+    WIP: Migrate Water Tank to new structure logic, implement new water generation algorithm. Missing GUI atm.
+    WIP: Migrate Rock Crusher and Steam Oven to new structure logic and fix a few bugs along the way.
+    WIP: Advancement framework improvements. (liach)
+    COMPAT: Improve snow detection so as to be compatible with Serene Seasons.
+    COMPAT: Improve compatibility with Cubic Chunks. (liach)
+    COMPAT: Refactor cart rendering to support Immersive Engineering Shaded Carts.
+    COMPAT: Refactor inventory code to be compatible with Sponge. (liach)
+    COMPAT: Boiler can now burn Immersive Engineering liquid fuels. (Acerixx)
+    CHANGE: Activator Rail no longer removes passengers from Carts, use Disembarking Track Kit instead.
+    CHANGE: Zinc now spawns alongside Lead by default. Requires fresh ore configs.
+    CONFIG: Added a cargo blacklist feature for Chest/Cargo carts.
+    FIX: Blast Furnace no longer wastes fuel.
+    FIX: Boiler Fireboxes should no longer crash. May not be fully functional though. (liach)
+    FIX: Train drag calculation should no longer resolve to a negative multiplier in some cases. Fixes several speed related issues with Trains.
+    FIX: Fix Fluid Loader/Unloader pipe interactions. (liach)
+    FIX: Fix Train Dispenser crash. (liach)
+    FIX: Fix Firestone dupe bug. (liach)
+    FIX: Fix particle effects in multi-player. (liach)
+    FIX: Numerous smaller fixes, behind the scenes refactoring, and general maintenance.
+
 12.0.0-beta-4:
     FIX: Fix server startup crash.
     FIX: Fix Blast Furnace outputs.
