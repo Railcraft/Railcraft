@@ -165,8 +165,8 @@ public abstract class BlockEntityDelegate<T extends TileRailcraft & ISmartTile> 
 
     @Override
     public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-        if (pos.getY() < 0)
-            return 0;
+//        if (pos.getY() < 0)
+//            return 0; // cubic chunks
         return TileManager.forTile(this::getTileClass, state, world, pos)
                 .retrieve(ITileLit.class, ITileLit::getLightValue).orElse(0);
     }

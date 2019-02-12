@@ -42,7 +42,7 @@ public class GuiHandler implements IGuiHandler {
     public static void openGui(EnumGui gui, EntityPlayer player, World world, Entity entity) {
         if (Game.isHost(world)) {
             if (gui.hasContainer()) {
-                player.openGui(Railcraft.getMod(), gui.ordinal(), world, entity.getEntityId(), -1, 0);
+                player.openGui(Railcraft.getMod(), gui.ordinal(), world, entity.getEntityId(), Integer.MIN_VALUE, 0);
             }
         } else if (!gui.hasContainer()) {
             FMLClientHandler.instance().displayGuiScreen(player, FactoryGui.build(gui, player.inventory, entity, world, entity.getEntityId(), -1, 0));
@@ -51,7 +51,7 @@ public class GuiHandler implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (y < 0) {
+        if (y == Integer.MIN_VALUE) {
             Entity entity = world.getEntityByID(x);
             if (entity == null) {
                 Game.log().msg(Level.WARN, "[Server] Entity not found when opening GUI: {0}", x);
@@ -65,7 +65,7 @@ public class GuiHandler implements IGuiHandler {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        if (y < 0) {
+        if (y == Integer.MIN_VALUE) {
             Entity entity = world.getEntityByID(x);
             if (entity == null) {
                 Game.log().msg(Level.WARN, "[Client] Entity not found when opening GUI: {0}", x);
