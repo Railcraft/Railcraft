@@ -11,6 +11,8 @@
 package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.util.inventory.InvOp;
+import mods.railcraft.common.util.inventory.InvTools;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -25,8 +27,13 @@ public class VoidChestLogic extends InventoryLogic {
 
     @Override
     public void updateServer() {
-        if (clock(TICK_PER_VOID))
-            removeOneItem();
+        if (clock(TICK_PER_VOID)) {
+            final double fullness = InvTools.calculateFullness(this);
+            streamSlots().forEach(slot -> {
+                int remove = (int) Math.round(slot.getMaxStackSize() * fullness);
+                slot.removeFromSlot(remove < 1 ? 1 : remove, InvOp.EXECUTE);
+            });
+        }
     }
 
     @Override

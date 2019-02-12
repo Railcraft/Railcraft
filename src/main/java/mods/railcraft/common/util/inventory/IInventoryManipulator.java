@@ -255,10 +255,7 @@ public interface IInventoryManipulator {
      * @see Container#calcRedstoneFromInventory(IInventory)
      */
     default int calcRedstone() {
-        double average = streamSlots()
-                .mapToDouble(slot -> (double) InvTools.sizeOf(slot.getStack()) / (double) slot.getMaxStackSize())
-                .summaryStatistics()
-                .getAverage();
+        double average = InvTools.calculateFullness(this);
 
         return MathHelper.floor(average * 14.0F) + (hasNoItems() ? 0 : 1);
     }
