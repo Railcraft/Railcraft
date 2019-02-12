@@ -76,7 +76,7 @@ public final class OreDictPlugin {
     }
 
     public static boolean oreExists(String name) {
-        return OreDictionary.doesOreNameExist(name);
+        return !OreDictionary.getOres(name, false).isEmpty();
     }
 
     public static Set<IBlockState> getOreBlockStates() {
