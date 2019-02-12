@@ -504,4 +504,7 @@ public abstract class InvTools {
         return null;
     }
 
+    public static double calculateFullness(IInventoryManipulator manipulator) {
+        return manipulator.streamSlots().mapToDouble(slot -> slot.getStack().getCount() / (double) slot.getMaxStackSize()).average().orElse(0.0);
+    }
 }
