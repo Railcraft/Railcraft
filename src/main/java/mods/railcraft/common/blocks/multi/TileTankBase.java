@@ -510,12 +510,14 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
         tankManager.writePacketData(data);
+        data.writeInt(tankManager.get(0).getCapacity());
     }
 
     @Override
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
         tankManager.readPacketData(data);
+        tankManager.get(0).setCapacity(data.readInt());
     }
 
     @Override
