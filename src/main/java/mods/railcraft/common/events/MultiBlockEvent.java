@@ -10,22 +10,23 @@
 
 package mods.railcraft.common.events;
 
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.IMultiBlockTile;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 public abstract class MultiBlockEvent extends Event {
-    private final IMultiBlockTile multiBlock;
+    private final TileRailcraft multiBlock;
 
-    MultiBlockEvent(IMultiBlockTile tile) {
+    MultiBlockEvent(TileRailcraft tile) {
         this.multiBlock = tile;
     }
 
-    public IMultiBlockTile getMultiBlock() {
+    public TileRailcraft getMultiBlock() {
         return multiBlock;
     }
 
     public static final class Form extends MultiBlockEvent {
-        public Form(IMultiBlockTile tile) {
+        public Form(TileRailcraft tile) {
             super(tile);
         }
     }

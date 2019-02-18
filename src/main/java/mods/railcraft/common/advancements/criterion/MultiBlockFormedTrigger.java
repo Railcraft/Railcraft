@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.advancements.criterion.MultiBlockFormedTrigger.Instance;
+import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.IMultiBlockTile;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.util.json.JsonTools;
@@ -70,7 +71,7 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
 
     @SubscribeEvent
     public void onMultiBlockForm(MultiBlockEvent.Form event) {
-        IMultiBlockTile tile = event.getMultiBlock();
+        TileRailcraft tile = event.getMultiBlock();
         GameProfile owner = tile.getOwner();
         MinecraftServer server = requireNonNull(FMLCommonHandler.instance().getMinecraftServerInstance());
         EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(owner.getId());
@@ -97,8 +98,8 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
         }
 
         // FIXME: This used to use the master class, but I removed that function and probably broke it. - CovertJaguar
-        boolean matches(IMultiBlockTile tile) {
-            return Conditions.check(clazz, tile.getClass()) && nbt.test(((TileEntity) tile).writeToNBT(new NBTTagCompound()));
+        boolean matches(TileRailcraft tile) {
+            return Conditions.check(clazz, tile.getClass()) && nbt.test(tile.writeToNBT(new NBTTagCompound()));
         }
 
         @Override

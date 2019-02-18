@@ -14,6 +14,7 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -31,6 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -211,13 +213,13 @@ public class StructureLogic extends Logic {
                                 .flatMap(tileToLogic())
                                 .ifPresent(l -> {
                                     l.setPattern(pattern, patternPos);
-                                    // FIXME components.add
+                                    components.add(l.tile);
                                 });
                     }
                 }
             }
 
-            // FIXME  MinecraftForge.EVENT_BUS.post(new MultiBlockEvent.Form(tile));
+            MinecraftForge.EVENT_BUS.post(new MultiBlockEvent.Form(tile));
         } else if (patternStates.containsKey(MultiBlockPattern.State.NOT_LOADED)) {
             state = StructureState.UNKNOWN;
         } else {
@@ -281,7 +283,7 @@ public class StructureLogic extends Logic {
         for (EnumFacing side : EnumFacing.VALUES) {
             tile.getTileCache().onSide(side)
                     .flatMap(tileToLogic())
-                    .ifPresent(l -> l.markChange(getMaxRecursionDepth()));
+                    .ifPresent(l -> l.markChange(depth));
         }
     }
 

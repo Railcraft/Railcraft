@@ -45,7 +45,7 @@ public class GuiHandler implements IGuiHandler {
                 player.openGui(Railcraft.getMod(), gui.ordinal(), world, entity.getEntityId(), Integer.MIN_VALUE, 0);
             }
         } else if (!gui.hasContainer()) {
-            FMLClientHandler.instance().displayGuiScreen(player, FactoryGui.build(gui, player.inventory, entity, world, entity.getEntityId(), -1, 0));
+            FMLClientHandler.instance().displayGuiScreen(player, FactoryGui.build(gui, player.inventory, entity, world, entity.getEntityId(), Integer.MIN_VALUE, 0));
         }
     }
 
