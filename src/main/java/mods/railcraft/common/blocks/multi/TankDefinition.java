@@ -61,7 +61,7 @@ public enum TankDefinition {
             Crafters.blastFurnace().newRecipe(block)
                     .name("railcraft:smelt_iron_tank")
                     .time(IBlastFurnaceCrafter.SMELT_TIME * 4)
-                    .output(RailcraftItems.INGOT.getStack(4, Metal.STEEL)).slagOutput(4)
+                    .output(RailcraftItems.NUGGET.getStack(4, Metal.STEEL)).slagOutput(1)
                     .register();
         }
     },
