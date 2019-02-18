@@ -89,7 +89,8 @@ public final class ShapedRailcraftRecipe extends ShapedRecipes {
     /**
      * Checks if the region of a crafting inventory is match for the recipe.
      */
-    private boolean checkMatch(InventoryCrafting p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
+    @Override
+    protected boolean checkMatch(InventoryCrafting p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
         requireNonNull(bySlots);
         Arrays.fill(bySlots, null);
         for (int i = 0; i < p_77573_1_.getWidth(); ++i) {
