@@ -99,6 +99,7 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
     protected void setTrackPowering() {
         boolean notify = delay == 0;
         delay = CartConstants.DETECTED_POWER_OUTPUT_FADE;
+        theWorldAsserted().updateComparatorOutputLevel(getPos(), getTile().getBlockType());
         if (notify) {
             notifyNeighbors();
         }
@@ -122,7 +123,7 @@ public class TrackKitDetector extends TrackKitRailcraft implements ITrackKitEmit
             if (!carts.isEmpty() && carts.get(0).getComparatorLevel() > -1) return carts.get(0).getComparatorLevel();
 
             List<EntityMinecartCommandBlock> commandCarts = EntitySearcher.find(EntityMinecartCommandBlock.class)
-                    .around(getPos()).upTo(-0.2F).and(EntitySelectors.HAS_INVENTORY).in(world);
+                    .around(getPos()).upTo(-0.2F).in(world);
 
             if (!commandCarts.isEmpty()) {
                 return commandCarts.get(0).getCommandBlockLogic().getSuccessCount();
