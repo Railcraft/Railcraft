@@ -212,6 +212,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         super.writePacketData(data);
 //        tankManager.writePacketData(data);
         data.writeBoolean(boiler.isBurning());
+        data.writeInt(tankManager.get(TANK_STEAM).getCapacity());
+        data.writeInt(tankManager.get(TANK_WATER).getCapacity());
     }
 
     @Override
@@ -219,6 +221,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         super.readPacketData(data);
 //        tankManager.readPacketData(data);
         boiler.setBurning(data.readBoolean());
+        tankManager.get(TANK_STEAM).setCapacity(data.readInt());
+        tankManager.get(TANK_WATER).setCapacity(data.readInt());
     }
 
     @Override
