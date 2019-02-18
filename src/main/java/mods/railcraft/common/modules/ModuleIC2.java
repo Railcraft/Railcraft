@@ -23,6 +23,7 @@ import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 //import mods.railcraft.common.plugins.ic2.crops.*;
@@ -57,10 +58,6 @@ public class ModuleIC2 extends RailcraftModulePayload {
             @Override
             public void init() {
             //    Crops.instance.registerCrop(new CropCreosote()); ##Save this for when a proper crafting recipe is possible
-            }
-
-            @Override
-            public void postInit() {
 //                Block blockDetector = RailcraftBlocks.DETECTOR.block();
 //
 //                if (blockDetector != null) {
@@ -167,16 +164,18 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 }
 
                 if (!RailcraftConfig.getRecipeConfig("ic2.macerator.bones"))
-                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.DYE, 1, 15));
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BONE), new ItemStack(Items.DYE, 1, 15));
 
                 if (!RailcraftConfig.getRecipeConfig("ic2.macerator.blaze"))
-                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BLAZE_POWDER));
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Items.BLAZE_ROD), new ItemStack(Items.BLAZE_POWDER));
 
-                if (!RailcraftConfig.getRecipeConfig("ic2.macerator.cobble"))
-                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.COBBLESTONE));
+                if (!RailcraftConfig.getRecipeConfig("ic2.macerator.cobble")) {
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.SAND));
+                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.STONE), new ItemStack(Blocks.COBBLESTONE));
+                }
 
                 if (!RailcraftConfig.getRecipeConfig("ic2.macerator.dirt"))
-                    IC2Plugin.removeMaceratorRecipes(new ItemStack(Blocks.DIRT));
+                    IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getOutput().stream().anyMatch(item -> item.getItem() == Item.getItemFromBlock(Blocks.DIRT)));
             }
         });
     }
