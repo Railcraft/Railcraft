@@ -237,7 +237,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 replaceVanillaCart(names, RailcraftCarts.FURNACE, Items.FURNACE_MINECART, EntityMinecart.Type.FURNACE, 44);
                 replaceVanillaCart(names, RailcraftCarts.TNT, Items.TNT_MINECART, EntityMinecart.Type.TNT, 45);
                 replaceVanillaCart(names, RailcraftCarts.HOPPER, Items.HOPPER_MINECART, EntityMinecart.Type.HOPPER, 46);
-                replaceVanillaCart(names, RailcraftCarts.SPAWNER, null, EntityMinecart.Type.SPAWNER, 47);
+                if (RailcraftCarts.SPAWNER.isLoaded())
+                    replaceVanillaCart(names, RailcraftCarts.SPAWNER, null, EntityMinecart.Type.SPAWNER, 47);
 
                 float h = TrackConstants.HARDNESS;
                 Blocks.RAIL.setHardness(h).setHarvestLevel("crowbar", 0);
