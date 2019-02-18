@@ -517,6 +517,6 @@ public abstract class InvTools {
      * @return whether the stack needs filling
      */
     public static boolean isStackFull(ItemStack stack) {
-        return stack.isEmpty() || stack.getCount() == stack.getMaxStackSize();
+        return !stack.isEmpty() && stack.getCount() == stack.getMaxStackSize();
     }
 }
