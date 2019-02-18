@@ -507,4 +507,16 @@ public abstract class InvTools {
     public static double calculateFullness(IInventoryManipulator manipulator) {
         return manipulator.streamSlots().mapToDouble(slot -> slot.getStack().getCount() / (double) slot.getMaxStackSize()).average().orElse(0.0);
     }
+
+    /**
+     * Checks if a stack can have more items filled in.
+     *
+     * <p>Callers: Be warned that you need to check slot stack limit as well!
+     *
+     * @param stack the stack to check
+     * @return whether the stack needs filling
+     */
+    public static boolean isStackFull(ItemStack stack) {
+        return stack.isEmpty() || stack.getCount() == stack.getMaxStackSize();
+    }
 }
