@@ -369,12 +369,13 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "vanilla.furnace", true, "change to '{t}=false' to disable the Furnace Minecart recipe");
-        loadRecipeProperty("ic2.macerator", "obsidian", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Crushed Obsidian and Obsidian Dust");
+        loadRecipeProperty("ic2.macerator", "crushed.obsidian", true, "change to '{t}=false' to remove the IC2 Macerator recipes from Obsidian to Crushed Obsidian");
+        loadRecipeProperty("ic2.macerator", "obsidian", true, "change to '{t}=false' to remove the IC2 Macerator recipes with Obsidian input");
         loadRecipeProperty("ic2.macerator", "charcoal", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Charcoal Dust");
         loadRecipeProperty("ic2.macerator", "ores", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Ore Dusts");
         loadRecipeProperty("ic2.macerator", "bones", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Bonemeal");
         loadRecipeProperty("ic2.macerator", "blaze", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Blaze Powder");
-        loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Cobblestone");
+        loadRecipeProperty("ic2.macerator", "cobble", true, "change to '{t}=false' to disable the IC2 Macerator recipes involving Cobblestone");
         loadRecipeProperty("ic2.macerator", "dirt", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Dirt");
         loadRecipeProperty("ic2.macerator", "slag", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Slag Dust");
         loadRecipeProperty("ic2.macerator", "ender", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Ender Powder");
