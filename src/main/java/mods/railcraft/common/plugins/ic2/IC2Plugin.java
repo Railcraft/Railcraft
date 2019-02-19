@@ -161,11 +161,8 @@ public class IC2Plugin {
         removeMaceratorRecipes(recipe -> (isInputBlock(recipe.getInput()) && doesRecipeProduce(recipe.getOutput(), items)));
     }
 
-    /**
-     * Removes either by input or result.
-     */
-    public static void removeMaceratorRecipes(ItemStack item) {
-        removeMaceratorRecipes(recipe -> doesRecipeRequire(recipe.getInput(), item) || doesRecipeProduce(recipe.getOutput(), item));
+    public static void removeMaceratorRecipes(ItemStack input, ItemStack output) {
+        removeMaceratorRecipes(recipe -> doesRecipeRequire(recipe.getInput(), input) || doesRecipeProduce(recipe.getOutput(), output));
     }
 
     public static void removeMaceratorRecipes(Predicate<? super MachineRecipe<? extends IRecipeInput, Collection<ItemStack>>> predicate) {

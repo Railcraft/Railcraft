@@ -144,7 +144,7 @@ public class ModuleResources extends RailcraftModulePayload {
 
                     if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftItems.DUST.isEnabled()) {
                         ItemStack obsidian = new ItemStack(Blocks.OBSIDIAN);
-                        IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian));
+                        IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian) && OreDictPlugin.hasOreType("dustObsidian", recipe.getOutput()));
                         if (RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian")) {
                             IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
                             IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
