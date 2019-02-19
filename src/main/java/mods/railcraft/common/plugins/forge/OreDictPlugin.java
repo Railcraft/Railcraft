@@ -38,6 +38,14 @@ public final class OreDictPlugin {
         OreDictionary.registerOre("gateWood", Blocks.SPRUCE_FENCE_GATE);
     }
 
+    public static boolean hasOreType(String oreName, Iterable<ItemStack> stacks) {
+        for (ItemStack stack : stacks) {
+            if (isOreType(oreName, stack))
+                return true;
+        }
+        return false;
+    }
+
     public static boolean isOreType(String oreName, ItemStack stack) {
         if (!oreExists(oreName))
             return false;
