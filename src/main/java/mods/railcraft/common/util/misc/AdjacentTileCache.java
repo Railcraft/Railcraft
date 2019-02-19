@@ -52,14 +52,6 @@ public final class AdjacentTileCache {
         }
     }
 
-    public Map<EnumFacing, TileEntity> refreshTiles() {
-        Map<EnumFacing, TileEntity> tiles = new EnumMap<>(EnumFacing.class);
-        for (EnumFacing side : EnumFacing.VALUES) {
-            tiles.put(side, getTileOnSide(side));
-        }
-        return tiles;
-    }
-
     public void purge() {
         Arrays.fill(cache, null);
         resetTimers();
@@ -75,12 +67,12 @@ public final class AdjacentTileCache {
         int s = side.ordinal();
         if (cache[s] != tile) {
             cache[s] = tile;
-            changed(side);
+            changed(side, tile);
         }
     }
 
-    private void changed(EnumFacing side) {
-        listeners.forEach(l -> l.changed(side));
+    private void changed(EnumFacing side, @Nullable TileEntity newTile) {
+        listeners.forEach(l -> l.changed(side, newTile));
     }
 
     private boolean isInSameChunk(EnumFacing side) {
@@ -95,8 +87,9 @@ public final class AdjacentTileCache {
 
     public @Nullable TileEntity getTileOnSide(EnumFacing side) {
         if (Game.BUKKIT || !isInSameChunk(side)) {
-            changed(side);
-            return searchSide(side);
+            TileEntity tile = searchSide(side);
+            changed(side, tile);
+            return tile;
         }
         int s = side.ordinal();
         if (cache[s] != null)
@@ -129,7 +122,7 @@ public final class AdjacentTileCache {
     }
 
     public interface ICacheListener {
-        void changed(EnumFacing side);
+        void changed(EnumFacing side, @Nullable TileEntity newTile);
 
         void purge();
     }

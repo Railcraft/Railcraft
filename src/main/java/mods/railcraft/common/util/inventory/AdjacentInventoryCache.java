@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -29,8 +28,7 @@ public final class AdjacentInventoryCache {
     private final InventoryComposite sortedInvs = InventoryComposite.create();
     private final Map<EnumFacing, InventoryAdaptor> invs = new EnumMap<>(EnumFacing.class);
     private final Comparator<InventoryAdaptor> sorter;
-    private final Predicate<TileEntity> filter;
-    private final EnumSet<EnumFacing> changedSides = EnumSet.allOf(EnumFacing.class);
+    private boolean changed = true;
 
     public AdjacentInventoryCache(AdjacentTileCache cache) {
         this(cache, null, null);
@@ -40,33 +38,28 @@ public final class AdjacentInventoryCache {
         this.cache = cache;
         cache.addListener(new AdjacentTileCache.ICacheListener() {
             @Override
-            public void changed(EnumFacing side) {
-                changedSides.add(side);
+            public void changed(EnumFacing side, @Nullable TileEntity newTile) {
+                changed = true;
+                invs.remove(side);
+                if (newTile != null && (filter == null || filter.test(newTile))) {
+                    InventoryAdaptor.of(newTile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
+                }
             }
 
             @Override
             public void purge() {
-                changedSides.addAll(EnumSet.allOf(EnumFacing.class));
+                changed = true;
                 invs.clear();
             }
 
         });
-        this.filter = filter;
         this.sorter = sorter;
     }
 
     public InventoryComposite getAdjacentInventories() {
-        Map<EnumFacing, TileEntity> tiles = cache.refreshTiles();
-        if (!changedSides.isEmpty()) {
-            for (EnumFacing side : changedSides) {
-                invs.remove(side);
-                TileEntity tile = tiles.get(side);
-                if (tile != null && (filter == null || filter.test(tile))) {
-                    InventoryAdaptor.of(tile, side.getOpposite()).ifPresent(inv -> invs.put(side, inv));
-                }
-            }
-            changedSides.clear();
-
+        cache.refresh();
+        if (changed) {
+            changed = false;
             sortedInvs.clear();
             sortedInvs.addAll(invs.values());
 
