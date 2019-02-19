@@ -83,10 +83,15 @@ public final class Train implements Iterable<EntityMinecart> {
 
     public static Object getTicker() {
         return new Object() {
+
+            int counter = 0;
+
             @SubscribeEvent
             public void tick(TickEvent.WorldTickEvent event) {
                 if (event.side == Side.SERVER && event.phase == TickEvent.Phase.END) {
-                    getManager(event.world).ifPresent(Manager::tick);
+                    counter++;
+                    if (counter % 32 == 0)
+                        getManager(event.world).ifPresent(Manager::tick);
                 }
             }
         };
@@ -494,6 +499,7 @@ public final class Train implements Iterable<EntityMinecart> {
                 if (train.isDead || train.isInvalid()) {
                     train.clear();
                     it.remove();
+                    data.markDirty();
                 }
             }
         }
