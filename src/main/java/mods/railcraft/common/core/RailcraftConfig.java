@@ -369,8 +369,8 @@ public class RailcraftConfig {
         loadRecipeProperty("railcraft.cart", "bronze", true, "change to '{t}=false' to disable the bronze recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "steel", true, "change to '{t}=false' to disable the steel recipe for minecarts");
         loadRecipeProperty("railcraft.cart", "vanilla.furnace", true, "change to '{t}=false' to disable the Furnace Minecart recipe");
-        loadRecipeProperty("ic2.macerator", "crushed.obsidian", true, "change to '{t}=false' to remove the IC2 Macerator recipes from Obsidian to Crushed Obsidian");
-        loadRecipeProperty("ic2.macerator", "obsidian", true, "change to '{t}=false' to remove the IC2 Macerator recipes with Obsidian input");
+        loadRecipeProperty("ic2.macerator", "crushed.obsidian", true, "change to '{t}=false' to disable the IC2 Macerator recipe from Obsidian to Crushed Obsidian");
+        loadRecipeProperty("ic2.macerator", "obsidian", true, "change to '{t}=false' to disable any IC2 Macerator recipe with Obsidian input");
         loadRecipeProperty("ic2.macerator", "charcoal", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Charcoal Dust");
         loadRecipeProperty("ic2.macerator", "ores", true, "change to '{t}=false' to disable the IC2 Macerator recipes for Ore Dusts");
         loadRecipeProperty("ic2.macerator", "bones", true, "change to '{t}=false' to disable the IC2 Macerator recipe for Bonemeal");
