@@ -69,13 +69,15 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             return parentLogic.get().getLogic(logicClass);
         if (logicClass.isInstance(this))
             return Optional.of(logicClass.cast(this));
-        return subLogics().stream().flatMap(Streams.toType(logicClass)).findFirst();
+        if (!subLogics.isEmpty())
+            return subLogics().stream().flatMap(Streams.toType(logicClass)).findFirst();
+        return Optional.empty();
     }
 
     private Collection<Logic> subLogics() {
         List<Logic> logics = new ArrayList<>();
-        logics.add(this);
         for (Logic sub : subLogics) {
+            logics.add(sub);
             logics.addAll(sub.subLogics());
         }
         return logics;
