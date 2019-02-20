@@ -30,10 +30,6 @@ public class ItemCoke extends ItemRailcraft {
 
     @Override
     public void defineRecipes() {
-        Crafters.blastFurnace().newFuel(getIngredient())
-                .name(getRegistryName())
-                .time(COKE_HEAT)
-                .register();
         if (RailcraftConfig.coalCokeTorchOutput() > 0) {
             CraftingPlugin.addShapedRecipe(new ItemStack(Blocks.TORCH, RailcraftConfig.coalCokeTorchOutput()),
                     "C",

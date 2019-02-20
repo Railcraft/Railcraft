@@ -10,9 +10,11 @@
 package mods.railcraft.common.util.crafting;
 
 import com.google.common.base.Preconditions;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.api.crafting.IBlastFurnaceCrafter;
 import mods.railcraft.api.crafting.ISimpleRecipe;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.items.ItemCoke;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.plugins.thaumcraft.ThaumcraftPlugin;
@@ -36,6 +38,10 @@ public enum BlastFurnaceCrafter implements IBlastFurnaceCrafter {
     private final List<@NotNull ISimpleRecipe> fuels = new ArrayList<>();
 
     public void initFuel() {
+        newFuel(Ingredients.from("fuelCoke"))
+                .name("railcraft:fuel_coke")
+                .time(ItemCoke.COKE_HEAT)
+                .register();
         newFuel(ThaumcraftPlugin.ITEMS.get("alumentum", 0)).name("thaumcraft:alumentum").register();
         newFuel(EnumGeneric.BLOCK_COKE.getStack()).name("railcraft:block_coke").register();
         newFuel(new ItemStack(Items.COAL, 1, 1)).name("minecraft:charcoal").register();
