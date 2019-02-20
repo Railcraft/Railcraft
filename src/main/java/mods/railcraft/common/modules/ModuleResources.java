@@ -70,7 +70,7 @@ public class ModuleResources extends RailcraftModulePayload {
                             'S', "stickWood");
                 }
 
-                if (BlockMetal.getBlock() != null) {
+                if (RailcraftBlocks.METAL.isLoaded()) {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
@@ -134,7 +134,7 @@ public class ModuleResources extends RailcraftModulePayload {
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);
                 }
 
-                if (BlockGeneric.getBlock() != null && RailcraftConfig.isSubBlockEnabled(EnumGeneric.CRUSHED_OBSIDIAN.getTag())) {
+                if (RailcraftBlocks.GENERIC.isLoaded() && RailcraftConfig.isSubBlockEnabled(EnumGeneric.CRUSHED_OBSIDIAN.getTag())) {
                     ItemStack stack = EnumGeneric.CRUSHED_OBSIDIAN.getStack();
 
                     BallastRegistry.registerBallast(BlockGeneric.getBlock(), EnumGeneric.CRUSHED_OBSIDIAN.ordinal());
