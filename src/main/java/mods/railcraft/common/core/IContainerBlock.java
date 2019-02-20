@@ -11,7 +11,6 @@
 package mods.railcraft.common.core;
 
 import net.minecraft.block.Block;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Lets see if we can remove some boilerplate with this.
@@ -19,6 +18,5 @@ import org.jetbrains.annotations.Nullable;
  * Created by CovertJaguar on 3/24/2016.
  */
 public interface IContainerBlock {
-    @Nullable
     Block block();
 }
