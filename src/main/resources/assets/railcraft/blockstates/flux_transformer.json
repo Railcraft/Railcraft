@@ -15,6 +15,14 @@
       {
         "transform": "forge:default-block"
       }
-    ]
+    ],
+    "icon": {
+      "0": {},
+      "1": {
+        "textures": {
+          "side": "railcraft:blocks/flux_transformer_side_powered"
+        }
+      }
+    }
   }
 }

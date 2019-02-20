@@ -118,7 +118,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
         if (placer != null)
             // This is kind of ugly, but it works. Normally we can't access our logic directly, only through the master.
             getLogic(StructureLogic.class)
-                    .ifPresent(l -> ((SteamOvenLogic) l.masterLogic).setFacing(MiscTools.getHorizontalSideFacingPlayer(placer)));
+                    .ifPresent(l -> ((SteamOvenLogic) l.functionalLogic).setFacing(MiscTools.getHorizontalSideFacingPlayer(placer)));
     }
 
     @Override

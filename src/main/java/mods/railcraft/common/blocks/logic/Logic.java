@@ -241,7 +241,7 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
 
         abstract boolean isUsableByPlayer(EntityPlayer player);
 
-        private static class Tile extends Adapter {
+        public static class Tile extends Adapter {
             private final TileRailcraft tile;
 
             public Tile(TileRailcraft tile) {
@@ -304,7 +304,7 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             }
 
             @Override
-            @Nullable TileRailcraft tile() {
+            TileRailcraft tile() {
                 return tile;
             }
 
@@ -314,7 +314,7 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             }
         }
 
-        public static Adapter of(TileRailcraft tile) {
+        public static Adapter.Tile of(TileRailcraft tile) {
             return new Tile(tile);
         }
 

@@ -12,8 +12,15 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBattery;
+import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.logic.ChargeComparatorLogic;
+import mods.railcraft.common.blocks.logic.ChargeSourceLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -27,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class TileFluxTransformer extends TileMultiBlockCharge implements IEnergyStorage {
+public final class TileFluxTransformer extends TileLogic implements IEnergyStorage {
 
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
@@ -59,7 +66,19 @@ public final class TileFluxTransformer extends TileMultiBlockCharge implements I
     }
 
     public TileFluxTransformer() {
-        super(patterns);
+        setLogic(new StructureLogic("flux", this, patterns, new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution)) {
+            @Override
+            protected void onPatternChanged() {
+                super.onPatternChanged();
+                getFunctionalLogic(ChargeSourceLogic.class).ifPresent(logic -> {
+                    if (isMaster) {
+                        logic.getBattery().setState(IBatteryBlock.State.SOURCE);
+                    } else {
+                        logic.getBattery().setState(IBatteryBlock.State.DISABLED);
+                    }
+                });
+            }
+        }.addSubLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution)));
     }
 
     public static void placeFluxTransformer(World world, BlockPos pos) {
@@ -70,21 +89,27 @@ public final class TileFluxTransformer extends TileMultiBlockCharge implements I
     }
 
     @Override
+    public IBlockState getActualState(IBlockState base) {
+        return getLogic(StructureLogic.class).map(l -> l.getState() == StructureLogic.StructureState.VALID).orElse(false)
+                ? base.withProperty(BlockFluxTransformer.ICON, 1)
+                : base.withProperty(BlockFluxTransformer.ICON, 0);
+    }
+
+    @Override
     protected void setWorldCreate(World worldIn) {
         setWorld(worldIn);
     }
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        if (!isStructureValid())
-            return 0;
-        IBattery battery = getBattery();
-        if (battery.needsCharging()) {
-            if (!simulate)
-                battery.addCharge(maxReceive * RailcraftConstants.FE_EU_RATIO);
-            return maxReceive;
-        }
-        return 0;
+        return getLogic(ChargeSourceLogic.class)
+                .map(ChargeSourceLogic::getBattery)
+                .filter(IBattery::needsCharging)
+                .map(battery -> {
+                    if (!simulate)
+                        battery.addCharge(maxReceive * RailcraftConstants.FE_EU_RATIO);
+                    return maxReceive;
+                }).orElse(0);
     }
 
     @Override

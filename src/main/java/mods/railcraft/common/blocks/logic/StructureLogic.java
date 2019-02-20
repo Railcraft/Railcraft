@@ -50,25 +50,24 @@ public class StructureLogic extends Logic {
     private final Timer netTimer = new Timer();
     private final TileRailcraft tile;
     private final String structureKey;
-    public final Logic masterLogic;
+    public final Logic functionalLogic;
     private final List<? extends MultiBlockPattern> patterns;
     private final List<TileRailcraft> components = new ArrayList<>();
     private final List<TileRailcraft> componentsView = Collections.unmodifiableList(components);
     public final ListMultimap<MultiBlockPattern.State, MultiBlockPattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockPattern.State.class), ArrayList::new);
     protected boolean isMaster;
     private boolean requestPacket;
-    private StructureState state;
+    private StructureState state = StructureState.UNTESTED;
     private @Nullable BlockPos masterPos;
     private @Nullable MultiBlockPattern currentPattern;
     private @Nullable BlockPos posInPattern;
 
-    public StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic masterLogic) {
+    public StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic functionalLogic) {
         super(Adapter.of(tile));
         this.structureKey = structureKey;
         this.tile = tile;
         this.patterns = patterns;
-        this.masterLogic = masterLogic;
-        state = StructureState.UNTESTED;
+        this.functionalLogic = functionalLogic;
         components.add(tile);
     }
 
@@ -77,7 +76,7 @@ public class StructureLogic extends Logic {
         Optional<L> imp = super.getLogic(logicClass);
         if (imp.isPresent())
             return imp;
-        return getMasterLogic().map(m -> m.masterLogic).flatMap(l -> l.getLogic(logicClass));
+        return getMasterLogic().map(m -> m.functionalLogic).flatMap(l -> l.getLogic(logicClass));
     }
 
     public final Optional<StructureLogic> getMasterLogic() {
@@ -89,15 +88,21 @@ public class StructureLogic extends Logic {
         return Optional.empty();
     }
 
+    public final <L> Optional<L> getFunctionalLogic(Class<L> logicClass) {
+        if (logicClass.isInstance(functionalLogic))
+            return Optional.of(logicClass.cast(functionalLogic));
+        return Optional.empty();
+    }
+
     public List<TileRailcraft> getComponents() {
         return getMasterLogic().map(m -> m.componentsView).orElseGet(Collections::emptyList);
     }
 
     @OverridingMethodsMustInvokeSuper
     protected void onPatternChanged() {
-        tile.markBlockForUpdate();
-        if (!isMaster && masterLogic instanceof IInventory)
-            InvTools.spewInventory((IInventory) masterLogic, theWorldAsserted(), getPos());
+        adapter.updateModels();
+        if (!isMaster && functionalLogic instanceof IInventory)
+            InvTools.spewInventory((IInventory) functionalLogic, theWorldAsserted(), getPos());
     }
 
     public final char getPatternMarker() {
@@ -139,6 +144,7 @@ public class StructureLogic extends Logic {
 
         if (changed)
             onPatternChanged();
+        sendUpdateToClient();
     }
 
     public final byte getPatternIndex() {
@@ -161,7 +167,7 @@ public class StructureLogic extends Logic {
     public void update() {
         super.update();
         if (isValidMaster())
-            masterLogic.update();
+            functionalLogic.update();
     }
 
     @Override
@@ -191,6 +197,8 @@ public class StructureLogic extends Logic {
 //             System.out.println("structure complete");
 
             MultiBlockPattern pattern = patternStates.get(MultiBlockPattern.State.VALID).get(0);
+
+            setPattern(pattern, pattern.getMasterOffset());
 
             int xWidth = pattern.getPatternWidthX();
             int zWidth = pattern.getPatternWidthZ();
@@ -293,6 +301,7 @@ public class StructureLogic extends Logic {
             return;
         if (state != StructureState.UNTESTED) {
             state = StructureState.UNTESTED;
+            sendUpdateToClient();
 
             getMasterLogic().ifPresent(StructureLogic::onBlockChange);
 
@@ -313,14 +322,14 @@ public class StructureLogic extends Logic {
 
     @Override
     public @Nullable EnumGui getGUI() {
-        return masterLogic.getGUI();
+        return functionalLogic.getGUI();
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        masterLogic.writeToNBT(data);
+        functionalLogic.writeToNBT(data);
         data.setBoolean("master", isMaster);
         data.setByte("pattern", getPatternIndex());
     }
@@ -329,7 +338,7 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        masterLogic.readFromNBT(data);
+        functionalLogic.readFromNBT(data);
         isMaster = data.getBoolean("master");
         try {
             byte index = data.getByte("pattern");
@@ -348,7 +357,7 @@ public class StructureLogic extends Logic {
             data.writeBlockPos(Objects.requireNonNull(posInPattern));
         }
         super.writePacketData(data);
-        masterLogic.writePacketData(data);
+        functionalLogic.writePacketData(data);
     }
 
     @Override
@@ -375,7 +384,7 @@ public class StructureLogic extends Logic {
         }
 
         super.readPacketData(data);
-        masterLogic.readPacketData(data);
+        functionalLogic.readPacketData(data);
     }
 
     public final boolean isValidMaster() {
