@@ -14,6 +14,8 @@ import mods.railcraft.api.core.IOwnable;
 import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
+import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
@@ -44,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -143,6 +146,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.placedby", ownable.getDisplayName(), ownable.getOwner());
             returnValue = EnumActionResult.SUCCESS;
         }
+
         if (t instanceof TileMultiBlock) {
             TileMultiBlock tile = (TileMultiBlock) t;
             if (tile.isStructureValid()) {
@@ -157,6 +161,26 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
                     }
                 }
             returnValue = EnumActionResult.SUCCESS;
+        }
+
+        if (t instanceof TileLogic) {
+            TileLogic tile = (TileLogic) t;
+            Optional<StructureLogic> optLogic = tile.getLogic(StructureLogic.class);
+            if (optLogic.isPresent()) {
+                StructureLogic logic = optLogic.get();
+                if (logic.isStructureValid()) {
+                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
+                    ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (logic.isValidMaster() ? "true" : "false"));
+                } else
+                    for (State returnState : EnumSet.complementOf(EnumSet.of(State.VALID))) {
+                        List<MultiBlockPattern> pats = logic.patternStates.get(returnState);
+                        if (!pats.isEmpty()) {
+                            List<Integer> indexList = pats.stream().map(map -> logic.getPatterns().indexOf(map)).collect(Collectors.toList());
+                            ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, indexList.toString());
+                        }
+                    }
+                returnValue = EnumActionResult.SUCCESS;
+            }
         }
         if (t instanceof IDualHeadSignal) {
             IDualHeadSignal signal = (IDualHeadSignal) t;
