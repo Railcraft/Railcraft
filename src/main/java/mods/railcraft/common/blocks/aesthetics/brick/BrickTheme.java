@@ -357,17 +357,16 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
 
     @Override
     public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
+        if (!isLoaded())
+            return ItemStack.EMPTY;
         BlockBrick blockBrick = getBlock();
-        if (blockBrick != null) {
-            int meta;
-            if (variant != null) {
-                blockBrick.checkVariant(variant);
-                meta = variant.ordinal();
-            } else
-                meta = 0;
-            return new ItemStack(blockBrick, qty, meta);
-        }
-        return ItemStack.EMPTY;
+        int meta;
+        if (variant != null) {
+            blockBrick.checkVariant(variant);
+            meta = variant.ordinal();
+        } else
+            meta = 0;
+        return new ItemStack(blockBrick, qty, meta);
     }
 
 //    @Nullable

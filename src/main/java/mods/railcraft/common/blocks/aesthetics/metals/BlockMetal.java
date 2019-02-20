@@ -89,7 +89,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
         return state;
     }
 
-    public static @Nullable BlockMetal getBlock() {
+    public static BlockMetal getBlock() {
         return (BlockMetal) RailcraftBlocks.METAL.block();
     }
 

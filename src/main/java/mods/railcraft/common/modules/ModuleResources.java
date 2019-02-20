@@ -70,7 +70,7 @@ public class ModuleResources extends RailcraftModulePayload {
                             'S', "stickWood");
                 }
 
-                if (BlockMetal.getBlock() != null) {
+                if (RailcraftBlocks.METAL.isLoaded()) {
                     EnumMetal type = EnumMetal.BLOCK_STEEL;
                     if (RailcraftConfig.isSubBlockEnabled(type.getTag())) {
                         initMetalBlock(Metal.STEEL);
@@ -133,20 +133,20 @@ public class ModuleResources extends RailcraftModulePayload {
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 0), RailcraftItems.BOTTLE_CREOSOTE.getStack(2), 0.0F);
                     CraftingPlugin.addFurnaceRecipe(new ItemStack(Items.COAL, 1, 1), RailcraftItems.BOTTLE_CREOSOTE.getStack(1), 0.0F);
                 }
-            }
 
-            @Override
-            public void postInit() {
-                if (BlockGeneric.getBlock() != null && RailcraftConfig.isSubBlockEnabled(EnumGeneric.CRUSHED_OBSIDIAN.getTag())) {
+                if (RailcraftBlocks.GENERIC.isLoaded() && RailcraftConfig.isSubBlockEnabled(EnumGeneric.CRUSHED_OBSIDIAN.getTag())) {
                     ItemStack stack = EnumGeneric.CRUSHED_OBSIDIAN.getStack();
 
                     BallastRegistry.registerBallast(BlockGeneric.getBlock(), EnumGeneric.CRUSHED_OBSIDIAN.ordinal());
 
                     if (Mod.anyLoaded(Mod.IC2, Mod.IC2_CLASSIC) && RailcraftItems.DUST.isEnabled()) {
                         ItemStack obsidian = new ItemStack(Blocks.OBSIDIAN);
-                        IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian) && OreDictPlugin.hasOreType("dustObsidian", recipe.getOutput()));
-                        if (RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian")) {
-                            IC2Plugin.addMaceratorRecipe(new ItemStack(Blocks.OBSIDIAN), stack);
+                        final boolean crushedObsidian = RailcraftConfig.getRecipeConfig("ic2.macerator.crushed.obsidian");
+                        if (crushedObsidian || !RailcraftConfig.getRecipeConfig("ic2.macerator.obsidian")) {
+                            IC2Plugin.removeMaceratorRecipes(recipe -> recipe.getInput().matches(obsidian) && OreDictPlugin.hasOreType("dustObsidian", recipe.getOutput()));
+                        }
+                        if (crushedObsidian) {
+                            IC2Plugin.addMaceratorRecipe(obsidian, stack);
                             IC2Plugin.addMaceratorRecipe(stack, RailcraftItems.DUST.getStack(ItemDust.EnumDust.OBSIDIAN));
                         }
                     }

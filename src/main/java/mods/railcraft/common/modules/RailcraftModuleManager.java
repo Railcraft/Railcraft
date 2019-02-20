@@ -20,8 +20,11 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
@@ -249,8 +252,18 @@ public final class RailcraftModuleManager {
                     Game.log().msg(Level.INFO, "Module performing stage {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
                 stage.passToModule(module.getModuleEventHandler(enabled));
             } catch (Throwable th) {
-                Game.log().throwable(Level.ERROR, 3, th, "Module failed during {0}: {1} {2}", stage.name(), getModuleName(module), enabled ? "+" : "-");
-                throw th;
+                String stageName = stage.name();
+                String moduleName = getModuleName(module);
+                String enable = enabled ? "+" : "-";
+
+                Game.log().throwable(Level.FATAL, 10, th, "Module failed during {0}: {1} {2}", stageName, moduleName, enable);
+
+                CrashReport crashreport = CrashReport.makeCrashReport(th, "Loading Railcraft Module");
+                CrashReportCategory crashreportcategory = crashreport.makeCategory("Module being loaded");
+                crashreportcategory.addDetail("Name", () -> moduleName);
+                crashreportcategory.addDetail("Stage", () -> stageName);
+                crashreportcategory.addDetail("Enabled", () -> enable);
+                throw new ReportedException(crashreport);
             }
         }
     }

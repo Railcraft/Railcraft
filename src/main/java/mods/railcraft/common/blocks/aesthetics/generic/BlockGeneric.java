@@ -91,7 +91,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         return state;
     }
 
-    public static @Nullable BlockGeneric getBlock() {
+    public static BlockGeneric getBlock() {
         return (BlockGeneric) RailcraftBlocks.GENERIC.block();
     }
 
