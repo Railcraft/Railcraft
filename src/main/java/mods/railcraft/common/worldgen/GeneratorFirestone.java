@@ -29,9 +29,9 @@ public class GeneratorFirestone extends Generator {
 
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
-        int x = targetPos.getX() + rand.nextInt(16);
+        int x = targetPos.getX() + rand.nextInt(16) - 8;
         int y = 31;
-        int z = targetPos.getZ() + rand.nextInt(16);
+        int z = targetPos.getZ() + rand.nextInt(16) - 8;
 
         generator.generate(world, rand, new BlockPos(x, y, z));
     }

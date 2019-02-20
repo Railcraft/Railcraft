@@ -32,8 +32,8 @@ public class GeneratorSaltpeter extends Generator {
         int worldX = targetPos.getX();
         int worldZ = targetPos.getZ();
         for (int i = 0; i < 64; i++) {
-            int x = worldX + rand.nextInt(16);
-            int z = worldZ + rand.nextInt(16);
+            int x = worldX + rand.nextInt(16) - 8;
+            int z = worldZ + rand.nextInt(16) - 8;
             BlockPos topBlock = world.getTopSolidOrLiquidBlock(new BlockPos(x, 50, z)).down(1 + (rand.nextInt(100) == 0 ? 0 : 1));
             if (topBlock.getY() < 50 || topBlock.getY() > 100)
                 continue;

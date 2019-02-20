@@ -103,8 +103,8 @@ public class GeneratorMine extends Generator {
     private boolean attemptGen(World world, Random rand, int worldX, int worldZ, int depth, NoiseGen cloudNoise, NoiseGen veinNoise, int cycles, double denseArea) {
         boolean generated = false;
         for (int i = 0; i < cycles; i++) {
-            int x = worldX + rand.nextInt(16);
-            int z = worldZ + rand.nextInt(16);
+            int x = worldX + rand.nextInt(16) - 8;
+            int z = worldZ + rand.nextInt(16) - 8;
             double cloudStrength = cloudNoise.noise(x, z);
             if (cloudStrength > settings.fringeLimit) {
                 int y = depth + Math.round((float) rand.nextGaussian() * settings.range);

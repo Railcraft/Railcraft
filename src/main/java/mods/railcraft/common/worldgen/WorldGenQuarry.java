@@ -122,11 +122,12 @@ public class WorldGenQuarry extends WorldGenerator {
             return false;
 
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (!WorldPlugin.isBlockAir(world, up.offset(side)))
+            BlockPos target = up.offset(side);
+            if (!WorldPlugin.isBlockLoaded(world, target) || !WorldPlugin.isBlockAir(world, target))
                 return false;
         }
 
-        world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+        WorldPlugin.setBlockStateWorldGen(world, pos, Blocks.AIR.getDefaultState());
         return true;
     }
 
@@ -136,10 +137,10 @@ public class WorldGenQuarry extends WorldGenerator {
 //        }
         //Removes tall grass
         if (WorldPlugin.isBlockAt(world, pos.up(), Blocks.TALLGRASS))
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+            WorldPlugin.setBlockStateWorldGen(world, pos, Blocks.AIR.getDefaultState());
 
         if (isReplaceable(existingState, world, pos))
-            world.setBlockState(pos, quarryStone, 2);
+            WorldPlugin.setBlockStateWorldGen(world, pos, quarryStone);
     }
 
     private boolean isReplaceable(IBlockState existingState, World world, BlockPos pos) {

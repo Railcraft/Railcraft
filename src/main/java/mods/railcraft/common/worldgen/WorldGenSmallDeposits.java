@@ -54,7 +54,7 @@ public class WorldGenSmallDeposits extends WorldGenerator {
         for (int num = 0; num < blockCount; num++) {
             IBlockState blockState = WorldPlugin.getBlockState(world, pos);
             if (blockState.getBlock().isReplaceableOreGen(blockState, world, pos, replace::test))
-                WorldPlugin.setBlockState(world, pos, ore, 2);
+                WorldPlugin.setBlockStateWorldGen(world, pos, ore);
 
             pos = pos.offset(EnumFacing.random(rand));
             if (!WorldPlugin.isBlockLoaded(world, pos))
