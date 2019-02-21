@@ -90,12 +90,12 @@ public class WorldGenGeode extends WorldGenerator {
 
     private void placeAir(IBlockState existingState, World world, Random rand, BlockPos pos) {
         if (isReplaceable(existingState, world, pos))
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+            WorldPlugin.setBlockStateWorldGen(world, pos, Blocks.AIR.getDefaultState());
     }
 
     private void placeStone(IBlockState existingState, World world, Random rand, BlockPos pos) {
         if (isReplaceable(existingState, world, pos))
-            world.setBlockState(pos, geodeStone, 2);
+            WorldPlugin.setBlockStateWorldGen(world, pos, geodeStone);
     }
 
     private void placeOre(IBlockState existingState, World world, Random rand, BlockPos pos) {
@@ -109,7 +109,7 @@ public class WorldGenGeode extends WorldGenerator {
             else if (chance <= 0.02 && EnumOre.DARK_LAPIS.isEnabled())
                 oreState = EnumOre.DARK_LAPIS.getDefaultState();
             if (oreState != null)
-                world.setBlockState(pos, oreState, 2);
+                WorldPlugin.setBlockStateWorldGen(world, pos, oreState);
         }
     }
 

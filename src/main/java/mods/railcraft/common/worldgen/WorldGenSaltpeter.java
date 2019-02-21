@@ -32,10 +32,10 @@ public class WorldGenSaltpeter extends WorldGenerator {
     @Override
     public boolean generate(World world, Random rand, BlockPos pos) {
         if (mineableBlock != null && isReplaceable(world, pos)) {
-            WorldPlugin.setBlockState(world, pos, mineableBlock, 2);
+            WorldPlugin.setBlockStateWorldGen(world, pos, mineableBlock);
 
             if (logicBlock != null) {
-                WorldPlugin.setBlockState(world, new BlockPos(pos.getX(), 0, pos.getZ()), logicBlock, 2);
+                WorldPlugin.setBlockStateWorldGen(world, new BlockPos(pos.getX(), 0, pos.getZ()), logicBlock);
             }
         }
 

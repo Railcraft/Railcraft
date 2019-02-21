@@ -35,9 +35,9 @@ public class GeneratorSulfur extends Generator {
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {
         for (int i = 0; i < 90; i++) {
-            int x = targetPos.getX() + rand.nextInt(16);
+            int x = targetPos.getX() + rand.nextInt(16) - 8;
             int y = 6 + rand.nextInt(10);
-            int z = targetPos.getZ() + rand.nextInt(16);
+            int z = targetPos.getZ() + rand.nextInt(16) - 8;
 
             generator.generate(world, rand, new BlockPos(x, y, z));
         }

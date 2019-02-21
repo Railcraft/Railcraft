@@ -10,7 +10,6 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.RailcraftFakePlayer;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -25,7 +24,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -121,6 +119,10 @@ public class WorldPlugin {
 
     public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState) {
         return world.setBlockState(pos, blockState);
+    }
+
+    public static boolean setBlockStateWorldGen(World world, BlockPos pos, IBlockState blockState) {
+        return world.setBlockState(pos, blockState, 18); // 2 | 16
     }
 
     public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState, int update) {
