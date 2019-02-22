@@ -85,5 +85,4 @@ public class TileSignalBlockDual extends TileSignalBlock implements IReceiverTil
             return receiver.getAspect();
         return getSignalAspect();
     }
-
 }

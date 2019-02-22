@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.wayobjects.signals;
 
+import mods.railcraft.api.signal.IColorLightAspect;
+import mods.railcraft.api.signal.IRuleDisplay;
 import mods.railcraft.api.signals.DualLamp;
 import mods.railcraft.api.signals.SignalAspect;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +22,9 @@ public interface IDualHeadSignal {
 
     EnumFacing getFacing();
 
+    @Deprecated
     SignalAspect getSignalAspect(DualLamp lamp);
+
+//    IRuleDisplay<IColorLightAspect> getRule(DualLamp lamp);
 
 }
