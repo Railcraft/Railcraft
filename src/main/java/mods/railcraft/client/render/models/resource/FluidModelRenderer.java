@@ -11,6 +11,7 @@
 package mods.railcraft.client.render.models.resource;
 
 import mods.railcraft.client.render.tools.RenderTools;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -21,17 +22,21 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.Level;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -48,12 +53,21 @@ public final class FluidModelRenderer {
     private FluidModelRenderer() {
     }
 
+    private static void putFluidSprite(TextureMap map, @Nullable ResourceLocation sprite, Fluid fluid, String type) {
+        if (sprite != null) {
+            map.registerSprite(sprite);
+        } else {
+            // Guard against bad mods
+            Game.log().msg(Level.ERROR, "Fluid \"{0}\" does not have a {1} texture! Immediately report to the mod that added this fluid!", FluidRegistry.getDefaultFluidName(fluid), type);
+        }
+    }
+
     @SubscribeEvent
     public void loadTextures(TextureStitchEvent.Pre event) {
         final TextureMap map = event.getMap();
         FluidRegistry.getRegisteredFluids().values().forEach(f -> {
-            map.registerSprite(f.getFlowing());
-            map.registerSprite(f.getStill());
+            putFluidSprite(map, f.getFlowing(), f, "flowing");
+            putFluidSprite(map, f.getStill(), f, "still");
         });
     }
 
