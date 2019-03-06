@@ -50,7 +50,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -59,7 +62,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -820,37 +822,32 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
         EntityPlayerMP fakePlayer = CartTools.getFakePlayerWith(this, head);
 
-        // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(world, targetPos, targetState, fakePlayer);
-        MinecraftForge.EVENT_BUS.post(breakEvent);
-
-        if (breakEvent.isCanceled())
+        // Fires break event within; harvest handled separately
+        if (!WorldPlugin.playerRemoveBlock(world, targetPos, fakePlayer, false))
             return false;
-        // End of Event Fire
-
-        boolean silk = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, head) > 0;
-        NonNullList<ItemStack> items = NonNullList.create();
-        int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, head);
-
-        if (silk) {
-            ItemStack stack = HarvestPlugin.getSilkTouchDrop(targetState);
-            if (!InvTools.isEmpty(stack)) {
-                items.add(stack);
-            }
-            // Use modifiable lists for events
-        } else {
-            targetState.getBlock().getDrops(items, world, targetPos, targetState, fortuneLevel);
-        }
-
-        // Start of Event Fire
-        BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(world, targetPos, targetState, fortuneLevel, 1F, items, fakePlayer, silk);
-        MinecraftForge.EVENT_BUS.post(harvestDropsEvent);
-
-        if (harvestDropsEvent.isCanceled())
-            return false;
-        // End of Event Fire
 
         if (RailcraftConfig.borePreserveStacks() && world.getGameRules().getBoolean("doTileDrops")) {
+            boolean silk = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, head) > 0;
+            NonNullList<ItemStack> items = NonNullList.create();
+            int fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, head);
+
+            if (silk) {
+                ItemStack stack = HarvestPlugin.getSilkTouchDrop(targetState);
+                if (!InvTools.isEmpty(stack)) {
+                    items.add(stack);
+                }
+                // Use modifiable lists for events
+            } else {
+                targetState.getBlock().getDrops(items, world, targetPos, targetState, fortuneLevel);
+            }
+            // Start of Event Fire
+            BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(world, targetPos, targetState, fortuneLevel, 1F, items, fakePlayer, silk);
+            MinecraftForge.EVENT_BUS.post(harvestDropsEvent);
+
+            if (harvestDropsEvent.isCanceled())
+                return false;
+            // End of Event Fire
+
             for (ItemStack stack : items) {
                 if (StackFilters.FUEL.test(stack))
                     stack = invFuel.addStack(stack);
@@ -873,7 +870,6 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 }
             }
         }
-        WorldPlugin.setBlockToAir(world, targetPos);
 
         head.damageItem(1, fakePlayer);
         if (head.getItemDamage() > head.getMaxDamage())

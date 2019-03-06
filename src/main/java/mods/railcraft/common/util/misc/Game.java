@@ -9,13 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.misc;
 
+import com.google.common.collect.Sets;
 import mods.railcraft.api.core.ClientAccessException;
 import mods.railcraft.common.core.Railcraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.Entity;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
@@ -29,8 +31,7 @@ import org.apache.logging.log4j.message.MessageFormatMessage;
 import org.apache.logging.log4j.message.SimpleMessage;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -45,19 +46,20 @@ public final class Game {
      */
     public static final Level DEBUG_REPORT = Level.forName("DEBUG_REPORT", 150);
 
+    /**
+     * Separate options with spaces.
+     */
+    private static final String CATEGORY_SETTINGS = "railcraft.log.categories";
+    /**
+     * Other options include "registry" and "models" for now.
+     */
+    private static final Set<String> enabledCategories = Sets.newHashSet("default");
+
+    private static ILogger NULL_LOGGER = new ILogger() {};
+
     static {
-        boolean worldFound = false;
-        boolean worldObjFound = false;
-        try {
-            worldFound = Entity.class.getDeclaredField("world") != null;
-        } catch (NoSuchFieldException | SecurityException ignored) {
-        }
-        try {
-            //noinspection JavaReflectionMemberAccess
-            worldObjFound = Entity.class.getDeclaredField("worldObj") != null;
-        } catch (NoSuchFieldException | SecurityException ignored) {
-        }
-        OBFUSCATED = !worldFound && !worldObjFound;
+        Object obj = Launch.blackboard.get("fml.deobfuscatedEnvironment");
+        OBFUSCATED = obj instanceof Boolean && ((Boolean) obj);
         DEVELOPMENT_VERSION = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         boolean foundBukkit = false;
         try {
@@ -67,6 +69,11 @@ public final class Game {
         BUKKIT = foundBukkit;
         if (BUKKIT)
             Game.log().msg(Level.INFO, "Bukkit detected, disabling Tile Entity caching because Bukkit doesn't seem to invalid Tile Entities properly!");
+
+        String st = System.getProperty(CATEGORY_SETTINGS);
+        if (st != null) {
+            Collections.addAll(enabledCategories, st.split(" "));
+        }
     }
 
     public static boolean isHost(final World world) {
@@ -77,8 +84,9 @@ public final class Game {
         return world.isRemote;
     }
 
-    public static void notClient(final World world) {
+    public static WorldServer requireHost(final World world) {
         if (isClient(world)) throw new ClientAccessException();
+        return (WorldServer) world;
     }
 
     public static void requiresServerThread() {
@@ -110,13 +118,6 @@ public final class Game {
     private Game() {
     }
 
-    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
-    private static final Set<String> enabledCategories = new HashSet<>(Arrays.asList(
-//                "registry",
-//                "models",
-            "default"
-    ));
-
     public static ILogger log() {
         return log("default");
     }
@@ -126,8 +127,6 @@ public final class Game {
             return Logger.INSTANCE;
         return NULL_LOGGER;
     }
-
-    private static ILogger NULL_LOGGER = new ILogger() {};
 
     public enum Logger implements ILogger {
         INSTANCE;
