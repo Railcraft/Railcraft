@@ -41,6 +41,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -49,10 +50,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -513,7 +511,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
 
                 ItemStack head = getStackInSlot(0);
                 if (!InvTools.isEmpty(head)) {
-                    head.damageItem(entities.size(), CartTools.getCartOwnerEntity(this));
+                    head.damageItem(entities.size(), CartTools.getFakePlayer(this));
                 }
             }
 
@@ -698,7 +696,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                             IBlockState state = WorldPlugin.getBlockState(world, searchPos);
                             if (!WorldPlugin.isBlockAir(world, searchPos, state) && !state.getMaterial().isLiquid()) {
                                 // Break other blocks first
-                                WorldPlugin.playerRemoveBlock(world, searchPos.toImmutable(), CartTools.getCartOwnerEntity(this),
+                                WorldPlugin.playerRemoveBlock(world, searchPos.toImmutable(), CartTools.getFakePlayer(this),
                                         world.getGameRules().getBoolean("doTileDrops") && RailcraftConfig.borePreserveStacks());
                             }
                         }
@@ -717,7 +715,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
-        EntityPlayer owner = CartTools.getCartOwnerEntity(this);
+        EntityPlayer owner = CartTools.getFakePlayer(this);
 
         if (replaceableBlocks.contains(oldState.getBlock()))
             WorldPlugin.destroyBlockSafe(world, targetPos, owner, true);
@@ -820,8 +818,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         if (!canMineBlock(targetPos, targetState))
             return false;
 
+        EntityPlayerMP fakePlayer = CartTools.getFakePlayerWith(this, head);
+
         // Start of Event Fire
-        BreakEvent breakEvent = new BreakEvent(world, targetPos, targetState, CartTools.getCartOwnerEntity(this));
+        BreakEvent breakEvent = new BreakEvent(world, targetPos, targetState, fakePlayer);
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())
@@ -843,7 +843,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         }
 
         // Start of Event Fire
-        BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(world, targetPos, targetState, fortuneLevel, 1F, items, CartTools.getCartOwnerEntity(this), silk);
+        BlockEvent.HarvestDropsEvent harvestDropsEvent = new BlockEvent.HarvestDropsEvent(world, targetPos, targetState, fortuneLevel, 1F, items, fakePlayer, silk);
         MinecraftForge.EVENT_BUS.post(harvestDropsEvent);
 
         if (harvestDropsEvent.isCanceled())
@@ -875,7 +875,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         }
         WorldPlugin.setBlockToAir(world, targetPos);
 
-        head.damageItem(1, CartTools.getCartOwnerEntity(this));
+        head.damageItem(1, fakePlayer);
         if (head.getItemDamage() > head.getMaxDamage())
             setInventorySlotContents(0, ItemStack.EMPTY);
         return true;

@@ -29,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -156,7 +157,17 @@ public final class CartTools {
         if (!RailcraftConstantsAPI.UNKNOWN_PLAYER.equals(owner.getName()))
             player = PlayerPlugin.getPlayer(cart.world, owner);
         if (player == null)
-            player = RailcraftFakePlayer.get((WorldServer) cart.world, cart.posX, cart.posY, cart.posZ);
+            player = getFakePlayer(cart);
+        return player;
+    }
+
+    public static EntityPlayerMP getFakePlayer(EntityMinecart cart) {
+        return RailcraftFakePlayer.get((WorldServer) cart.world, cart.posX, cart.posY, cart.posZ);
+    }
+
+    public static EntityPlayerMP getFakePlayerWith(EntityMinecart cart, ItemStack stack) {
+        EntityPlayerMP player = getFakePlayer(cart);
+        player.setHeldItem(EnumHand.MAIN_HAND, stack);
         return player;
     }
 

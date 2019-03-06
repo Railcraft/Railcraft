@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +61,9 @@ public abstract class ItemBoreHead extends ItemTool implements IBoreHead, IRailc
 
     @Override
     public int getHarvestLevel(ItemStack stack, String toolClass, @Nullable EntityPlayer player, @Nullable IBlockState blockState) {
-        return IBoreHead.super.getHarvestLevel(stack, toolClass, player, blockState);
+        if (player instanceof FakePlayer)
+            return IBoreHead.super.getHarvestLevel(stack, toolClass, player, blockState);
+        return -1;
     }
 
     @Override
