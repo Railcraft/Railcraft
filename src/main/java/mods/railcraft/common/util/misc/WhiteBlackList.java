@@ -11,10 +11,13 @@
 package mods.railcraft.common.util.misc;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * A combination of black list and white list.
+ *
+ * The whitelist has a higher priority than the blacklist.
  */
 public final class WhiteBlackList<T> {
 
@@ -27,7 +30,7 @@ public final class WhiteBlackList<T> {
     }
 
     public static <T> WhiteBlackList<T> create(Set<T> blacklist) {
-        return new WhiteBlackList<>(blacklist, Collections.emptySet(), false);
+        return new WhiteBlackList<>(blacklist, new HashSet<>(), false);
     }
 
     private WhiteBlackList(Set<T> blacklist, Set<T> whitelist, boolean whitelistEnabled) {
@@ -58,15 +61,15 @@ public final class WhiteBlackList<T> {
     }
 
     public boolean permits(T entry) {
-        return (!whitelistEnabled || whitelist.contains(entry)) && !blacklist.contains(entry);
+        return (whitelistEnabled && whitelist.contains(entry)) || !blacklist.contains(entry);
     }
 
     public PermissionLevel getPermissionLevel(T entry) {
-        if (blacklist.contains(entry)) {
-            return PermissionLevel.BLACKLISTED;
-        }
         if (whitelistEnabled && whitelist.contains(entry)) {
             return PermissionLevel.WHITELISTED;
+        }
+        if (blacklist.contains(entry)) {
+            return PermissionLevel.BLACKLISTED;
         }
         return PermissionLevel.DEFAULT;
     }

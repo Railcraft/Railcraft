@@ -49,7 +49,29 @@ public abstract class Generator implements IWorldGenerator {
         }
     }
 
+    /**
+     * Actually generate to the world.
+     *
+     * Note: The target position is in the middle of the chunk! Minus 8 in both x and z for regular
+     * positions.
+     *
+     * @param world the world
+     * @param rand the seed
+     * @param targetPos the target pos, in the middle of the chunk
+     * @param biome the biome
+     */
     public abstract void generate(World world, Random rand, BlockPos targetPos, Biome biome);
 
+    /**
+     * Test if the generation should happen.
+     *
+     * Note: The target position is in the middle of the chunk! Minus 8 in both x and z for regular
+     * positions.
+     *
+     * @param world the world
+     * @param rand the seed
+     * @param targetPos the target pos, in the middle of the chunk
+     * @param biome the biome
+     */
     public abstract boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome);
 }

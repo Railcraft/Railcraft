@@ -10,10 +10,9 @@
 
 package mods.railcraft.common.worldgen;
 
-import com.google.common.base.Ascii;
 import com.google.common.collect.ImmutableSet;
+import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.WhiteBlackList;
@@ -74,13 +73,19 @@ public class OreGeneratorFactory {
 
         switch (type) {
             case MINE:
-                GeneratorSettingsMine settings = new GeneratorSettingsMine(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, defaultFringeOre, defaultCoreOre);
-                this.settings = settings;
-                IWorldGenerator genImpl = new GeneratorMine(config, dimensionRules, biomeRules, settings);
-                worldGen = new GeneratorRailcraftOre(genImpl, retrogen, retrogenMarker).setRegistryName(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name));
-                Game.log().msg(Level.INFO, "Registered Mine Ore Generator at depth {0} called {1}", settings.depth, name);
+                GeneratorSettingsMine mineSettings = new GeneratorSettingsMine(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, defaultFringeOre, defaultCoreOre);
+                this.settings = mineSettings;
+                IWorldGenerator mineGenImpl = new GeneratorMine(config, dimensionRules, biomeRules, mineSettings);
+                worldGen = new GeneratorRailcraftOre(mineGenImpl, retrogen, retrogenMarker).setRegistryName(RailcraftConstantsAPI.locationOf(name));
+                Game.log().msg(Level.INFO, "Registered Mine Ore Generator at depth {0} called {1}", mineSettings.depth, name);
                 break;
             case DIFFUSE:
+                GeneratorSettings diffuseSettings = new GeneratorSettings(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultCoreOre);
+                this.settings = diffuseSettings;
+                IWorldGenerator diffuseGenImpl = new GeneratorDiffuse(dimensionRules, biomeRules, diffuseSettings);
+                worldGen = new GeneratorRailcraftOre(diffuseGenImpl, retrogen, retrogenMarker).setRegistryName(RailcraftConstantsAPI.locationOf(name));
+                Game.log().msg(Level.INFO, "Registered Diffuse Ore Generator called {0}", name);
+                break;
             default:
                 throw new OreConfigurationException(config, "Something went wrong. This should be impossible.");
         }
@@ -94,12 +99,17 @@ public class OreGeneratorFactory {
         public final int depth;
         public final int range;
         public final int blockCount;
+        public final IBlockState coreOre;
 
-        public GeneratorSettings(Configuration config, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange) {
+        public GeneratorSettings(Configuration config, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, String defaultCoreOre) {
             weight = config.getInt("weight", CAT, defaultWeight, 0, Integer.MAX_VALUE, "The generator weight, larger weights generate later. You can use this to sort what order stuff is generated.");
             depth = config.getInt("depth", CAT, defaultDepth, 10, Integer.MAX_VALUE, "The y level that the mine will generate at. Generally you should keep this below 220 for vanilla height worlds. If your sea level is the normal 63, its usually best to stay below 50 as well due to the topsoil.");
             range = config.getInt("range", CAT, defaultRange, 1, 20, "The scale of the gaussian distribution used to spread the mine vertically, how tall it is. Note that it spreads above and blow the y level equally, so a value of 3 is roughly 6 blocks tall.");
             blockCount = config.getInt("blockCount", CAT, defaultBlockCount, 1, 16, "The number of ore blocks generated during each successful event. Each chunk generally gets 216 generation events, but not all events result in ore spawn due to chance settings and noise fields.");
+
+
+            config.setCategoryComment(CAT + ".ore", "The ore blocks to be generated. Format: <modId>:<blockname>#<meta>");
+            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
         }
     }
 
@@ -107,16 +117,15 @@ public class OreGeneratorFactory {
         public final boolean skyGen;
         public final int noiseSeed;
         public final double cloudScale, veinScale, fringeLimit, richLimit, coreLimit, veinLimit, fringeGenChance, coreGenChance, coreOreChance;
-        public final IBlockState fringeOre, coreOre;
+        public final IBlockState fringeOre;
 
         public GeneratorSettingsMine(Configuration config, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, int defaultSeed, String defaultFringeOre, String defaultCoreOre) {
-            super(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange);
+            super(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultCoreOre);
 
             this.skyGen = RailcraftConfig.isWorldGenEnabled("sky");
 
             config.setCategoryComment(CAT + ".ore", "The ore blocks to be generated. Format: <modId>:<blockname>#<meta>");
             fringeOre = BlockItemParser.parseBlock(config.getString("fringe", CAT + ".ore", defaultFringeOre, "The ore block generated on the fringe of the mine.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
-            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
 
             noiseSeed = config.getInt("seed", CAT, defaultSeed, 0, Integer.MAX_VALUE, "The seed used to create the noise map. Generally it is set to the atomic number of the element being generated, but it can be anything you want. Should be unique for each generator or your mines will generate in the same places, which can be desirable if you want to mix ores like Iron and Nickel.");
             cloudScale = config.getFloat("cloud", CAT + ".scale", 0.0018F, 0.000001F, 1F, "The scale of the noise map used to determine the boundaries of the mine. Very small changes can have drastic effects. Smaller numbers result in larger mines. Recommended to not change this.");
@@ -213,7 +222,7 @@ public class OreGeneratorFactory {
                 return level == WhiteBlackList.PermissionLevel.WHITELISTED;
 
             // FIXME this is wrong, it doesn't have to match all
-            return BiomeDictionary.getTypes(biome).stream().allMatch(richBiomeTypes::permits);
+            return BiomeDictionary.getTypes(biome).stream().anyMatch(richBiomeTypes::permits);
         }
 
 //        private Stream<Biome> getBiomes(String name) {
@@ -253,7 +262,7 @@ public class OreGeneratorFactory {
             boolean whiteListDisabled = false;
             ImmutableSet.Builder<E> whiteListBuilder = ImmutableSet.builder();
             for (String whiteEntry : whiteEntries) {
-                if (Ascii.equalsIgnoreCase("all", whiteEntry)) {
+                if ("all".equalsIgnoreCase(whiteEntry)) {
                     whiteListDisabled = true;
                     break;
                 }
