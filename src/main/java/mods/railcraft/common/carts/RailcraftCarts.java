@@ -301,8 +301,8 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
     }
 
     @Override
-    public void finalizeDefinition() {
-        IRailcraftCartContainer.super.finalizeDefinition();
+    public void defineRecipes() {
+        IRailcraftCartContainer.super.defineRecipes();
         if (contentsSupplier != null)
             CraftingPlugin.addRecipe(new CartDisassemblyRecipe.RailcraftVariant(this));
     }

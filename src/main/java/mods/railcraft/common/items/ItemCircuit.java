@@ -41,7 +41,8 @@ public class ItemCircuit extends ItemRailcraftSubtyped {
     }
 
     @Override
-    public void finalizeDefinition() {
+    public void defineRecipes() {
+        super.defineRecipes();
         Ingredient glue = Ingredients.from("slimeball", ModItems.STICKY_RESIN);
         Ingredient gem = Ingredients.from("gemLapis", "gemQuartz", "crystalCertusQuartz");
         CraftingPlugin.addShapedRecipe(new ItemStack(this, 1, EnumCircuit.CONTROLLER.ordinal()),
