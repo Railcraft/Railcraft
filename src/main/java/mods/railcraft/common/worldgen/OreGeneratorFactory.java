@@ -29,6 +29,7 @@ import org.apache.logging.log4j.Level;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -173,8 +174,25 @@ public class OreGeneratorFactory {
         final WhiteBlackList<BiomeDictionary.Type> richBiomeTypes;
 
         public BiomeRules(Configuration config) {
+            final Function<String, Iterable<Biome>> biomeFactory = (biomeId) -> {
+                ResourceLocation id = new ResourceLocation(biomeId);
 
-            Function<String, Biome> biomeFactory = (biomeId) -> ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeId));
+                if ("all".equalsIgnoreCase(id.getPath())) {
+                    String namespace = id.getNamespace();
+                    return ForgeRegistries.BIOMES.getEntries().stream()
+                            .filter(entry -> namespace.equals(entry.getKey().getNamespace()))
+                            .map(Entry::getValue)
+                            .collect(Collectors.toList());
+                }
+                Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeId));
+
+                if (biome == null) {
+                    Game.log().msg(Level.WARN, "Invalid biome id {0} defined in ore generation config!", biomeId);
+                    return Collections.emptySet();
+                }
+
+                return Collections.singleton(biome);
+            };
 
             config.setCategoryComment(CAT + ".biomes", "Expects fully qualified Biome registry names.\n" +
                     "See Biome.java in Minecraft/Forge for the names.\n" +
@@ -185,7 +203,7 @@ public class OreGeneratorFactory {
             String[] biomeWhitelistNames = config.getStringList("whitelist", CAT + ".biomes", new String[]{}, "Biome registry names where the ore will generate. Takes priority over types.");
 //            biomeWhitelist = Collections.unmodifiableSet(Arrays.stream(biomeWhitelistNames).flatMap(this::getBiomes).collect(Collectors.toSet()));
 
-            validBiomes = makeDoubleList(biomeFactory, biomeBlacklistNames, biomeWhitelistNames);
+            validBiomes = makeDoubleListFlat(biomeFactory, biomeBlacklistNames, biomeWhitelistNames);
 
             config.setCategoryComment(CAT + ".biomesTypes", "Biome Dictionary types can be found in BiomeDictionary.java in Forge.\n" +
                     "You can use 'ALL' to specify all types.");
@@ -198,81 +216,68 @@ public class OreGeneratorFactory {
 
             config.setCategoryComment(CAT + ".rich", "Biomes where the ore will generator more richly.");
             String[] richBiomeNames = config.getStringList("biomes", CAT + ".rich", new String[]{"minecraft:mesa"}, "Biomes where the ore will generator more richly. Expects fully qualified Biome registry names. '<modId>:all' can be used to specify all Biomes from a specific mod.");
-            richBiomes = makeSingleList(biomeFactory, richBiomeNames);
+            richBiomes = makeSingleListFlat(biomeFactory, richBiomeNames);
 
             String[] richBiomeTypeNames = config.getStringList("biomeTypes", CAT + ".rich", new String[]{"MOUNTAIN", "MESA", "HILLS"}, "Biome Dictionary types where the ore will generator more richly. You can use 'ALL' to specify all types.");
             richBiomeTypes = makeSingleList(BiomeDictionary.Type::getType, richBiomeTypeNames);
-
         }
 
         public boolean isValidBiome(Biome biome) {
-            WhiteBlackList.PermissionLevel level = validBiomes.getPermissionLevel(biome);
-
-            if (level != WhiteBlackList.PermissionLevel.DEFAULT)
-                return level == WhiteBlackList.PermissionLevel.WHITELISTED;
-
-            // FIXME this is wrong, it doesn't have to match all
-            return BiomeDictionary.getTypes(biome).stream().allMatch(validBiomeTypes::permits);
+            return isOfBiome(validBiomes, validBiomeTypes, biome);
         }
 
         public boolean isRichBiome(Biome biome) {
-            WhiteBlackList.PermissionLevel level = richBiomes.getPermissionLevel(biome);
+            return isOfBiome(richBiomes, richBiomeTypes, biome);
+        }
+
+        private static boolean isOfBiome(WhiteBlackList<Biome> biomes, WhiteBlackList<BiomeDictionary.Type> types, Biome biome) {
+            WhiteBlackList.PermissionLevel level = biomes.getPermissionLevel(biome);
 
             if (level != WhiteBlackList.PermissionLevel.DEFAULT)
                 return level == WhiteBlackList.PermissionLevel.WHITELISTED;
 
-            // FIXME this is wrong, it doesn't have to match all
-            return BiomeDictionary.getTypes(biome).stream().anyMatch(richBiomeTypes::permits);
+            Set<BiomeDictionary.Type> biomeTypes = BiomeDictionary.getTypes(biome);
+            Set<BiomeDictionary.Type> blacklist = types.getBlacklist();
+            return biomeTypes.stream().noneMatch(blacklist::contains) && biomeTypes.stream().anyMatch(types::permits);
         }
 
-//        private Stream<Biome> getBiomes(String name) {
-//            ResourceLocation resource = new ResourceLocation(name);
-//            if ("all".equalsIgnoreCase(resource.getPath()))
-//                return StreamSupport.stream(Biome.REGISTRY.spliterator(), false).filter(b -> resource.getNamespace().equalsIgnoreCase(b.getRegistryName().getNamespace()));
-//            Biome biome = Biome.REGISTRY.getObject(resource);
-//            if (biome == null)
-//                return Stream.empty();
-//            return Stream.of(biome);
-//        }
-//
-//        private Stream<BiomeDictionary.Type> getTypes(String name) {
-//            name = name.toUpperCase(Locale.ROOT);
-//            if ("ALL".equalsIgnoreCase(name)) {
-//                noWhiteList = true;
-//                return Stream.empty();
-//            }
-//            return Stream.of(BiomeDictionary.Type.getType(name));
-//        }
-
         private static <E> WhiteBlackList<E> makeSingleList(Function<String, E> transform, String[] whiteEntries) {
-            return makeDoubleList(transform, new String[0], whiteEntries);
+            return makeDoubleListFlat(st -> Collections.singleton(transform.apply(st)), new String[0], whiteEntries);
         }
 
         private static <E> WhiteBlackList<E> makeDoubleList(Function<String, E> transform, String[] blackEntries, String[] whiteEntries) {
+            return makeDoubleListFlat(st -> Collections.singleton(transform.apply(st)), blackEntries, whiteEntries);
+        }
+
+        private static <E> WhiteBlackList<E> makeSingleListFlat(Function<String, Iterable<E>> transform, String[] whiteEntries) {
+            return makeDoubleListFlat(transform, new String[0], whiteEntries);
+        }
+
+        private static <E> WhiteBlackList<E> makeDoubleListFlat(Function<String, Iterable<E>> transform, String[] blackEntries, String[] whiteEntries) {
             ImmutableSet.Builder<E> blackListBuilder = ImmutableSet.builder();
             for (String blackEntry : blackEntries) {
-                E result = transform.apply(blackEntry);
+                Iterable<E> result = transform.apply(blackEntry);
                 if (result != null) {
-                    blackListBuilder.add(result);
+                    blackListBuilder.addAll(result);
                 }
             }
 
             ImmutableSet<E> blackList = blackListBuilder.build();
 
-            boolean whiteListDisabled = false;
+            boolean allowAll = false;
             ImmutableSet.Builder<E> whiteListBuilder = ImmutableSet.builder();
             for (String whiteEntry : whiteEntries) {
                 if ("all".equalsIgnoreCase(whiteEntry)) {
-                    whiteListDisabled = true;
+                    allowAll = true;
                     break;
                 }
-                E result = transform.apply(whiteEntry);
+                Iterable<E> result = transform.apply(whiteEntry);
                 if (result != null) {
-                    whiteListBuilder.add(result);
+                    whiteListBuilder.addAll(result);
                 }
             }
 
-            return whiteListDisabled ? WhiteBlackList.create(blackList) : WhiteBlackList.create(blackList, whiteListBuilder.build());
+            return allowAll ? WhiteBlackList.create(blackList) : WhiteBlackList.create(blackList, whiteListBuilder.build());
         }
     }
 

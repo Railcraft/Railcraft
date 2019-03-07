@@ -14,13 +14,15 @@ class WhiteBlackListTest {
         Set<String> whiteList = Sets.newHashSet("apple", "bear", "pear");
         Set<String> blackList = Sets.newHashSet("apple", "non", "nana");
         WhiteBlackList<String> whiteBlackList = WhiteBlackList.create(blackList, whiteList);
-        Assertions.assertTrue(whiteBlackList.permits("apple"));
-        Assertions.assertTrue(whiteBlackList.permits("dana"));
+        Assertions.assertFalse(whiteBlackList.permits("apple"));
+        Assertions.assertTrue(whiteBlackList.permits("pear"));
+        Assertions.assertFalse(whiteBlackList.permits("dana"));
         Assertions.assertEquals(PermissionLevel.DEFAULT, whiteBlackList.getPermissionLevel("abcde"));
         Assertions.assertEquals(PermissionLevel.BLACKLISTED, whiteBlackList.getPermissionLevel("non"));
         Assertions.assertEquals(PermissionLevel.WHITELISTED, whiteBlackList.getPermissionLevel("bear"));
-        Assertions.assertEquals(PermissionLevel.WHITELISTED, whiteBlackList.getPermissionLevel("apple"));
+        Assertions.assertEquals(PermissionLevel.BLACKLISTED, whiteBlackList.getPermissionLevel("apple"));
         Assertions.assertFalse(whiteBlackList.permits("nana"));
         Assertions.assertFalse(whiteBlackList.permits("non"));
+        Assertions.assertTrue(whiteBlackList.permits("bear"));
     }
 }

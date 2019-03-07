@@ -10,33 +10,32 @@
 
 package mods.railcraft.common.util.misc;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * A combination of black list and white list.
  *
- * The whitelist has a higher priority than the blacklist.
+ * The blacklist has a higher priority than the whitelist.
  */
 public final class WhiteBlackList<T> {
 
     private final Set<T> blacklist;
     private final Set<T> whitelist;
-    private boolean whitelistEnabled;
+    private boolean allowAll;
 
     public static <T> WhiteBlackList<T> create(Set<T> blacklist, Set<T> whitelist) {
-        return new WhiteBlackList<>(blacklist, whitelist, true);
+        return new WhiteBlackList<>(blacklist, whitelist, false);
     }
 
     public static <T> WhiteBlackList<T> create(Set<T> blacklist) {
-        return new WhiteBlackList<>(blacklist, new HashSet<>(), false);
+        return new WhiteBlackList<>(blacklist, new HashSet<>(), true);
     }
 
-    private WhiteBlackList(Set<T> blacklist, Set<T> whitelist, boolean whitelistEnabled) {
+    private WhiteBlackList(Set<T> blacklist, Set<T> whitelist, boolean allowAll) {
         this.whitelist = whitelist;
         this.blacklist = blacklist;
-        this.whitelistEnabled = whitelistEnabled;
+        this.allowAll = allowAll;
     }
 
     public Set<T> getBlacklist() {
@@ -47,29 +46,28 @@ public final class WhiteBlackList<T> {
         return whitelist;
     }
 
-    public void disableWhiteList() {
-        this.whitelistEnabled = false;
-        whitelist.clear();
+    public void restrictToWhitelist() {
+        this.allowAll = false;
     }
 
-    public void enableWhiteList() {
-        this.whitelistEnabled = true;
+    public void allowAll() {
+        this.allowAll = true;
     }
 
-    public boolean isWhitelistEnabled() {
-        return whitelistEnabled;
+    public boolean isAllowingAll() {
+        return allowAll;
     }
 
     public boolean permits(T entry) {
-        return (whitelistEnabled && whitelist.contains(entry)) || !blacklist.contains(entry);
+        return !blacklist.contains(entry) && (allowAll || whitelist.contains(entry));
     }
 
     public PermissionLevel getPermissionLevel(T entry) {
-        if (whitelistEnabled && whitelist.contains(entry)) {
-            return PermissionLevel.WHITELISTED;
-        }
         if (blacklist.contains(entry)) {
             return PermissionLevel.BLACKLISTED;
+        }
+        if (allowAll || whitelist.contains(entry)) {
+            return PermissionLevel.WHITELISTED;
         }
         return PermissionLevel.DEFAULT;
     }
