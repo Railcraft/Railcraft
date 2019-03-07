@@ -551,12 +551,12 @@ public final class Train implements Iterable<EntityMinecart> {
                 if (train != null)
                     trains.put(train.getUUID(), train);
             }
-            Game.log().msg(Level.INFO, "Loaded {0} Trains...", trains.size());
+            Game.log().msg(Level.DEBUG, "Loaded {0} Trains...", trains.size());
         }
 
         @Override
         public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-            Game.log().msg(Level.INFO, "Saving {0} Trains...", trains.size());
+            Game.log().msg(Level.DEBUG, "Saving {0} Trains...", trains.size());
             NBTTagList listTag = new NBTTagList();
             for (Train train : trains.values()) {
                 NBTTagCompound tag = new NBTTagCompound();
