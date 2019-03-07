@@ -45,12 +45,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IMinecartCollisionHandler;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -418,12 +420,6 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
             return;
         }
         if (cart.canBeRidden()) {
-            //TODO: this will interfere with carts that multiple players can ride, re-evaluate
-            // Don't try to ride carts being ridden by someone else
-            if (cart.isBeingRidden() && player.getRidingEntity() != cart) {
-                event.setCanceled(true);
-                return;
-            }
             // Don't try to ride a cart if we are riding something else already
             if (player.getRidingEntity() != null && player.getRidingEntity() != cart) {
                 event.setCanceled(true);
@@ -438,6 +434,22 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         if (!player.canEntityBeSeen(cart)) {
             event.setCanceled(true);
         }
+    }
+
+    // Substitutes vanilla minecart spawns.
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onMinecartSpawn(EntityJoinWorldEvent event) {
+        Entity entity = event.getEntity();
+        IRailcraftCartContainer cartType = CartTools.classReplacements.get(entity.getClass());
+        if (cartType == null) {
+            return;
+        }
+
+        Entity replacement = cartType.getRegistration().newInstance(event.getWorld());
+        replacement.readFromNBT(entity.writeToNBT(new NBTTagCompound()));
+        entity.setDead();
+        event.setCanceled(true);
+        event.getWorld().spawnEntity(replacement);
     }
 
     @SubscribeEvent
