@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftColored;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -27,6 +28,6 @@ public class ItemPostMetal extends ItemBlockRailcraftColored<BlockPostMetalBase>
     public String getTranslationKey(ItemStack stack) {
         if (stack.getItemDamage() == -1 || stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
             return EnumPost.METAL_UNPAINTED.getTag();
-        return super.getTranslationKey() + "." + EnumColor.fromOrdinal(stack.getItemDamage()).getBaseTag();
+        return super.getTranslationKey() + "." + LocalizationPlugin.convertTag(EnumColor.fromOrdinal(stack.getItemDamage()).getBaseTag());
     }
 }
