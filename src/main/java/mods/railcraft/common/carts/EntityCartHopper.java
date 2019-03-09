@@ -55,7 +55,12 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
 
     @Override
     protected EnumGui getGuiType() {
-        throw new UnsupportedOperationException("not supported");
+        throw new UnsupportedOperationException("No GUI");
+    }
+
+    @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        player.displayGUIChest(this);
     }
 
     @Override
@@ -218,11 +223,6 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     @Override
     public String getGuiID() {
         return "minecraft:hopper";
-    }
-
-    @Override
-    protected void openRailcraftGui(EntityPlayer player) {
-        player.displayGUIChest(this);
     }
 
     @Override

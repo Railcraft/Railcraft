@@ -19,6 +19,7 @@ import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -81,6 +82,11 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
 
     @Override
     protected EnumGui getGuiType() {
-        throw new Error("This does not have GUIs or containers");
+        throw new UnsupportedOperationException("No GUI");
+    }
+
+    @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        // Do nothing!
     }
 }
