@@ -223,6 +223,11 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
     }
 
+    /**
+     * Gets the GUI type of the minecart.
+     *
+     * If there is no GUI, the cart must override {@link #openRailcraftGui(EntityPlayer)} to not open a GUI.
+     */
     protected abstract EnumGui getGuiType();
 
     @Override
