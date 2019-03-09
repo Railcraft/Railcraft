@@ -48,6 +48,11 @@ public final class Game {
     static {
         boolean worldFound = false;
         boolean worldObjFound = false;
+        boolean foundBukkit = false;
+        try {
+            foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
+        } catch (ClassNotFoundException ignored) {
+        }
         try {
             worldFound = Entity.class.getDeclaredField("world") != null;
         } catch (NoSuchFieldException | SecurityException ignored) {
@@ -57,14 +62,9 @@ public final class Game {
             worldObjFound = Entity.class.getDeclaredField("worldObj") != null;
         } catch (NoSuchFieldException | SecurityException ignored) {
         }
-        OBFUSCATED = !worldFound && !worldObjFound;
-        DEVELOPMENT_VERSION = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
-        boolean foundBukkit = false;
-        try {
-            foundBukkit = Class.forName("org.spigotmc.SpigotConfig") != null;
-        } catch (ClassNotFoundException ignored) {
-        }
         BUKKIT = foundBukkit;
+        OBFUSCATED = !worldFound && !worldObjFound && !BUKKIT;
+        DEVELOPMENT_VERSION = Railcraft.getVersion().matches(".*(alpha|beta).*") || !OBFUSCATED;
         if (BUKKIT)
             Game.log().msg(Level.INFO, "Bukkit detected, disabling Tile Entity caching because Bukkit doesn't seem to invalid Tile Entities properly!");
     }
@@ -122,9 +122,17 @@ public final class Game {
     }
 
     public static ILogger log(String category) {
-        if (enabledCategories.contains(category))
-            return Logger.INSTANCE;
-        return NULL_LOGGER;
+    	if(BUKKIT) {
+    		try {
+    			return Logger.INSTANCE;
+    		} catch (Throwable ex) {
+    			return NULL_LOGGER;
+    		}
+    	} else {
+    		if (enabledCategories.contains(category))
+    			return Logger.INSTANCE;
+    		return NULL_LOGGER;
+    	}
     }
 
     private static ILogger NULL_LOGGER = new ILogger() {};
