@@ -30,17 +30,14 @@ import java.util.function.Predicate;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GeneratorMine extends Generator {
+public class GeneratorMine extends RuledGenerator {
     private final Map<World, NoiseGen> cloudMap = new MapMaker().weakKeys().makeMap();
     private final Map<World, NoiseGen> veinMap = new MapMaker().weakKeys().makeMap();
-    private final OreGeneratorFactory.DimensionRules dimensionRules;
-    private final OreGeneratorFactory.BiomeRules biomeRules;
     private final OreGeneratorFactory.GeneratorSettingsMine settings;
     private final WorldGenerator fringeGen, coreGen;
 
     protected GeneratorMine(Configuration config, OreGeneratorFactory.DimensionRules dimensionRules, OreGeneratorFactory.BiomeRules biomeRules, OreGeneratorFactory.GeneratorSettingsMine settings) {
-        this.dimensionRules = dimensionRules;
-        this.biomeRules = biomeRules;
+        super(dimensionRules, biomeRules);
         this.settings = settings;
 
         fringeGen = getGen(settings.fringeOre);
@@ -137,6 +134,6 @@ public class GeneratorMine extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos targetPos, Biome biome) {
-        return dimensionRules.isDimensionValid(world) && biomeRules.isValidBiome(biome) && TerrainGen.generateOre(world, rand, coreGen, targetPos, EventType.CUSTOM);
+        return super.canGen(world, rand, targetPos, biome) && TerrainGen.generateOre(world, rand, coreGen, targetPos, EventType.CUSTOM);
     }
 }
