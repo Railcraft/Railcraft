@@ -823,7 +823,10 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         EntityPlayerMP fakePlayer = CartTools.getFakePlayerWith(this, head);
 
         // Fires break event within; harvest handled separately
-        if (!WorldPlugin.playerRemoveBlock(world, targetPos, fakePlayer, false))
+        BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(world, targetPos, targetState, CartTools.getCartOwnerEntity(this));
+        MinecraftForge.EVENT_BUS.post(breakEvent);
+
+        if (breakEvent.isCanceled())
             return false;
 
         if (RailcraftConfig.borePreserveStacks() && world.getGameRules().getBoolean("doTileDrops")) {
@@ -870,6 +873,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                 }
             }
         }
+
+        WorldPlugin.setBlockToAir(world, targetPos);
 
         head.damageItem(1, fakePlayer);
         if (head.getItemDamage() > head.getMaxDamage())
