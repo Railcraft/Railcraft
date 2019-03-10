@@ -47,7 +47,7 @@ public final class Game {
     public static final Level DEBUG_REPORT = Level.forName("DEBUG_REPORT", 150);
 
     /**
-     * Separate options with spaces.
+     * Separate options with commas.
      */
     private static final String CATEGORY_SETTINGS = "railcraft.log.categories";
     /**
@@ -72,7 +72,7 @@ public final class Game {
 
         String st = System.getProperty(CATEGORY_SETTINGS);
         if (st != null) {
-            Collections.addAll(enabledCategories, st.split(" "));
+            Collections.addAll(enabledCategories, st.split(","));
         }
     }
 
