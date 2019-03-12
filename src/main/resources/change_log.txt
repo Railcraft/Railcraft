@@ -1,3 +1,24 @@
+12.0.0-rc-1:
+    INFO: Release Candidate
+    WIP: Migrate Flux Transformer to new structure logic and fix a few bugs along the way.
+    INFO: Tanks and Boilers still remain to be migrated and thoroughly tested, but we are not aware of any bugs at this time.
+    CHANGE: Revert Abyssal and Quarried Stone recipes to require a furnace. (liach)
+    CHANGE: Revert Track Parts to be made from nuggets instead of ingots, resulting in cost reduction.
+    COMPAT: Fix crash with Spigot/Bukkit. (liach)
+    COMPAT: CraftTweaker - All recipes now properly defined in init instead of some being in post. (liach)
+    COMPAT: LookTweaker - Clean up loot handling to allow better compatibility. (liach)
+    CONFIG: Improve options controlling the insertion of crushed obsidian into IC2's crafting tree. (liach)
+    FIX: Fix Mine generation biome matching, rich biomes should work again. (liach)
+    FIX: Various localization fixes. (liach)
+    FIX: Bore now properly mines blocks with as if it was a tool. (liach)
+    FIX: Cascading world gen issues resolved. (liach)
+    FIX: Tooltips now correctly report tank size for boilers and tanks. (liach)
+    FIX: Fix auto stocking for track layer. (liach)
+    FIX: Fix fluid containing recipes. (liach)
+    FIX: Fix Detector Track Kits properly emulating the Comparator functions of vanilla Detector Tracks. (liach)
+    FIX: Fix infinite Iron bug in tank recipes. (liach)
+    API: Now available as compiled and source jars! (liach)
+
 12.0.0-beta-5:
     WIP: Migrate Water Tank to new structure logic, implement new water generation algorithm. Missing GUI atm.
     WIP: Migrate Rock Crusher and Steam Oven to new structure logic and fix a few bugs along the way.
