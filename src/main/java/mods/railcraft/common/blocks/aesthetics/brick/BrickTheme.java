@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
@@ -30,6 +31,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.BLOCK;
+import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.COBBLE;
 
 /**
  * The Brick Themes (clever, I know)
@@ -41,6 +43,12 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_ABYSSAL.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_ABYSSAL.getStack(), block.getStack(BLOCK), 0.05f);
+                if (COBBLE.isEnabled()) {
+                    Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_ABYSSAL)
+                            .name("railcraft:stone_abyssal")
+                            .addOutput(getStack(COBBLE))
+                            .register();
+                }
             }
         }
     },
@@ -90,6 +98,12 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         public void initRecipes(BlockBrick block) {
             if (EnumGeneric.STONE_QUARRIED.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_QUARRIED.getStack(), block.getStack(BLOCK), 0.05f);
+                if (COBBLE.isEnabled()) {
+                    Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_QUARRIED)
+                            .name("railcraft:stone_quarried")
+                            .addOutput(getStack(COBBLE))
+                            .register();
+                }
             }
         }
     },
