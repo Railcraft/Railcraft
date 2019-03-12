@@ -43,7 +43,7 @@ public final class AdjacentTileCache {
     }
 
     private @Nullable TileEntity searchSide(EnumFacing side) {
-        return WorldPlugin.getBlockTile(source.getWorld(), source.getPos().offset(side));
+        return WorldPlugin.getBlockTileWeak(source.getWorld(), source.getPos().offset(side));
     }
 
     public void refresh() {
