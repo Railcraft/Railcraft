@@ -823,7 +823,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         EntityPlayerMP fakePlayer = CartTools.getFakePlayerWith(this, head);
 
         // Fires break event within; harvest handled separately
-        BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(world, targetPos, targetState, CartTools.getCartOwnerEntity(this));
+        BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(world, targetPos, targetState, fakePlayer);
         MinecraftForge.EVENT_BUS.post(breakEvent);
 
         if (breakEvent.isCanceled())
