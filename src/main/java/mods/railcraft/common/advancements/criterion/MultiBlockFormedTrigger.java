@@ -16,10 +16,10 @@ import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.advancements.criterion.MultiBlockFormedTrigger.Instance;
 import mods.railcraft.common.blocks.TileRailcraft;
-import mods.railcraft.common.blocks.multi.IMultiBlockTile;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.util.json.JsonTools;
 import mods.railcraft.common.util.misc.Conditions;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.NBTPredicate;
@@ -30,7 +30,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,9 +70,9 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
 
     @SubscribeEvent
     public void onMultiBlockForm(MultiBlockEvent.Form event) {
-        TileRailcraft tile = event.getMultiBlock();
+        TileRailcraft tile = event.getMaster();
         GameProfile owner = tile.getOwner();
-        MinecraftServer server = requireNonNull(FMLCommonHandler.instance().getMinecraftServerInstance());
+        MinecraftServer server = requireNonNull(Game.getServer());
         EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(owner.getId());
         if (player == null) {
             return; // Offline
@@ -97,7 +96,6 @@ final class MultiBlockFormedTrigger extends BaseTrigger<Instance> {
             this.nbt = nbtPredicate;
         }
 
-        // FIXME: This used to use the master class, but I removed that function and probably broke it. - CovertJaguar
         boolean matches(TileRailcraft tile) {
             return Conditions.check(clazz, tile.getClass()) && nbt.test(tile.writeToNBT(new NBTTagCompound()));
         }

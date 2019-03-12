@@ -325,14 +325,27 @@ task signDevJar(type: JarSigner, dependsOn: 'devJar') {
     outputFile = devJar.getArchivePath()
 }
 
-task apiZip(type: Zip) {
+task apiSourceJar(type: Jar) {
     from project.apiRailcraft
+    include '**/mods/railcraft/api/**/*.java'
+    from project.apiRailcraft + "/LICENSE.md"
+    include '**/LICENSE.md'
     destinationDir = file(dirDest)
-    classifier = 'api'
-    extension = 'zip'
+    classifier = 'api-sources'
+    extension = 'jar'
 }
 
-build.dependsOn signMainJar, signDevJar, apiZip
+task apiJar(type: Jar) {
+    from sourceSets.api.output
+    include '**/mods/railcraft/api/**'
+    from project.apiRailcraft + "/LICENSE.md"
+    include '**/LICENSE.md'
+    destinationDir = file(dirDest)
+    classifier = 'api'
+    extension = 'jar'
+}
+
+build.dependsOn signMainJar, signDevJar, apiSourceJar, apiJar
 uploadArchives.shouldRunAfter build
 
 if (project.hasProperty("ftpUsername"))
@@ -350,7 +363,8 @@ if (project.hasProperty("ftpUsername"))
     }
 
 artifacts {
-    archives apiZip
+    archives apiSourceJar
+    archives apiJar
     archives devJar
     archives jar
 }
