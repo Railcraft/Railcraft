@@ -22,6 +22,7 @@ import mods.railcraft.common.blocks.logic.ChargeSourceLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -70,13 +71,14 @@ public final class TileFluxTransformer extends TileLogic implements IEnergyStora
             @Override
             protected void onPatternChanged() {
                 super.onPatternChanged();
-                getFunctionalLogic(ChargeSourceLogic.class).ifPresent(logic -> {
-                    if (isMaster) {
-                        logic.getBattery().setState(IBatteryBlock.State.SOURCE);
-                    } else {
-                        logic.getBattery().setState(IBatteryBlock.State.DISABLED);
-                    }
-                });
+                if (Game.isHost(theWorldAsserted()))
+                    getFunctionalLogic(ChargeSourceLogic.class).ifPresent(logic -> {
+                        if (isMaster) {
+                            logic.getBattery().setState(IBatteryBlock.State.SOURCE);
+                        } else {
+                            logic.getBattery().setState(IBatteryBlock.State.DISABLED);
+                        }
+                    });
             }
         }.addSubLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution)));
     }
