@@ -70,7 +70,8 @@ def actualRunDir = project.file(minecraft.runDir)
 def optimizedVmArgs = ['-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M']
 def assertionVmArgs = ['-ea:mods.railcraft...', '-ea:net.minecraft...', '-ea:net.minecraftforge...']
 def log4jVmArgs = ['-Dlog4j.configurationFile=' + new File(actualRunDir, 'log4j2.xml').toString()]
-def combinedVmArgs = [assertionVmArgs, optimizedVmArgs, log4jVmArgs].flatten()
+def railcraftDebugArgs = ['-Drailcraft.log.categories=registry,models']
+def combinedVmArgs = [assertionVmArgs, optimizedVmArgs, log4jVmArgs, railcraftDebugArgs].flatten()
 def extraEnvs = new LinkedHashMap() //['LOG4J_CONFIGURATION_FILE': "log4j2.xml"]
 
 minecraft {

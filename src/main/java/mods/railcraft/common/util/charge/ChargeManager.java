@@ -47,7 +47,6 @@ public enum ChargeManager implements Charge.IManager {
 
     @Override
     public Charge.INetwork network(World world) {
-        Game.notClient(world);
-        return networks.computeIfAbsent(world, (w) -> new ChargeNetwork(type, w));
+        return networks.computeIfAbsent(Game.requireHost(world), (w) -> new ChargeNetwork(type, w));
     }
 }
