@@ -19,7 +19,6 @@ import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -85,7 +84,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
         }
 
         @Override
-        public @Nullable String getOreTag() {
+        public String getOreTag() {
             return oreTag;
         }
 
