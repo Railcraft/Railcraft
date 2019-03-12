@@ -90,8 +90,15 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
-    public void finalizeDefinition() {
-        IRailcraftBlock.super.finalizeDefinition();
+    public void defineRecipes() {
+        for (EnumColor color : EnumColor.VALUES) {
+            CraftingPlugin.addShapedRecipe(getStack(8, color),
+                    "GGG",
+                    "GDG",
+                    "GGG",
+                    'G', RailcraftBlocks.GLASS.getWildcard(),
+                    'D', color.getDyeOreDictTag());
+        }
 
         Object[] frameTypes = {"ingotTin", "ingotNickel", "ingotInvar", "ingotBrass", Items.IRON_INGOT};
         FluidStack water = Fluids.WATER.get(FluidTools.BUCKET_VOLUME);
@@ -104,18 +111,6 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
                     'F', frame,
                     'S', "dustSaltpeter",
                     'W', water);
-        }
-    }
-
-    @Override
-    public void defineRecipes() {
-        for (EnumColor color : EnumColor.VALUES) {
-            CraftingPlugin.addShapedRecipe(getStack(8, color),
-                    "GGG",
-                    "GDG",
-                    "GGG",
-                    'G', RailcraftBlocks.GLASS.getWildcard(),
-                    'D', color.getDyeOreDictTag());
         }
     }
 

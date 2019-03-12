@@ -26,7 +26,8 @@ public class ItemCartWorldspikeStandard extends ItemCartWorldspike {
     }
 
     @Override
-    public void finalizeDefinition() {
+    public void defineRecipes() {
+        super.defineRecipes();
         if (WorldspikeVariant.STANDARD.isAvailable()) {
             if (RailcraftConfig.canCraftStandardWorldspikes()) {
                 CraftingPlugin.addShapedRecipe(getStack(),

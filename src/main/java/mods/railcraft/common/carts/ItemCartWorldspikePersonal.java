@@ -26,7 +26,8 @@ public class ItemCartWorldspikePersonal extends ItemCartWorldspike {
     }
 
     @Override
-    public void finalizeDefinition() {
+    public void defineRecipes() {
+        super.defineRecipes();
         if (RailcraftConfig.canCraftPersonalWorldspikes()) {
             CraftingPlugin.addShapedRecipe(getStack(),
                     "A",
