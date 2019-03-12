@@ -147,10 +147,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                             "I I",
                             'I', "ingotRefinedIron");
                 }
-            }
 
-            @Override
-            public void postInit() {
                 EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
                 if (cubeType.isEnabled()) {
                     ItemStack stack = cubeType.getStack();

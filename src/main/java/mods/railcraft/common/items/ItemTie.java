@@ -45,10 +45,7 @@ public class ItemTie extends ItemRailcraftSubtyped {
                 'O', water,
                 'r', RailcraftItems.REBAR,
                 '#', RailcraftItems.CONCRETE);
-    }
 
-    @Override
-    public void finalizeDefinition() {
         ItemStack tieWood = RailcraftItems.TIE.getStack(1, EnumTie.WOOD);
         FluidStack creosote = Fluids.CREOSOTE.getB(1);
         CraftingPlugin.addShapedRecipe(tieWood,

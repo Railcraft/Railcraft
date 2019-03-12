@@ -84,8 +84,8 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
     }
 
     @Override
-    public void finalizeDefinition() {
-        super.finalizeDefinition();
+    public void defineRecipes() {
+        super.defineRecipes();
         for (Tuple<TrackType, TrackKit> combo : TrackRegistry.getCombinations()) {
             TrackType trackType = combo.getFirst();
             TrackKit trackKit = combo.getSecond();

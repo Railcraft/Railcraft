@@ -24,7 +24,8 @@ import net.minecraftforge.fml.common.Optional;
 public class ItemFilterBee extends ItemRailcraft implements IFilterItem {
 
     @Override
-    public void finalizeDefinition() {
+    public void defineRecipes() {
+        super.defineRecipes();
         CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEY_DROP);
         CraftingPlugin.addShapelessRecipe(getStack(), RailcraftItems.FILTER_BLANK, ModItems.HONEYDEW_DROP);
     }
