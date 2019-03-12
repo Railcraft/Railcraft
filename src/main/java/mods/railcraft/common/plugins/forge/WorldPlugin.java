@@ -17,11 +17,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
 import org.jetbrains.annotations.Nullable;
@@ -44,13 +42,13 @@ public class WorldPlugin {
         return getBlockState(world, pos).getBlock();
     }
 
+    public static @Nullable TileEntity getBlockTileWeak(World world, BlockPos pos) {
+        return isBlockLoaded(world, pos) ? getBlockTile(world, pos) : null;
+    }
+
     public static @Nullable TileEntity getBlockTile(IBlockAccess world, BlockPos pos) {
-        // see flowerpot source code
-//        if (pos.getY() < 0) { // cubic chunks
-//            // dunno if this will be triggered by tiles at y=0
-//            Game.log().msg(Level.INFO, "Attempted to access tile entity in an invalid position");
-//        }
-        return world instanceof ChunkCache ? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(pos);
+        // see flowerpot source code about chunk cache (forge patched in 1.12)
+        return world.getTileEntity(pos);
     }
 
     public static Optional<TileEntity> getTileEntity(IBlockAccess world, BlockPos pos) {
