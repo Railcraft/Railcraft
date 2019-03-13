@@ -45,7 +45,6 @@ public class RailcraftConfig {
     private static final String COMMENT_PREFIX = "\n";
     private static final String COMMENT_SUFFIX = "\n";
     //    private static final String COMMENT_PREFIX = "\n\n   # ";
-    private static final String CAT_AURAS = "auras";
     private static final String CAT_CHARGE = "charge";
     private static final String CAT_ENCHANTMENTS = "enchantments";
     private static final String CAT_LOOT = "loot";
@@ -96,7 +95,6 @@ public class RailcraftConfig {
     private static boolean cartsAreSolid;
     private static boolean playSounds;
     private static boolean routingOpsOnly;
-    private static boolean trackingAuraEnabled;
     private static boolean enableGhostTrain;
     private static boolean enablePolarExpress;
     private static boolean generateDefaultOreConfigs;
@@ -112,7 +110,6 @@ public class RailcraftConfig {
     private static int locomotiveHorsepower;
     private static int creosoteTorchOutput;
     private static int coalCokeTorchOutput;
-    private static int villagerID;
     private static String[] enchantments;
     private static int vanillaOreGenChance = 100;
     private static int locomotiveLightLevel;
@@ -125,6 +122,7 @@ public class RailcraftConfig {
     private static float fuelPerSteamMultiplier = SteamConstants.FUEL_PER_BOILER_CYCLE;
     private static float steamLocomotiveEfficiencyMultiplier = 3F;
     private static boolean allowTankStacking;
+    private static boolean hopperCartTransferCooldown;
     public static Configuration configMain;
     public static Configuration configBlocks;
     public static Configuration configItems;
@@ -354,6 +352,8 @@ public class RailcraftConfig {
                         + "there are 1000 milli-buckets in a bucket, ignored if 'tweaks.minecarts.tank.useCustomValues=false'");
         if (minecartTankCustomize)
             minecartTankFillRate = fillRate;
+
+        hopperCartTransferCooldown = get(CAT_TWEAKS_CARTS + ".hopper", "transferCooldown", true, "change to '{t}=false' to revert fix for MC-65029 and restore the incorrect vanilla behavior, i.e. no transfer cooldown");
     }
 
     private static void loadRecipeOption() {
@@ -428,8 +428,6 @@ public class RailcraftConfig {
 
 //        mineStandardOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "mineStandardOreChance", 0, 20, 100, "chance that standard Ore will spawn in the core of Railcraft Ore Mines, min=0, default=20, max=100");
         vanillaOreGenChance = get(configMain, CAT_WORLD_GEN + ".tweak", "vanillaOreGenChance", 0, 100, 100, "chance that vanilla ore gen (Iron, Gold) will spawn ore uniformly throughout the world, set to zero to disable, min=0, default=100, max=100");
-
-        villagerID = configMain.get(CAT_WORLD_GEN + ".id", "workshop", 456).getInt(456);
     }
 
     private static void loadFluids() {
@@ -893,10 +891,6 @@ public class RailcraftConfig {
         return allowTankStacking;
     }
 
-    public static boolean isTrackingAuraEnabled() {
-        return trackingAuraEnabled;
-    }
-
     public static float chargeLossMultiplier() {
         return chargeLossMultiplier;
     }
@@ -921,8 +915,8 @@ public class RailcraftConfig {
         return vanillaOreGenChance;
     }
 
-    public static int villagerID() {
-        return villagerID;
+    public static boolean hopperCartTransferCooldown() {
+        return hopperCartTransferCooldown;
     }
 
     public static boolean isEnchantmentEnabled(String enchantment) {

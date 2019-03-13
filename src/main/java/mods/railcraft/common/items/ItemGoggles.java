@@ -65,7 +65,7 @@ public class ItemGoggles extends ItemRailcraftArmor {
                 aura = 0;
             data.setByte("aura", aura);
 
-            if (getCurrentAura(goggles) == GoggleAura.TRACKING && !RailcraftConfig.isTrackingAuraEnabled())
+            if (getCurrentAura(goggles) == GoggleAura.TRACKING)
                 incrementAura(goggles);
         }
     }
