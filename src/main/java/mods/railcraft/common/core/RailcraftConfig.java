@@ -101,6 +101,8 @@ public class RailcraftConfig {
     private static boolean enablePolarExpress;
     private static boolean generateDefaultOreConfigs;
     private static boolean nerfWaterBottle;
+    private static boolean handleBottles;
+    private static boolean cartsInvulnerableFromMonsters;
     private static int minecartTankCapacity = 32;
     private static int minecartTankFillRate = 32;
     private static int launchRailMaxForce;
@@ -274,6 +276,7 @@ public class RailcraftConfig {
     private static void loadItemTweaks() {
 //        trackingAuraEnabled = get(CAT_AURAS + ".goggles", "trackingAura", true, "Change to '{t}=false' to disable the Tracking Aura");
         nerfWaterBottle = get(CAT_TWEAKS_ITEMS + "bottle.water", "nerfWaterBottle", false, "adjust to make the water bottles contain only 333 milli-bucket water, default=false");
+        handleBottles = get(CAT_TWEAKS_ITEMS + "bottle", "handleBottles", true, "change to '{t}=false' to prevent railcraft from attaching capabilities to bottles, default=true");
     }
 
     private static void loadTrackTweaks() {
@@ -303,6 +306,8 @@ public class RailcraftConfig {
         minecartsCollideWithItems = get(CAT_TWEAKS_CARTS + ".general", "collideWithItems", false, "change to '{t}=true' to restore minecart collisions with dropped items, ignored if 'register.collision.handler=false'");
 
         printLinkingDebug = get(CAT_TWEAKS_CARTS + ".general", "printLinkingDebug", false, "change to '{t}=true' to log debug info for Cart Linking");
+
+        cartsInvulnerableFromMonsters = get(CAT_TWEAKS_CARTS + ".general", "cartsInvulnerableFromMonsters", true, "change to '{t}=false' to allow monster fired projectiles to damage carts");
 
         adjustBasicCartDrag = get(CAT_TWEAKS_CARTS + ".basic", "adjustDrag", true, "change to '{t}=false' to give basic carts the original vanilla drag values, after changing you may need to replace the carts to see any change in game");
 
@@ -846,6 +851,14 @@ public class RailcraftConfig {
 
     public static boolean nerfWaterBottle() {
         return nerfWaterBottle;
+    }
+
+    public static boolean handleBottles() {
+        return handleBottles;
+    }
+
+    public static boolean cartsInvulnerableFromMonsters() {
+        return cartsInvulnerableFromMonsters;
     }
 
     public static float getMaxHighSpeed() {
