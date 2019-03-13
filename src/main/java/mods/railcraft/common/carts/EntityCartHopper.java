@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.carts;
 
+import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.IExtInvSlot;
@@ -140,7 +141,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
                     transferCooldown = 0;
                 }
 
-                if (transferCooldown <= 0) {
+                if (!RailcraftConfig.hopperCartTransferCooldown() || transferCooldown <= 0) {
                     if (transferAndNeedsCooldown()) {
                         transferCooldown = 4;
                     }

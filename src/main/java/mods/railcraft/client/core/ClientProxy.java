@@ -30,7 +30,6 @@ import mods.railcraft.common.blocks.multi.TileSteamTurbine;
 import mods.railcraft.common.blocks.multi.TileTankBase;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
@@ -237,11 +236,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 //        stack = EnumCart.CARGO.getCartItem();
 //        if (stack != null)
 //            registerItemRenderer(stack.getItem(), new RenderCartItemFiltered(RenderCartItemFiltered.RendererType.Cargo));
-
-        if (RailcraftConfig.isWorldGenEnabled("workshop")) {
-            int id = RailcraftConfig.villagerID();
-//            VillagerRegistry.instance().registerVillagerSkin(id, ModuleWorld.VILLAGER_TEXTURE);
-        }
 
         Game.log().msg(Level.TRACE, "Init Complete: Renderer");
     }
