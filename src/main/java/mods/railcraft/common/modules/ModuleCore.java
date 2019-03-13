@@ -52,6 +52,11 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntityLlamaSpit;
+import net.minecraft.entity.projectile.EntityShulkerBullet;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -59,8 +64,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -101,7 +108,8 @@ public class ModuleCore extends RailcraftModulePayload {
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
                 RailcraftFluids.preInitFluids();
-                MinecraftForge.EVENT_BUS.register(CustomContainerHandler.INSTANCE);
+                if (RailcraftConfig.handleBottles())
+                    MinecraftForge.EVENT_BUS.register(CustomContainerHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
                 LootPlugin.INSTANCE.init();
 
@@ -174,6 +182,39 @@ public class ModuleCore extends RailcraftModulePayload {
                         }
                     }
                 });
+
+                if (RailcraftConfig.cartsInvulnerableFromMonsters()) {
+                    MinecraftForge.EVENT_BUS.register(new Object() {
+                        // Prevent mobs from killing minecarts!
+                        @SubscribeEvent
+                        public void onMinecartDamagedByProjectile(ProjectileImpactEvent event) {
+                            RayTraceResult result = event.getRayTraceResult();
+                            Entity hit = result.entityHit;
+                            if (!(hit instanceof EntityMinecart))
+                                return;
+                            Entity offender = getOwner(event.getEntity());
+
+                            if (offender instanceof IMob || offender instanceof EntityShulkerBullet) {
+                                event.setCanceled(true);
+                            }
+                        }
+
+                        private @Nullable Entity getOwner(Entity projectile) {
+                            if (projectile instanceof EntityThrowable) {
+                                return ((EntityThrowable) projectile).getThrower();
+                            }
+                            if (projectile instanceof EntityArrow) {
+                                return ((EntityArrow) projectile).shootingEntity;
+                            }
+                            if (projectile instanceof EntityLlamaSpit) {
+                                return ((EntityLlamaSpit) projectile).owner;
+                            }
+                            // Left shulker bullet as its owner is inaccessible
+
+                            return projectile; // Fallback
+                        }
+                    });
+                }
 
                 if (RailcraftConfig.useCollisionHandler()) {
                     if (EntityMinecart.getCollisionHandler() != null)
