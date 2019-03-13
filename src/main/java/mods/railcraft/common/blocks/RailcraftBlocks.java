@@ -39,7 +39,6 @@ import mods.railcraft.common.blocks.machine.charge.BlockChargeFeeder;
 import mods.railcraft.common.blocks.machine.equipment.BlockMachineEquipment;
 import mods.railcraft.common.blocks.machine.manipulator.BlockMachineManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
-import mods.railcraft.common.blocks.machine.wayobjects.actuators.ItemMachineActuator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.BlockMachineSignalBoxRailcraft;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.BlockMachineSignalDualRailcraft;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.BlockMachineSignalRailcraft;
@@ -82,7 +81,7 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum RailcraftBlocks implements IRailcraftBlockContainer {
-    ACTUATOR("actuator", BlockMachineActuator.class, ItemMachineActuator::new),
+    ACTUATOR("actuator", BlockMachineActuator.class, ItemMachine::new),
     ANVIL_STEEL("anvil", BlockRCAnvil.class, ItemAnvil::new),
     BATTERY_NICKEL_IRON("battery_nickel_iron", BlockBatteryNickelIron.class, ItemBattery::new),
     BATTERY_NICKEL_ZINC("battery_nickel_zinc", BlockBatteryNickelZinc.class, ItemBattery::new),
