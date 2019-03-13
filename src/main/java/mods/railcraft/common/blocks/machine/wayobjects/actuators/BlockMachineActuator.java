@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks.machine.wayobjects.actuators;
 
 import mods.railcraft.api.tracks.ISwitchActuator;
+import mods.railcraft.client.render.models.resource.ActuatorModel;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.machine.BlockMachine;
 import mods.railcraft.common.items.ItemCircuit;
@@ -32,6 +33,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Optional;
 
@@ -164,5 +168,12 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                     'B', "dyeBlack",
                     'R', "dyeRed");
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void initializeClient() {
+        super.initializeClient();
+        ModelLoaderRegistry.registerLoader(ActuatorModel.Loader.INSTANCE);
     }
 }

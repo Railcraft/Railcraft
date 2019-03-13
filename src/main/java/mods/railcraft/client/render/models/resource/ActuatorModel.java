@@ -12,8 +12,15 @@ package mods.railcraft.client.render.models.resource;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
+import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.*;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -24,11 +31,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
+import javax.vecmath.Matrix4f;
 import java.util.*;
 import java.util.function.Function;
 
@@ -39,17 +48,24 @@ import java.util.function.Function;
  */
 @SideOnly(Side.CLIENT)
 public class ActuatorModel implements IModel {
-    public static final ActuatorModel INSTANCE = new ActuatorModel();
     private static final Set<ResourceLocation> models = new HashSet<>();
     private static final Map<IBlockState, ModelResourceLocation> baseModelLocations = new HashMap<>();
     private static final Map<IBlockState, ModelResourceLocation> redFlagModelLocations = new HashMap<>();
     private static final Map<IBlockState, ModelResourceLocation> whiteFlagModelLocations = new HashMap<>();
+    private static final Map<ModelResourceLocation, IBakedModel> baseModels = new HashMap<>();
+    private static final Map<ModelResourceLocation, IBakedModel> redFlagModels = new HashMap<>();
+    private static final Map<ModelResourceLocation, IBakedModel> whiteFlagModels = new HashMap<>();
+    static boolean baked;
+
+    private final IBlockState blockState;
+
+    ActuatorModel(IBlockState blockState) {
+        this.blockState = blockState;
+    }
 
     @Override
     public Collection<ResourceLocation> getDependencies() {
         BlockMachineActuator block = (BlockMachineActuator) RailcraftBlocks.ACTUATOR.block();
-        if (block == null)
-            return Collections.emptyList();
 
         if (models.isEmpty()) {
             StateMapperBase baseStateMapper = new StateMap.Builder()
@@ -92,70 +108,92 @@ public class ActuatorModel implements IModel {
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
         getDependencies();
+        if (!baked) {
+            baked = true;
+            bakeModels(baseModels, format, bakedTextureGetter, baseModelLocations);
+            bakeModels(redFlagModels, format, bakedTextureGetter, redFlagModelLocations);
+            bakeModels(whiteFlagModels, format, bakedTextureGetter, whiteFlagModelLocations);
+        }
         return new CompositeModel(
-                bakeModels(format, bakedTextureGetter, baseModelLocations),
-                bakeModels(format, bakedTextureGetter, redFlagModelLocations),
-                bakeModels(format, bakedTextureGetter, whiteFlagModelLocations));
+                baseModels.get(baseModelLocations.get(blockState)),
+                redFlagModels.get(redFlagModelLocations.get(blockState)),
+                whiteFlagModels.get(whiteFlagModelLocations.get(blockState))
+        );
     }
 
-    private Map<ModelResourceLocation, IBakedModel> bakeModels(
+    private static void bakeModels(
+            Map<ModelResourceLocation, IBakedModel> models,
             VertexFormat format,
             Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
             Map<IBlockState, ModelResourceLocation> modelLocations) {
-        Map<ModelResourceLocation, IBakedModel> models = new HashMap<>();
         for (ModelResourceLocation modelLocation : modelLocations.values()) {
             IModel model = ModelManager.getModel(modelLocation);
+            Game.log().msg(Level.INFO, "Catching dependency model {0} with name {1}", model, modelLocation);
             models.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }
-        return models;
     }
 
     public enum Loader implements ICustomModelLoader {
-        INSTANCE {
-            @Override
-            public void onResourceManagerReload(IResourceManager resourceManager) {
-            }
+        INSTANCE;
 
-            @Override
-            public boolean accepts(ResourceLocation modelLocation) {
-                return Objects.equals(modelLocation.getNamespace(), "railcraft")
-                        && modelLocation.getPath().startsWith("actuator") && !modelLocation.getPath().startsWith("actuator_");
-            }
-
-            @Override
-            public IModel loadModel(ResourceLocation modelLocation) {
-                return ActuatorModel.INSTANCE;
-            }
+        @Override
+        public void onResourceManagerReload(IResourceManager resourceManager) {
+            baked = false;
+            baseModels.clear();
+            redFlagModels.clear();
+            whiteFlagModels.clear();
         }
+
+        @Override
+        public boolean accepts(ResourceLocation modelLocation) {
+            return Objects.equals(modelLocation.getNamespace(), "railcraft")
+                    && modelLocation.getPath().startsWith("actuator") && !modelLocation.getPath().startsWith("actuator_");
+        }
+
+        @Override
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        public IModel loadModel(ResourceLocation modelLocation) {
+            Block block = RailcraftBlocks.ACTUATOR.block();
+            IBlockState state = block.getDefaultState();
+            if (modelLocation instanceof ModelResourceLocation) {
+                ModelResourceLocation mrl = (ModelResourceLocation) modelLocation;
+                String[] entries = mrl.getVariant().split(",");
+                for (String entry : entries) {
+                    String[] keyValue = entry.split("=");
+                    if (keyValue.length != 2)
+                        continue;
+                    IProperty prop = block.getBlockState().getProperty(keyValue[0]);
+                    if (prop == null)
+                        continue;
+                    Object value = prop.parseValue(keyValue[1]).orNull();
+                    if (value == null)
+                        continue;
+                    state = state.withProperty(prop, (Comparable) value);
+                }
+            }
+
+            return new ActuatorModel(state);
+        }
+
     }
 
+    @SideOnly(Side.CLIENT)
     public class CompositeModel implements IBakedModel {
-        private final Map<ModelResourceLocation, IBakedModel> baseModels;
-        private final Map<ModelResourceLocation, IBakedModel> redFlagModels;
-        private final Map<ModelResourceLocation, IBakedModel> whiteFlagModels;
         private final IBakedModel baseModel;
+        private final IBakedModel redFlagModel;
+        private final IBakedModel whiteFlagModel;
 
-        public CompositeModel(
-                Map<ModelResourceLocation, IBakedModel> baseModels,
-                Map<ModelResourceLocation, IBakedModel> redFlagModels,
-                Map<ModelResourceLocation, IBakedModel> whiteFlagModels) {
-            this.baseModels = baseModels;
-            this.redFlagModels = redFlagModels;
-            this.whiteFlagModels = whiteFlagModels;
-            baseModel = baseModels.get(baseModelLocations.get(RailcraftBlocks.ACTUATOR.getDefaultState()));
+        public CompositeModel(IBakedModel baseModel, IBakedModel redFlagModel, IBakedModel whiteFlagModel) {
+            this.baseModel = baseModel;
+            this.redFlagModel = redFlagModel;
+            this.whiteFlagModel = whiteFlagModel;
         }
 
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-            if (state instanceof IExtendedBlockState)
-                state = ((IExtendedBlockState) state).getClean();
-            List<BakedQuad> quads = new ArrayList<>();
-            IBakedModel baseModel = baseModels.get(baseModelLocations.get(state));
-            IBakedModel redFlagModel = redFlagModels.get(redFlagModelLocations.get(state));
-            IBakedModel whiteFlagModel = whiteFlagModels.get(whiteFlagModelLocations.get(state));
-            if (baseModel != null) quads.addAll(baseModel.getQuads(state, side, rand));
-            if (redFlagModel != null) quads.addAll(redFlagModel.getQuads(state, side, rand));
-            if (whiteFlagModel != null) quads.addAll(whiteFlagModel.getQuads(state, side, rand));
+            List<BakedQuad> quads = new ArrayList<>(baseModel.getQuads(state, side, rand));
+            quads.addAll(redFlagModel.getQuads(state, side, rand));
+            quads.addAll(whiteFlagModel.getQuads(state, side, rand));
             return quads;
         }
 
@@ -180,14 +218,14 @@ public class ActuatorModel implements IModel {
         }
 
         @Override
-        @Deprecated
-        public ItemCameraTransforms getItemCameraTransforms() {
-            return baseModel.getItemCameraTransforms();
+        public ItemOverrideList getOverrides() {
+            return baseModel.getOverrides();
         }
 
         @Override
-        public ItemOverrideList getOverrides() {
-            return baseModel.getOverrides();
+        public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
+            Pair<? extends IBakedModel, Matrix4f> perspective = baseModel.handlePerspective(cameraTransformType);
+            return Pair.of(this, perspective.getRight());
         }
     }
 
