@@ -43,6 +43,8 @@ public final class CartContentRendererTank extends CartContentRenderer<EntityCar
 
                 OpenGL.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
+                OpenGL.glScalef(0.99f, 0.99f, 0.99f);
+
                 OpenGL.glTranslatef(-0.5F, -0.501F + RenderTools.PIXEL, -0.5F);
 
                 float level = Math.min(fluidStack.amount / cap, cap);

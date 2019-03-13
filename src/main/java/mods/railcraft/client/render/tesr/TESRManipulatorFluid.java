@@ -39,7 +39,7 @@ public final class TESRManipulatorFluid extends TileEntitySpecialRenderer<TileFl
             OpenGL.glPushMatrix();
             OpenGL.glTranslatef((float) x + 0.5F, (float) y + 0.06256F * 4, (float) z + 0.5F);
             OpenGL.glScalef(0.95f, 1f, 0.95f);
-            OpenGL.glTranslatef(-0.5F, 0, -0.5F);
+            OpenGL.glTranslatef(-0.5F, fluidStack.getFluid().isGaseous() ? -0.5F : 0F, -0.5F);
 
             float cap = tank.getCapacity();
             float level = Math.min(fluidStack.amount, cap) / cap;

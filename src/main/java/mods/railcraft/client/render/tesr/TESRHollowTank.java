@@ -166,7 +166,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTankBase
             OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset + 0.01f, (float) z + 0.5F);
             OpenGL.glScalef(hScale, vScale, hScale);
 
-//            OpenGL.glScalef(0.999f, 1, 0.999f); //old
+            OpenGL.glScalef(0.999f, 1, 0.999f);
 //            int[] displayLists = FluidRenderer.getLiquidDisplayLists(fluidStack); this broke
 //            OpenGL.glPushMatrix();
 
