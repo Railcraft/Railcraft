@@ -149,51 +149,56 @@
       }
     ],
     "grass": {
-      "true": {"model": "tall_grass"},
+      "true": {
+        "submodel": "railcraft:tinted_cross_1",
+        "textures": {
+          "cross": "minecraft:blocks/tallgrass"
+        }
+      },
       "false": {}
     },
     "shape": {
       "north_south": {
-        "submodel": "rail_flat"
+        "model": "rail_flat"
       },
       "east_west": {
-        "submodel": "rail_flat", "y": 90
+        "model": "rail_flat", "y": 90
       },
       "ascending_east": {
-        "submodel": "rail_raised_ne", "y": 90
+        "model": "rail_raised_ne", "y": 90
       },
       "ascending_west": {
-        "submodel": "rail_raised_sw", "y": 90
+        "model": "rail_raised_sw", "y": 90
       },
       "ascending_north": {
-        "submodel": "rail_raised_ne"
+        "model": "rail_raised_ne"
       },
       "ascending_south": {
-        "submodel": "rail_raised_sw"
+        "model": "rail_raised_sw"
       },
       "south_east": {
         "textures": {
           "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
-        "submodel": "rail_curved"
+        "model": "rail_curved"
       },
       "south_west": {
         "textures": {
           "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
-        "submodel": "rail_curved", "y": 90
+        "model": "rail_curved", "y": 90
       },
       "north_west": {
         "textures": {
           "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
-        "submodel": "rail_curved", "y": 180
+        "model": "rail_curved", "y": 180
       },
       "north_east": {
         "textures": {
           "rail": "railcraft:blocks/tracks/flex/abandoned_turned"
         },
-        "submodel": "rail_curved", "y": 270
+        "model": "rail_curved", "y": 270
       }
     }
   }
