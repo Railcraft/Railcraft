@@ -55,6 +55,6 @@ public class BlockTrackFlexAbandoned extends BlockTrackFlex implements ColorPlug
 
     @Override
     public ColorPlugin.IColorFunctionBlock colorHandler() {
-        return (state, worldIn, pos, tintIndex) -> worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+        return (state, worldIn, pos, tintIndex) -> tintIndex == 1 ? worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D) : 0xffffff;
     }
 }
