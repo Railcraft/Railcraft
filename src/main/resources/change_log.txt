@@ -1,3 +1,10 @@
+12.0.0:
+    INFO: Stable release, as promised. Even ahead of schedule.
+    CHANGE: Carts are now invulnerable to mob projectiles. (liach)
+    FIX: Fix rendering of gasses.
+    FIX: Fix rendering of Actuators in the inventory. (liach)
+    FIX: Fix particle color of Abandoned Track. (liach)
+
 12.0.0-rc-1:
     INFO: Release Candidate
     WIP: Migrate Flux Transformer to new structure logic and fix a few bugs along the way.
