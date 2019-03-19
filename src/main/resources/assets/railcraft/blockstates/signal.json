@@ -1,10 +1,10 @@
 {
   "forge_marker": 1,
   "variants": {
-    "normal": [{}],
     "inventory": [
       {
         "transform": "forge:default-block",
+        "model": "railcraft:signal_single",
         "submodel": {
           "lamp": {"model": "railcraft:signal_single_lamp"},
           "con_down": {"model": "railcraft:signal_single_pillar"}
@@ -77,19 +77,36 @@
     },
     "front": {
       "north": {
-        "model": "railcraft:signal_single"
+        "submodel": {
+          "body": {
+            "model": "railcraft:signal_single",
+            "y": 0
+          }
+        }
       },
       "east": {
-        "model": "railcraft:signal_single",
-        "y": 90
+        "submodel": {
+          "body": {
+            "model": "railcraft:signal_single",
+            "y": 90
+          }
+        }
       },
       "south": {
-        "model": "railcraft:signal_single",
-        "y": 180
+        "submodel": {
+          "body": {
+            "model": "railcraft:signal_single",
+            "y": 180
+          }
+        }
       },
       "west": {
-        "model": "railcraft:signal_single",
-        "y": 270
+        "submodel": {
+          "body": {
+            "model": "railcraft:signal_single",
+            "y": 270
+          }
+        }
       }
     }
   }
