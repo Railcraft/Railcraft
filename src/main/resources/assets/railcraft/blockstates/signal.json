@@ -1,8 +1,5 @@
 {
   "forge_marker": 1,
-  "defaults": {
-    "model": "railcraft:signal_single"
-  },
   "variants": {
     "normal": [{}],
     "inventory": [
@@ -24,29 +21,76 @@
     },
     "connection_north": {
       "true": {
+        "submodel": {
+          "singleN": {
+            "model": "railcraft:post_single_bar",
+            "y": 0,
+            "textures": {
+              "texture": "railcraft:blocks/signal"
+            }
+          }
+        }
       },
       "false": {}
     },
     "connection_east": {
       "true": {
+        "submodel": {
+          "singleE": {
+            "model": "railcraft:post_single_bar",
+            "y": 90,
+            "textures": {
+              "texture": "railcraft:blocks/signal"
+            }
+          }
+        }
       },
       "false": {}
     },
     "connection_south": {
       "true": {
+        "submodel": {
+          "singleS": {
+            "model": "railcraft:post_single_bar",
+            "y": 180,
+            "textures": {
+              "texture": "railcraft:blocks/signal"
+            }
+          }
+        }
       },
       "false": {}
     },
     "connection_west": {
       "true": {
+        "submodel": {
+          "singleW": {
+            "model": "railcraft:post_single_bar",
+            "y": 270,
+            "textures": {
+              "texture": "railcraft:blocks/signal"
+            }
+          }
+        }
       },
       "false": {}
     },
     "front": {
-      "north": {},
-      "east": {"y": 90},
-      "south": {"y": 180},
-      "west": {"y": 270}
+      "north": {
+        "model": "railcraft:signal_single"
+      },
+      "east": {
+        "model": "railcraft:signal_single",
+        "y": 90
+      },
+      "south": {
+        "model": "railcraft:signal_single",
+        "y": 180
+      },
+      "west": {
+        "model": "railcraft:signal_single",
+        "y": 270
+      }
     }
   }
 }
