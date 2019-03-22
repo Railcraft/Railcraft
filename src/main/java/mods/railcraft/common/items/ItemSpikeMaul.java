@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items;
 
+import com.google.common.collect.Lists;
 import ic2.api.item.IBoxable;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.core.IVariantEnum;
@@ -115,15 +116,21 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
             return EnumActionResult.PASS;
         }
 
-        Deque<ISpikeMaulTarget> targets = new ArrayDeque<>(ISpikeMaulTarget.spikeMaulTargets);
+        List<ISpikeMaulTarget> list = ISpikeMaulTarget.spikeMaulTargets;
+        if (playerIn.isSneaking()) {
+            list = Lists.reverse(list);
+        }
+        Deque<ISpikeMaulTarget> targets = new ArrayDeque<>(list);
         ISpikeMaulTarget first = targets.getFirst();
         ISpikeMaulTarget found = null;
-        for (ISpikeMaulTarget each = targets.removeFirst(); !targets.isEmpty(); each = targets.removeFirst()) {
+        ISpikeMaulTarget each;
+        do {
+            each = targets.removeFirst();
             if (each.matches(worldIn, pos, oldState)) {
                 found = targets.isEmpty() ? first : targets.getFirst();
                 break;
             }
-        }
+        } while (!targets.isEmpty());
         if (found == null) {
             return EnumActionResult.PASS;
         }
