@@ -18,13 +18,12 @@ import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
-import mods.railcraft.common.util.collections.ItemMap;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
@@ -330,6 +329,12 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (!powered) {
             disabled = 0;
         }
+    }
+
+    @Override
+    protected void openRailcraftGui(EntityPlayer player) {
+        if (needsFuel())
+            super.openRailcraftGui(player);
     }
 
     @Override

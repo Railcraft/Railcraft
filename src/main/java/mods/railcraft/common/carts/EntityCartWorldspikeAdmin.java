@@ -14,7 +14,11 @@ import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -36,6 +40,16 @@ public class EntityCartWorldspikeAdmin extends EntityCartWorldspikeStandard {
 
     @Override
     public boolean usesFuel() {
+        return false;
+    }
+
+    @Override
+    public Map<Ingredient, Float> getFuelMap() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public boolean needsFuel() {
         return false;
     }
 
