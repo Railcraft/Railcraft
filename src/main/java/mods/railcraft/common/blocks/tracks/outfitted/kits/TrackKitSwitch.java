@@ -133,7 +133,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     @Override
     public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         determineRailDirection();
-        determineMirror();
+        determineMirror(false);
 
         // Notify any neighboring switches that we exist so they know to register themselves with us
         ((TileRailcraft) getTile()).notifyBlocksOfNeighborChange();
@@ -159,7 +159,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
             TrackTools.setTrackDirection(world, getPos(), EnumRailDirection.NORTH_SOUTH);
     }
 
-    protected void determineMirror() {
+    protected void determineMirror(boolean updateClient) {
         World world = theWorldAsserted();
         EnumRailDirection dir = TrackTools.getTrackDirection(world, getPos());
         boolean prevValue = isMirrored();
@@ -180,7 +180,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
         } else if (dir == EnumRailDirection.EAST_WEST)
             mirrored = TrackTools.isRailBlockAt(world, getPos().north());
 
-        if (prevValue != isMirrored())
+        if (updateClient && prevValue != isMirrored())
             sendUpdateToClient();
     }
 
@@ -188,7 +188,7 @@ public abstract class TrackKitSwitch extends TrackKitRailcraft implements ITrack
     public void onNeighborBlockChange(IBlockState state, @Nullable Block block) {
         if (Game.isHost(theWorldAsserted())) {
             determineRailDirection();
-            determineMirror();
+            determineMirror(true);
         }
         super.onNeighborBlockChange(state, block);
     }
