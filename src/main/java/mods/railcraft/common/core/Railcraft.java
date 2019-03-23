@@ -130,6 +130,7 @@ public final class Railcraft {
         HostEffects.init();
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
+        MinecraftForge.EVENT_BUS.register(BetaMessageTickHandler.INSTANCE);
     }
 
     @Mod.EventHandler
