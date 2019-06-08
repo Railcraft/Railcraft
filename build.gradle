@@ -1,28 +1,39 @@
 import groovy.xml.MarkupBuilder
-import net.minecraftforge.gradle.tasks.SignJar
+import net.minecraftforge.gradle.common.task.SignJar
 
 buildscript {
     repositories {
-        jcenter()
-        mavenCentral()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+apply plugin: 'net.minecraftforge.gradle'
 
-apply plugin: 'net.minecraftforge.gradle.forge'
+// Example for how to get properties into the manifest for reading by the runtime..
+//jar {
+//    manifest {
+//        attributes([
+//            "Specification-Title": "examplemod",
+//            "Specification-Vendor": "examplemodsareus",
+//            "Specification-Version": "1", // We are version 1 of ourselves
+//            "Implementation-Title": project.name,
+//            "Implementation-Version": "${version}",
+//            "Implementation-Vendor" :"examplemodsareus",
+//            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+//        ])
+//    }
+//}
+
 apply from: 'api/railcraft/gradle.properties', to: project.ext
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "railcraft"
@@ -56,16 +67,56 @@ println '*************************************************************'
 println ''
 
 minecraft {
-    version = project.version_minecraft + "-" + project.version_forge
-    runDir = "run"
+    mappings channel: 'snapshot', version: '20190608-1.14.2'
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    
+    // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
 
-    mappings = project.version_mcp.replace("-", "_")
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-    replace '@VERSION@', project.version
-    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                examplemod {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+    //version = project.version_minecraft + "-" + project.version_forge
+    //runDir = "run"
+
+    //mappings = project.version_mcp.replace("-", "_")
+
+    //replace '@VERSION@', project.version
+    //makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-def actualRunDir = project.file(minecraft.runDir)
+def actualRunDir = project.file("run")//(minecraft.runDir)
 // Change the 4G in -Xmx4G to your desired max RAM and 4G in -Xms4G to your desired initial RAM
 def optimizedVmArgs = ['-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M']
 def assertionVmArgs = ['-ea:mods.railcraft...', '-ea:net.minecraft...', '-ea:net.minecraftforge...']
@@ -75,12 +126,15 @@ def combinedVmArgs = [assertionVmArgs, optimizedVmArgs, log4jVmArgs, railcraftDe
 def extraEnvs = new LinkedHashMap() //['LOG4J_CONFIGURATION_FILE': "log4j2.xml"]
 
 minecraft {
-    clientJvmArgs = combinedVmArgs
-    serverJvmArgs = combinedVmArgs
+    //clientJvmArgs = combinedVmArgs
+    //serverJvmArgs = combinedVmArgs
 }
 
 sourceSets {
     main {
+	    java {
+		    srcDir 'ported/java'
+		}
         resources {
             srcDir project.dirLang
             exclude '**/Thumbs.db'
@@ -88,7 +142,7 @@ sourceSets {
     }
     api {
         java {
-            srcDir project.apiRailcraft
+            //srcDir project.apiRailcraft
         }
     }
 }
@@ -115,16 +169,18 @@ configurations {
 }
 
 dependencies {
+    // forge
+    minecraft 'net.minecraftforge:forge:1.14.2-26.0.5'
     // forestry
-    compileOnly "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
-    runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
+    //compileOnly "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
+    //runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
     // IC2
-    api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
-    runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
+    //api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
+    //runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
     // BuildCraft
-    compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
+    //compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
     // JEI
-    deobfProvided "mezz.jei:jei_${project.version_minecraft}:${project.version_jei}"
+    //deobfProvided "mezz.jei:jei_${project.version_minecraft}:${project.version_jei}"
     // annotations
     apiCompileOnly "org.jetbrains:annotations:16.0.2"
     compileOnly "org.jetbrains:annotations:16.0.2"
@@ -138,14 +194,14 @@ dependencies {
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
-    inputs.property "version_minecraft", project.minecraft.version
+    inputs.property "version_minecraft", "1.14.2"//project.minecraft.version
 
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
 
         // replace version and version_minecraft
-        expand 'version': project.version, 'version_minecraft': project.minecraft.version
+        expand 'version': project.version, 'version_minecraft': "1.14.2"//project.minecraft.version
     }
 
     // copy everything else, that is not the mcmod.info
@@ -156,20 +212,20 @@ processResources {
     }
 }
 
-runClient {
-    // in git bash, do (replace stuff in the <>) ./gradlew runClient -PmcUsername=<your minecraft login email> -PmcPassword=<your minecraft password>
-    if (project.hasProperty('mcUsername') && project.hasProperty('mcPassword')) {
-        args "--username=${project.mcUsername}"
-        args "--password=${project.mcPassword}"
-    }
-}
+//runClient {
+//    // in git bash, do (replace stuff in the <>) ./gradlew runClient -PmcUsername=<your minecraft login email> -PmcPassword=<your minecraft password>
+//    if (project.hasProperty('mcUsername') && project.hasProperty('mcPassword')) {
+//        args "--username=${project.mcUsername}"
+//        args "--password=${project.mcPassword}"
+//    }
+//}
 
-runServer {
-    doFirst {
-        new File(workingDir, "eula.txt").text = "eula=true"
-    }
-    args "nogui" // no server gui, we have console
-}
+//runServer {
+//    doFirst {
+//        new File(workingDir, "eula.txt").text = "eula=true"
+//    }
+//    args "nogui" // no server gui, we have console
+//}
 
 test {
     useJUnitPlatform()
@@ -197,43 +253,43 @@ tasks.withType(JavaExec) {
     workingDir actualRunDir
 }
 
-genIntellijRuns {
-    dependsOn copyLog4jConfig
-    doLast {
-        def runConfigurationsDir = new File(".idea/runConfigurations")
-        runConfigurationsDir.mkdirs()
-
-        tasks.withType(JavaExec).each { task ->
-            def taskName = task.name
-            def mainClass = task.main
-            def props = combinedVmArgs.join(' ') // task.jvmArgs.join(' ') has too much trash
-            def args = task.args.join(' ')
-
-            def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
-            def xml = new MarkupBuilder(writer)
-
-            xml.component(name: "ProjectRunConfigurationManager") {
-                configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
-                    option(name: 'MAIN_CLASS_NAME', value: mainClass)
-                    option(name: 'VM_PARAMETERS', value: props)
-                    option(name: 'PROGRAM_PARAMETERS', value: args)
-                    option(name: 'WORKING_DIRECTORY', value: task.workingDir)
-                    envs() {
-                        extraEnvs.entrySet().each { envVar ->
-                            env(name: envVar.key, value: envVar.value)
-                        }
-                    }
-                    module(name: 'railcraft_main')
-                    // copy log4j config before running
-                    method(v: '2') {
-                        option(name: 'Make', enabled: 'true')
-                        option(name: 'Gradle.BeforeRunTask', enabled: 'true', tasks: 'copyLog4jConfig', externalProjectPath: '$PROJECT_DIR$')
-                    }
-                }
-            }
-        }
-    }
-}
+//genIntellijRuns {
+//    dependsOn copyLog4jConfig
+//    doLast {
+//        def runConfigurationsDir = new File(".idea/runConfigurations")
+//        runConfigurationsDir.mkdirs()
+//
+//        tasks.withType(JavaExec).each { task ->
+//            def taskName = task.name
+//            def mainClass = task.main
+//            def props = combinedVmArgs.join(' ') // task.jvmArgs.join(' ') has too much trash
+//            def args = task.args.join(' ')
+//
+//            def writer = new FileWriter(new File(runConfigurationsDir, "${taskName}.xml"))
+//            def xml = new MarkupBuilder(writer)
+//
+//            xml.component(name: "ProjectRunConfigurationManager") {
+//                configuration(default: 'false', name: taskName, type: "Application", factoryName: "Application", singleton: "true") {
+//                    option(name: 'MAIN_CLASS_NAME', value: mainClass)
+//                    option(name: 'VM_PARAMETERS', value: props)
+//                    option(name: 'PROGRAM_PARAMETERS', value: args)
+//                    option(name: 'WORKING_DIRECTORY', value: task.workingDir)
+//                    envs() {
+//                        extraEnvs.entrySet().each { envVar ->
+//                            env(name: envVar.key, value: envVar.value)
+//                        }
+//                    }
+//                    module(name: 'railcraft_main')
+//                    // copy log4j config before running
+//                    method(v: '2') {
+//                        option(name: 'Make', enabled: 'true')
+//                        option(name: 'Gradle.BeforeRunTask', enabled: 'true', tasks: 'copyLog4jConfig', externalProjectPath: '$PROJECT_DIR$')
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
 compileJava {
     options.compilerArgs += [
@@ -369,6 +425,6 @@ artifacts {
     archives jar
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "4.10.3"
+wrapper {
+    gradleVersion = "5.4.1"
 }
