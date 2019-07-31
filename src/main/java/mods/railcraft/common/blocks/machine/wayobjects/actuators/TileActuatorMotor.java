@@ -158,7 +158,7 @@ public class TileActuatorMotor extends TileActuatorSecured implements ITileAspec
 
     @Override
     public void doActionOnAspect(SignalAspect aspect, boolean trigger) {
-        switchOnAspects.flip(aspect.ordinal());
+        switchOnAspects.set(aspect.ordinal(), trigger);
     }
 
     @Override
