@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.carts.EntityCartUndercutter;
+import mods.railcraft.common.carts.CartBaseMaintenancePattern;
 import mods.railcraft.common.gui.containers.ContainerCartUndercutter;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -17,19 +17,20 @@ import net.minecraft.entity.player.InventoryPlayer;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GuiCartUndercutter extends GuiTitled {
+public class GuiCartUndercutter extends GuiCartBaseMaintenance {
 
-    public GuiCartUndercutter(InventoryPlayer inv, EntityCartUndercutter cart) {
-        super(cart, new ContainerCartUndercutter(inv, cart), "gui_cart_undercutter.png");
+    public GuiCartUndercutter(InventoryPlayer inv, CartBaseMaintenancePattern cart) {
+        super(cart, new ContainerCartUndercutter(inv, cart), "gui_cart_undercutter.png", cart);
         ySize = 205;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.undercutter.pattern"), 8, 32, 0x404040);
-        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.undercutter.transfer.stock.name"), 125, 30, 0x404040);
-        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.cart.undercutter.under"), 32);
-        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.cart.undercutter.sides"), 74);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.undercutter.pattern"), 8, 23, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.maintenance.stock"), 125, 21, 0x404040);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.cart.undercutter.under"), 23);
+        GuiTools.drawCenteredString(fontRenderer, LocalizationPlugin.translate("gui.railcraft.cart.undercutter.sides"), 65);
     }
+
 }

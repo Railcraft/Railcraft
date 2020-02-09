@@ -51,6 +51,11 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         EXCLUDED_BLOCKS.add(Blocks.SAND);
     }
 
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
+    }
     @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isValidBallast(ItemStack stack) {
         if (InvTools.isEmpty(stack))
@@ -86,7 +91,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         super.onUpdate();
         if (Game.isClient(world))
             return;
-
+        if(getMode() == CartMode.TRANSPORT) return;
         stockItems(SLOT_REPLACE_UNDER, SLOT_STOCK_UNDER);
         stockItems(SLOT_REPLACE_SIDE, SLOT_STOCK_SIDE);
 

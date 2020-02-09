@@ -9,16 +9,24 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.carts.EntityCartTrackRelayer;
+import mods.railcraft.common.carts.CartBaseMaintenancePattern;
 import mods.railcraft.common.gui.containers.ContainerCartTrackRelayer;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class GuiCartTrackRelayer extends GuiCartTrackLayer {
+public class GuiCartTrackRelayer extends GuiCartBaseMaintenance {
 
-    public GuiCartTrackRelayer(InventoryPlayer inv, EntityCartTrackRelayer cart) {
-        super(cart, new ContainerCartTrackRelayer(inv, cart), "gui_cart_track_relayer.png");
+    public GuiCartTrackRelayer(InventoryPlayer inv, CartBaseMaintenancePattern cart) {
+        super(cart, new ContainerCartTrackRelayer(inv, cart), "gui_cart_track_relayer.png", cart);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.maintenance.pattern"), 38, 30, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.cart.maintenance.stock"), 125, 25, 0x404040);
     }
 }

@@ -13,6 +13,7 @@ import mods.railcraft.client.render.models.programmatic.carts.ModelMaintenanceLa
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
 import mods.railcraft.common.carts.CartBaseMaintenance;
+import mods.railcraft.common.carts.CartBaseMaintenance.CartMode;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
@@ -25,6 +26,7 @@ public class CartContentRendererMaintenance extends CartContentRenderer<CartBase
     private static final ModelBase LAMP = new ModelMaintenanceLamp();
     private static final ResourceLocation LAMP_ON_TEX = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_maint_lamp_on.png");
     private static final ResourceLocation LAMP_OFF_TEX = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_maint_lamp_off.png");
+    private static final ResourceLocation LAMP_DISABLED_TEX = new ResourceLocation(RailcraftConstants.CART_TEXTURE_FOLDER + "cart_maint_lamp_disabled.png");
 
     @Override
     public void render(RenderCart renderer, CartBaseMaintenance cart, float light, float partialTicks) {
@@ -36,6 +38,8 @@ public class CartContentRendererMaintenance extends CartContentRenderer<CartBase
         if (bright) {
             RenderTools.setBrightness(1F);
             renderer.bindTex(LAMP_ON_TEX);
+        } else if (cart.getMode() == CartMode.TRANSPORT){
+            renderer.bindTex(LAMP_DISABLED_TEX);
         } else {
             renderer.bindTex(LAMP_OFF_TEX);
         }

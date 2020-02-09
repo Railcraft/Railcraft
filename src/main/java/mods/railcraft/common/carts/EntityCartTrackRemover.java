@@ -40,6 +40,12 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
+    }
+
+    @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.MOW_TRACK_REMOVER;
     }
@@ -66,6 +72,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     private void removeTrack(BlockPos track) {
+        if(getMode() == CartMode.TRANSPORT) return;
         if (getDistanceSq(track) >= 9)
             tracksRemoved.add(track);
         else if (!TrackTools.isRailBlockAt(world, track))

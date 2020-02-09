@@ -33,6 +33,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     public static final int SLOT_REPLACE = 0;
     public static final int[] SLOTS = InvTools.buildSlotArray(0, 1);
 
+
     public EntityCartTrackLayer(World world) {
         super(world);
     }
@@ -42,9 +43,16 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     @Override
+    protected void entityInit() {
+        super.entityInit();
+        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
+    }
+
+    @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.MOW_TRACK_LAYER;
     }
+
 
     @Override
     protected void moveAlongTrack(BlockPos pos, IBlockState state) {
@@ -59,6 +67,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     private void placeTrack(BlockPos pos) {
+        if(getMode() == CartMode.TRANSPORT) return;
         pos = pos.offset(travelDirection);
 
         BlockRailBase.EnumRailDirection trackShape = NORTH_SOUTH;
