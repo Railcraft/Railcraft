@@ -41,18 +41,16 @@ public abstract class GuiCartBaseMaintenance extends GuiTitled {
         int h = (height - ySize) / 2;
         modeButton = GuiMultiButton.create(1, 200, h + ySize - 100, 90, cart.getModeController());
         modeButton.setToolTip(ToolTip.buildToolTip("gui.railcraft.cart.maintenance.tips.mode."+cart.getMode().getName()));
-        modeButton.setClickConsumer(n -> {
-            cart.clientMode = cart.getOtherMode();
-        });
+        modeButton.setClickConsumer(n -> cart.setMode(cart.getOtherMode()));
         buttonList.add(modeButton);
     }
     @Override
     public void updateScreen() {
         super.updateScreen();
-        updateTooltip();
+        update();
     }
 
-    private void updateTooltip() {
+    private void update() {
         modeButton.setToolTip((cart.getMode() == CartMode.SERVICE) ? serviceToolTip : (cart.getMode() == CartMode.TRANSPORT) ? transportToolTip : null);
     }
 
@@ -61,7 +59,7 @@ public abstract class GuiCartBaseMaintenance extends GuiTitled {
         if (cart == null)
             return;
         super.actionPerformed(guibutton);
-        updateTooltip();
+        update();
         sendUpdatePacket();
     }
 

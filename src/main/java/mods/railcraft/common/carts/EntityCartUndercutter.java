@@ -51,11 +51,6 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         EXCLUDED_BLOCKS.add(Blocks.SAND);
     }
 
-    @Override
-    protected void entityInit() {
-        super.entityInit();
-        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
-    }
     @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isValidBallast(ItemStack stack) {
         if (InvTools.isEmpty(stack))

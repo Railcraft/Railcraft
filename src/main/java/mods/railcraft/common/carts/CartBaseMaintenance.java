@@ -53,7 +53,6 @@ public abstract class CartBaseMaintenance extends CartBaseContainer implements I
     private static final int DATA_ID_BLINK = 25;
     public static final DataParameter<Byte> CART_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
     private final MultiButtonController<CartModeButtonState> modeController = MultiButtonController.create(0, CartModeButtonState.VALUES);
-    public CartMode clientMode = CartMode.SERVICE;
 
     @Override
     public float getMaxCartSpeedOnRail() {
@@ -82,8 +81,8 @@ public abstract class CartBaseMaintenance extends CartBaseContainer implements I
     }
 
     public enum CartModeButtonState implements IMultiButtonState {
-        SERVICE(LocalizationPlugin.translate("gui.railcraft.cart.maintenance.mode.service")),
-        TRANSPORT(LocalizationPlugin.translate("gui.railcraft.cart.maintenance.mode.transport"));
+        SERVICE("Service mode"),
+        TRANSPORT("Transport mode");
 
         public static final CartModeButtonState[] VALUES = values();
         private final String label;
@@ -94,7 +93,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer implements I
 
         @Override
         public String getLabel() {
-            return label;
+            return LocalizationPlugin.translate("gui.railcraft.cart.maintenance.mode."+name().toLowerCase());
         }
 
         @Override
@@ -134,6 +133,7 @@ public abstract class CartBaseMaintenance extends CartBaseContainer implements I
     protected void entityInit() {
         super.entityInit();
         dataManager.register(BLINK, (byte) 0);
+        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
     }
 
     @Override
@@ -202,9 +202,10 @@ public abstract class CartBaseMaintenance extends CartBaseContainer implements I
         getEntityWorld().setBlockToAir(pos);
         return trackShape;
     }
+
     @Override
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
-        data.writeEnum(clientMode);
+        data.writeEnum(getMode());
     }
 
     @Override

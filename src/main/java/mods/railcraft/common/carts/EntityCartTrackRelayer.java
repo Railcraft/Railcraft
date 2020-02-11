@@ -48,12 +48,6 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
-        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
-    }
-
-    @Override
     public void onUpdate() {
         super.onUpdate();
         if (Game.isClient(world))

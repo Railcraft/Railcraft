@@ -40,12 +40,6 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
-        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
-    }
-
-    @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.MOW_TRACK_REMOVER;
     }
