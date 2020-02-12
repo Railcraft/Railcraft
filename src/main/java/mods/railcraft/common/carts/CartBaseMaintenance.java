@@ -81,15 +81,11 @@ public abstract class CartBaseMaintenance extends CartBaseContainer implements I
     }
 
     public enum CartModeButtonState implements IMultiButtonState {
-        SERVICE("Service mode"),
-        TRANSPORT("Transport mode");
+        SERVICE,
+        TRANSPORT;
 
         public static final CartModeButtonState[] VALUES = values();
-        private final String label;
 
-        CartModeButtonState(String label) {
-            this.label = label;
-        }
 
         @Override
         public String getLabel() {
