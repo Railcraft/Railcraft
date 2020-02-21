@@ -134,28 +134,29 @@ public class ChargeNetwork implements Charge.INetwork {
      * Add the node to the network and clean up any node that used to exist there
      */
     private void addNodeImpl(BlockPos pos, ChargeNode node) {
-        if(needsNode(pos, node.chargeSpec)){
-            ChargeNode oldNode = nodes.put(pos.toImmutable(), node);
-    
-            // update the battery in the save data tracker
-            if (node.chargeBattery.isPresent())
-                worldData.initBattery(node.chargeBattery.get());
-            else
-                worldData.removeBattery(pos);
-    
-            // clean up any preexisting node
-            if (oldNode != null) {
-                oldNode.invalid = true;
-                if (oldNode.chargeGrid.isActive()) {
-                    node.chargeGrid = oldNode.chargeGrid;
-                    node.chargeGrid.add(node);
-                }
-                oldNode.chargeGrid = NULL_GRID;
+        if(!needsNode(pos, node.chargeSpec))
+            return;
+
+        ChargeNode oldNode = nodes.put(pos.toImmutable(), node);
+
+        // update the battery in the save data tracker
+        if (node.chargeBattery.isPresent())
+            worldData.initBattery(node.chargeBattery.get());
+        else
+            worldData.removeBattery(pos);
+
+        // clean up any preexisting node
+        if (oldNode != null) {
+            oldNode.invalid = true;
+            if (oldNode.chargeGrid.isActive()) {
+                node.chargeGrid = oldNode.chargeGrid;
+                node.chargeGrid.add(node);
             }
-    
-            if (node.isGridNull())
-                node.constructGrid();
+            oldNode.chargeGrid = NULL_GRID;
         }
+
+        if (node.isGridNull())
+            node.constructGrid();
     }
 
     private void removeNodeImpl(BlockPos pos) {
