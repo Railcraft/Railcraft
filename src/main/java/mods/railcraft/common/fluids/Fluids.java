@@ -30,7 +30,16 @@ import java.util.function.Supplier;
  */
 public enum Fluids implements Supplier<@Nullable Fluid> {
 
-    WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL("bio.ethanol"), COAL, PYROTHEUM, FRESHWATER, BIODIESEL, DIESEL, GASOLINE;
+    //New buildcraft fuels
+    OIL_HEAVY,
+    OIL_DENSE,
+    OIL_DISTILLED,
+    FUEL_DENSE,
+    FUEL_MIXED_HEAVY,
+    FUEL_LIGHT,
+    FUEL_MIXED_LIGHT,
+    FUEL_GASEOUS,
+    FUEL, WATER, LAVA, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL("bio.ethanol"), COAL, PYROTHEUM, FRESHWATER, BIODIESEL, DIESEL, GASOLINE;
     private final String tag;
 
     Fluids() {
