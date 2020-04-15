@@ -477,7 +477,13 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 Fluids.FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
 
-                //New buildcraft fuels
+                Fluids.COAL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.PYROTHEUM.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.CREOSOTE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (4800 * RailcraftConfig.boilerFuelMultiplier())));
+
+                Fluids.DIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (96000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.GASOLINE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
+
                 Fluids.OIL_HEAVY.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (42666 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.OIL_DENSE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.OIL_DISTILLED.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (20000 * RailcraftConfig.boilerFuelMultiplier())));
@@ -486,14 +492,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 Fluids.FUEL_LIGHT.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.FUEL_MIXED_LIGHT.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (16000 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.FUEL_GASEOUS.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (8000 * RailcraftConfig.boilerFuelMultiplier())));
-
-
-                Fluids.COAL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.PYROTHEUM.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.CREOSOTE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (4800 * RailcraftConfig.boilerFuelMultiplier())));
-
-                Fluids.DIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (96000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.GASOLINE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
             }
         });
     }
