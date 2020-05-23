@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.aesthetics.post.ItemPost;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
@@ -157,7 +158,8 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
             return;
 
         if (safeToReplace(pos)) {
-            IBlockState stockBlock = InvTools.getBlockStateFromStack(stock, world, pos);
+            GameProfile owner = CartToolsAPI.getCartOwner(this);
+            IBlockState stockBlock = InvTools.getBlockStateFromStack(stock, world, pos, owner);
             //noinspection deprecation
             List<ItemStack> drops = oldState.getBlock().getDrops(world, pos, oldState, 0);
             ItemBlock item = (ItemBlock) stock.getItem();

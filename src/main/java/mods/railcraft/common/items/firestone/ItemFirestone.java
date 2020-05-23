@@ -9,8 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.items.ItemRailcraft;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -46,9 +51,9 @@ public class ItemFirestone extends ItemRailcraft {
      * @return A new Entity object to spawn or null
      */
     @Override
-
     public EntityItemFirestone createEntity(World world, Entity location, ItemStack stack) {
-        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
+        GameProfile owner = PlayerPlugin.getItemThrowerProfile(((EntityItem) location));
+        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack, owner);
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;

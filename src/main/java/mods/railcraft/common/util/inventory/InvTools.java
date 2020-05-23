@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IFilterItem;
 import mods.railcraft.api.items.InvToolsAPI;
@@ -488,14 +489,14 @@ public abstract class InvTools {
         return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
     }
 
-    public static @Nullable IBlockState getBlockStateFromStack(ItemStack stack, World world, BlockPos pos) {
+    public static @Nullable IBlockState getBlockStateFromStack(ItemStack stack, World world, BlockPos pos, GameProfile owner) {
         if (isEmpty(stack))
             return null;
         Item item = stack.getItem();
         if (item instanceof ItemBlock) {
             int meta = item.getMetadata(stack.getMetadata());
             if (world instanceof WorldServer)
-                return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up()), EnumHand.MAIN_HAND);
+                return ((ItemBlock) item).getBlock().getStateForPlacement(world, pos, EnumFacing.UP, 0.5F, 0.5F, 0.5F, meta, RailcraftFakePlayer.get((WorldServer) world, pos.up(), owner), EnumHand.MAIN_HAND);
                 //TODO fix get state for placement for that hand
             else
                 //noinspection deprecation

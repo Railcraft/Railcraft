@@ -233,7 +233,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     private void removeExtraBlocks(World world, int level, BlockPos pos, IBlockState state, EntityPlayer player) {
         if (level > 0) {
-            WorldPlugin.playerRemoveBlock(world, pos, player);
+            WorldPlugin.playerRemoveBlock(world, pos, player.getGameProfile());
             checkBlocks(world, level, pos, player);
         }
     }

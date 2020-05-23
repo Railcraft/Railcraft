@@ -9,10 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.ore;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.items.firestone.EntityItemFirestone;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -53,7 +56,8 @@ public class ItemOreMagic extends ItemBlockRailcraftSubtyped<BlockOreMagic> {
     public @Nullable Entity createEntity(World world, Entity location, ItemStack stack) {
         if (!hasCustomEntity(stack))
             return null;
-        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
+        GameProfile owner = PlayerPlugin.getItemThrowerProfile(((EntityItem) location));
+        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack, owner);
         entity.motionX = location.motionX;
         entity.motionY = location.motionY;
         entity.motionZ = location.motionZ;

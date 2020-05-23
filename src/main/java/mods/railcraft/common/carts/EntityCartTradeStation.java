@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.TradeStationLogic;
@@ -44,6 +46,11 @@ public class EntityCartTradeStation extends CartBaseLogic {
                     AIPlugin.addAITask(villager, 9, new EntityAIWatchEntity(villager, entity -> entity instanceof EntityCartTradeStation, 4, 0.08F));
                     AIPlugin.addAITask(villager, 9, new EntityAISearchForEntity(villager, entity -> entity instanceof EntityCartTradeStation, 16, 0.002F));
                 }
+            }
+
+            @Override
+            protected GameProfile getOwner() {
+                return CartToolsAPI.getCartOwner(EntityCartTradeStation.this);
             }
 
             @Override

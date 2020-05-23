@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.items.firestone;
 
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.fluids.FluidTools;
@@ -164,7 +165,7 @@ public class ItemFirestoneRefined extends ItemFirestone {
                 if (drops.size() == 1 && !InvTools.isEmpty(drops.get(0)) && drops.get(0).getItem() instanceof ItemBlock) {
                     ItemStack cooked = FurnaceRecipes.instance().getSmeltingResult(drops.get(0));
                     if (cooked.getItem() instanceof ItemBlock) {
-                        IBlockState newState = InvTools.getBlockStateFromStack(cooked, world, pos);
+                        IBlockState newState = InvTools.getBlockStateFromStack(cooked, world, pos, player.getGameProfile());
                         if (newState != null) {
                             WorldPlugin.setBlockState(world, pos, newState);
                             SoundHelper.playSound(world, null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);

@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.logic.Logic;
@@ -35,6 +36,11 @@ public class TileTradeStation extends TileLogic {
                     AIPlugin.addAITask(villager, 9, new EntityAIWatchBlock(villager, RailcraftBlocks.TRADE_STATION.getDefaultState(), 4, 0.08F));
                     AIPlugin.addAITask(villager, 9, new EntityAISearchForBlock(villager, RailcraftBlocks.TRADE_STATION.getDefaultState(), 16, 0.002F));
                 }
+            }
+
+            @Override
+            protected GameProfile getOwner() {
+                return TileTradeStation.this.getOwner();
             }
 
             @Override

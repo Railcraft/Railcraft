@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.api.tracks.IOutfittedTrackTile;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -84,20 +86,22 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
             if (nextToSuspended)
                 return;
 
-            if (InvTools.nonEmpty(trackExist) && InvTools.nonEmpty(trackStock))
+            if (InvTools.nonEmpty(trackExist) && InvTools.nonEmpty(trackStock)) {
+                GameProfile owner = CartToolsAPI.getCartOwner(this);
                 if (trackExist.getItem() instanceof ITrackItem) {
                     ITrackItem trackItem = (ITrackItem) trackExist.getItem();
                     if (trackItem.getPlacedBlock() == block) {
                         TileEntity tile = world.getTileEntity(pos);
                         if (trackItem.isPlacedTileEntity(trackExist, tile)) {
                             BlockRailBase.EnumRailDirection trackShape = removeOldTrack(pos, block);
-                            placeNewTrack(pos, SLOT_STOCK, trackShape);
+                            placeNewTrack(pos, SLOT_STOCK, trackShape, owner);
                         }
                     }
                 } else if (InvTools.isStackEqualToBlock(trackExist, block)) {
                     BlockRailBase.EnumRailDirection trackShape = removeOldTrack(pos, block);
-                    placeNewTrack(pos, SLOT_STOCK, trackShape);
+                    placeNewTrack(pos, SLOT_STOCK, trackShape, owner);
                 }
+            }
         }
     }
 

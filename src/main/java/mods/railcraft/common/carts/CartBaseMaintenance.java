@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.tracks.TrackToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackTools;
@@ -101,10 +102,10 @@ public abstract class CartBaseMaintenance extends CartBaseContainer {
         return dataManager.get(BLINK) > 0;
     }
 
-    protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape) {
+    protected boolean placeNewTrack(BlockPos pos, int slotStock, BlockRailBase.EnumRailDirection trackShape, GameProfile owner) {
         ItemStack trackStock = getStackInSlot(slotStock);
         if (!InvTools.isEmpty(trackStock))
-            if (TrackToolsAPI.placeRailAt(trackStock, (WorldServer) getEntityWorld(), pos)) {
+            if (TrackToolsAPI.placeRailAt(trackStock, (WorldServer) getEntityWorld(), pos, owner)) {
                 decrStackSize(slotStock, 1);
                 blink();
                 return true;

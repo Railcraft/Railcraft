@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -80,7 +82,8 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
 
         if (isValidNewTrackPosition(pos)) {
             IBlockState targetState = WorldPlugin.getBlockState(world, pos);
-            if (placeNewTrack(pos, SLOT_STOCK, trackShape)) {
+            GameProfile owner = CartToolsAPI.getCartOwner(this);
+            if (placeNewTrack(pos, SLOT_STOCK, trackShape, owner)) {
                 targetState.getBlock().dropBlockAsItem(world, pos, targetState, 0);
             }
         }

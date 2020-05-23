@@ -16,6 +16,7 @@ import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Annotations;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,6 +57,17 @@ public final class PlayerPlugin {
         return new GameProfile(ownerUUID, ownerName);
     }
 
+    public static GameProfile getItemThrowerProfile(EntityItem item) {
+        String thrower = item.getThrower();
+        for (EntityPlayer player : item.world.playerEntities) {
+            GameProfile profile = player.getGameProfile();
+            if (profile.getName().equalsIgnoreCase(thrower)) {
+                return profile;
+            }
+        }
+        return RailcraftFakePlayer.UNKNOWN_USER_PROFILE;
+    }
+
     public static @Nullable EntityPlayer getPlayer(World world, GameProfile gameProfile) {
         UUID playerId = gameProfile.getId();
         if (playerId != null) {
@@ -71,7 +83,7 @@ public final class PlayerPlugin {
         if (!RailcraftConstantsAPI.UNKNOWN_PLAYER.equals(owner.getName()))
             player = PlayerPlugin.getPlayer(world, owner);
         if (player == null)
-            player = RailcraftFakePlayer.get(world, pos);
+            player = RailcraftFakePlayer.get(world, pos, owner);
         return player;
     }
 

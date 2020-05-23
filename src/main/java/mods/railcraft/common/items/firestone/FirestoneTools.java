@@ -10,17 +10,23 @@
 
 package mods.railcraft.common.items.firestone;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,20 +50,21 @@ public final class FirestoneTools {
         return InvTools.isStackEqualToBlock(stack, EnumOreMagic.FIRESTONE.block()) && stack.getItemDamage() == EnumOreMagic.FIRESTONE.ordinal();
     };
 
-    @Contract("_,_,null->false")
-    public static boolean trySpawnFire(World world, BlockPos pos, @Nullable ItemStack stack) {
+    @Contract("_,_,null,_->false")
+    public static boolean trySpawnFire(World world, BlockPos pos, @Nullable ItemStack stack, GameProfile owner) {
         if (InvTools.isEmpty(stack) || !SPAWNS_FIRE.test(stack))
             return false;
         boolean spawnedFire = false;
+        EntityPlayerMP placer = RailcraftFakePlayer.get((WorldServer) world, pos.getX(), pos.getY(), pos.getZ(), owner);
         for (int i = 0; i < sizeOf(stack); i++) {
-            spawnedFire |= FirestoneTools.spawnFire(world, pos);
+            spawnedFire |= FirestoneTools.spawnFire(world, pos, placer);
         }
         if (spawnedFire && stack.isItemStackDamageable() && stack.getItemDamage() < stack.getMaxDamage() - 1)
             InvTools.damageItem(stack, 1);
         return spawnedFire;
     }
 
-    public static boolean spawnFire(World world, BlockPos pos) {
+    public static boolean spawnFire(World world, BlockPos pos, EntityPlayer placer) {
         Random rnd = MiscTools.RANDOM;
         int x = pos.getX() - 5 + rnd.nextInt(12);
         int y = pos.getY() - 5 + rnd.nextInt(12);
@@ -69,6 +76,16 @@ public final class FirestoneTools {
             y = world.getActualHeight() - 2;
 
         BlockPos firePos = new BlockPos(x, y, z);
+        if (canBurn(world, firePos)) {
+            net.minecraftforge.common.util.BlockSnapshot blocksnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(world, firePos);
+            WorldPlugin.setBlockState(world, firePos, Blocks.FIRE.getDefaultState());
+            if (net.minecraftforge.event.ForgeEventFactory.onPlayerBlockPlace(placer, blocksnapshot, EnumFacing.UP, EnumHand.MAIN_HAND).isCanceled()) {
+                blocksnapshot.restore(true, false);
+                return false;
+            }
+        } else {
+            return false;
+        }
         return canBurn(world, firePos) && world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
     }
 

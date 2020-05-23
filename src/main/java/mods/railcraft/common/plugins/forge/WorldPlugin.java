@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forge;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -139,29 +140,27 @@ public class WorldPlugin {
         return world.destroyBlock(pos, world.getGameRules().getBoolean("doTileDrops"));
     }
 
-    public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor) {
+    public static boolean destroyBlockSafe(World world, BlockPos pos, GameProfile actor) {
         return destroyBlockSafe(world, pos, actor, world.getGameRules().getBoolean("doTileDrops"));
     }
 
-    public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor, boolean dropBlock) {
-        if (actor == null)
-            actor = RailcraftFakePlayer.get((WorldServer) world, pos);
+    public static boolean destroyBlockSafe(World world, BlockPos pos, GameProfile actor, boolean dropBlock) {
+        EntityPlayer player = RailcraftFakePlayer.get((WorldServer) world, pos, actor);
 
         // Start of Event Fire
-        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, getBlockState(world, pos), actor)))
+        if (MinecraftForge.EVENT_BUS.post(new BlockEvent.BreakEvent(world, pos, getBlockState(world, pos), player)))
             return false;
         // End of Event Fire
 
         return destroyBlock(world, pos, dropBlock);
     }
 
-    public static boolean playerRemoveBlock(World world, BlockPos pos, @Nullable EntityPlayer player) {
+    public static boolean playerRemoveBlock(World world, BlockPos pos, GameProfile player) {
         return playerRemoveBlock(world, pos, player, world.getGameRules().getBoolean("doTileDrops"));
     }
 
-    public static boolean playerRemoveBlock(World world, BlockPos pos, @Nullable EntityPlayer player, boolean dropBlock) {
-        if (player == null)
-            player = RailcraftFakePlayer.get((WorldServer) world, pos);
+    public static boolean playerRemoveBlock(World world, BlockPos pos, GameProfile owner, boolean dropBlock) {
+        EntityPlayer player = RailcraftFakePlayer.get((WorldServer) world, pos, owner);
         IBlockState state = getBlockState(world, pos);
         TileEntity te = getBlockTile(world, pos);
 

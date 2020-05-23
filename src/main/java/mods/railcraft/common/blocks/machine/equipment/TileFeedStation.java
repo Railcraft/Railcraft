@@ -142,7 +142,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                 EntityPlayer player;
                 if (Game.isHost(world)) {
                     EntityAIMateBreeding.modifyAI(animal);
-                    player = RailcraftFakePlayer.get((WorldServer) world, getPos());
+                    player = RailcraftFakePlayer.get((WorldServer) world, getPos(), getOwner());
                 } else {
                     player = null;
                 }

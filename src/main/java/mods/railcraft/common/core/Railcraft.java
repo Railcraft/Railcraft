@@ -94,14 +94,6 @@ public final class Railcraft {
     }
 
     @Mod.EventHandler
-    public void fingerprintError(FMLFingerprintViolationEvent event) {
-        if (Game.isObfuscated()) {
-            Game.log().fingerprint(MOD_ID);
-            throw new RuntimeException("Invalid Fingerprint");
-        }
-    }
-
-    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         RailcraftModuleManager.loadModules(event.getAsmData());
 

@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.blocks.logic;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.VillagerPlugin;
@@ -153,7 +154,7 @@ public abstract class TradeStationLogic extends InventoryLogic {
         ItemStack buy2 = recipeSlots.getStackInSlot(tradeSet * 3 + 1);
         ItemStack sell = recipeSlots.getStackInSlot(tradeSet * 3 + 2);
         for (EntityVillager villager : villagers) {
-            MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) theWorldAsserted(), getX(), getY(), getZ()));
+            MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) theWorldAsserted(), getX(), getY(), getZ(), getOwner()));
             if (recipes != null) {
                 for (MerchantRecipe recipe : recipes) {
                     if (recipe.isRecipeDisabled())
@@ -209,6 +210,8 @@ public abstract class TradeStationLogic extends InventoryLogic {
                 Game.log().msg(Level.WARN, "Cannot remove second input item!");
         invOutput.addStack(InvTools.copy(recipe.getItemToSell()));
     }
+
+    protected abstract GameProfile getOwner();
 
     protected abstract EntityPlayer getOwnerEntityOrFake();
 
@@ -284,7 +287,7 @@ public abstract class TradeStationLogic extends InventoryLogic {
         } else {
             villager = villagers.iterator().next();
         }
-        MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) theWorldAsserted(), getX(), getY(), getZ()));
+        MerchantRecipeList recipes = villager.getRecipes(RailcraftFakePlayer.get((WorldServer) theWorldAsserted(), getX(), getY(), getZ(), getOwner()));
         assert recipes != null;
         MerchantRecipe recipe = recipes.get(MiscTools.RANDOM.nextInt(recipes.size()));
         recipeSlots.setInventorySlotContents(tradeSet * 3, recipe.getItemToBuy());

@@ -43,7 +43,9 @@ public abstract class BlockTrackTile<T extends TileRailcraft> extends BlockTrack
     @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
         super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
-        lastClearResult.set(clearBlock(state, worldIn, pos, harvesters.get()));
+        if (!worldIn.isRemote) {
+            lastClearResult.set(clearBlock(state, worldIn, pos, harvesters.get()));
+        }
     }
 
     @Override

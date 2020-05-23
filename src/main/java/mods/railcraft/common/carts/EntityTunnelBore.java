@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.api.carts.ILinkableCart;
@@ -262,7 +263,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             */
             Item item = head.getItem();
             Set<String> toolClasses = item.getToolClasses(head);
-            EntityPlayer fakePlayer = RailcraftFakePlayer.get((WorldServer) world, posX, posY, posZ);
+            GameProfile owner = CartToolsAPI.getCartOwner(this);
+            EntityPlayer fakePlayer = RailcraftFakePlayer.get((WorldServer) world, posX, posY, posZ, owner);
 
             return toolClasses.stream()
                     .anyMatch(tool -> item.getHarvestLevel(head, tool, fakePlayer, targetState) >= HarvestPlugin.getHarvestLevel(targetState, tool));
@@ -678,7 +680,8 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean placeBallast(BlockPos targetPos) {
-        if (!world.isSideSolid(targetPos, EnumFacing.UP))
+        if (!world.isSideSolid(targetPos, EnumFacing.UP)) {
+            GameProfile owner = CartToolsAPI.getCartOwner(this);
             for (IExtInvSlot slot : InventoryIterator.get(invBallast)) {
                 ItemStack stack = slot.getStack();
                 if (!InvTools.isEmpty(stack) && BallastRegistry.isItemBallast(stack)) {
@@ -688,7 +691,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                         searchPos.move(EnumFacing.DOWN);
                         if (world.isSideSolid(searchPos, EnumFacing.UP)) {
                             // Fill ballast
-                            IBlockState state = InvTools.getBlockStateFromStack(stack, world, targetPos);
+                            IBlockState state = InvTools.getBlockStateFromStack(stack, world, targetPos, owner);
                             if (state != null) {
                                 slot.decreaseStack();
                                 WorldPlugin.setBlockState(world, targetPos, state);
@@ -698,7 +701,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                             IBlockState state = WorldPlugin.getBlockState(world, searchPos);
                             if (!WorldPlugin.isBlockAir(world, searchPos, state) && !state.getMaterial().isLiquid()) {
                                 // Break other blocks first
-                                WorldPlugin.playerRemoveBlock(world, searchPos.toImmutable(), CartTools.getFakePlayer(this),
+                                WorldPlugin.playerRemoveBlock(world, searchPos.toImmutable(), owner,
                                         world.getGameRules().getBoolean("doTileDrops") && RailcraftConfig.borePreserveStacks());
                             }
                         }
@@ -707,6 +710,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                     return false;
                 }
             }
+        }
         return false;
     }
 
@@ -717,7 +721,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     protected boolean placeTrack(BlockPos targetPos, IBlockState oldState, BlockRailBase.EnumRailDirection shape) {
-        EntityPlayer owner = CartTools.getFakePlayer(this);
+        GameProfile owner = CartToolsAPI.getCartOwner(this);
 
         if (replaceableBlocks.contains(oldState.getBlock()))
             WorldPlugin.destroyBlockSafe(world, targetPos, owner, true);
@@ -726,7 +730,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             for (IInvSlot slot : InventoryIterator.get(invRails)) {
                 ItemStack stack = slot.getStack();
                 if (!InvTools.isEmpty(stack)) {
-                    boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) world, targetPos, shape);
+                    boolean placed = TrackToolsAPI.placeRailAt(stack, (WorldServer) world, targetPos, shape, owner);
                     if (placed) {
                         slot.decreaseStack();
                     }

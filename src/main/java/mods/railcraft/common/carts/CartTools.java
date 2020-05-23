@@ -162,7 +162,8 @@ public final class CartTools {
     }
 
     public static EntityPlayerMP getFakePlayer(EntityMinecart cart) {
-        return RailcraftFakePlayer.get((WorldServer) cart.world, cart.posX, cart.posY, cart.posZ);
+        GameProfile owner = CartToolsAPI.getCartOwner(cart);
+        return RailcraftFakePlayer.get((WorldServer) cart.world, cart.posX, cart.posY, cart.posZ, owner);
     }
 
     public static EntityPlayerMP getFakePlayerWith(EntityMinecart cart, ItemStack stack) {
