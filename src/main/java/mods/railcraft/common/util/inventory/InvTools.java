@@ -484,8 +484,8 @@ public abstract class InvTools {
             return Blocks.AIR.getDefaultState();
         Item item = stack.getItem();
         Block block = GameData.getBlockItemMap().inverse().get(item);
-        //noinspection deprecation
         try {
+            //noinspection deprecation
             return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
         } catch (IllegalArgumentException e) {
             return Blocks.AIR.getDefaultState();
