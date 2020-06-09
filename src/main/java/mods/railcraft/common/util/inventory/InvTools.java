@@ -485,7 +485,11 @@ public abstract class InvTools {
         Item item = stack.getItem();
         Block block = GameData.getBlockItemMap().inverse().get(item);
         //noinspection deprecation
-        return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
+        try {
+            return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
+        } catch (IllegalArgumentException e) {
+            return Blocks.AIR.getDefaultState();
+        }
     }
 
     public static @Nullable IBlockState getBlockStateFromStack(ItemStack stack, World world, BlockPos pos) {
