@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,10 +25,10 @@ import java.util.Locale;
  */
 public enum BrickVariant implements IVariantEnum {
 
+    PAVER(Blocks.STONEBRICK),
     BRICK(Blocks.STONEBRICK),
-    FITTED(Blocks.STONEBRICK),
-    BLOCK(Blocks.STONEBRICK),
-    ORNATE(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META)),
+    POLISHED(Blocks.STONEBRICK),
+    CHISELED(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META)),
     ETCHED(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CRACKED_META)),
     COBBLE(new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CRACKED_META));
     public static final BrickVariant[] VALUES = values();
@@ -40,7 +40,7 @@ public enum BrickVariant implements IVariantEnum {
 
     public static BrickVariant fromOrdinal(int ordinal) {
         if (ordinal < 0 || ordinal >= VALUES.length)
-            return BRICK;
+            return PAVER;
         return VALUES[ordinal];
     }
 

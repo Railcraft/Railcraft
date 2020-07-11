@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -398,7 +398,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 " B ",
                                 "BPB",
                                 " B ",
-                                'B', BrickTheme.INFERNAL.getStack(1, BrickVariant.BRICK),
+                                'B', BrickTheme.INFERNAL.getStack(1, BrickVariant.PAVER),
                                 'P', Items.MAGMA_CREAM);
                     }
                     if (RailcraftBlocks.COKE_OVEN.isLoaded() && BrickTheme.SANDY.isLoaded()) {
@@ -407,7 +407,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 " B ",
                                 " S ",
                                 " B ",
-                                'B', BrickTheme.SANDY.getStack(1, BrickVariant.BRICK),
+                                'B', BrickTheme.SANDY.getStack(1, BrickVariant.PAVER),
                                 'S', "sand");
                     }
                 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -69,70 +69,70 @@ public enum Materials implements IVariantEnum {
     OBSIDIAN("obsidian", Blocks.OBSIDIAN::getDefaultState),
     OBSIDIAN_CRUSHED("crushed_obsidian", EnumGeneric.CRUSHED_OBSIDIAN::getDefaultState),
 
-    ABYSSAL_BLOCK("abyssal_block", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BLOCK)),
-    ABYSSAL_BRICK("abyssal_brick", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BRICK)),
+    ABYSSAL_POLISHED("abyssal_block", () -> BrickTheme.ABYSSAL.getState(BrickVariant.POLISHED)),
+    ABYSSAL_BRICK("abyssal_brick", () -> BrickTheme.ABYSSAL.getState(BrickVariant.PAVER)),
     ABYSSAL_COBBLE("abyssal_cobble", () -> BrickTheme.ABYSSAL.getState(BrickVariant.COBBLE)),
-    ABYSSAL_FITTED("abyssal_fitted", () -> BrickTheme.ABYSSAL.getState(BrickVariant.FITTED)),
+    ABYSSAL_FITTED("abyssal_fitted", () -> BrickTheme.ABYSSAL.getState(BrickVariant.BRICK)),
 
-    BLEACHEDBONE_BLOCK("bleached_bone_block", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.BLOCK)),
-    BLEACHEDBONE_BRICK("bleached_bone_brick", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK)),
+    BLEACHEDBONE_POLISHED("bleached_bone_block", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.POLISHED)),
+    BLEACHEDBONE_BRICK("bleached_bone_brick", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.PAVER)),
     BLEACHEDBONE_COBBLE("bleached_bone_cobble", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.COBBLE)),
-    BLEACHEDBONE_FITTED("bleached_bone_fitted", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.FITTED)),
+    BLEACHEDBONE_FITTED("bleached_bone_fitted", () -> BrickTheme.BLEACHEDBONE.getState(BrickVariant.BRICK)),
 
-    BLOODSTAINED_BLOCK("bloodstained_block", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.BLOCK)),
-    BLOODSTAINED_BRICK("bloodstained_brick", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK)),
+    BLOODSTAINED_POLISHED("bloodstained_block", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.POLISHED)),
+    BLOODSTAINED_BRICK("bloodstained_brick", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.PAVER)),
     BLOODSTAINED_COBBLE("bloodstained_cobble", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.COBBLE)),
-    BLOODSTAINED_FITTED("bloodstained_fitted", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.FITTED)),
+    BLOODSTAINED_FITTED("bloodstained_fitted", () -> BrickTheme.BLOODSTAINED.getState(BrickVariant.BRICK)),
 
-    FROSTBOUND_BLOCK("frost_bound_block", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.BLOCK)),
-    FROSTBOUND_BRICK("frost_bound_brick", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.BRICK)),
+    FROSTBOUND_BLOCK("frost_bound_block", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.POLISHED)),
+    FROSTBOUND_BRICK("frost_bound_brick", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.PAVER)),
     FROSTBOUND_COBBLE("frost_bound_cobble", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.COBBLE)),
-    FROSTBOUND_FITTED("frost_bound_fitted", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.FITTED)),
+    FROSTBOUND_FITTED("frost_bound_fitted", () -> BrickTheme.FROSTBOUND.getState(BrickVariant.BRICK)),
 
-    INFERNAL_BLOCK("infernal_block", () -> BrickTheme.INFERNAL.getState(BrickVariant.BLOCK)),
-    INFERNAL_BRICK("infernal_brick", () -> BrickTheme.INFERNAL.getState(BrickVariant.BRICK)),
+    INFERNAL_BLOCK("infernal_block", () -> BrickTheme.INFERNAL.getState(BrickVariant.POLISHED)),
+    INFERNAL_BRICK("infernal_brick", () -> BrickTheme.INFERNAL.getState(BrickVariant.PAVER)),
     INFERNAL_COBBLE("infernal_cobble", () -> BrickTheme.INFERNAL.getState(BrickVariant.COBBLE)),
-    INFERNAL_FITTED("infernal_fitted", () -> BrickTheme.INFERNAL.getState(BrickVariant.FITTED)),
+    INFERNAL_FITTED("infernal_fitted", () -> BrickTheme.INFERNAL.getState(BrickVariant.BRICK)),
 
-    NETHER_BLOCK("nether_block", () -> BrickTheme.NETHER.getState(BrickVariant.BLOCK)),
+    NETHER_BLOCK("nether_block", () -> BrickTheme.NETHER.getState(BrickVariant.POLISHED)),
     NETHER_BRICK("nether_brick", Blocks.NETHER_BRICK::getDefaultState),
     NETHER_COBBLE("nether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
-    NETHER_FITTED("nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
+    NETHER_FITTED("nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.BRICK)),
 
-    RED_NETHER_BLOCK("red_nether_block", () -> BrickTheme.NETHER.getState(BrickVariant.BLOCK)),
+    RED_NETHER_BLOCK("red_nether_block", () -> BrickTheme.NETHER.getState(BrickVariant.POLISHED)),
     RED_NETHER_BRICK("red_nether_brick", Blocks.RED_NETHER_BRICK::getDefaultState),
     RED_NETHER_COBBLE("red_nether_cobble", () -> BrickTheme.NETHER.getState(BrickVariant.COBBLE)),
-    RED_NETHER_FITTED("red_nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.FITTED)),
+    RED_NETHER_FITTED("red_nether_fitted", () -> BrickTheme.NETHER.getState(BrickVariant.BRICK)),
 
-    QUARRIED_BLOCK("quarried_block", () -> BrickTheme.QUARRIED.getState(BrickVariant.BLOCK)),
-    QUARRIED_BRICK("quarried_brick", () -> BrickTheme.QUARRIED.getState(BrickVariant.BRICK)),
+    QUARRIED_BLOCK("quarried_block", () -> BrickTheme.QUARRIED.getState(BrickVariant.POLISHED)),
+    QUARRIED_BRICK("quarried_brick", () -> BrickTheme.QUARRIED.getState(BrickVariant.PAVER)),
     QUARRIED_COBBLE("quarried_cobble", () -> BrickTheme.QUARRIED.getState(BrickVariant.COBBLE)),
-    QUARRIED_FITTED("quarried_fitted", () -> BrickTheme.QUARRIED.getState(BrickVariant.FITTED)),
+    QUARRIED_FITTED("quarried_fitted", () -> BrickTheme.QUARRIED.getState(BrickVariant.BRICK)),
 
-    SANDY_BLOCK("sandy_block", () -> BrickTheme.SANDY.getState(BrickVariant.BLOCK)),
-    SANDY_BRICK("sandy_brick", () -> BrickTheme.SANDY.getState(BrickVariant.BRICK)),
+    SANDY_BLOCK("sandy_block", () -> BrickTheme.SANDY.getState(BrickVariant.POLISHED)),
+    SANDY_BRICK("sandy_brick", () -> BrickTheme.SANDY.getState(BrickVariant.PAVER)),
     SANDY_COBBLE("sandy_cobble", () -> BrickTheme.SANDY.getState(BrickVariant.COBBLE)),
-    SANDY_FITTED("sandy_fitted", () -> BrickTheme.SANDY.getState(BrickVariant.FITTED)),
+    SANDY_FITTED("sandy_fitted", () -> BrickTheme.SANDY.getState(BrickVariant.BRICK)),
 
-    RED_SANDY_BLOCK("red_sandy_block", () -> BrickTheme.REDSANDY.getState(BrickVariant.BLOCK)),
-    RED_SANDY_BRICK("red_sandy_brick", () -> BrickTheme.REDSANDY.getState(BrickVariant.BRICK)),
+    RED_SANDY_BLOCK("red_sandy_block", () -> BrickTheme.REDSANDY.getState(BrickVariant.POLISHED)),
+    RED_SANDY_BRICK("red_sandy_brick", () -> BrickTheme.REDSANDY.getState(BrickVariant.PAVER)),
     RED_SANDY_COBBLE("red_sandy_cobble", () -> BrickTheme.REDSANDY.getState(BrickVariant.COBBLE)),
-    RED_SANDY_FITTED("red_sandy_fitted", () -> BrickTheme.REDSANDY.getState(BrickVariant.FITTED)),
+    RED_SANDY_FITTED("red_sandy_fitted", () -> BrickTheme.REDSANDY.getState(BrickVariant.BRICK)),
 
     ANDESITE_BLOCK("andesite_block", () -> Blocks.STONE.getDefaultState().withProperty(VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH)),
-    ANDESITE_BRICK("andesite_brick", () -> BrickTheme.ANDESITE.getState(BrickVariant.BRICK)),
+    ANDESITE_BRICK("andesite_brick", () -> BrickTheme.ANDESITE.getState(BrickVariant.PAVER)),
     ANDESITE_COBBLE("andesite_cobble", () -> BrickTheme.ANDESITE.getState(BrickVariant.COBBLE)),
-    ANDESITE_FITTED("andesite_fitted", () -> BrickTheme.ANDESITE.getState(BrickVariant.FITTED)),
+    ANDESITE_FITTED("andesite_fitted", () -> BrickTheme.ANDESITE.getState(BrickVariant.BRICK)),
 
     DIORITE_BLOCK("diorite_block", () -> Blocks.STONE.getDefaultState().withProperty(VARIANT, BlockStone.EnumType.DIORITE_SMOOTH)),
-    DIORITE_BRICK("diorite_brick", () -> BrickTheme.DIORITE.getState(BrickVariant.BRICK)),
+    DIORITE_BRICK("diorite_brick", () -> BrickTheme.DIORITE.getState(BrickVariant.PAVER)),
     DIORITE_COBBLE("diorite_cobble", () -> BrickTheme.DIORITE.getState(BrickVariant.COBBLE)),
-    DIORITE_FITTED("diorite_fitted", () -> BrickTheme.DIORITE.getState(BrickVariant.FITTED)),
+    DIORITE_FITTED("diorite_fitted", () -> BrickTheme.DIORITE.getState(BrickVariant.BRICK)),
 
     GRANITE_BLOCK("granite_block", () -> Blocks.STONE.getDefaultState().withProperty(VARIANT, BlockStone.EnumType.GRANITE_SMOOTH)),
-    GRANITE_BRICK("granite_brick", () -> BrickTheme.DIORITE.getState(BrickVariant.BRICK)),
+    GRANITE_BRICK("granite_brick", () -> BrickTheme.DIORITE.getState(BrickVariant.PAVER)),
     GRANITE_COBBLE("granite_cobble", () -> BrickTheme.DIORITE.getState(BrickVariant.COBBLE)),
-    GRANITE_FITTED("granite_fitted", () -> BrickTheme.DIORITE.getState(BrickVariant.FITTED)),
+    GRANITE_FITTED("granite_fitted", () -> BrickTheme.DIORITE.getState(BrickVariant.BRICK)),
 
     SNOW("snow", Blocks.SNOW::getDefaultState),
     ICE("ice", Blocks.ICE::getDefaultState),

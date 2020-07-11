@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,9 +40,9 @@ import static mods.railcraft.common.blocks.aesthetics.materials.Materials.*;
  */
 public class MatTools {
     public static void defineCrusherRecipes(IMaterialBlock source) {
-        addRockCrusherRecipe(source, BrickTheme.ABYSSAL, ABYSSAL_BLOCK, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
-        addRockCrusherRecipe(source, BrickTheme.BLEACHEDBONE, BLEACHEDBONE_BLOCK, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
-        addRockCrusherRecipe(source, BrickTheme.BLOODSTAINED, BLOODSTAINED_BLOCK, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
+        addRockCrusherRecipe(source, BrickTheme.ABYSSAL, ABYSSAL_POLISHED, ABYSSAL_BRICK, ABYSSAL_COBBLE, ABYSSAL_FITTED);
+        addRockCrusherRecipe(source, BrickTheme.BLEACHEDBONE, BLEACHEDBONE_POLISHED, BLEACHEDBONE_BRICK, BLEACHEDBONE_COBBLE, BLEACHEDBONE_FITTED);
+        addRockCrusherRecipe(source, BrickTheme.BLOODSTAINED, BLOODSTAINED_POLISHED, BLOODSTAINED_BRICK, BLOODSTAINED_COBBLE, BLOODSTAINED_FITTED);
         addRockCrusherRecipe(source, BrickTheme.FROSTBOUND, FROSTBOUND_BLOCK, FROSTBOUND_BRICK, FROSTBOUND_COBBLE, FROSTBOUND_FITTED);
         addRockCrusherRecipe(source, BrickTheme.INFERNAL, INFERNAL_BLOCK, INFERNAL_BRICK, INFERNAL_COBBLE, INFERNAL_FITTED);
         addRockCrusherRecipe(source, BrickTheme.NETHER, NETHER_BLOCK, NETHER_BRICK, NETHER_COBBLE, NETHER_FITTED);

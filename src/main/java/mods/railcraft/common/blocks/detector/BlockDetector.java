@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -167,7 +167,7 @@ public class BlockDetector extends BlockContainerRailcraftSubtyped<TileDetector,
                     "XXX",
                     "XPX",
                     "XXX",
-                    'X', BrickTheme.INFERNAL.getStack(1, BrickVariant.BRICK),
+                    'X', BrickTheme.INFERNAL.getStack(1, BrickVariant.PAVER),
                     'P', Blocks.STONE_PRESSURE_PLATE);
     }
 

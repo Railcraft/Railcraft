@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -38,7 +38,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     public BlockBrick(BrickTheme theme) {
         super(Material.ROCK);
         this.theme = theme;
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), BrickVariant.BRICK));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), BrickVariant.PAVER));
         setResistance(15);
         setHardness(5);
         setSoundType(SoundType.STONE);
@@ -58,21 +58,31 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapelessRecipe(getStack(BLOCK), getStack(BRICK));
-        CraftingPlugin.addShapelessRecipe(getStack(BRICK), getStack(FITTED));
-        CraftingPlugin.addShapelessRecipe(getStack(FITTED), getStack(BLOCK));
-        CraftingPlugin.addShapedRecipe(getStack(8, ORNATE),
+        CraftingPlugin.addShapedRecipe(getStack(4, BRICK),
+                "II",
+                "II",
+                'I', getStack(POLISHED));
+        CraftingPlugin.addShapedRecipe(getStack(4, PAVER),
+                "II",
+                "II",
+                'I', getStack(BRICK));
+        CraftingPlugin.addShapedRecipe(getStack(8, CHISELED),
                 "III",
                 "I I",
                 "III",
-                'I', getStack(BLOCK));
-        CraftingPlugin.addShapelessRecipe(getStack(ETCHED), getStack(BLOCK), new ItemStack(Items.GUNPOWDER));
+                'I', getStack(POLISHED));
+        CraftingPlugin.addShapedRecipe(getStack(8, ETCHED),
+                "III",
+                "IGI",
+                "III",
+                'G', new ItemStack(Items.GUNPOWDER),
+                'I', getStack(POLISHED));
 
         Crafters.rockCrusher().makeRecipe(this)
                 .addOutput(getStack(COBBLE))
                 .register();
 
-        CraftingPlugin.addFurnaceRecipe(getStack(COBBLE), getStack(BLOCK), 0.0F);
+        CraftingPlugin.addFurnaceRecipe(getStack(COBBLE), getStack(POLISHED), 0.0F);
         theme.initRecipes(this);
     }
 
