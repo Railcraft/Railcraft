@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -63,7 +63,7 @@ public class ItemGear extends ItemRailcraftSubtyped {
 //                        "II",
 //                        'I', Ingredients.from("ingotBronze", "ingotBrass"));
 
-        Crafters.rollingMachine().newRecipe(getStack(2, EnumGear.BUSHING))
+        Crafters.rollingMachine().newRecipe(getStack(4, EnumGear.BUSHING))
                 .time(100)
                 .shaped(
                         "II",
