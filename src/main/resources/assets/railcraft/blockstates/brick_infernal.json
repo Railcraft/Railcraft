@@ -11,16 +11,16 @@
       }
     ],
     "variant": {
-      "brick": {
+      "paver": {
         "textures": {"all": "railcraft:blocks/brick_infernal_0"}
       },
-      "fitted": {
+      "brick": {
         "textures": {"all": "railcraft:blocks/brick_infernal_1"}
       },
-      "block": {
+      "polished": {
         "textures": {"all": "railcraft:blocks/brick_infernal_2"}
       },
-      "ornate": {
+      "chiseled": {
         "textures": {"all": "railcraft:blocks/brick_infernal_3"}
       },
       "etched": {

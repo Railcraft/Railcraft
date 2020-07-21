@@ -11,16 +11,16 @@
       }
     ],
     "variant": {
-      "brick": {
+      "paver": {
         "textures": {"all": "railcraft:blocks/brick_diorite_0"}
       },
-      "fitted": {
+      "brick": {
         "textures": {"all": "railcraft:blocks/brick_diorite_1"}
       },
-      "block": {
+      "polished": {
         "textures": {"all": "railcraft:blocks/brick_diorite_2"}
       },
-      "ornate": {
+      "chiseled": {
         "textures": {"all": "railcraft:blocks/brick_diorite_3"}
       },
       "etched": {
