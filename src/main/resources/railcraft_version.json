@@ -1,5 +1,8 @@
 {
-  "homepage": "http://www.railcraft.info/releases/",
+  "homepage": "http://www.railcraft.info/",
+  "1.12.2": {
+    "12.0.0": "Updated for 1.12.2!"
+  },
   "1.10.2": {
     "10.3.1": "FIX: Fix cart spawning due to obfuscation error, oops.",
     "10.3.0": "INFO: Merry Christmas!\nNEW: Added Snow to carts!\nNEW: Added Crowbar of Seasons, used to switch carts to Christmas or Halloween mode, found in Workshops or in Gift and Pumpkin Carts.\nNEW: Restored Creosote and Steam blocks. (contribution by liach)\nNEW: Added Creosote potion effect that harms spiders when thrown. (contribution by liach)\nCHANGE: 'NeedsRefuel' routing condition now looks at the entire train and considers Worldspike Carts as well.",
@@ -13,6 +16,8 @@
     "10.0.0-beta-3": "CHANGE: Rework Poor Ore worldgen. Replace with Mines, branching clouds of ore containing both Poor Ore and Standard Ore.\nCHANGE: Standardize Item and Texture names, may affect addons and resource packs, worlds should be unaffected.\nCONFIG: Added config option to reduce/eliminate vanilla Gold/Iron Ore generation.\nFIX: Fix Geode generation.\nFIX: Various other fixes."
   },
   "promos": {
+    "1.12.2-latest": "12.0.0",
+    "1.12.2-recommended": "12.0.0",
     "1.10.2-latest": "10.3.1",
     "1.10.2-recommended": "10.3.1"
   }
