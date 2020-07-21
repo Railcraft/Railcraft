@@ -178,8 +178,12 @@ public final class TileRockCrusher extends TileCrafter {
                 EntitySearcher.find(EntityItem.class).around(target).in(world).forEach(item -> {
                     if (l.useInternalCharge(SUCKING_POWER_COST)) {
                         ItemStack stack = item.getItem().copy();
-                        l.invInput.addStack(stack);
-                        item.setDead();
+                        ItemStack remainder = l.invInput.addStack(stack);
+                        if (remainder.isEmpty()) {
+                            item.setDead();
+                        } else {
+                            item.setItem(remainder);
+                        }
                     }
                 });
 
