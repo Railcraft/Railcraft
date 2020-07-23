@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,11 +31,9 @@ public enum BetaMessageTickHandler {
             "You are using a development version of Railcraft.",
             "There is no guarantee that your server or worlds are safe.",
             "There is no guarantee that game breaking bugs will be fixed prior to the next stable build.",
-            "There is no guarantee when the next build will be available.",
-            "There is no guarantee that the next build will be on CurseForge.",
+            "There is no guarantee when the next build will be available or where it will be uploaded.",
             "You use this at your own risk, as is. Bugs and all.",
             "This build should not be used in modpacks.",
-            "You can thank the friendly people at FTB for making this message necessary.",
             "Have a nice day and enjoy the mod!",
             "- CovertJaguar"
     };
