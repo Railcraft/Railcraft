@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -92,23 +92,36 @@ public class ModuleWorld extends RailcraftModulePayload {
                     oreConfigFolder.mkdirs();
 
                 if (RailcraftConfig.generateDefaultOreConfigs()) {
-                    generateDefaultMine(100, 60, 3, 8, 29, Metal.COPPER, "mine_copper.cfg");
-                    generateDefaultMine(100, 15, 1, 1, 79, Metal.GOLD, "mine_gold.cfg");
-                    generateDefaultMine(100, 40, 4, 16, 26, Metal.IRON, "mine_iron.cfg");
-                    generateDefaultMine(101, 40, 6, 4, 26, Metal.NICKEL, "mine_nickel.cfg"); // Same depth/seed as Iron so they will generate together
-                    generateDefaultMine(100, 30, 3, 6, 82, Metal.LEAD, "mine_lead.cfg");
-                    generateDefaultMine(101, 30, 4, 4, 82, Metal.ZINC, "mine_zinc.cfg"); // Same depth/seed as Lead so they will generate together
-                    generateDefaultMine(100, 20, 2, 2, 47, Metal.SILVER, "mine_silver.cfg");
-                    generateDefaultMine(100, 50, 2, 4, 50, Metal.TIN, "mine_tin.cfg");
+                    generateDefaultConfigs(100, 60, 3, 8, 20, 8, 29, Metal.COPPER);
+                    generateDefaultConfigs(100, 15, 1, 1, 0, 0, 79, Metal.GOLD);
+                    generateDefaultConfigs(100, 40, 4, 16, 0, 0, 26, Metal.IRON);
+                    generateDefaultConfigs(101, 40, 6, 4, 15, 6, 26, Metal.NICKEL); // Same depth/seed as Iron so they will generate together
+                    generateDefaultConfigs(100, 30, 3, 6, 10, 7, 82, Metal.LEAD);
+                    generateDefaultConfigs(101, 30, 4, 4, 10, 6, 82, Metal.ZINC); // Same depth/seed as Lead so they will generate together
+                    generateDefaultConfigs(100, 20, 2, 2, 10, 4, 47, Metal.SILVER);
+                    generateDefaultConfigs(100, 50, 2, 4, 15, 6, 50, Metal.TIN);
                 }
             }
 
-            private void generateDefaultMine(int defaultWeight, int defaultDepth, int defaultRange, int defaultBlockCount, int defaultSeed, Metal metal, String fileName) {
-                File file = new File(oreConfigFolder, fileName);
-                if (file.exists())
-                    file.delete();
-                Configuration oreConfig = new Configuration(file);
-                oreConfig.load();
+            private void generateDefaultConfigs(int weight, int depth, int mineRange, int mineBlockCount, int diffuseRange, int diffuseBlockCount, int seed, Metal metal) {
+                String[] fileNames = {
+                        "mine_" + metal.name() + ".cfg",
+                        "diffuse_" + metal.name() + ".cfg"
+                };
+                Configuration[] oreConfigs = new Configuration[2];
+                int numConfigs = 2;
+                switch (metal) {
+                    case GOLD:
+                    case IRON:
+                        numConfigs = 1;
+                }
+                for (int ii = 0; ii < numConfigs; ii++) {
+                    File file = new File(oreConfigFolder, fileNames[ii]);
+                    if (file.exists())
+                        file.delete();
+                    oreConfigs[ii] = new Configuration(file);
+                    oreConfigs[ii].load();
+                }
                 IBlockState fringeState = Metal.Form.POOR_ORE.getState(metal);
                 if (fringeState == null)
                     return;
@@ -117,7 +130,14 @@ public class ModuleWorld extends RailcraftModulePayload {
                 if (coreState == null)
                     return;
                 String coreOre = BlockItemParser.toString(coreState);
-                OreGeneratorFactory.makeMine(oreConfig, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, fringeOre, coreOre);
+                OreGeneratorFactory.makeMine(oreConfigs[0], weight, mineBlockCount, depth, mineRange, seed, fringeOre, coreOre);
+                switch (metal) {
+                    case GOLD:
+                    case IRON:
+                        break;
+                    default:
+                        OreGeneratorFactory.makeDiffuse(oreConfigs[1], weight, diffuseBlockCount, depth, diffuseRange, coreOre);
+                }
             }
 
             @Override

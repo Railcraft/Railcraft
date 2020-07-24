@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,6 +54,10 @@ public class OreGeneratorFactory {
         return new OreGeneratorFactory(config, "MINE", defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, defaultFringeOre, defaultCoreOre);
     }
 
+    public static OreGeneratorFactory makeDiffuse(Configuration config, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, String defaultCoreOre) {
+        return new OreGeneratorFactory(config, "DIFFUSE", defaultWeight, defaultBlockCount, defaultDepth, defaultRange, 0, "", defaultCoreOre);
+    }
+
     public OreGeneratorFactory(Configuration config) {
         this(config, "MINE", 100, 4, 40, 3, 29, "railcraft:ore_metal_poor#2", "railcraft:ore_metal#0");
     }
@@ -71,25 +75,24 @@ public class OreGeneratorFactory {
 
         DimensionRules dimensionRules = new DimensionRules(config);
         BiomeRules biomeRules = new BiomeRules(config);
+        IWorldGenerator genImp;
 
         switch (type) {
             case MINE:
                 GeneratorSettingsMine mineSettings = new GeneratorSettingsMine(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultSeed, defaultFringeOre, defaultCoreOre);
                 this.settings = mineSettings;
-                IWorldGenerator mineGenImpl = new GeneratorMine(config, dimensionRules, biomeRules, mineSettings);
-                worldGen = new GeneratorRailcraftOre(mineGenImpl, retrogen, retrogenMarker).setRegistryName(RailcraftConstantsAPI.locationOf(name));
-                Game.log().msg(Level.INFO, "Registered Mine Ore Generator at depth {0} called {1}", mineSettings.depth, name);
+                genImp = new GeneratorMine(config, dimensionRules, biomeRules, mineSettings);
                 break;
             case DIFFUSE:
                 GeneratorSettings diffuseSettings = new GeneratorSettings(config, defaultWeight, defaultBlockCount, defaultDepth, defaultRange, defaultCoreOre);
                 this.settings = diffuseSettings;
-                IWorldGenerator diffuseGenImpl = new GeneratorDiffuse(dimensionRules, biomeRules, diffuseSettings);
-                worldGen = new GeneratorRailcraftOre(diffuseGenImpl, retrogen, retrogenMarker).setRegistryName(RailcraftConstantsAPI.locationOf(name));
-                Game.log().msg(Level.INFO, "Registered Diffuse Ore Generator called {0}", name);
+                genImp = new GeneratorDiffuse(dimensionRules, biomeRules, diffuseSettings);
                 break;
             default:
                 throw new OreConfigurationException(config, "Something went wrong. This should be impossible.");
         }
+        worldGen = new GeneratorRailcraftOre(genImp, retrogen, retrogenMarker).setRegistryName(RailcraftConstantsAPI.locationOf(name));
+        Game.log().msg(Level.INFO, "Registered {0} Ore Generator at depth {1}-{2} called {3}", type, settings.minDepth(), settings.maxDepth(), name);
 
         if (config.hasChanged())
             config.save();
@@ -104,13 +107,21 @@ public class OreGeneratorFactory {
 
         public GeneratorSettings(Configuration config, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, String defaultCoreOre) {
             weight = config.getInt("weight", CAT, defaultWeight, 0, Integer.MAX_VALUE, "The generator weight, larger weights generate later. You can use this to sort what order stuff is generated.");
-            depth = config.getInt("depth", CAT, defaultDepth, 10, Integer.MAX_VALUE, "The y level that the mine will generate at. Generally you should keep this below 220 for vanilla height worlds. If your sea level is the normal 63, its usually best to stay below 50 as well due to the topsoil.");
-            range = config.getInt("range", CAT, defaultRange, 1, 20, "The scale of the gaussian distribution used to spread the mine vertically, how tall it is. Note that it spreads above and blow the y level equally, so a value of 3 is roughly 6 blocks tall.");
-            blockCount = config.getInt("blockCount", CAT, defaultBlockCount, 1, 16, "The number of ore blocks generated during each successful event. Each chunk generally gets 216 generation events, but not all events result in ore spawn due to chance settings and noise fields.");
+            depth = config.getInt("depth", CAT, defaultDepth, 10, Integer.MAX_VALUE, "The y level that the ore will generate at. Generally you should keep this below 220 for vanilla height worlds. If your sea level is the normal 63, its usually best to stay below 50 as well due to the topsoil.");
+            range = config.getInt("range", CAT, defaultRange, 1, 20, "The distribution used to spread the ore vertically. Note that it spreads above and blow the y level equally, so a value of 3 is roughly 6 blocks tall.");
+            blockCount = config.getInt("blockCount", CAT, defaultBlockCount, 1, 16, "The number of ore blocks generated during each successful event.");
 
 
             config.setCategoryComment(CAT + ".ore", "The ore blocks to be generated. Format: <modId>:<blockname>#<meta>");
-            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The ore block generated in the core of the mine.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
+            coreOre = BlockItemParser.parseBlock(config.getString("core", CAT + ".ore", defaultCoreOre, "The main ore block generated.")).stream().findFirst().orElse(Blocks.STONE.getDefaultState());
+        }
+
+        public int minDepth() {
+            return depth - range;
+        }
+
+        public int maxDepth() {
+            return depth + range;
         }
     }
 
