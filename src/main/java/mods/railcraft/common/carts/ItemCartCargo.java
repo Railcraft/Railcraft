@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.items.IPrototypedItem;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 
 /**
@@ -28,9 +27,9 @@ public class ItemCartCargo extends ItemCart implements IPrototypedItem {
     @Override
     public void defineRecipes() {
         CraftingPlugin.addShapedRecipe(getStack(),
-                "B",
+                "C",
                 "M",
-                'B', Blocks.TRAPPED_CHEST,
+                'C', Items.COMPARATOR,
                 'M', Items.MINECART);
     }
 }
