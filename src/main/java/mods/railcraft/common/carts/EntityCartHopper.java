@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -195,7 +195,7 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
         EntityItem found = EntitySearcher.findItem().around(this).growFlat(0.25D).in(world).any();
 
         if (found != null) {
-            TileEntityHopper.putDropInInventoryAllSlots(null, this, found);
+            addStack(found.getItem());
             markDirty();
         }
         return false;
