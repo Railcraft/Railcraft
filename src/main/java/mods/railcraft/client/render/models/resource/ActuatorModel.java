@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.client.render.models.resource;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.wayobjects.actuators.BlockMachineActuator;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -34,7 +33,6 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import javax.vecmath.Matrix4f;
@@ -128,7 +126,7 @@ public class ActuatorModel implements IModel {
             Map<IBlockState, ModelResourceLocation> modelLocations) {
         for (ModelResourceLocation modelLocation : modelLocations.values()) {
             IModel model = ModelManager.getModel(modelLocation);
-            Game.log().msg(Level.INFO, "Catching dependency model {0} with name {1}", model, modelLocation);
+//            Game.log().msg(Level.INFO, "Catching dependency model {0} with name {1}", model, modelLocation);
             models.put(modelLocation, model.bake(model.getDefaultState(), format, bakedTextureGetter));
         }
     }
