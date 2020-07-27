@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
+import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitDelayedLocking;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
@@ -21,7 +22,7 @@ public class GuiTrackDelayedLocking extends GuiBasic {
     private TrackKitDelayedLocking track;
 
     public GuiTrackDelayedLocking(TrackKitDelayedLocking t) {
-        super(GuiTools.getDisplayTitle(t));
+        super(((TileTrackOutfitted) t.getTile()).getName());
         track = t;
         delay = track.getDelay();
     }
