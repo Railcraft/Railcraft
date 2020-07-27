@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,7 +43,8 @@ public abstract class BlockTrackTile<T extends TileRailcraft> extends BlockTrack
     @Override
     public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
         super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
-        lastClearResult.set(clearBlock(state, worldIn, pos, harvesters.get()));
+        if (Game.isHost(worldIn))
+            lastClearResult.set(clearBlock(state, worldIn, pos, harvesters.get()));
     }
 
     @Override
