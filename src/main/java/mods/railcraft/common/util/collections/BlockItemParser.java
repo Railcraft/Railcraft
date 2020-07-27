@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -59,7 +59,7 @@ public class BlockItemParser {
         String[] tokens = line.split("#");
         Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tokens[0]));
         if (block == null)
-            throw new IllegalArgumentException("Invalid Block while parsing config line: " + line);
+            throw new IllegalArgumentException("No matching block found for " + line);
         int meta = tokens.length > 1 ? Integer.valueOf(tokens[1]) : 0;
         //noinspection deprecation
         return Collections.singleton(block.getStateFromMeta(meta));
@@ -82,7 +82,7 @@ public class BlockItemParser {
                         .collect(Collectors.toSet());
             }
             if (items.isEmpty())
-                throw new IllegalArgumentException("Invalid Item while parsing config line: " + line);
+                throw new IllegalArgumentException("No matching item found for " + line);
             Range<Integer> metadata;
             if (tokens.length > 1) {
                 if (tokens[1].contains("-")) {
@@ -113,7 +113,7 @@ public class BlockItemParser {
                 entries.forEach(e -> Game.log().msg(Level.INFO, logMessage + ": {0}", toString(e)));
                 return entries.stream();
             } catch (Exception ex) {
-                Game.log().throwable(Level.ERROR, 0, ex, "Invalid list entry while {0}: {1}", logMessage, line);
+                Game.log().throwable(Level.WARN, 0, ex, "Invalid list entry while {0}: {1}", logMessage, line);
             }
             return Stream.empty();
         }).collect(Collectors.toList());
@@ -130,7 +130,7 @@ public class BlockItemParser {
                     map.put(key, value);
                 });
             } catch (Exception ex) {
-                Game.log().throwable(Level.ERROR, 0, ex, "Invalid map entry while {0}: {1}", logMessage, line);
+                Game.log().throwable(Level.WARN, 0, ex, "Invalid map entry while {0}: {1}", logMessage, line);
             }
         });
         return map;
