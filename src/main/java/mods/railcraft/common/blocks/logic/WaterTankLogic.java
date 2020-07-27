@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,11 +12,17 @@ package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
@@ -30,12 +36,14 @@ import javax.annotation.Nonnull;
  */
 public class WaterTankLogic extends InventoryLogic {
     public static final int SLOT_INPUT = 0;
-    public static final int SLOT_OUTPUT = 1;
+    public static final int SLOT_PROCESS = 1;
+    public static final int SLOT_OUTPUT = 2;
     private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 400;
     private final StandardTank tank;
+    private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
     public WaterTankLogic(Adapter adapter) {
-        super(adapter, 2);
+        super(adapter, 3);
         tank = new FilteredTank(TANK_CAPACITY, adapter.tile()).setFilterFluid(Fluids.WATER);
         addSubLogic(new TankLogic(adapter).addTank(tank));
     }
@@ -45,7 +53,7 @@ public class WaterTankLogic extends InventoryLogic {
         super.updateServer();
 
         if (clock(FluidTools.BUCKET_FILL_TIME))
-            FluidTools.processContainers(tank, this, WaterTankLogic.SLOT_INPUT, WaterTankLogic.SLOT_OUTPUT);
+            processState = FluidTools.processContainer(this, tank, ProcessType.DRAIN_THEN_FILL, processState);
     }
 
     @Override
@@ -69,5 +77,27 @@ public class WaterTankLogic extends InventoryLogic {
                 return super.extractItem(slot, amount, simulate);
             }
         };
+    }
+
+    @Override
+    public boolean interact(EntityPlayer player, EnumHand hand) {
+        return FluidTools.interactWithFluidHandler(player, hand, tank) || super.interact(player, hand);
+    }
+
+    @Override
+    public @Nullable EnumGui getGUI() {
+        return EnumGui.TANK_WATER;
+    }
+
+    @Override
+    public void writeToNBT(NBTTagCompound data) {
+        super.writeToNBT(data);
+        NBTPlugin.writeEnumOrdinal(data, "processState", processState);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        processState = NBTPlugin.readEnumOrdinal(data, "processState", FluidTools.ProcessState.values(), FluidTools.ProcessState.RESET);
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,6 +67,7 @@ public enum EnumGui {
     STEAM_OVEN(true),
     SWITCH_MOTOR(true),
     TANK(true),
+    TANK_WATER(true),
     TRACK_DELAYED(false),
     TRACK_EMBARKING(false),
     TRACK_LAUNCHER(false),

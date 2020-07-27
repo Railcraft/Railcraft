@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -102,6 +102,13 @@ public final class FluidTools {
         return FluidItemHelper.isContainer(player.getHeldItem(hand));
     }
 
+    public enum ProcessType {
+        FILL_ONLY,
+        DRAIN_ONLY,
+        FILL_THEN_DRAIN,
+        DRAIN_THEN_FILL
+    }
+
     public enum ProcessState {
         FILLING,
         DRAINING,
@@ -140,17 +147,27 @@ public final class FluidTools {
      * Expects a three slot inventory, with input as slot 0, processing as slot 1, and output as slot 2.
      * Will handle moving an item through all stages from input to output for either filling or draining.
      */
-    public static ProcessState processContainer(IInventory inv, StandardTank tank, boolean defaultToFill, ProcessState state) {
+    public static ProcessState processContainer(IInventory inv, StandardTank tank, ProcessType type, ProcessState state) {
         ItemStack container = inv.getStackInSlot(1);
         if (InvTools.isEmpty(container) || FluidUtil.getFluidHandler(container) == null) {
             sendToProcessing(inv);
             return ProcessState.RESET;
         }
         if (state == ProcessState.RESET) {
-            if (defaultToFill) {
+            if (type == ProcessType.FILL_ONLY) {
                 return tryFill(inv, tank, container);
-            } else {
+            } else if (type == ProcessType.DRAIN_ONLY) {
                 return tryDrain(inv, tank, container);
+            } else if (type == ProcessType.FILL_THEN_DRAIN) {
+                if (FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, false).isSuccess())
+                    return tryFill(inv, tank, container);
+                else
+                    return tryDrain(inv, tank, container);
+            } else if (type == ProcessType.DRAIN_THEN_FILL) {
+                if (FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, false).isSuccess())
+                    return tryDrain(inv, tank, container);
+                else
+                    return tryFill(inv, tank, container);
             }
         }
         if (state == ProcessState.FILLING)

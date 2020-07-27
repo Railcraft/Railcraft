@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
@@ -157,7 +158,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
             }
 
             if (update % FluidTools.BUCKET_FILL_TIME == 0)
-                processState = FluidTools.processContainer(invWaterContainers, tankWater, false, processState);
+                processState = FluidTools.processContainer(invWaterContainers, tankWater, ProcessType.DRAIN_ONLY, processState);
 
         } else {
             if (isSmoking()) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,10 +18,7 @@ import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
 import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
-import mods.railcraft.common.blocks.multi.TileBoilerFireboxFluid;
-import mods.railcraft.common.blocks.multi.TileBoilerFireboxSolid;
-import mods.railcraft.common.blocks.multi.TileMultiBlock;
-import mods.railcraft.common.blocks.multi.TileSteamTurbine;
+import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
@@ -91,6 +88,8 @@ public final class FactoryContainer {
                     return new ContainerRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
                 case TANK:
                     return new ContainerTank(inv, (ITankTile) obj);
+                case TANK_WATER:
+                    return new ContainerTankWater(inv, (TileTankWater) obj);
                 case ROLLING_MACHINE_MANUAL:
                     return new ContainerRollingMachine(inv, (TileRollingMachine) obj);
                 case ROLLING_MACHINE_POWERED:

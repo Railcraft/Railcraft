@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.interfaces.ITileTank;
 import mods.railcraft.common.fluids.AdvancedFluidHandler;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
@@ -110,7 +111,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
 
         if (clock % FluidTools.BUCKET_FILL_TIME == 0) {
-            processState = FluidTools.processContainer(this, tank, this instanceof TileFluidUnloader, processState);
+            processState = FluidTools.processContainer(this, tank, this instanceof TileFluidUnloader ? ProcessType.FILL_ONLY : ProcessType.DRAIN_ONLY, processState);
         }
     }
 
