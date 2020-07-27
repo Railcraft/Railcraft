@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -78,7 +78,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
             MicroBlockPlugin.addMicroBlockCandidate(this, block.ordinal());
         }
 
-        OreDictionary.registerOre("blockCoke", EnumGeneric.BLOCK_COKE.getStack());
+        OreDictionary.registerOre("blockFuelCoke", EnumGeneric.BLOCK_COKE.getStack());
     }
 
     @Override
