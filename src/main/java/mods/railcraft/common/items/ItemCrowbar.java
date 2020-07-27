@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,7 +96,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        if (TrackTools.isRailBlock(state))
+        if (TrackTools.isRail(state))
             return efficiency;
         return super.getDestroySpeed(stack, state);
     }
@@ -240,7 +240,7 @@ public abstract class ItemCrowbar extends ItemTool implements IToolCrowbar, IBox
 
     private void checkBlock(World world, int level, BlockPos pos, EntityPlayer player) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
-        if (TrackTools.isRailBlock(state) || state.getBlock() instanceof BlockTrackElevator || state.getBlock().isToolEffective("crowbar", state))
+        if (TrackTools.isRail(state) || state.getBlock() instanceof BlockTrackElevator || state.getBlock().isToolEffective("crowbar", state))
             removeExtraBlocks(world, level - 1, pos, state, player);
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.common.util.inventory.filters;
 
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.items.IMinecartItem;
-import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidItemHelper;
@@ -52,7 +51,7 @@ public enum StackFilters implements Predicate<ItemStack> {
     TRACK {
         @Override
         protected boolean testType(ItemStack stack) {
-            return stack.getItem() instanceof ITrackItem || (stack.getItem() instanceof ItemBlock && TrackTools.isRailBlock(InvTools.getBlockStateFromStack(stack)));
+            return TrackTools.isRail(stack);
         }
 
     },

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -78,7 +78,7 @@ public final class CartTools {
 
     public static @Nullable EntityMinecart placeCart(IRailcraftCartContainer cartType, GameProfile owner, ItemStack cartStack, World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
-        if (TrackTools.isRailBlock(state))
+        if (TrackTools.isRail(state))
             if (EntitySearcher.findMinecarts().around(pos).in(world).isEmpty()) {
                 BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
                 double h = 0.0D;

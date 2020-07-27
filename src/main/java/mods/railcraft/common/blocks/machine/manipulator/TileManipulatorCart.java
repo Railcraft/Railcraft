@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -261,7 +261,7 @@ public abstract class TileManipulatorCart extends TileManipulator implements IHa
         boolean emit = false;
         if (isPowered()) {
             Block block = WorldPlugin.getBlock(world, getPos().offset(side.getOpposite()));
-            emit = TrackTools.isRailBlock(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
+            emit = TrackTools.isRail(block) || block == Blocks.REDSTONE_WIRE || block == Blocks.POWERED_REPEATER || block == Blocks.UNPOWERED_REPEATER;
         }
         return emit ? PowerPlugin.FULL_POWER : PowerPlugin.NO_POWER;
     }

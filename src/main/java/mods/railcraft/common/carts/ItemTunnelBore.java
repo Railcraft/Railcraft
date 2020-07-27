@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -84,7 +84,7 @@ public class ItemTunnelBore extends ItemCart {
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState existingState = WorldPlugin.getBlockState(world, pos);
-        if (TrackTools.isRailBlock(existingState)) {
+        if (TrackTools.isRail(existingState)) {
             if (Game.isHost(world) && EntitySearcher.findMinecarts().around(pos).in(world).isEmpty()) {
                 BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirection(world, pos, existingState);
                 if (TrackShapeHelper.isLevelStraight(trackShape)) {

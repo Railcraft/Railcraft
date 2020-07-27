@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -139,7 +139,7 @@ public class ItemTrackKit extends ItemRailcraft {
         if (Game.isClient(worldIn))
             return EnumActionResult.PASS;
         IBlockState oldState = WorldPlugin.getBlockState(worldIn, pos);
-        if (!TrackTools.isRailBlock(oldState)) {
+        if (!TrackTools.isRail(oldState)) {
             return EnumActionResult.PASS;
         }
         TrackType trackType = null;

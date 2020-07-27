@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.api.items.ITrackItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.inventory.IInventory;
@@ -23,7 +22,7 @@ public class SlotTrack extends SlotRailcraft {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return !InvTools.isEmpty(stack) && (stack.getItem() instanceof ITrackItem || TrackTools.isRailBlock(stack));
+        return !InvTools.isEmpty(stack) && TrackTools.isRail(stack);
     }
 
 }

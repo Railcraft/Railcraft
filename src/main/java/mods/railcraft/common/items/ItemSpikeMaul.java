@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -108,7 +108,7 @@ public abstract class ItemSpikeMaul extends ItemTool implements IBoxable, IRailc
         if (oldState.getBlock().hasTileEntity(oldState)) {
             oldTile = WorldPlugin.getBlockTile(worldIn, pos);
         }
-        if (!TrackTools.isRailBlock(oldState))
+        if (!TrackTools.isRail(oldState))
             return EnumActionResult.PASS;
         TrackType trackType = TrackTools.getTrackTypeAt(worldIn, pos, oldState);
         BlockRailBase.EnumRailDirection shape = TrackTools.getTrackDirectionRaw(oldState);

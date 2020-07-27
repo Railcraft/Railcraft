@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -145,7 +145,7 @@ public final class PlayerPlugin {
             return false;
         ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem)) {
-            return TrackTools.isRailItem(heldItem.getItem())
+            return TrackTools.isRail(heldItem)
                     || Annotations.isAnnotatedDeepSearch(ActivationBlockingItem.class, heldItem.getItem());
         }
         return false;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,6 @@ import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMinecart;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -43,7 +42,7 @@ public class TrackmanBackpack extends BaseBackpack {
 
     public void setup() {
         for (Block block : ForgeRegistries.BLOCKS.getValuesCollection()) {
-            if (TrackTools.isRailBlock(block))
+            if (TrackTools.isRail(block))
                 add(block);
         }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -280,7 +280,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
 
         Block block = WorldPlugin.getBlock(cart.world, event.getPos());
         int launched = data.getInteger("Launched");
-        if (TrackTools.isRailBlock(block)) {
+        if (TrackTools.isRail(block)) {
             cart.fallDistance = 0;
             if (cart.isBeingRidden())
                 cart.getPassengers().forEach(p -> p.fallDistance = 0);

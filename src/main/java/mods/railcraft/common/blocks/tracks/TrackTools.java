@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,7 +18,6 @@ import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
@@ -52,30 +51,29 @@ public final class TrackTools {
     public static final int TRAIN_LOCKDOWN_DELAY = 200;
 
     public static boolean isRailBlockAt(IBlockAccess world, BlockPos pos) {
-        return isRailBlock(WorldPlugin.getBlock(world, pos));
+        return isRail(WorldPlugin.getBlock(world, pos));
     }
 
     public static boolean isStraightTrackAt(IBlockAccess world, BlockPos pos) {
         Block block = WorldPlugin.getBlock(world, pos);
-        return isRailBlock(block) && TrackShapeHelper.isStraight(getTrackDirection(world, pos));
+        return isRail(block) && TrackShapeHelper.isStraight(getTrackDirection(world, pos));
     }
 
     @Contract("null -> false")
-    public static boolean isRailBlock(@Nullable Block block) {
+    public static boolean isRail(@Nullable Block block) {
         return block instanceof BlockRailBase;
     }
 
-    public static boolean isRailBlock(IBlockState state) {
-        return state.getBlock() instanceof BlockRailBase;
+    public static boolean isRail(IBlockState state) {
+        return isRail(state.getBlock());
     }
 
-    public static boolean isRailBlock(ItemStack stack) {
-        Block block = InvTools.getBlockStateFromStack(stack).getBlock();
-        return block instanceof BlockRailBase;
+    public static boolean isRail(ItemStack stack) {
+        return isRail(stack.getItem());
     }
 
-    public static boolean isRailItem(Item item) {
-        return item instanceof ITrackItem || (item instanceof ItemBlock && isRailBlock(((ItemBlock) item).getBlock()));
+    public static boolean isRail(Item item) {
+        return item instanceof ITrackItem || (item instanceof ItemBlock && isRail(((ItemBlock) item).getBlock()));
     }
 
     public static EnumRailDirection getTrackDirection(IBlockAccess world, BlockPos pos, IBlockState state) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -131,7 +131,7 @@ public abstract class BlockTrack extends BlockRailBase implements IBlockTrack, I
         TrackTools.traverseConnectedTracks(worldIn, pos, (w, p) -> {
             IBlockState s = WorldPlugin.getBlockState(w, p);
             Block b = s.getBlock();
-            if (!TrackTools.isRailBlock(s))
+            if (!TrackTools.isRail(s))
                 return false;
             if (b instanceof BlockTrack) {
                 BlockTrack track = (BlockTrack) b;

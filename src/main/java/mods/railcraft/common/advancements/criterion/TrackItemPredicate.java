@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -63,6 +63,6 @@ final class TrackItemPredicate extends ItemPredicate {
         if (!Conditions.check(kit, TrackRegistry.TRACK_KIT.get(stack))) {
             return false;
         }
-        return TrackTools.isRailBlock(stack);
+        return TrackTools.isRail(stack);
     }
 }

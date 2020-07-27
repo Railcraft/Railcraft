@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,7 +65,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
 
         Block block = WorldPlugin.getBlock(world, pos);
 
-        if (TrackTools.isRailBlock(block)) {
+        if (TrackTools.isRail(block)) {
             ItemStack trackExist = patternInv.getStackInSlot(SLOT_EXIST);
             ItemStack trackStock = getStackInSlot(SLOT_STOCK);
 

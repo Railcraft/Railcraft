@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -465,7 +465,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
                             setActive(false);
                         }
                         placeRail = false;
-                    } else if (TrackTools.isRailBlock(existingState)) {
+                    } else if (TrackTools.isRail(existingState)) {
                         if (dir != TrackTools.getTrackDirection(world, targetPos, this)) {
                             TrackTools.setTrackDirection(world, targetPos, dir);
                             setDelay(STANDARD_DELAY);
@@ -806,7 +806,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return true;
 
         IBlockState targetState = WorldPlugin.getBlockState(world, targetPos);
-        if (TrackTools.isRailBlock(targetState)) {
+        if (TrackTools.isRail(targetState)) {
             BlockRailBase.EnumRailDirection targetShape = TrackTools.getTrackDirection(world, targetPos, targetState, this);
             if (preferredShape == targetShape)
                 return true;
@@ -913,7 +913,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
             return 0;
 
         IBlockState blockState = WorldPlugin.getBlockState(world, pos);
-        if (TrackTools.isRailBlock(blockState)) {
+        if (TrackTools.isRail(blockState)) {
             BlockRailBase.EnumRailDirection trackMeta = TrackTools.getTrackDirection(world, pos, blockState, this);
             if (dir == trackMeta)
                 return 0;

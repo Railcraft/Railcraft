@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -479,13 +479,19 @@ public abstract class InvTools {
         return !(isEmpty(stack) || block == null) && stack.getItem() instanceof ItemBlock && ((ItemBlock) stack.getItem()).getBlock() == block;
     }
 
+    public static Block getBlockFromStack(ItemStack stack) {
+        if (isEmpty(stack))
+            return Blocks.AIR;
+        Item item = stack.getItem();
+        Block block = GameData.getBlockItemMap().inverse().get(item);
+        return block == null ? Blocks.AIR : block.delegate.get();
+    }
+
     public static IBlockState getBlockStateFromStack(ItemStack stack) {
         if (isEmpty(stack))
             return Blocks.AIR.getDefaultState();
-        Item item = stack.getItem();
-        Block block = GameData.getBlockItemMap().inverse().get(item);
         //noinspection deprecation
-        return block == null ? Blocks.AIR.getDefaultState() : block.getStateFromMeta(stack.getItemDamage());
+        return getBlockFromStack(stack).getStateFromMeta(stack.getItemDamage());
     }
 
     public static @Nullable IBlockState getBlockStateFromStack(ItemStack stack, World world, BlockPos pos) {
