@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
@@ -339,6 +340,7 @@ public class StructureLogic extends Logic {
         functionalLogic.writeToNBT(data);
         data.setBoolean("master", isMaster);
         data.setByte("pattern", getPatternIndex());
+        NBTPlugin.writeBlockPos(data, "posInPattern", posInPattern);
     }
 
     @Override
@@ -347,12 +349,15 @@ public class StructureLogic extends Logic {
         super.readFromNBT(data);
         functionalLogic.readFromNBT(data);
         isMaster = data.getBoolean("master");
+        MultiBlockPattern pat = null;
         try {
             byte index = data.getByte("pattern");
-            currentPattern = index < 0 ? null : patterns.get(index);
+            pat = index < 0 ? null : patterns.get(index);
         } catch (Exception ex) {
             //NOOP
         }
+        BlockPos pos = NBTPlugin.readBlockPos(data, "posInPattern");
+        setPattern(pat, pos);
     }
 
     @Override

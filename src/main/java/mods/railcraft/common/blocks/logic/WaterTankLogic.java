@@ -38,7 +38,7 @@ public class WaterTankLogic extends InventoryLogic {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_PROCESS = 1;
     public static final int SLOT_OUTPUT = 2;
-    private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 400;
+    private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 16;
     private final StandardTank tank;
     private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 

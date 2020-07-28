@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,12 +50,14 @@ public class FluidGaugeWidget extends Widget {
         FluidStack fluidStack = tank.getFluid();
 //        Game.log(Level.INFO, "fluid write {0}", tank.getFluidAmount());
         lastSyncedFluidStack = fluidStack == null ? null : fluidStack.copy();
+        data.writeInt(tank.getCapacity());
         data.writeFluidStack(fluidStack);
     }
 
     @Override
     public void readServerSyncData(RailcraftInputStream data) throws IOException {
         super.readServerSyncData(data);
+        tank.setCapacity(data.readInt());
         tank.setFluid(data.readFluidStack());
 //        Game.log(Level.INFO, "fluid read {0}", tank.getFluidAmount());
     }
