@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,8 +67,10 @@ public final class FluidItemHelper {
 
     public static boolean isRoomInContainer(ItemStack stack, @Nullable Fluid fluid) {
         if (fluid == null) return false;
+        stack = stack.copy();
+        stack.setCount(1);
         IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
-        return fluidHandler != null && fluidHandler.fill(new FluidStack(fluid, 1), false) > 0;
+        return fluidHandler != null && fluidHandler.fill(new FluidStack(fluid, FluidTools.BUCKET_VOLUME), false) > 0;
     }
 
     public static boolean containsFluid(ItemStack stack, @Nullable Fluid fluid) {

@@ -105,9 +105,9 @@ public class ContainerTankWater extends RailcraftContainer {
         });
 
         tile.getLogic(IInventoryImplementor.class).ifPresent(inv -> {
-            addSlot(new SlotRailcraft(inv.getInventory(), 0, 116, 18));
-            addSlot(new SlotOutput(inv.getInventory(), 1, 140, 36));
-            addSlot(new SlotOutput(inv.getInventory(), 2, 116, 54));
+            addSlot(new SlotRailcraft(inv, 0, 116, 18));
+            addSlot(new SlotOutput(inv, 1, 140, 36));
+            addSlot(new SlotOutput(inv, 2, 116, 54));
         });
 
         addPlayerSlots(inventoryplayer);
