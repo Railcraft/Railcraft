@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.ILocalizedObject;
+import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -53,6 +54,21 @@ public final class LocalizationPlugin {
 
     public static String translate(String tag, Object... args) {
         String text = translate(tag);
+
+        try {
+            return String.format(text, args);
+        } catch (IllegalFormatException ex) {
+            return "Format error: " + text;
+        }
+    }
+
+    public static String format(String tag, Object... args) {
+        String text = translate(tag);
+        for (int ii = 0; ii < args.length; ii++) {
+            if (args[ii] instanceof Double) {
+                args[ii] = HumanReadableNumberFormatter.format((Double) args[ii]);
+            }
+        }
 
         try {
             return String.format(text, args);

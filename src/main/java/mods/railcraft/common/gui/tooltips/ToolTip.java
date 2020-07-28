@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,6 +50,10 @@ public class ToolTip extends ForwardingList<ToolTipLine> {
 
     public void add(String line, TextFormatting format) {
         add(new ToolTipLine(line, format));
+    }
+
+    public void newline() {
+        add("");
     }
 
     public void set(@Nullable ToolTip other) {
