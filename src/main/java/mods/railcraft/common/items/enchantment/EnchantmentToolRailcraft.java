@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.items.enchantment;
 
-import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.items.ItemSpikeMaul;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
@@ -26,7 +26,7 @@ public class EnchantmentToolRailcraft extends Enchantment {
 
     @Override
     public boolean canApply(ItemStack stack) {
-        return stack.getItem() instanceof ItemCrowbar || stack.getItem() instanceof ItemSpikeMaul;
+        return stack.getItem() instanceof IToolCrowbar || stack.getItem() instanceof ItemSpikeMaul;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.items.enchantment;
 
-import mods.railcraft.common.items.ItemCrowbar;
+import mods.railcraft.api.items.IToolCrowbar;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
@@ -37,7 +37,7 @@ public class EnchantmentDestruction extends EnchantmentToolRailcraft {
 
     @Override
     public boolean canApply(ItemStack stack) {
-        return stack.getItem() instanceof ItemCrowbar;
+        return stack.getItem() instanceof IToolCrowbar;
     }
 
 }
