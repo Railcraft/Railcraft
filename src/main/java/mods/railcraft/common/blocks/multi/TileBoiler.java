@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -89,7 +89,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         char[][] level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                level[x][z] = MultiBlockPattern.EMPTY_PATTERN;
+                level[x][z] = MultiBlockPattern.EMPTY_MARKER;
             }
         }
         builder.level(level);
@@ -97,7 +97,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_PATTERN : 'F';
+                char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_MARKER : 'F';
                 level[x][z] = m;
             }
         }
@@ -107,7 +107,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
             level = new char[width + 2][width + 2];
             for (int x = 0; x < width + 2; x++) {
                 for (int z = 0; z < width + 2; z++) {
-                    char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_PATTERN : tank;
+                    char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_MARKER : tank;
                     level[x][z] = m;
                 }
             }
@@ -117,7 +117,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                level[x][z] = MultiBlockPattern.EMPTY_PATTERN;
+                level[x][z] = MultiBlockPattern.EMPTY_MARKER;
             }
         }
         //noinspection UnnecessaryLocalVariable
@@ -141,7 +141,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     }
 
     BoilerData boilerData() {
-        return Optional.ofNullable(getPattern()).<BoilerData>map(MultiBlockPattern::getAttachedData).orElse(BoilerData.EMPTY);
+        return Optional.ofNullable(getPattern()).<BoilerData>map(p -> p.getAttachedData(0)).orElse(BoilerData.EMPTY);
     }
 
     public int getNumTanks() {

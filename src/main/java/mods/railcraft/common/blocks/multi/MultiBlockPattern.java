@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,11 +32,11 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public final class MultiBlockPattern {
 
-    public static final char EMPTY_PATTERN = 'O';
+    public static final char EMPTY_MARKER = 'O';
     private final char[][][] pattern;
     private final BlockPos masterOffset;
     private final @Nullable AxisAlignedBB entityCheckBounds;
-    private final @Nullable Object attachedData;
+    private final Object[] attachedData;
 
     /**
      * Creates a multiblock pattern builder.
@@ -51,7 +51,7 @@ public final class MultiBlockPattern {
         this(pattern, 1, 1, 1);
     }
 
-    public MultiBlockPattern(char[][][] pattern, Object attachedData) {
+    public MultiBlockPattern(char[][][] pattern, Object... attachedData) {
         this(pattern, new BlockPos(1, 1, 1), null, attachedData);
     }
 
@@ -60,13 +60,10 @@ public final class MultiBlockPattern {
     }
 
     public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ, @Nullable AxisAlignedBB entityCheckBounds) {
-        this.pattern = pattern;
-        this.masterOffset = new BlockPos(offsetX, offsetY, offsetZ);
-        this.entityCheckBounds = entityCheckBounds;
-        this.attachedData = null;
+        this(pattern, new BlockPos(offsetX, offsetY, offsetZ), entityCheckBounds);
     }
 
-    MultiBlockPattern(char[][][] pattern, BlockPos offset, @Nullable AxisAlignedBB entityCheckBounds, @Nullable Object attachedData) {
+    MultiBlockPattern(char[][][] pattern, BlockPos offset, @Nullable AxisAlignedBB entityCheckBounds, Object... attachedData) {
         this.pattern = pattern;
         this.masterOffset = offset;
         this.entityCheckBounds = entityCheckBounds;
@@ -84,9 +81,9 @@ public final class MultiBlockPattern {
         int y = posInPattern.getY();
         int z = posInPattern.getZ();
         if (x < 0 || y < 0 || z < 0)
-            return EMPTY_PATTERN;
+            return EMPTY_MARKER;
         if (x >= getPatternWidthX() || y >= getPatternHeight() || z >= getPatternWidthZ())
-            return EMPTY_PATTERN;
+            return EMPTY_MARKER;
         return getPatternMarker(posInPattern);
     }
 
@@ -126,15 +123,20 @@ public final class MultiBlockPattern {
         return masterOffset.equals(posInPattern);
     }
 
-    @SuppressWarnings("unchecked")
-    public @Nullable <T> T getAttachedData() {
-        return (T) attachedData;
+    public Object[] getAttachedData() {
+        return attachedData;
     }
 
-    @Contract("!null -> !null")
     @SuppressWarnings("unchecked")
-    public @Nullable <T> T getAttachedDataOr(@Nullable T backup) {
-        return attachedData == null ? backup : (T) attachedData;
+    public <T> T getAttachedData(int index) {
+        return (T) attachedData[index];
+    }
+
+    // Why is this needed??
+    @Contract("_, !null -> !null")
+    @SuppressWarnings("unchecked")
+    public @Nullable <T> T getAttachedDataOr(int index, @Nullable T backup) {
+        return attachedData.length <= index ? backup : (T) attachedData[index];
     }
 
     @Deprecated
@@ -271,7 +273,7 @@ public final class MultiBlockPattern {
         private BlockPos masterOffset = new BlockPos(1, 1, 1);
         private final List<char[][]> levels = new ArrayList<>();
         private @Nullable AxisAlignedBB box;
-        private @Nullable Object attachedData;
+        private List<Object> attachedData = new ArrayList<>();
 
         Builder() {
         }
@@ -342,7 +344,7 @@ public final class MultiBlockPattern {
          * @return This builder, for chaining
          */
         public <T> Builder attachedData(@Nullable T data) {
-            this.attachedData = data;
+            attachedData.add(data);
             return this;
         }
 
@@ -353,7 +355,7 @@ public final class MultiBlockPattern {
          */
         public MultiBlockPattern build() {
             char[][][] chars = levels.toArray(new char[0][][]);
-            return new MultiBlockPattern(chars, masterOffset, box, attachedData);
+            return new MultiBlockPattern(chars, masterOffset, box, attachedData.toArray());
         }
     }
 }

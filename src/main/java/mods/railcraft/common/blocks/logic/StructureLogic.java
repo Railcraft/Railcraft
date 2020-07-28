@@ -104,8 +104,13 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     protected void onPatternChanged() {
         adapter.updateModels();
-        if (!isMaster && functionalLogic instanceof IInventory)
+        if (!isMaster && functionalLogic instanceof IInventory && theWorld() != null)
             InvTools.spewInventory((IInventory) functionalLogic, theWorldAsserted(), getPos());
+        if (getPattern() != null) {
+            onStructureChanged(getPattern().getAttachedData());
+            if (isMaster)
+                functionalLogic.onStructureChanged(getPattern().getAttachedData());
+        }
     }
 
     public final char getPatternMarker() {
@@ -340,7 +345,8 @@ public class StructureLogic extends Logic {
         functionalLogic.writeToNBT(data);
         data.setBoolean("master", isMaster);
         data.setByte("pattern", getPatternIndex());
-        NBTPlugin.writeBlockPos(data, "posInPattern", posInPattern);
+        if (posInPattern != null)
+            NBTPlugin.writeBlockPos(data, "posInPattern", posInPattern);
     }
 
     @Override

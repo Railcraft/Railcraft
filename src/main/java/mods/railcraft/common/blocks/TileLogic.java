@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -88,6 +88,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @OverridingMethodsMustInvokeSuper
     public void onLoad() {
         super.onLoad();
+        if (Game.isClient(world)) return;
         getLogic(StructureLogic.class).ifPresent(StructureLogic::onBlockChange);
     }
 

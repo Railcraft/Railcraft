@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -118,6 +118,11 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
     @OverridingMethodsMustInvokeSuper
     public boolean interact(EntityPlayer player, EnumHand hand) {
         return subLogics.stream().map(l -> l.interact(player, hand)).filter(b -> b).findFirst().orElse(false);
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    public void onStructureChanged(Object[] data) {
+        subLogics.forEach(subLogic -> subLogic.onStructureChanged(data));
     }
 
     @Override

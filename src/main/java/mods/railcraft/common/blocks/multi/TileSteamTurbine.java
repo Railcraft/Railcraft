@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -457,7 +457,7 @@ public final class TileSteamTurbine extends TileMultiBlockCharge implements IMul
             return base;
         }
         MultiBlockPattern currentPattern = requireNonNull(getCurrentPattern());
-        Axis axis = currentPattern.getAttachedDataOr(Axis.X);
+        Axis axis = currentPattern.getAttachedData(0);
         base = base.withProperty(BlockSteamTurbine.WINDOW, getPatternMarker() == 'W')
                 .withProperty(BlockSteamTurbine.LONG_AXIS, axis);
         BlockPos pos = getPatternPosition();

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.logic.CokeOvenLogic;
+import mods.railcraft.common.blocks.logic.DynamicTankCapacityLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.fluids.FluidTools;
@@ -37,7 +38,7 @@ public final class TileCokeOven extends TileCrafter {
     private static final List<MultiBlockPattern> patterns = new ArrayList<>();
 
     static {
-        char[][][] map = {
+        char[][][] map1 = {
                 {
                         {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O'},
@@ -73,11 +74,107 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },};
-        patterns.add(new MultiBlockPattern(map, 2, 1, 2));
+        patterns.add(new MultiBlockPattern(map1, new BlockPos(2, 1, 2), null, CokeOvenLogic.TANK_CAPACITY, 1));
+        char[][][] map2 = {
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'W', 'A', 'A', 'A', 'A', 'A', 'W', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },};
+        patterns.add(new MultiBlockPattern(map2, new BlockPos(2, 1, 4), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
+        char[][][] map3 = {
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'B', 'O'},
+                        {'O', 'B', 'W', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },};
+        patterns.add(new MultiBlockPattern(map3, new BlockPos(4, 1, 2), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
     }
 
     public TileCokeOven() {
-        setLogic(new StructureLogic("coke_oven", this, patterns, new CokeOvenLogic(Logic.Adapter.of(this))) {
+        setLogic(new StructureLogic("coke_oven", this, patterns,
+                new CokeOvenLogic(Logic.Adapter.of(this))
+                        .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0))
+        ) {
 
             @Override
             public boolean isMapPositionValid(BlockPos pos, char mapPos) {

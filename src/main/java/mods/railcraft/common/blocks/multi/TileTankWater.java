@@ -119,14 +119,10 @@ public class TileTankWater extends TileLogic {
     }
 
     public TileTankWater() {
-        setLogic(new StructureLogic("water_tank", this, patterns, new WaterTankLogic(Logic.Adapter.of(this))) {
-                    @Override
-                    protected void onPatternChanged() {
-                        super.onPatternChanged();
-                        if (isMaster && getPattern() != null)
-                            getLogic(TankLogic.class).ifPresent(logic -> logic.getTankManager().setCapacity(0, getPattern().getAttachedData()));
-                    }
-                }
+        setLogic(new StructureLogic("water_tank", this, patterns,
+                        new WaterTankLogic(Logic.Adapter.of(this))
+                                .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0))
+                )
                         .addSubLogic(new WaterGeneratorLogic(Logic.Adapter.of(this)))
                         .addSubLogic(new FluidPushLogic(Logic.Adapter.of(this), OUTPUT_RATE, OUTPUT_FACES))
         );

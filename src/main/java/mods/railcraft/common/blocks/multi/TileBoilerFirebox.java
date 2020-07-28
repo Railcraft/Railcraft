@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -87,8 +87,8 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
         int capacity = getNumTanks() * FluidTools.BUCKET_VOLUME;
         tankManager.setCapacity(TANK_STEAM, capacity * getSteamCapacityPerTank());
         tankManager.setCapacity(TANK_WATER, capacity * 4);
-        boiler.setMaxHeat(pattern.getAttachedDataOr(BoilerData.EMPTY).maxHeat);
-        boiler.setTicksPerCycle(pattern.getAttachedDataOr(BoilerData.EMPTY).ticksPerCycle);
+        boiler.setMaxHeat(pattern.getAttachedDataOr(0, BoilerData.EMPTY).maxHeat);
+        boiler.setTicksPerCycle(pattern.getAttachedDataOr(0, BoilerData.EMPTY).ticksPerCycle);
     }
 
     public boolean isBurning() {
