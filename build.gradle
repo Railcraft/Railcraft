@@ -44,14 +44,11 @@ ext {
     dirLang = "./lang"
 
     dirDest = './build/distributions'
-
-    environment = findProject(":private") == null ? "Dev" : "Release"
 }
 
 println ''
 println '*************************************************************'
 println 'Project Version: ' + project.version
-println 'Environment: ' + project.environment
 println '*************************************************************'
 println ''
 

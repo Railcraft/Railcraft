@@ -24,6 +24,7 @@ README.txt
 .idea/compiler.xml
 *.iml
 run/
+release/
 private/
 push/
 *.ipr
