@@ -20,7 +20,7 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply from: 'api/railcraft/gradle.properties', to: project.ext
+apply from: 'api-railcraft/gradle.properties', to: project.ext
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
@@ -37,11 +37,10 @@ if (file("passwords.properties").exists()) {
 }
 
 ext {
-    apiRailcraft = "./api/railcraft/src/main/java"
+    apiRailcraft = "./api-railcraft/src/main/java"
     // apiForestry = "./api/forestry"
     // apiThaumcraft = "./api/thaumcraft"
     // apiBuildcraft = "./api/buildcraft"
-    dirLang = "./lang"
 
     dirDest = './build/distributions'
 }
@@ -79,13 +78,7 @@ minecraft {
 sourceSets {
     main {
         resources {
-            srcDir project.dirLang
             exclude '**/Thumbs.db'
-        }
-    }
-    api {
-        java {
-            srcDir project.apiRailcraft
         }
     }
 }

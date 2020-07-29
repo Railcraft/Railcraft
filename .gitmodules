@@ -2,5 +2,5 @@
 	path = lang
 	url = https://github.com/Railcraft/Railcraft-Localization.git
 [submodule "api/railcraft"]
-	path = api/railcraft
+	path = api-railcraft
 	url = https://github.com/Railcraft/Railcraft-API.git
