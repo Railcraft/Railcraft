@@ -22,6 +22,10 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply from: 'api-railcraft/gradle.properties', to: project.ext
 
+//subprojects {
+//    apply plugin: "java"
+//}
+
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
