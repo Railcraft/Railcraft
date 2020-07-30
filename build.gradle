@@ -22,10 +22,6 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply from: 'api-railcraft/gradle.properties', to: project.ext
 
-//subprojects {
-//    apply plugin: "java"
-//}
-
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
 group = "com.headlamp-games" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -41,7 +37,7 @@ if (file("passwords.properties").exists()) {
 }
 
 ext {
-    apiRailcraft = "./api-railcraft/src/main/java"
+    apiRailcraft = project(":api-railcraft").projectDir.path
     // apiForestry = "./api/forestry"
     // apiThaumcraft = "./api/thaumcraft"
     // apiBuildcraft = "./api/buildcraft"
@@ -167,7 +163,7 @@ runServer {
 
 test {
     useJUnitPlatform()
-    
+
     // listen to events in the test execution lifecycle
     beforeTest { descriptor ->
         logger.lifecycle("Running: $descriptor")
@@ -320,7 +316,7 @@ task signDevJar(type: JarSigner, dependsOn: 'devJar') {
 }
 
 task apiSourceJar(type: Jar) {
-    from project.apiRailcraft
+    from sourceSets.api.java
     include '**/mods/railcraft/api/**/*.java'
     from project.apiRailcraft + "/LICENSE.md"
     include '**/LICENSE.md'
