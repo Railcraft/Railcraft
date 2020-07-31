@@ -63,7 +63,29 @@ minecraft {
 
 def actualRunDir = project.file(minecraft.runDir)
 // Change the 4G in -Xmx4G to your desired max RAM and 4G in -Xms4G to your desired initial RAM
-def optimizedVmArgs = ['-XX:+UseG1GC', '-Xmx4G', '-Xms4G', '-XX:+UnlockExperimentalVMOptions', '-XX:G1NewSizePercent=20', '-XX:G1ReservePercent=20', '-XX:MaxGCPauseMillis=50', '-XX:G1HeapRegionSize=32M']
+
+def optimizedVmArgs = [
+        "-Xms4G",
+        "-Xmx4G",
+        "-XX:+UseG1GC",
+        "-XX:+ParallelRefProcEnabled",
+        "-XX:MaxGCPauseMillis=200",
+        "-XX:+UnlockExperimentalVMOptions",
+        "-XX:+DisableExplicitGC",
+        "-XX:+AlwaysPreTouch",
+        "-XX:G1NewSizePercent=30",
+        "-XX:G1MaxNewSizePercent=40",
+        "-XX:G1HeapRegionSize=8M",
+        "-XX:G1ReservePercent=20",
+        "-XX:G1HeapWastePercent=5",
+        "-XX:G1MixedGCCountTarget=4",
+        "-XX:InitiatingHeapOccupancyPercent=15",
+        "-XX:G1MixedGCLiveThresholdPercent=90",
+        "-XX:G1RSetUpdatingPauseTimePercent=5",
+        "-XX:SurvivorRatio=32",
+        "-XX:+PerfDisableSharedMem",
+        "-XX:MaxTenuringThreshold=1"
+]
 def assertionVmArgs = ['-ea:mods.railcraft...', '-ea:net.minecraft...', '-ea:net.minecraftforge...']
 def log4jVmArgs = ['-Dlog4j.configurationFile=' + new File(actualRunDir, 'log4j2.xml').toString()]
 def railcraftDebugArgs = ['-Drailcraft.log.categories=registry,models']
@@ -76,12 +98,44 @@ minecraft {
 }
 
 sourceSets {
+    api {
+        java {
+            srcDirs += [
+                    project(':api-railcraft').projectDir.path + "/src/api/java"
+            ]
+        }
+    }
     main {
+        java {
+            srcDirs += [
+                    project(':release').projectDir.path + "/src/main/java"
+            ]
+        }
         resources {
             exclude '**/Thumbs.db'
+            srcDirs += [
+                    project(':release').projectDir.path + "/src/main/resources",
+                    project(':lang').projectDir.path + "/src/main/resources"
+            ]
         }
     }
 }
+
+println ""
+println "Source Sets:"
+println "-- api:"
+sourceSets.api.java.srcDirs.each {
+    println "---- " + it
+}
+println "-- main:"
+sourceSets.main.java.srcDirs.each {
+    println "---- " + it
+}
+println "-- resourses:"
+sourceSets.main.resources.srcDirs.each {
+    println "---- " + it
+}
+println ""
 
 repositories {
     mavenCentral()
@@ -357,8 +411,4 @@ artifacts {
     archives apiJar
     archives devJar
     archives jar
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = "4.10.3"
 }
