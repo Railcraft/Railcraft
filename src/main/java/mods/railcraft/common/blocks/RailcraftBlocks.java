@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrick;
+import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.brick.ItemBrick;
 import mods.railcraft.common.blocks.aesthetics.concrete.BlockReinforcedConcrete;
@@ -20,7 +21,6 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
-import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.materials.slab.BlockRailcraftSlab;
@@ -87,24 +87,92 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BATTERY_NICKEL_ZINC("battery_nickel_zinc", BlockBatteryNickelZinc.class, ItemBattery::new),
     BATTERY_ZINC_CARBON("battery_zinc_carbon", BlockBatteryZincCarbon.class, ItemBattery::new),
     BATTERY_ZINC_SILVER("battery_zinc_silver", BlockBatteryZincSilver.class, ItemBattery::new),
+
+    // Bricks
+
     BRICK_ABYSSAL("brick_abyssal", BlockBrick.class, () -> new BlockBrick(BrickTheme.ABYSSAL), ItemBrick::new) {{
         conditions().add(EnumGeneric.STONE_ABYSSAL);
     }},
-    BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),
     BRICK_BLEACHED_BONE("brick_bleachedbone", BlockBrick.class, () -> new BlockBrick(BrickTheme.BLEACHEDBONE), ItemBrick::new),
     BRICK_BLOOD_STAINED("brick_bloodstained", BlockBrick.class, () -> new BlockBrick(BrickTheme.BLOODSTAINED), ItemBrick::new),
-    BRICK_DIORITE("brick_diorite", BlockBrick.class, () -> new BlockBrick(BrickTheme.DIORITE), ItemBrick::new),
     BRICK_FROST_BOUND("brick_frostbound", BlockBrick.class, () -> new BlockBrick(BrickTheme.FROSTBOUND), ItemBrick::new),
-    BRICK_GRANITE("brick_granite", BlockBrick.class, () -> new BlockBrick(BrickTheme.GRANITE), ItemBrick::new),
     BRICK_INFERNAL("brick_infernal", BlockBrick.class, () -> new BlockBrick(BrickTheme.INFERNAL), ItemBrick::new),
-    BRICK_NETHER("brick_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
     BRICK_PEARLIZED("brick_pearlized", BlockBrick.class, () -> new BlockBrick(BrickTheme.PEARLIZED), ItemBrick::new),
     BRICK_QUARRIED("brick_quarried", BlockBrick.class, () -> new BlockBrick(BrickTheme.QUARRIED), ItemBrick::new) {{
         conditions().add(EnumGeneric.STONE_QUARRIED);
     }},
-    BRICK_RED_NETHER("brick_red_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDNETHER), ItemBrick::new),
-    BRICK_RED_SANDY("brick_red_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.REDSANDY), ItemBrick::new),
+    BRICK_BADLANDS("brick_badlands", BlockBrick.class, () -> new BlockBrick(BrickTheme.BADLANDS), ItemBrick::new),
     BRICK_SANDY("brick_sandy", BlockBrick.class, () -> new BlockBrick(BrickTheme.SANDY), ItemBrick::new),
+
+    // Vanilla Bricks
+
+    BRICK_ANDESITE("brick_andesite", BlockBrick.class, () -> new BlockBrick(BrickTheme.ANDESITE), ItemBrick::new),
+    BRICK_DIORITE("brick_diorite", BlockBrick.class, () -> new BlockBrick(BrickTheme.DIORITE), ItemBrick::new),
+    BRICK_GRANITE("brick_granite", BlockBrick.class, () -> new BlockBrick(BrickTheme.GRANITE), ItemBrick::new),
+    BRICK_NETHER("brick_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.NETHER), ItemBrick::new),
+    BRICK_RED_NETHER("brick_red_nether", BlockBrick.class, () -> new BlockBrick(BrickTheme.RED_NETHER), ItemBrick::new),
+
+    // Stairs
+
+    STAIR_ABYSSAL_BRICK("stair_abyssal_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.ABYSSAL), ItemBlockRailcraft::new) {{
+        conditions().add(EnumGeneric.STONE_ABYSSAL);
+        conditions().add(BrickTheme.ABYSSAL::isLoaded, () -> "Abyssal Brick disabled");
+    }},
+    STAIR_ABYSSAL_PAVER("stair_abyssal_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.ABYSSAL), ItemBlockRailcraft::new) {{
+        conditions().add(EnumGeneric.STONE_ABYSSAL);
+        conditions().add(BrickTheme.ABYSSAL::isLoaded, () -> "Abyssal Brick disabled");
+    }},
+    STAIR_BLEACHED_BONE_BRICK("stair_bleachedbone_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.BLEACHEDBONE), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.BLEACHEDBONE::isLoaded, () -> "Bleached Bone Brick disabled");
+    }},
+    STAIR_BLEACHED_BONE_PAVER("stair_bleachedbone_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.BLEACHEDBONE), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.BLEACHEDBONE::isLoaded, () -> "Bleached Bone Brick disabled");
+    }},
+    STAIR_BLOOD_STAINED_BRICK("stair_bloodstained_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.BLOODSTAINED), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.BLOODSTAINED::isLoaded, () -> "Bloodstained Brick disabled");
+    }},
+    STAIR_BLOOD_STAINED_PAVER("stair_bloodstained_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.BLOODSTAINED), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.BLOODSTAINED::isLoaded, () -> "Bloodstained Brick disabled");
+    }},
+    STAIR_FROST_BOUND_BRICK("stair_frostbound_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.FROSTBOUND), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.FROSTBOUND::isLoaded, () -> "Frost Bound Brick disabled");
+    }},
+    STAIR_FROST_BOUND_PAVER("stair_frostbound_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.FROSTBOUND), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.FROSTBOUND::isLoaded, () -> "Frost Bound Brick disabled");
+    }},
+    STAIR_INFERNAL_BRICK("stair_infernal_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.INFERNAL), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.INFERNAL::isLoaded, () -> "Infernsl Brick disabled");
+    }},
+    STAIR_INFERNAL_PAVER("stair_infernal_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.INFERNAL), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.INFERNAL::isLoaded, () -> "Infernsl Brick disabled");
+    }},
+    STAIR_PEARLIZED_BRICK("stair_pearlized_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.PEARLIZED), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.PEARLIZED::isLoaded, () -> "Pearlized Brick disabled");
+    }},
+    STAIR_PEARLIZED_PAVER("stair_pearlized_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.PEARLIZED), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.PEARLIZED::isLoaded, () -> "Pearlized Brick disabled");
+    }},
+    STAIR_QUARRIED_BRICK("stair_quarried_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.QUARRIED), ItemBlockRailcraft::new) {{
+        conditions().add(EnumGeneric.STONE_QUARRIED);
+        conditions().add(BrickTheme.QUARRIED::isLoaded, () -> "Quarried Brick disabled");
+    }},
+    STAIR_QUARRIED_PAVER("stair_quarried_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.QUARRIED), ItemBlockRailcraft::new) {{
+        conditions().add(EnumGeneric.STONE_QUARRIED);
+        conditions().add(BrickTheme.QUARRIED::isLoaded, () -> "Quarried Brick disabled");
+    }},
+    STAIR_BADLANDS_BRICK("stair_badlands_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.BADLANDS), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.BADLANDS::isLoaded, () -> "Badlands Brick disabled");
+    }},
+    STAIR_BADLANDS_PAVER("stair_badlands_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.BADLANDS), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.BADLANDS::isLoaded, () -> "Badlands Brick disabled");
+    }},
+    STAIR_SANDY_BRICK("stair_sandy_brick", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.SANDY), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.SANDY::isLoaded, () -> "Sandy Brick disabled");
+    }},
+    STAIR_SANDY_PAVER("stair_sandy_paver", BlockBrickStairs.class, () -> new BlockBrickStairs(BrickTheme.SANDY), ItemBlockRailcraft::new) {{
+        conditions().add(BrickTheme.SANDY::isLoaded, () -> "Sandy Brick disabled");
+    }},
+
     CHARGE_FEEDER("charge_feeder", BlockChargeFeeder.class, ItemMachine::new),
     CHARGE_TRAP("charge_trap", BlockChargeTrap.class, ItemBlockRailcraft::new),
     DETECTOR("detector", BlockDetector.class, ItemDetector::new),
@@ -129,7 +197,6 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     SIGNAL_DUAL("signal_dual", BlockMachineSignalDualRailcraft.class, ItemSignal::new),
     SIGNAL_BOX("signal_box", BlockMachineSignalBoxRailcraft.class, ItemMachine::new),
     SLAB("slab", BlockRailcraftSlab.class, ItemSlab::new),
-    STAIR("stair", BlockRailcraftStairs.class, ItemMaterial::new),
     TRACK_ELEVATOR("track_elevator", BlockTrackElevator.class, ItemTrack::new),
     TRACK_FLEX_ABANDONED("track_flex_abandoned", BlockTrackFlexAbandoned.class, () -> new BlockTrackFlexAbandoned(TrackTypes.ABANDONED.getTrackType()), ItemTrackStateless::new),
     TRACK_FLEX_ELECTRIC("track_flex_electric", BlockTrackFlexElectric.class, () -> new BlockTrackFlexElectric(TrackTypes.ELECTRIC.getTrackType()), ItemTrackStateless::new),

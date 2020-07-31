@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -131,6 +131,7 @@ public final class Railcraft {
 
         MinecraftForge.EVENT_BUS.register(new BlinkTick());
         MinecraftForge.EVENT_BUS.register(BetaMessageTickHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(Remapper.class);
     }
 
     @Mod.EventHandler

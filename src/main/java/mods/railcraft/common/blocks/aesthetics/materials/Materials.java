@@ -114,10 +114,10 @@ public enum Materials implements IVariantEnum {
     SANDY_COBBLE("sandy_cobble", () -> BrickTheme.SANDY.getState(BrickVariant.COBBLE)),
     SANDY_FITTED("sandy_fitted", () -> BrickTheme.SANDY.getState(BrickVariant.BRICK)),
 
-    RED_SANDY_BLOCK("red_sandy_block", () -> BrickTheme.REDSANDY.getState(BrickVariant.POLISHED)),
-    RED_SANDY_BRICK("red_sandy_brick", () -> BrickTheme.REDSANDY.getState(BrickVariant.PAVER)),
-    RED_SANDY_COBBLE("red_sandy_cobble", () -> BrickTheme.REDSANDY.getState(BrickVariant.COBBLE)),
-    RED_SANDY_FITTED("red_sandy_fitted", () -> BrickTheme.REDSANDY.getState(BrickVariant.BRICK)),
+    RED_SANDY_BLOCK("red_sandy_block", () -> BrickTheme.BADLANDS.getState(BrickVariant.POLISHED)),
+    RED_SANDY_BRICK("red_sandy_brick", () -> BrickTheme.BADLANDS.getState(BrickVariant.PAVER)),
+    RED_SANDY_COBBLE("red_sandy_cobble", () -> BrickTheme.BADLANDS.getState(BrickVariant.COBBLE)),
+    RED_SANDY_FITTED("red_sandy_fitted", () -> BrickTheme.BADLANDS.getState(BrickVariant.BRICK)),
 
     ANDESITE_BLOCK("andesite_block", () -> Blocks.STONE.getDefaultState().withProperty(VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH)),
     ANDESITE_BRICK("andesite_brick", () -> BrickTheme.ANDESITE.getState(BrickVariant.PAVER)),

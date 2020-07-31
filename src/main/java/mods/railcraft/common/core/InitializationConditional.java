@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,7 @@ import java.util.function.Supplier;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class InitializationConditional {
-    private List<Condition> conditions = new ArrayList<>();
+    private final List<Condition> conditions = new ArrayList<>();
     private Supplier<String> failureReason = () -> "";
 
     public boolean test(IRailcraftObjectContainer<?> objectContainer) {

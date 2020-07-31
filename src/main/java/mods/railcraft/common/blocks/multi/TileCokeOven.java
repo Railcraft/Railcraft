@@ -13,6 +13,8 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.logic.CokeOvenLogic;
 import mods.railcraft.common.blocks.logic.DynamicTankCapacityLogic;
 import mods.railcraft.common.blocks.logic.Logic;
@@ -62,9 +64,9 @@ public final class TileCokeOven extends TileCrafter {
                 },
                 {
                         {'O', 'O', 'O', 'O', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'C', 'C', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'C', 'C', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },
                 {
@@ -98,9 +100,9 @@ public final class TileCokeOven extends TileCrafter {
                 },
                 {
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'O'},
+                        {'O', 'C', 'B', 'B', 'B', 'B', 'B', 'C', 'O'},
+                        {'O', 'C', 'C', 'C', 'C', 'C', 'C', 'C', 'O'},
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
                 },
                 {
@@ -147,13 +149,13 @@ public final class TileCokeOven extends TileCrafter {
                 },
                 {
                         {'O', 'O', 'O', 'O', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'C', 'C', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'C', 'C', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },
                 {
@@ -181,12 +183,16 @@ public final class TileCokeOven extends TileCrafter {
                 IBlockState other = WorldPlugin.getBlockState(world, pos);
                 switch (mapPos) {
                     case 'O': // Other
-                        if (RailcraftBlocks.COKE_OVEN.isEqual(other) || RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                        if (isBlock(other))
+                            return false;
+                        break;
+                    case 'C': // Corner
+                        if (!isCorner(other))
                             return false;
                         break;
                     case 'W': // Window
                     case 'B': // Block
-                        if (!RailcraftBlocks.COKE_OVEN.isEqual(other) && !RailcraftBlocks.COKE_OVEN_RED.isEqual(other))
+                        if (!isBlock(other))
                             return false;
                         break;
                     case 'A': // Air
@@ -197,6 +203,16 @@ public final class TileCokeOven extends TileCrafter {
                         return true;
                 }
                 return true;
+            }
+
+            private boolean isCorner(IBlockState state) {
+                return isBlock(state) || (state.getBlock() instanceof BlockBrickStairs
+                        && ((((BlockBrickStairs) state.getBlock()).brickTheme == BrickTheme.BADLANDS && RailcraftBlocks.COKE_OVEN_RED.isEqual(getBlockType()))
+                        || (((BlockBrickStairs) state.getBlock()).brickTheme == BrickTheme.SANDY && RailcraftBlocks.COKE_OVEN.isEqual(getBlockType()))));
+            }
+
+            private boolean isBlock(IBlockState state) {
+                return RailcraftBlocks.COKE_OVEN.isEqual(state) || RailcraftBlocks.COKE_OVEN_RED.isEqual(state);
             }
         });
     }

@@ -117,7 +117,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     'M', new ItemStack(Blocks.SAND, 1, 0));
         }
     },
-    REDSANDY(RailcraftBlocks.BRICK_RED_SANDY, MapColor.DIRT) {
+    BADLANDS(RailcraftBlocks.BRICK_BADLANDS, MapColor.DIRT) {
         @Override
         public void initRecipes(BlockBrick block) {
             CraftingPlugin.addShapedRecipe(block.getStack(POLISHED),
@@ -154,7 +154,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         }
 
     },
-    REDNETHER(RailcraftBlocks.BRICK_RED_NETHER, MapColor.NETHERRACK) {
+    RED_NETHER(RailcraftBlocks.BRICK_RED_NETHER, MapColor.NETHERRACK) {
         @Override
         public ItemStack getStack(int qty, @Nullable IVariantEnum variant) {
             if (variant == BrickVariant.PAVER)

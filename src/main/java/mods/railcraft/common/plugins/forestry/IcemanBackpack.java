@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,7 +51,6 @@ public class IcemanBackpack extends BaseBackpack {
         add(Blocks.PACKED_ICE);
         for (Materials mat : Materials.MAT_SET_FROZEN) {
             add(RailcraftBlocks.WALL.getStack(mat));
-            add(RailcraftBlocks.STAIR.getStack(mat));
             add(RailcraftBlocks.SLAB.getStack(mat));
         }
         add(Items.SNOWBALL);

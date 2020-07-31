@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,7 +43,27 @@ public class ModuleStructures extends RailcraftModulePayload {
                         RailcraftBlocks.REINFORCED_CONCRETE,
 //                        RailcraftBlocks.post,
                         RailcraftBlocks.POST_METAL,
-                        RailcraftBlocks.POST_METAL_PLATFORM
+                        RailcraftBlocks.POST_METAL_PLATFORM,
+
+                        RailcraftBlocks.STAIR_ABYSSAL_BRICK,
+                        RailcraftBlocks.STAIR_BLEACHED_BONE_BRICK,
+                        RailcraftBlocks.STAIR_BLOOD_STAINED_BRICK,
+                        RailcraftBlocks.STAIR_FROST_BOUND_BRICK,
+                        RailcraftBlocks.STAIR_INFERNAL_BRICK,
+                        RailcraftBlocks.STAIR_PEARLIZED_BRICK,
+                        RailcraftBlocks.STAIR_QUARRIED_BRICK,
+                        RailcraftBlocks.STAIR_BADLANDS_BRICK,
+                        RailcraftBlocks.STAIR_SANDY_BRICK,
+
+                        RailcraftBlocks.STAIR_ABYSSAL_PAVER,
+                        RailcraftBlocks.STAIR_BLEACHED_BONE_PAVER,
+                        RailcraftBlocks.STAIR_BLOOD_STAINED_PAVER,
+                        RailcraftBlocks.STAIR_FROST_BOUND_PAVER,
+                        RailcraftBlocks.STAIR_INFERNAL_PAVER,
+                        RailcraftBlocks.STAIR_PEARLIZED_PAVER,
+                        RailcraftBlocks.STAIR_QUARRIED_PAVER,
+                        RailcraftBlocks.STAIR_BADLANDS_PAVER,
+                        RailcraftBlocks.STAIR_SANDY_PAVER
 //                        RailcraftBlocks.slab,
 //                        RailcraftBlocks.stair,
 //                        RailcraftBlocks.lantern,

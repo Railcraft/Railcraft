@@ -1,0 +1,34 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "variant": {
+      "paver": {
+        "textures": {"all": "railcraft:blocks/brick_badlands_0"}
+      },
+      "brick": {
+        "textures": {"all": "railcraft:blocks/brick_badlands_1"}
+      },
+      "polished": {
+        "textures": {"all": "railcraft:blocks/brick_badlands_2"}
+      },
+      "chiseled": {
+        "textures": {"all": "railcraft:blocks/brick_badlands_3"}
+      },
+      "etched": {
+        "textures": {"all": "railcraft:blocks/brick_badlands_4"}
+      },
+      "cobble": {
+        "textures": {"all": "railcraft:blocks/brick_badlands_5"}
+      }
+    }
+  }
+}
