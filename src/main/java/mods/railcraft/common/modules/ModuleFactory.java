@@ -401,15 +401,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                                 'B', BrickTheme.INFERNAL.getStack(1, BrickVariant.PAVER),
                                 'P', Items.MAGMA_CREAM);
                     }
-                    if (RailcraftBlocks.COKE_OVEN.isLoaded() && BrickTheme.SANDY.isLoaded()) {
-                        ItemStack stack = RailcraftBlocks.COKE_OVEN.getStack();
-                        CraftingPlugin.addShapedRecipe(stack,
-                                " B ",
-                                " S ",
-                                " B ",
-                                'B', BrickTheme.SANDY.getStack(1, BrickVariant.PAVER),
-                                'S', "sand");
-                    }
                 }
 
                 if (EnumGeneric.BLOCK_COKE.isEnabled()) {

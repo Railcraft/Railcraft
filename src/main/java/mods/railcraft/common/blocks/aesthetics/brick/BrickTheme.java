@@ -117,7 +117,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     'M', new ItemStack(Blocks.SAND, 1, 0));
         }
     },
-    BADLANDS(RailcraftBlocks.BRICK_BADLANDS, MapColor.DIRT) {
+    BADLANDS(RailcraftBlocks.BRICK_BADLANDS, MapColor.ORANGE_STAINED_HARDENED_CLAY) {
         @Override
         public void initRecipes(BlockBrick block) {
             CraftingPlugin.addShapedRecipe(block.getStack(POLISHED),
@@ -351,5 +351,10 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     @Override
     public boolean isLoaded() {
         return container.isLoaded();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return container.isEnabled();
     }
 }

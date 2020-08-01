@@ -26,10 +26,12 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.BRICK;
  */
 public class BlockBrickStairs extends BlockStairs implements IRailcraftBlock {
     public final BrickTheme brickTheme;
+    public final BrickVariant brickVariant;
 
-    public BlockBrickStairs(BrickTheme brickTheme) {
+    public BlockBrickStairs(BrickTheme brickTheme, BrickVariant brickVariant) {
         super(Objects.requireNonNull(brickTheme.getState(BRICK)));
         this.brickTheme = brickTheme;
+        this.brickVariant = brickVariant;
     }
 
     @Override
@@ -38,8 +40,8 @@ public class BlockBrickStairs extends BlockStairs implements IRailcraftBlock {
                 "I  ",
                 "II ",
                 "III",
-                'I', brickTheme, BRICK);
-        CraftingPlugin.addShapedRecipe(brickTheme.getStack(3, BRICK),
+                'I', brickTheme, brickVariant);
+        CraftingPlugin.addShapedRecipe(brickTheme.getStack(3, brickVariant),
                 "II",
                 "II",
                 'I', getStack());
