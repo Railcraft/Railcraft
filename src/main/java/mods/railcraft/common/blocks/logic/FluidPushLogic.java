@@ -32,11 +32,11 @@ public class FluidPushLogic extends Logic {
     @Override
     protected void updateServer() {
         super.updateServer();
-        getLogic(TankLogic.class).ifPresent(tank -> {
+        adapter.tile().ifPresent(tile -> getLogic(TankLogic.class).ifPresent(tank -> {
             TankManager tMan = tank.getTankManager();
             if (!tMan.isEmpty()) {
-                tMan.push(adapter.tile().getTileCache(), Predicates.notInstanceOf(adapter.tile().getClass()), outputFaces, 0, outputRate);
+                tMan.push(tile.getTileCache(), Predicates.notInstanceOf(tile.getClass()), outputFaces, 0, outputRate);
             }
-        });
+        }));
     }
 }

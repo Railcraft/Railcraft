@@ -23,6 +23,7 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -214,6 +215,12 @@ public final class TileCokeOven extends TileCrafter {
             private boolean isBlock(IBlockState state) {
                 return RailcraftBlocks.COKE_OVEN.isEqual(state) || RailcraftBlocks.COKE_OVEN_RED.isEqual(state);
             }
+
+            @Override
+            public boolean isPart(Block block) {
+                return block instanceof BlockCokeOven || block instanceof BlockBrickStairs;
+            }
+
         });
     }
 

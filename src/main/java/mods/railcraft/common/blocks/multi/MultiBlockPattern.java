@@ -115,6 +115,10 @@ public final class MultiBlockPattern {
         return pattern[0][0].length;
     }
 
+    public int getPatternSize() {
+        return getPatternHeight() * getPatternWidthX() * getPatternWidthZ();
+    }
+
     public BlockPos getMasterPosition(BlockPos myPos, BlockPos posInPattern) {
         return masterOffset.subtract(posInPattern).add(myPos);
     }

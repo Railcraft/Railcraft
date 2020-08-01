@@ -51,7 +51,7 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
 
     public CokeOvenLogic(Adapter adapter) {
         super(adapter, 4, SLOT_INPUT);
-        tank = new StandardTank(TANK_CAPACITY, adapter.tile());
+        tank = new StandardTank(TANK_CAPACITY, adapter.tile().orElse(null));
         addSubLogic(new TankLogic(adapter).addTank(tank));
     }
 

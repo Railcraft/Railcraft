@@ -44,7 +44,7 @@ public class WaterTankLogic extends InventoryLogic {
 
     public WaterTankLogic(Adapter adapter) {
         super(adapter, 3);
-        tank = new FilteredTank(TANK_CAPACITY, adapter.tile()).setFilterFluid(Fluids.WATER);
+        tank = new FilteredTank(TANK_CAPACITY, adapter.tile().orElse(null)).setFilterFluid(Fluids.WATER);
         addSubLogic(new TankLogic(adapter).addTank(tank));
     }
 

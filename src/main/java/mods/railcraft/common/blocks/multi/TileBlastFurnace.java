@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,14 +13,14 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
+import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
+import mods.railcraft.common.blocks.logic.ItemPullLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
-import mods.railcraft.common.util.inventory.InventoryComposite;
-import mods.railcraft.common.util.inventory.InventorySorter;
-import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -49,8 +49,15 @@ public final class TileBlastFurnace extends TileCrafter {
                 },
                 {
                         {'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'B', 'W', 'B', 'O'},
-                        {'O', 'W', 'B', 'W', 'O'},
+                        {'O', 'W', 'A', 'W', 'O'},
                         {'O', 'B', 'W', 'B', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },
@@ -63,16 +70,9 @@ public final class TileBlastFurnace extends TileCrafter {
                 },
                 {
                         {'O', 'O', 'O', 'O', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'A', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'O', 'O', 'O', 'O'}
-                },
-                {
-                        {'O', 'O', 'O', 'O', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
-                        {'O', 'B', 'B', 'B', 'O'},
+                        {'O', 'C', 'C', 'C', 'O'},
+                        {'O', 'C', 'B', 'C', 'O'},
+                        {'O', 'C', 'C', 'C', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },
                 {
@@ -85,12 +85,6 @@ public final class TileBlastFurnace extends TileCrafter {
         };
         patterns.add(new MultiBlockPattern(map, 2, 1, 2));
     }
-
-    private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
-        if (tile instanceof TileBlastFurnace)
-            return false;
-        return InventoryComposite.of(tile).slotCount() >= 27;
-    }, InventorySorter.SIZE_DESCENDING);
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
         MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
@@ -114,71 +108,52 @@ public final class TileBlastFurnace extends TileCrafter {
             @Override
             public boolean isMapPositionValid(BlockPos pos, char mapPos) {
                 IBlockState self = getBlockState();
-                IBlockState state = world.getBlockState(pos);
+                IBlockState other = world.getBlockState(pos);
                 switch (mapPos) {
                     case 'O':
-                        if (self != state)
+                        if (self != other)
+                            return true;
+                        break;
+                    case 'C': // Corner
+                        if (self == other || isCorner(other))
                             return true;
                         break;
                     case 'B':
                     case 'W':
-                        if (self == state)
+                        if (self == other)
                             return true;
                         break;
                     case 'A':
-                        if (state.getBlock().isAir(state, world, pos) || state.getMaterial() == Material.LAVA)
+                        if (other.getBlock().isAir(other, world, pos) || other.getMaterial() == Material.LAVA)
                             return true;
                         break;
                 }
                 return false;
             }
-        });
-    }
 
-    private void setLavaIdle() {
-        BlockPos offsetPos = getPos().add(0, 1, 0);
-        if (world.isAirBlock(offsetPos))
-            world.setBlockState(offsetPos, Blocks.LAVA.getStateFromMeta(7), 3);
-    }
-
-    private void setLavaBurn() {
-        BlockPos offsetPos = getPos().add(0, 1, 0);
-        if (world.isAirBlock(offsetPos))
-            world.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
-        offsetPos = offsetPos.up();
-        if (world.isAirBlock(offsetPos))
-            world.setBlockState(offsetPos, Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
-    }
-
-    /*private void destroyLava() {
-        int xLava = x + 1;
-        int yLava = y + 2;
-        int zLava = z + 1;
-        if (world.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
-            world.setBlockToAir(xLava, yLava, zLava);
-        yLava -= 1;
-        if (world.getBlock(xLava, yLava, zLava).getMaterial() == Material.LAVA)
-            world.setBlockToAir(xLava, yLava, zLava);
-    }*/
-
-    @Override
-    public void update() {
-        super.update();
-
-        if (Game.isClient(getWorld()))
-            return;
-
-        if (clock(128)) {
-            getLogic(BlastFurnaceLogic.class).map(l -> l.invFuel).ifPresent(invFuel ->
-                    invCache.getAdjacentInventories().moveOneItemTo(invFuel, BlastFurnaceLogic.FUEL_FILTER));
-
-            if (getLogic(StructureLogic.class).map(StructureLogic::isValidMaster).orElse(false)) {
-                if (isBurning())
-                    setLavaBurn();
-                else
-                    setLavaIdle();
+            private boolean isCorner(IBlockState state) {
+                return state.getBlock() instanceof BlockBrickStairs
+                        && ((BlockBrickStairs) state.getBlock()).brickTheme == BrickTheme.INFERNAL;
             }
-        }
+
+            @Override
+            public boolean isPart(Block block) {
+                return super.isPart(block) || block instanceof BlockBrickStairs;
+            }
+
+            @Override
+            protected void onMasterReset() {
+                super.onMasterReset();
+                BlastFurnaceLogic furnace = (BlastFurnaceLogic) functionalLogic;
+                if (furnace.isBurning()) {
+                    for (int ii = 0; ii < furnace.getInventory().getSizeInventory(); ii++)
+                        furnace.getInventory().decrStackSize(ii, 1);
+                    world.setBlockState(getPos().up(), Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
+                    world.setBlockState(getPos().up(2), Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
+                }
+            }
+        }.addSubLogic(new ItemPullLogic(Logic.Adapter.of(this), BlastFurnaceLogic.SLOT_FUEL, 1, 128, BlastFurnaceLogic.FUEL_FILTER)));
+
     }
 
     private boolean isBurning() {
@@ -192,16 +167,16 @@ public final class TileBlastFurnace extends TileCrafter {
     }
 
     @Override
-    public EnumGui getGui() {
-        return EnumGui.BLAST_FURNACE;
-    }
-
-    @Override
     public IBlockState getActualState(IBlockState base) {
         return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(false)
                 ? hasFlames()
                 ? base.withProperty(ICON, 2)
                 : base.withProperty(ICON, 1)
                 : base.withProperty(ICON, 0);
+    }
+
+    @Override
+    public EnumGui getGui() {
+        return EnumGui.BLAST_FURNACE;
     }
 }

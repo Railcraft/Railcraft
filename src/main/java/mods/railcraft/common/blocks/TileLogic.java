@@ -22,12 +22,16 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -63,6 +67,16 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     }
 
     @Override
+    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
+        super.onNeighborBlockChange(state, neighborBlock, neighborPos);
+        if (Game.isClient(world)) return;
+        getLogic(StructureLogic.class).ifPresent(logic -> {
+            if (logic.isPart(neighborBlock) || neighborBlock == Blocks.AIR)
+                logic.onBlockChange();
+        });
+    }
+
+    @Override
     @OverridingMethodsMustInvokeSuper
     public void onBlockAdded() {
         if (Game.isClient(world)) return;
@@ -73,8 +87,8 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @OverridingMethodsMustInvokeSuper
     public void onBlockRemoval() {
         if (Game.isClient(world)) return;
-        getLogic(StructureLogic.class).ifPresent(StructureLogic::onBlockChange);
         getLogic(IInventory.class).ifPresent(i -> InvTools.spewInventory(i, world, getPos()));
+        getLogic(StructureLogic.class).ifPresent(StructureLogic::onBlockChange);
     }
 
     @Override

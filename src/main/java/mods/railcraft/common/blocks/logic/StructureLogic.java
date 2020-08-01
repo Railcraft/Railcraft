@@ -12,12 +12,14 @@ package mods.railcraft.common.blocks.logic;
 
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Optionals;
@@ -26,6 +28,7 @@ import mods.railcraft.common.util.network.PacketDispatcher;
 import mods.railcraft.common.util.network.PacketTileRequest;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -35,6 +38,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,6 +46,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Created by CovertJaguar on 12/17/2018 for Railcraft.
@@ -49,14 +54,15 @@ import java.util.function.Function;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class StructureLogic extends Logic {
-    private static final int NETWORK_RECHECK = 16;
-    private final Timer netTimer = new Timer();
-    private final TileRailcraft tile;
+    private static final int RECHECK = 40;
+    private final Timer resetTimer = new Timer();
+    private final TileLogic tile;
     private final String structureKey;
     public final Logic functionalLogic;
     private final List<? extends MultiBlockPattern> patterns;
-    private final List<TileRailcraft> components = new ArrayList<>();
-    private final List<TileRailcraft> componentsView = Collections.unmodifiableList(components);
+    private final int maxSize;
+    private final List<TileLogic> components = new ArrayList<>();
+    private final List<TileLogic> componentsView = Collections.unmodifiableList(components);
     public final ListMultimap<MultiBlockPattern.State, MultiBlockPattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockPattern.State.class), ArrayList::new);
     protected boolean isMaster;
     private boolean requestPacket;
@@ -64,12 +70,14 @@ public class StructureLogic extends Logic {
     private @Nullable BlockPos masterPos;
     private @Nullable MultiBlockPattern currentPattern;
     private @Nullable BlockPos posInPattern;
+    private char marker = 'O';
 
-    public StructureLogic(String structureKey, TileRailcraft tile, List<? extends MultiBlockPattern> patterns, Logic functionalLogic) {
+    public StructureLogic(String structureKey, TileLogic tile, List<? extends MultiBlockPattern> patterns, Logic functionalLogic) {
         super(Adapter.of(tile));
         this.structureKey = structureKey;
         this.tile = tile;
         this.patterns = patterns;
+        this.maxSize = patterns.stream().mapToInt(MultiBlockPattern::getPatternSize).max().orElse(7 * 7 * 7);
         this.functionalLogic = functionalLogic;
         components.add(tile);
     }
@@ -97,7 +105,7 @@ public class StructureLogic extends Logic {
         return Optional.empty();
     }
 
-    public List<TileRailcraft> getComponents() {
+    public List<TileLogic> getComponents() {
         return getMasterLogic().map(m -> m.componentsView).orElseGet(Collections::emptyList);
     }
 
@@ -114,9 +122,7 @@ public class StructureLogic extends Logic {
     }
 
     public final char getPatternMarker() {
-        if (currentPattern == null || posInPattern == null || !isStructureValid())
-            return 'O';
-        return currentPattern.getPatternMarker(posInPattern);
+        return marker;
     }
 
     public final @Nullable BlockPos getPatternPosition() {
@@ -150,8 +156,13 @@ public class StructureLogic extends Logic {
         else
             state = StructureState.VALID;
 
-        if (changed)
+        if (changed) {
+            if (currentPattern == null || posInPattern == null)
+                marker = 'O';
+            else
+                marker = currentPattern.getPatternMarker(posInPattern);
             onPatternChanged();
+        }
         sendUpdateToClient();
     }
 
@@ -161,10 +172,6 @@ public class StructureLogic extends Logic {
 
     public final @Nullable BlockPos getMasterPos() {
         return masterPos;
-    }
-
-    protected int getMaxRecursionDepth() {
-        return 12;
     }
 
     public StructureState getState() {
@@ -180,7 +187,7 @@ public class StructureLogic extends Logic {
 
     @Override
     protected void updateClient() {
-        if (requestPacket && netTimer.hasTriggered(theWorldAsserted(), NETWORK_RECHECK)) {
+        if (requestPacket && resetTimer.hasTriggered(theWorldAsserted(), RECHECK)) {
             PacketDispatcher.sendToServer(new PacketTileRequest(tile));
             requestPacket = false;
         }
@@ -188,6 +195,9 @@ public class StructureLogic extends Logic {
 
     @Override
     protected void updateServer() {
+        if (state == StructureState.UNKNOWN && resetTimer.hasTriggered(theWorldAsserted(), RECHECK)) {
+            state = StructureState.UNTESTED;
+        }
         if (state == StructureState.UNTESTED)
             testIfMasterBlock();
         //                ClientProxy.getMod().totalMultiBlockUpdates++;
@@ -196,6 +206,9 @@ public class StructureLogic extends Logic {
     private void testIfMasterBlock() {
 //        System.out.println("testing structure");
         testPatterns();
+
+        List<TileRailcraft> old = new ArrayList<>(components);
+
         components.clear();
         components.add(tile);
 
@@ -243,9 +256,14 @@ public class StructureLogic extends Logic {
             if (isMaster) {
                 isMaster = false;
                 onMasterReset();
+                functionalLogic.getLogic(IInventory.class).ifPresent(i -> InvTools.spewInventory(i, theWorldAsserted(), getPos()));
                 sendUpdateToClient();
             }
         }
+
+        old.removeAll(components);
+        old.stream().filter(t -> !t.isInvalid()).map(tileToLogic())
+                .flatMap(Streams.unwrap()).forEach(t -> t.setPattern(null, null));
     }
 
     protected void onMasterReset() {
@@ -285,6 +303,10 @@ public class StructureLogic extends Logic {
         return true;
     }
 
+    public boolean isPart(Block block) {
+        return block == tile.getBlockType();
+    }
+
     private void testPatterns() {
         patternStates.clear();
         // This specifically tests all patterns in order to provide complete data to the MagGlass
@@ -292,28 +314,27 @@ public class StructureLogic extends Logic {
     }
 
     public void onBlockChange() {
-        spreadChange(getMaxRecursionDepth());
+        Optional<StructureLogic> masterLogic = getMasterLogic();
+        spreadChange(theWorldAsserted(), new HashSet<>(maxSize), getPos(), this::isPart, maxSize);
+        masterLogic.ifPresent(master -> master.getComponents().forEach(t -> t.getLogic(StructureLogic.class).ifPresent(s -> s.state = StructureState.UNTESTED)));
     }
 
-    private void spreadChange(int depth) {
-        for (EnumFacing side : EnumFacing.VALUES) {
-            tile.getTileCache().onSide(side)
-                    .flatMap(tileToLogic())
-                    .ifPresent(l -> l.markChange(depth));
-        }
-    }
-
-    private void markChange(int depth) {
-        depth--;
-        if (depth < 0)
+    private static void spreadChange(World world, Set<BlockPos> visited, BlockPos pos, Predicate<Block> isPart, int max) {
+        if (visited.size() > max || visited.contains(pos))
             return;
-        if (state != StructureState.UNTESTED) {
-            state = StructureState.UNTESTED;
-            sendUpdateToClient();
-
-            getMasterLogic().ifPresent(StructureLogic::onBlockChange);
-
-            spreadChange(depth);
+        visited.add(pos);
+        if (visited.size() == 1 || isPart.test(WorldPlugin.getBlock(world, pos))) {
+            WorldPlugin.getTileEntity(world, pos, TileLogic.class).ifPresent(tile -> {
+                tile.getLogic(StructureLogic.class).ifPresent(logic -> {
+                    if (logic.state != StructureState.UNTESTED) {
+                        logic.state = StructureState.UNTESTED;
+                        logic.getMasterLogic().ifPresent(master -> spreadChange(world, visited, master.getPos(), isPart, max));
+                    }
+                });
+            });
+            for (EnumFacing side : EnumFacing.VALUES) {
+                spreadChange(world, visited, pos.offset(side), isPart, max);
+            }
         }
     }
 
@@ -344,6 +365,7 @@ public class StructureLogic extends Logic {
         super.writeToNBT(data);
         functionalLogic.writeToNBT(data);
         data.setBoolean("master", isMaster);
+        data.setString("marker", String.valueOf(marker));
         data.setByte("pattern", getPatternIndex());
         if (posInPattern != null)
             NBTPlugin.writeBlockPos(data, "posInPattern", posInPattern);
@@ -355,6 +377,8 @@ public class StructureLogic extends Logic {
         super.readFromNBT(data);
         functionalLogic.readFromNBT(data);
         isMaster = data.getBoolean("master");
+        if (data.hasKey("marker"))
+            marker = data.getString("marker").charAt(0);
         MultiBlockPattern pat = null;
         try {
             byte index = data.getByte("pattern");
@@ -370,6 +394,7 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         data.writeEnum(state);
+        data.writeChar(marker);
         if (state == StructureState.VALID) {
             data.writeByte(getPatternIndex());
             data.writeBlockPos(Objects.requireNonNull(posInPattern));
@@ -383,6 +408,7 @@ public class StructureLogic extends Logic {
     public void readPacketData(RailcraftInputStream data) throws IOException {
         requestPacket = false;
         state = data.readEnum(StructureState.VALUES);
+        marker = data.readChar();
         if (state == StructureState.VALID) {
             int patternIndex = data.readByte();
             patternIndex = MathHelper.clamp(patternIndex, 0, patterns.size() - 1);

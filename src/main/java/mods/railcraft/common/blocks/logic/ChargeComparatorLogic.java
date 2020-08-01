@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,8 @@
 package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.charge.Charge;
-
-import java.util.Objects;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 
 /**
  * Created by CovertJaguar on 2/20/2019 for Railcraft.
@@ -33,7 +33,7 @@ public class ChargeComparatorLogic extends ChargeLogic {
         if (clock(16)) {
             int newComparatorOutput = access().getComparatorOutput();
             if (prevComparatorOutput != newComparatorOutput)
-                theWorldAsserted().updateComparatorOutputLevel(getPos(), Objects.requireNonNull(adapter.tile()).getBlockType());
+                theWorldAsserted().updateComparatorOutputLevel(getPos(), adapter.tile().map(TileEntity::getBlockType).orElse(Blocks.AIR));
             prevComparatorOutput = newComparatorOutput;
         }
     }

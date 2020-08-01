@@ -240,8 +240,8 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
 
         abstract Object getContainer();
 
-        @Nullable TileRailcraft tile() {
-            return null;
+        Optional<TileRailcraft> tile() {
+            return Optional.empty();
         }
 
         abstract boolean isUsableByPlayer(EntityPlayer player);
@@ -309,8 +309,8 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
             }
 
             @Override
-            TileRailcraft tile() {
-                return tile;
+            Optional<TileRailcraft> tile() {
+                return Optional.of(tile);
             }
 
             @Override
