@@ -20,6 +20,7 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'idea'
 apply from: 'api-railcraft/gradle.properties', to: project.ext
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
@@ -97,6 +98,16 @@ minecraft {
     serverJvmArgs = combinedVmArgs
 }
 
+idea {
+    module {
+        //some extra dirs that should be excluded by IDEA
+        excludeDirs += file('run/')
+        excludeDirs += file('logs/')
+
+//        inheritOutputDirs = false
+    }
+}
+
 sourceSets {
     api {
         java {
@@ -155,7 +166,7 @@ repositories {
 
 configurations {
     api
-    compile.extendsFrom api
+    implementation.extendsFrom api
 }
 
 dependencies {
@@ -173,7 +184,7 @@ dependencies {
     apiCompileOnly "org.jetbrains:annotations:16.0.2"
     compileOnly "org.jetbrains:annotations:16.0.2"
     // libs folder in case
-    compile fileTree(dir: 'lib', include: '*.jar')
+    implementation fileTree(dir: 'lib', include: '*.jar')
     // Tests
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'

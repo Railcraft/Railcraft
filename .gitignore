@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/intellij+iml,forgegradle,windows,linux,java,gradle,git,maven,netbeans,eclipse
-# Edit at https://www.toptal.com/developers/gitignore?templates=intellij+iml,forgegradle,windows,linux,java,gradle,git,maven,netbeans,eclipse
+# Created by https://www.toptal.com/developers/gitignore/api/intellij,forgegradle,windows,linux,java,gradle,git,maven,netbeans,eclipse
+# Edit at https://www.toptal.com/developers/gitignore?templates=intellij,forgegradle,windows,linux,java,gradle,git,maven,netbeans,eclipse
 
 ### Eclipse ###
 .metadata
@@ -159,12 +159,6 @@ fabric.properties
 # Android studio 3.1+ serialized cache file
 .idea/caches/build_file_checksums.ser
 
-### Intellij+iml Patch ###
-# Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023
-
-modules.xml
-.idea/misc.xml
-
 ### Java ###
 # Compiled class file
 *.class
@@ -272,7 +266,7 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-# End of https://www.toptal.com/developers/gitignore/api/intellij+iml,forgegradle,windows,linux,java,gradle,git,maven,netbeans,eclipse
+# End of https://www.toptal.com/developers/gitignore/api/intellij,forgegradle,windows,linux,java,gradle,git,maven,netbeans,eclipse
 
 
 
