@@ -35,6 +35,7 @@ public class IC2EmitterLogic extends Logic implements ILocatable, IMetaDelegate,
     private final int sourceTier;
     private final int output;
     private List<IEnergyTile> subTiles = NonNullList.create();
+    private boolean added;
 
     public IC2EmitterLogic(Adapter adapter, int sourceTier, int output) {
         super(adapter);
@@ -92,14 +93,17 @@ public class IC2EmitterLogic extends Logic implements ILocatable, IMetaDelegate,
         } catch (Throwable error) {
             Game.log().api("IndustrialCraft", error);
         }
+        added = true;
     }
 
     public void dropFromNet() {
-        try {
-            IC2Plugin.removeTileFromNet(this);
-        } catch (Throwable error) {
-            Game.log().api("IndustrialCraft", error);
-        }
+        if (added)
+            try {
+                IC2Plugin.removeTileFromNet(this);
+            } catch (Throwable error) {
+                Game.log().api("IndustrialCraft", error);
+            }
+        added = false;
     }
 
     @Override

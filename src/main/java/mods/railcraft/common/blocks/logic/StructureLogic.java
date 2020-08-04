@@ -220,6 +220,8 @@ public class StructureLogic extends Logic {
 
             BlockPos offset = getPos().subtract(pattern.getMasterOffset());
 
+            Map<BlockPos, StructureLogic> newComponents = new HashMap<>();
+
             for (int px = 0; px < xWidth; px++) {
                 for (int py = 0; py < height; py++) {
                     for (int pz = 0; pz < zWidth; pz++) {
@@ -234,12 +236,13 @@ public class StructureLogic extends Logic {
                         WorldPlugin.getTileEntity(theWorldAsserted(), pos)
                                 .flatMap(tileToLogic())
                                 .ifPresent(l -> {
-                                    l.setPattern(pattern, patternPos);
                                     components.add(l.tile);
+                                    newComponents.put(patternPos, l);
                                 });
                     }
                 }
             }
+            newComponents.forEach((pos, logic) -> logic.setPattern(pattern, pos));
 
             MinecraftForge.EVENT_BUS.post(new MultiBlockEvent.Form(tile));
         } else if (patternStates.containsKey(MultiBlockPattern.State.NOT_LOADED)) {
