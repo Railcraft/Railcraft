@@ -38,7 +38,9 @@ if (file("passwords.properties").exists()) {
 }
 
 ext {
-    apiRailcraft = project(":api-railcraft").projectDir.path
+    dirApi = "./api-railcraft"
+    dirRelease = "./release"
+    dirLang = "./lang"
     // apiForestry = "./api/forestry"
     // apiThaumcraft = "./api/thaumcraft"
     // apiBuildcraft = "./api/buildcraft"
@@ -112,21 +114,21 @@ sourceSets {
     api {
         java {
             srcDirs += [
-                    project(':api-railcraft').projectDir.path + "/src/api/java"
+                    project.dirApi + "/src/api/java"
             ]
         }
     }
     main {
         java {
             srcDirs += [
-                    project(':release').projectDir.path + "/src/main/java"
+                    project.dirRelease + "/src/main/java"
             ]
         }
         resources {
             exclude '**/Thumbs.db'
             srcDirs += [
-                    project(':release').projectDir.path + "/src/main/resources",
-                    project(':lang').projectDir.path + "/src/main/resources"
+                    project.dirRelease + "/src/main/resources",
+                    project.dirLang + "/src/main/resources"
             ]
         }
     }
@@ -166,16 +168,16 @@ repositories {
 
 configurations {
     api
-    implementation.extendsFrom api
+    compileOnly.extendsFrom api
 }
 
 dependencies {
     // forestry
     compileOnly "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}:api"
-    runtime "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
+    runtimeOnly "net.sengir.forestry:forestry_${project.version_minecraft}:${project.version_forestry}"
     // IC2
     api "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}:api"
-    runtime "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
+    runtimeOnly "net.industrial-craft:industrialcraft-2:${project.version_industrialcraft}"
     // BuildCraft
     compileOnly "com.mod-buildcraft:buildcraft-api:${project.version_buildcraft}"
     // JEI
@@ -317,7 +319,7 @@ tasks.withType(Jar) {
     exclude '**/Thumbs.db'
 
     into('mods/railcraft/api') {
-        from project.apiRailcraft + "/LICENSE.md"
+        from project.dirApi + "/LICENSE.md"
     }
 //    into('forestry/api') {
 //        from project.apiForestry + "/LICENSE.txt"
@@ -383,7 +385,7 @@ task signDevJar(type: JarSigner, dependsOn: 'devJar') {
 task apiSourceJar(type: Jar) {
     from sourceSets.api.java
     include '**/mods/railcraft/api/**/*.java'
-    from project.apiRailcraft + "/LICENSE.md"
+    from project.dirApi + "/LICENSE.md"
     include '**/LICENSE.md'
     destinationDir = file(dirDest)
     classifier = 'api-sources'
@@ -393,7 +395,7 @@ task apiSourceJar(type: Jar) {
 task apiJar(type: Jar) {
     from sourceSets.api.output
     include '**/mods/railcraft/api/**'
-    from project.apiRailcraft + "/LICENSE.md"
+    from project.dirApi + "/LICENSE.md"
     include '**/LICENSE.md'
     destinationDir = file(dirDest)
     classifier = 'api'

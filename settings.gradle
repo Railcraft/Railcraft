@@ -1,5 +1,4 @@
 rootProject.name = "railcraft"
-include 'api-railcraft', 'release', 'lang'
 rootProject.children.each { subproject ->
     subproject.buildFileName = "${subproject.name}.gradle"
 }
