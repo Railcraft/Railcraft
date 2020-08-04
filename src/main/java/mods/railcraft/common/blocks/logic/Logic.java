@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.logic;
 
-import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.carts.CartBaseLogic;
@@ -18,7 +17,6 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +39,7 @@ import java.util.Optional;
 /**
  * The basic logic class.
  */
-public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
-        RailcraftOutputStream>, IWorldNameable, IGuiReturnHandler {
+public class Logic implements ITickable, IWorldNameable, ILogicContainer {
     protected final Adapter adapter;
     private int clock = MiscTools.RANDOM.nextInt();
     private List<Logic> subLogics = new ArrayList<>();
@@ -64,6 +61,7 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
         this.adapter = adapter;
     }
 
+    @Override
     public <L> Optional<L> getLogic(Class<L> logicClass) {
         if (parentLogic.isPresent())
             return parentLogic.get().getLogic(logicClass);
@@ -121,8 +119,8 @@ public class Logic implements ITickable, INetworkedObject<RailcraftInputStream,
     }
 
     @OverridingMethodsMustInvokeSuper
-    public void onStructureChanged(Object[] data) {
-        subLogics.forEach(subLogic -> subLogic.onStructureChanged(data));
+    public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
+        subLogics.forEach(subLogic -> subLogic.onStructureChanged(isComplete, isMaster, data));
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,9 +11,11 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.common.blocks.TileRailcraft;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.util.misc.Capabilities;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,26 +72,33 @@ public class EnergyPlugin {
         return 0;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public static int pushToTiles(TileRailcraft te, int pushPerSide) {
-        return Arrays.stream(EnumFacing.VALUES)
-                .mapToInt(side -> pushToSide(te, pushPerSide, side)).sum();
+    public static int chargeToForgeEnergy(double charge) {
+        return MathHelper.floor(charge / RailcraftConstants.FE_EU_RATIO);
     }
 
-    private static int pushToSide(TileRailcraft te, int pushPerSide, EnumFacing side) {
-        return Capabilities.get(te, ENERGY, side).map(source ->
-                te.getTileCache().onSide(side)
-                        .flatMap(tile -> Capabilities.get(tile, ENERGY, side.getOpposite()))
-                        .filter(IEnergyStorage::canReceive)
-                        .map(receiver -> {
-                            int amountToPush = source.extractEnergy(pushPerSide, true);
-                            if (amountToPush > 0) {
-                                int amountPushed = receiver.receiveEnergy(amountToPush, false);
-                                source.extractEnergy(amountPushed, false);
-                                return amountPushed;
-                            }
-                            return 0;
-                        }).orElse(0)).orElse(0);
+    public static double forgeEnergyToCharge(int fe) {
+        return fe * RailcraftConstants.FE_EU_RATIO;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public static int pushToTiles(TileRailcraft tile, IEnergyStorage energyStorage, int pushPerSide, EnumFacing[] targetSides) {
+        return Arrays.stream(targetSides)
+                .mapToInt(side -> pushToSide(tile, energyStorage, pushPerSide, side)).sum();
+    }
+
+    private static int pushToSide(TileRailcraft tile, IEnergyStorage energyStorage, int pushPerSide, EnumFacing side) {
+        return tile.getTileCache().onSide(side)
+                .flatMap(target -> Capabilities.get(target, ENERGY, side.getOpposite()))
+                .filter(IEnergyStorage::canReceive)
+                .map(receiver -> {
+                    int amountToPush = energyStorage.extractEnergy(pushPerSide, true);
+                    if (amountToPush > 0) {
+                        int amountPushed = receiver.receiveEnergy(amountToPush, false);
+                        energyStorage.extractEnergy(amountPushed, false);
+                        return amountPushed;
+                    }
+                    return 0;
+                }).orElse(0);
     }
 
     public static boolean canTileReceivePower(@Nullable TileEntity tile, EnumFacing side) {

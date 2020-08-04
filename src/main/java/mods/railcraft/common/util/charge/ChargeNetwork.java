@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,6 @@ import mods.railcraft.api.core.CollectionToolsAPI;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.effects.HostEffects;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.misc.Game;
@@ -357,6 +356,10 @@ public class ChargeNetwork implements Charge.INetwork {
 
         public double getPotentialDraw() {
             return activeBatteries().mapToDouble(BatteryBlock::getPotentialDraw).sum();
+        }
+
+        public double getMaxDraw() {
+            return activeBatteries().mapToDouble(BatteryBlock::getMaxDraw).sum();
         }
 
         public double getEfficiency() {

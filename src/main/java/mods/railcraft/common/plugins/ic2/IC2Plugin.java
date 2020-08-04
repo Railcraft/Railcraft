@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,9 +57,9 @@ public class IC2Plugin {
         return IC2Items.getItemAPI().getBlockState(name, variant);
     }
 
-    public static boolean addTileToNet(TileEntity tile) {
+    public static boolean addTileToNet(Object tile) {
         try {
-            if (EnergyNet.instance != null && tile instanceof IEnergyTile) {
+            if (EnergyNet.instance != null) {
                 MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent((IEnergyTile) tile));
                 return true;
             }
@@ -70,10 +69,9 @@ public class IC2Plugin {
         return false;
     }
 
-    public static void removeTileFromNet(TileEntity tile) {
+    public static void removeTileFromNet(Object tile) {
         try {
-            if (tile instanceof IEnergyTile)
-                MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) tile));
+            MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent((IEnergyTile) tile));
         } catch (Throwable error) {
             Game.log().api("IC2", error, EnergyTileUnloadEvent.class);
         }

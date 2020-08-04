@@ -104,8 +104,8 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
     }
 
     @Override
-    public void onStructureChanged(Object[] data) {
-        super.onStructureChanged(data);
+    public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
+        super.onStructureChanged(isComplete, isMaster, data);
         multiplier = (Integer) data[1];
     }
 

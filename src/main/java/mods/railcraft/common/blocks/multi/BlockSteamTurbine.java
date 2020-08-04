@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,78 +13,42 @@ package mods.railcraft.common.blocks.multi;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.BlockMeta;
+import mods.railcraft.common.blocks.logic.SteamTurbineLogic;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Tuple;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Map;
-import java.util.Random;
 
 @BlockMeta.Tile(TileSteamTurbine.class)
-public final class BlockSteamTurbine extends BlockMultiBlockCharge<TileSteamTurbine> {
+public final class BlockSteamTurbine extends BlockStructureCharge<TileSteamTurbine> {
 
     public static final IProperty<Boolean> WINDOW = PropertyBool.create("window");
     public static final IProperty<Axis> LONG_AXIS = PropertyEnum.create("long_axis", Axis.class, Axis.X, Axis.Z);
     public static final IProperty<Texture> TEXTURE = PropertyEnum.create("texture", Texture.class);
     private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.0,
             new IBatteryBlock.Spec(IBatteryBlock.State.DISABLED,
-                    TileSteamTurbine.IC2_OUTPUT, TileSteamTurbine.IC2_OUTPUT, 1.0));
+                    SteamTurbineLogic.CHARGE_OUTPUT, SteamTurbineLogic.CHARGE_OUTPUT, 1.0));
 
     public BlockSteamTurbine() {
-        super(Material.IRON);
-        setSoundType(SoundType.METAL);
+        super(Material.IRON, CHARGE_SPECS);
         setDefaultState(getDefaultState().withProperty(WINDOW, false).withProperty(LONG_AXIS, Axis.X).withProperty(TEXTURE, Texture.NONE));
-        setHarvestLevel("pickaxe", 1);
-        setTickRandomly(true);
-    }
-
-    @Override
-    public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return CHARGE_SPECS;
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, WINDOW, LONG_AXIS, TEXTURE);
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
-
-    @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-        super.onBlockAdded(worldIn, pos, state);
-        registerNode(state, worldIn, pos);
-    }
-
-    @Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        super.breakBlock(worldIn, pos, state);
-        deregisterNode(worldIn, pos);
     }
 
     @Override
@@ -104,16 +68,6 @@ public final class BlockSteamTurbine extends BlockMultiBlockCharge<TileSteamTurb
                 'B', "blockSteel",
                 'E', RailcraftItems.CHARGE, ItemCharge.EnumCharge.MOTOR
         );
-    }
-
-    @Override
-    public boolean hasComparatorInputOverride(IBlockState state) {
-        return true;
-    }
-
-    @Override
-    public int getComparatorInputOverride(IBlockState state, World worldIn, BlockPos pos) {
-        return Charge.distribution.network(worldIn).access(pos).getComparatorOutput();
     }
 
     enum Texture implements IStringSerializable {

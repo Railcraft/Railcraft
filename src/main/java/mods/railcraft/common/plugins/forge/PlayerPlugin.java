@@ -141,8 +141,8 @@ public final class PlayerPlugin {
     }
 
     public static boolean doesItemBlockActivation(EntityPlayer player, EnumHand hand) {
-        if (player.isSneaking())
-            return false;
+        if (player.isSneaking() || hand == EnumHand.OFF_HAND)
+            return true;
         ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem)) {
             return TrackTools.isRail(heldItem)

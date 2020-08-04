@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.EnergyPlugin;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 
 public class TileRFUnloader extends TileRFManipulator {
     private static final int AMOUNT_TO_PUSH_TO_TILES = 2000;
@@ -34,7 +35,7 @@ public class TileRFUnloader extends TileRFManipulator {
     @Override
     public void upkeep() {
         super.upkeep();
-        EnergyPlugin.pushToTiles(this, AMOUNT_TO_PUSH_TO_TILES);
+        EnergyPlugin.pushToTiles(this, energyStorage, AMOUNT_TO_PUSH_TO_TILES, EnumFacing.VALUES);
     }
 
     @Override

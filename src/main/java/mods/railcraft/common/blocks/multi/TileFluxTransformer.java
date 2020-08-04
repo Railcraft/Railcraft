@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBattery;
-import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.logic.ChargeComparatorLogic;
@@ -22,7 +21,6 @@ import mods.railcraft.common.blocks.logic.ChargeSourceLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -67,20 +65,8 @@ public final class TileFluxTransformer extends TileLogic implements IEnergyStora
     }
 
     public TileFluxTransformer() {
-        setLogic(new StructureLogic("flux", this, patterns, new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution)) {
-            @Override
-            protected void onPatternChanged() {
-                super.onPatternChanged();
-                if (Game.isHost(theWorldAsserted()))
-                    getFunctionalLogic(ChargeSourceLogic.class).ifPresent(logic -> {
-                        if (isMaster) {
-                            logic.getBattery().setState(IBatteryBlock.State.SOURCE);
-                        } else {
-                            logic.getBattery().setState(IBatteryBlock.State.DISABLED);
-                        }
-                    });
-            }
-        }.addSubLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution)));
+        setLogic(new StructureLogic("flux", this, patterns, new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution))
+                .addSubLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution)));
     }
 
     public static void placeFluxTransformer(World world, BlockPos pos) {

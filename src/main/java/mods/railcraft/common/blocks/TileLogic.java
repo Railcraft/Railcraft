@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks;
 
 import buildcraft.api.statements.IActionExternal;
+import mods.railcraft.common.blocks.interfaces.IDropsInv;
 import mods.railcraft.common.blocks.logic.ILogicContainer;
 import mods.railcraft.common.blocks.logic.InventoryLogic;
 import mods.railcraft.common.blocks.logic.Logic;
@@ -18,7 +19,6 @@ import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -27,12 +27,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -87,7 +88,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     @OverridingMethodsMustInvokeSuper
     public void onBlockRemoval() {
         if (Game.isClient(world)) return;
-        getLogic(IInventory.class).ifPresent(i -> InvTools.spewInventory(i, world, getPos()));
+        getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(world, getPos()));
         getLogic(StructureLogic.class).ifPresent(StructureLogic::onBlockChange);
     }
 
@@ -192,6 +193,9 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
                 && getLogic(IFluidHandler.class).isPresent())
             return true;
+        if (capability == CapabilityEnergy.ENERGY
+                && getLogic(IEnergyStorage.class).isPresent())
+            return true;
         return super.hasCapability(capability, facing);
     }
 
@@ -206,6 +210,11 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
             Optional<IFluidHandler> tank = getLogic(IFluidHandler.class);
             if (tank.isPresent())
                 return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank.get());
+        }
+        if (capability == CapabilityEnergy.ENERGY) {
+            Optional<IEnergyStorage> energy = getLogic(IEnergyStorage.class);
+            if (energy.isPresent())
+                return CapabilityEnergy.ENERGY.cast(energy.get());
         }
         return super.getCapability(capability, facing);
     }

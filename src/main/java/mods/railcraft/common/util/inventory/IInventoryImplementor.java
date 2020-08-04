@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.util.inventory;
 
+import mods.railcraft.common.blocks.interfaces.IDropsInv;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -20,7 +21,7 @@ import net.minecraft.util.text.ITextComponent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IInventoryImplementor extends IInventory, IInventoryComposite {
+public interface IInventoryImplementor extends IInventory, IInventoryComposite, IDropsInv {
     /**
      * Gets the standalone inventory that backs this implementor.
      *

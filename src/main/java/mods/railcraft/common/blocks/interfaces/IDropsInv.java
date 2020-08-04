@@ -7,26 +7,23 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
-package mods.railcraft.common.gui.widgets;
 
-import mods.railcraft.common.gui.tooltips.ToolTip;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+package mods.railcraft.common.blocks.interfaces;
+
+import mods.railcraft.common.util.inventory.InvTools;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
+ * Created by CovertJaguar on 8/3/2020 for Railcraft.
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface IIndicatorController {
-    @SideOnly(Side.CLIENT)
-    ToolTip getToolTip();
+public interface IDropsInv {
 
-    default double getMeasurement() {
-        return getClientValue();
+    default void spewInventory(World world, BlockPos pos) {
+        if (this instanceof IInventory)
+            InvTools.spewInventory((IInventory) this, world, pos);
     }
-
-    double getServerValue();
-
-    double getClientValue();
-
-    void setClientValue(double value);
 }

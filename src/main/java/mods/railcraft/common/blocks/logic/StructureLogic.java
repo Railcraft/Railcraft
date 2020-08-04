@@ -14,13 +14,13 @@ import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
+import mods.railcraft.common.blocks.interfaces.IDropsInv;
 import mods.railcraft.common.blocks.multi.MultiBlockPattern;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.Streams;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Optionals;
 import mods.railcraft.common.util.misc.Timer;
@@ -31,7 +31,6 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -78,6 +77,10 @@ public class StructureLogic extends Logic {
         this.tile = tile;
         this.patterns = patterns;
         this.maxSize = patterns.stream().mapToInt(MultiBlockPattern::getPatternSize).max().orElse(7 * 7 * 7);
+
+        // Note we don't set the parent.
+        // So getLogic() calls from the functional logic can only see the functional logic tree.
+        // This may not be desired behavior, but is not currently relevant.
         this.functionalLogic = functionalLogic;
         components.add(tile);
     }
@@ -109,18 +112,6 @@ public class StructureLogic extends Logic {
         return getMasterLogic().map(m -> m.componentsView).orElseGet(Collections::emptyList);
     }
 
-    @OverridingMethodsMustInvokeSuper
-    protected void onPatternChanged() {
-        adapter.updateModels();
-        if (!isMaster && functionalLogic instanceof IInventory && theWorld() != null)
-            InvTools.spewInventory((IInventory) functionalLogic, theWorldAsserted(), getPos());
-        if (getPattern() != null) {
-            onStructureChanged(getPattern().getAttachedData());
-            if (isMaster)
-                functionalLogic.onStructureChanged(getPattern().getAttachedData());
-        }
-    }
-
     public final char getPatternMarker() {
         return marker;
     }
@@ -134,20 +125,17 @@ public class StructureLogic extends Logic {
     }
 
     private void setPattern(@Nullable MultiBlockPattern pattern, @Nullable BlockPos posInPattern) {
-        boolean changed = false;
-        if (!Objects.equals(currentPattern, pattern)) {
-            changed = true;
-            this.currentPattern = pattern;
-        }
+        this.currentPattern = pattern;
         if (!Objects.equals(this.posInPattern, posInPattern)) {
-            changed = true;
             this.posInPattern = posInPattern == null ? null : posInPattern.toImmutable();
         }
-        BlockPos newMaster = pattern == null || posInPattern == null ? null
-                : pattern.getMasterPosition(getPos(), this.posInPattern);
-        if (!Objects.equals(masterPos, newMaster)) {
-            changed = true;
-            this.masterPos = newMaster;
+
+        if (currentPattern == null || posInPattern == null) {
+            this.masterPos = null;
+            marker = 'O';
+        } else {
+            this.masterPos = currentPattern.getMasterPosition(getPos(), this.posInPattern);
+            marker = currentPattern.getPatternMarker(this.posInPattern);
         }
 
         // Possible side effects?
@@ -156,14 +144,21 @@ public class StructureLogic extends Logic {
         else
             state = StructureState.VALID;
 
-        if (changed) {
-            if (currentPattern == null || posInPattern == null)
-                marker = 'O';
-            else
-                marker = currentPattern.getPatternMarker(posInPattern);
-            onPatternChanged();
-        }
+        onPatternChanged();
         sendUpdateToClient();
+    }
+
+    private void onPatternChanged() {
+        adapter.updateModels();
+        if (theWorld() == null || !Game.isHost(theWorldAsserted())) return;
+        if (!isMaster) {
+            functionalLogic.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
+        }
+        boolean isComplete = getPattern() != null;
+        Object[] attachedData = isComplete ? getPattern().getAttachedData() : new Object[]{};
+        onStructureChanged(isComplete, isMaster, attachedData);
+        if (isMaster)
+            functionalLogic.onStructureChanged(isComplete, isMaster, attachedData);
     }
 
     public final byte getPatternIndex() {
@@ -203,7 +198,7 @@ public class StructureLogic extends Logic {
         //                ClientProxy.getMod().totalMultiBlockUpdates++;
     }
 
-    private void testIfMasterBlock() {
+    protected void testIfMasterBlock() {
 //        System.out.println("testing structure");
         testPatterns();
 
@@ -218,8 +213,6 @@ public class StructureLogic extends Logic {
 //             System.out.println("structure complete");
 
             MultiBlockPattern pattern = patternStates.get(MultiBlockPattern.State.VALID).get(0);
-
-            setPattern(pattern, pattern.getMasterOffset());
 
             int xWidth = pattern.getPatternWidthX();
             int zWidth = pattern.getPatternWidthZ();
@@ -253,10 +246,10 @@ public class StructureLogic extends Logic {
             state = StructureState.UNKNOWN;
         } else {
             state = StructureState.INVALID;
+            functionalLogic.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
             if (isMaster) {
                 isMaster = false;
                 onMasterReset();
-                functionalLogic.getLogic(IInventory.class).ifPresent(i -> InvTools.spewInventory(i, theWorldAsserted(), getPos()));
                 sendUpdateToClient();
             }
         }

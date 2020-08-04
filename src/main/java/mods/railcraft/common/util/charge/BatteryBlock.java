@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -71,6 +71,7 @@ public class BatteryBlock extends Battery implements IBatteryBlock {
 
     public void tick() {
         chargeDrawnThisTick = 0.0;
+//        chargeAddedThisTick = 0.0;
     }
 
     @Override

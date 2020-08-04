@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,8 +55,8 @@ public class AnalogWidget extends MeterWidget {
         double halfWidth = 1; // half width of the needle
         double len = h * 0.75; // length of the needle (along the center)
 
-        // average the value over time to smooth the needle
-        double value = 1.0 - getMeasurement();
+        // average the value over time to smooth the needle (0.0 - 1.0)
+        double value = getMeasurement();
 
         // set the needle angle between 30° (= 0%) and 150° (= 100%)
         double angle = Math.toRadians(120 * value + 30);

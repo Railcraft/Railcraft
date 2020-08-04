@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,11 +36,6 @@ public class ChargeNetworkIndicator extends IndicatorController {
     protected void refreshToolTip() {
         ToolTip newTip = ToolTip.buildToolTip("gui.railcraft.charge.network.usage", "{percent}=" + String.format("%.0f%%", chargePercent * 100.0));
         getToolTip().set(newTip);
-    }
-
-    @Override
-    public double getMeasurement() {
-        return chargePercent;
     }
 
     @Override

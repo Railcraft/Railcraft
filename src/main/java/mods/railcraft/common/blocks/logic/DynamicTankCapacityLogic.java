@@ -26,8 +26,9 @@ public class DynamicTankCapacityLogic extends Logic {
     }
 
     @Override
-    public void onStructureChanged(Object[] data) {
-        super.onStructureChanged(data);
-        getLogic(TankLogic.class).ifPresent(logic -> logic.getTankManager().setCapacity(tankIndex, (Integer) data[dataIndex]));
+    public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
+        super.onStructureChanged(isComplete, isMaster, data);
+        if (isComplete)
+            getLogic(TankLogic.class).ifPresent(logic -> logic.getTankManager().setCapacity(tankIndex, (Integer) data[dataIndex]));
     }
 }

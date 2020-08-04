@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -106,13 +106,13 @@ public class ItemChargeMeter extends ItemRailcraft {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (state.getBlock() instanceof IChargeBlock) {
             ChargeNetwork.ChargeNode node = (ChargeNetwork.ChargeNode) ((IChargeBlock) state.getBlock()).getMeterAccess(Charge.distribution, state, world, pos);
-            if (node.isValid() && !node.isGridNull()) {
+            if (node != null && node.isValid() && !node.isGridNull()) {
                 sendChat(player, "gui.railcraft.charge.meter.start", SECONDS_TO_RECORD);
                 node.startUsageRecording(SECONDS_TO_RECORD * 20, avg -> {
                     ChargeNetwork.ChargeGrid grid = node.getGrid();
                     sendChat(player, "gui.railcraft.charge.meter.network", grid.size(),
                             grid.isInfinite() ? "INF" : grid.getCharge(), grid.getAverageUsagePerTick(),
-                            grid.getAvailableCharge(), grid.getLosses(), grid.getEfficiency() * 100.0);
+                            grid.getMaxDraw(), grid.getLosses(), grid.getEfficiency() * 100.0);
 
                     @Nullable BatteryBlock battery = node.getBattery().orElse(null);
                     if (battery == null)
@@ -122,8 +122,8 @@ public class ItemChargeMeter extends ItemRailcraft {
                         boolean infiniteBat = battery.getState() == IBatteryBlock.State.INFINITE;
                         sendChat(player, "gui.railcraft.charge.meter.producer",
                                 infiniteBat ? "INF" : battery.getCharge(),
-                                infiniteBat ? "INF" : 0.0,
-                                battery.getAvailableCharge(),
+                                infiniteBat ? "INF" : "NA",
+                                battery.getMaxDraw(),
                                 node.getChargeSpec().getLosses() * RailcraftConfig.chargeLossMultiplier(),
                                 battery.getEfficiency() * 100.0);
                     }

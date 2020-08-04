@@ -10,23 +10,21 @@
 
 package mods.railcraft.common.blocks.logic;
 
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.util.misc.Predicates;
+import mods.railcraft.common.plugins.forge.EnergyPlugin;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.IEnergyStorage;
 
 /**
  * Created by CovertJaguar on 1/28/2019 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class FluidPushLogic extends Logic {
-    private final int tankIndex;
+public class EnergyPushLogic extends Logic {
     private final int outputRate;
     private final EnumFacing[] outputFaces;
 
-    public FluidPushLogic(Adapter adapter, int tankIndex, int outputRate, EnumFacing[] outputFaces) {
+    public EnergyPushLogic(Adapter adapter, int outputRate, EnumFacing[] outputFaces) {
         super(adapter);
-        this.tankIndex = tankIndex;
         this.outputRate = outputRate;
         this.outputFaces = outputFaces;
     }
@@ -34,11 +32,8 @@ public class FluidPushLogic extends Logic {
     @Override
     protected void updateServer() {
         super.updateServer();
-        adapter.tile().ifPresent(tile -> getLogic(TankLogic.class).ifPresent(tank -> {
-            TankManager tMan = tank.getTankManager();
-            if (!tMan.isEmpty()) {
-                tMan.push(tile.getTileCache(), Predicates.notInstanceOf(tile.getClass()), outputFaces, tankIndex, outputRate);
-            }
+        adapter.tile().ifPresent(tile -> getLogic(IEnergyStorage.class).ifPresent(energy -> {
+            EnergyPlugin.pushToTiles(tile, energy, outputRate, outputFaces);
         }));
     }
 }

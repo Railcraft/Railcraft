@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.brick;
 
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.crafting.RockCrusherCrafter;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 
@@ -45,6 +46,8 @@ public class BlockBrickStairs extends BlockStairs implements IRailcraftBlock {
                 "II",
                 "II",
                 'I', getStack());
+        RockCrusherCrafter.INSTANCE.makeRecipe(getStack())
+                .addOutput(brickTheme.getStack(BrickVariant.COBBLE), 0.75F).register();
     }
 
     @Override

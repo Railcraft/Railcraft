@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,6 +21,7 @@ public class Battery implements IBattery {
     protected final double capacity;
     protected double charge;
     protected double chargeDrawnThisTick;
+//    protected double chargeAddedThisTick;
 
     public Battery(double capacity) {this.capacity = capacity;}
 
@@ -42,6 +43,7 @@ public class Battery implements IBattery {
     @Override
     public void addCharge(double charge) {
         this.charge += charge;
+//        chargeAddedThisTick += charge;
     }
 
     /**

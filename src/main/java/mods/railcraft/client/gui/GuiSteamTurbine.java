@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 public class GuiSteamTurbine extends GuiTitled {
 
     private final TileSteamTurbine tile;
+    private double outputReadout;
 
     public GuiSteamTurbine(InventoryPlayer playerInv, TileSteamTurbine tile) {
         super(tile, new ContainerTurbine(playerInv, tile),
@@ -30,6 +31,7 @@ public class GuiSteamTurbine extends GuiTitled {
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.steam.turbine.rotor"), 20, 29, 0x404040);
-        fontRenderer.drawString(String.format(LocalizationPlugin.translate("gui.railcraft.steam.turbine.output"), Math.round(tile.output)), 95, 24, 0x404040);
+        GuiTools.drawStringCenteredAtPos(fontRenderer, LocalizationPlugin.translate("gui.railcraft.steam.turbine.production"), 110, 24);
+        GuiTools.drawStringCenteredAtPos(fontRenderer, LocalizationPlugin.translate("gui.railcraft.steam.turbine.network"), 110, 43);
     }
 }
