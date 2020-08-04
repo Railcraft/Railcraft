@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -47,7 +47,8 @@ import java.util.Random;
 public class RockCrusherLogic extends CrafterLogic {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 9;
-    private static final double CRUSHING_POWER_COST_PER_STEP = 160 * PROGRESS_STEP;
+    private static final double CRUSHING_POWER_COST_PER_TICK = 160;
+    private static final double CRUSHING_POWER_COST_PER_STEP = CRUSHING_POWER_COST_PER_TICK * PROGRESS_STEP;
     private static final double MAX_STORED_CHARGE = 8_000;
     private static final Optional<IRockCrusherCrafter.IRecipe> DESTRUCTION_RECIPE = Optional.of(new IRockCrusherCrafter.IRecipe() {
         @Override
@@ -90,7 +91,7 @@ public class RockCrusherLogic extends CrafterLogic {
     protected void updateServer() {
         super.updateServer();
         storedCharge += Charge.distribution.network(theWorldAsserted()).access(getPos())
-                .removeCharge(Math.max(0.0, MAX_STORED_CHARGE - storedCharge));
+                .removeCharge(Math.min(CRUSHING_POWER_COST_PER_TICK, Math.max(0.0, MAX_STORED_CHARGE - storedCharge)));
     }
 
     private boolean isRecipeValid() {

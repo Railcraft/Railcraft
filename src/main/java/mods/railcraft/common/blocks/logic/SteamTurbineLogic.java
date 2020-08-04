@@ -42,8 +42,7 @@ public class SteamTurbineLogic extends TankLogic implements IChargeAccessorLogic
     protected final StandardTank tankSteam;
     protected final StandardTank tankWater;
     private final InventoryAdvanced inv = new InventoryAdvanced(1);
-    public float operatingRatio;
-    private byte gaugeState;
+    public double operatingRatio;
     private double energy;
 
     public SteamTurbineLogic(Adapter adapter) {
@@ -80,7 +79,8 @@ public class SteamTurbineLogic extends TankLogic implements IChargeAccessorLogic
             }
         }
 
-        operatingRatio = (float) ((operatingRatio * 49D + (addedEnergy ? 1D : 0D)) / 50D);
+        double thisTick = addedEnergy ? 1.0 : 0.0;
+        operatingRatio = (thisTick - operatingRatio) * 0.05 + operatingRatio;
 
 //                System.out.println("output=" + output);
 //                System.out.println("addedEnergy=" + addedEnergy);
@@ -124,7 +124,7 @@ public class SteamTurbineLogic extends TankLogic implements IChargeAccessorLogic
         super.writeToNBT(data);
         inv.writeToNBT("rotor", data);
         energy = data.getFloat("energy");
-        operatingRatio = data.getFloat("operatingRatio");
+        operatingRatio = data.getDouble("operatingRatio");
     }
 
     @Override
@@ -132,6 +132,6 @@ public class SteamTurbineLogic extends TankLogic implements IChargeAccessorLogic
         super.readFromNBT(data);
         inv.readFromNBT("rotor", data);
         data.setFloat("energy", (float) energy);
-        data.setFloat("operatingRatio", operatingRatio);
+        data.setDouble("operatingRatio", operatingRatio);
     }
 }

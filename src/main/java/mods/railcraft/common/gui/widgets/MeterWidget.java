@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,7 +46,7 @@ public class MeterWidget extends Widget {
             measurement = controller.getMeasurement();
             first = false;
         } else {
-            measurement = (measurement * 9.0 + controller.getMeasurement()) / 10.0;
+            measurement = (controller.getMeasurement() - measurement) * 0.1 + measurement;
         }
         return measurement;
     }
