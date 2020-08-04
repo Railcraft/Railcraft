@@ -30,6 +30,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -171,6 +172,123 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O'}
                 },};
         patterns.add(new MultiBlockPattern(map3, new BlockPos(4, 1, 2), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
+        char[][][] map4 = {
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'W', 'W', 'B', 'O'},
+                        {'O', 'W', 'A', 'A', 'W', 'O'},
+                        {'O', 'W', 'A', 'A', 'W', 'O'},
+                        {'O', 'B', 'W', 'W', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'C', 'C', 'C', 'C', 'O'},
+                        {'O', 'C', 'B', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'B', 'C', 'O'},
+                        {'O', 'C', 'C', 'C', 'C', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O'}
+                },};
+        AxisAlignedBB entityCheck = new AxisAlignedBB(0, 1, 0, 2, 3, 2);
+        patterns.add(new MultiBlockPattern(map4, new BlockPos(2, 1, 2), entityCheck, CokeOvenLogic.TANK_CAPACITY * 3, 3));
+        char[][][] map5 = {
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'W', 'B', 'W', 'B', 'O'},
+                        {'O', 'W', 'A', 'A', 'A', 'W', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'W', 'A', 'A', 'A', 'W', 'O'},
+                        {'O', 'B', 'W', 'B', 'W', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'A', 'A', 'A', 'B', 'O'},
+                        {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'C', 'C', 'C', 'C', 'C', 'O'},
+                        {'O', 'C', 'B', 'B', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'B', 'B', 'C', 'O'},
+                        {'O', 'C', 'B', 'B', 'B', 'C', 'O'},
+                        {'O', 'C', 'C', 'C', 'C', 'C', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },
+                {
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+                        {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
+                },};
+        entityCheck = new AxisAlignedBB(-1, 1, -1, 2, 4, 2);
+        patterns.add(new MultiBlockPattern(map5, new BlockPos(3, 1, 3), entityCheck, CokeOvenLogic.TANK_CAPACITY * 5, 5));
     }
 
     public TileCokeOven() {
