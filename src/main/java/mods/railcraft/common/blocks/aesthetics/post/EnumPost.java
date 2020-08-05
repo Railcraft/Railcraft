@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.aesthetics.post;
 import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.IVariantEnumBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.modules.ModuleStructures;
+import mods.railcraft.common.modules.ModuleBuilding;
 import net.minecraft.block.material.MapColor;
 
 import java.util.Locale;
@@ -35,7 +35,7 @@ public enum EnumPost implements IVariantEnumBlock<EnumPost> {
 
     EnumPost(MapColor mapColor) {
         this.mapColor = mapColor;
-        this.def = new Definition(name().toLowerCase(Locale.ROOT), ModuleStructures.class);
+        this.def = new Definition(name().toLowerCase(Locale.ROOT), ModuleBuilding.class);
     }
 
     public static EnumPost fromId(int id) {

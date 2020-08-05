@@ -390,7 +390,7 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
 
-                if (RailcraftModuleManager.isModuleEnabled(ModuleStructures.class)) {
+                if (RailcraftModuleManager.isModuleEnabled(ModuleBuilding.class)) {
                     if (RailcraftBlocks.BLAST_FURNACE.isLoaded() && BrickTheme.INFERNAL.isLoaded()) {
 
                         ItemStack stack = RailcraftBlocks.BLAST_FURNACE.getStack(4);

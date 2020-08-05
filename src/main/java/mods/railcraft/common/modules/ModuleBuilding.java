@@ -25,10 +25,10 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
-@RailcraftModule(value = "railcraft:structures", description = "glass, posts, stairs, slabs, lanterns, walls")
-public class ModuleStructures extends RailcraftModulePayload {
+@RailcraftModule(value = "railcraft:building", description = "glass, posts, bricks, stairs, slabs, lanterns, walls")
+public class ModuleBuilding extends RailcraftModulePayload {
 
-    public ModuleStructures() {
+    public ModuleBuilding() {
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
@@ -36,7 +36,7 @@ public class ModuleStructures extends RailcraftModulePayload {
                     add(brick.getContainer());
                 }
                 add(
-                        RailcraftItems.STONE_CARVER,
+//                        RailcraftItems.STONE_CARVER,
                         RailcraftItems.CONCRETE,
                         RailcraftBlocks.GLASS,
                         RailcraftBlocks.GENERIC,

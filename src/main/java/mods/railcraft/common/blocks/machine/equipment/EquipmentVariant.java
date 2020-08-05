@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,8 +15,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
 import mods.railcraft.common.modules.ModuleAutomation;
+import mods.railcraft.common.modules.ModuleBuilding;
 import mods.railcraft.common.modules.ModuleFactory;
-import mods.railcraft.common.modules.ModuleStructures;
 import net.minecraft.util.Tuple;
 
 import java.util.ArrayList;
@@ -30,7 +30,8 @@ public enum EquipmentVariant implements IEnumMachine<EquipmentVariant> {
     ROLLING_MACHINE_MANUAL(ModuleFactory.class, "rolling_manual", TileRollingMachineManual.class),
     ROLLING_MACHINE_POWERED(ModuleFactory.class, "rolling_powered", TileRollingMachinePowered.class),
     FEED_STATION(ModuleAutomation.class, "feed_station", TileFeedStation.class),
-    SMOKER(ModuleStructures.class, "smoker", TileSmoker.class),;
+    SMOKER(ModuleBuilding.class, "smoker", TileSmoker.class),
+    ;
 
     private static final List<EquipmentVariant> creativeList = new ArrayList<>();
     public static final EquipmentVariant[] VALUES = values();
