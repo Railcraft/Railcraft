@@ -13,7 +13,7 @@ import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.blocks.logic.WaterGeneratorLogic;
 import mods.railcraft.common.blocks.logic.WaterGeneratorLogic.GeneratorStatus;
-import mods.railcraft.common.blocks.multi.TileTankWater;
+import mods.railcraft.common.blocks.structures.TileTankWater;
 import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;

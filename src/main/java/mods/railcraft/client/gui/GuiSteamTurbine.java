@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.multi.TileSteamTurbine;
+import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.gui.containers.ContainerTurbine;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;

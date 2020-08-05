@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,8 +29,8 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
-import mods.railcraft.common.blocks.multi.TileSteamTurbine;
-import mods.railcraft.common.blocks.multi.TileTankBase;
+import mods.railcraft.common.blocks.structures.TileSteamTurbine;
+import mods.railcraft.common.blocks.structures.TileTankBase;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftObjects;

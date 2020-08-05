@@ -12,7 +12,7 @@ package mods.railcraft.client.render.tesr;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.logic.SteamTurbineLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
-import mods.railcraft.common.blocks.multi.TileSteamTurbine;
+import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;

@@ -9,8 +9,8 @@
 //package mods.railcraft.common.blocks.machine.beta;
 //
 //import mods.railcraft.common.blocks.machine.IEnumMachine;
-//import mods.railcraft.common.blocks.multi.MultiBlockPattern;
-//import mods.railcraft.common.blocks.multi.TileMultiBlock;
+//import mods.railcraft.common.blocks.structures.MultiBlockPattern;
+//import mods.railcraft.common.blocks.structures.TileMultiBlock;
 //
 //import java.util.ArrayList;
 //import java.util.List;

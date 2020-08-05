@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,8 +12,8 @@ package mods.railcraft.client.render.tesr;
 import mods.railcraft.client.render.models.resource.FluidModelRenderer;
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.client.render.tools.RenderTools;
-import mods.railcraft.common.blocks.multi.TileTankBase;
-import mods.railcraft.common.blocks.multi.TileTankIronValve;
+import mods.railcraft.common.blocks.structures.TileTankBase;
+import mods.railcraft.common.blocks.structures.TileTankIronValve;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;

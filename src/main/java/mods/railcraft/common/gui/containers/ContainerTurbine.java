@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.logic.SteamTurbineLogic;
-import mods.railcraft.common.blocks.multi.TileSteamTurbine;
+import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.widgets.AnalogWidget;

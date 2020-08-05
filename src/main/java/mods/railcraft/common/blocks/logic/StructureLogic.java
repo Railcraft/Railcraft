@@ -15,7 +15,7 @@ import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.interfaces.IDropsInv;
-import mods.railcraft.common.blocks.multi.MultiBlockPattern;
+import mods.railcraft.common.blocks.structures.MultiBlockPattern;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;

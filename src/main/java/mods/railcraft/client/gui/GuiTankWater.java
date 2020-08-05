@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.multi.TileTankWater;
+import mods.railcraft.common.blocks.structures.TileTankWater;
 import mods.railcraft.common.gui.containers.ContainerTankWater;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;

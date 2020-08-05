@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,8 +22,8 @@ import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikeAdmin;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePassive;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspikePersonal;
-import mods.railcraft.common.blocks.multi.*;
 import mods.railcraft.common.blocks.single.*;
+import mods.railcraft.common.blocks.structures.*;
 import mods.railcraft.common.blocks.tracks.force.TileTrackForce;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 

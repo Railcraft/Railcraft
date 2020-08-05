@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,9 +18,9 @@ import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
-import mods.railcraft.common.blocks.multi.MultiBlockPattern;
-import mods.railcraft.common.blocks.multi.MultiBlockPattern.State;
-import mods.railcraft.common.blocks.multi.TileMultiBlock;
+import mods.railcraft.common.blocks.structures.MultiBlockPattern;
+import mods.railcraft.common.blocks.structures.MultiBlockPattern.State;
+import mods.railcraft.common.blocks.structures.TileMultiBlock;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;

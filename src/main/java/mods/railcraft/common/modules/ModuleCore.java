@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,7 @@ import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.client.util.sounds.SoundLimiterTicker;
 import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
 import mods.railcraft.common.blocks.machine.MachineTileRegistry;
-import mods.railcraft.common.blocks.multi.MultiBlockHelper;
+import mods.railcraft.common.blocks.structures.MultiBlockHelper;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.*;
