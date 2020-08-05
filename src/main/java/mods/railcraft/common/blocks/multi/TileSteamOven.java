@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,22 +9,17 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.multi;
 
+import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
-import mods.railcraft.common.blocks.logic.CrafterLogic;
-import mods.railcraft.common.blocks.logic.Logic;
-import mods.railcraft.common.blocks.logic.SteamOvenLogic;
-import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -39,7 +34,6 @@ import java.util.List;
 
 import static mods.railcraft.common.blocks.multi.BlockSteamOven.FACING;
 import static mods.railcraft.common.blocks.multi.BlockSteamOven.ICON;
-import static net.minecraft.util.EnumFacing.NORTH;
 
 public final class TileSteamOven extends TileCrafter implements ISteamUser, ITileRotate {
 
@@ -75,10 +69,16 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
         patterns.add(new MultiBlockPattern(map));
     }
 
-    private boolean wasProcessing;
-
     public TileSteamOven() {
-        setLogic(new StructureLogic("steam_oven", this, patterns, new SteamOvenLogic(Logic.Adapter.of(this))));
+        setLogic(new StructureLogic("steam_oven", this, patterns,
+                        new SteamOvenLogic(Logic.Adapter.of(this))
+                                .addSubLogic(new RotationLogic(Logic.Adapter.of(this)))
+                )
+                        .addSubLogic(new CrafterParticleEffectLogic(Logic.Adapter.of(this), () -> {
+                            for (int i = 0; i < 16; i++)
+                                ClientEffects.INSTANCE.steamEffect(theWorldAsserted(), this, +0.25);
+                        }))
+        );
     }
 
     public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
@@ -99,37 +99,14 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
     }
 
     @Override
-    public void update() {
-        super.update();
-
-        if (Game.isClient(getWorld())) {
-            boolean isProcessing = getLogic(CrafterLogic.class).map(CrafterLogic::isProcessing).orElse(false);
-            if (wasProcessing != isProcessing && !isProcessing) {
-                for (int i = 0; i < 16; i++)
-                    ClientEffects.INSTANCE.steamEffect(world, this, +0.25);
-            }
-            wasProcessing = isProcessing;
-        }
-    }
-
-    @Override
-    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
-        super.onBlockPlacedBy(state, placer, stack);
-        if (placer != null)
-            // This is kind of ugly, but it works. Normally we can't access our logic directly, only through the master.
-            getLogic(StructureLogic.class)
-                    .ifPresent(l -> ((SteamOvenLogic) l.functionalLogic).setFacing(MiscTools.getHorizontalSideFacingPlayer(placer)));
-    }
-
-    @Override
     public EnumFacing getFacing() {
-        return getLogic(SteamOvenLogic.class).map(SteamOvenLogic::getFacing).orElse(NORTH);
+        return RotationLogic.getRotationLogic(this).getFacing();
     }
 
     @Override
     public void setFacing(EnumFacing facing) {
-        getLogic(SteamOvenLogic.class).ifPresent(l -> l.setFacing(facing));
-        markBlockForUpdate();
+        Preconditions.checkArgument(canRotate(facing), "Cannot set facing to up or down.");
+        RotationLogic.getRotationLogic(this).setFacing(facing);
     }
 
     @Override
@@ -159,7 +136,13 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
     @Override
     public IBlockState getActualState(IBlockState base) {
         EnumFacing side = getFacing();
-        IBlockState actualState = base.withProperty(FACING, side);
+        IBlockState facedState;
+        try {
+            facedState = base.withProperty(FACING, side);
+        } catch (IllegalArgumentException ex) {
+            facedState = base.withProperty(FACING, EnumFacing.NORTH);
+        }
+        IBlockState actualState = facedState;
         return getLogic(StructureLogic.class).filter(StructureLogic::isStructureValid).map(l -> {
             BlockPos pos = l.getPatternPosition();
             assert pos != null;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,35 +26,35 @@ public enum RemoteEffectType {
         @Override
         @SideOnly(Side.CLIENT)
         public void handle(ClientEffects effects, RailcraftInputStream input) throws IOException {
-            effects.doTeleport(input);
+            effects.readTeleport(input);
         }
     },
     FIRE_SPARK() {
         @Override
         @SideOnly(Side.CLIENT)
         public void handle(ClientEffects effects, RailcraftInputStream input) throws IOException {
-            effects.doFireSpark(input);
+            effects.readFireSpark(input);
         }
     },
     FORCE_SPAWN() {
         @Override
         @SideOnly(Side.CLIENT)
         public void handle(ClientEffects effects, RailcraftInputStream input) throws IOException {
-            effects.doForceSpawn(input);
+            effects.readForceSpawn(input);
         }
     },
     ZAP_DEATH() {
         @Override
         @SideOnly(Side.CLIENT)
         public void handle(ClientEffects effects, RailcraftInputStream input) throws IOException {
-            effects.doZapDeath(input);
+            effects.readZapDeath(input);
         }
     },
     BLOCK_PARTICLE() {
         @Override
         @SideOnly(Side.CLIENT)
         public void handle(ClientEffects effects, RailcraftInputStream input) throws IOException {
-            effects.doBlockParticle(input);
+            effects.readBlockParticle(input);
         }
     },
     ;

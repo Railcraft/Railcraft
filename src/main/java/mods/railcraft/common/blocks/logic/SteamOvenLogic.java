@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.logic;
 
-import com.google.common.base.Preconditions;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -22,13 +21,10 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,10 +33,6 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.io.IOException;
-
-import static net.minecraft.util.EnumFacing.NORTH;
 
 /**
  * Created by CovertJaguar on 1/11/2019 for Railcraft.
@@ -59,7 +51,6 @@ public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
     private final FilteredTank tank;
     private final InventoryMapper invInput = InventoryMapper.make(this, SLOT_INPUT, 9);
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9).ignoreItemChecks();
-    private EnumFacing facing = NORTH;
 
     public SteamOvenLogic(Adapter adapter) {
         super(adapter, 18);
@@ -137,6 +128,9 @@ public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
             return false;
         if (slot >= SLOT_OUTPUT)
             return false;
+        // Apparently Steam Autoclaves are used in smelting processes, who knew?
+//        if (OreDictPlugin.getOreTags(stack).stream().anyMatch(tag -> tag.contains("ore")))
+//            return false;
         return InvTools.nonEmpty(FurnaceRecipes.instance().getSmeltingResult(stack));
     }
 
@@ -151,47 +145,6 @@ public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
                 return super.extractItem(slot, amount, simulate);
             }
         };
-    }
-
-    public EnumFacing getFacing() {
-        return facing;
-    }
-
-    public void setFacing(EnumFacing facing) {
-        Preconditions.checkArgument(facing.getAxis() != EnumFacing.Axis.Y, "Cannot set facing to up or down.");
-        this.facing = facing;
-    }
-
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        data.setByte("facing", (byte) facing.getHorizontalIndex());
-    }
-
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        facing = EnumFacing.byHorizontalIndex(data.getByte("facing"));
-    }
-
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-        data.writeEnum(facing);
-    }
-
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-        EnumFacing f = data.readEnum(EnumFacing.VALUES);
-        if (facing != f) {
-            facing = f;
-            adapter.updateModels();
-        }
     }
 
     @Override

@@ -30,7 +30,9 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -343,6 +345,12 @@ public class StructureLogic extends Logic {
                 .map(Optionals.toType(ILogicContainer.class))
                 .flatMap(c -> c.getLogic(StructureLogic.class))
                 .filter(this::canMatch);
+    }
+
+    @Override
+    public void placed(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        super.placed(state, placer, stack);
+        functionalLogic.placed(state, placer, stack);
     }
 
     @Override

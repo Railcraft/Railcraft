@@ -19,7 +19,10 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
@@ -108,6 +111,11 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
 
     protected boolean clock(int interval) {
         return clock % interval == 0;
+    }
+
+    @OverridingMethodsMustInvokeSuper
+    public void placed(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        subLogics.forEach(l -> l.placed(state, placer, stack));
     }
 
     /**

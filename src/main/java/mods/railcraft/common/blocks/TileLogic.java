@@ -25,8 +25,10 @@ import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -68,6 +70,14 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
+    public void onBlockPlacedBy(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
+        super.onBlockPlacedBy(state, placer, stack);
+        logic.placed(state, placer, stack);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
     public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
         super.onNeighborBlockChange(state, neighborBlock, neighborPos);
         if (Game.isClient(world)) return;
@@ -93,6 +103,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (PlayerPlugin.doesItemBlockActivation(player, hand))
             return false;

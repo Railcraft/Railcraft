@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,10 @@ package mods.railcraft.common.blocks.multi;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.logic.CrafterParticleEffectLogic;
 import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.blocks.logic.RockCrusherLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
@@ -21,12 +23,16 @@ import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -109,36 +115,51 @@ public final class TileRockCrusher extends TileCrafter {
     public TileRockCrusher() {
         setLogic(new StructureLogic("rock_crusher", this, patterns, new RockCrusherLogic(Logic.Adapter.of(this))) {
 
-            @Override
-            public boolean isMapPositionValid(BlockPos pos, char mapPos) {
-                IBlockState self = getBlockState();
-                IBlockState other = WorldPlugin.getBlockState(world, pos);
-                switch (mapPos) {
-                    case 'O': // Other
-                        if (self != other)
-                            return true;
-                        break;
-                    case 'D': // Window
-                    case 'B': // Block
-                    case 'a': // Block
-                    case 'b': // Block
-                    case 'c': // Block
-                    case 'd': // Block
-                    case 'e': // Block
-                    case 'f': // Block
-                    case 'g': // Block
-                    case 'h': // Block
-                        if (self == other)
-                            return true;
-                        break;
-                    case 'A': // Air
-                        if (other.getBlock().isAir(other, world, pos))
-                            return true;
-                        break;
+                    @Override
+                    public boolean isMapPositionValid(BlockPos pos, char mapPos) {
+                        IBlockState self = getBlockState();
+                        IBlockState other = WorldPlugin.getBlockState(world, pos);
+                        switch (mapPos) {
+                            case 'O': // Other
+                                if (self != other)
+                                    return true;
+                                break;
+                            case 'D': // Window
+                            case 'B': // Block
+                            case 'a': // Block
+                            case 'b': // Block
+                            case 'c': // Block
+                            case 'd': // Block
+                            case 'e': // Block
+                            case 'f': // Block
+                            case 'g': // Block
+                            case 'h': // Block
+                                if (self == other)
+                                    return true;
+                                break;
+                            case 'A': // Air
+                                if (other.getBlock().isAir(other, world, pos))
+                                    return true;
+                                break;
+                        }
+                        return false;
+                    }
                 }
-                return false;
-            }
-        });
+                        .addSubLogic(new CrafterParticleEffectLogic(Logic.Adapter.of(this), () -> {
+                            ItemStack crushed = getLogic(RockCrusherLogic.class).map(RockCrusherLogic::getCrushed).orElseGet(() -> new ItemStack(Blocks.COBBLESTONE));
+                            IBlockState crushedState = InvTools.getBlockStateFromStack(crushed);
+                            for (int i = 0; i < 8; i++)
+                                ClientEffects.INSTANCE.blockParticle(
+                                        theWorldAsserted(),
+                                        this,
+                                        new Vec3d(getPos()).add(0.5 + MiscTools.RANDOM.nextGaussian() * 0.5, 1.0, 0.5 + MiscTools.RANDOM.nextGaussian() * 0.5),
+                                        new Vec3d(MiscTools.RANDOM.nextGaussian() * 0.05, 0.1, MiscTools.RANDOM.nextGaussian() * 0.05),
+                                        crushedState,
+                                        true,
+                                        ""
+                                );
+                        }))
+        );
     }
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {

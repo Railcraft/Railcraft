@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.logic.SteamOvenLogic;
-import mods.railcraft.common.gui.slots.SlotSmelting;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.SlotFurnaceOutput;
@@ -24,7 +24,7 @@ public class ContainerSteamOven extends ContainerCrafter {
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {
-                addSlot(new SlotSmelting(logic, i * 3 + k, 8 + k * 18, 17 + i * 18));
+                addSlot(new SlotRailcraft(logic, i * 3 + k, 8 + k * 18, 17 + i * 18));
             }
         }
         for (int i = 0; i < 3; i++) {

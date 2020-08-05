@@ -20,7 +20,10 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -34,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -82,6 +86,7 @@ public class RockCrusherLogic extends CrafterLogic {
     private final Random random = new Random();
     private int currentSlot;
     private double storedCharge;
+    private ItemStack crushed = new ItemStack(Blocks.COBBLESTONE);
 
     public RockCrusherLogic(Adapter adapter) {
         super(adapter, 18);
@@ -138,6 +143,10 @@ public class RockCrusherLogic extends CrafterLogic {
         return useInternalCharge(CRUSHING_POWER_COST_PER_STEP);
     }
 
+    public ItemStack getCrushed() {
+        return crushed;
+    }
+
     @Override
     protected boolean craftAndPush() {
         final IRockCrusherCrafter.IRecipe recipe = currentRecipe.orElseThrow(NullPointerException::new);
@@ -149,7 +158,7 @@ public class RockCrusherLogic extends CrafterLogic {
 
         if (hasRoom) {
             outputs.forEach(invOutput::addStack);
-            invInput.removeOneItem(recipe.getInput());
+            crushed = invInput.removeOneItem(recipe.getInput());
 
             SoundHelper.playSound(theWorldAsserted(), null, getPos(), SoundEvents.ENTITY_IRONGOLEM_DEATH,
                     SoundCategory.BLOCKS, 1.0f, random.nextFloat() * 0.25F + 0.7F);
@@ -200,6 +209,18 @@ public class RockCrusherLogic extends CrafterLogic {
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
         storedCharge = data.getDouble("charge");
+    }
+
+    @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeItemStack(crushed);
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
+        crushed = data.readItemStack();
     }
 
     @Override

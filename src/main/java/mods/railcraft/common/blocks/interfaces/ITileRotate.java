@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,9 @@ import net.minecraft.util.EnumFacing;
 import java.util.Arrays;
 
 /**
+ * An interface for defining how blocks rotate.
+ *
+ *
  * Created by CovertJaguar on 9/8/2016 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>

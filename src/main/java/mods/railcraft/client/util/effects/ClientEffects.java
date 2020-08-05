@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -73,7 +73,7 @@ public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRend
         Code.setValue(Charge.class, null, this, "effects");
     }
 
-    public void doTeleport(RailcraftInputStream data) throws IOException {
+    public void readTeleport(RailcraftInputStream data) throws IOException {
         World world = Game.getWorld();
         if (world == null)
             return;
@@ -98,7 +98,7 @@ public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRend
         }
     }
 
-    public void doForceSpawn(RailcraftInputStream data) throws IOException {
+    public void readForceSpawn(RailcraftInputStream data) throws IOException {
         if (thinParticles(true))
             return;
 
@@ -182,7 +182,7 @@ public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRend
         SoundHelper.playSoundClient(world, es.getPos(), SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, .2F + rand.nextFloat() * .2F, .9F + rand.nextFloat() * .15F);
     }
 
-    public void doFireSpark(RailcraftInputStream data) throws IOException {
+    public void readFireSpark(RailcraftInputStream data) throws IOException {
         Vec3d start = data.readVec3d();
         Vec3d destination = data.readVec3d();
         fireSparkEffect(mc.world, start, destination);
@@ -298,30 +298,9 @@ public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRend
         }
     }
 
-    public void doZapDeath(RailcraftInputStream data) throws IOException {
+    public void readZapDeath(RailcraftInputStream data) throws IOException {
         Vec3d pos = data.readVec3d();
         zapEffectDeath(mc.world, pos);
-    }
-
-    public void doBlockParticle(RailcraftInputStream data) throws IOException {
-        BlockPos block = data.readBlockPos();
-        Vec3d pos = data.readVec3d();
-        Vec3d velocity = data.readVec3d();
-        IBlockState state = Block.getStateById(data.readInt());
-        boolean blockDust = data.readBoolean();
-        String location = data.readUTF();
-        ParticleBlockCrack crack = new ParticleBlockCrack(mc.world, pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z, state);
-
-        crack.setBlockPos(block);
-        TextureAtlasSprite sprite = mc.getTextureMapBlocks().getAtlasSprite(location);
-        if (sprite == mc.getTextureMapBlocks().getMissingSprite())
-            Game.log().msg(Level.WARN, "Cannot find sprite at {0} for block state {1}", location, state);
-        crack.setParticleTexture(sprite);
-        if (blockDust) {
-            crack.setVelocity(velocity);
-        }
-
-        spawnParticle(crack);
     }
 
     @Override
@@ -355,6 +334,37 @@ public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRend
             }
             spawnParticle(new ParticleSpark(worldIn, start, vel));
         }
+    }
+
+    public void blockParticle(World world, Object source, Vec3d pos, Vec3d velocity, IBlockState state, boolean blockDust, String location) {
+        if (Game.isHost(world)) {
+            // oh naw
+            return;
+        }
+        ParticleBlockCrack particle = new ParticleBlockCrack(world, pos.x, pos.y, pos.z, velocity.x, velocity.y, velocity.z, state);
+
+        particle.setBlockPos(EffectManager.getEffectSource(source).getPos());
+        if (!location.isEmpty()) {
+            TextureAtlasSprite sprite = mc.getTextureMapBlocks().getAtlasSprite(location);
+            if (sprite == mc.getTextureMapBlocks().getMissingSprite())
+                Game.log().msg(Level.WARN, "Cannot find sprite at {0} for block state {1}", location, state);
+            particle.setParticleTexture(sprite);
+        }
+        if (blockDust) {
+            particle.setVelocity(velocity);
+        }
+
+        spawnParticle(particle);
+    }
+
+    public void readBlockParticle(RailcraftInputStream data) throws IOException {
+        BlockPos block = data.readBlockPos();
+        Vec3d pos = data.readVec3d();
+        Vec3d velocity = data.readVec3d();
+        IBlockState state = Block.getStateById(data.readInt());
+        boolean blockDust = data.readBoolean();
+        String location = data.readUTF();
+        blockParticle(mc.world, block, pos, velocity, state, blockDust, location);
     }
 
     private boolean thinParticles(boolean canDisable) {
