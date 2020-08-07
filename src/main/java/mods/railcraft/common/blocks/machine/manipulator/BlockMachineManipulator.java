@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -45,7 +45,7 @@ public class BlockMachineManipulator extends BlockMachine<ManipulatorVariant> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), FRONT, ACTIVE);
+        return new BlockStateContainer(this, getVariantEnumProperty(), FRONT, ACTIVE);
     }
 
     @Override

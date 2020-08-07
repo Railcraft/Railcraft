@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,7 +55,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         setHardness(4);
         setSoundType(SoundType.STONE);
         setCreativeTab(CreativePlugin.STRUCTURE_TAB);
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.SILVER));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumColor.SILVER));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
     @Override
     @SideOnly(Side.CLIENT)
     public @Nullable StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(getVariantProperty()).build();
+        return new StateMap.Builder().ignore(getVariantEnumProperty()).build();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(getVariantProperty(), (EnumColor) variant);
+            state = state.withProperty(getVariantEnumProperty(), (EnumColor) variant);
         }
         return state;
     }
@@ -113,7 +113,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
 
     @Override
     public EnumColor getColor(IBlockState state) {
-        return state.getValue(getVariantProperty());
+        return state.getValue(getVariantEnumProperty());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getColor(state).getDye() != color) {
-            world.setBlockState(pos, getDefaultState().withProperty(getVariantProperty(), EnumColor.fromDye(color)));
+            world.setBlockState(pos, getDefaultState().withProperty(getVariantEnumProperty(), EnumColor.fromDye(color)));
             return true;
         }
         return false;
@@ -153,7 +153,7 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), EnumColor.fromOrdinal(meta));
+        return getDefaultState().withProperty(getVariantEnumProperty(), EnumColor.fromOrdinal(meta));
     }
 
     /**
@@ -166,6 +166,6 @@ public class BlockReinforcedConcrete extends BlockRailcraftSubtyped<EnumColor> i
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty());
+        return new BlockStateContainer(this, getVariantEnumProperty());
     }
 }

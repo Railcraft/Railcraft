@@ -47,7 +47,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     public BlockGeneric() {
         super(Material.ROCK);
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumGeneric.BLOCK_COKE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumGeneric.BLOCK_COKE));
         setResistance(20);
         setHardness(5);
         setSoundType(SoundType.STONE);
@@ -86,7 +86,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(getVariantProperty(), (EnumGeneric) variant);
+            state = state.withProperty(getVariantEnumProperty(), (EnumGeneric) variant);
         }
         return state;
     }
@@ -100,7 +100,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), EnumGeneric.fromOrdinal(meta));
+        return getDefaultState().withProperty(getVariantEnumProperty(), EnumGeneric.fromOrdinal(meta));
     }
 
     /**
@@ -108,12 +108,12 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty());
+        return new BlockStateContainer(this, getVariantEnumProperty());
     }
 
     private EnumGeneric getVariant(IBlockAccess world, BlockPos pos) {
@@ -128,7 +128,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 
     @SuppressWarnings("deprecation")

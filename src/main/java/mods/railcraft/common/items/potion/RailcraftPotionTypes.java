@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public final class RailcraftPotionTypes {
 
     private static final class PotionTypeContainer implements IRailcraftObjectContainer<PotionTypeRailcraft> {
-        private final Definition def;
+        private final SimpleDef def;
         private final Supplier<PotionTypeRailcraft> supplier;
         private final String name;
         private PotionTypeRailcraft potion;
@@ -33,11 +33,11 @@ public final class RailcraftPotionTypes {
         PotionTypeContainer(String name, Supplier<PotionTypeRailcraft> supplier) {
             this.supplier = supplier;
             this.name = name;
-            this.def = new Definition(this, name, null);
+            this.def = new SimpleDef(this, name);
         }
 
         @Override
-        public Definition getDef() {
+        public SimpleDef getDef() {
             return def;
         }
 

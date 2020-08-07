@@ -38,7 +38,7 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
     public BlockBrick(BrickTheme theme) {
         super(Material.ROCK);
         this.theme = theme;
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), BrickVariant.PAVER));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), BrickVariant.PAVER));
         setResistance(15);
         setHardness(5);
         setSoundType(SoundType.STONE);

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -115,16 +115,16 @@ public interface IRailcraftObject<T extends IForgeRegistryEntry<T>> extends IRai
         Class<?> clazz = variant == null ? null : variant.getClass();
         if (clazz != null && clazz.isAnonymousClass())
             clazz = clazz.getEnclosingClass();
-        if (getVariantEnum() != clazz)
+        if (getVariantEnumClass() != clazz)
             throw new RuntimeException("Incorrect Variant object used.");
     }
 
-    default @Nullable Class<? extends IVariantEnum> getVariantEnum() {
+    default @Nullable Class<? extends IVariantEnum> getVariantEnumClass() {
         return null;
     }
 
     default @Nullable IVariantEnum[] getVariants() {
-        Class<? extends IVariantEnum> variantEnum = getVariantEnum();
+        Class<? extends IVariantEnum> variantEnum = getVariantEnumClass();
         if (variantEnum != null) {
             return variantEnum.getEnumConstants();
         }

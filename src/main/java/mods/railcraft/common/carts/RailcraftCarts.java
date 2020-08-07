@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -174,7 +174,7 @@ public enum RailcraftCarts implements IRailcraftCartContainer {
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
-        this.def = new Definition(this, tag, null);
+        this.def = new Definition(tag);
         this.itemSupplier = itemSupplier;
         this.contentsSupplier = contentsSupplier;
         this.id = entityId;

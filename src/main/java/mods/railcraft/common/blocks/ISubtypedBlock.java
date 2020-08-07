@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,7 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
         private BlockMeta.Variant annotation;
         private Class<V> variantClass;
         private V[] variantValues;
-        private PropertyEnum<V> variantProperty;
+        private PropertyEnum<V> property;
     }
 
     default VariantData<V> getVariantData() {
@@ -38,19 +38,19 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
         data.annotation = getClass().getAnnotation(BlockMeta.Variant.class);
         //noinspection unchecked
         data.variantClass = (Class<V>) data.annotation.value();
-        data.variantValues = data.variantClass.getEnumConstants();
-        data.variantProperty = PropertyEnum.create(data.annotation.propertyName(), data.variantClass);
+        data.variantValues = ((Class<? extends V>) data.variantClass).getEnumConstants();
+        data.property = PropertyEnum.create(data.annotation.propertyName(), data.variantClass);
         return data;
     }
 
     @Nonnull
-    default IProperty<V> getVariantProperty() {
-        return getVariantData().variantProperty;
+    default IProperty<V> getVariantEnumProperty() {
+        return getVariantData().property;
     }
 
     @Nonnull
     @Override
-    default Class<? extends V> getVariantEnum() {
+    default Class<? extends V> getVariantEnumClass() {
         return getVariantData().variantClass;
     }
 
@@ -61,7 +61,7 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
     }
 
     default V getVariant(IBlockState state) {
-        return state.getValue(getVariantProperty());
+        return state.getValue(getVariantEnumProperty());
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +70,7 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
         if (variant == null)
             return ((Block) this).getDefaultState();
         checkVariant(variant);
-        return ((Block) this).getDefaultState().withProperty(getVariantProperty(), (V) variant);
+        return ((Block) this).getDefaultState().withProperty(getVariantEnumProperty(), (V) variant);
     }
 
     @Nonnull
@@ -78,7 +78,7 @@ public interface ISubtypedBlock<V extends Enum<V> & IVariantEnum> extends IRailc
         IBlockState state = ((Block) this).getDefaultState();
         V[] variantValues = getVariantData().variantValues;
         if (ArrayTools.indexInBounds(variantValues.length, meta))
-            state = state.withProperty(getVariantProperty(), variantValues[meta]);
+            state = state.withProperty(getVariantEnumProperty(), variantValues[meta]);
         return state;
     }
 }

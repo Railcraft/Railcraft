@@ -37,7 +37,7 @@ public abstract class BlockTankMetalGauge<T extends TileTankBase> extends BlockT
     protected BlockTankMetalGauge() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE).withProperty(POSITION, BlockStrengthGlass.Position.SINGLE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumColor.WHITE).withProperty(POSITION, BlockStrengthGlass.Position.SINGLE));
         fullBlock = false;
         lightOpacity = 0;
         setHarvestLevel("pickaxe", 1);
@@ -45,7 +45,7 @@ public abstract class BlockTankMetalGauge<T extends TileTankBase> extends BlockT
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), POSITION);
+        return new BlockStateContainer(this, getVariantEnumProperty(), POSITION);
     }
 
     @Override

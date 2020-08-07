@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -61,7 +61,7 @@ public class BlockRailcraftWall extends BlockWall implements IMaterialBlock {
     }
 
     @Override
-    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnumClass() {
         return Materials.class;
     }
 

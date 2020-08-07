@@ -122,7 +122,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
     private final int states;
     private final Class<? extends TrackKitRailcraft> trackInstance;
     private final Supplier<List<Object[]>> recipeSupplier;
-    private final Definition def;
+    private final SimpleDef def;
     private TrackKit trackKit;
     private boolean visible = true;
     private boolean allowedOnSlopes;
@@ -137,14 +137,14 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
 
     TrackKits(int states, String tag, int recipeOutput, Class<? extends TrackKitRailcraft> trackInstance, Supplier<List<Object[]>> recipeSupplier) {
         this.states = states;
-        this.def = new Definition(this, tag, null);
+        this.def = new SimpleDef(this, tag);
         this.recipeOutput = recipeOutput;
         this.trackInstance = trackInstance;
         this.recipeSupplier = recipeSupplier;
     }
 
     @Override
-    public Definition getDef() {
+    public SimpleDef getDef() {
         return def;
     }
 

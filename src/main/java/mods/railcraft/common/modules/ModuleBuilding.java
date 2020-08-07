@@ -14,7 +14,6 @@ import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
-import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
@@ -63,7 +62,35 @@ public class ModuleBuilding extends RailcraftModulePayload {
                         RailcraftBlocks.STAIR_PEARLIZED_PAVER,
                         RailcraftBlocks.STAIR_QUARRIED_PAVER,
                         RailcraftBlocks.STAIR_BADLANDS_PAVER,
-                        RailcraftBlocks.STAIR_SANDY_PAVER
+                        RailcraftBlocks.STAIR_SANDY_PAVER,
+
+                        RailcraftBlocks.SLAB_ABYSSAL_DOUBLE,
+                        RailcraftBlocks.SLAB_ABYSSAL,
+
+                        RailcraftBlocks.SLAB_BADLANDS_DOUBLE,
+                        RailcraftBlocks.SLAB_BADLANDS,
+
+                        RailcraftBlocks.SLAB_BLEACHED_BONE_DOUBLE,
+                        RailcraftBlocks.SLAB_BLEACHED_BONE,
+
+                        RailcraftBlocks.SLAB_BLOOD_STAINED_DOUBLE,
+                        RailcraftBlocks.SLAB_BLOOD_STAINED,
+
+                        RailcraftBlocks.SLAB_FROST_BOUND_DOUBLE,
+                        RailcraftBlocks.SLAB_FROST_BOUND,
+
+                        RailcraftBlocks.SLAB_INFERNAL_DOUBLE,
+                        RailcraftBlocks.SLAB_INFERNAL,
+
+                        RailcraftBlocks.SLAB_PEARLIZED_DOUBLE,
+                        RailcraftBlocks.SLAB_PEARLIZED,
+
+                        RailcraftBlocks.SLAB_QUARRIED_DOUBLE,
+                        RailcraftBlocks.SLAB_QUARRIED,
+
+                        RailcraftBlocks.SLAB_SANDY_DOUBLE,
+                        RailcraftBlocks.SLAB_SANDY
+
 //                        RailcraftBlocks.slab,
 //                        RailcraftBlocks.stair,
 //                        RailcraftBlocks.lantern,
@@ -95,7 +122,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                     CraftingPlugin.addShapedRecipe(EnumPost.WOOD_PLATFORM.getStack(),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.SLAB, Materials.CREOSOTE,
+                            'T', RailcraftBlocks.SLAB_ABYSSAL, // FIXME
                             'I', EnumPost.WOOD.getStack());
 
                     CraftingPlugin.addShapedRecipe(EnumPost.STONE.getStack(8),
@@ -107,7 +134,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                     CraftingPlugin.addShapedRecipe(EnumPost.STONE_PLATFORM.getStack(),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.SLAB, Materials.CONCRETE,
+                            'T', RailcraftBlocks.SLAB_ABYSSAL, // FIXME
                             'I', EnumPost.STONE.getStack());
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getStack(16);
@@ -127,7 +154,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                     CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getStack(4),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.SLAB, Materials.IRON,
+                            'T', RailcraftBlocks.SLAB_ABYSSAL, // FIXME
                             'I', EnumPost.METAL_UNPAINTED.getStack());
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(32);

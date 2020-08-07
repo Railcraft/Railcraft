@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -44,7 +44,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
 
     public BlockMetal() {
         super(Material.IRON);
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumMetal.BLOCK_COPPER));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumMetal.BLOCK_COPPER));
         setResistance(20);
         setHardness(5);
         setSoundType(SoundType.METAL);
@@ -84,7 +84,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
         IBlockState state = getDefaultState();
         if (variant != null) {
             checkVariant(variant);
-            state = state.withProperty(getVariantProperty(), (EnumMetal) variant);
+            state = state.withProperty(getVariantEnumProperty(), (EnumMetal) variant);
         }
         return state;
     }
@@ -98,7 +98,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(getVariantProperty(), EnumMetal.fromOrdinal(meta));
+        return getDefaultState().withProperty(getVariantEnumProperty(), EnumMetal.fromOrdinal(meta));
     }
 
     /**
@@ -106,12 +106,12 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty());
+        return new BlockStateContainer(this, getVariantEnumProperty());
     }
 
     private EnumMetal getVariant(IBlockAccess world, BlockPos pos) {
@@ -126,7 +126,7 @@ public class BlockMetal extends BlockRailcraftSubtyped<EnumMetal> {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 
     @SuppressWarnings("deprecation")

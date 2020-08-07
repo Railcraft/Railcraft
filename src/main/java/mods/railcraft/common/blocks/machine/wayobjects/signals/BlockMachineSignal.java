@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -96,7 +96,7 @@ public abstract class BlockMachineSignal<V extends Enum<V> & IEnumMachine<V>> ex
     @Override
     @SideOnly(Side.CLIENT)
     public @Nullable StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(getVariantProperty()).build();
+        return new StateMap.Builder().ignore(getVariantEnumProperty()).build();
     }
 
     @Override

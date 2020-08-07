@@ -9,8 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.plugins.forestry;
 
-import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.materials.Materials;
 import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.init.Blocks;
@@ -49,10 +47,6 @@ public class IcemanBackpack extends BaseBackpack {
         add(Blocks.SNOW_LAYER);
         add(Blocks.ICE);
         add(Blocks.PACKED_ICE);
-        for (Materials mat : Materials.MAT_SET_FROZEN) {
-            add(RailcraftBlocks.WALL.getStack(mat));
-            add(RailcraftBlocks.SLAB.getStack(mat));
-        }
         add(Items.SNOWBALL);
     }
 

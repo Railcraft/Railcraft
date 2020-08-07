@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,7 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 @BlockMeta.Variant(EnumOreMetalPoor.class)
 public class BlockOreMetalPoor extends BlockOreMetalBase<EnumOreMetalPoor> {
     public BlockOreMetalPoor() {
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumOreMetalPoor.COPPER));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumOreMetalPoor.COPPER));
     }
 
     @Override

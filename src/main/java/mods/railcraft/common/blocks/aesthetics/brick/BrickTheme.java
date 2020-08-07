@@ -262,7 +262,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     private final Definition def;
 
     BrickTheme(RailcraftBlocks container, MapColor mapColor) {
-        this.def = new Definition(this, "brick_" + name().toLowerCase(Locale.ROOT), null);
+        this.def = new Definition("brick_" + name().toLowerCase(Locale.ROOT));
         this.container = container;
         this.mapColor = mapColor;
         conditions().add(container);
@@ -296,7 +296,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         BlockBrick block = getBlock();
         block.checkVariant(variant);
         if (variant != null)
-            return block.getDefaultState().withProperty(block.getVariantProperty(), variant);
+            return block.getDefaultState().withProperty(block.getVariantEnumProperty(), variant);
         return null;
     }
 

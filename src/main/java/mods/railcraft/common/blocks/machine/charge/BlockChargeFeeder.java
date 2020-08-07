@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,7 +49,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
 
     public BlockChargeFeeder() {
-        IBlockState defaultState = blockState.getBaseState().withProperty(getVariantProperty(), FeederVariant.IC2).withProperty(REDSTONE, false);
+        IBlockState defaultState = blockState.getBaseState().withProperty(getVariantEnumProperty(), FeederVariant.IC2).withProperty(REDSTONE, false);
         setDefaultState(defaultState);
         setResistance(10F);
         setHardness(5F);
@@ -85,7 +85,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
         state = state.withProperty(REDSTONE, (meta & 0x8) > 0);
-        state = state.withProperty(getVariantProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
+        state = state.withProperty(getVariantEnumProperty(), EnumTools.fromOrdinal(meta & 0x7, FeederVariant.VALUES));
         return state;
     }
 
@@ -94,7 +94,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        int meta = state.getValue(getVariantProperty()).ordinal();
+        int meta = state.getValue(getVariantEnumProperty()).ordinal();
         if (state.getValue(REDSTONE))
             meta |= 0x8;
         return meta;
@@ -107,7 +107,7 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), REDSTONE);
+        return new BlockStateContainer(this, getVariantEnumProperty(), REDSTONE);
     }
 
     @Override
@@ -140,6 +140,6 @@ public class BlockChargeFeeder extends BlockMachineCharge<FeederVariant> {
 
     @Override
     public int damageDropped(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 }

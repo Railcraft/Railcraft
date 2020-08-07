@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,10 +11,8 @@ package mods.railcraft.common.blocks.aesthetics.materials;
 
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.BlockRailcraft;
-import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -30,9 +28,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
@@ -71,7 +67,7 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
     }
 
     @Override
-    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
+    public @Nullable Class<? extends IVariantEnum> getVariantEnumClass() {
         return Materials.class;
     }
 
@@ -85,16 +81,16 @@ public class BlockLantern extends BlockRailcraft implements IMaterialBlock {
             RailcraftRegistry.register(this, mat, getStack(mat));
             ForestryPlugin.addBackpackItem("forestry.builder", getStack(mat));
 
-            Ingredient slab;
-            if (RailcraftBlocks.SLAB.isEnabled())
-                slab = RailcraftBlocks.SLAB.getIngredient(mat);
-            else
-                slab = mat.getCraftingEquivalent();
-//            if (mat == Materials.SANDSTONE)
-//                slab = new ItemStack(Blocks.STONE_SLAB, 1, 1);
-//            else if (mat == Materials.STONE_BRICK)
-//                slab = new ItemStack(Blocks.STONE_SLAB, 1, 0);
-            CraftingPlugin.addShapedRecipe(getStack(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.TORCH));
+//            Ingredient slab;
+//            if (RailcraftBlocks.SLAB.isEnabled())
+//                slab = RailcraftBlocks.SLAB.getIngredient(mat);
+//            else
+//                slab = mat.getCraftingEquivalent();
+////            if (mat == Materials.SANDSTONE)
+////                slab = new ItemStack(Blocks.STONE_SLAB, 1, 1);
+////            else if (mat == Materials.STONE_BRICK)
+////                slab = new ItemStack(Blocks.STONE_SLAB, 1, 0);
+//            CraftingPlugin.addShapedRecipe(getStack(mat), " S ", " T ", " S ", 'S', slab, 'T', new ItemStack(Blocks.TORCH));
         }
         MatTools.defineCrusherRecipes(this);
     }

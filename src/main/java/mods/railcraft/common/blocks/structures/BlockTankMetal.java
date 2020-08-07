@@ -50,7 +50,7 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockEntity
     protected BlockTankMetal(Material material) {
         super(material);
         setSoundType(SoundType.METAL);
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumColor.WHITE));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumColor.WHITE));
     }
 
     public abstract TankDefinition getTankType();
@@ -87,7 +87,7 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockEntity
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty());
+        return new BlockStateContainer(this, getVariantEnumProperty());
     }
 
     /**
@@ -104,13 +104,13 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockEntity
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public @Nullable StateMapperBase getStateMapper() {
-        return new StateMap.Builder().ignore(getVariantProperty()).build();
+        return new StateMap.Builder().ignore(getVariantEnumProperty()).build();
     }
 
     @Override
@@ -122,7 +122,7 @@ public abstract class BlockTankMetal<T extends TileTankBase> extends BlockEntity
     public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color) {
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         if (getVariant(state).getDye() != color) {
-            world.setBlockState(pos, getDefaultState().withProperty(getVariantProperty(), EnumColor.fromDye(color)));
+            world.setBlockState(pos, getDefaultState().withProperty(getVariantEnumProperty(), EnumColor.fromDye(color)));
             return true;
         }
         return false;

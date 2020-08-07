@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -87,7 +87,7 @@ public class CrushedObsidian extends SimpleCube {
                 }
 
                 if (blockPos.getY() > 0)
-                    WorldPlugin.setBlockState(world, blockPos.up(), BlockGeneric.getBlock().getDefaultState().withProperty(BlockGeneric.getBlock().getVariantProperty(), EnumGeneric.CRUSHED_OBSIDIAN));
+                    WorldPlugin.setBlockState(world, blockPos.up(), BlockGeneric.getBlock().getDefaultState().withProperty(BlockGeneric.getBlock().getVariantEnumProperty(), EnumGeneric.CRUSHED_OBSIDIAN));
             }
         }
     }

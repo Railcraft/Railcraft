@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,8 +34,8 @@ public class ItemAnvil extends ItemAnvilBlock implements IRailcraftItemBlock {
     }
 
     @Override
-    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
-        return ((BlockRCAnvil) block).getVariantEnum();
+    public @Nullable Class<? extends IVariantEnum> getVariantEnumClass() {
+        return ((BlockRCAnvil) block).getVariantEnumClass();
     }
 
     @Override

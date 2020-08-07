@@ -67,7 +67,7 @@ public class ActuatorModel implements IModel {
 
         if (models.isEmpty()) {
             StateMapperBase baseStateMapper = new StateMap.Builder()
-                    .withName(block.getVariantProperty())
+                    .withName(block.getVariantEnumProperty())
                     .ignore(BlockMachineActuator.RED_FLAG)
                     .ignore(BlockMachineActuator.WHITE_FLAG)
                     .build();
@@ -75,7 +75,7 @@ public class ActuatorModel implements IModel {
 
             StateMapperBase redFlagStateMapper = new StateMap.Builder()
                     .withSuffix("_flag_red")
-                    .ignore(block.getVariantProperty())
+                    .ignore(block.getVariantEnumProperty())
                     .ignore(BlockMachineActuator.THROWN)
                     .ignore(BlockMachineActuator.FACING)
                     .ignore(BlockMachineActuator.WHITE_FLAG)
@@ -84,7 +84,7 @@ public class ActuatorModel implements IModel {
 
             StateMapperBase whiteFlagStateMapper = new StateMap.Builder()
                     .withSuffix("_flag_white")
-                    .ignore(block.getVariantProperty())
+                    .ignore(block.getVariantEnumProperty())
                     .ignore(BlockMachineActuator.THROWN)
                     .ignore(BlockMachineActuator.FACING)
                     .ignore(BlockMachineActuator.RED_FLAG)

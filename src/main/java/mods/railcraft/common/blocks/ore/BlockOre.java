@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -43,7 +43,7 @@ public class BlockOre extends BlockRailcraftSubtyped<EnumOre> {
 
     public BlockOre() {
         super(Material.ROCK);
-        setDefaultState(blockState.getBaseState().withProperty(getVariantProperty(), EnumOre.SULFUR));
+        setDefaultState(blockState.getBaseState().withProperty(getVariantEnumProperty(), EnumOre.SULFUR));
         setResistance(5);
         setHardness(3);
         setSoundType(SoundType.STONE);

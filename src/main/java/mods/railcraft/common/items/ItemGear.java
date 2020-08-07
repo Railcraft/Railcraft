@@ -55,20 +55,12 @@ public class ItemGear extends ItemRailcraftSubtyped {
                 "TT",
                 'T', "ingotBrass");
 
-        // FIXME this conflicts with the plate recipes... not sure what GeneralCamo was thinking here
-//        Crafters.rollingMachine().newRecipe(getStack(2, EnumGear.BUSHING))
-//                .time(200)
-//                .shaped(
-//                        "II",
-//                        "II",
-//                        'I', Ingredients.from("ingotBronze", "ingotBrass"));
-
         Crafters.rollingMachine().newRecipe(getStack(4, EnumGear.BUSHING))
                 .time(100)
                 .shaped(
                         "II",
                         "II",
-                        'I', Ingredients.from("plateBronze", "plateBrass"));
+                        'I', Ingredients.from("plateBronze", "plateBrass", "barBronze", "barBrass"));
 
         CraftingPlugin.addShapedRecipe(gear.getStack(EnumGear.BRASS),
                 " I ",

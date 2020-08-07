@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -88,7 +88,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), FACING, THROWN, RED_FLAG, WHITE_FLAG);
+        return new BlockStateContainer(this, getVariantEnumProperty(), FACING, THROWN, RED_FLAG, WHITE_FLAG);
     }
 
     @Override

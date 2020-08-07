@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -117,7 +117,6 @@ public class CraftingPlugin {
     }
 
     // TODO replace all this junk with a builder
-    @Deprecated
     public static void addShapedRecipe(ItemStack result, Object... recipeArray) {
         addShapedRecipe(null, DEFAULT_GROUP, result, recipeArray);
     }

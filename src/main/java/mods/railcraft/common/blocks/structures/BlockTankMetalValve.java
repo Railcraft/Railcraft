@@ -34,7 +34,7 @@ public abstract class BlockTankMetalValve<T extends TileTankBase> extends BlockT
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), OPTIONAL_AXIS);
+        return new BlockStateContainer(this, getVariantEnumProperty(), OPTIONAL_AXIS);
     }
 
     @Override

@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {
+      "all": "railcraft:blocks/brick_abyssal_1"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "variant": {
+      "brick": {"textures": {"all": "railcraft:blocks/brick_abyssal_1"}},
+      "paver": {"textures": {"all": "railcraft:blocks/brick_abyssal_0"}}
+    }
+  }
+}

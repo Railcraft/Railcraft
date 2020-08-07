@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,7 +56,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
         // TODO: This can't be right
         setSoundType(SoundType.STONE);
         setTickRandomly(true);
-        setDefaultState(getDefaultState().withProperty(getVariantProperty(), getVariants()[0]));
+        setDefaultState(getDefaultState().withProperty(getVariantEnumProperty(), getVariants()[0]));
 
         setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
 
@@ -74,7 +74,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty());
+        return new BlockStateContainer(this, getVariantEnumProperty());
     }
 
     /**
@@ -91,7 +91,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(getVariantProperty()).ordinal();
+        return state.getValue(getVariantEnumProperty()).ordinal();
     }
 
 //    /**
@@ -187,7 +187,7 @@ public class BlockMachine<V extends Enum<V> & IEnumMachine<V>> extends BlockEnti
 
     public final List<V> getCreativeList() {
         try {
-            Method creativeList = getVariantEnum().getMethod("getCreativeList");
+            Method creativeList = getVariantEnumClass().getMethod("getCreativeList");
             //noinspection unchecked
             return (List<V>) creativeList.invoke(null);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {

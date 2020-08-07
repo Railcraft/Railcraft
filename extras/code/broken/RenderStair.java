@@ -11,7 +11,6 @@ package mods.railcraft.client.render.broken;
 
 import mods.railcraft.client.render.tools.OpenGL;
 import mods.railcraft.common.blocks.aesthetics.materials.Materials;
-import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.stairs.TileStair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -57,7 +57,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
     @Override
     @SideOnly(Side.CLIENT)
     public @Nullable StateMapperBase getStateMapper() {
-        return new StateMap.Builder().withName(getVariantProperty()).build();
+        return new StateMap.Builder().withName(getVariantEnumProperty()).build();
     }
 
     @SuppressWarnings("deprecation")
@@ -79,7 +79,7 @@ public class BlockWorldspike extends BlockMachine<WorldspikeVariant> {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, getVariantProperty(), ENABLED);
+        return new BlockStateContainer(this, getVariantEnumProperty(), ENABLED);
     }
 
     @Override

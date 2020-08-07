@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.core;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.plugins.misc.Mod;
 import mods.railcraft.common.util.crafting.Ingredients;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
@@ -25,6 +26,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -33,18 +36,90 @@ import java.util.function.Supplier;
  * Created by CovertJaguar on 4/13/2016.
  */
 public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extends IIngredientSource {
-    class Definition {
-        public final Set<Class<? extends IRailcraftModule>> modules = new HashSet<>();
-        private final InitializationConditional conditions = new InitializationConditional();
-        private final String tag;
-        private final @Nullable Supplier<?> altRecipeObject;
-        public final ResourceLocation registryName;
+    class SimpleDef extends Definition<SimpleDef> {
+        public SimpleDef(IRailcraftObjectContainer<?> obj, String tag) {
+            super(tag);
+        }
 
-        public Definition(IRailcraftObjectContainer<?> obj, String tag, @Nullable Supplier<?> altRecipeObject) {
-            this.tag = tag;
+        public SimpleDef(IRailcraftObjectContainer<?> obj, String tag, @Nullable Supplier<?> altRecipeObject) {
+            super(tag, altRecipeObject);
+        }
+    }
+
+    class Definition<D extends Definition<D>> {
+        public final Set<Class<? extends IRailcraftModule>> modules = new HashSet<>();
+        protected final InitializationConditional conditions = new InitializationConditional();
+        protected String tag;
+        protected @Nullable Supplier<?> altRecipeObject;
+        public ResourceLocation registryName;
+
+        public Definition(String tag) {
+            tag(tag);
+        }
+
+        public Definition(String tag, @Nullable Supplier<?> altRecipeObject) {
             this.altRecipeObject = altRecipeObject;
-            registryName = new ResourceLocation(obj.getNamespace(), tag);
+            tag(tag);
+        }
+
+        {
             conditions.add(c -> !modules.isEmpty(), () -> "it has no module");
+        }
+
+        @SuppressWarnings("unchecked")
+        protected D getDef() {
+            return (D) this;
+        }
+
+        public D tag(String tag) {
+            this.tag = tag;
+            registryName = new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, tag);
+            return getDef();
+        }
+
+        public D alt(Supplier<?> altRecipeObject) {
+            this.altRecipeObject = altRecipeObject;
+            return getDef();
+        }
+
+        public D condition(IRailcraftObjectContainer<?> objectContainer) {
+            conditions.add(objectContainer);
+            return getDef();
+        }
+
+        public D condition(IRailcraftObjectContainer<?> objectContainer, IVariantEnum variant) {
+            conditions.add(objectContainer, variant);
+            return getDef();
+        }
+
+        public D condition(Class<? extends IRailcraftModule> moduleClass) {
+            conditions.add(moduleClass);
+            return getDef();
+        }
+
+        public D condition(Mod mod) {
+            conditions.add(mod);
+            return getDef();
+        }
+
+        public D condition(IVariantEnum variant) {
+            conditions.add(variant);
+            return getDef();
+        }
+
+        public D condition(BooleanSupplier condition, Supplier<String> failureReason) {
+            conditions.add(condition, failureReason);
+            return getDef();
+        }
+
+        public D condition(Predicate<IRailcraftObjectContainer<?>> condition, Supplier<String> failureReason) {
+            conditions.add(condition, failureReason);
+            return getDef();
+        }
+
+        public D condition(InitializationConditional condition) {
+            conditions.add(condition);
+            return getDef();
         }
     }
 
@@ -92,11 +167,6 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         }).orElse(false);
     }
 
-    @SuppressWarnings("SameReturnValue")
-    default String getNamespace() {
-        return RailcraftConstants.RESOURCE_DOMAIN;
-    }
-
     default String getBaseTag() {
         return getDef().tag;
     }
@@ -140,7 +210,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         Object obj = getObject()
                 .filter(t -> isEnabled())
                 .map(o -> {
-                    if (o.getVariantEnum() != null && variant == null)
+                    if (o.getVariantEnumClass() != null && variant == null)
                         return o.getWildcard();
                     o.checkVariant(variant);
                     return o.getIngredient(variant);
@@ -169,6 +239,7 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
      *
      * @param source The module that loads this object
      */
+    @SuppressWarnings("unchecked")
     default void addedBy(Class<? extends IRailcraftModule> source) {
         getDef().modules.add(source);
     }

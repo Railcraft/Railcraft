@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,8 +28,8 @@ public class ItemBlockRailcraftSubtyped<B extends Block & IRailcraftBlock> exten
     }
 
     @Override
-    public @Nullable Class<? extends IVariantEnum> getVariantEnum() {
-        return block.getVariantEnum();
+    public @Nullable Class<? extends IVariantEnum> getVariantEnumClass() {
+        return block.getVariantEnumClass();
     }
 
     @Override

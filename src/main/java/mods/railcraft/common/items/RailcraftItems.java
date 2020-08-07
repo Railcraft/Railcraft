@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -176,7 +176,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     WHISTLE_TUNER(ItemWhistleTuner::new, "tool_whistle_tuner");
     public static final RailcraftItems[] VALUES = values();
     private final Supplier<Item> itemSupplier;
-    private final Definition def;
+    private final SimpleDef def;
     private Item item;
     private Optional<IRailcraftItemSimple> railcraftObject = Optional.empty();
 
@@ -185,13 +185,13 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
     }
 
     RailcraftItems(Supplier<Item> itemSupplier, String tag, @Nullable Supplier<Object> alt) {
-        this.def = new Definition(this, tag, alt);
+        this.def = new SimpleDef(this, tag, alt);
         this.itemSupplier = itemSupplier;
         conditions().add(RailcraftConfig::isItemEnabled, () -> "disabled via config");
     }
 
     @Override
-    public Definition getDef() {
+    public SimpleDef getDef() {
         return def;
     }
 
