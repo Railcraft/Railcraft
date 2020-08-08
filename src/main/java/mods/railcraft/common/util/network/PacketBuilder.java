@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -125,11 +125,15 @@ public final class PacketBuilder implements ISignalPacketBuilder {
             try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
                  RailcraftOutputStream data = new RailcraftOutputStream(out)) {
                 widget.writeServerSyncData(listener, data);
-                PacketGuiWidget pkt = new PacketGuiWidget(windowId, widget, byteBuf.array());
+                byte[] syncData = new byte[byteBuf.readableBytes()];
+                byteBuf.readBytes(syncData);
+                PacketGuiWidget pkt = new PacketGuiWidget(windowId, widget, syncData);
                 PacketDispatcher.sendToPlayer(pkt, (EntityPlayerMP) listener);
             } catch (IOException ex) {
                 if (Game.DEVELOPMENT_VERSION)
                     throw new RuntimeException(ex);
+            } finally {
+                byteBuf.release();
             }
         }
     }

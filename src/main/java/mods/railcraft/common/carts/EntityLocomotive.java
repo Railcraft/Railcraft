@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -668,12 +668,13 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public void readSpawnData(ByteBuf data) {
-        try {
-            DataInputStream byteSteam = new DataInputStream(new ByteBufInputStream(data));
-            String name = byteSteam.readUTF();
+        try (ByteBufInputStream byteBufStream = new ByteBufInputStream(data);
+             DataInputStream byteStream = new DataInputStream(byteBufStream)) {
+
+            String name = byteStream.readUTF();
             if (!name.isEmpty())
                 setCustomNameTag(name);
-            model = byteSteam.readUTF();
+            model = byteStream.readUTF();
         } catch (IOException ignored) {
         }
     }

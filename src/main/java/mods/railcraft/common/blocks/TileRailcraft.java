@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import mods.railcraft.api.core.INetworkedObject;
-import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.interfaces.ITile;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -98,12 +97,16 @@ public abstract class TileRailcraft extends TileEntity implements INetworkedObje
         try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
              RailcraftOutputStream data = new RailcraftOutputStream(out)) {
             writePacketData(data);
+            byte[] syncData = new byte[byteBuf.readableBytes()];
+            byteBuf.readBytes(syncData);
+            nbt.setByteArray("sync", syncData);
         } catch (IOException e) {
             Game.log().throwable("Error constructing tile packet: {0}", e, getClass());
             if (Game.DEVELOPMENT_VERSION)
                 throw new RuntimeException(e);
+        } finally {
+            byteBuf.release();
         }
-        nbt.setByteArray("sync", byteBuf.array());
         return nbt;
     }
 
