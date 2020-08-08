@@ -48,7 +48,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     public static final int STEAM_HIGH = 32;
     public static final float HEAT_LOW = SteamConstants.MAX_HEAT_LOW;
     public static final float HEAT_HIGH = SteamConstants.MAX_HEAT_HIGH;
-    protected static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    protected static final List<StructurePattern> patterns = new ArrayList<>();
     private static final Set<IBlockState> boilerBlocks = new HashSet<>();
     private static final Set<IBlockState> fireboxBlocks = new HashSet<>();
     private boolean explode;
@@ -84,12 +84,12 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         super(patterns);
     }
 
-    private static MultiBlockPattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int capacity) {
-        MultiBlockPattern.Builder builder = MultiBlockPattern.builder();
+    private static StructurePattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int capacity) {
+        StructurePattern.Builder builder = StructurePattern.builder();
         char[][] level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                level[x][z] = MultiBlockPattern.EMPTY_MARKER;
+                level[x][z] = StructurePattern.EMPTY_MARKER;
             }
         }
         builder.level(level);
@@ -97,7 +97,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_MARKER : 'F';
+                char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? StructurePattern.EMPTY_MARKER : 'F';
                 level[x][z] = m;
             }
         }
@@ -107,7 +107,7 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
             level = new char[width + 2][width + 2];
             for (int x = 0; x < width + 2; x++) {
                 for (int z = 0; z < width + 2; z++) {
-                    char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? MultiBlockPattern.EMPTY_MARKER : tank;
+                    char m = x == 0 || z == 0 || x == width + 1 || z == width + 1 ? StructurePattern.EMPTY_MARKER : tank;
                     level[x][z] = m;
                 }
             }
@@ -117,11 +117,11 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
         level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
             for (int z = 0; z < width + 2; z++) {
-                level[x][z] = MultiBlockPattern.EMPTY_MARKER;
+                level[x][z] = StructurePattern.EMPTY_MARKER;
             }
         }
         //noinspection UnnecessaryLocalVariable
-        MultiBlockPattern ret = builder
+        StructurePattern ret = builder
                 .level(level)
                 .attachedData(new BoilerData(width * width * tankHeight, ticks, heat, capacity))
                 .master(offset, 1, offset)

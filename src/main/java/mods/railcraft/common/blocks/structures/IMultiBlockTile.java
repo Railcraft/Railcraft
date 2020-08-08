@@ -28,11 +28,11 @@ public interface IMultiBlockTile extends ITile {
 
     @Nullable TileMultiBlock getMasterBlock();
 
-    @Nullable MultiBlockPattern getCurrentPattern();
+    @Nullable StructurePattern getCurrentPattern();
 
     MultiBlockState getState();
 
     BlockPos getPatternPosition();
 
-    Collection<? extends MultiBlockPattern> getPatterns();
+    Collection<? extends StructurePattern> getPatterns();
 }

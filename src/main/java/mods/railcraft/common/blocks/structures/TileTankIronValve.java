@@ -142,7 +142,7 @@ public class TileTankIronValve extends TileTankBase implements IFluidHandler, IT
         if (!isStructureValid())
             return base;
         BlockPos pos = getPatternPosition();
-        MultiBlockPattern pattern = requireNonNull(getPattern());
+        StructurePattern pattern = requireNonNull(getPattern());
         for (EnumFacing facing : EnumFacing.VALUES) {
             if (isMapPositionOtherBlock(pattern.getPatternMarkerChecked(pos.offset(facing)))) {
                 base = base.withProperty(BlockTankIronValve.OPTIONAL_AXIS, BlockTankIronValve.OptionalAxis.from(facing.getAxis()));

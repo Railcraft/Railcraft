@@ -15,7 +15,7 @@ import com.google.common.collect.Multimaps;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.interfaces.IDropsInv;
-import mods.railcraft.common.blocks.structures.MultiBlockPattern;
+import mods.railcraft.common.blocks.structures.StructurePattern;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -60,25 +60,25 @@ public class StructureLogic extends Logic {
     private final TileLogic tile;
     private final String structureKey;
     public final Logic functionalLogic;
-    private final List<? extends MultiBlockPattern> patterns;
+    private final List<? extends StructurePattern> patterns;
     private final int maxSize;
     private final List<TileLogic> components = new ArrayList<>();
     private final List<TileLogic> componentsView = Collections.unmodifiableList(components);
-    public final ListMultimap<MultiBlockPattern.State, MultiBlockPattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockPattern.State.class), ArrayList::new);
+    public final ListMultimap<StructurePattern.State, StructurePattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(StructurePattern.State.class), ArrayList::new);
     protected boolean isMaster;
     private boolean requestPacket;
     private StructureState state = StructureState.UNTESTED;
     private @Nullable BlockPos masterPos;
-    private @Nullable MultiBlockPattern currentPattern;
+    private @Nullable StructurePattern currentPattern;
     private @Nullable BlockPos posInPattern;
     private char marker = 'O';
 
-    public StructureLogic(String structureKey, TileLogic tile, List<? extends MultiBlockPattern> patterns, Logic functionalLogic) {
+    public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns, Logic functionalLogic) {
         super(Adapter.of(tile));
         this.structureKey = structureKey;
         this.tile = tile;
         this.patterns = patterns;
-        this.maxSize = patterns.stream().mapToInt(MultiBlockPattern::getPatternSize).max().orElse(7 * 7 * 7);
+        this.maxSize = patterns.stream().mapToInt(StructurePattern::getPatternSize).max().orElse(7 * 7 * 7);
 
         // Note we don't set the parent.
         // So getLogic() calls from the functional logic can only see the functional logic tree.
@@ -122,11 +122,11 @@ public class StructureLogic extends Logic {
         return posInPattern;
     }
 
-    public final @Nullable MultiBlockPattern getPattern() {
+    public final @Nullable StructurePattern getPattern() {
         return currentPattern;
     }
 
-    private void setPattern(@Nullable MultiBlockPattern pattern, @Nullable BlockPos posInPattern) {
+    private void setPattern(@Nullable StructurePattern pattern, @Nullable BlockPos posInPattern) {
         this.currentPattern = pattern;
         if (!Objects.equals(this.posInPattern, posInPattern)) {
             this.posInPattern = posInPattern == null ? null : posInPattern.toImmutable();
@@ -209,12 +209,12 @@ public class StructureLogic extends Logic {
         components.clear();
         components.add(tile);
 
-        if (patternStates.containsKey(MultiBlockPattern.State.VALID)) {
+        if (patternStates.containsKey(StructurePattern.State.VALID)) {
             state = StructureState.VALID;
             isMaster = true;
 //             System.out.println("structure complete");
 
-            MultiBlockPattern pattern = patternStates.get(MultiBlockPattern.State.VALID).get(0);
+            StructurePattern pattern = patternStates.get(StructurePattern.State.VALID).get(0);
 
             int xWidth = pattern.getPatternWidthX();
             int zWidth = pattern.getPatternWidthZ();
@@ -247,7 +247,7 @@ public class StructureLogic extends Logic {
             newComponents.forEach((pos, logic) -> logic.setPattern(pattern, pos));
 
             MinecraftForge.EVENT_BUS.post(new MultiBlockEvent.Form(tile));
-        } else if (patternStates.containsKey(MultiBlockPattern.State.NOT_LOADED)) {
+        } else if (patternStates.containsKey(StructurePattern.State.NOT_LOADED)) {
             state = StructureState.UNKNOWN;
         } else {
             state = StructureState.INVALID;
@@ -383,7 +383,7 @@ public class StructureLogic extends Logic {
         isMaster = data.getBoolean("master");
         if (data.hasKey("marker"))
             marker = data.getString("marker").charAt(0);
-        MultiBlockPattern pat = null;
+        StructurePattern pat = null;
         try {
             byte index = data.getByte("pattern");
             pat = index < 0 ? null : patterns.get(index);
@@ -416,7 +416,7 @@ public class StructureLogic extends Logic {
         if (state == StructureState.VALID) {
             int patternIndex = data.readByte();
             patternIndex = MathHelper.clamp(patternIndex, 0, patterns.size() - 1);
-            MultiBlockPattern pat = patterns.get(patternIndex);
+            StructurePattern pat = patterns.get(patternIndex);
 
             BlockPos posInPattern = data.readBlockPos();
             setPattern(pat, posInPattern);
@@ -449,7 +449,7 @@ public class StructureLogic extends Logic {
         return getMasterLogic().isPresent();
     }
 
-    public List<? extends MultiBlockPattern> getPatterns() {
+    public List<? extends StructurePattern> getPatterns() {
         return patterns;
     }
 

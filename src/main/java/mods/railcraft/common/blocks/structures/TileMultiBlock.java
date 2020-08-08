@@ -47,19 +47,19 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     //    private static final int UNKNOWN_STATE_RECHECK = 256;
     private static final int NETWORK_RECHECK = 16;
     private final Timer netTimer = new Timer();
-    private final List<? extends MultiBlockPattern> patterns;
+    private final List<? extends StructurePattern> patterns;
     private final List<TileMultiBlock> components = new ArrayList<>();
     private final List<TileMultiBlock> componentsView = Collections.unmodifiableList(components);
-    public final ListMultimap<MultiBlockPattern.State, MultiBlockPattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(MultiBlockPattern.State.class), ArrayList::new);
+    public final ListMultimap<StructurePattern.State, StructurePattern> patternStates = Multimaps.newListMultimap(new EnumMap<>(StructurePattern.State.class), ArrayList::new);
     protected boolean isMaster;
     private BlockPos posInPattern = new BlockPos(0, 0, 0);
     private boolean requestPacket;
     private MultiBlockState state;
     private @Nullable TileMultiBlock masterBlock;
-    private @Nullable MultiBlockPattern currentPattern;
+    private @Nullable StructurePattern currentPattern;
     private @Nullable UUID uuidMaster;
 
-    protected TileMultiBlock(List<? extends MultiBlockPattern> patterns) {
+    protected TileMultiBlock(List<? extends StructurePattern> patterns) {
         this.patterns = patterns;
         currentPattern = null;
         state = MultiBlockState.UNTESTED;
@@ -90,7 +90,7 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
         this.uuidMaster = master.getUUID();
     }
 
-    protected void onPatternLock(MultiBlockPattern pattern) {
+    protected void onPatternLock(StructurePattern pattern) {
     }
 
     protected void onPatternChanged() {
@@ -113,12 +113,12 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
         posInPattern = new BlockPos(x, y, z);
     }
 
-    public final @Nullable MultiBlockPattern getPattern() {
+    public final @Nullable StructurePattern getPattern() {
         assert !(isStructureValid() && (currentPattern == null));
         return currentPattern;
     }
 
-    public final void setPattern(@Nullable MultiBlockPattern pattern) {
+    public final void setPattern(@Nullable StructurePattern pattern) {
         if (Game.isHost(world) && currentPattern != pattern) {
             onPatternChanged();
         }
@@ -163,12 +163,12 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
         components.clear();
         components.add(this);
 
-        if (patternStates.containsKey(MultiBlockPattern.State.VALID)) {
+        if (patternStates.containsKey(StructurePattern.State.VALID)) {
             state = MultiBlockState.VALID;
             isMaster = true;
 //             System.out.println("structure complete");
 
-            MultiBlockPattern pattern = patternStates.get(MultiBlockPattern.State.VALID).get(0);
+            StructurePattern pattern = patternStates.get(StructurePattern.State.VALID).get(0);
 
             int xWidth = pattern.getPatternWidthX();
             int zWidth = pattern.getPatternWidthZ();
@@ -208,7 +208,7 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
             });
 
             MinecraftForge.EVENT_BUS.post(new Form(this));
-        } else if (patternStates.containsKey(MultiBlockPattern.State.NOT_LOADED)) {
+        } else if (patternStates.containsKey(StructurePattern.State.NOT_LOADED)) {
             state = MultiBlockState.UNKNOWN;
         } else {
             state = MultiBlockState.INVALID;
@@ -399,7 +399,7 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
             byte patternIndex = data.readByte();
             patternIndex = (byte) Math.max(patternIndex, 0);
             patternIndex = (byte) Math.min(patternIndex, patterns.size() - 1);
-            MultiBlockPattern pat = patterns.get(patternIndex);
+            StructurePattern pat = patterns.get(patternIndex);
 
             byte pX = data.readByte();
             byte pY = data.readByte();
@@ -494,12 +494,12 @@ public abstract class TileMultiBlock extends TileRailcraftTicking implements ISm
     }
 
     @Override
-    public @Nullable MultiBlockPattern getCurrentPattern() {
+    public @Nullable StructurePattern getCurrentPattern() {
         return currentPattern;
     }
 
     @Override
-    public List<? extends MultiBlockPattern> getPatterns() {
+    public List<? extends StructurePattern> getPatterns() {
         return patterns;
     }
 

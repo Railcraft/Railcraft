@@ -48,7 +48,7 @@ public final class TileRockCrusher extends TileCrafter {
     private static final double SUCKING_POWER_COST = 1000;
     private static final double KILLING_POWER_COST = 5000;
 
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map1 = {
@@ -77,7 +77,7 @@ public final class TileRockCrusher extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O'}
                 }
         };
-        patterns.add(new MultiBlockPattern(map1));
+        patterns.add(new StructurePattern(map1));
 
         char[][][] map2 = {
                 {
@@ -109,7 +109,7 @@ public final class TileRockCrusher extends TileCrafter {
                         {'O', 'O', 'O', 'O'}
                 }
         };
-        patterns.add(new MultiBlockPattern(map2));
+        patterns.add(new StructurePattern(map2));
     }
 
     public TileRockCrusher() {
@@ -163,7 +163,7 @@ public final class TileRockCrusher extends TileCrafter {
     }
 
     public static void placeRockCrusher(World world, BlockPos pos, int patternIndex, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
-        MultiBlockPattern pattern = TileRockCrusher.patterns.get(patternIndex);
+        StructurePattern pattern = TileRockCrusher.patterns.get(patternIndex);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         IBlockState state = RailcraftBlocks.ROCK_CRUSHER.getState(null);
         blockMapping.put('B', state);

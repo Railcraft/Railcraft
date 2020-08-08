@@ -44,7 +44,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     public static void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
-        for (MultiBlockPattern pattern : TileBoiler.patterns) {
+        for (StructurePattern pattern : TileBoiler.patterns) {
             if (pattern.getPatternHeight() - 3 == height && pattern.getPatternWidthX() - 2 == width) {
                 Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
                 blockMapping.put('F', RailcraftBlocks.BOILER_FIREBOX_FLUID.getDefaultState());

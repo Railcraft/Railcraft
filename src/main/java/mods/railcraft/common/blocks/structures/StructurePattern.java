@@ -30,7 +30,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class MultiBlockPattern {
+public final class StructurePattern {
 
     public static final char EMPTY_MARKER = 'O';
     private final char[][][] pattern;
@@ -47,23 +47,23 @@ public final class MultiBlockPattern {
         return new Builder();
     }
 
-    public MultiBlockPattern(char[][][] pattern) {
+    public StructurePattern(char[][][] pattern) {
         this(pattern, 1, 1, 1);
     }
 
-    public MultiBlockPattern(char[][][] pattern, Object... attachedData) {
+    public StructurePattern(char[][][] pattern, Object... attachedData) {
         this(pattern, new BlockPos(1, 1, 1), null, attachedData);
     }
 
-    public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ) {
+    public StructurePattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ) {
         this(pattern, offsetX, offsetY, offsetZ, null);
     }
 
-    public MultiBlockPattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ, @Nullable AxisAlignedBB entityCheckBounds) {
+    public StructurePattern(char[][][] pattern, int offsetX, int offsetY, int offsetZ, @Nullable AxisAlignedBB entityCheckBounds) {
         this(pattern, new BlockPos(offsetX, offsetY, offsetZ), entityCheckBounds);
     }
 
-    MultiBlockPattern(char[][][] pattern, BlockPos offset, @Nullable AxisAlignedBB entityCheckBounds, Object... attachedData) {
+    StructurePattern(char[][][] pattern, BlockPos offset, @Nullable AxisAlignedBB entityCheckBounds, Object... attachedData) {
         this.pattern = pattern;
         this.masterOffset = offset;
         this.entityCheckBounds = entityCheckBounds;
@@ -76,6 +76,7 @@ public final class MultiBlockPattern {
         return entityCheckBounds.offset(masterPos.getX(), masterPos.getY(), masterPos.getZ());
     }
 
+    @Deprecated
     public char getPatternMarkerChecked(BlockPos posInPattern) {
         int x = posInPattern.getX();
         int y = posInPattern.getY();
@@ -357,9 +358,9 @@ public final class MultiBlockPattern {
          *
          * @return The created multiblock pattern
          */
-        public MultiBlockPattern build() {
+        public StructurePattern build() {
             char[][][] chars = levels.toArray(new char[0][][]);
-            return new MultiBlockPattern(chars, masterOffset, box, attachedData.toArray());
+            return new StructurePattern(chars, masterOffset, box, attachedData.toArray());
         }
     }
 }

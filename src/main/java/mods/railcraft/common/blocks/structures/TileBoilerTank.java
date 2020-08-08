@@ -42,7 +42,7 @@ public abstract class TileBoilerTank extends TileBoiler {
         if (marker == 'O')
             return state;
         BlockPos patternPos = getPatternPosition();
-        MultiBlockPattern pattern = requireNonNull(getCurrentPattern());
+        StructurePattern pattern = requireNonNull(getCurrentPattern());
         state = state
                 .withProperty(BlockBoilerTank.NORTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
                 .withProperty(BlockBoilerTank.SOUTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)

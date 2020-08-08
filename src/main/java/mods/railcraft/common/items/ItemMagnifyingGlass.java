@@ -18,8 +18,8 @@ import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
-import mods.railcraft.common.blocks.structures.MultiBlockPattern;
-import mods.railcraft.common.blocks.structures.MultiBlockPattern.State;
+import mods.railcraft.common.blocks.structures.StructurePattern;
+import mods.railcraft.common.blocks.structures.StructurePattern.State;
 import mods.railcraft.common.blocks.structures.TileMultiBlock;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
@@ -154,7 +154,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
                 ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (tile.isValidMaster() ? "true" : "false"));
             } else
                 for (State returnState : EnumSet.complementOf(EnumSet.of(State.VALID))) {
-                    List<MultiBlockPattern> pats = tile.patternStates.get(returnState);
+                    List<StructurePattern> pats = tile.patternStates.get(returnState);
                     if (!pats.isEmpty()) {
                         List<Integer> indexList = pats.stream().map(map -> tile.getPatterns().indexOf(map)).collect(Collectors.toList());
                         ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, indexList.toString());
@@ -173,7 +173,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
                     ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (logic.isValidMaster() ? "true" : "false"));
                 } else
                     for (State returnState : EnumSet.complementOf(EnumSet.of(State.VALID))) {
-                        List<MultiBlockPattern> pats = logic.patternStates.get(returnState);
+                        List<StructurePattern> pats = logic.patternStates.get(returnState);
                         if (!pats.isEmpty()) {
                             List<Integer> indexList = pats.stream().map(map -> logic.getPatterns().indexOf(map)).collect(Collectors.toList());
                             ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, indexList.toString());

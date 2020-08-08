@@ -35,7 +35,7 @@ import java.util.List;
 
 public final class TileFluxTransformer extends TileLogic implements IEnergyStorage {
 
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map = {
@@ -61,7 +61,7 @@ public final class TileFluxTransformer extends TileLogic implements IEnergyStora
                         {'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O'},
                         {'*', 'O', 'O', '*'},},};
-        patterns.add(new MultiBlockPattern(map));
+        patterns.add(new StructurePattern(map));
     }
 
     public TileFluxTransformer() {
@@ -70,7 +70,7 @@ public final class TileFluxTransformer extends TileLogic implements IEnergyStora
     }
 
     public static void placeFluxTransformer(World world, BlockPos pos) {
-        MultiBlockPattern pattern = TileFluxTransformer.patterns.get(0);
+        StructurePattern pattern = TileFluxTransformer.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.FLUX_TRANSFORMER.getDefaultState());
         pattern.placeStructure(world, pos, blockMapping);

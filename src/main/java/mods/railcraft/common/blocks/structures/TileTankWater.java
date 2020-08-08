@@ -32,7 +32,7 @@ public class TileTankWater extends TileLogic {
     private static final int CAP_PER_BLOCK = 16 * FluidTools.BUCKET_VOLUME;
     private static final int OUTPUT_RATE = 40;
     private static final EnumFacing[] OUTPUT_FACES = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map1 = {
@@ -71,7 +71,7 @@ public class TileTankWater extends TileLogic {
                         {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },};
-        patterns.add(new MultiBlockPattern(map1, new BlockPos(2, 1, 2), null, CAP_PER_BLOCK * 27));
+        patterns.add(new StructurePattern(map1, new BlockPos(2, 1, 2), null, CAP_PER_BLOCK * 27));
         char[][][] map2 = {
                 {
                         {'O', 'O', 'O', 'O', 'O'},
@@ -115,7 +115,7 @@ public class TileTankWater extends TileLogic {
                         {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },};
-        patterns.add(new MultiBlockPattern(map2, new BlockPos(2, 1, 2), null, CAP_PER_BLOCK * 36));
+        patterns.add(new StructurePattern(map2, new BlockPos(2, 1, 2), null, CAP_PER_BLOCK * 36));
     }
 
     public TileTankWater() {
@@ -129,7 +129,7 @@ public class TileTankWater extends TileLogic {
     }
 
     public static void placeWaterTank(World world, BlockPos pos, int water) {
-        MultiBlockPattern pattern = TileTankWater.patterns.get(0);
+        StructurePattern pattern = TileTankWater.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.TANK_WATER.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);

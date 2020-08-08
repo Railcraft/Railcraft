@@ -83,7 +83,7 @@ public abstract class TileBoilerFirebox extends TileBoiler implements ISidedInve
     }
 
     @Override
-    protected void onPatternLock(MultiBlockPattern pattern) {
+    protected void onPatternLock(StructurePattern pattern) {
         int capacity = getNumTanks() * FluidTools.BUCKET_VOLUME;
         tankManager.setCapacity(TANK_STEAM, capacity * getSteamCapacityPerTank());
         tankManager.setCapacity(TANK_WATER, capacity * 4);

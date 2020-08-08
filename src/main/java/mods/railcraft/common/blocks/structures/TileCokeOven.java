@@ -39,7 +39,7 @@ import java.util.List;
 
 public final class TileCokeOven extends TileCrafter {
 
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map1 = {
@@ -78,7 +78,7 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },};
-        patterns.add(new MultiBlockPattern(map1, new BlockPos(2, 1, 2), null, CokeOvenLogic.TANK_CAPACITY, 1));
+        patterns.add(new StructurePattern(map1, new BlockPos(2, 1, 2), null, CokeOvenLogic.TANK_CAPACITY, 1));
         char[][][] map2 = {
                 {
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -114,7 +114,7 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
                 },};
-        patterns.add(new MultiBlockPattern(map2, new BlockPos(2, 1, 4), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
+        patterns.add(new StructurePattern(map2, new BlockPos(2, 1, 4), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
         char[][][] map3 = {
                 {
                         {'O', 'O', 'O', 'O', 'O'},
@@ -171,7 +171,7 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O'},
                         {'O', 'O', 'O', 'O', 'O'}
                 },};
-        patterns.add(new MultiBlockPattern(map3, new BlockPos(4, 1, 2), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
+        patterns.add(new StructurePattern(map3, new BlockPos(4, 1, 2), null, CokeOvenLogic.TANK_CAPACITY * 3, 3));
         char[][][] map4 = {
                 {
                         {'O', 'O', 'O', 'O', 'O', 'O'},
@@ -222,7 +222,7 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O', 'O'}
                 },};
         AxisAlignedBB entityCheck = new AxisAlignedBB(0, 1, 0, 2, 3, 2);
-        patterns.add(new MultiBlockPattern(map4, new BlockPos(2, 1, 2), entityCheck, CokeOvenLogic.TANK_CAPACITY * 3, 3));
+        patterns.add(new StructurePattern(map4, new BlockPos(2, 1, 2), entityCheck, CokeOvenLogic.TANK_CAPACITY * 3, 3));
         char[][][] map5 = {
                 {
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -288,7 +288,7 @@ public final class TileCokeOven extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
                 },};
         entityCheck = new AxisAlignedBB(-1, 1, -1, 2, 4, 2);
-        patterns.add(new MultiBlockPattern(map5, new BlockPos(3, 1, 3), entityCheck, CokeOvenLogic.TANK_CAPACITY * 5, 5));
+        patterns.add(new StructurePattern(map5, new BlockPos(3, 1, 3), entityCheck, CokeOvenLogic.TANK_CAPACITY * 5, 5));
     }
 
     public TileCokeOven() {
@@ -343,7 +343,7 @@ public final class TileCokeOven extends TileCrafter {
     }
 
     public static void placeCokeOven(World world, BlockPos pos, int creosote, ItemStack input, ItemStack output) {
-        MultiBlockPattern pattern = TileCokeOven.patterns.get(0);
+        StructurePattern pattern = TileCokeOven.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getDefaultState());

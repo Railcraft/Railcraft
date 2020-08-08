@@ -35,7 +35,7 @@ public final class TileSteamTurbine extends TileLogic implements INeedsMaintenan
     private static final int WATER_OUTPUT = 4;
     private static final int FE_OUTPUT = 900;
     private static final int IC2_TIER = 3;
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map1 = {
@@ -64,7 +64,7 @@ public final class TileSteamTurbine extends TileLogic implements INeedsMaintenan
                         {'O', 'O', 'O', 'O', 'O'}
                 }
         };
-        MultiBlockPattern pattern = new MultiBlockPattern(map1, Axis.X);
+        StructurePattern pattern = new StructurePattern(map1, Axis.X);
         patterns.add(pattern);
 
         char[][][] map2 = {
@@ -97,7 +97,7 @@ public final class TileSteamTurbine extends TileLogic implements INeedsMaintenan
                         {'O', 'O', 'O', 'O'}
                 }
         };
-        MultiBlockPattern otherPattern = new MultiBlockPattern(map2, Axis.Z);
+        StructurePattern otherPattern = new StructurePattern(map2, Axis.Z);
         patterns.add(otherPattern);
     }
 

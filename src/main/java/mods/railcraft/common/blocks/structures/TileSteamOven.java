@@ -37,7 +37,7 @@ import static mods.railcraft.common.blocks.structures.BlockSteamOven.ICON;
 
 public final class TileSteamOven extends TileCrafter implements ISteamUser, ITileRotate {
 
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map = {
@@ -66,7 +66,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
                         {'*', 'O', 'O', '*'},
                 },
         };
-        patterns.add(new MultiBlockPattern(map));
+        patterns.add(new StructurePattern(map));
     }
 
     public TileSteamOven() {
@@ -82,7 +82,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
     }
 
     public static void placeSteamOven(World world, BlockPos pos, @Nullable List<ItemStack> input, @Nullable List<ItemStack> output) {
-        MultiBlockPattern pattern = TileSteamOven.patterns.get(0);
+        StructurePattern pattern = TileSteamOven.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.STEAM_OVEN.getDefaultState());
         TileEntity tile = pattern.placeStructure(world, pos, blockMapping);

@@ -36,7 +36,7 @@ import static mods.railcraft.common.blocks.structures.BlockBlastFurnace.ICON;
 
 public final class TileBlastFurnace extends TileCrafter {
 
-    private static final List<MultiBlockPattern> patterns = new ArrayList<>();
+    private static final List<StructurePattern> patterns = new ArrayList<>();
 
     static {
         char[][][] map = {
@@ -83,11 +83,11 @@ public final class TileBlastFurnace extends TileCrafter {
                         {'O', 'O', 'O', 'O', 'O'}
                 }
         };
-        patterns.add(new MultiBlockPattern(map, 2, 1, 2));
+        patterns.add(new StructurePattern(map, 2, 1, 2));
     }
 
     public static void placeBlastFurnace(World world, BlockPos pos, ItemStack input, ItemStack output, ItemStack secondOutput, ItemStack fuel) {
-        MultiBlockPattern pattern = TileBlastFurnace.patterns.get(0);
+        StructurePattern pattern = TileBlastFurnace.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getDefaultState());

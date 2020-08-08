@@ -59,7 +59,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     @SuppressWarnings("WeakerAccess")
     protected static final int SLOT_OUTPUT = 1;
     private static final int NETWORK_UPDATE_INTERVAL = 64;
-    private static final List<MultiBlockPattern> patterns = buildPatterns();
+    private static final List<StructurePattern> patterns = buildPatterns();
     protected final StandardTank tank = new StandardTank(64 * FluidTools.BUCKET_VOLUME, this);
     protected final TankManager tankManager = new TankManager();
     private final InventoryAdvanced inv;
@@ -73,7 +73,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
-        MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
+        StructurePattern pattern = TileTankBase.patterns.get(patternIndex);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.TANK_IRON_WALL.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.TANK_IRON_GAUGE.getDefaultState());
@@ -85,7 +85,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
-        MultiBlockPattern pattern = TileTankBase.patterns.get(patternIndex);
+        StructurePattern pattern = TileTankBase.patterns.get(patternIndex);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.TANK_STEEL_WALL.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
@@ -96,8 +96,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         }
     }
 
-    private static List<MultiBlockPattern> buildPatterns() {
-        List<MultiBlockPattern> pats = new ArrayList<>();
+    private static List<StructurePattern> buildPatterns() {
+        List<StructurePattern> pats = new ArrayList<>();
         boolean client = FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT;
 
         // 3x3
@@ -323,12 +323,12 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         return pats;
     }
 
-    private static MultiBlockPattern buildPattern(char[][][] map, int xOffset, int yOffset, int zOffset, AxisAlignedBB entityCheck) {
+    private static StructurePattern buildPattern(char[][][] map, int xOffset, int yOffset, int zOffset, AxisAlignedBB entityCheck) {
         if (!RailcraftConfig.allowTankStacking()) {
             entityCheck.offset(0, 1, 0);
             yOffset = 1;
         }
-        return new MultiBlockPattern(map, xOffset, yOffset, zOffset, entityCheck);
+        return new StructurePattern(map, xOffset, yOffset, zOffset, entityCheck);
     }
 
     private static char[][][] buildMap(int height, char[][] bottom, char[][] mid, char[][] top, char[][] border) {
@@ -426,7 +426,7 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    protected void onPatternLock(MultiBlockPattern pattern) {
+    protected void onPatternLock(StructurePattern pattern) {
         if (isMaster) {
             int capacity = (pattern.getPatternWidthX() - 2) * (pattern.getPatternHeight() - (pattern.getMasterOffset().getY() * 2)) * (pattern.getPatternWidthZ() - 2) * getTankDefinition().getCapacityPerBlock();
             tankManager.setCapacity(0, capacity);
