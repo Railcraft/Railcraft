@@ -12,27 +12,16 @@ package mods.railcraft.common.blocks.structures;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.machine.ITankTile;
+import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InventoryAdvanced;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.Timer;
-import mods.railcraft.common.util.network.RailcraftInputStream;
-import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -45,55 +34,35 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
+// TODO Add light calcs to glass blocks
+public abstract class TileTank extends TileLogic {
 
-    @SuppressWarnings("WeakerAccess")
-    protected static final int SLOT_INPUT = 0;
-    @SuppressWarnings("WeakerAccess")
-    protected static final int SLOT_OUTPUT = 1;
-    private static final int NETWORK_UPDATE_INTERVAL = 64;
     private static final List<StructurePattern> patterns = buildPatterns();
-    protected final StandardTank tank = new StandardTank(64 * FluidTools.BUCKET_VOLUME, this);
-    protected final TankManager tankManager = new TankManager();
-    private final InventoryAdvanced inv;
-    private final Timer networkTimer = new Timer();
-    private FluidStack previousFluidStack;
-
-    protected TileTankBase() {
-        super(patterns);
-        inv = new InventoryAdvanced(2, "gui.tank.iron").callbackTile(this);
-        tankManager.add(tank);
-    }
 
     public static void placeIronTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
-        StructurePattern pattern = TileTankBase.patterns.get(patternIndex);
-        Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
-        blockMapping.put('B', RailcraftBlocks.TANK_IRON_WALL.getDefaultState());
-        blockMapping.put('W', RailcraftBlocks.TANK_IRON_GAUGE.getDefaultState());
-        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-        if (tile instanceof TileTankBase) {
-            TileTankBase master = (TileTankBase) tile;
-            master.tank.setFluid(fluid);
-        }
+        placeTank(world, pos, patternIndex, RailcraftBlocks.TANK_IRON_WALL.getDefaultState(), fluid);
     }
 
     public static void placeSteelTank(World world, BlockPos pos, int patternIndex, FluidStack fluid) {
-        StructurePattern pattern = TileTankBase.patterns.get(patternIndex);
+        placeTank(world, pos, patternIndex, RailcraftBlocks.TANK_STEEL_WALL.getDefaultState(), fluid);
+    }
+
+    public static void placeTank(World world, BlockPos pos, int patternIndex, IBlockState wallState, FluidStack fluid) {
+        StructurePattern pattern = TileTank.patterns.get(patternIndex);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
-        blockMapping.put('B', RailcraftBlocks.TANK_STEEL_WALL.getDefaultState());
-        blockMapping.put('W', RailcraftBlocks.TANK_STEEL_GAUGE.getDefaultState());
-        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-        if (tile instanceof TileTankBase) {
-            TileTankBase master = (TileTankBase) tile;
-            master.tank.setFluid(fluid);
-        }
+        blockMapping.put('B', wallState);
+        blockMapping.put('W', RailcraftBlocks.GLASS.getDefaultState());
+        Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
+        tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
+            structure.getFunctionalLogic(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(fluid));
+        });
     }
 
     private static List<StructurePattern> buildPatterns() {
@@ -328,7 +297,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
             entityCheck.offset(0, 1, 0);
             yOffset = 1;
         }
-        return new StructurePattern(map, xOffset, yOffset, zOffset, entityCheck);
+        int tankSize = (map[0].length - 2) * (map[0][0].length - 2) * (map.length - (RailcraftConfig.allowTankStacking() ? 0 : 2));
+        return new StructurePattern(map, new BlockPos(xOffset, yOffset, zOffset), entityCheck, tankSize);
     }
 
     private static char[][][] buildMap(int height, char[][] bottom, char[][] mid, char[][] top, char[][] border) {
@@ -358,19 +328,64 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
         return map;
     }
 
+    protected TileTank() {
+        setLogic(new StructureLogic("metal_tank", this, patterns,
+                new StorageTankLogic(Logic.Adapter.of(this), getTankDefinition().getCapacityPerBlock())
+                        .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0, getTankDefinition().getCapacityPerBlock()))
+        ) {
+
+            @Override
+            public boolean isMapPositionValid(BlockPos pos, char marker) {
+                IBlockState state = WorldPlugin.getBlockState(world, pos);
+                switch (marker) {
+                    case 'O': // Other
+                        return !getTankDefinition().isTankBlock(state);
+                    case 'W': // Wall, Gauge, or Valve
+                        return getTankDefinition().isTankBlock(state);
+                    case 'B': // Wall
+                        return getTankDefinition().isWallBlock(state);
+                    case 'M': // Master
+                        if (RailcraftBlocks.GLASS.isEqual(state))
+                            return false;
+                    case 'T': // Top Block
+                        if (!getTankDefinition().isTankBlock(state))
+                            return false;
+                        TileEntity tile = world.getTileEntity(pos);
+                        if (!(tile instanceof TileLogic)) {
+                            world.removeTileEntity(pos);
+                            return true;
+                        }
+                        return !((TileLogic) tile).getLogic(StructureLogic.class).map(StructureLogic::isStructureValid).orElse(true);
+                    case 'A': // Air
+                        return state.getBlock().isAir(state, world, pos);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean isPart(Block block) {
+                return getTankDefinition().isTankBlock(block);
+            }
+
+//            @Override
+//            protected void onMasterReset() {
+//                super.onMasterReset();
+//                getLogic(FluidLogic.class).ifPresent(logic-> logic.getTankManager().get(0).setFluid(null));
+//            }
+
+        });
+        getLogic(FluidLogic.class).ifPresent(logic -> {
+            logic.setHidden(true);
+            logic.setTankSync(0);
+        });
+    }
+
     @Override
     public final EnumGui getGui() {
         return EnumGui.TANK;
     }
 
-    public TankDefinition getTankDefinition() {
-        return TankDefinition.IRON;
-    }
-
-    @Override
-    public IInventory getInventory() {
-        return inv;
-    }
+    public abstract TankDefinition getTankDefinition();
 
     @Override
     public float getResistance(@Nullable Entity exploder) {
@@ -378,146 +393,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
     }
 
     @Override
-    protected int getMaxRecursionDepth() {
-        return 500;
-    }
-
-    @Override
-    public String getTitle() {
-        return getTankDefinition().getTitle();
-    }
-
-    @Override
-    protected boolean isStructureTile(@Nullable TileEntity tile) {
-        return tile instanceof TileTankBase;
-    }
-
-    @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (Game.isHost(world)) {
-            if (isStructureValid() && FluidTools.interactWithFluidHandler(player, hand, getTankManager())) {
-                TileTankBase master = (TileTankBase) getMasterBlock();
-                if (master != null)
-                    master.syncClient();
-                return true;
-            }
-        } else if (FluidItemHelper.isContainer(heldItem))
-            return true;
-
         // Prevents players from getting inside tanks using boats
-        return heldItem.getItem() == Items.BOAT || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
-    }
-
-    @Override
-    public TankManager getTankManager() {
-        TileTankBase mBlock = (TileTankBase) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.tankManager;
-        return TankManager.NIL;
-    }
-
-    @Override
-    public @Nullable StandardTank getTank() {
-        TileTankBase mBlock = (TileTankBase) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.tankManager.get(0);
-        return null;
-    }
-
-    @Override
-    protected void onPatternLock(StructurePattern pattern) {
-        if (isMaster) {
-            int capacity = (pattern.getPatternWidthX() - 2) * (pattern.getPatternHeight() - (pattern.getMasterOffset().getY() * 2)) * (pattern.getPatternWidthZ() - 2) * getTankDefinition().getCapacityPerBlock();
-            tankManager.setCapacity(0, capacity);
-        }
-    }
-
-    @Override
-    protected void onMasterChanged() {
-        super.onMasterChanged();
-        TankManager tMan = getTankManager();
-        if (!tMan.isEmpty())
-            tMan.get(0).setFluid(null);
-    }
-
-    @Override
-    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
-        switch (mapPos) {
-            case 'O': // Other
-                return !getTankDefinition().isTankBlock(state);
-            case 'W': // Wall, Gauge, or Valve
-                return getTankDefinition().isTankBlock(state);
-            case 'B': // Wall
-                return getTankDefinition().isWallBlock(state);
-            case 'M': // Master
-            case 'T': // Top Block
-                if (!getTankDefinition().isTankBlock(state))
-                    return false;
-                TileEntity tile = world.getTileEntity(pos);
-                if (!(tile instanceof TileMultiBlock)) {
-                    world.removeTileEntity(pos);
-                    return true;
-                }
-                return !((TileMultiBlock) tile).isStructureValid();
-            case 'A': // Air
-                return state.getBlock().isAir(state, world, pos);
-        }
-        return true;
-    }
-
-    @Override
-    public void update() {
-        super.update();
-
-        if (Game.isHost(world))
-            if (isMaster) {
-
-                if (clock % FluidTools.BUCKET_FILL_TIME == 0)
-                    FluidTools.processContainers(tankManager.get(0), inv, SLOT_INPUT, SLOT_OUTPUT);
-
-                if (networkTimer.hasTriggered(world, NETWORK_UPDATE_INTERVAL))
-                    syncClient();
-            }
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    private void syncClient() {
-        FluidStack fluidStack = tankManager.get(0).getFluid();
-        if (!Fluids.areIdentical(previousFluidStack, fluidStack)) {
-            previousFluidStack = fluidStack == null ? null : fluidStack.copy();
-            sendUpdateToClient();
-        }
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        tankManager.writeTanksToNBT(data);
-        inv.writeToNBT("inv", data);
-        return data;
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        tankManager.readTanksFromNBT(data);
-        inv.readFromNBT("inv", data);
-    }
-
-    @Override
-    public void writePacketData(RailcraftOutputStream data) throws IOException {
-        super.writePacketData(data);
-        tankManager.writePacketData(data);
-        data.writeInt(tankManager.get(0).getCapacity());
-    }
-
-    @Override
-    public void readPacketData(RailcraftInputStream data) throws IOException {
-        super.readPacketData(data);
-        tankManager.readPacketData(data);
-        tankManager.get(0).setCapacity(data.readInt());
+        return player.getHeldItem(hand).getItem() == Items.BOAT || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
     }
 
     @Override
@@ -533,11 +411,8 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     public boolean shouldRenderInPass(int pass) {
+        boolean isMaster = getLogic(StructureLogic.class).map(StructureLogic::isValidMaster).orElse(false);
         return isMaster ? pass == 0 : pass == 1;
     }
 
-    int getComparatorValue() {
-        double fullness = (double) tank.getFluidAmount() / (double) tank.getCapacity();
-        return (int) Math.ceil(fullness * 15.0);
-    }
 }

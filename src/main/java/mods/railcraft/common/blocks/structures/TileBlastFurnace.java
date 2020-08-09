@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
 import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
@@ -25,12 +26,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static mods.railcraft.common.blocks.structures.BlockBlastFurnace.ICON;
 
@@ -91,15 +92,15 @@ public final class TileBlastFurnace extends TileCrafter {
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
-        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-        if (tile instanceof TileBlastFurnace) {
+        Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
+//        if (tile instanceof TileBlastFurnace) {
             // FIXME this might not work if the structure isn't ready
 //            TileBlastFurnace master = (TileBlastFurnace) tile;
 //            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
 //            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
 //            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_SLAG, secondOutput);
 //            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_FUEL, fuel);
-        }
+//        }
     }
 
     {

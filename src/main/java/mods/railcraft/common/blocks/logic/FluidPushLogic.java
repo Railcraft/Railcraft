@@ -12,7 +12,10 @@ package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.util.misc.Predicates;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+
+import java.util.function.Predicate;
 
 /**
  * Created by CovertJaguar on 1/28/2019 for Railcraft.
@@ -23,21 +26,35 @@ public class FluidPushLogic extends Logic {
     private final int tankIndex;
     private final int outputRate;
     private final EnumFacing[] outputFaces;
+    private final Predicate<? super TileEntity> validTargets;
 
-    public FluidPushLogic(Adapter adapter, int tankIndex, int outputRate, EnumFacing[] outputFaces) {
+    @SuppressWarnings("unchecked")
+    public static Predicate<? super TileEntity> defaultTargets(Adapter adapter) {
+        return (Predicate<? super TileEntity>) adapter.tile()
+                .map(Object::getClass)
+                .map(Predicates::notInstanceOf)
+                .orElse(Predicates.alwaysTrue());
+    }
+
+    public FluidPushLogic(Adapter adapter, int tankIndex, int outputRate, EnumFacing... outputFaces) {
+        this(adapter, tankIndex, outputRate, defaultTargets(adapter), outputFaces);
+    }
+
+    public FluidPushLogic(Adapter adapter, int tankIndex, int outputRate, Predicate<? super TileEntity> validTargets, EnumFacing... outputFaces) {
         super(adapter);
         this.tankIndex = tankIndex;
         this.outputRate = outputRate;
         this.outputFaces = outputFaces;
+        this.validTargets = validTargets;
     }
 
     @Override
     protected void updateServer() {
         super.updateServer();
-        adapter.tile().ifPresent(tile -> getLogic(TankLogic.class).ifPresent(tank -> {
+        adapter.tile().ifPresent(tile -> getLogic(FluidLogic.class).ifPresent(tank -> {
             TankManager tMan = tank.getTankManager();
             if (!tMan.isEmpty()) {
-                tMan.push(tile.getTileCache(), Predicates.notInstanceOf(tile.getClass()), outputFaces, tankIndex, outputRate);
+                tMan.push(tile.getTileCache(), validTargets, outputFaces, tankIndex, outputRate);
             }
         }));
     }

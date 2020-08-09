@@ -15,37 +15,45 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
+import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.function.Supplier;
 
 /**
  * Created by CovertJaguar on 1/28/2019 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class WaterTankLogic extends InventoryLogic {
+public class StorageTankLogic extends InventoryLogic {
+    public static final int TANK_INDEX = 0;
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_PROCESS = 1;
     public static final int SLOT_OUTPUT = 2;
-    private static final int TANK_CAPACITY = FluidTools.BUCKET_VOLUME * 16;
-    private final StandardTank tank;
+    private final FilteredTank tank;
     private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
-    public WaterTankLogic(Adapter adapter) {
+    public StorageTankLogic(Adapter adapter, int capacity) {
+        this(adapter, capacity, null);
+    }
+
+    public StorageTankLogic(Adapter adapter, int capacity, @Nullable Supplier<@Nullable Fluid> filter) {
         super(adapter, 3);
-        tank = new FilteredTank(TANK_CAPACITY, adapter.tile().orElse(null)).setFilterFluid(Fluids.WATER);
-        addSubLogic(new TankLogic(adapter).addTank(tank));
+        tank = new FilteredTank(capacity, adapter.tile().orElse(null));
+        if (filter != null)
+            tank.setFilterFluid(filter);
+        addSubLogic(new FluidLogic(adapter).addTank(tank));
     }
 
     @Override
@@ -81,7 +89,14 @@ public class WaterTankLogic extends InventoryLogic {
 
     @Override
     public boolean interact(EntityPlayer player, EnumHand hand) {
-        return FluidTools.interactWithFluidHandler(player, hand, tank) || super.interact(player, hand);
+        boolean interact = false;
+        if (Game.isHost(theWorldAsserted())) {
+            interact = FluidTools.interactWithFluidHandler(player, hand, tank);
+            if (interact)
+                sendUpdateToClient();
+        } else if (FluidItemHelper.isContainer(player.getHeldItem(hand)))
+            return true;
+        return interact || super.interact(player, hand);
     }
 
     @Override

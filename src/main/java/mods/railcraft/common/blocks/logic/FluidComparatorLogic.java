@@ -10,20 +10,23 @@
 
 package mods.railcraft.common.blocks.logic;
 
-import mods.railcraft.api.charge.Charge;
 import mods.railcraft.common.blocks.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.logic.Logic.Adapter.Tile;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.fluids.FluidTank;
 
 /**
  * Created by CovertJaguar on 2/20/2019 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ChargeComparatorLogic extends ChargeLogic implements ITileCompare {
+public class FluidComparatorLogic extends Logic implements ITileCompare {
+    private final int tankIndex;
 
-    public ChargeComparatorLogic(Adapter.Tile adapter, Charge network) {
-        super(adapter, network);
+    public FluidComparatorLogic(Tile adapter, int tankIndex) {
+        super(adapter);
+        this.tankIndex = tankIndex;
     }
 
     private int prevComparatorOutput;
@@ -41,6 +44,10 @@ public class ChargeComparatorLogic extends ChargeLogic implements ITileCompare {
 
     @Override
     public int getComparatorInputOverride() {
-        return access().getComparatorOutput();
+        return getLogic(FluidLogic.class).map(logic -> {
+            FluidTank tank = logic.getTankManager().get(tankIndex);
+            double fullness = (double) tank.getFluidAmount() / (double) tank.getCapacity();
+            return (int) Math.ceil(fullness * 15.0);
+        }).orElse(0);
     }
 }

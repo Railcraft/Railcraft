@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.structures;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileTankSteelGauge extends TileTankIronGauge {
+public final class TileTankSteel extends TileTank {
 
     @Override
     public TankDefinition getTankDefinition() {

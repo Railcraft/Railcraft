@@ -30,7 +30,7 @@ import mods.railcraft.common.blocks.machine.manipulator.TileFluidManipulator;
 import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxBase;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.*;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
-import mods.railcraft.common.blocks.structures.TileTankBase;
+import mods.railcraft.common.blocks.structures.TileTank;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.core.CommonProxy;
 import mods.railcraft.common.core.RailcraftObjects;
@@ -189,7 +189,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 
         //TODO move to block classes
         bindTESR(TileSteamTurbine.class, TESRTurbineGauge::new);
-        bindTESR(TileTankBase.class, TESRHollowTank::new);
+        bindTESR(TileTank.class, TESRHollowTank::new);
         bindTESR(TileFluidManipulator.class, TESRManipulatorFluid::new);
 
 //        bindTESR(EnumMachineBeta.ENGINE_STEAM_HOBBY, TESRPneumaticEngine::new);

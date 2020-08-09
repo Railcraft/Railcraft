@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.structures;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
@@ -24,12 +25,12 @@ import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -68,15 +69,16 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
                 Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
                 blockMapping.put('F', RailcraftBlocks.BOILER_FIREBOX_SOLID.getDefaultState());
                 blockMapping.put('H', highPressure ? RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.getDefaultState() : RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.getDefaultState());
-                TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-                if (tile instanceof TileBoilerFireboxSolid) {
-                    TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
-                    master.tankWater.setFluid(Fluids.WATER.get(water));
-                    InventoryMapper masterFuel = InventoryMapper.make(master.inventory, SLOT_BURN, 4);
-                    for (ItemStack stack : fuel) {
-                        masterFuel.addStack(stack);
-                    }
-                }
+                Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
+                //FIXME
+//                if (tile instanceof TileBoilerFireboxSolid) {
+//                    TileBoilerFireboxSolid master = (TileBoilerFireboxSolid) tile;
+//                    master.tankWater.setFluid(Fluids.WATER.get(water));
+//                    InventoryMapper masterFuel = InventoryMapper.make(master.inventory, SLOT_BURN, 4);
+//                    for (ItemStack stack : fuel) {
+//                        masterFuel.addStack(stack);
+//                    }
+//                }
                 return;
             }
         }

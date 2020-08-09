@@ -15,8 +15,8 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import net.minecraft.init.Blocks;
 
-@BlockMeta.Tile(TileTankSteelValve.class)
-public class BlockTankSteelValve extends BlockTankMetalValve<TileTankSteelValve> {
+@BlockMeta.Tile(TileTankValveSteel.class)
+public class BlockTankSteelValve extends BlockTankMetalValve<TileTankValveSteel> {
 
     @Override
     public TankDefinition getTankType() {

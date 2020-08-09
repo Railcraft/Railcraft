@@ -314,6 +314,10 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
                 tile.markBlockForUpdate();
             }
 
+            void notifyNeighbors() {
+                tile.notifyBlocksOfNeighborChange();
+            }
+
             @Override
             Optional<TileRailcraft> tile() {
                 return Optional.of(tile);

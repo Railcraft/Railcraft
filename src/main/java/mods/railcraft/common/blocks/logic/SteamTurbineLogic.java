@@ -34,7 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SteamTurbineLogic extends TankLogic implements IChargeAccessorLogic, IDropsInv {
+public class SteamTurbineLogic extends FluidLogic implements IChargeAccessorLogic, IDropsInv {
     public static final int CHARGE_OUTPUT = 225;
     private static final int STEAM_USAGE = 360;
     public static final int TANK_STEAM = 0;

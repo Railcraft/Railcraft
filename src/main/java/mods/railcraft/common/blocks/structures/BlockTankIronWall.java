@@ -14,8 +14,8 @@ import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 
-@BlockMeta.Tile(TileTankIronWall.class)
-public class BlockTankIronWall extends BlockTankMetalWall<TileTankIronWall> {
+@BlockMeta.Tile(TileTankIron.class)
+public class BlockTankIronWall extends BlockTankMetalWall<TileTankIron> {
 
     @Override
     public TankDefinition getTankType() {

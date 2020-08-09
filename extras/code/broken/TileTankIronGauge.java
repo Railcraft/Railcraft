@@ -26,10 +26,15 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronGauge extends TileTankBase implements ITileLit {
+public class TileTankIronGauge extends TileTankMetal implements ITileLit {
 
     private int lightValue;
     private final Timer timer = new Timer();
+
+    @Override
+    public TankDefinition getTankDefinition() {
+        return TankDefinition.IRON;
+    }
 
     @Override
     @SideOnly(Side.CLIENT)

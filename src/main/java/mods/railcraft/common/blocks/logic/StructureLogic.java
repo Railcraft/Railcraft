@@ -72,6 +72,7 @@ public class StructureLogic extends Logic {
     private @Nullable StructurePattern currentPattern;
     private @Nullable BlockPos posInPattern;
     private char marker = 'O';
+    private boolean updatingNeighbors;
 
     public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns, Logic functionalLogic) {
         super(Adapter.of(tile));
@@ -82,7 +83,6 @@ public class StructureLogic extends Logic {
 
         // Note we don't set the parent.
         // So getLogic() calls from the functional logic can only see the functional logic tree.
-        // This may not be desired behavior, but is not currently relevant.
         this.functionalLogic = functionalLogic;
         components.add(tile);
     }
@@ -92,6 +92,10 @@ public class StructureLogic extends Logic {
         Optional<L> imp = super.getLogic(logicClass);
         if (imp.isPresent())
             return imp;
+        return getMasterLogic(logicClass);
+    }
+
+    public <L> Optional<L> getMasterLogic(Class<L> logicClass) {
         return getMasterLogic().map(m -> m.functionalLogic).flatMap(l -> l.getLogic(logicClass));
     }
 
@@ -105,9 +109,7 @@ public class StructureLogic extends Logic {
     }
 
     public final <L> Optional<L> getFunctionalLogic(Class<L> logicClass) {
-        if (logicClass.isInstance(functionalLogic))
-            return Optional.of(logicClass.cast(functionalLogic));
-        return Optional.empty();
+        return functionalLogic.getLogic(logicClass);
     }
 
     public List<TileLogic> getComponents() {
@@ -151,6 +153,7 @@ public class StructureLogic extends Logic {
     }
 
     private void onPatternChanged() {
+        updatingNeighbors = true;
         adapter.updateModels();
         if (theWorld() == null || !Game.isHost(theWorldAsserted())) return;
         if (!isMaster) {
@@ -161,6 +164,12 @@ public class StructureLogic extends Logic {
         onStructureChanged(isComplete, isMaster, attachedData);
         if (isMaster)
             functionalLogic.onStructureChanged(isComplete, isMaster, attachedData);
+        tile.notifyBlocksOfNeighborChange();
+        updatingNeighbors = false;
+    }
+
+    public boolean isUpdatingNeighbors() {
+        return updatingNeighbors;
     }
 
     public final byte getPatternIndex() {
@@ -267,7 +276,7 @@ public class StructureLogic extends Logic {
     protected void onMasterReset() {
     }
 
-    protected boolean isMapPositionOtherBlock(char mapPos) {
+    public boolean isMapPositionOtherBlock(char mapPos) {
         switch (mapPos) {
             case 'A':
             case 'O':

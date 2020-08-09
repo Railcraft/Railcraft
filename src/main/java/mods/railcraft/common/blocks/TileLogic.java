@@ -12,13 +12,12 @@ package mods.railcraft.common.blocks;
 
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.interfaces.IDropsInv;
-import mods.railcraft.common.blocks.logic.ILogicContainer;
-import mods.railcraft.common.blocks.logic.InventoryLogic;
-import mods.railcraft.common.blocks.logic.Logic;
-import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.blocks.interfaces.ITileCompare;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -50,7 +49,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileLogic extends TileRailcraftTicking implements ISmartTile, IActionReceptor, ILogicContainer {
+public abstract class TileLogic extends TileRailcraftTicking implements ISmartTile, IActionReceptor, ILogicContainer, ITileCompare {
     private Logic logic;
 
     protected void setLogic(Logic logic) {
@@ -78,13 +77,19 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
 
     @Override
     @OverridingMethodsMustInvokeSuper
-    public void onNeighborBlockChange(IBlockState state, Block neighborBlock, BlockPos neighborPos) {
-        super.onNeighborBlockChange(state, neighborBlock, neighborPos);
+    public void onNeighborBlockChange(IBlockState ourState, Block neighborBlock, BlockPos fromPos) {
+        super.onNeighborBlockChange(ourState, neighborBlock, fromPos);
         if (Game.isClient(world)) return;
-        getLogic(StructureLogic.class).ifPresent(logic -> {
-            if (logic.isPart(neighborBlock) || neighborBlock == Blocks.AIR)
-                logic.onBlockChange();
-        });
+        boolean isStructureUpdating = WorldPlugin.getTileEntity(world, fromPos, TileLogic.class)
+                .flatMap(tileLogic -> tileLogic.getLogic(StructureLogic.class))
+                .map(StructureLogic::isUpdatingNeighbors)
+                .orElse(false);
+
+        if (!isStructureUpdating)
+            getLogic(StructureLogic.class).ifPresent(logic -> {
+                if (logic.isPart(neighborBlock) || neighborBlock == Blocks.AIR)
+                    logic.onBlockChange();
+            });
     }
 
     @Override
@@ -193,7 +198,12 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
 
     @Override
     public boolean canCreatureSpawn(EntityLiving.SpawnPlacementType type) {
-        return getLogic(StructureLogic.class).map(l -> !(l.isStructureValid() && l.getPatternPosition() != null && l.getPatternPosition().getY() < 2)).orElse(true);
+        return getLogic(StructureLogic.class).map(l -> !(l.isStructureValid() && l.getMasterPos().getY() == getY())).orElse(true);
+    }
+
+    @Override
+    public int getComparatorInputOverride() {
+        return getLogic(ITileCompare.class).map(ITileCompare::getComparatorInputOverride).orElse(0);
     }
 
     @Override
@@ -218,9 +228,11 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
                 return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inv.get().getItemHandler(facing));
         }
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            Optional<IFluidHandler> tank = getLogic(IFluidHandler.class);
-            if (tank.isPresent())
-                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank.get());
+            FluidLogic handler = getLogic(FluidLogic.class)
+                    .filter(logic -> !logic.isHidden())
+                    .orElse(null);
+            if (handler != null)
+                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(handler);
         }
         if (capability == CapabilityEnergy.ENERGY) {
             Optional<IEnergyStorage> energy = getLogic(IEnergyStorage.class);

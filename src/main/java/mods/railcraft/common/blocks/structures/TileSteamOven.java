@@ -15,13 +15,13 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.steam.ISteamUser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
@@ -31,6 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static mods.railcraft.common.blocks.structures.BlockSteamOven.FACING;
 import static mods.railcraft.common.blocks.structures.BlockSteamOven.ICON;
@@ -85,17 +86,17 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
         StructurePattern pattern = TileSteamOven.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.STEAM_OVEN.getDefaultState());
-        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-        if (tile instanceof TileSteamOven) {
-            TileSteamOven master = (TileSteamOven) tile;
-            // FIXME
-//            for (int slot = 0; slot < 9; slot++) {
-//                if (input != null && slot < input.size())
-//                    master.inv.setInventorySlotContents(SteamOvenLogic.SLOT_INPUT + slot, input.get(slot));
-//                if (output != null && slot < output.size())
-//                    master.inv.setInventorySlotContents(SteamOvenLogic.SLOT_OUTPUT + slot, output.get(slot));
-//            }
-        }
+        Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
+        tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
+            structure.getFunctionalLogic(InventoryLogic.class).ifPresent(logic -> {
+                for (int slot = 0; slot < 9; slot++) {
+                    if (input != null && slot < input.size())
+                        logic.setInventorySlotContents(RockCrusherLogic.SLOT_INPUT + slot, input.get(slot));
+                    if (output != null && slot < output.size())
+                        logic.setInventorySlotContents(RockCrusherLogic.SLOT_OUTPUT + slot, output.get(slot));
+                }
+            });
+        });
     }
 
     @Override

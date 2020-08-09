@@ -12,5 +12,10 @@ package mods.railcraft.common.blocks.structures;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileTankIronWall extends TileTankBase {
+public final class TileTankValveSteel extends TileTankValve {
+
+    @Override
+    public TankDefinition getTankDefinition() {
+        return TankDefinition.STEEL;
+    }
 }

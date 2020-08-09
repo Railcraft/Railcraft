@@ -11,12 +11,6 @@
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{"transform": "forge:default-block"}],
-    "position": {
-      "single": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_0"}},
-      "top": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_1"}},
-      "center": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_2"}},
-      "bottom": {"textures": {"side": "railcraft:blocks/tank_steel_gauge_3"}}
-    }
+    "inventory": [{"transform": "forge:default-block"}]
   }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,11 +34,11 @@ public class ItemCartTank extends ItemCart implements IPrototypedItem {
 
     @Override
     public void defineRecipes() {
-        if (RailcraftBlocks.TANK_IRON_GAUGE.isEnabled()) {
+        if (RailcraftBlocks.GLASS.isEnabled()) {
             CraftingPlugin.addShapedRecipe(getStack(),
                     "T",
                     "M",
-                    'T', RailcraftBlocks.TANK_IRON_GAUGE,
+                    'T', RailcraftBlocks.GLASS,
                     'M', Items.MINECART);
         } else {
             CraftingPlugin.addShapedRecipe(getStack(),

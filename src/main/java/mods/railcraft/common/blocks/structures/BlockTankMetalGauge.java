@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTankMetalGauge<T extends TileTankBase> extends BlockTankMetal<T> {
+public abstract class BlockTankMetalGauge<T extends TileTank> extends BlockTankMetal<T> {
     public static final PropertyEnum<BlockStrengthGlass.Position> POSITION = PropertyEnum.create("position", BlockStrengthGlass.Position.class);
 
     protected BlockTankMetalGauge() {

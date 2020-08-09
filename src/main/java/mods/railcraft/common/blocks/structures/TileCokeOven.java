@@ -13,13 +13,12 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
-import mods.railcraft.common.blocks.logic.CokeOvenLogic;
-import mods.railcraft.common.blocks.logic.DynamicTankCapacityLogic;
-import mods.railcraft.common.blocks.logic.Logic;
-import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -27,7 +26,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -36,6 +34,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class TileCokeOven extends TileCrafter {
 
@@ -347,14 +346,14 @@ public final class TileCokeOven extends TileCrafter {
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();
         blockMapping.put('B', RailcraftBlocks.COKE_OVEN.getDefaultState());
         blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getDefaultState());
-        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-        if (tile instanceof TileCokeOven) {
-            // FIXME this might not work if the structure isn't ready
-//            CokeOvenLogic logic = ((TileCokeOvenLogic) tile).getLogic(CokeOvenLogic.class);
-//            logic.getTankManager().get(0).setFluid(Fluids.CREOSOTE.get(creosote));
-//            logic.setInventorySlotContents(CokeOvenLogic.SLOT_INPUT, input);
-//            logic.setInventorySlotContents(CokeOvenLogic.SLOT_OUTPUT, output);
-        }
+        Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
+        tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
+            structure.getFunctionalLogic(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(Fluids.CREOSOTE.get(creosote)));
+            structure.getFunctionalLogic(InventoryLogic.class).ifPresent(logic -> {
+                logic.setInventorySlotContents(CokeOvenLogic.SLOT_INPUT, input);
+                logic.setInventorySlotContents(CokeOvenLogic.SLOT_OUTPUT, output);
+            });
+        });
     }
 
     @Override

@@ -52,15 +52,12 @@ public final class MachineTileRegistry {
         RailcraftRegistry.register(TileBoilerFireboxFluid.class, "boiler_firebox_fluid");
         RailcraftRegistry.register(TileBoilerTankLow.class, "boiler_tank_pressure_low");
         RailcraftRegistry.register(TileBoilerTankHigh.class, "boiler_tank_pressure_high");
-        RailcraftRegistry.register(TileTankIronWall.class, "tank_iron_wall");
-        RailcraftRegistry.register(TileTankIronGauge.class, "tank_iron_gauge");
-        RailcraftRegistry.register(TileTankIronValve.class, "tank_iron_valve");
-        RailcraftRegistry.register(TileTankSteelWall.class, "tank_steel_wall");
-        RailcraftRegistry.register(TileTankSteelGauge.class, "tank_steel_gauge");
-        RailcraftRegistry.register(TileTankSteelValve.class, "tank_steel_valve");
+        RailcraftRegistry.register(TileTankIron.class, "tank_iron_wall");
+        RailcraftRegistry.register(TileTankValveIron.class, "tank_iron_valve");
+        RailcraftRegistry.register(TileTankSteel.class, "tank_steel_wall");
+        RailcraftRegistry.register(TileTankValveSteel.class, "tank_steel_valve");
         RailcraftRegistry.register(TileChestVoid.class, "chest_void");
         RailcraftRegistry.register(TileChestMetals.class, "chest_metals");
-//        RailcraftRegistry.register(TileSawmill.class, "RCSawmillTile");
 
         // Epsilon
         RailcraftRegistry.register(TileAdminSteamProducer.class, "admin_steam_producer");

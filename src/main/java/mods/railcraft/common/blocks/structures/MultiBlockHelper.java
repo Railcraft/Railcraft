@@ -60,12 +60,12 @@ public final class MultiBlockHelper implements IStructureHelper {
 
     @Override
     public void placeIronTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid) {
-        TileTankBase.placeIronTank(world, pos, patternIndex, fluid);
+        TileTank.placeIronTank(world, pos, patternIndex, fluid);
     }
 
     @Override
     public void placeSteelTank(World world, BlockPos pos, int patternIndex, @Nullable FluidStack fluid) {
-        TileTankBase.placeSteelTank(world, pos, patternIndex, fluid);
+        TileTank.placeSteelTank(world, pos, patternIndex, fluid);
     }
 
     @Override

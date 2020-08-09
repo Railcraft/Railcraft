@@ -14,10 +14,8 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileCrafter;
-import mods.railcraft.common.blocks.logic.CrafterParticleEffectLogic;
-import mods.railcraft.common.blocks.logic.Logic;
-import mods.railcraft.common.blocks.logic.RockCrusherLogic;
-import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
@@ -30,7 +28,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -38,6 +35,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static mods.railcraft.common.blocks.structures.BlockRockCrusher.ICON;
 
@@ -175,17 +173,17 @@ public final class TileRockCrusher extends TileCrafter {
         blockMapping.put('e', state);
         blockMapping.put('f', state);
         blockMapping.put('h', state);
-        TileEntity tile = pattern.placeStructure(world, pos, blockMapping);
-        if (tile instanceof TileRockCrusher) {
-            TileRockCrusher master = (TileRockCrusher) tile;
-            // FIXME
-//            for (int slot = 0; slot < 9; slot++) {
-//                if (input != null && slot < input.size())
-//                    master.inv.setInventorySlotContents(TileRockCrusher.SLOT_INPUT + slot, input.get(slot));
-//                if (output != null && slot < output.size())
-//                    master.inv.setInventorySlotContents(TileRockCrusher.SLOT_OUTPUT + slot, output.get(slot));
-//            }
-        }
+        Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
+        tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
+            structure.getFunctionalLogic(InventoryLogic.class).ifPresent(logic -> {
+                for (int slot = 0; slot < 9; slot++) {
+                    if (input != null && slot < input.size())
+                        logic.setInventorySlotContents(RockCrusherLogic.SLOT_INPUT + slot, input.get(slot));
+                    if (output != null && slot < output.size())
+                        logic.setInventorySlotContents(RockCrusherLogic.SLOT_OUTPUT + slot, output.get(slot));
+                }
+            });
+        });
     }
 
     @Override

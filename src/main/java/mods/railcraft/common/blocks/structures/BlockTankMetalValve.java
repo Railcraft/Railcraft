@@ -23,7 +23,7 @@ import net.minecraft.util.Tuple;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTankMetalValve<T extends TileTankBase> extends BlockTankMetal<T> {
+public abstract class BlockTankMetalValve<T extends TileTank> extends BlockTankMetal<T> {
     public static final IProperty<OptionalAxis> OPTIONAL_AXIS = PropertyEnum.create("axis", OptionalAxis.class);
 
     protected BlockTankMetalValve() {

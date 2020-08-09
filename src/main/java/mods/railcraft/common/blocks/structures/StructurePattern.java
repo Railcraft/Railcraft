@@ -10,11 +10,11 @@
 package mods.railcraft.common.blocks.structures;
 
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -211,14 +212,14 @@ public final class StructurePattern {
         return State.VALID;
     }
 
-    public @Nullable TileEntity placeStructure(World world, BlockPos pos, Char2ObjectMap<IBlockState> blockMapping) {
+    public Optional<TileLogic> placeStructure(World world, BlockPos pos, Char2ObjectMap<IBlockState> blockMapping) {
         int xWidth = getPatternWidthX();
         int zWidth = getPatternWidthZ();
         int height = getPatternHeight();
 
         BlockPos offset = pos.subtract(getMasterOffset());
 
-        TileEntity master = null;
+        Optional<TileLogic> master = Optional.empty();
 
         for (byte px = 0; px < xWidth; px++) {
             for (byte py = 0; py < height; py++) {
@@ -234,7 +235,7 @@ public final class StructurePattern {
                     world.setBlockState(p, blockState, 3);
 
                     if (px == masterOffset.getX() && py == masterOffset.getY() && pz == masterOffset.getZ())
-                        master = WorldPlugin.getBlockTile(world, pos);
+                        master = WorldPlugin.getTileEntity(world, pos, TileLogic.class);
                 }
             }
         }

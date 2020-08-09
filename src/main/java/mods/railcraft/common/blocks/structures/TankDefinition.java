@@ -30,7 +30,7 @@ import java.util.Set;
 public enum TankDefinition {
     IRON {
         {
-            tankBlocks.add(RailcraftBlocks.TANK_IRON_GAUGE);
+            tankBlocks.add(RailcraftBlocks.GLASS);
             tankBlocks.add(RailcraftBlocks.TANK_IRON_WALL);
             tankBlocks.add(RailcraftBlocks.TANK_IRON_VALVE);
         }
@@ -67,7 +67,7 @@ public enum TankDefinition {
     },
     STEEL {
         {
-            tankBlocks.add(RailcraftBlocks.TANK_STEEL_GAUGE);
+            tankBlocks.add(RailcraftBlocks.GLASS);
             tankBlocks.add(RailcraftBlocks.TANK_STEEL_VALVE);
             tankBlocks.add(RailcraftBlocks.TANK_STEEL_WALL);
         }
@@ -104,6 +104,10 @@ public enum TankDefinition {
 
     public boolean isTankBlock(IBlockState state) {
         return tankBlocks.stream().anyMatch(b -> b.isEqual(state));
+    }
+
+    public boolean isTankBlock(Block block) {
+        return tankBlocks.stream().anyMatch(b -> b.isEqual(block));
     }
 
     public abstract boolean isWallBlock(IBlockState meta);

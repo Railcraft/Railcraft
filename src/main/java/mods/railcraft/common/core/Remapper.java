@@ -31,8 +31,12 @@ import java.util.Optional;
  */
 public class Remapper {
     private static final Map<String, RailcraftBlocks> blockRemaps = new HashMap<>();
+    private static final Map<String, RailcraftBlocks> itemRemaps = new HashMap<>();
 
     static {
+        itemRemaps.put("tank_iron_gauge", RailcraftBlocks.GLASS);
+        itemRemaps.put("tank_steel_gauge", RailcraftBlocks.GLASS);
+
         blockRemaps.put("brick_red_sandy", RailcraftBlocks.BRICK_BADLANDS);
 
         blockRemaps.put("manipulator", RailcraftBlocks.MANIPULATOR);
@@ -57,7 +61,7 @@ public class Remapper {
         for (Mapping<Block> mapping : event.getMappings()) {
             try {
                 Optional.ofNullable(blockRemaps.get(mapping.key.getPath())).ifPresent(v -> {
-                    mapping.remap((Block) v.getObject().orElseThrow(NullPointerException::new));
+                    mapping.remap(v.block());
                     Game.log().msg(Level.WARN, "Remapping block " + mapping.key + " to " + v.getRegistryName());
                 });
             } catch (Exception ex) {
@@ -70,6 +74,10 @@ public class Remapper {
     public static void remapItem(MissingMappings<Item> event) {
         for (Mapping<Item> mapping : event.getMappings()) {
             try {
+                Optional.ofNullable(itemRemaps.get(mapping.key.getPath())).ifPresent(v -> {
+                    mapping.remap(Objects.requireNonNull(v.item()));
+                    Game.log().msg(Level.WARN, "Remapping item " + mapping.key + " to " + v.getRegistryName());
+                });
                 Optional.ofNullable(blockRemaps.get(mapping.key.getPath())).ifPresent(v -> {
                     mapping.remap(Objects.requireNonNull(v.item()));
                     Game.log().msg(Level.WARN, "Remapping item " + mapping.key + " to " + v.getRegistryName());

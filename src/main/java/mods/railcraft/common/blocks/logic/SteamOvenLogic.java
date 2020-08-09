@@ -55,7 +55,7 @@ public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
     public SteamOvenLogic(Adapter adapter) {
         super(adapter, 18);
         tank = new FilteredTank(TANK_CAPACITY, adapter.tile().orElse(null)).setFilterFluid(Fluids.STEAM);
-        addSubLogic(new TankLogic(adapter).addTank(tank));
+        addSubLogic(new FluidLogic(adapter).addTank(tank));
         setDuration(TOTAL_COOK_TIME);
     }
 

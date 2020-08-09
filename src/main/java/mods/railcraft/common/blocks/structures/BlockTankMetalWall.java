@@ -18,7 +18,7 @@ import net.minecraft.util.Tuple;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockTankMetalWall<T extends TileTankBase> extends BlockTankMetal<T> {
+public abstract class BlockTankMetalWall<T extends TileTank> extends BlockTankMetal<T> {
     protected BlockTankMetalWall() {
         super(Material.IRON);
         setHarvestLevel("pickaxe", 1);

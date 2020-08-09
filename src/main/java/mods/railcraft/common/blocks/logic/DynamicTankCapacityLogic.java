@@ -18,17 +18,23 @@ package mods.railcraft.common.blocks.logic;
 public class DynamicTankCapacityLogic extends Logic {
     private final int tankIndex;
     private final int dataIndex;
+    private final int multiplier;
 
     public DynamicTankCapacityLogic(Adapter adapter, int tankIndex, int dataIndex) {
+        this(adapter, tankIndex, dataIndex, 1);
+    }
+
+    public DynamicTankCapacityLogic(Adapter adapter, int tankIndex, int dataIndex, int multiplier) {
         super(adapter);
         this.tankIndex = tankIndex;
         this.dataIndex = dataIndex;
+        this.multiplier = multiplier;
     }
 
     @Override
     public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
         super.onStructureChanged(isComplete, isMaster, data);
         if (isComplete)
-            getLogic(TankLogic.class).ifPresent(logic -> logic.getTankManager().setCapacity(tankIndex, (Integer) data[dataIndex]));
+            getLogic(FluidLogic.class).ifPresent(logic -> logic.getTankManager().setCapacity(tankIndex, ((Integer) data[dataIndex]) * multiplier));
     }
 }
