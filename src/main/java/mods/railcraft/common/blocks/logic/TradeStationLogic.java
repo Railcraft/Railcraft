@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -107,9 +107,12 @@ public abstract class TradeStationLogic extends InventoryLogic {
     public boolean interact(EntityPlayer player, EnumHand hand) {
         if (super.interact(player, hand))
             return true;
-        player.addExperience(getXpCollected());
-        clearXp();
-        return true;
+        if (getXpCollected() > 0) {
+            player.addExperience(getXpCollected());
+            clearXp();
+            return true;
+        }
+        return false;
     }
 
     @Override
