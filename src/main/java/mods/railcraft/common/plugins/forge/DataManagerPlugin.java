@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,17 +12,22 @@ package mods.railcraft.common.plugins.forge;
 
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.fluids.OptionalFluidStack;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Game.Logger;
+import mods.railcraft.common.util.misc.Reflection;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
-import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.registries.DataSerializerEntry;
+import org.apache.logging.log4j.Level;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -36,6 +41,16 @@ public class DataManagerPlugin {
 
     public abstract static class DataSerializerIO<T> implements DataSerializer<T> {
 
+        private final String name;
+
+        protected DataSerializerIO(String name) {
+            this.name = name;
+        }
+
+        public ResourceLocation getResourceName() {
+            return new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, name);
+        }
+
         @Override
         public T copyValue(T value) {
             return value;
@@ -47,7 +62,7 @@ public class DataManagerPlugin {
         }
     }
 
-    public static final DataSerializer<OptionalFluidStack> OPTIONAL_FLUID_STACK = new DataSerializerIO<OptionalFluidStack>() {
+    public static final DataSerializerIO<OptionalFluidStack> OPTIONAL_FLUID_STACK = new DataSerializerIO<OptionalFluidStack>("optional.fluid.stack") {
         @Override
         public final void write(PacketBuffer buf, OptionalFluidStack value) {
             try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
@@ -80,7 +95,7 @@ public class DataManagerPlugin {
         }
     };
 
-    public static final DataSerializer<EnumColor> ENUM_COLOR = new DataSerializerIO<EnumColor>() {
+    public static final DataSerializerIO<EnumColor> ENUM_COLOR = new DataSerializerIO<EnumColor>("enum.color") {
         @Override
         public final void write(PacketBuffer buf, EnumColor value) {
             try (ByteBufOutputStream out = new ByteBufOutputStream(buf);
@@ -108,7 +123,7 @@ public class DataManagerPlugin {
         }
     };
 
-    public static final DataSerializer<byte[]> BYTE_ARRAY = new DataSerializerIO<byte[]>() {
+    public static final DataSerializerIO<byte[]> BYTE_ARRAY = new DataSerializerIO<byte[]>("byte.array") {
         @Override
         public void write(PacketBuffer packetBuffer, byte[] bytes) {
             packetBuffer.writeByteArray(bytes);
@@ -126,15 +141,19 @@ public class DataManagerPlugin {
     };
 
     public static void register() {
-        DataSerializers.registerSerializer(OPTIONAL_FLUID_STACK);
-        DataSerializers.registerSerializer(ENUM_COLOR);
-        DataSerializers.registerSerializer(BYTE_ARRAY);
+        register(OPTIONAL_FLUID_STACK);
+        register(ENUM_COLOR);
+        register(BYTE_ARRAY);
     }
 
-    @SuppressWarnings("deprecation")
+    private static void register(DataSerializerIO<?> dataSerializer) {
+        ForgeRegistries.DATA_SERIALIZERS.register(new DataSerializerEntry(dataSerializer).setRegistryName(dataSerializer.getResourceName()));
+    }
+
     public static <T> DataParameter<T> create(DataSerializer<T> serializer) {
-        Class<?> clazz = sun.reflect.Reflection.getCallerClass(2);
-        return EntityDataManager.createKey(clazz.asSubclass(Entity.class), serializer);
+        DataParameter<T> dataParameter = EntityDataManager.createKey(Reflection.getCallerClass(1), serializer);
+        Logger.INSTANCE.msg(Level.WARN, "This is NOT an error. Its just Forge being nosy.");
+        return dataParameter;
     }
 
     public static <T extends Enum<T>> void writeEnum(EntityDataManager dataManager, DataParameter<Byte> parameter, Enum<T> value) {

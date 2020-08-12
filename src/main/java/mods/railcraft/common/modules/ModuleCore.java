@@ -310,7 +310,7 @@ public class ModuleCore extends RailcraftModulePayload {
                         .tracker(80, 2, true)
                         .build();
                 ForgeRegistries.ENTITIES.register(substitute);
-                Game.log().msg(Level.INFO, "Successfully substituted {0} with {1}.", key, cartType.getRegistration().getRegistryName());
+                Game.log().msg(Level.WARN, "Successfully substituted {0} with {1}. This is an intended override.", key, cartType.getRegistration().getRegistryName());
 
                 if (original != null) {
                     BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(original, new BehaviorDefaultDispenseItem());
