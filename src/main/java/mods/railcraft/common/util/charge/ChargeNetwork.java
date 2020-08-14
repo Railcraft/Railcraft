@@ -133,6 +133,9 @@ public class ChargeNetwork implements Charge.INetwork {
      * Add the node to the network and clean up any node that used to exist there
      */
     private void addNodeImpl(BlockPos pos, ChargeNode node) {
+        if(!needsNode(pos, node.chargeSpec))
+            return;
+
         ChargeNode oldNode = nodes.put(pos.toImmutable(), node);
 
         // update the battery in the save data tracker
@@ -237,6 +240,9 @@ public class ChargeNetwork implements Charge.INetwork {
 
         @Override
         public boolean add(ChargeNode chargeNode) {
+            if(!chargeNode.isValid())
+                return false;
+
             boolean added = super.add(chargeNode);
             if (added)
                 totalLosses += chargeNode.chargeSpec.getLosses();
