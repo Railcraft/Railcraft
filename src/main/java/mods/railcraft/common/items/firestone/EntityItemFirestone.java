@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.items.EntityItemFireproof;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntityIDs;
 import mods.railcraft.common.util.misc.Game;
@@ -59,7 +60,7 @@ public class EntityItemFirestone extends EntityItemFireproof {
             if (clock % 4 != 0)
                 return;
             ItemStack stack = getItem();
-            FirestoneTools.trySpawnFire(world, getPosition(), stack);
+            FirestoneTools.trySpawnFire(world, getPosition(), stack, PlayerPlugin.getItemThrower(this));
         }
     }
 
@@ -76,16 +77,17 @@ public class EntityItemFirestone extends EntityItemFireproof {
                 surface = surface.up();
                 if (WorldPlugin.isBlockAir(world, surface) && WorldPlugin.getBlockMaterial(world, surface.down()) == Material.LAVA) {
                     boolean cracked = getItem().getItem() instanceof ItemFirestoneCracked;
-                    WorldPlugin.setBlockState(world, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked));
-                    TileEntity tile = WorldPlugin.getBlockTile(world, surface);
-                    if (tile instanceof TileRitual) {
-                        TileRitual fireTile = (TileRitual) tile;
-                        ItemStack firestone = getItem();
-                        fireTile.charge = firestone.getMaxDamage() - firestone.getItemDamage();
-                        if (firestone.hasDisplayName())
-                            fireTile.setItemName(firestone.getDisplayName());
-                        setDead();
-                        return;
+                    if (WorldPlugin.setBlockState(world, surface, firestoneBlock.withProperty(BlockRitual.CRACKED, cracked), PlayerPlugin.getItemThrower(this))) {
+                        TileEntity tile = WorldPlugin.getBlockTile(world, surface);
+                        if (tile instanceof TileRitual) {
+                            TileRitual fireTile = (TileRitual) tile;
+                            ItemStack firestone = getItem();
+                            fireTile.charge = firestone.getMaxDamage() - firestone.getItemDamage();
+                            if (firestone.hasDisplayName())
+                                fireTile.setItemName(firestone.getDisplayName());
+                            setDead();
+                            return;
+                        }
                     }
                 }
             }

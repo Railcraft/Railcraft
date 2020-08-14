@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,10 +9,10 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.machine.equipment;
 
-import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.entity.ai.EntityAIMateBreeding;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
@@ -142,7 +142,7 @@ public class TileFeedStation extends TileMachineItem implements ITileExtraDataHa
                 EntityPlayer player;
                 if (Game.isHost(world)) {
                     EntityAIMateBreeding.modifyAI(animal);
-                    player = RailcraftFakePlayer.get((WorldServer) world, getPos());
+                    player = PlayerPlugin.getOwnerEntity(getOwner(), (WorldServer) world, getPos());
                 } else {
                     player = null;
                 }

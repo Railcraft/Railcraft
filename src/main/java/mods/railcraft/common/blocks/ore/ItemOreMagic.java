@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 package mods.railcraft.common.blocks.ore;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
-import mods.railcraft.common.items.firestone.EntityItemFirestone;
+import mods.railcraft.common.items.firestone.FirestoneTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -44,21 +44,16 @@ public class ItemOreMagic extends ItemBlockRailcraftSubtyped<BlockOreMagic> {
      * function normally. Called when the item it placed in a world.
      *
      * @param world    The world object
-     * @param location The EntityItem object, useful for getting the position of
+     * @param original The EntityItem object, useful for getting the position of
      *                 the entity
      * @param stack    The current item stack
      * @return A new Entity object to spawn or null
      */
     @Override
-    public @Nullable Entity createEntity(World world, Entity location, ItemStack stack) {
+    public @Nullable Entity createEntity(World world, Entity original, ItemStack stack) {
         if (!hasCustomEntity(stack))
             return null;
-        EntityItemFirestone entity = new EntityItemFirestone(world, location.posX, location.posY, location.posZ, stack);
-        entity.motionX = location.motionX;
-        entity.motionY = location.motionY;
-        entity.motionZ = location.motionZ;
-        entity.setPickupDelay(10);
-        return entity;
+        return FirestoneTools.createEntityItem(world, original, stack);
     }
 
 }

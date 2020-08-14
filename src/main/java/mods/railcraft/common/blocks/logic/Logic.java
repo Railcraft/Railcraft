@@ -10,6 +10,8 @@
 
 package mods.railcraft.common.blocks.logic;
 
+import com.mojang.authlib.GameProfile;
+import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.carts.CartBaseLogic;
@@ -246,6 +248,8 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
 
         abstract Object getContainer();
 
+        abstract GameProfile getOwner();
+
         Optional<TileRailcraft> tile() {
             return Optional.empty();
         }
@@ -302,6 +306,11 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
             @Override
             public boolean hasCustomName() {
                 return tile.hasCustomName();
+            }
+
+            @Override
+            GameProfile getOwner() {
+                return tile.getOwner();
             }
 
             @Override
@@ -373,6 +382,11 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
                 @Override
                 public boolean hasCustomName() {
                     return cart.hasCustomName();
+                }
+
+                @Override
+                GameProfile getOwner() {
+                    return CartToolsAPI.getCartOwner(cart);
                 }
 
                 @Override

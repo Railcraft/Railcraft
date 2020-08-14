@@ -16,6 +16,7 @@ import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Annotations;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -64,6 +65,13 @@ public final class PlayerPlugin {
                 return player;
         }
         return null;
+    }
+
+    public static EntityPlayer getItemThrower(EntityItem item) {
+        EntityPlayer player = item.world.getPlayerEntityByName(item.getThrower());
+        if (player == null)
+            player = RailcraftFakePlayer.get((WorldServer) item.world, item.getPosition());
+        return player;
     }
 
     public static EntityPlayer getOwnerEntity(GameProfile owner, WorldServer world, BlockPos pos) {

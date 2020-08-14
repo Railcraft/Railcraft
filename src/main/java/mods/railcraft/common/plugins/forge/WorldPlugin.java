@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,11 +16,14 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.world.BlockEvent;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,6 +122,18 @@ public class WorldPlugin {
         return world.setBlockState(pos, blockState);
     }
 
+    public static boolean setBlockState(World world, BlockPos pos, IBlockState blockState, @Nullable EntityPlayer actor) {
+        if (actor == null)
+            actor = RailcraftFakePlayer.get((WorldServer) world, pos);
+        BlockSnapshot snapshot = BlockSnapshot.getBlockSnapshot(world, pos);
+        boolean result = setBlockState(world, pos, blockState);
+        if (ForgeEventFactory.onPlayerBlockPlace(actor, snapshot, EnumFacing.UP, EnumHand.MAIN_HAND).isCanceled()) {
+            snapshot.restore(true, false);
+            return false;
+        }
+        return result;
+    }
+
     public static boolean setBlockStateWorldGen(World world, BlockPos pos, IBlockState blockState) {
         return world.setBlockState(pos, blockState, 18); // 2 | 16
     }
@@ -139,11 +154,11 @@ public class WorldPlugin {
         return world.destroyBlock(pos, world.getGameRules().getBoolean("doTileDrops"));
     }
 
-    public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor) {
-        return destroyBlockSafe(world, pos, actor, world.getGameRules().getBoolean("doTileDrops"));
+    public static boolean destroyBlock(World world, BlockPos pos, @Nullable EntityPlayer actor) {
+        return destroyBlock(world, pos, actor, world.getGameRules().getBoolean("doTileDrops"));
     }
 
-    public static boolean destroyBlockSafe(World world, BlockPos pos, @Nullable EntityPlayer actor, boolean dropBlock) {
+    public static boolean destroyBlock(World world, BlockPos pos, @Nullable EntityPlayer actor, boolean dropBlock) {
         if (actor == null)
             actor = RailcraftFakePlayer.get((WorldServer) world, pos);
 

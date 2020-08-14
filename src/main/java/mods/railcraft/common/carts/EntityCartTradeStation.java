@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,6 @@ import mods.railcraft.common.util.entity.ai.EntityAISearchForEntity;
 import mods.railcraft.common.util.entity.ai.EntityAIWatchEntity;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
@@ -44,11 +43,6 @@ public class EntityCartTradeStation extends CartBaseLogic {
                     AIPlugin.addAITask(villager, 9, new EntityAIWatchEntity(villager, entity -> entity instanceof EntityCartTradeStation, 4, 0.08F));
                     AIPlugin.addAITask(villager, 9, new EntityAISearchForEntity(villager, entity -> entity instanceof EntityCartTradeStation, 16, 0.002F));
                 }
-            }
-
-            @Override
-            protected EntityPlayer getOwnerEntityOrFake() {
-                return CartTools.getCartOwnerEntity(EntityCartTradeStation.this);
             }
         });
     }

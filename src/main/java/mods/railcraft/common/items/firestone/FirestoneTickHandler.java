@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,8 @@ public class FirestoneTickHandler {
             return;
         if (entity instanceof EntityPlayer && ((EntityPlayer) entity).openContainer != ((EntityPlayer) entity).inventoryContainer)
             return;
-        InventoryComposite.of(entity).streamStacks().forEach(stack -> FirestoneTools.trySpawnFire(entity.world, entity.getPosition(), stack));
+        EntityPlayer holder = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
+        InventoryComposite.of(entity).streamStacks().forEach(stack -> FirestoneTools.trySpawnFire(entity.world, entity.getPosition(), stack, holder));
     }
 
 }

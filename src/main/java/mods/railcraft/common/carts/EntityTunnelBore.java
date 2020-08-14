@@ -720,7 +720,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
         EntityPlayer owner = CartTools.getFakePlayer(this);
 
         if (replaceableBlocks.contains(oldState.getBlock()))
-            WorldPlugin.destroyBlockSafe(world, targetPos, owner, true);
+            WorldPlugin.destroyBlock(world, targetPos, owner, true);
 
         if (WorldPlugin.isBlockAir(world, targetPos, oldState) && world.isSideSolid(targetPos.down(), EnumFacing.UP))
             for (IInvSlot slot : InventoryIterator.get(invRails)) {
