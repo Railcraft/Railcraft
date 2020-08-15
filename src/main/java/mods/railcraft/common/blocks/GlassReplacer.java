@@ -33,42 +33,46 @@ public class GlassReplacer extends BlockStrengthGlass {
     }
 
     @Override
+    public void initializeDefinition() {
+    }
+
+    @Override
     public Block getObject() {
         return this;
     }
 
     @Override
     public boolean requiresUpdates() {
-        return super.requiresUpdates();
+        return true;
     }
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         super.updateTick(worldIn, pos, state, rand);
-        replace(worldIn, pos, state, this);
+        replace(worldIn, pos, state);
     }
 
     @Override
     public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
         super.onNeighborChange(world, pos, neighbor);
         if (world instanceof World)
-            replace((World) world, pos, WorldPlugin.getBlockState(world, pos), this);
+            replace((World) world, pos, WorldPlugin.getBlockState(world, pos));
     }
 
     @Override
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
-        replace(worldIn, pos, state, this);
+        replace(worldIn, pos, state);
     }
 
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
         super.randomTick(worldIn, pos, state, random);
-        replace(worldIn, pos, state, this);
+        replace(worldIn, pos, state);
     }
 
-    private static void replace(World worldIn, BlockPos pos, IBlockState state, GlassReplacer block) {
+    private void replace(World worldIn, BlockPos pos, IBlockState state) {
         WorldPlugin.setBlockState(worldIn, pos, RailcraftBlocks.GLASS.getDefaultState().withProperty(EnumColor.PROPERTY, state.getValue(EnumColor.PROPERTY)));
-        WorldPlugin.notifyBlocksOfNeighborChange(worldIn, pos, block);
+        WorldPlugin.notifyBlocksOfNeighborChange(worldIn, pos, this);
     }
 }

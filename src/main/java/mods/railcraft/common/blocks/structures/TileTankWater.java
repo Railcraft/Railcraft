@@ -130,6 +130,13 @@ public class TileTankWater extends TileLogic {
         );
     }
 
+    @Override
+    public String getLocalizationTag() {
+        if (getLogic(StructureLogic.class).map(StructureLogic::isStructureValid).orElse(false))
+            return "gui.railcraft.tank.water";
+        return super.getLocalizationTag();
+    }
+
     public static void placeWaterTank(World world, BlockPos pos, int water) {
         StructurePattern pattern = TileTankWater.patterns.get(0);
         Char2ObjectMap<IBlockState> blockMapping = new Char2ObjectOpenHashMap<>();

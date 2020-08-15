@@ -101,7 +101,7 @@ public class StorageTankLogic extends InventoryLogic {
 
     @Override
     public @Nullable EnumGui getGUI() {
-        return EnumGui.TANK_WATER;
+        return EnumGui.TANK;
     }
 
     @Override

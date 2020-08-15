@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.logic;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IWorldSupplier;
+import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.carts.CartBaseLogic;
 import mods.railcraft.common.gui.EnumGui;
@@ -340,6 +341,14 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
 
         public static Adapter.Tile of(TileRailcraft tile) {
             return new Tile(tile);
+        }
+
+        public static Adapter from(ILogicContainer logicContainer) {
+            if (logicContainer instanceof CartBaseLogic)
+                return of((CartBaseLogic) logicContainer);
+            if (logicContainer instanceof TileLogic)
+                return of((TileLogic) logicContainer);
+            throw new IllegalArgumentException("Invalid Logic Container");
         }
 
         public static Adapter of(CartBaseLogic cart) {

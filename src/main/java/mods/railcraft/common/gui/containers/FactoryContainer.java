@@ -12,7 +12,6 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.interfaces.ITileAspectResponder;
 import mods.railcraft.common.blocks.logic.*;
-import mods.railcraft.common.blocks.machine.ITankTile;
 import mods.railcraft.common.blocks.machine.equipment.TileFeedStation;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachine;
 import mods.railcraft.common.blocks.machine.equipment.TileRollingMachinePowered;
@@ -20,7 +19,10 @@ import mods.railcraft.common.blocks.machine.manipulator.*;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.structures.*;
+import mods.railcraft.common.blocks.structures.TileBoilerFireboxFluid;
+import mods.railcraft.common.blocks.structures.TileBoilerFireboxSolid;
+import mods.railcraft.common.blocks.structures.TileMultiBlock;
+import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
@@ -87,9 +89,7 @@ public final class FactoryContainer {
                 case ROCK_CRUSHER:
                     return new ContainerRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
                 case TANK:
-                    return new ContainerTank(inv, (ITankTile) obj);
-                case TANK_WATER:
-                    return new ContainerTankWater(inv, (TileTankWater) obj);
+                    return new ContainerTank(inv, (ILogicContainer) obj);
                 case ROLLING_MACHINE_MANUAL:
                     return new ContainerRollingMachine(inv, (TileRollingMachine) obj);
                 case ROLLING_MACHINE_POWERED:

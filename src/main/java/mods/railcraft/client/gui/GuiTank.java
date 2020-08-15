@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,9 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.machine.ITankTile;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
 import mods.railcraft.common.gui.containers.ContainerTank;
-import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
 /**
@@ -19,8 +18,7 @@ import net.minecraft.entity.player.InventoryPlayer;
  */
 public class GuiTank extends GuiTitled {
 
-    public GuiTank(InventoryPlayer inv, ITankTile tile) {
-        super(tile, new ContainerTank(inv, tile), "gui_tank_water.png",
-                LocalizationPlugin.translate(tile.getTitle()));
+    public GuiTank(InventoryPlayer inv, ILogicContainer logicContainer) {
+        super(logicContainer, new ContainerTank(inv, logicContainer), "gui_tank.png");
     }
 }

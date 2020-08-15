@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,7 @@ import mods.railcraft.api.core.INetworkedObject;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
+import net.minecraft.world.IWorldNameable;
 
 import java.util.Optional;
 
@@ -22,6 +23,6 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public interface ILogicContainer extends INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IGuiReturnHandler {
+public interface ILogicContainer extends INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, IGuiReturnHandler, IWorldNameable {
     <L> Optional<L> getLogic(Class<L> logicClass);
 }

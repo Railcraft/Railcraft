@@ -385,6 +385,13 @@ public abstract class TileTank extends TileLogic {
         return EnumGui.TANK;
     }
 
+    @Override
+    public String getLocalizationTag() {
+        if (getLogic(StructureLogic.class).map(StructureLogic::isStructureValid).orElse(false))
+            return getTankDefinition().getTitle();
+        return super.getLocalizationTag();
+    }
+
     public abstract TankDefinition getTankDefinition();
 
     @Override
