@@ -89,17 +89,18 @@ public class ModuleWorld extends RailcraftModulePayload {
 
                 oreConfigFolder = new File(Railcraft.instance.getConfigFolder(), "ores");
                 if (!oreConfigFolder.exists())
+                    //noinspection ResultOfMethodCallIgnored
                     oreConfigFolder.mkdirs();
 
                 if (RailcraftConfig.generateDefaultOreConfigs()) {
-                    generateDefaultConfigs(100, 60, 3, 8, 20, 8, 29, Metal.COPPER);
-                    generateDefaultConfigs(100, 15, 1, 1, 0, 0, 79, Metal.GOLD);
-                    generateDefaultConfigs(100, 40, 4, 16, 0, 0, 26, Metal.IRON);
-                    generateDefaultConfigs(101, 40, 6, 4, 15, 6, 26, Metal.NICKEL); // Same depth/seed as Iron so they will generate together
-                    generateDefaultConfigs(100, 30, 3, 6, 10, 7, 82, Metal.LEAD);
-                    generateDefaultConfigs(101, 30, 4, 4, 10, 6, 82, Metal.ZINC); // Same depth/seed as Lead so they will generate together
-                    generateDefaultConfigs(100, 20, 2, 2, 10, 4, 47, Metal.SILVER);
-                    generateDefaultConfigs(100, 50, 2, 4, 15, 6, 50, Metal.TIN);
+                    generateDefaultConfigs(8, 60, 3, 8, 20, 8, 29, Metal.COPPER);
+                    generateDefaultConfigs(8, 15, 1, 1, 0, 0, 79, Metal.GOLD);
+                    generateDefaultConfigs(8, 40, 4, 16, 0, 0, 26, Metal.IRON);
+                    generateDefaultConfigs(9, 40, 6, 4, 15, 6, 26, Metal.NICKEL); // Same depth/seed as Iron so they will generate together
+                    generateDefaultConfigs(8, 30, 3, 6, 10, 7, 82, Metal.LEAD);
+                    generateDefaultConfigs(9, 30, 4, 4, 10, 6, 82, Metal.ZINC); // Same depth/seed as Lead so they will generate together
+                    generateDefaultConfigs(8, 20, 2, 2, 10, 4, 47, Metal.SILVER);
+                    generateDefaultConfigs(8, 50, 2, 4, 15, 6, 50, Metal.TIN);
                 }
             }
 
@@ -118,6 +119,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                 for (int ii = 0; ii < numConfigs; ii++) {
                     File file = new File(oreConfigFolder, fileNames[ii]);
                     if (file.exists())
+                        //noinspection ResultOfMethodCallIgnored
                         file.delete();
                     oreConfigs[ii] = new Configuration(file);
                     oreConfigs[ii].load();

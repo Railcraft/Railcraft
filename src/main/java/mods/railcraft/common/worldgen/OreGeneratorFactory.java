@@ -59,7 +59,7 @@ public class OreGeneratorFactory {
     }
 
     public OreGeneratorFactory(Configuration config) {
-        this(config, "MINE", 100, 4, 40, 3, 29, "railcraft:ore_metal_poor#2", "railcraft:ore_metal#0");
+        this(config, "MINE", 0, 4, 40, 3, 29, "railcraft:ore_metal_poor#2", "railcraft:ore_metal#0");
     }
 
     private OreGeneratorFactory(Configuration config, String defaultType, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, int defaultSeed, String defaultFringeOre, String defaultCoreOre) {
