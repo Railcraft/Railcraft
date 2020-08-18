@@ -97,6 +97,13 @@ public final class Train implements Iterable<EntityMinecart> {
         };
     }
 
+    /**
+     * Finds and returns a Train object.
+     *
+     * If one is not found, it will create a new instance.
+     *
+     * This function is NOT thread safe and will throw an error if called outside the server thread.
+     */
     public static Optional<Train> get(@Nullable EntityMinecart cart) {
         if (cart == null)
             return Optional.empty();
@@ -118,6 +125,13 @@ public final class Train implements Iterable<EntityMinecart> {
         });
     }
 
+    /**
+     * Finds and returns a Train object only if one has already been created.
+     *
+     * It will not create a new Train instance.
+     *
+     * This function is thread safe.
+     */
     public static Optional<Train> getExisting(@Nullable EntityMinecart cart) {
         if (cart == null)
             return Optional.empty();
