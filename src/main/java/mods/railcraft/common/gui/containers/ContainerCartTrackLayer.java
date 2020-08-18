@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.gui.containers;
 
-import mods.railcraft.common.carts.EntityCartTrackLayer;
+import mods.railcraft.common.carts.CartBaseMaintenancePattern;
 import mods.railcraft.common.gui.slots.SlotLinked;
 import mods.railcraft.common.gui.slots.SlotTrackFilter;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -18,7 +18,7 @@ import net.minecraft.inventory.Slot;
 
 public class ContainerCartTrackLayer extends RailcraftContainer {
 
-    public ContainerCartTrackLayer(InventoryPlayer inventoryplayer, EntityCartTrackLayer cart) {
+    public ContainerCartTrackLayer(InventoryPlayer inventoryplayer, CartBaseMaintenancePattern cart) {
         super(cart);
         Slot track;
         addSlot(track = new SlotTrackFilter(cart.getPattern(), 0, 49, 43));
