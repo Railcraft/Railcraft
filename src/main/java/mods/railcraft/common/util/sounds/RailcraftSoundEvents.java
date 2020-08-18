@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,8 @@ package mods.railcraft.common.util.sounds;
 import mods.railcraft.common.core.RailcraftConstants;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * Created by CovertJaguar on 5/25/2016 for Railcraft.
@@ -29,9 +31,17 @@ public enum RailcraftSoundEvents {
 
     RailcraftSoundEvents(String path) {
         this.soundEvent = new SoundEvent(new ResourceLocation(RailcraftConstants.SOUND_FOLDER + path));
+        soundEvent.setRegistryName(new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, path));
     }
 
     public SoundEvent getSoundEvent() {
         return soundEvent;
+    }
+
+    @SubscribeEvent
+    public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+        for (RailcraftSoundEvents rse : RailcraftSoundEvents.values()) {
+            event.getRegistry().registerAll(rse.soundEvent);
+        }
     }
 }
