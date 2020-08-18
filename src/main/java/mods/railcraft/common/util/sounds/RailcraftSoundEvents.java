@@ -41,7 +41,7 @@ public enum RailcraftSoundEvents {
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
         for (RailcraftSoundEvents rse : RailcraftSoundEvents.values()) {
-            event.getRegistry().registerAll(rse.soundEvent);
+            event.getRegistry().register(rse.soundEvent);
         }
     }
 }
