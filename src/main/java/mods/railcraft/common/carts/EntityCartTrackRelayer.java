@@ -52,7 +52,7 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
         super.onUpdate();
         if (Game.isClient(world))
             return;
-
+        if(getMode() == CartMode.TRANSPORT) return;
         stockItems(SLOT_REPLACE, SLOT_STOCK);
         replace();
     }
@@ -116,4 +116,5 @@ public class EntityCartTrackRelayer extends CartBaseMaintenancePattern {
     protected EnumGui getGuiType() {
         return EnumGui.CART_TRACK_RELAYER;
     }
+
 }

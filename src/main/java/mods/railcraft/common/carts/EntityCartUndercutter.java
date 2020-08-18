@@ -86,7 +86,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
         super.onUpdate();
         if (Game.isClient(world))
             return;
-
+        if(getMode() == CartMode.TRANSPORT) return;
         stockItems(SLOT_REPLACE_UNDER, SLOT_STOCK_UNDER);
         stockItems(SLOT_REPLACE_SIDE, SLOT_STOCK_SIDE);
 

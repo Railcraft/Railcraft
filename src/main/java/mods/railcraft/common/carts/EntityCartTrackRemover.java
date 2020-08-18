@@ -66,6 +66,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     private void removeTrack(BlockPos track) {
+        if(getMode() == CartMode.TRANSPORT) return;
         if (getDistanceSq(track) >= 9)
             tracksRemoved.add(track);
         else if (!TrackTools.isRailBlockAt(world, track))

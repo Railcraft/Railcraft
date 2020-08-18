@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.common.carts.CartBaseMaintenancePattern;
 import mods.railcraft.common.carts.EntityCartUndercutter;
 import mods.railcraft.common.gui.slots.SlotBlockFilter;
 import mods.railcraft.common.gui.slots.SlotLinked;
@@ -19,19 +20,19 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerCartUndercutter extends RailcraftContainer {
 
-    public ContainerCartUndercutter(InventoryPlayer inventoryplayer, EntityCartUndercutter cart) {
+    public ContainerCartUndercutter(InventoryPlayer inventoryplayer, CartBaseMaintenancePattern cart) {
         super(cart);
 
-        addSlot(new SlotBlockFilter(cart.getPattern(), 0, 17, 45));
-        addSlot(new SlotBlockFilter(cart.getPattern(), 1, 35, 45));
-        addSlot(new SlotBlockFilter(cart.getPattern(), 2, 17, 87));
-        addSlot(new SlotBlockFilter(cart.getPattern(), 3, 35, 87));
+        addSlot(new SlotBlockFilter(cart.getPattern(), 0, 17, 36));
+        addSlot(new SlotBlockFilter(cart.getPattern(), 1, 35, 36));
+        addSlot(new SlotBlockFilter(cart.getPattern(), 2, 17, 78));
+        addSlot(new SlotBlockFilter(cart.getPattern(), 3, 35, 78));
         Slot under;
-        addSlot(under = new SlotUndercutterFilter(cart.getPattern(), 4, 80, 45));
+        addSlot(under = new SlotUndercutterFilter(cart.getPattern(), 4, 80, 36));
         Slot side;
-        addSlot(side = new SlotUndercutterFilter(cart.getPattern(), 5, 80, 87));
-        addSlot(new SlotLinked(cart, 0, 131, 45, under));
-        addSlot(new SlotLinked(cart, 1, 131, 87, side));
+        addSlot(side = new SlotUndercutterFilter(cart.getPattern(), 5, 80, 78));
+        addSlot(new SlotLinked(cart, 0, 131, 36, under));
+        addSlot(new SlotLinked(cart, 1, 131, 78, side));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {
