@@ -3,14 +3,20 @@
   "defaults": {
     "model": "railcraft:glass",
     "textures": {
-      "particle": "railcraft:blocks/tank_steel_gauge_0",
-      "overlay": "railcraft:blocks/tank_steel_gauge_4",
-      "down": "railcraft:blocks/tank_steel_gauge_0",
-      "up": "railcraft:blocks/tank_steel_gauge_0"
+      "particle": "railcraft:blocks/glass_0",
+      "overlay": "railcraft:blocks/glass_4",
+      "down": "railcraft:blocks/glass_0",
+      "up": "railcraft:blocks/glass_0"
     }
   },
   "variants": {
     "normal": [{}],
-    "inventory": [{"transform": "forge:default-block"}]
+    "inventory": [{"transform": "forge:default-block"}],
+    "position": {
+      "single": {"textures": {"side": "railcraft:blocks/glass_0"}},
+      "top": {"textures": {"side": "railcraft:blocks/glass_1"}},
+      "center": {"textures": {"side": "railcraft:blocks/glass_2"}},
+      "bottom": {"textures": {"side": "railcraft:blocks/glass_3"}}
+    }
   }
 }
