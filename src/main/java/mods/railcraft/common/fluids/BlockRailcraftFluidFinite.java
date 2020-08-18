@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.IRailcraftBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -80,6 +81,11 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite implements IRail
         this.particleGreen = particleGreen;
         this.particleBlue = particleBlue;
         return this;
+    }
+
+    @Override
+    public StateMapperBase getStateMapper() {
+        return RailcraftFluids.getStateMapper(this);
     }
 
     @Override

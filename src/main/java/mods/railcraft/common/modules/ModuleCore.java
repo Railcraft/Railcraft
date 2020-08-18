@@ -107,7 +107,6 @@ public class ModuleCore extends RailcraftModulePayload {
 
                 SignalTools.packetBuilder = PacketBuilder.instance();
 
-                RailcraftFluids.preInitFluids();
                 if (RailcraftConfig.handleBottles())
                     MinecraftForge.EVENT_BUS.register(CustomContainerHandler.INSTANCE);
                 MinecraftForge.EVENT_BUS.register(RailcraftDamageSource.EVENT_HANDLER);
@@ -150,7 +149,10 @@ public class ModuleCore extends RailcraftModulePayload {
                         RailcraftCarts.TNT,
                         RailcraftCarts.HOPPER,
                         RailcraftCarts.COMMAND_BLOCK,
-                        RailcraftCarts.SPAWNER
+                        RailcraftCarts.SPAWNER,
+
+                        RailcraftFluids.CREOSOTE,
+                        RailcraftFluids.STEAM
                 );
             }
 
@@ -424,8 +426,6 @@ public class ModuleCore extends RailcraftModulePayload {
 
             @Override
             public void postInit() {
-                RailcraftFluids.finalizeDefinitions();
-
                 addLiquidFuels();
 
                 FluidTools.initWaterBottle(RailcraftConfig.nerfWaterBottle());

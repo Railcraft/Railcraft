@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,11 +10,13 @@
 
 package mods.railcraft.common.core;
 
+import com.google.common.collect.Streams;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.IRailcraftItemBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.RailcraftCarts;
+import mods.railcraft.common.fluids.RailcraftFluids;
 import mods.railcraft.common.items.IRailcraftItemSimple;
 import mods.railcraft.common.items.RailcraftItems;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +35,7 @@ import java.util.function.Consumer;
 public class RailcraftObjects {
 
     public static void processBlocks(@Nullable BiConsumer<IRailcraftBlock, IRailcraftItemBlock> processBlock, BiConsumer<IRailcraftBlock, IVariantEnum> processVariants) {
-        for (RailcraftBlocks blockContainer : RailcraftBlocks.VALUES) {
+        Streams.concat(Arrays.stream(RailcraftBlocks.VALUES), Arrays.stream(RailcraftFluids.VALUES)).forEach(blockContainer -> {
             blockContainer.getObject().ifPresent(block -> {
                 if (processBlock != null)
                     processBlock.accept(block, (IRailcraftItemBlock) blockContainer.item());
@@ -44,7 +46,7 @@ public class RailcraftObjects {
                     }
                 } else processVariants.accept(block, null);
             });
-        }
+        });
     }
 
     public static void processBlockVariants(BiConsumer<IRailcraftBlock, IVariantEnum> processVariants) {
