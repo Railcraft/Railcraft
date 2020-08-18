@@ -465,7 +465,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         // Unloaded entities are not "isDead"
         if (Game.isHost(entityIn.world) && !entityIn.isEntityAlive() && entityIn instanceof EntityMinecart) {
             // We only mark Trains for deletion here, this event seems to be called from outside the server thread.
-            Train.get(((EntityMinecart) entityIn)).ifPresent(Train::kill);
+            Train.getExisting(((EntityMinecart) entityIn)).ifPresent(Train::kill);
             LinkageManager.INSTANCE.breakLinks((EntityMinecart) entityIn);
         }
     }

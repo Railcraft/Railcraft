@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -118,7 +118,7 @@ public final class Train implements Iterable<EntityMinecart> {
         });
     }
 
-    private static Optional<Train> getTrainRaw(@Nullable EntityMinecart cart) {
+    public static Optional<Train> getExisting(@Nullable EntityMinecart cart) {
         if (cart == null)
             return Optional.empty();
         Optional<Train> train = getManager(cart.world).map(manager -> manager.get(getTrainUUID(cart)));
@@ -160,8 +160,8 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     private static Optional<Train> getLongerTrain(EntityMinecart cart1, EntityMinecart cart2) {
-        Optional<Train> train1 = getTrainRaw(cart1);
-        Optional<Train> train2 = getTrainRaw(cart2);
+        Optional<Train> train1 = getExisting(cart1);
+        Optional<Train> train2 = getExisting(cart2);
 
         if (train1.equals(train2))
             return train1;
@@ -207,7 +207,7 @@ public final class Train implements Iterable<EntityMinecart> {
         else
             throw new IllegalStateException("Passed a non-null prev value on an empty train!");
 
-        getTrainRaw(next).filter(t -> t != this).ifPresent(Train::kill);
+        getExisting(next).filter(t -> t != this).ifPresent(Train::kill);
         addTrainTag(next);
 
         LinkageManager lm = LinkageManager.INSTANCE;
@@ -237,7 +237,7 @@ public final class Train implements Iterable<EntityMinecart> {
      */
     public static void killTrain(EntityMinecart cart) {
 //        Game.log(Level.WARN, "Thread: " + Thread.currentThread().getName());
-        getTrainRaw(cart).ifPresent(Train::kill);
+        getExisting(cart).ifPresent(Train::kill);
         removeTrainTag(cart);
     }
 
