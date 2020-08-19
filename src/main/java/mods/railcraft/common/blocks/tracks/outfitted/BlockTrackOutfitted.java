@@ -80,9 +80,9 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
         setCreativeTab(CreativePlugin.TRACK_TAB);
         setHarvestLevel("crowbar", 0);
         setDefaultState(((IExtendedBlockState) getDefaultState().withProperty(TICKING, false))
-                .withProperty(TRACK_TYPE, TrackTypes.IRON.getTrackType())
-                .withProperty(TRACK_KIT, TrackKits.BOOSTER.getTrackKit())
-                .withProperty(STATE, 0)
+//                .withProperty(TRACK_TYPE, TrackTypes.IRON.getTrackType())
+//                .withProperty(TRACK_KIT, TrackRegistry.getMissingTrackKit())
+//                .withProperty(STATE, 0)
         );
         setTickRandomly(true);
     }
