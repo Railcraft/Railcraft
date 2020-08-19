@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,13 +51,13 @@ public class ModuleIC2 extends RailcraftModulePayload {
             }
 
             @Override
-            public void preInit(){
-            //    IC2Plugin.addCanningRecipe(IC2Plugin.getItem("fluid_cell"), RailcraftItems.TARBERRY.getStack(), IC2Plugin.getItem("fluid_cell#railcraftcreosote")); ##Saved for later
+            public void preInit() {
+                //    IC2Plugin.addCanningRecipe(IC2Plugin.getItem("fluid_cell"), RailcraftItems.TARBERRY.getStack(), IC2Plugin.getItem("fluid_cell#railcraftcreosote")); ##Saved for later
             }
 
             @Override
             public void init() {
-            //    Crops.instance.registerCrop(new CropCreosote()); ##Save this for when a proper crafting recipe is possible
+                //    Crops.instance.registerCrop(new CropCreosote()); ##Save this for when a proper crafting recipe is possible
 //                Block blockDetector = RailcraftBlocks.DETECTOR.block();
 //
 //                if (blockDetector != null) {
@@ -141,7 +141,7 @@ public class ModuleIC2 extends RailcraftModulePayload {
                 else
                     detector = new ItemStack(Blocks.STONE_PRESSURE_PLATE);
 
-                if (!InvTools.isEmpty(battery) && !InvTools.isEmpty(machine)) {
+                if (!InvTools.isEmpty(battery) && !InvTools.isEmpty(machine) && !InvTools.isEmpty(detector)) {
                     if (ManipulatorVariant.ENERGY_LOADER.isAvailable())
                         Recipes.advRecipes.addRecipe(ManipulatorVariant.ENERGY_LOADER.getStack(),
                                 "BLB",
