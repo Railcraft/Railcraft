@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,9 +79,9 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
     }
 
     private void slowCartSpeed(EntityMinecart cart) {
-//        if (cart instanceof EntityLocomotive) {
-//            ((EntityLocomotive) cart).forceIdle(20);
-//        }
+        if (cart instanceof EntityLocomotive) {
+            ((EntityLocomotive) cart).forceIdle(20);
+        }
         cart.motionX *= SLOW_FACTOR;
         cart.motionZ *= SLOW_FACTOR;
     }

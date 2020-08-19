@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -81,9 +81,9 @@ public class TrackKitBooster extends TrackKitPowered {
         } else {
             boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
             if (highSpeed) {
-//                if (cart instanceof EntityLocomotive) {
-//                    ((EntityLocomotive) cart).forceIdle(20);
-//                }
+                if (cart instanceof EntityLocomotive) {
+                    ((EntityLocomotive) cart).forceIdle(20);
+                }
                 cart.motionX *= SLOW_FACTOR_HS;
                 cart.motionY = 0.0D;
                 cart.motionZ *= SLOW_FACTOR_HS;
