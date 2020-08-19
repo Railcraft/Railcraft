@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,7 +79,11 @@ public class BlockTrackOutfitted extends BlockTrackTile<TileTrackOutfitted> impl
     public BlockTrackOutfitted() {
         setCreativeTab(CreativePlugin.TRACK_TAB);
         setHarvestLevel("crowbar", 0);
-        setDefaultState(getDefaultState().withProperty(TICKING, false));
+        setDefaultState(((IExtendedBlockState) getDefaultState().withProperty(TICKING, false))
+                .withProperty(TRACK_TYPE, TrackTypes.IRON.getTrackType())
+                .withProperty(TRACK_KIT, TrackKits.BOOSTER.getTrackKit())
+                .withProperty(STATE, 0)
+        );
         setTickRandomly(true);
     }
 
