@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
@@ -88,7 +89,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
 
     @Override // called on server thread only
     public void onMinecartPass(EntityMinecart cart) {
-        if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger("MountPrevention") <= 0) {
+        if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger(CartConstants.TAG_MOUNT_PREVENTION) <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
             box = box.grow(a, a, a);

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.block.state.IBlockState;
@@ -65,7 +66,7 @@ public class TrackKitDisembark extends TrackKitPowered implements ITrackKitRever
             else
                 z -= offset;
             CartTools.removePassengers(cart, new Vec3d(x + 0.5, getPos().getY() + 1, z + 0.5));
-            cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
+            cart.getEntityData().setInteger(CartConstants.TAG_MOUNT_PREVENTION, TIME_TILL_NEXT_MOUNT);
         }
     }
 

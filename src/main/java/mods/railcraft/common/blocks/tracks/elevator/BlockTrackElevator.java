@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.elevator;
 
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
 import mods.railcraft.common.items.RailcraftItems;
@@ -255,7 +256,7 @@ public class BlockTrackElevator extends BlockRailcraft {
      *              assumed that the minecart is within the area of effect of the block
      */
     protected void minecartInteraction(World world, EntityMinecart cart, BlockPos pos) {
-        cart.getEntityData().setByte("elevator", ELEVATOR_TIMER);
+        cart.getEntityData().setByte(CartConstants.TAG_ELEVATOR, ELEVATOR_TIMER);
         cart.setNoGravity(true);
         IBlockState state = WorldPlugin.getBlockState(world, pos);
         keepMinecartConnected(pos, state, cart);

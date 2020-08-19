@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.tracks.ITrackKitPowered;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.CartTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -49,7 +50,7 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
         if (cart.isBeingRidden()) {
             CartTools.removePassengers(cart, cart.getPositionVector().add(0, -2, 0));
         }
-        cart.getEntityData().setInteger("MountPrevention", TIME_TILL_NEXT_MOUNT);
+        cart.getEntityData().setInteger(CartConstants.TAG_MOUNT_PREVENTION, TIME_TILL_NEXT_MOUNT);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,6 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.tracks.TrackToolsAPI;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.collections.Streams;
@@ -140,7 +141,7 @@ public final class LinkageHandler {
 //            stretch *= 2;
 //        }
 
-        boolean highSpeed = CartTools.isTravellingHighSpeed(cart1);
+        boolean highSpeed = HighSpeedTools.isTravellingHighSpeed(cart1);
 
         double stiffness = highSpeed ? HS_STIFFNESS : STIFFNESS;
         double springX = stiffness * stretch * unit.getX();
@@ -223,7 +224,7 @@ public final class LinkageHandler {
 //        cart.motionZ += pushZ;
 
         // Drag
-        if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class) && !CartTools.isTravellingHighSpeed(cart)) {
+        if (linked && RailcraftModuleManager.isModuleEnabled(ModuleLocomotives.class) && !HighSpeedTools.isTravellingHighSpeed(cart)) {
             cart.motionX *= LINK_DRAG;
             cart.motionZ *= LINK_DRAG;
         }
@@ -343,12 +344,12 @@ public final class LinkageHandler {
     }
 
     public boolean isLaunched(EntityMinecart cart) {
-        int launched = cart.getEntityData().getInteger("Launched");
+        int launched = cart.getEntityData().getInteger(CartConstants.TAG_LAUNCHED);
         return launched > 0;
     }
 
     public boolean isOnElevator(EntityMinecart cart) {
-        int elevator = cart.getEntityData().getByte("elevator");
+        int elevator = cart.getEntityData().getByte(CartConstants.TAG_ELEVATOR);
         return elevator > 0;
     }
 

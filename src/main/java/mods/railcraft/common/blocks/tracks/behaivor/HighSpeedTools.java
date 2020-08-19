@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,7 @@ import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
+import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.core.RailcraftConfig;
 import net.minecraft.block.BlockRailBase;
@@ -72,18 +73,18 @@ public final class HighSpeedTools {
     }
 
     public static void performHighSpeedChecks(World world, BlockPos pos, EntityMinecart cart, @Nullable TrackKit trackKit) {
-        boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
+        boolean highSpeed = isTravellingHighSpeed(cart);
         if (highSpeed) {
             checkSafetyAndExplode(world, pos, cart);
         } else if (trackKit == TrackKits.BOOSTER.getTrackKit() || trackKit == TrackKits.HIGH_SPEED_TRANSITION.getTrackKit()) {
             if (isTrackSafeForHighSpeed(world, pos, cart)) {
                 if (Math.abs(cart.motionX) > SPEED_CUTOFF) {
                     cart.motionX = Math.copySign(SPEED_CUTOFF, cart.motionX);
-                    CartTools.setTravellingHighSpeed(cart, true);
+                    setTravellingHighSpeed(cart, true);
                 }
                 if (Math.abs(cart.motionZ) > SPEED_CUTOFF) {
                     cart.motionZ = Math.copySign(SPEED_CUTOFF, cart.motionZ);
-                    CartTools.setTravellingHighSpeed(cart, true);
+                    setTravellingHighSpeed(cart, true);
                 }
             }
         } else {
@@ -121,5 +122,13 @@ public final class HighSpeedTools {
             }
 
         return maxSpeed;
+    }
+
+    public static void setTravellingHighSpeed(EntityMinecart cart, boolean flag) {
+        cart.getEntityData().setBoolean(CartConstants.TAG_HIGH_SPEED, flag);
+    }
+
+    public static boolean isTravellingHighSpeed(EntityMinecart cart) {
+        return cart.getEntityData().getBoolean(CartConstants.TAG_HIGH_SPEED);
     }
 }

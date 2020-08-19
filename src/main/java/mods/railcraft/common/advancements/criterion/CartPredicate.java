@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,8 @@ package mods.railcraft.common.advancements.criterion;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import mods.railcraft.api.carts.CartToolsAPI;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.carts.CartConstants;
-import mods.railcraft.common.carts.CartTools;
 import mods.railcraft.common.carts.LinkageHandler;
 import mods.railcraft.common.carts.MinecartHooks;
 import mods.railcraft.common.util.json.JsonTools;
@@ -56,7 +56,7 @@ public final class CartPredicate {
     }
 
     public boolean test(EntityPlayerMP player, EntityMinecart cart) {
-        if (highSpeed != null && CartTools.isTravellingHighSpeed(cart) != highSpeed) {
+        if (highSpeed != null && HighSpeedTools.isTravellingHighSpeed(cart) != highSpeed) {
             return false;
         }
         if (launched != null && LinkageHandler.getInstance().isLaunched(cart) != launched) {
@@ -86,9 +86,9 @@ public final class CartPredicate {
         }
         JsonObject object = JsonUtils.getJsonObject(element, "a cart predicate");
 
-        Boolean highSpeed = JsonTools.nullableBoolean(object, "high_speed");
-        Boolean launched = JsonTools.nullableBoolean(object, "launched");
-        Boolean elevator = JsonTools.nullableBoolean(object, "elevator");
+        Boolean highSpeed = JsonTools.nullableBoolean(object, CartConstants.TAG_HIGH_SPEED);
+        Boolean launched = JsonTools.nullableBoolean(object, CartConstants.TAG_LAUNCHED);
+        Boolean elevator = JsonTools.nullableBoolean(object, CartConstants.TAG_ELEVATOR);
         Boolean derail = JsonTools.nullableBoolean(object, CartConstants.TAG_DERAIL);
         Boolean canMount = JsonTools.nullableBoolean(object, "canMount");
         Boolean checksOwner = JsonTools.nullableBoolean(object, "check_owner");

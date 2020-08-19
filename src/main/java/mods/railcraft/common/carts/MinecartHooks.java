@@ -82,7 +82,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     }
 
     public boolean canMount(EntityMinecart cart) {
-        return cart.getEntityData().getInteger("MountPrevention") <= 0;
+        return cart.getEntityData().getInteger(CartConstants.TAG_MOUNT_PREVENTION) <= 0;
     }
 
     @SuppressWarnings("unused")
@@ -247,7 +247,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     }
 
     private void land(EntityMinecart cart) {
-        cart.getEntityData().setInteger("Launched", 0);
+        cart.getEntityData().setInteger(CartConstants.TAG_LAUNCHED, 0);
         cart.setMaxSpeedAirLateral(EntityMinecart.defaultMaxSpeedAirLateral);
         cart.setMaxSpeedAirVertical(EntityMinecart.defaultMaxSpeedAirVertical);
         cart.setDragAir(EntityMinecart.defaultDragAir);
@@ -279,7 +279,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         }
 
         Block block = WorldPlugin.getBlock(cart.world, event.getPos());
-        int launched = data.getInteger("Launched");
+        int launched = data.getInteger(CartConstants.TAG_LAUNCHED);
         if (TrackTools.isRail(block)) {
             cart.fallDistance = 0;
             if (cart.isBeingRidden())
@@ -287,45 +287,45 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
             if (launched > 1)
                 land(cart);
         } else if (launched == 1) {
-            data.setInteger("Launched", 2);
+            data.setInteger(CartConstants.TAG_LAUNCHED, 2);
             cart.setCanUseRail(true);
         } else if (launched > 1 && (cart.onGround || cart.isInsideOfMaterial(Material.CIRCUITS)))
             land(cart);
 
-        int mountPrevention = data.getInteger("MountPrevention");
+        int mountPrevention = data.getInteger(CartConstants.TAG_MOUNT_PREVENTION);
         if (mountPrevention > 0) {
             mountPrevention--;
-            data.setInteger("MountPrevention", mountPrevention);
+            data.setInteger(CartConstants.TAG_MOUNT_PREVENTION, mountPrevention);
         }
 
-        byte elevator = data.getByte("elevator");
+        byte elevator = data.getByte(CartConstants.TAG_ELEVATOR);
         if (elevator < BlockTrackElevator.ELEVATOR_TIMER) {
             cart.setNoGravity(false);
         }
         if (elevator > 0) {
             elevator--;
-            data.setByte("elevator", elevator);
+            data.setByte(CartConstants.TAG_ELEVATOR, elevator);
         }
 
         byte derail = data.getByte(CartConstants.TAG_DERAIL);
         if (derail > 0) {
             derail--;
-            data.setByte("derail", derail);
+            data.setByte(CartConstants.TAG_DERAIL, derail);
             // nothing ever sets it to false, so why set it true here?
 //            if (derail == 0) {
 //                cart.setCanUseRail(true);
 //            }
         }
 
-        if (data.getBoolean("explode")) {
-            cart.getEntityData().setBoolean("explode", false);
+        if (data.getBoolean(CartConstants.TAG_EXPLODE)) {
+            cart.getEntityData().setBoolean(CartConstants.TAG_EXPLODE, false);
             CartTools.explodeCart(cart);
         }
 
-        if (data.getBoolean(CartTools.HIGH_SPEED_TAG))
+        if (data.getBoolean(CartConstants.TAG_HIGH_SPEED))
             if (CartTools.cartVelocityIsLessThan(cart, HighSpeedTools.SPEED_EXPLODE))
-                data.setBoolean(CartTools.HIGH_SPEED_TAG, false);
-            else if (data.getInteger("Launched") == 0)
+                data.setBoolean(CartConstants.TAG_HIGH_SPEED, false);
+            else if (data.getInteger(CartConstants.TAG_LAUNCHED) == 0)
                 HighSpeedTools.checkSafetyAndExplode(cart.world, event.getPos(), cart);
 
 
@@ -377,7 +377,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     }
 
     private void testHighSpeedCollision(EntityMinecart cart, Entity other) {
-        boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
+        boolean highSpeed = HighSpeedTools.isTravellingHighSpeed(cart);
         if (highSpeed) {
             if (other instanceof EntityMinecart && Train.areInSameTrain(cart, (EntityMinecart) other))
                 return;
@@ -385,7 +385,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
                 return;
 
             if (other instanceof EntityMinecart) {
-                boolean otherHighSpeed = CartTools.isTravellingHighSpeed((EntityMinecart) other);
+                boolean otherHighSpeed = HighSpeedTools.isTravellingHighSpeed((EntityMinecart) other);
                 if (!otherHighSpeed || (cart.motionX > 0 ^ other.motionX > 0) || (cart.motionZ > 0 ^ other.motionZ > 0)) {
                     primeToExplode(cart);
                     return;
@@ -400,7 +400,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     }
 
     private void primeToExplode(EntityMinecart cart) {
-        cart.getEntityData().setBoolean("explode", true);
+        cart.getEntityData().setBoolean(CartConstants.TAG_EXPLODE, true);
     }
 
     @SubscribeEvent

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,4 +17,9 @@ public class CartConstants {
     public static final double RENDER_DIST_MULTIPLIER = 4;
     public static final int DETECTED_POWER_OUTPUT_FADE = 10;
     public static final String TAG_DERAIL = "derail";
+    public static final String TAG_MOUNT_PREVENTION = "MountPrevention";
+    public static final String TAG_LAUNCHED = "launched";
+    public static final String TAG_ELEVATOR = "elevator";
+    public static final String TAG_EXPLODE = "explode";
+    public static final String TAG_HIGH_SPEED = "high_speed";
 }

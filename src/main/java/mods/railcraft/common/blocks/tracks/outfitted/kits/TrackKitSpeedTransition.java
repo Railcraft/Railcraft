@@ -11,8 +11,10 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.tracks.ITrackKitReversible;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
+import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,7 +55,7 @@ public class TrackKitSpeedTransition extends TrackKitPowered implements ITrackKi
             double speed = Math.sqrt(cart.motionX * cart.motionX + cart.motionZ * cart.motionZ);
             if (speed > BOOST_THRESHOLD) {
                 BlockRailBase.EnumRailDirection trackShape = getRailDirectionRaw();
-                boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
+                boolean highSpeed = HighSpeedTools.isTravellingHighSpeed(cart);
                 if (TrackShapeHelper.isNorthSouth(trackShape)) {
                     if (reversed ^ cart.motionZ < 0) {
                         boostCartSpeed(cart, speed);

@@ -10,9 +10,11 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.tracks.TrackType;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartTools;
+import mods.railcraft.common.carts.EntityLocomotive;
 import net.minecraft.block.BlockRailBase.EnumRailDirection;
 import net.minecraft.entity.item.EntityMinecart;
 
@@ -79,7 +81,7 @@ public class TrackKitBooster extends TrackKitPowered {
                 CartTools.startBoost(cart, getPos(), dir, START_BOOST);
             }
         } else {
-            boolean highSpeed = CartTools.isTravellingHighSpeed(cart);
+            boolean highSpeed = HighSpeedTools.isTravellingHighSpeed(cart);
             if (highSpeed) {
                 if (cart instanceof EntityLocomotive) {
                     ((EntityLocomotive) cart).forceIdle(20);

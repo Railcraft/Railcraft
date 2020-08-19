@@ -17,6 +17,7 @@ import mods.railcraft.api.carts.*;
 import mods.railcraft.client.render.carts.LocomotiveRenderType;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers;
+import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.carts.LinkageManager.LinkType;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -433,7 +434,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                 force = -force;
             switch (speed) {
                 case MAX:
-                    boolean highSpeed = CartTools.isTravellingHighSpeed(this);
+                    boolean highSpeed = HighSpeedTools.isTravellingHighSpeed(this);
                     if (highSpeed)
                         force *= HS_FORCE_BONUS;
                     break;
@@ -519,7 +520,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
             if (!entity.isEntityAlive())
                 return;
             if (Train.streamCarts(this).noneMatch(t -> t.isPassenger(entity))
-                    && (cartVelocityIsGreaterThan(0.2f) || CartTools.isTravellingHighSpeed(this))
+                    && (cartVelocityIsGreaterThan(0.2f) || HighSpeedTools.isTravellingHighSpeed(this))
                     && RCEntitySelectors.KILLABLE.test(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
                 if (RailcraftConfig.locomotiveDamageMobs())
