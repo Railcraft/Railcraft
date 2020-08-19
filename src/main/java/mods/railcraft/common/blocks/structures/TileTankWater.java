@@ -127,6 +127,7 @@ public class TileTankWater extends TileLogic {
                         .addSubLogic(new WaterGeneratorLogic(Logic.Adapter.of(this)))
                 .addSubLogic(new FluidPushLogic(Logic.Adapter.of(this), 0, OUTPUT_RATE, OUTPUT_FACES))
                 .addSubLogic(new FluidComparatorLogic(Logic.Adapter.of(this), 0))
+                .addSubLogic(new BucketInteractionLogic(Logic.Adapter.of(this)))
         );
     }
 

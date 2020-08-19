@@ -13,7 +13,11 @@ package mods.railcraft.common.blocks;
 import buildcraft.api.statements.IActionExternal;
 import mods.railcraft.common.blocks.interfaces.IDropsInv;
 import mods.railcraft.common.blocks.interfaces.ITileCompare;
-import mods.railcraft.common.blocks.logic.*;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.InventoryLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.buildcraft.actions.IActionReceptor;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
@@ -36,7 +40,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -212,7 +215,7 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
                 && getLogic(InventoryLogic.class).isPresent())
             return true;
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
-                && getLogic(IFluidHandler.class).isPresent())
+                && getLogic(IFluidHandlerImplementor.class).filter(IFluidHandlerImplementor::isVisible).isPresent())
             return true;
         if (capability == CapabilityEnergy.ENERGY
                 && getLogic(IEnergyStorage.class).isPresent())
@@ -228,8 +231,8 @@ public abstract class TileLogic extends TileRailcraftTicking implements ISmartTi
                 return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inv.get().getItemHandler(facing));
         }
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            FluidLogic handler = getLogic(FluidLogic.class)
-                    .filter(logic -> !logic.isHidden())
+            IFluidHandlerImplementor handler = getLogic(IFluidHandlerImplementor.class)
+                    .filter(IFluidHandlerImplementor::isVisible)
                     .orElse(null);
             if (handler != null)
                 return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(handler);

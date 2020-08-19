@@ -333,6 +333,12 @@ public abstract class TileTank extends TileLogic {
                 new StorageTankLogic(Logic.Adapter.of(this), getTankDefinition().getCapacityPerBlock())
                         .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0, getTankDefinition().getCapacityPerBlock()))
         ) {
+            {
+                getFunctionalLogic(FluidLogic.class).ifPresent(logic -> {
+                    logic.setVisible(false);
+                    logic.setTankSync(0);
+                });
+            }
 
             @Override
             public boolean isMapPositionValid(BlockPos pos, char marker) {
@@ -373,10 +379,6 @@ public abstract class TileTank extends TileLogic {
 //                getLogic(FluidLogic.class).ifPresent(logic-> logic.getTankManager().get(0).setFluid(null));
 //            }
 
-        });
-        getLogic(FluidLogic.class).ifPresent(logic -> {
-            logic.setHidden(true);
-            logic.setTankSync(0);
         });
     }
 

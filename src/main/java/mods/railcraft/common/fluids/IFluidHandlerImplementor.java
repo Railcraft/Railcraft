@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,6 +23,10 @@ import javax.annotation.Nullable;
  */
 public interface IFluidHandlerImplementor extends IFluidHandler {
     TankManager getTankManager();
+
+    default boolean isVisible() {
+        return true;
+    }
 
     @Override
     default IFluidTankProperties[] getTankProperties() {

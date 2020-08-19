@@ -94,8 +94,10 @@ public class FluidGaugeWidget extends Widget {
 
         OpenGL.glColor4f(1, 1, 1, 1);
         gui.bindTexture(gui.texture);
-
-        gui.drawTexturedModalRect(guiX + x, guiY + y - 1, x, y - 1, w, h - (int) Math.floor(h * scale) + 1);
+        int mask = (int) Math.floor(h * scale);
+        if (mask == 0 && fluidStack.amount > 0)
+            mask = 1;
+        gui.drawTexturedModalRect(guiX + x, guiY + y - 1, x, y - 1, w, h - mask + 1);
         gui.drawTexturedModalRect(guiX + x, guiY + y, u, v, w, h);
     }
 

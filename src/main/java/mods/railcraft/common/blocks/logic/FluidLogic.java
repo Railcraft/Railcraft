@@ -15,11 +15,8 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -34,13 +31,15 @@ public class FluidLogic extends Logic implements IFluidHandlerImplementor {
     private static final int NETWORK_UPDATE_INTERVAL = 64;
     protected final TankManager tankManager = new TankManager();
     private Set<Integer> tanksToSync = new HashSet<>();
-    private boolean hidden;
+    private boolean visible = true;
+    private boolean changed = true;
 
     public FluidLogic(Adapter adapter) {
         super(adapter);
     }
 
     public FluidLogic addTank(StandardTank tank) {
+        tank.setUpdateCallback(t -> changed = true);
         tankManager.add(tank);
         return this;
     }
@@ -50,13 +49,14 @@ public class FluidLogic extends Logic implements IFluidHandlerImplementor {
         return this;
     }
 
-    public FluidLogic setHidden(boolean hidden) {
-        this.hidden = hidden;
+    public FluidLogic setVisible(boolean visible) {
+        this.visible = visible;
         return this;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    @Override
+    public boolean isVisible() {
+        return visible;
     }
 
     @Override
@@ -68,14 +68,10 @@ public class FluidLogic extends Logic implements IFluidHandlerImplementor {
     protected void updateServer() {
         super.updateServer();
 
-        if (clock(NETWORK_UPDATE_INTERVAL))
+        if (changed || clock(NETWORK_UPDATE_INTERVAL)) {
             sendUpdateToClient();
-    }
-
-    @Override
-    public boolean interact(EntityPlayer player, EnumHand hand) {
-        return FluidUtil.interactWithFluidHandler(player, hand, getTankManager())
-                || super.interact(player, hand);
+            changed = false;
+        }
     }
 
     @Override
@@ -96,6 +92,7 @@ public class FluidLogic extends Logic implements IFluidHandlerImplementor {
         data.writeByte((byte) tanksToSync.size());
         for (int tankIndex : tanksToSync) {
             data.writeInt(tankIndex);
+            data.writeInt(tankManager.get(tankIndex).getCapacity());
             data.writeFluidStack(tankManager.get(tankIndex).getFluid());
         }
     }
@@ -106,6 +103,7 @@ public class FluidLogic extends Logic implements IFluidHandlerImplementor {
         int dataSize = data.readByte();
         for (int ii = 0; ii < dataSize; ii++) {
             int tankIndex = data.readInt();
+            tankManager.get(tankIndex).setCapacity(data.readInt());
             FluidStack fluidStack = data.readFluidStack();
             tankManager.get(tankIndex).setFluid(fluidStack);
         }

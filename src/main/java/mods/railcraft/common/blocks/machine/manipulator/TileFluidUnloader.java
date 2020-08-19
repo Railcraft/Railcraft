@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,9 +19,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
+import java.util.stream.Stream;
+
 public class TileFluidUnloader extends TileFluidManipulator {
 
     private static final int TRANSFER_RATE = 80;
+    private static final EnumFacing[] PUSH_TO = Stream.of(EnumFacing.VALUES).filter(f -> f != EnumFacing.UP).toArray(EnumFacing[]::new);
 
     @Override
     public ManipulatorVariant getMachineType() {
@@ -40,7 +43,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
         if (clock % FluidTools.BUCKET_FILL_TIME == 0)
             FluidTools.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, tank.getFluidType());
 
-        tankManager.push(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
+        tankManager.push(tileCache, Predicates.notInstanceOf(getClass()), 0, TRANSFER_RATE, PUSH_TO);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,6 +36,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 public class TileFluidLoader extends TileFluidManipulator {
 
@@ -43,6 +44,7 @@ public class TileFluidLoader extends TileFluidManipulator {
     private static final int TRANSFER_RATE = 20;
     private static final float MAX_PIPE_LENGTH = 0.96F;
     private static final float PIPE_INCREMENT = 0.01f;
+    private static final EnumFacing[] PULL_FROM = Stream.of(EnumFacing.VALUES).filter(f -> f != EnumFacing.DOWN).toArray(EnumFacing[]::new);
     private float pipeLength;
     private boolean needsPipe;
 
@@ -111,7 +113,7 @@ public class TileFluidLoader extends TileFluidManipulator {
         it.slot(SLOT_PROCESSING).validate(world, getPos(), FluidItemHelper::isContainer);
         it.slot(SLOT_OUTPUT).validate(world, getPos(), FluidItemHelper::isContainer);
 
-        tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), EnumFacing.VALUES, 0, TRANSFER_RATE);
+        tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), 0, TRANSFER_RATE, PULL_FROM);
     }
 
     @Override

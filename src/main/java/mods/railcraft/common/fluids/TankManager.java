@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -149,12 +149,12 @@ public class TankManager extends ForwardingList<StandardTank> implements IFluidH
             fluidStack.amount = capacity;
     }
 
-    public void pull(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
+    public void pull(AdjacentTileCache cache, Predicate<? super TileEntity> filter, int tankIndex, int amount, EnumFacing... sides) {
         Collection<IFluidHandler> targets = FluidTools.findNeighbors(cache, filter, sides);
         pull(targets, tankIndex, amount);
     }
 
-    public void push(AdjacentTileCache cache, Predicate<? super TileEntity> filter, EnumFacing[] sides, int tankIndex, int amount) {
+    public void push(AdjacentTileCache cache, Predicate<? super TileEntity> filter, int tankIndex, int amount, EnumFacing... sides) {
         Collection<IFluidHandler> targets = FluidTools.findNeighbors(cache, filter, sides);
         push(targets, tankIndex, amount);
     }

@@ -14,9 +14,13 @@ import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.IOException;
 
 /**
  * Created by CovertJaguar on 8/8/2020 for Railcraft.
@@ -33,11 +37,10 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
         fillTank.setHidden(true);
         addSubLogic(new FluidPushLogic(adapter, StorageTankLogic.TANK_INDEX, FLOW_RATE,
                 FluidPushLogic.defaultTargets(adapter)
-                        .and(tile -> getLogic(StructureLogic.class)
-                                .filter(logic -> logic.getMasterPos() != null)
-                                .map(logic -> getY() - logic.getMasterPos().getY() <= 1).orElse(false)),
+                        .and(tile -> canDrain()),
                 EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST));
         addSubLogic(new FluidComparatorLogic(adapter, StorageTankLogic.TANK_INDEX));
+        addSubLogic(new BucketInteractionLogic(adapter));
     }
 
     @Override
@@ -74,6 +77,8 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
+        if (!canFill())
+            return 0;
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty()) {
             int amount = tMan.fill(resource, doFill);
@@ -87,6 +92,8 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
 
     @Override
     public @Nullable FluidStack drain(int maxDrain, boolean doDrain) {
+        if (!canDrain())
+            return null;
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty()) {
             return tMan.drain(maxDrain, doDrain);
@@ -96,7 +103,7 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
 
     @Override
     public @Nullable FluidStack drain(@Nullable FluidStack resource, boolean doDrain) {
-        if (resource == null)
+        if (resource == null || !canDrain())
             return null;
         TankManager tMan = getTankManager();
         if (!tMan.isEmpty()) {
@@ -105,7 +112,31 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
         return null;
     }
 
+    public boolean canFill() {
+        return getLogic(StructureLogic.class)
+                .filter(logic -> logic.getMasterPos() != null)
+                .map(logic -> getPos().getY() - logic.getMasterPos().getY() > 0).orElse(false);
+    }
+
+    public boolean canDrain() {
+        return getLogic(StructureLogic.class)
+                .filter(logic -> logic.getMasterPos() != null)
+                .map(logic -> getPos().getY() - logic.getMasterPos().getY() <= 1).orElse(false);
+    }
+
     public StandardTank getFillTank() {
         return fillTank;
+    }
+
+    @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        super.writePacketData(data);
+        data.writeFluidStack(fillTank.getFluid());
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        super.readPacketData(data);
+        fillTank.setFluid(data.readFluidStack());
     }
 }

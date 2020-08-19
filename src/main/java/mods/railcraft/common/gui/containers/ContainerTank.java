@@ -9,11 +9,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.common.blocks.logic.FluidLogic;
 import mods.railcraft.common.blocks.logic.ILogicContainer;
 import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.blocks.logic.WaterGeneratorLogic;
 import mods.railcraft.common.blocks.logic.WaterGeneratorLogic.GeneratorStatus;
-import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
@@ -36,7 +36,7 @@ public class ContainerTank extends RailcraftContainer {
 
     public ContainerTank(InventoryPlayer inventoryplayer, ILogicContainer logicContainer) {
         this.logicContainer = logicContainer;
-        logicContainer.getLogic(IFluidHandlerImplementor.class).ifPresent(tank ->
+        logicContainer.getLogic(FluidLogic.class).ifPresent(tank ->
                 addWidget(createGauge(tank.getTankManager().get(0), 35, 20, 176, 0, 48, 47)));
 
         logicContainer.getLogic(IInventoryImplementor.class).ifPresent(inv -> {

@@ -54,7 +54,7 @@ public class FluidPushLogic extends Logic {
         adapter.tile().ifPresent(tile -> getLogic(FluidLogic.class).ifPresent(tank -> {
             TankManager tMan = tank.getTankManager();
             if (!tMan.isEmpty()) {
-                tMan.push(tile.getTileCache(), validTargets, outputFaces, tankIndex, outputRate);
+                tMan.push(tile.getTileCache(), validTargets, tankIndex, outputRate, outputFaces);
             }
         }));
     }

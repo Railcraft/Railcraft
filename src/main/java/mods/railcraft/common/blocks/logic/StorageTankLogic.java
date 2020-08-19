@@ -17,12 +17,9 @@ import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.util.misc.Game;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -85,18 +82,6 @@ public class StorageTankLogic extends InventoryLogic {
                 return super.extractItem(slot, amount, simulate);
             }
         };
-    }
-
-    @Override
-    public boolean interact(EntityPlayer player, EnumHand hand) {
-        boolean interact = false;
-        if (Game.isHost(theWorldAsserted())) {
-            interact = FluidTools.interactWithFluidHandler(player, hand, tank);
-            if (interact)
-                sendUpdateToClient();
-        } else if (FluidItemHelper.isContainer(player.getHeldItem(hand)))
-            return true;
-        return interact || super.interact(player, hand);
     }
 
     @Override

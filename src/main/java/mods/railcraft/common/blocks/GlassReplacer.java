@@ -37,6 +37,10 @@ public class GlassReplacer extends BlockStrengthGlass {
     }
 
     @Override
+    public void defineRecipes() {
+    }
+
+    @Override
     public Block getObject() {
         return this;
     }
