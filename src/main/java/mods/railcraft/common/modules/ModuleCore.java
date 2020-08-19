@@ -474,12 +474,17 @@ public class ModuleCore extends RailcraftModulePayload {
                 Fluids.BIOFUEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
                 Fluids.IC2BIOGAS.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
                 Fluids.BIODIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
+                Fluids.REFINED_BIOFUEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
 
                 Fluids.FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
 
                 Fluids.COAL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.PYROTHEUM.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.CREOSOTE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (4800 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.REFINED_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (80000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.REFINED_FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (120000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.TREE_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.SEED_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (6400 * RailcraftConfig.boilerFuelMultiplier())));
 
                 Fluids.DIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (96000 * RailcraftConfig.boilerFuelMultiplier())));
                 Fluids.GASOLINE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
