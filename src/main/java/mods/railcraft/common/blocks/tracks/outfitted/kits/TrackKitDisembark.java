@@ -66,7 +66,7 @@ public class TrackKitDisembark extends TrackKitPowered implements ITrackKitRever
             else
                 z -= offset;
             CartTools.removePassengers(cart, new Vec3d(x + 0.5, getPos().getY() + 1, z + 0.5));
-            cart.getEntityData().setInteger(CartConstants.TAG_MOUNT_PREVENTION, TIME_TILL_NEXT_MOUNT);
+            cart.getEntityData().setInteger(CartConstants.TAG_PREVENT_MOUNT, TIME_TILL_NEXT_MOUNT);
         }
     }
 

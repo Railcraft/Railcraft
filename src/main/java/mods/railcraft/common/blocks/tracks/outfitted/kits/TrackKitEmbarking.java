@@ -89,7 +89,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
 
     @Override // called on server thread only
     public void onMinecartPass(EntityMinecart cart) {
-        if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger(CartConstants.TAG_MOUNT_PREVENTION) <= 0) {
+        if (isPowered() && cart.canBeRidden() && !cart.isBeingRidden() && cart.getEntityData().getInteger(CartConstants.TAG_PREVENT_MOUNT) <= 0) {
             int a = area;
             AxisAlignedBB box = AABBFactory.start().createBoxForTileAt(getPos()).build();
             box = box.grow(a, a, a);

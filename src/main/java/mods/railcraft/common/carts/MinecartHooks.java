@@ -82,7 +82,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
     }
 
     public boolean canMount(EntityMinecart cart) {
-        return cart.getEntityData().getInteger(CartConstants.TAG_MOUNT_PREVENTION) <= 0;
+        return cart.getEntityData().getInteger(CartConstants.TAG_PREVENT_MOUNT) <= 0;
     }
 
     @SuppressWarnings("unused")
@@ -292,10 +292,10 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
         } else if (launched > 1 && (cart.onGround || cart.isInsideOfMaterial(Material.CIRCUITS)))
             land(cart);
 
-        int mountPrevention = data.getInteger(CartConstants.TAG_MOUNT_PREVENTION);
+        int mountPrevention = data.getInteger(CartConstants.TAG_PREVENT_MOUNT);
         if (mountPrevention > 0) {
             mountPrevention--;
-            data.setInteger(CartConstants.TAG_MOUNT_PREVENTION, mountPrevention);
+            data.setInteger(CartConstants.TAG_PREVENT_MOUNT, mountPrevention);
         }
 
         byte elevator = data.getByte(CartConstants.TAG_ELEVATOR);

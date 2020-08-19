@@ -50,7 +50,7 @@ public class TrackKitDumping extends TrackKitSuspended implements ITrackKitPower
         if (cart.isBeingRidden()) {
             CartTools.removePassengers(cart, cart.getPositionVector().add(0, -2, 0));
         }
-        cart.getEntityData().setInteger(CartConstants.TAG_MOUNT_PREVENTION, TIME_TILL_NEXT_MOUNT);
+        cart.getEntityData().setInteger(CartConstants.TAG_PREVENT_MOUNT, TIME_TILL_NEXT_MOUNT);
     }
 
     @Override
