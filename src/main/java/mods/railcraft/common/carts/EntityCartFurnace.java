@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -95,7 +95,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
         int burnTime = FuelPlugin.getBurnTime(stack);
         if (burnTime > 0 && fuel + burnTime <= 32000) {
             if (!player.capabilities.isCreativeMode)
-                InvTools.depleteItem(stack);
+                player.setHeldItem(hand, InvTools.depleteItem(stack));
             fuel += burnTime;
 
             pushX = posX - player.posX;
