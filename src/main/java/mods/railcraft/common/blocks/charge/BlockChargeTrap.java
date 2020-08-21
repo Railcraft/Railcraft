@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,6 +24,7 @@ import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -36,7 +37,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Random;
@@ -47,9 +47,9 @@ import java.util.Random;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class BlockChargeTrap extends BlockCharge {
-    public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().grow(-0.0625D).build();
+    public static final AxisAlignedBB BOUNDING_BOX = AABBFactory.start().box().raiseCeilingPixel(-15).build();
     public static final PropertyBool REDSTONE = PropertyBool.create("redstone");
-    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.025);
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.SLAB, 0.025);
 
     public BlockChargeTrap() {
         super(Material.IRON);
@@ -86,8 +86,8 @@ public class BlockChargeTrap extends BlockCharge {
     /**
      * Convert the given metadata into a BlockState for this Block
      */
-    @SuppressWarnings("deprecation")
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         IBlockState state = getDefaultState();
         state = state.withProperty(REDSTONE, (meta & 0x8) > 0);
@@ -129,12 +129,6 @@ public class BlockChargeTrap extends BlockCharge {
 
     @Override
     @SuppressWarnings("deprecation")
-    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return COLLISION_BOX;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos posIn) {
         super.neighborChanged(state, worldIn, pos, blockIn, posIn);
         IBlockState newState = detectRedstoneState(state, worldIn, pos);
@@ -142,8 +136,8 @@ public class BlockChargeTrap extends BlockCharge {
             WorldPlugin.setBlockState(worldIn, pos, newState);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         IBlockState state = super.getStateForPlacement(worldIn, pos, facing, hitX, hitY, hitZ, meta, placer);
         return detectRedstoneState(state, worldIn, pos);
@@ -153,5 +147,39 @@ public class BlockChargeTrap extends BlockCharge {
         if (Game.isClient(worldIn))
             return state;
         return state.withProperty(REDSTONE, PowerPlugin.isBlockBeingPowered(worldIn, pos));
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BOUNDING_BOX;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+    }
+
+    /**
+     * Checks if this block can be placed exactly at the given position.
+     */
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        return super.canPlaceBlockAt(worldIn, pos)
+                && !WorldPlugin.isBlockAt(worldIn, pos.down(), this)
+                && !WorldPlugin.isBlockAt(worldIn, pos.up(), this);
     }
 }
