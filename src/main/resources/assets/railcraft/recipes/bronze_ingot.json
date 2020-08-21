@@ -1,0 +1,52 @@
+{
+  "type": "crafting_shapeless",
+  "group": "alloys",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "railcraft:ingot"
+    },
+    {
+      "type": "railcraft:module",
+      "module": "railcraft:resources"
+    },
+    {
+      "type": "railcraft:ore_exists",
+      "tag": "ingotTin"
+    },
+    {
+      "type": "railcraft:ore_exists",
+      "tag": "ingotCopper"
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "railcraft:ore_exists",
+        "tag": "dustBronze"
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotTin"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    }
+  ],
+  "result": {
+    "item": "railcraft:ingot",
+    "data": 5,
+    "count": 4
+  }
+}

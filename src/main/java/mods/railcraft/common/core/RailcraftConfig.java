@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -361,12 +361,7 @@ public class RailcraftConfig {
 
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
-        loadRecipeProperty("railcraft.alloy", "enableAltBronze", false, "change to '{t}=true' to forcibly enable a recipe to craft Bronze Ingots from Tin and Copper Ingots, regardless of whether the Factory Module is enabled");
-        loadRecipeProperty("railcraft.alloy", "enableHarderBronze", false, "change to '{t}=true' if you want Bronze recipes to supply 3 Bronze instead of 4");
-        loadRecipeProperty("railcraft.alloy", "enableAltBrass", false, "change to '{t}=true' to forcibly enable a recipe to craft Brass Ingots from Zinc and Copper Ingots, regardless of whether the Factory Module is enabled");
-        loadRecipeProperty("railcraft.alloy", "enableHarderBrass", false, "change to '{t}=true' if you want Brass recipes to supply 3 Brass instead of 4");
         loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
-        loadRecipeProperty("railcraft.alloy", "enableAltInvar", false, "change to '{t}=true' to forcibly enable a recipe to craft Invar Ingots from Iron and Nickel Ingots, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = get(CAT_RECIPES + ".railcraft.misc", "creosote.torches", 0, 6, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
@@ -599,71 +594,6 @@ public class RailcraftConfig {
 
         Map<String, Property> items = configItems.getCategory(CAT_ITEMS);
         items.keySet().retainAll(enabledItems.keySet());
-
-//        loadItemProperty("tool.crowbar.magic");
-//        loadItemProperty("tool.crowbar.void");
-
-//        loadItemProperty("backpack.trackman.t1");
-//        loadItemProperty("backpack.trackman.t2");
-//        loadItemProperty("backpack.iceman.t1");
-//        loadItemProperty("backpack.iceman.t2");
-//        loadItemProperty("backpack.apothecary.t1");
-//        loadItemProperty("backpack.apothecary.t2");
-//
-//        loadItemProperty("fluid.steam.bottle");
-//        loadItemProperty("fluid.creosote.cell");
-//        loadItemProperty("fluid.creosote.bottle");
-//        loadItemProperty("fluid.creosote.can");
-//        loadItemProperty("fluid.creosote.wax");
-//        loadItemProperty("fluid.creosote.refactory");
-//        loadItemProperty("fluid.creosote.bucket");
-//
-//        loadItemProperty("firestone.cut");
-//        loadItemProperty("firestone.raw");
-//        loadItemProperty("firestone.refined");
-//        loadItemProperty("firestone.cracked");
-//
-//        loadItemProperty("tool.steel.shears");
-//        loadItemProperty("tool.steel.sword");
-//        loadItemProperty("tool.steel.shovel");
-//        loadItemProperty("tool.steel.pickaxe");
-//        loadItemProperty("tool.steel.axe");
-//        loadItemProperty("tool.steel.hoe");
-//
-//        loadItemProperty("armor.steel.helmet");
-//        loadItemProperty("armor.steel.plate");
-//        loadItemProperty("armor.steel.legs");
-//        loadItemProperty("armor.steel.boots");
-//
-//        changeItemProperty("item.ic2.upgrade.lapotron", "ic2.upgrade.lapotron");
-//
-//        loadItemProperty("tool.bore.head.diamond");
-//        loadItemProperty("tool.bore.head.iron");
-//        loadItemProperty("tool.bore.head.steel");
-//
-//        changeItemProperty("item.cart.tnt", "cart.tnt");
-//        loadItemProperty("cart.tnt.wood");
-//        changeItemProperty("item.cart.pumpkin", "cart.pumpkin");
-//        changeItemProperty("item.cart.gift", "cart.gift");
-//
-//        changeItemProperty("item.cart.tank", "cart.tank");
-//        changeItemProperty("item.cart.bore", "cart.bore");
-//
-//        loadItemProperty("cart.energy.batbox");
-//        loadItemProperty("cart.energy.cesu");
-//        loadItemProperty("cart.energy.mfe");
-//        loadItemProperty("cart.energy.mfsu");
-//
-//        changeItemProperty("item.cart.worldspike", "cart.worldspike");
-//        changeItemProperty("item.cart.worldspike.personal", "cart.worldspike.personal");
-//        changeItemProperty("item.cart.worldspike.admin", "cart.worldspike.admin");
-//        changeItemProperty("item.cart.work", "cart.work");
-//        changeItemProperty("item.cart.track.relayer", "cart.track.relayer");
-//        changeItemProperty("item.cart.undercutter", "cart.undercutter");
-//
-//        changeItemProperty("cart.loco.steam", "cart.loco.steam.solid");
-//
-//        loadItemProperty("emblem");
     }
 
     private static void loadItemProperty(String tag) {
@@ -697,26 +627,6 @@ public class RailcraftConfig {
 
     public static boolean canCrushOres() {
         return getRecipeConfig("railcraft.rockCrusher.ores");
-    }
-
-    public static boolean forceEnableBronzeRecipe() {
-        return getRecipeConfig("railcraft.alloy.enableAltBronze");
-    }
-
-    public static boolean forceEnableBrassRecipe() {
-        return getRecipeConfig("railcraft.alloy.enableAltBrass");
-    }
-
-    public static boolean forceEnableInvarRecipe() {
-        return getRecipeConfig("railcraft.alloy.enableAltInvar");
-    }
-
-    public static boolean enableHarderBronze() {
-        return getRecipeConfig("railcraft.alloy.enableHarderBronze");
-    }
-
-    public static boolean enableHarderBrass() {
-        return getRecipeConfig("railcraft.alloy.enableHarderBrass");
     }
 
     public static boolean forceEnableSteelRecipe() {

@@ -1,0 +1,48 @@
+{
+  "type": "crafting_shapeless",
+  "group": "alloys",
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "railcraft:ingot"
+    },
+    {
+      "type": "railcraft:module",
+      "module": "railcraft:resources"
+    },
+    {
+      "type": "railcraft:ore_exists",
+      "tag": "ingotNickel"
+    },
+    {
+      "type": "railcraft:ore_exists",
+      "tag": "ingotIron"
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "railcraft:ore_exists",
+        "tag": "dustInvar"
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotNickel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  ],
+  "result": {
+    "item": "railcraft:ingot",
+    "data": 7,
+    "count": 3
+  }
+}
