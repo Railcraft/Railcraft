@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.items.IToolCrowbar;
+import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoMode;
@@ -62,9 +63,9 @@ public class TrackKitLocomotive extends TrackKitPowered {
     @Override
     public void onMinecartPass(EntityMinecart cart) {
         if (isPowered()) {
-            if (cart instanceof EntityLocomotive) {
-                ((EntityLocomotive) cart).setMode(mode);
-            }
+            EntityLocomotive.applyAction(((TileTrackOutfitted) getTile()).getOwner(), cart, false, loco -> {
+                loco.setMode(mode);
+            });
         }
     }
 

@@ -34,6 +34,7 @@ import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
+import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -74,6 +75,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
@@ -649,12 +652,16 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
     @Override
     public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
-        setMode(data.readEnum(LocoMode.VALUES));
-        setSpeed(data.readEnum(LocoSpeed.VALUES));
+        LocoMode m = data.readEnum(LocoMode.VALUES);
+        LocoSpeed s = data.readEnum(LocoSpeed.VALUES);
         int lock = data.readInt();
-        if (PlayerPlugin.isOwnerOrOp(getOwner(), sender.getGameProfile()))
-            lockController.setCurrentState(lock);
-        setReverse(data.readBoolean());
+        boolean r = data.readBoolean();
+        applyAction(sender.getGameProfile(), this, false, loco -> {
+            loco.setMode(m);
+            loco.setSpeed(s);
+            loco.setReverse(r);
+            loco.lockController.setCurrentState(lock);
+        });
     }
 
     @Override
@@ -677,6 +684,17 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                 setCustomNameTag(name);
             model = byteStream.readUTF();
         } catch (IOException ignored) {
+        }
+    }
+
+    public static void applyAction(GameProfile gameProfile, EntityMinecart cart, boolean single, Consumer<EntityLocomotive> action) {
+        Stream<EntityLocomotive> locos = Train.streamCarts(cart)
+                .flatMap(Streams.toType(EntityLocomotive.class))
+                .filter(loco -> loco.canControl(gameProfile));
+        if (single) {
+            locos.findAny().ifPresent(action);
+        } else {
+            locos.forEach(action);
         }
     }
 
