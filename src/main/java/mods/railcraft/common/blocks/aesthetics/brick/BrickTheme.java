@@ -72,13 +72,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     "III",
                     "ILI",
                     "III",
-                    'I', new ItemStack(Blocks.ICE),
-                    'L', "gemLapis"); // TODO remove ice one in the future
-            CraftingPlugin.addShapedRecipe(block.getStack(8, POLISHED),
-                    "III",
-                    "ILI",
-                    "III",
-                    'I', new ItemStack(Blocks.PACKED_ICE),
+                    'I', Blocks.PACKED_ICE,
                     'L', "gemLapis");
         }
     },
