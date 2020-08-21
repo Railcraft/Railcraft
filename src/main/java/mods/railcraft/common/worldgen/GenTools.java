@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 
 package mods.railcraft.common.worldgen;
 
+import net.minecraft.block.BlockStone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
@@ -21,7 +22,12 @@ import java.util.function.Predicate;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class GenTools {
-    public static final Predicate<IBlockState> STONE = input -> input != null && input.getBlock() == Blocks.STONE;
+    public static final Predicate<IBlockState> STONE = input -> {
+        if (input != null && input.getBlock() == Blocks.STONE) {
+            BlockStone.EnumType type = input.getValue(BlockStone.VARIANT);
+            return type.isNatural();
+        } else return false;
+    };
     public static final Predicate<IBlockState> GRAVEL = input -> input != null && input.getBlock() == Blocks.GRAVEL;
     public static final Predicate<IBlockState> DIRT = input -> input != null && input.getBlock() == Blocks.DIRT;
     public static final Predicate<IBlockState> SAND = input -> input != null && input.getBlock() == Blocks.SAND;
