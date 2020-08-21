@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import com.google.common.collect.ForwardingList;
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.EnumTools;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.math.BlockPos;
@@ -61,6 +62,12 @@ public final class NBTPlugin {
             return enumConstants[ordinal];
         }
         return defaultValue;
+    }
+
+    public static <T extends Enum<T>> void incrementEnumOrdinal(NBTTagCompound data, String tag, T[] enumConstants, T defaultValue) {
+        assert enumConstants.length < Byte.MAX_VALUE;
+
+        writeEnumOrdinal(data, tag, EnumTools.next(readEnumOrdinal(data, tag, enumConstants, defaultValue), enumConstants));
     }
 
     public static <T extends Enum<T>> void writeEnumName(NBTTagCompound data, String tag, Enum<T> e) {

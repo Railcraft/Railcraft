@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,9 @@ package mods.railcraft.common.items;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
+import mods.railcraft.common.plugins.misc.SeasonPlugin.Season;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,11 +57,7 @@ public class ItemCrowbarSeasons extends ItemCrowbar {
                 data = new NBTTagCompound();
                 crowbar.setTagCompound(data);
             }
-            byte aura = data.getByte("season");
-            aura++;
-            if (aura >= SeasonPlugin.Season.VALUES.length)
-                aura = 0;
-            data.setByte("season", aura);
+            NBTPlugin.incrementEnumOrdinal(data, "season", Season.VALUES, Season.CHRISTMAS);
         }
     }
 
