@@ -68,7 +68,10 @@ public final class PlayerPlugin {
     }
 
     public static EntityPlayer getItemThrower(EntityItem item) {
-        EntityPlayer player = item.world.getPlayerEntityByName(item.getThrower());
+        String thrower = item.getThrower();
+        EntityPlayer player = null;
+        if (thrower != null)
+            player = item.world.getPlayerEntityByName(item.getThrower());
         if (player == null)
             player = RailcraftFakePlayer.get((WorldServer) item.world, item.getPosition());
         return player;
