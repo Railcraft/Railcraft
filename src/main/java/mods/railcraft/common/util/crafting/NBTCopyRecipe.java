@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -79,7 +79,7 @@ public class NBTCopyRecipe extends BaseRecipe {
         for (int i = 0; i < ret.size(); i++) {
             ItemStack stack = inv.getStackInSlot(i);
             if (source.test(stack)) {
-                ret.set(i, stack.copy());
+                ret.set(i, InvTools.copyOne(stack));
                 break;
             }
         }
