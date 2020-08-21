@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,6 +19,7 @@ import mods.railcraft.common.plugins.misc.Mod;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -37,7 +38,8 @@ public class ItemDust extends ItemRailcraftSubtyped {
             ItemStack stack = new ItemStack(this, 1, d.ordinal());
             RailcraftRegistry.register(this, d, stack);
             ForestryPlugin.addBackpackItem("forestry.miner", stack);
-            OreDictionary.registerOre(d.oreTag, stack.copy());
+            for (String tag : d.oreTags)
+                OreDictionary.registerOre(tag, stack.copy());
         }
     }
 
@@ -58,7 +60,7 @@ public class ItemDust extends ItemRailcraftSubtyped {
             if (RailcraftConfig.getRecipeConfig("ic2.macerator.ender")) {
                 IC2Plugin.addMaceratorRecipe(new ItemStack(Items.ENDER_PEARL), getStack(EnumDust.ENDER));
             }
-            if (!Mod.IC2_CLASSIC.isLoaded()){
+            if (!Mod.IC2_CLASSIC.isLoaded()) {
                 if (RailcraftConfig.getRecipeConfig("ic2.macerator.slag")) {
                     IC2Plugin.addMaceratorRecipe(ModItems.SLAG.getStack(), getStack(EnumDust.SLAG));
                 }
@@ -74,18 +76,22 @@ public class ItemDust extends ItemRailcraftSubtyped {
         CHARCOAL("dustCharcoal"),
         SLAG("dustSlag"),
         COAL("dustCoal"),
-        ENDER("dustEnder"),
+        ENDER("dustEnderPearl", "dustEnder"),
         VOID("dustVoid");
         public static final EnumDust[] VALUES = values();
-        private final String oreTag;
+        private final String[] oreTags;
 
-        EnumDust(String oreTag) {
-            this.oreTag = oreTag;
+        EnumDust(String... oreTags) {
+            this.oreTags = oreTags;
         }
 
         @Override
-        public String getOreTag() {
-            return oreTag;
+        public @Nullable String getOreTag() {
+            return oreTags[0];
+        }
+
+        public String[] getOreTags() {
+            return oreTags;
         }
 
         @Override
