@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,6 +32,7 @@ public class ModuleTransport extends RailcraftModulePayload {
                 add(
                         RailcraftCarts.CARGO,
                         RailcraftCarts.TANK,
+                        RailcraftBlocks.TANK_WATER,
                         RailcraftBlocks.MANIPULATOR,
                         RailcraftBlocks.CHEST_VOID,
                         RailcraftCarts.CHEST_VOID

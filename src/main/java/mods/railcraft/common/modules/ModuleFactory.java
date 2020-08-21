@@ -74,7 +74,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                         RailcraftBlocks.TANK_STEEL_GAUGE,
                         RailcraftBlocks.TANK_STEEL_VALVE,
                         RailcraftBlocks.TANK_STEEL_WALL,
-                        RailcraftBlocks.TANK_WATER,
                         RailcraftBlocks.CHEST_METALS,
                         RailcraftCarts.CHEST_METALS
                 );
