@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -47,5 +47,9 @@ public class Optionals {
      */
     public static <T, U> Function<T, @Nullable U> toType(Class<U> clazz) {
         return t -> clazz.isInstance(t) ? clazz.cast(t) : null;
+    }
+
+    public static <T> boolean notEqualOrEmpty(Optional<T> opt1, Optional<T> opt2) {
+        return opt1.isPresent() && opt2.isPresent() && !opt1.equals(opt2);
     }
 }

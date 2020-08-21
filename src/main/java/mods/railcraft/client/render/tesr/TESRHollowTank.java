@@ -94,7 +94,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTank> {
 
                         int height = getTankHeight(structure);
                         float yOffset = height / 2f;
-                        float vScale = height - 2f;
+                        float vScale = height;
                         OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset - height + 1, (float) z + 0.5F);
                         OpenGL.glScalef(FILL_SCALE, vScale, FILL_SCALE);
 

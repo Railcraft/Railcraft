@@ -10,10 +10,12 @@
 
 package mods.railcraft.common.blocks.logic;
 
+import mods.railcraft.common.blocks.structures.TileTank;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.IFluidHandlerImplementor;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.util.misc.Optionals;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.util.EnumFacing;
@@ -37,6 +39,13 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
         fillTank.setHidden(true);
         addSubLogic(new FluidPushLogic(adapter, StorageTankLogic.TANK_INDEX, FLOW_RATE,
                 FluidPushLogic.defaultTargets(adapter)
+                        .or(tile -> {
+                            if (tile instanceof TileTank) {
+                                return Optionals.notEqualOrEmpty(((TileTank) tile).getLogic(StructureLogic.class).map(StructureLogic::getMasterPos),
+                                        getLogic(StructureLogic.class).map(StructureLogic::getMasterPos));
+                            }
+                            return false;
+                        })
                         .and(tile -> canDrain()),
                 EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST));
         addSubLogic(new FluidComparatorLogic(adapter, StorageTankLogic.TANK_INDEX));

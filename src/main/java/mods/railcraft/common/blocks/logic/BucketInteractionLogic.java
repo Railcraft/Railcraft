@@ -10,9 +10,7 @@
 
 package mods.railcraft.common.blocks.logic;
 
-import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -29,11 +27,9 @@ public class BucketInteractionLogic extends Logic {
 
     @Override
     public boolean interact(EntityPlayer player, EnumHand hand) {
-        return getLogic(IFluidHandler.class).map(tank -> {
-            if (Game.isHost(theWorldAsserted())) {
-                return FluidTools.interactWithFluidHandler(player, hand, tank);
-            } else return FluidItemHelper.isContainer(player.getHeldItem(hand));
-        }).orElse(false) || super.interact(player, hand);
+        return getLogic(IFluidHandler.class)
+                .map(tank -> FluidTools.interactWithFluidHandler(player, hand, tank))
+                .orElse(false) || super.interact(player, hand);
     }
 
 }
