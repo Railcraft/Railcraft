@@ -40,22 +40,18 @@ public class ModuleResources extends RailcraftModulePayload {
     boolean bottleFree;
 
     public ModuleResources() {
+        add(
+                RailcraftBlocks.METAL,
+                RailcraftItems.BOTTLE_CREOSOTE,
+                RailcraftItems.BOTTLE_STEAM,
+                RailcraftItems.NUGGET,
+                RailcraftItems.INGOT,
+                RailcraftItems.GEAR,
+                RailcraftItems.PLATE,
+                RailcraftItems.DUST
+        );
         instance = this;
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftBlocks.METAL,
-                        RailcraftItems.BOTTLE_CREOSOTE,
-                        RailcraftItems.BOTTLE_STEAM,
-                        RailcraftItems.NUGGET,
-                        RailcraftItems.INGOT,
-                        RailcraftItems.GEAR,
-                        RailcraftItems.PLATE,
-                        RailcraftItems.DUST
-                );
-            }
-
             @Override
             public void init() {
                 if (Fluids.CREOSOTE.isPresent() && RailcraftConfig.creosoteTorchOutput() > 0) {

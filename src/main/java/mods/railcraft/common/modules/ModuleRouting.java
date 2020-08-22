@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,18 +29,14 @@ import net.minecraft.item.ItemStack;
 @RailcraftModule(value = "railcraft:routing", dependencyClasses = {ModuleSignals.class}, softDependencyClasses = ModuleTracks.class, description = "routing tables, tickets, detectors, etc...")
 public class ModuleRouting extends RailcraftModulePayload {
     public ModuleRouting() {
+        add(
+                RailcraftItems.ROUTING_TABLE,
+                RailcraftItems.TICKET,
+                RailcraftItems.TICKET_GOLD,
+                RailcraftBlocks.DETECTOR,
+                TrackKits.ROUTING
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftItems.ROUTING_TABLE,
-                        RailcraftItems.TICKET,
-                        RailcraftItems.TICKET_GOLD,
-                        RailcraftBlocks.DETECTOR,
-                        TrackKits.ROUTING
-                );
-            }
-
             @Override
             public void init() {
                 if (RailcraftItems.ROUTING_TABLE.isEnabled())

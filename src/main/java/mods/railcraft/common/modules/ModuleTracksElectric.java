@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,13 +19,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 public class ModuleTracksElectric extends RailcraftModulePayload {
 
     public ModuleTracksElectric() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftBlocks.TRACK_FLEX_ELECTRIC
-                );
-            }
-        });
+        add(
+                RailcraftBlocks.TRACK_FLEX_ELECTRIC
+        );
     }
 }

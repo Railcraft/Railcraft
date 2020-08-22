@@ -11,13 +11,13 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.client.util.effects.ClientEffects;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
@@ -93,7 +93,7 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         invWaterInput.withStackSizeLimit(4);
 
         boiler = new SteamBoiler(tankWater, tankSteam);
-        boiler.setEfficiencyModifier(RailcraftConfig.steamLocomotiveEfficiencyMultiplier());
+        boiler.setEfficiencyModifier(ModuleLocomotives.config.steamLocomotiveEfficiency);
         boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
     }
 

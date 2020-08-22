@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,16 +28,12 @@ import net.minecraft.item.ItemStack;
 @RailcraftModule(value = "railcraft:redstone_flux", description = "redstone flux cart")
 public class ModuleRF extends RailcraftModulePayload {
     public ModuleRF() {
+        add(
+                RailcraftCarts.REDSTONE_FLUX,
+                RailcraftBlocks.MANIPULATOR,
+                RailcraftBlocks.FLUX_TRANSFORMER
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftCarts.REDSTONE_FLUX,
-                        RailcraftBlocks.MANIPULATOR,
-                        RailcraftBlocks.FLUX_TRANSFORMER
-                );
-            }
-
             @Override
             public void init() {
                 ManipulatorVariant gamma = ManipulatorVariant.RF_LOADER;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,13 +16,8 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 public class ModuleTracksAbandoned extends RailcraftModulePayload {
 
     public ModuleTracksAbandoned() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftBlocks.TRACK_FLEX_ABANDONED
-                );
-            }
-        });
+        add(
+                RailcraftBlocks.TRACK_FLEX_ABANDONED
+        );
     }
 }

@@ -13,8 +13,8 @@ import com.google.common.collect.ForwardingMap;
 import com.google.common.collect.MapMaker;
 import mods.railcraft.api.charge.CapabilitiesCharge;
 import mods.railcraft.api.charge.IBatteryCart;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.modules.ModuleTrains;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Capabilities;
@@ -73,7 +73,7 @@ public final class Train implements Iterable<EntityMinecart> {
     }
 
     public static void printDebug(String msg, Object... args) {
-        if (RailcraftConfig.printLinkingDebug())
+        if (ModuleTrains.config.debug)
             Game.log().msg(Level.DEBUG, msg, args);
     }
 

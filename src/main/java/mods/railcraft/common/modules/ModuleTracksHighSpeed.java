@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,14 +17,9 @@ import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 public class ModuleTracksHighSpeed extends RailcraftModulePayload {
 
     public ModuleTracksHighSpeed() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftBlocks.TRACK_FLEX_HIGH_SPEED,
-                        TrackKits.HIGH_SPEED_TRANSITION
-                );
-            }
-        });
+        add(
+                RailcraftBlocks.TRACK_FLEX_HIGH_SPEED,
+                TrackKits.HIGH_SPEED_TRANSITION
+        );
     }
 }

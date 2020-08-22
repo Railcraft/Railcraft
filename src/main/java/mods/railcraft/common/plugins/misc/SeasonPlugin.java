@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,12 +35,44 @@ public final class SeasonPlugin {
         if (RailcraftModuleManager.isModuleEnabled(ModuleSeasonal.class)) {
             Calendar cal = Calendar.getInstance();
             int month = cal.get(Calendar.MONTH);
-            HARVEST = month == Calendar.OCTOBER || month == Calendar.NOVEMBER;
-
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            HALLOWEEN = (month == Calendar.OCTOBER && day >= 21) || (month == Calendar.NOVEMBER && day <= 10);
 
-            CHRISTMAS = month == Calendar.DECEMBER || month == Calendar.JANUARY;
+            switch (ModuleSeasonal.config.christmas) {
+                case 1:
+                    CHRISTMAS = true;
+                    break;
+                case 2:
+                    CHRISTMAS = false;
+                    break;
+                default:
+                    CHRISTMAS = month == Calendar.DECEMBER || month == Calendar.JANUARY;
+                    break;
+            }
+
+            switch (ModuleSeasonal.config.harvest) {
+                case 1:
+                    HARVEST = true;
+                    break;
+                case 2:
+                    HARVEST = false;
+                    break;
+                default:
+                    HARVEST = month == Calendar.OCTOBER || month == Calendar.NOVEMBER;
+                    break;
+            }
+
+            switch (ModuleSeasonal.config.halloween) {
+                case 1:
+                    HALLOWEEN = true;
+                    break;
+                case 2:
+                    HALLOWEEN = false;
+                    break;
+                default:
+                    HALLOWEEN = (month == Calendar.OCTOBER && day >= 21) || (month == Calendar.NOVEMBER && day <= 10);
+                    break;
+            }
+
         } else {
             HARVEST = false;
             HALLOWEEN = false;

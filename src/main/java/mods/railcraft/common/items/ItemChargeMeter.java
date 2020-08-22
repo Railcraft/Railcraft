@@ -12,7 +12,7 @@ package mods.railcraft.common.items;
 import mods.railcraft.api.charge.*;
 import mods.railcraft.api.items.ActivationBlockingItem;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -124,7 +124,7 @@ public class ItemChargeMeter extends ItemRailcraft {
                                 infiniteBat ? "INF" : battery.getCharge(),
                                 infiniteBat ? "INF" : "NA",
                                 battery.getMaxDraw(),
-                                node.getChargeSpec().getLosses() * RailcraftConfig.chargeLossMultiplier(),
+                                node.getChargeSpec().getLosses() * ModuleCharge.config.lossMultiplier,
                                 battery.getEfficiency() * 100.0);
                     }
                 });

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.carts;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.ILinkageManager;
 import mods.railcraft.api.events.CartLinkEvent;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleTrains;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MathTools;
 import net.minecraft.entity.item.EntityMinecart;
@@ -51,7 +51,7 @@ public enum LinkageManager implements ILinkageManager {
     public static final String LINK_B_LOW = "rcLinkBLow";
 
     public static void printDebug(String msg, Object... args) {
-        if (RailcraftConfig.printLinkingDebug())
+        if (ModuleTrains.config.debug)
             Game.log().msg(Level.DEBUG, msg, args);
     }
 

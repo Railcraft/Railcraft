@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,36 +18,32 @@ import mods.railcraft.common.items.RailcraftItems;
 public class ModuleTracks extends RailcraftModulePayload {
 
     public ModuleTracks() {
+        add(
+                RailcraftItems.TRACK_KIT,
+                RailcraftItems.SPIKE_MAUL_IRON,
+                RailcraftItems.SPIKE_MAUL_STEEL,
+                RailcraftItems.RAILBED,
+                RailcraftItems.TRACK_PARTS,
+                RailcraftBlocks.ACTUATOR,
+                RailcraftBlocks.TRACK_OUTFITTED,
+                TrackKits.ACTIVATOR,
+                TrackKits.BOOSTER,
+                TrackKits.BUFFER_STOP,
+                TrackKits.CONTROL,
+                TrackKits.DETECTOR,
+                TrackKits.DISEMBARK,
+                TrackKits.DUMPING,
+                TrackKits.EMBARKING,
+                TrackKits.GATED,
+                TrackKits.LOCKING,
+                TrackKits.ONE_WAY,
+                TrackKits.JUNCTION,
+                TrackKits.TURNOUT,
+                TrackKits.WYE,
+                TrackKits.MESSENGER,
+                TrackKits.DELAYED
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftItems.TRACK_KIT,
-                        RailcraftItems.SPIKE_MAUL_IRON,
-                        RailcraftItems.SPIKE_MAUL_STEEL,
-                        RailcraftItems.RAILBED,
-                        RailcraftItems.TRACK_PARTS,
-                        RailcraftBlocks.ACTUATOR,
-                        RailcraftBlocks.TRACK_OUTFITTED,
-                        TrackKits.ACTIVATOR,
-                        TrackKits.BOOSTER,
-                        TrackKits.BUFFER_STOP,
-                        TrackKits.CONTROL,
-                        TrackKits.DETECTOR,
-                        TrackKits.DISEMBARK,
-                        TrackKits.DUMPING,
-                        TrackKits.EMBARKING,
-                        TrackKits.GATED,
-                        TrackKits.LOCKING,
-                        TrackKits.ONE_WAY,
-                        TrackKits.JUNCTION,
-                        TrackKits.TURNOUT,
-                        TrackKits.WYE,
-                        TrackKits.MESSENGER,
-                        TrackKits.DELAYED
-                );
-            }
-
             @Override
             public void preInit() {
 //                TrackKits.JUNCTION.register();

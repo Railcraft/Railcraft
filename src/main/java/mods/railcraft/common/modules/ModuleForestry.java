@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -36,24 +36,20 @@ public class ModuleForestry extends RailcraftModulePayload {
     }
 
     public ModuleForestry() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
-            public void construction() {
-                add(
-                        RailcraftItems.FILTER_BEE,
-                        RailcraftItems.FILTER_BEE_GENOME,
-                        RailcraftItems.BACKPACK_APOTHECARY_T1,
-                        RailcraftItems.BACKPACK_APOTHECARY_T2,
-                        RailcraftItems.BACKPACK_ICEMAN_T1,
-                        RailcraftItems.BACKPACK_ICEMAN_T2,
-                        RailcraftItems.BACKPACK_TRACKMAN_T1,
-                        RailcraftItems.BACKPACK_TRACKMAN_T2,
-                        RailcraftItems.BACKPACK_SIGNALMAN_T1,
-                        RailcraftItems.BACKPACK_SIGNALMAN_T2
-                );
-            }
+        add(
+                RailcraftItems.FILTER_BEE,
+                RailcraftItems.FILTER_BEE_GENOME,
+                RailcraftItems.BACKPACK_APOTHECARY_T1,
+                RailcraftItems.BACKPACK_APOTHECARY_T2,
+                RailcraftItems.BACKPACK_ICEMAN_T1,
+                RailcraftItems.BACKPACK_ICEMAN_T2,
+                RailcraftItems.BACKPACK_TRACKMAN_T1,
+                RailcraftItems.BACKPACK_TRACKMAN_T2,
+                RailcraftItems.BACKPACK_SIGNALMAN_T1,
+                RailcraftItems.BACKPACK_SIGNALMAN_T2
+        );
 
+        setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             @Optional.Method(modid = ForestryPlugin.FORESTRY_ID)
             public void init() {

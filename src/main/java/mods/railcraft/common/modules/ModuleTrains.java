@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,16 +20,22 @@ import mods.railcraft.common.carts.Train;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-@RailcraftModule(value = "railcraft:train", softDependencyClasses = ModuleTracks.class, description = "cart linking, train dispenser, coupler track kit")
-public class ModuleTrain extends RailcraftModulePayload {
+@RailcraftModule(value = "railcraft:trains", softDependencyClasses = ModuleTracks.class, description = "cart linking, train dispenser, coupler track kit")
+public class ModuleTrains extends RailcraftModulePayload {
+    public static Config config;
 
-    public ModuleTrain() {
+    public ModuleTrains() {
+        add(
+                RailcraftBlocks.MANIPULATOR,
+                TrackKits.COUPLER
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void construction() {
@@ -45,10 +51,6 @@ public class ModuleTrain extends RailcraftModulePayload {
                         Train.killTrain(event.getCartTwo());
                     }
                 });
-                add(
-                        RailcraftBlocks.MANIPULATOR,
-                        TrackKits.COUPLER
-                );
             }
 
             @Override
@@ -73,5 +75,18 @@ public class ModuleTrain extends RailcraftModulePayload {
                 }
             }
         });
+    }
+
+    @Override
+    public void loadConfig(Configuration config) {
+        ModuleTrains.config = new Config(config);
+    }
+
+    public static class Config {
+        public final boolean debug;
+
+        public Config(Configuration config) {
+            debug = config.getBoolean("printDebug", CAT_CONFIG, false, "change to 'true' to log debug info for Cart Linking");
+        }
     }
 }

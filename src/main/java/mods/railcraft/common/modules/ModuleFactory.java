@@ -55,28 +55,22 @@ public class ModuleFactory extends RailcraftModulePayload {
     private static final int COKE_COOK_CREOSOTE = 500;
 
     public ModuleFactory() {
+        add(
+                RailcraftBlocks.ANVIL_STEEL,
+                RailcraftBlocks.EQUIPMENT,
+                RailcraftItems.COKE,
+                RailcraftBlocks.COKE_OVEN,
+                RailcraftBlocks.COKE_OVEN_RED,
+                RailcraftBlocks.BLAST_FURNACE,
+                RailcraftBlocks.ROCK_CRUSHER,
+                RailcraftBlocks.STEAM_OVEN,
+                RailcraftBlocks.CHEST_METALS,
+                RailcraftCarts.CHEST_METALS
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
 
             @Override
             public void construction() {
-                add(
-                        RailcraftBlocks.ANVIL_STEEL,
-                        RailcraftBlocks.EQUIPMENT,
-                        RailcraftItems.COKE,
-                        RailcraftBlocks.COKE_OVEN,
-                        RailcraftBlocks.COKE_OVEN_RED,
-                        RailcraftBlocks.BLAST_FURNACE,
-                        RailcraftBlocks.ROCK_CRUSHER,
-                        RailcraftBlocks.STEAM_OVEN,
-                        RailcraftBlocks.TANK_IRON_GAUGE,
-                        RailcraftBlocks.TANK_IRON_VALVE,
-                        RailcraftBlocks.TANK_IRON_WALL,
-                        RailcraftBlocks.TANK_STEEL_GAUGE,
-                        RailcraftBlocks.TANK_STEEL_VALVE,
-                        RailcraftBlocks.TANK_STEEL_WALL,
-                        RailcraftBlocks.CHEST_METALS,
-                        RailcraftCarts.CHEST_METALS
-                );
                 Code.setValue(Crafters.class, null, BlastFurnaceCrafter.INSTANCE, "blastFurnace");
                 Code.setValue(Crafters.class, null, CokeOvenCrafter.INSTANCE, "cokeOven");
                 Code.setValue(Crafters.class, null, RockCrusherCrafter.INSTANCE, "rockCrusher");

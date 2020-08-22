@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,35 +25,36 @@ import net.minecraftforge.common.MinecraftForge;
 @RailcraftModule(value = "railcraft:automation", description = "tunnel bore, maintenance carts, feed station, trade station, detectors")
 public class ModuleAutomation extends RailcraftModulePayload {
     public ModuleAutomation() {
+        add(
+                RailcraftBlocks.DETECTOR,
+                RailcraftBlocks.MANIPULATOR,
+                RailcraftBlocks.EQUIPMENT,
+                RailcraftBlocks.TRADE_STATION,
+                RailcraftBlocks.FORCE_TRACK_EMITTER,
+                RailcraftBlocks.TRACK_FORCE,
+
+                RailcraftItems.FILTER_BLANK,
+                RailcraftItems.FILTER_TYPE,
+                RailcraftItems.FILTER_ORE_DICT,
+
+                RailcraftCarts.BORE,
+                RailcraftItems.BORE_HEAD_BRONZE,
+                RailcraftItems.BORE_HEAD_IRON,
+                RailcraftItems.BORE_HEAD_STEEL,
+                RailcraftItems.BORE_HEAD_DIAMOND,
+                RailcraftCarts.MOW_TRACK_LAYER,
+                RailcraftCarts.MOW_TRACK_RELAYER,
+                RailcraftCarts.MOW_TRACK_REMOVER,
+                RailcraftCarts.MOW_UNDERCUTTER,
+                RailcraftCarts.TRADE_STATION
+        );
+
         setEnabledEventHandler(new ModuleEventHandler() {
 
             @Override
             public void construction() {
                 if (!RailcraftConfig.boreMinesAllBlocks())
                     MinecraftForge.EVENT_BUS.register(new BoreOreHandler());
-                add(
-                        RailcraftBlocks.DETECTOR,
-                        RailcraftBlocks.MANIPULATOR,
-                        RailcraftBlocks.EQUIPMENT,
-                        RailcraftBlocks.TRADE_STATION,
-                        RailcraftBlocks.FORCE_TRACK_EMITTER,
-                        RailcraftBlocks.TRACK_FORCE,
-
-                        RailcraftItems.FILTER_BLANK,
-                        RailcraftItems.FILTER_TYPE,
-                        RailcraftItems.FILTER_ORE_DICT,
-
-                        RailcraftCarts.BORE,
-                        RailcraftItems.BORE_HEAD_BRONZE,
-                        RailcraftItems.BORE_HEAD_IRON,
-                        RailcraftItems.BORE_HEAD_STEEL,
-                        RailcraftItems.BORE_HEAD_DIAMOND,
-                        RailcraftCarts.MOW_TRACK_LAYER,
-                        RailcraftCarts.MOW_TRACK_RELAYER,
-                        RailcraftCarts.MOW_TRACK_REMOVER,
-                        RailcraftCarts.MOW_UNDERCUTTER,
-                        RailcraftCarts.TRADE_STATION
-                );
             }
 
             @Override

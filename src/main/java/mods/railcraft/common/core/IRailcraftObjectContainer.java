@@ -123,6 +123,8 @@ public interface IRailcraftObjectContainer<T extends IRailcraftObject<?>> extend
         }
     }
 
+    default IRailcraftObjectContainer<T> getContainer() {return this;}
+
     Definition getDef();
 
     default ResourceLocation getRegistryName() {

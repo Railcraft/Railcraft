@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,11 +10,11 @@
 package mods.railcraft.common.util.steam;
 
 import mods.railcraft.common.blocks.TileRailcraft;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.widgets.IIndicatorController;
 import mods.railcraft.common.gui.widgets.IndicatorController;
+import mods.railcraft.common.modules.ModuleSteam;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -172,7 +172,7 @@ public class SteamBoiler {
         fuel += SteamConstants.FUEL_PRESSURE_INEFFICIENCY * (getMaxHeat() / SteamConstants.MAX_HEAT_HIGH);
         fuel *= numTanks;
         fuel *= efficiencyModifier;
-        fuel *= RailcraftConfig.fuelPerSteamMultiplier();
+        fuel *= ModuleSteam.config.fuelPerSteamMultiplier;
         return fuel;
     }
 

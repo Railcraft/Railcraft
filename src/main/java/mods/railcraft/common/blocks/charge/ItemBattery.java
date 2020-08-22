@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,8 @@ package mods.railcraft.common.blocks.charge;
 import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.ItemBlockRailcraft;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
+import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
@@ -53,7 +53,7 @@ public class ItemBattery<B extends BlockBattery> extends ItemBlockRailcraft<B> {
                 HumanReadableNumberFormatter.format(batterySpec.getMaxDraw())));
 
         tips.add(LocalizationPlugin.translate("tile.railcraft.battery.tips.loss",
-                HumanReadableNumberFormatter.format(chargeSpec.getLosses() * RailcraftConfig.chargeLossMultiplier())));
+                HumanReadableNumberFormatter.format(chargeSpec.getLosses() * ModuleCharge.config.lossMultiplier)));
 
         tips.add(LocalizationPlugin.translate("tile.railcraft.battery.tips.efficiency",
                 HumanReadableNumberFormatter.format(batterySpec.getEfficiency() * 100.0)));

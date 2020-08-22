@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@ package mods.railcraft.client.core;
 
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.RailcraftModuleManager;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
@@ -34,7 +33,6 @@ final class RailcraftGuiConfig extends GuiConfig {
         List<IConfigElement> elements = new ArrayList<>();
 
         elements.addAll(getElements(RailcraftConfig.configClient));
-        elements.addAll(getElements(RailcraftModuleManager.config));
         elements.addAll(getElements(RailcraftConfig.configMain));
         elements.addAll(getElements(RailcraftConfig.configBlocks));
         elements.addAll(getElements(RailcraftConfig.configItems));
@@ -56,7 +54,5 @@ final class RailcraftGuiConfig extends GuiConfig {
     public void onGuiClosed() {
         super.onGuiClosed();
         RailcraftConfig.saveConfigs();
-        if (RailcraftModuleManager.config.hasChanged())
-            RailcraftModuleManager.config.save();
     }
 }

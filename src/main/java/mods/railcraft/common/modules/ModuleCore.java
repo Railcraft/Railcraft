@@ -90,6 +90,43 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class ModuleCore extends RailcraftModulePayload {
 
     public ModuleCore() {
+        add(
+                RailcraftItems.CROWBAR_IRON,
+                RailcraftItems.CROWBAR_STEEL,
+
+                RailcraftItems.AXE_STEEL,
+                RailcraftItems.HOE_STEEL,
+                RailcraftItems.PICKAXE_STEEL,
+                RailcraftItems.SHEARS_STEEL,
+                RailcraftItems.SHOVEL_STEEL,
+                RailcraftItems.SWORD_STEEL,
+
+                RailcraftItems.ARMOR_HELMET_STEEL,
+                RailcraftItems.ARMOR_CHESTPLATE_STEEL,
+                RailcraftItems.ARMOR_LEGGINGS_STEEL,
+                RailcraftItems.ARMOR_BOOTS_STEEL,
+
+                RailcraftItems.MAG_GLASS,
+                RailcraftItems.GOGGLES,
+                RailcraftItems.OVERALLS,
+                RailcraftItems.NOTEPAD,
+
+                RailcraftItems.RAIL,
+                RailcraftItems.TIE,
+                RailcraftItems.REBAR,
+
+                RailcraftCarts.BASIC,
+                RailcraftCarts.CHEST,
+                RailcraftCarts.FURNACE,
+                RailcraftCarts.TNT,
+                RailcraftCarts.HOPPER,
+                RailcraftCarts.COMMAND_BLOCK,
+                RailcraftCarts.SPAWNER,
+
+                RailcraftFluids.CREOSOTE,
+                RailcraftFluids.STEAM
+        );
+
         setEnabledEventHandler(new ModuleEventHandler() {
             private final Field modField = ObfuscationReflectionHelper.findField(EntityEntryBuilder.class, "mod");
 
@@ -117,43 +154,6 @@ public class ModuleCore extends RailcraftModulePayload {
                 EntityItemFireproof.register();
 
                 OreDictPlugin.registerNewTags();
-
-                add(
-                        RailcraftItems.CROWBAR_IRON,
-                        RailcraftItems.CROWBAR_STEEL,
-
-                        RailcraftItems.AXE_STEEL,
-                        RailcraftItems.HOE_STEEL,
-                        RailcraftItems.PICKAXE_STEEL,
-                        RailcraftItems.SHEARS_STEEL,
-                        RailcraftItems.SHOVEL_STEEL,
-                        RailcraftItems.SWORD_STEEL,
-
-                        RailcraftItems.ARMOR_HELMET_STEEL,
-                        RailcraftItems.ARMOR_CHESTPLATE_STEEL,
-                        RailcraftItems.ARMOR_LEGGINGS_STEEL,
-                        RailcraftItems.ARMOR_BOOTS_STEEL,
-
-                        RailcraftItems.MAG_GLASS,
-                        RailcraftItems.GOGGLES,
-                        RailcraftItems.OVERALLS,
-                        RailcraftItems.NOTEPAD,
-
-                        RailcraftItems.RAIL,
-                        RailcraftItems.TIE,
-                        RailcraftItems.REBAR,
-
-                        RailcraftCarts.BASIC,
-                        RailcraftCarts.CHEST,
-                        RailcraftCarts.FURNACE,
-                        RailcraftCarts.TNT,
-                        RailcraftCarts.HOPPER,
-                        RailcraftCarts.COMMAND_BLOCK,
-                        RailcraftCarts.SPAWNER,
-
-                        RailcraftFluids.CREOSOTE,
-                        RailcraftFluids.STEAM
-                );
             }
 
             @Override
@@ -469,34 +469,35 @@ public class ModuleCore extends RailcraftModulePayload {
             }
 
             private void addLiquidFuels() {
-                int bioHeat = (int) (16000 * RailcraftConfig.boilerBiofuelMultiplier());
+                final int bioHeat = (int) (16000 * ModuleSteam.config.biofuelMultiplier);
                 Fluids.BIOETHANOL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
                 Fluids.BIOFUEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
                 Fluids.IC2BIOGAS.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
                 Fluids.BIODIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
                 Fluids.REFINED_BIOFUEL.ifPresent(f -> FluidFuelManager.addFuel(f, bioHeat));
 
-                Fluids.FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
+                final float fuelMultiplier = ModuleSteam.config.fuelMultiplier;
+                Fluids.FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * fuelMultiplier)));
 
-                Fluids.COAL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.PYROTHEUM.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.CREOSOTE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (4800 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.REFINED_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (80000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.REFINED_FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (120000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.TREE_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.SEED_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (6400 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.COAL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * fuelMultiplier)));
+                Fluids.PYROTHEUM.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * fuelMultiplier)));
+                Fluids.CREOSOTE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (4800 * fuelMultiplier)));
+                Fluids.REFINED_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (80000 * fuelMultiplier)));
+                Fluids.REFINED_FUEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (120000 * fuelMultiplier)));
+                Fluids.TREE_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (32000 * fuelMultiplier)));
+                Fluids.SEED_OIL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (6400 * fuelMultiplier)));
 
-                Fluids.DIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (96000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.GASOLINE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.DIESEL.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (96000 * fuelMultiplier)));
+                Fluids.GASOLINE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * fuelMultiplier)));
 
-                Fluids.OIL_HEAVY.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (42666 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.OIL_DENSE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.OIL_DISTILLED.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (20000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.FUEL_DENSE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (192000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.FUEL_MIXED_HEAVY.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (51200 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.FUEL_LIGHT.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.FUEL_MIXED_LIGHT.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (16000 * RailcraftConfig.boilerFuelMultiplier())));
-                Fluids.FUEL_GASEOUS.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (8000 * RailcraftConfig.boilerFuelMultiplier())));
+                Fluids.OIL_HEAVY.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (42666 * fuelMultiplier)));
+                Fluids.OIL_DENSE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (64000 * fuelMultiplier)));
+                Fluids.OIL_DISTILLED.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (20000 * fuelMultiplier)));
+                Fluids.FUEL_DENSE.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (192000 * fuelMultiplier)));
+                Fluids.FUEL_MIXED_HEAVY.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (51200 * fuelMultiplier)));
+                Fluids.FUEL_LIGHT.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (48000 * fuelMultiplier)));
+                Fluids.FUEL_MIXED_LIGHT.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (16000 * fuelMultiplier)));
+                Fluids.FUEL_GASEOUS.ifPresent(f -> FluidFuelManager.addFuel(f, (int) (8000 * fuelMultiplier)));
             }
         });
     }

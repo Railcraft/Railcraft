@@ -10,7 +10,6 @@
 package mods.railcraft.common.core;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.api.signals.SignalTools;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.EntityTunnelBore;
@@ -23,7 +22,6 @@ import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.collections.BlockItemParser;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
-import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.crafting.Ingredient;
@@ -44,8 +42,6 @@ public class RailcraftConfig {
     public static final List<Ingredient> cargoBlacklist = new ArrayList<>();
     private static final String COMMENT_PREFIX = "\n";
     private static final String COMMENT_SUFFIX = "\n";
-    //    private static final String COMMENT_PREFIX = "\n\n   # ";
-    private static final String CAT_CHARGE = "charge";
     private static final String CAT_ENCHANTMENTS = "enchantments";
     private static final String CAT_LOOT = "loot";
     private static final String CAT_WORLD_GEN = "worldgen";
@@ -79,16 +75,12 @@ public class RailcraftConfig {
     private static float maxHighSpeed = 1.1f;
     private static boolean borePreserveStacks = true;
     private static boolean boreMinesAllBlocks;
-    private static boolean locomotiveDamageMobs;
-    private static boolean printLinkingDebug;
     private static boolean printWorldspikeDebug;
-    private static boolean printChargeDebug;
     private static boolean deleteWorldspikes;
     private static String[] worldspikeCrafting;
     private static boolean worldspikesCanInteractWithPipes;
     private static boolean printWorldspikes;
     private static boolean minecartsBreakOnDrop;
-    private static boolean adjustBasicCartDrag;
     private static boolean chestAllowFluids;
     private static boolean minecartsCollideWithItems;
     private static boolean registerCollisionHandler;
@@ -107,7 +99,6 @@ public class RailcraftConfig {
     private static int cartDispenserDelay;
     private static int minecartStackSize;
     private static int maxTankSize;
-    private static int locomotiveHorsepower;
     private static int creosoteTorchOutput;
     private static int coalCokeTorchOutput;
     private static String[] enchantments;
@@ -116,11 +107,6 @@ public class RailcraftConfig {
     private static int tankPerBlockCapacity;
     private static int baseWaterGeneratorRate;
     private static float boreMiningSpeedMultiplier = 1F;
-    private static float chargeLossMultiplier = 1F;
-    private static float boilerMultiplierFuel = 1F;
-    private static float boilerMultiplierBiofuel = 1F;
-    private static float fuelPerSteamMultiplier = SteamConstants.FUEL_PER_BOILER_CYCLE;
-    private static float steamLocomotiveEfficiencyMultiplier = 3F;
     private static boolean allowTankStacking;
     private static boolean hopperCartTransferCooldown;
     public static Configuration configMain;
@@ -156,8 +142,6 @@ public class RailcraftConfig {
 
         configMain.removeCategory(configMain.getCategory(CAT_LOOT));
         configMain.removeCategory(configMain.getCategory("anchors"));
-
-        printChargeDebug = get(CAT_CHARGE, "printDebug", false, "change to '{t}=true' to enabled Charge Network debug spam");
 
         loadWorldspikeSettings();
         loadBlockTweaks();
@@ -259,16 +243,6 @@ public class RailcraftConfig {
         tankPerBlockCapacity = get(CAT_TWEAKS_BLOCKS + ".metal_tank", "capacity.per.block", 1, 16, 1600, "Allows you to set how many buckets (1000 milliBuckets) of fluid each iron tank block can carry, min=1, default=16, max=1600");
 
         baseWaterGeneratorRate = get(CAT_TWEAKS_BLOCKS + ".water_tank", "environmental.generation", 0, 4, 1000, "The base rate of water in milliBuckets that can be gathered from the local environment, applied every 16 ticks to every block that can see the sky, min=0, default=4, max=1000");
-
-        SignalTools.printSignalDebug = get(CAT_TWEAKS_BLOCKS + ".signals", "printDebug", false, "change to '{t}=true' to log debug info for Signal Blocks");
-        SignalTools.signalUpdateInterval = get(CAT_TWEAKS_BLOCKS + ".signals", "update.interval", 4, "measured in tick, smaller numbers update more often, resulting in more sensitive signals, but cost more cpu power, default = 4");
-
-        chargeLossMultiplier = get(CAT_TWEAKS_BLOCKS + ".charge", "lossMultiplier", 0.2F, 1.0F, 10F, "adjust the losses for the Charge network, min=0.2, default=1.0, max=10.0");
-
-        boilerMultiplierFuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "fuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of Fuel in a Boiler, min=0.2, default=1.0, max=10.0");
-        boilerMultiplierBiofuel = get(CAT_TWEAKS_BLOCKS + ".boiler", "biofuelMultiplier", 0.2F, 1.0F, 10F, "adjust the heat value of BioFuel in a Boiler, min=0.2, default=1.0, max=10.0");
-
-        fuelPerSteamMultiplier = get(CAT_TWEAKS + ".steam", "fuelPerSteamMultiplier", 0.2F, 1.0F, 6.0F, "adjust the amount of fuel used to create Steam, min=0.2, default=1.0, max=6.0");
     }
 
     private static void loadItemTweaks() {
@@ -303,11 +277,7 @@ public class RailcraftConfig {
         minecartsBreakOnDrop = get(CAT_TWEAKS_CARTS + ".general", "breakOnDrop", false, "change to '{t}=true' to restore vanilla behavior");
         minecartsCollideWithItems = get(CAT_TWEAKS_CARTS + ".general", "collideWithItems", false, "change to '{t}=true' to restore minecart collisions with dropped items, ignored if 'register.collision.handler=false'");
 
-        printLinkingDebug = get(CAT_TWEAKS_CARTS + ".general", "printLinkingDebug", false, "change to '{t}=true' to log debug info for Cart Linking");
-
         cartsInvulnerableFromMonsters = get(CAT_TWEAKS_CARTS + ".general", "cartsInvulnerableFromMonsters", true, "change to '{t}=false' to allow monster fired projectiles to damage carts");
-
-        adjustBasicCartDrag = get(CAT_TWEAKS_CARTS + ".basic", "adjustDrag", true, "change to '{t}=false' to give basic carts the original vanilla drag values, after changing you may need to replace the carts to see any change in game");
 
         chestAllowFluids = get(CAT_TWEAKS_CARTS + ".chest", "allowFluidContainers", false, "change to '{t}=true' to allow fluid containers in Chest and Cargo Carts");
 
@@ -332,14 +302,6 @@ public class RailcraftConfig {
         borePreserveStacks = !get(CAT_TWEAKS_CARTS + ".bore", "destroyBlocks", false, "change to '{t}=true' to cause the Bore to destroy the blocks it mines instead of dropping them");
         boreMinesAllBlocks = get(CAT_TWEAKS_CARTS + ".bore", "mineAllBlocks", true, "change to '{t}=false' to enable mining checks, use true setting with caution, especially on servers");
         boreMiningSpeedMultiplier = get(CAT_TWEAKS_CARTS + ".bore", "miningSpeed", 0.1f, 1.0f, 50.0f, "adjust the speed at which the Bore mines blocks, min=0.1, default=1.0, max=50.0");
-
-        steamLocomotiveEfficiencyMultiplier = get(CAT_TWEAKS_CARTS + ".locomotive.steam", "efficiencyMultiplier", 0.2F, 3.0F, 12.0F, "adjust the multiplier used when calculating fuel use, min=0.2, default=3.0, max=12.0");
-
-        locomotiveDamageMobs = get(CAT_TWEAKS_CARTS + ".locomotive", "damageMobs", true, "change to '{t}=false' to disable Locomotive damage on mobs, they will still knockback mobs");
-        locomotiveHorsepower = get(CAT_TWEAKS_CARTS + ".locomotive", "horsepower", 15, 15, 45,
-                "controls how much power locomotives have and how many carts they can pull\n"
-                        + "be warned, longer trains have a greater chance for glitches\n"
-                        + "as such it HIGHLY recommended you do not change this");
 
         boolean minecartTankCustomize = get(CAT_TWEAKS_CARTS + ".tank", "useCustomValues", false, "change to '{t}=true' to adjust the Tank Cart's capacity and fill rate");
 
@@ -490,59 +452,6 @@ public class RailcraftConfig {
 
         Map<String, Property> subBlocks = configBlocks.getCategory(CAT_SUB_BLOCKS);
         subBlocks.keySet().retainAll(enabledSubBlocks.keySet());
-
-//        for (EnumGeneric type : EnumGeneric.VALUES) {
-//            loadBlockFeature(type.getTag());
-//        }
-//
-//        for (EnumPost type : EnumPost.VALUES) {
-//            loadBlockFeature(type.getTag());
-//        }
-
-//        for (EnumWallAlpha type : EnumWallAlpha.VALUES) {
-//            loadBlockFeature(type.getTag());
-//        }
-//
-//        for (EnumWallBeta type : EnumWallBeta.VALUES) {
-//            loadBlockFeature(type.getTag());
-//        }
-
-//        for (BlockMaterial mat : BlockMaterial.STAIR_MATS) {
-//            loadBlockFeature(BlockRailcraftStairs.getTag(mat));
-//        }
-//
-//        for (BlockMaterial mat : BlockMaterial.SLAB_MATS) {
-//            loadBlockFeature(BlockRailcraftSlab.getTag(mat));
-//        }
-
-//        for (BlockMaterial mat : BlockLantern.STONE_LANTERN.values()) {
-//            loadBlockFeature(BlockLantern.getTag(mat));
-//        }
-//
-//        for (BlockMaterial mat : BlockLantern.METAL_LANTERN.values()) {
-//            loadBlockFeature(BlockLantern.getTag(mat));
-//        }
-
-//        for (EnumOre type : EnumOre.values()) {
-//            if (!type.isDeprecated())
-//                loadBlockFeature(type.getTag());
-//        }
-
-//        Set<IEnumMachine<?>> machineVariants = new HashSet<>();
-//        machineVariants.addAll(Arrays.asList(EnumMachineAlpha.VALUES));
-//        machineVariants.addAll(Arrays.asList(EnumMachineBeta.values()));
-//        machineVariants.addAll(Arrays.asList(EnumMachineGamma.values()));
-//        machineVariants.addAll(Arrays.asList(EnumMachineDelta.values()));
-//        machineVariants.addAll(Arrays.asList(EnumMachineEpsilon.values()));
-//
-//        for (IEnumMachine<?> type : machineVariants) {
-//            loadBlockFeature(type.getTag());
-//        }
-//
-//        for (EnumSignal type : EnumSignal.values()) {
-//            if (type.getModule() != null)
-//                loadBlockFeature(type.getTag());
-//        }
     }
 
     private static void cleanOldTags(Map<String, Property> props, String tag) {
@@ -661,14 +570,6 @@ public class RailcraftConfig {
         return boreMiningSpeedMultiplier;
     }
 
-    public static boolean locomotiveDamageMobs() {
-        return locomotiveDamageMobs;
-    }
-
-    public static int locomotiveHorsepower() {
-        return locomotiveHorsepower;
-    }
-
     public static int locomotiveLightLevel() {
         return locomotiveLightLevel;
     }
@@ -681,16 +582,8 @@ public class RailcraftConfig {
         return baseWaterGeneratorRate;
     }
 
-    public static boolean printLinkingDebug() {
-        return printLinkingDebug;
-    }
-
     public static boolean printWorldspikeDebug() {
         return printWorldspikeDebug;
-    }
-
-    public static boolean printChargeDebug() {
-        return printChargeDebug;
     }
 
     public static boolean worldspikesCanInteractWithPipes() {
@@ -719,10 +612,6 @@ public class RailcraftConfig {
 
     public static boolean doCartsBreakOnDrop() {
         return minecartsBreakOnDrop;
-    }
-
-    public static boolean adjustBasicCartDrag() {
-        return adjustBasicCartDrag;
     }
 
     public static boolean chestAllowLiquids() {
@@ -799,26 +688,6 @@ public class RailcraftConfig {
 
     public static boolean allowTankStacking() {
         return allowTankStacking;
-    }
-
-    public static float chargeLossMultiplier() {
-        return chargeLossMultiplier;
-    }
-
-    public static float boilerFuelMultiplier() {
-        return boilerMultiplierFuel;
-    }
-
-    public static float boilerBiofuelMultiplier() {
-        return boilerMultiplierBiofuel;
-    }
-
-    public static float fuelPerSteamMultiplier() {
-        return fuelPerSteamMultiplier;
-    }
-
-    public static float steamLocomotiveEfficiencyMultiplier() {
-        return steamLocomotiveEfficiencyMultiplier;
     }
 
     public static int vanillaOreGenChance() {

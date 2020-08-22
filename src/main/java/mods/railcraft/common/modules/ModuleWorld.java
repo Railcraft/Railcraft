@@ -56,20 +56,16 @@ public class ModuleWorld extends RailcraftModulePayload {
     public static @Nullable VillagerRegistry.VillagerProfession villagerTrackman;
 
     public ModuleWorld() {
+        add(
+                RailcraftBlocks.GENERIC,
+                RailcraftBlocks.ORE,
+                RailcraftBlocks.ORE_METAL,
+                RailcraftBlocks.ORE_METAL_POOR,
+                RailcraftBlocks.ORE_MAGIC,
+                RailcraftBlocks.WORLD_LOGIC
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
             private File oreConfigFolder;
-
-            @Override
-            public void construction() {
-                add(
-                        RailcraftBlocks.GENERIC,
-                        RailcraftBlocks.ORE,
-                        RailcraftBlocks.ORE_METAL,
-                        RailcraftBlocks.ORE_METAL_POOR,
-                        RailcraftBlocks.ORE_MAGIC,
-                        RailcraftBlocks.WORLD_LOGIC
-                );
-            }
 
             @Override
             public void preInit() {

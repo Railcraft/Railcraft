@@ -20,7 +20,6 @@ import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.carts.EntityLocomotive.LocoLockButtonState;
 import mods.railcraft.common.carts.LinkageManager.LinkType;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.buttons.ButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IButtonTextureSet;
 import mods.railcraft.common.gui.buttons.IMultiButtonState;
@@ -29,6 +28,7 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.ItemWhistleTuner;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.modules.ModuleLocomotives;
 import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -432,7 +432,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         LocoSpeed speed = getSpeed();
         if (isRunning()) {
-            float force = RailcraftConfig.locomotiveHorsepower() * 0.01F;
+            float force = ModuleLocomotives.config.locomotiveHorsepower * 0.01F;
             if (isReverse())
                 force = -force;
             switch (speed) {
@@ -526,7 +526,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
                     && (cartVelocityIsGreaterThan(0.2f) || HighSpeedTools.isTravellingHighSpeed(this))
                     && RCEntitySelectors.KILLABLE.test(entity)) {
                 EntityLivingBase living = (EntityLivingBase) entity;
-                if (RailcraftConfig.locomotiveDamageMobs())
+                if (ModuleLocomotives.config.locomotiveDamageMobs)
                     living.attackEntityFrom(RailcraftDamageSource.TRAIN, getDamageToRoadKill(living));
                 if (living.getHealth() > 0) {
                     float yaw = (rotationYaw - 90) * (float) Math.PI / 180.0F;

@@ -38,17 +38,15 @@ public class ModuleIC2 extends RailcraftModulePayload {
     }
 
     public ModuleIC2() {
+        add(
+                RailcraftCarts.ENERGY_BATBOX,
+                RailcraftCarts.ENERGY_MFE,
+                RailcraftCarts.ENERGY_CESU,
+                RailcraftBlocks.MANIPULATOR
+        );
+        if (Mod.IC2_CLASSIC.isLoaded()) add(RailcraftCarts.ENERGY_MFSU);
+
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftCarts.ENERGY_BATBOX,
-                        RailcraftCarts.ENERGY_MFE,
-                        RailcraftCarts.ENERGY_CESU,
-                        RailcraftBlocks.MANIPULATOR
-                );
-                if (Mod.IC2_CLASSIC.isLoaded()) add(RailcraftCarts.ENERGY_MFSU);
-            }
 
             @Override
             public void preInit() {

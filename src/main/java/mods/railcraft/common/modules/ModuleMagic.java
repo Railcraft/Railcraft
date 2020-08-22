@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,23 +25,20 @@ import net.minecraftforge.common.MinecraftForge;
 @RailcraftModule(value = "railcraft:magic", description = "firestone, waterstone, icestone")
 public class ModuleMagic extends RailcraftModulePayload {
     public ModuleMagic() {
+        add(
+                RailcraftItems.FIRESTONE_CRACKED,
+                RailcraftItems.FIRESTONE_CUT,
+                RailcraftItems.FIRESTONE_RAW,
+                RailcraftItems.FIRESTONE_REFINED,
+
+                RailcraftBlocks.RITUAL,
+                RailcraftPotions.CREOSOTE,
+                RailcraftPotionTypes.CREOSOTE,
+                RailcraftPotionTypes.LONG_CREOSOTE,
+                RailcraftPotionTypes.STRONG_CREOSOTE
+        );
+
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftItems.FIRESTONE_CRACKED,
-                        RailcraftItems.FIRESTONE_CUT,
-                        RailcraftItems.FIRESTONE_RAW,
-                        RailcraftItems.FIRESTONE_REFINED,
-
-                        RailcraftBlocks.RITUAL,
-                        RailcraftPotions.CREOSOTE,
-                        RailcraftPotionTypes.CREOSOTE,
-                        RailcraftPotionTypes.LONG_CREOSOTE,
-                        RailcraftPotionTypes.STRONG_CREOSOTE
-                );
-            }
-
             @Override
             public void preInit() {
                 EntityItemFirestone.register();

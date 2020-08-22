@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,8 +12,11 @@ package mods.railcraft.common.modules;
 import mods.railcraft.api.core.IRailcraftModule;
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.core.IRailcraftObjectContainer;
+import mods.railcraft.common.modules.RailcraftModuleManager.Stage;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 
 public abstract class RailcraftModulePayload implements IRailcraftModule {
@@ -34,13 +37,17 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
     }
 
     public final void add(IRailcraftObjectContainer<?>... objects) {
-        if (RailcraftModuleManager.getStage() != RailcraftModuleManager.Stage.CONSTRUCTION)
-            throw new RuntimeException("You can only associate Railcraft Objects with a Module during the Construction phase!");
-        objectContainers.addAll(Arrays.asList(objects));
+        if (RailcraftModuleManager.getStage() != Stage.LOADING)
+            throw new RuntimeException("You can only associate Railcraft Objects with a Module during the Loading phase!");
+        Arrays.stream(objects).map(IRailcraftObjectContainer::getContainer).forEach(objectContainers::add);
     }
 
     public final boolean isDefiningObject(IRailcraftObjectContainer<?> object) {
         return objectContainers.contains(object);
+    }
+
+    public final Collection<IRailcraftObjectContainer<?>> getObjects() {
+        return Collections.unmodifiableSet(objectContainers);
     }
 
     @Override
@@ -48,10 +55,6 @@ public abstract class RailcraftModulePayload implements IRailcraftModule {
         if (enabled)
             return baseEventHandler;
         return disabledEventHandler;
-    }
-
-    @Override
-    public void checkPrerequisites() throws MissingPrerequisiteException {
     }
 
     @Override

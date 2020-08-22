@@ -19,8 +19,8 @@ import mods.railcraft.api.charge.IBatteryBlock;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.api.charge.IChargeProtectionItem;
 import mods.railcraft.api.core.CollectionToolsAPI;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ModItems;
+import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
 import mods.railcraft.common.util.entity.RailcraftDamageSource;
@@ -72,7 +72,7 @@ public class ChargeNetwork implements Charge.INetwork {
     }
 
     private void printDebug(String msg, Object... args) {
-        if (RailcraftConfig.printChargeDebug())
+        if (ModuleCharge.config.debug)
             Game.log().msg(Level.INFO, msg, args);
     }
 
@@ -381,7 +381,7 @@ public class ChargeNetwork implements Charge.INetwork {
         }
 
         public double getLosses() {
-            return totalLosses * RailcraftConfig.chargeLossMultiplier();
+            return totalLosses * ModuleCharge.config.lossMultiplier;
         }
 
         public double getAverageUsagePerTick() {

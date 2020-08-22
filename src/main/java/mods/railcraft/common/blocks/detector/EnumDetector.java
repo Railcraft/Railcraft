@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.detector.types.*;
 import mods.railcraft.common.modules.ModuleAutomation;
 import mods.railcraft.common.modules.ModuleRouting;
-import mods.railcraft.common.modules.ModuleTrain;
+import mods.railcraft.common.modules.ModuleTrains;
 import net.minecraft.util.Tuple;
 
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public enum EnumDetector implements IVariantEnumBlock<EnumDetector> {
     TANK(ModuleAutomation.class, DetectorTank.class),
     ADVANCED(ModuleAutomation.class, DetectorAdvanced.class),
     AGE(ModuleAutomation.class, DetectorAge.class),
-    TRAIN(ModuleTrain.class, DetectorTrain.class),
+    TRAIN(ModuleTrains.class, DetectorTrain.class),
     SHEEP(ModuleAutomation.class, DetectorSheep.class),
     VILLAGER(ModuleAutomation.class, DetectorVillager.class),
     LOCOMOTIVE(ModuleAutomation.class, DetectorLocomotive.class),

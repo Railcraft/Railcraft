@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,8 +39,8 @@ import java.util.*;
 
 public final class RailcraftModuleManager {
 
-    private static final String MODULE_CONFIG_FILE_NAME = "modules.cfg";
-    private static final String CATEGORY_MODULES = "modules";
+    public static final String MODULE_CONFIG_FOLDER = "modules";
+    public static final String CATEGORY_MODULE = "module";
     private static final Map<Class<? extends IRailcraftModule>, IRailcraftModule> classToInstanceMapping = new HashMap<>();
     private static final Map<String, Class<? extends IRailcraftModule>> nameToClassMapping = new HashMap<>();
     private static final LinkedHashSet<Class<? extends IRailcraftModule>> enabledModules = new LinkedHashSet<>();
@@ -48,7 +48,6 @@ public final class RailcraftModuleManager {
     private static final List<IGuiHandleModule> guiHandlers = new ArrayList<>();
     static final Set<IRailcraftObjectContainer<?>> definedContainers = new HashSet<>();
     private static Stage stage = Stage.LOADING;
-    public static Configuration config;
 
     private RailcraftModuleManager() {
     }
@@ -105,16 +104,9 @@ public final class RailcraftModuleManager {
         Locale locale = Locale.getDefault();
         Locale.setDefault(Locale.ENGLISH);
 
-        config = new Configuration(new File(Railcraft.getMod().getConfigFolder(), MODULE_CONFIG_FILE_NAME));
-
-        config.load();
-        config.addCustomCategoryComment(CATEGORY_MODULES, "Disabling these Modules can greatly change how the mod functions.\n"
-                + "For example, disabling the Train Module will prevent you from linking carts.\n"
-                + "Disabling the Locomotive Module will remove the extra drag added to Trains.\n"
-                + "Disabling the World Module will disable all world gen.\n"
-                + "Railcraft will attempt to compensate for disabled Modules on a best effort basis.\n"
-                + "It will define alternate recipes and crafting paths, but the system is far from flawless.\n"
-                + "Unexpected behavior, bugs, or crashes may occur. Please report any issues so they can be fixed.\n");
+        File moduleFolder = new File(Railcraft.getMod().getConfigFolder(), MODULE_CONFIG_FOLDER);
+        if (!moduleFolder.exists())
+            moduleFolder.mkdirs();
 
         // Add enabled modules to list
         List<Class<? extends IRailcraftModule>> toEnable = Lists.newArrayList();
@@ -124,7 +116,7 @@ public final class RailcraftModuleManager {
                 continue;
             IRailcraftModule module = entry.getValue();
             String moduleName = getModuleName(module);
-            if (!isConfigured(config, module)) {
+            if (!isConfigured(moduleFolder, module)) {
                 Game.log().msg(Level.INFO, "Module disabled: {0}", module);
                 continue;
             }
@@ -192,9 +184,6 @@ public final class RailcraftModuleManager {
 
         // Add the disabled modules to the load order
         loadOrder.addAll(toDisable);
-
-        if (config.hasChanged())
-            config.save();
 
         Locale.setDefault(locale);
 
@@ -268,15 +257,48 @@ public final class RailcraftModuleManager {
         }
     }
 
-    private static boolean isConfigured(Configuration config, IRailcraftModule m) {
+    private static boolean isConfigured(File moduleFolder, IRailcraftModule m) {
         RailcraftModule annotation = m.getClass().getAnnotation(RailcraftModule.class);
         String moduleName = annotation.value().toLowerCase(Locale.ENGLISH);
 
-        // oops, remove this later
-        config.renameProperty(CATEGORY_MODULES, moduleName.replaceAll("[_|]", "."), moduleName);
 
-        Property prop = config.get(CATEGORY_MODULES, moduleName, true, annotation.description());
-        return prop.getBoolean(true);
+        Configuration config = new Configuration(new File(moduleFolder,
+                moduleName
+                        .replace("railcraft:", "")
+                        .replace(":", "_")
+                        .replace("|", "_")
+                        + ".cfg"));
+
+        StringBuilder desc = new StringBuilder("Disabling these Modules can greatly change how the mod functions.\n"
+                + "For example, disabling the Train Module will prevent you from linking carts.\n"
+                + "Disabling the Locomotive Module will remove the extra drag added to Trains.\n"
+                + "Disabling the World Module will disable all world gen.\n"
+                + "\n"
+                + "Railcraft will attempt to compensate for disabled Modules on a best effort basis.\n"
+                + "It will define alternate recipes and crafting paths, but the system is far from flawless.\n"
+                + "Unexpected behavior, bugs, or crashes may occur. Please report any issues so they can be fixed.\n"
+                + "\n"
+                + "\n"
+                + moduleName + "\n"
+                + "-- " + annotation.description() + "\n\n");
+        if (m instanceof RailcraftModulePayload) {
+            desc.append("items/blocks/entities/etc added by this module:\n");
+            for (IRailcraftObjectContainer<?> object : ((RailcraftModulePayload) m).getObjects())
+                desc.append("--  ").append(object.getBaseTag()).append("\n");
+        }
+
+        config.load();
+        config.addCustomCategoryComment(CATEGORY_MODULE, desc.toString());
+
+        Property prop = config.get(CATEGORY_MODULE, "enabled", true, "Whether the " + moduleName + " module is loaded or not");
+        boolean enabled = prop.getBoolean(true);
+
+        m.loadConfig(config);
+
+        if (config.hasChanged())
+            config.save();
+
+        return enabled;
     }
 
     public static boolean isModuleEnabled(Class<? extends IRailcraftModule> moduleClass) {

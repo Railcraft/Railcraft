@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,15 +15,10 @@ import mods.railcraft.common.carts.RailcraftCarts;
 @RailcraftModule(value = "railcraft:carts", description = "railcraft custom carts")
 public class ModuleCarts extends RailcraftModulePayload {
     public ModuleCarts() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftCarts.WORK,
-                        RailcraftCarts.JUKEBOX,
-                        RailcraftCarts.BED
-                );
-            }
-        });
+        add(
+                RailcraftCarts.WORK,
+                RailcraftCarts.JUKEBOX,
+                RailcraftCarts.BED
+        );
     }
 }

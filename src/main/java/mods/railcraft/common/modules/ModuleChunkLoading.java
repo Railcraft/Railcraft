@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,18 +24,15 @@ import net.minecraftforge.common.MinecraftForge;
 public class ModuleChunkLoading extends RailcraftModulePayload {
 
     public ModuleChunkLoading() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-                        RailcraftBlocks.WORLDSPIKE,
-                        RailcraftBlocks.WORLDSPIKE_POINT,
-                        RailcraftCarts.WORLDSPIKE_STANDARD,
-                        RailcraftCarts.WORLDSPIKE_ADMIN,
-                        RailcraftCarts.WORLDSPIKE_PERSONAL
-                );
-            }
+        add(
+                RailcraftBlocks.WORLDSPIKE,
+                RailcraftBlocks.WORLDSPIKE_POINT,
+                RailcraftCarts.WORLDSPIKE_STANDARD,
+                RailcraftCarts.WORLDSPIKE_ADMIN,
+                RailcraftCarts.WORLDSPIKE_PERSONAL
+        );
 
+        setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void preInit() {
                 ForgeChunkManager.setForcedChunkLoadingCallback(Railcraft.getMod(), ChunkManager.getInstance());

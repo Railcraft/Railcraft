@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,14 +25,11 @@ public class ModuleThaumcraft extends RailcraftModulePayload {
     }
 
     public ModuleThaumcraft() {
+        add(
+//                RailcraftItems.CROWBAR_THAUMIUM,
+//                RailcraftItems.CROWBAR_VOID
+        );
         setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                add(
-//                        RailcraftItems.CROWBAR_THAUMIUM,
-//                        RailcraftItems.CROWBAR_VOID
-                );
-            }
 
             @Override
             public void postInit() {

@@ -275,6 +275,7 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
         return mapColor;
     }
 
+    @Override
     public final RailcraftBlocks getContainer() {
         return container;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.util.charge;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.core.CollectionToolsAPI;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleCharge;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,7 +51,7 @@ public final class ChargeSaveData extends WorldSavedData {
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        if (RailcraftConfig.printChargeDebug())
+        if (ModuleCharge.config.debug)
             Game.log().msg(Level.INFO, "Saving Charge Battery data...");
         NBTTagList list = new NBTTagList();
         for (Map.Entry<BlockPos, Double> entry : chargeLevels.entrySet()) {
@@ -66,7 +66,7 @@ public final class ChargeSaveData extends WorldSavedData {
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
-        if (RailcraftConfig.printChargeDebug())
+        if (ModuleCharge.config.debug)
             Game.log().msg(Level.INFO, "Loading Charge Battery data...");
         List<NBTTagCompound> list = NBTPlugin.getNBTList(nbt, "batteries", NBTTagCompound.class);
         for (NBTTagCompound entry : list) {

@@ -28,76 +28,65 @@ import net.minecraftforge.fluids.FluidStack;
 public class ModuleBuilding extends RailcraftModulePayload {
 
     public ModuleBuilding() {
-        setEnabledEventHandler(new ModuleEventHandler() {
-            @Override
-            public void construction() {
-                for (BrickTheme brick : BrickTheme.VALUES) {
-                    add(brick.getContainer());
-                }
-                add(
+        add(BrickTheme.VALUES);
+        add(
 //                        RailcraftItems.STONE_CARVER,
-                        RailcraftItems.CONCRETE,
-                        RailcraftBlocks.GLASS,
-                        RailcraftBlocks.GENERIC,
-                        RailcraftBlocks.REINFORCED_CONCRETE,
-//                        RailcraftBlocks.post,
-                        RailcraftBlocks.POST_METAL,
-                        RailcraftBlocks.POST_METAL_PLATFORM,
+                RailcraftItems.CONCRETE,
+                RailcraftBlocks.GLASS,
+                RailcraftBlocks.GENERIC,
+                RailcraftBlocks.REINFORCED_CONCRETE,
+                RailcraftBlocks.POST_METAL,
+                RailcraftBlocks.POST_METAL_PLATFORM,
 
-                        RailcraftBlocks.STAIR_ABYSSAL_BRICK,
-                        RailcraftBlocks.STAIR_BLEACHED_BONE_BRICK,
-                        RailcraftBlocks.STAIR_BLOOD_STAINED_BRICK,
-                        RailcraftBlocks.STAIR_FROST_BOUND_BRICK,
-                        RailcraftBlocks.STAIR_INFERNAL_BRICK,
-                        RailcraftBlocks.STAIR_PEARLIZED_BRICK,
-                        RailcraftBlocks.STAIR_QUARRIED_BRICK,
-                        RailcraftBlocks.STAIR_BADLANDS_BRICK,
-                        RailcraftBlocks.STAIR_SANDY_BRICK,
+                RailcraftBlocks.STAIR_ABYSSAL_BRICK,
+                RailcraftBlocks.STAIR_BLEACHED_BONE_BRICK,
+                RailcraftBlocks.STAIR_BLOOD_STAINED_BRICK,
+                RailcraftBlocks.STAIR_FROST_BOUND_BRICK,
+                RailcraftBlocks.STAIR_INFERNAL_BRICK,
+                RailcraftBlocks.STAIR_PEARLIZED_BRICK,
+                RailcraftBlocks.STAIR_QUARRIED_BRICK,
+                RailcraftBlocks.STAIR_BADLANDS_BRICK,
+                RailcraftBlocks.STAIR_SANDY_BRICK,
 
-                        RailcraftBlocks.STAIR_ABYSSAL_PAVER,
-                        RailcraftBlocks.STAIR_BLEACHED_BONE_PAVER,
-                        RailcraftBlocks.STAIR_BLOOD_STAINED_PAVER,
-                        RailcraftBlocks.STAIR_FROST_BOUND_PAVER,
-                        RailcraftBlocks.STAIR_INFERNAL_PAVER,
-                        RailcraftBlocks.STAIR_PEARLIZED_PAVER,
-                        RailcraftBlocks.STAIR_QUARRIED_PAVER,
-                        RailcraftBlocks.STAIR_BADLANDS_PAVER,
-                        RailcraftBlocks.STAIR_SANDY_PAVER,
+                RailcraftBlocks.STAIR_ABYSSAL_PAVER,
+                RailcraftBlocks.STAIR_BLEACHED_BONE_PAVER,
+                RailcraftBlocks.STAIR_BLOOD_STAINED_PAVER,
+                RailcraftBlocks.STAIR_FROST_BOUND_PAVER,
+                RailcraftBlocks.STAIR_INFERNAL_PAVER,
+                RailcraftBlocks.STAIR_PEARLIZED_PAVER,
+                RailcraftBlocks.STAIR_QUARRIED_PAVER,
+                RailcraftBlocks.STAIR_BADLANDS_PAVER,
+                RailcraftBlocks.STAIR_SANDY_PAVER,
 
-                        RailcraftBlocks.SLAB_ABYSSAL_DOUBLE,
-                        RailcraftBlocks.SLAB_ABYSSAL,
+                RailcraftBlocks.SLAB_ABYSSAL_DOUBLE,
+                RailcraftBlocks.SLAB_ABYSSAL,
 
-                        RailcraftBlocks.SLAB_BADLANDS_DOUBLE,
-                        RailcraftBlocks.SLAB_BADLANDS,
+                RailcraftBlocks.SLAB_BADLANDS_DOUBLE,
+                RailcraftBlocks.SLAB_BADLANDS,
 
-                        RailcraftBlocks.SLAB_BLEACHED_BONE_DOUBLE,
-                        RailcraftBlocks.SLAB_BLEACHED_BONE,
+                RailcraftBlocks.SLAB_BLEACHED_BONE_DOUBLE,
+                RailcraftBlocks.SLAB_BLEACHED_BONE,
 
-                        RailcraftBlocks.SLAB_BLOOD_STAINED_DOUBLE,
-                        RailcraftBlocks.SLAB_BLOOD_STAINED,
+                RailcraftBlocks.SLAB_BLOOD_STAINED_DOUBLE,
+                RailcraftBlocks.SLAB_BLOOD_STAINED,
 
-                        RailcraftBlocks.SLAB_FROST_BOUND_DOUBLE,
-                        RailcraftBlocks.SLAB_FROST_BOUND,
+                RailcraftBlocks.SLAB_FROST_BOUND_DOUBLE,
+                RailcraftBlocks.SLAB_FROST_BOUND,
 
-                        RailcraftBlocks.SLAB_INFERNAL_DOUBLE,
-                        RailcraftBlocks.SLAB_INFERNAL,
+                RailcraftBlocks.SLAB_INFERNAL_DOUBLE,
+                RailcraftBlocks.SLAB_INFERNAL,
 
-                        RailcraftBlocks.SLAB_PEARLIZED_DOUBLE,
-                        RailcraftBlocks.SLAB_PEARLIZED,
+                RailcraftBlocks.SLAB_PEARLIZED_DOUBLE,
+                RailcraftBlocks.SLAB_PEARLIZED,
 
-                        RailcraftBlocks.SLAB_QUARRIED_DOUBLE,
-                        RailcraftBlocks.SLAB_QUARRIED,
+                RailcraftBlocks.SLAB_QUARRIED_DOUBLE,
+                RailcraftBlocks.SLAB_QUARRIED,
 
-                        RailcraftBlocks.SLAB_SANDY_DOUBLE,
-                        RailcraftBlocks.SLAB_SANDY
+                RailcraftBlocks.SLAB_SANDY_DOUBLE,
+                RailcraftBlocks.SLAB_SANDY
+        );
 
-//                        RailcraftBlocks.slab,
-//                        RailcraftBlocks.stair,
-//                        RailcraftBlocks.lantern,
-//                        RailcraftBlocks.wall,
-                );
-            }
-
+        setEnabledEventHandler(new ModuleEventHandler() {
             @Override
             public void init() {
 

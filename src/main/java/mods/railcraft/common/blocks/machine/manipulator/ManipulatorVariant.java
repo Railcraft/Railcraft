@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,7 @@ public enum ManipulatorVariant implements IEnumMachine<ManipulatorVariant> {
     ENERGY_LOADER(ModuleIC2.class, "loader_ic2", TileIC2Loader.class),
     ENERGY_UNLOADER(ModuleIC2.class, "unloader_ic2", TileIC2Unloader.class),
     DISPENSER_CART(ModuleAutomation.class, "dispenser_cart", TileDispenserCart.class),
-    DISPENSER_TRAIN(ModuleTrain.class, "dispenser_train", TileDispenserTrain.class),
+    DISPENSER_TRAIN(ModuleTrains.class, "dispenser_train", TileDispenserTrain.class),
     RF_LOADER(ModuleRF.class, "loader_rf", TileRFLoader.class),
     RF_UNLOADER(ModuleRF.class, "unloader_rf", TileRFUnloader.class);
     private static final List<ManipulatorVariant> creativeList = new ArrayList<>();

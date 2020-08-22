@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ import mods.railcraft.common.advancements.criterion.RailcraftAdvancementTriggers
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.items.enchantment.RailcraftEnchantments;
 import mods.railcraft.common.modules.ModuleSeasonal;
-import mods.railcraft.common.modules.ModuleTrain;
+import mods.railcraft.common.modules.ModuleTrains;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.misc.SeasonPlugin;
@@ -76,7 +76,7 @@ public class CrowbarHandler {
                 SeasonPlugin.Season season = ItemCrowbarSeasons.getCurrentSeason(stack);
                 ((IRailcraftCart) cart).setSeason(season);
                 RailcraftAdvancementTriggers.getInstance().onSeasonSet((EntityPlayerMP) thePlayer, cart, season);
-            } else if (RailcraftModuleManager.isModuleEnabled(ModuleTrain.class)
+            } else if (RailcraftModuleManager.isModuleEnabled(ModuleTrains.class)
                     && crowbar.canLink(thePlayer, hand, stack, cart)) {
                 linkCart(thePlayer, hand, stack, cart, crowbar);
             } else if (crowbar.canBoost(thePlayer, hand, stack, cart)) {
