@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.MinecartHooks;
 import mods.railcraft.common.carts.Train;
+import mods.railcraft.common.modules.ModuleTracksStrapIron;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.block.BlockRailBase;
@@ -96,7 +97,7 @@ public enum SpeedController {
     STRAP_IRON {
         @Override
         public float getMaxSpeed(World world, @Nullable EntityMinecart cart, BlockPos pos) {
-            return 0.12f;
+            return ModuleTracksStrapIron.config.maxSpeed;
         }
     };
 
