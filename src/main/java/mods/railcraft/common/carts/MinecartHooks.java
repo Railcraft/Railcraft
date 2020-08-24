@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.HighSpeedTools;
 import mods.railcraft.common.blocks.tracks.elevator.BlockTrackElevator;
 import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleTracksHighSpeed;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.entity.RCEntitySelectors;
@@ -392,7 +393,7 @@ public enum MinecartHooks implements IMinecartCollisionHandler, IWorldEventListe
                 }
             }
 
-            if (!other.isEntityAlive() || RailcraftConfig.isEntityExcludedFromHighSpeedExplosions(other))
+            if (!other.isEntityAlive() || ModuleTracksHighSpeed.config.isIgnored(other))
                 return;
 
             primeToExplode(cart);

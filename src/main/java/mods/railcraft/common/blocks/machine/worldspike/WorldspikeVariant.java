@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,7 @@ import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
-import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.modules.ModuleChunkLoading;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.Tuple;
@@ -32,19 +31,19 @@ public enum WorldspikeVariant implements IEnumMachine<WorldspikeVariant> {
     PASSIVE("passive", TileWorldspikePassive.class) {
         @Override
         public Map<Ingredient, Float> getFuelList() {
-            return RailcraftConfig.worldspikeFuelPassive;
+            return ModuleWorldspikes.config.fuelPassive;
         }
     },
     PERSONAL("personal", TileWorldspikePersonal.class) {
         @Override
         public Map<Ingredient, Float> getFuelList() {
-            return RailcraftConfig.worldspikeFuelPersonal;
+            return ModuleWorldspikes.config.fuelPersonal;
         }
     },
     STANDARD("standard", TileWorldspike.class) {
         @Override
         public Map<Ingredient, Float> getFuelList() {
-            return RailcraftConfig.worldspikeFuelStandard;
+            return ModuleWorldspikes.config.fuelStandard;
         }
     };
 
@@ -61,7 +60,7 @@ public enum WorldspikeVariant implements IEnumMachine<WorldspikeVariant> {
     private final Definition def;
 
     WorldspikeVariant(String tag, Class<? extends TileMachineBase> tile) {
-        this.def = new Definition(tag, tile, ModuleChunkLoading.class);
+        this.def = new Definition(tag, tile, ModuleWorldspikes.class);
     }
 
     public static WorldspikeVariant fromId(int id) {

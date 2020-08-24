@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,7 @@ package mods.railcraft.common.blocks.machine.worldspike;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.BlockRailcraft;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -96,7 +96,7 @@ public class BlockWorldspikePoint extends BlockRailcraft {
 
     @Override
     public void defineRecipes() {
-        if (RailcraftConfig.canCraftStandardWorldspikes()) {
+        if (ModuleWorldspikes.config.canCraftStandardWorldspikes()) {
             CraftingPlugin.addShapedRecipe(getStack(),
                     " p ",
                     " o ",

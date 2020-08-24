@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,8 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.crafting.Ingredient;
@@ -65,7 +65,7 @@ public class EntityCartWorldspikePersonal extends EntityCartWorldspike {
 
     @Override
     public Map<Ingredient, Float> getFuelMap() {
-        return RailcraftConfig.worldspikeFuelPersonal;
+        return ModuleWorldspikes.config.fuelPersonal;
     }
 
     @Override

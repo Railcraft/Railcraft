@@ -24,7 +24,6 @@ import mods.railcraft.common.blocks.structures.MultiBlockHelper;
 import mods.railcraft.common.blocks.tracks.TrackConstants;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.commands.*;
-import mods.railcraft.common.core.IInterModMessageHandler;
 import mods.railcraft.common.core.InterModMessageRegistry;
 import mods.railcraft.common.core.Railcraft;
 import mods.railcraft.common.core.RailcraftConfig;
@@ -62,7 +61,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraftforge.common.MinecraftForge;
@@ -222,17 +220,6 @@ public class ModuleCore extends RailcraftModulePayload {
                     if (EntityMinecart.getCollisionHandler() != null)
                         Game.log().msg(Level.WARN, "Existing Minecart Collision Handler detected, overwriting. Please check your configs to ensure this is desired behavior.");
                     EntityMinecart.setCollisionHandler(MinecartHooks.INSTANCE);
-
-                    InterModMessageRegistry.getInstance().register("high-speed-explosion-excluded-entities", mess -> {
-                        NBTTagCompound nbt = mess.getNBTValue();
-                        if (nbt.hasKey("entities")) {
-                            String entities = nbt.getString("entities");
-                            Iterable<String> split = IInterModMessageHandler.SPLITTER.split(entities);
-                            RailcraftConfig.excludedAllEntityFromHighSpeedExplosions(split);
-                        } else {
-                            Game.log().msg(Level.WARN, "Mod %s attempted to exclude an entity from H.S. explosions but failed: %s", mess.getSender(), nbt);
-                        }
-                    });
                 }
 
                 Set<Item> testSet = new HashSet<>();

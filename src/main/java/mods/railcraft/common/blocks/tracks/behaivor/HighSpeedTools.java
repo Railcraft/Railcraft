@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.carts.CartTools;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleTracksHighSpeed;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.EnumFacing;
@@ -97,7 +97,7 @@ public final class HighSpeedTools {
     }
 
     public static float speedForNextTrack(World world, BlockPos pos, int dist, @Nullable EntityMinecart cart) {
-        float maxSpeed = RailcraftConfig.getMaxHighSpeed();
+        float maxSpeed = ModuleTracksHighSpeed.config.maxSpeed;
         if (dist < LOOK_AHEAD_DIST)
             for (EnumFacing side : EnumFacing.HORIZONTALS) {
                 BlockPos nextPos = pos.offset(side);

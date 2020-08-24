@@ -12,9 +12,9 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.carts.CartConstants;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.modules.ModuleExtras;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -124,7 +124,7 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
 
     public void setLaunchForce(int force) {
         force = Math.max(force, MIN_LAUNCH_FORCE);
-        force = Math.min(force, RailcraftConfig.getLaunchRailMaxForce());
+        force = Math.min(force, ModuleExtras.config.maxLaunchTrackForce);
         launchForce = (byte) force;
     }
 }

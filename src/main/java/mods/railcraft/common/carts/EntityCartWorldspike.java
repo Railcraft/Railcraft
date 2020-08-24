@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,9 +13,9 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.client.util.effects.ClientEffects;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -102,7 +102,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
             return;
         }
 
-        if (RailcraftConfig.deleteWorldspikes()) {
+        if (ModuleWorldspikes.config.deleteWorldspikes()) {
             setDead();
             return;
         }
@@ -132,7 +132,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         if (ticket == null)
             requestTicket();
 
-        if (RailcraftConfig.printWorldspikeDebug() && ticket != null) {
+        if (ModuleWorldspikes.config.printDebug && ticket != null) {
             clock++;
             if (clock % 64 == 0) {
                 ChatPlugin.sendLocalizedChatToAllFromServer(world, "%s has a ticket and is ticking at <%.0f,%.0f,%.0f> in dim:%d - logged on tick %d", getName(), posX, posY, posZ, world.provider.getDimension(), world.getWorldTime());
@@ -317,7 +317,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return RailcraftConfig.worldspikesCanInteractWithPipes() && getFuelValue(stack).isPresent();
+        return ModuleWorldspikes.config.interactWithPipes && getFuelValue(stack).isPresent();
     }
 
     @Override

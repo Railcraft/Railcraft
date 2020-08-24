@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.client.gui;
 
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleExtras;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketGuiReturn;
@@ -51,8 +51,8 @@ public class GuiTrackLauncher extends GuiBasic {
             f += 10;
         if (f < TrackKitLauncher.MIN_LAUNCH_FORCE)
             f = TrackKitLauncher.MIN_LAUNCH_FORCE;
-        if (f > RailcraftConfig.getLaunchRailMaxForce())
-            f = RailcraftConfig.getLaunchRailMaxForce();
+        if (f > ModuleExtras.config.maxLaunchTrackForce)
+            f = ModuleExtras.config.maxLaunchTrackForce;
         force = f;
     }
 

@@ -64,7 +64,7 @@ public class OreGeneratorFactory {
 
     private OreGeneratorFactory(Configuration config, String defaultType, int defaultWeight, int defaultBlockCount, int defaultDepth, int defaultRange, int defaultSeed, String defaultFringeOre, String defaultCoreOre) {
         config.setCategoryComment(CAT, "Copy this file to add your own ore spawns or deleted it to disable spawning.\n" +
-                "Setting railcraft.config->worldgen.generateDefaultConfigs to true will reset the entire folder to defaults.");
+                "Setting railcraft.cfg->worldgen.generateDefaultConfigs to true will reset the entire folder to defaults.");
         config.setCategoryComment(CAT + ".retrogen", "Retrogen settings. You must have the Railcraft-Retrogen mod installed for these to do anything.");
         boolean retrogen = config.getBoolean("retrogen", CAT + ".retrogen", false, "Whether retrogen should be enabled on this generator.");
         String retrogenMarker = config.getString("retrogenMarker", CAT + ".retrogen", "RCRGMARK", "The marker used to indicate whether a chunk has generated this ore. Generally this should be unique each time you run retrogen.");

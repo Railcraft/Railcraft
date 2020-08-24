@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,16 +17,14 @@ import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.TileMachineItem;
 import mods.railcraft.common.carts.ItemCartWorldspike;
 import mods.railcraft.common.core.Railcraft;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.collections.ItemMap;
-import mods.railcraft.common.util.effects.EffectManager;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.ChunkManager;
 import mods.railcraft.common.util.misc.Game;
@@ -238,7 +236,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
             return;
         }
 
-        if (RailcraftConfig.deleteWorldspikes()) {
+        if (ModuleWorldspikes.config.deleteWorldspikes()) {
             releaseTicket();
             world.setBlockState(getPos(), Blocks.OBSIDIAN.getDefaultState());
             return;
@@ -285,7 +283,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         if (!hasActiveTicket())
             requestTicket();
 
-        if (RailcraftConfig.printWorldspikeDebug() && hasActiveTicket())
+        if (ModuleWorldspikes.config.printDebug && hasActiveTicket())
             if (clock % 64 == 0) {
                 int numChunks = chunks == null ? 0 : chunks.size();
                 ChatPlugin.sendLocalizedChatToAllFromServer(world, "%s has loaded %d chunks and is ticking at <%d> in dim:%d - logged on tick %d", getName(), numChunks, getPos(), world.provider.getDimension(), world.getWorldTime());
@@ -490,14 +488,14 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        if (RailcraftConfig.worldspikesCanInteractWithPipes())
+        if (ModuleWorldspikes.config.interactWithPipes)
             return SLOTS;
         return SLOTS_NO_ACCESS;
     }
 
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return RailcraftConfig.worldspikesCanInteractWithPipes();
+        return ModuleWorldspikes.config.interactWithPipes;
     }
 
     @Override

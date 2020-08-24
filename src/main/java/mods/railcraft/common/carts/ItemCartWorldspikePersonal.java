@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Items;
 
@@ -28,7 +28,7 @@ public class ItemCartWorldspikePersonal extends ItemCartWorldspike {
     @Override
     public void defineRecipes() {
         super.defineRecipes();
-        if (RailcraftConfig.canCraftPersonalWorldspikes()) {
+        if (ModuleWorldspikes.config.canCraftPersonalWorldspikes()) {
             CraftingPlugin.addShapedRecipe(getStack(),
                     "A",
                     "M",

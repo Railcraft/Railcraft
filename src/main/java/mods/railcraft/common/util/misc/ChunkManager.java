@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,7 @@ import com.google.common.collect.ListMultimap;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import mods.railcraft.common.carts.EntityCartWorldspike;
-import mods.railcraft.common.core.RailcraftConfig;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -138,7 +138,7 @@ public final class ChunkManager implements OrderedLoadingCallback, PlayerOrdered
     }
 
     private void printWorldspike(String type, int x, int y, int z) {
-        if (RailcraftConfig.printWorldspikeLocations()) {
+        if (ModuleWorldspikes.config.printWorldspikes) {
             Game.log().msg(Level.INFO, "{0} found at [{1}-{2}-{3}]", type, x, y, z);
         }
     }
@@ -208,7 +208,7 @@ public final class ChunkManager implements OrderedLoadingCallback, PlayerOrdered
 
     @Override
     public ListMultimap<String, Ticket> playerTicketsLoaded(ListMultimap<String, Ticket> tickets, World world) {
-        if (RailcraftConfig.printWorldspikeLocations())
+        if (ModuleWorldspikes.config.printWorldspikes)
             for (Ticket ticket : tickets.values()) {
                 Entity entity = ticket.getEntity();
                 if (entity == null) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,8 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.core.RailcraftConstants;
+import mods.railcraft.common.modules.ModuleWorldspikes;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,8 @@ public class ItemCartWorldspike extends ItemCart {
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> info, ITooltipFlag adv) {
         super.addInformation(stack, world, info, adv);
-        if ((getCartType() == RailcraftCarts.WORLDSPIKE_STANDARD && !RailcraftConfig.worldspikeFuelStandard.isEmpty()) || (getCartType() == RailcraftCarts.WORLDSPIKE_PERSONAL && !RailcraftConfig.worldspikeFuelPersonal.isEmpty())) {
+        if ((getCartType() == RailcraftCarts.WORLDSPIKE_STANDARD && !ModuleWorldspikes.config.fuelStandard.isEmpty())
+                || (getCartType() == RailcraftCarts.WORLDSPIKE_PERSONAL && !ModuleWorldspikes.config.fuelPersonal.isEmpty())) {
             long fuel = getFuel(stack);
             double hours = (double) fuel / RailcraftConstants.TICKS_PER_HOUR;
             String format = LocalizationPlugin.translate("gui.railcraft.worldspike.fuel.remaining");
