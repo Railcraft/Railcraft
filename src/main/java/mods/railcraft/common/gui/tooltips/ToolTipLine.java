@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,12 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.tooltips;
 
+import com.google.common.base.Objects;
 import net.minecraft.util.text.TextFormatting;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ToolTipLine {
+public class ToolTipLine implements Comparable<ToolTipLine> {
 
     public String text;
     public TextFormatting format;
@@ -50,5 +52,25 @@ public class ToolTipLine {
             line = text;
         line = line.replace('\u00A0', ' ');
         return line;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ToolTipLine that = (ToolTipLine) o;
+        return spacing == that.spacing &&
+                Objects.equal(text, that.text) &&
+                format == that.format;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(text, format, spacing);
+    }
+
+    @Override
+    public int compareTo(@NotNull ToolTipLine that) {
+        return text.compareTo(that.text);
     }
 }

@@ -95,10 +95,12 @@ public class ModuleWorldspikes extends RailcraftModulePayload {
                             "Regular expressions in the item name are supported.");
 
             String[] fuelDefault = {
-                    "railcraft:dust#0=2",
-                    "minecraft:ender_pearl=4",
-                    "railcraft:dust#6=8",
-                    "railcraft:dust#7=12"
+                    "dustObsidian=2",
+                    "enderpearl=4",
+                    "dustEnderPearl=8",
+                    "dustVoid=16",
+                    "minecraft:ender_eye=8",
+                    "dustEnderEye=12",
             };
 
             fuelStandardArray = config.getStringList("standard", CAT_FUEL, fuelDefault, "");

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,8 +16,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.text.TextFormatting;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,10 +39,17 @@ public class SlotIngredientMap<V> extends SlotRailcraft {
             public void refresh() {
                 clear();
                 add(new ToolTipLine(LocalizationPlugin.translate("gui.railcraft.slot.map.valid"), TextFormatting.DARK_PURPLE));
+                List<Pair<V, ToolTipLine>> lines = new ArrayList<>();
                 for (Map.Entry<Ingredient, V> entry : ingredients.entrySet()) {
-                    for (ItemStack stack : entry.getKey().getMatchingStacks())
-                        add(new ToolTipLine(stack.getDisplayName() + " = " + entry.getValue(), TextFormatting.GRAY));
+                    for (ItemStack stack : entry.getKey().getMatchingStacks()) {
+                        ToolTipLine line = new ToolTipLine(stack.getDisplayName() + " = " + entry.getValue(), TextFormatting.GRAY);
+                        Pair<V, ToolTipLine> pair = Pair.of(entry.getValue(), line);
+                        if (!lines.contains(pair))
+                            lines.add(pair);
+                    }
                 }
+                lines.sort(Comparator.naturalOrder());
+                lines.stream().map(Pair::getValue).forEach(this::add);
             }
         };
         setStackLimit(64);
