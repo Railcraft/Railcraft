@@ -84,6 +84,7 @@ public class BlockRailcraftFluidFinite extends BlockFluidFinite implements IRail
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public StateMapperBase getStateMapper() {
         return RailcraftFluids.getStateMapper(this);
     }

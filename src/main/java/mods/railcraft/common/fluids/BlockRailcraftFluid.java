@@ -103,6 +103,7 @@ public class BlockRailcraftFluid extends BlockFluidClassic implements IRailcraft
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public StateMapperBase getStateMapper() {
         return RailcraftFluids.getStateMapper(this);
     }

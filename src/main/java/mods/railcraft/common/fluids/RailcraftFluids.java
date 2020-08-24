@@ -36,6 +36,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -154,6 +156,7 @@ public enum RailcraftFluids implements IRailcraftBlockContainer {
         }
     }
 
+    @SideOnly(Side.CLIENT)
     public static StateMapperBase getStateMapper(IRailcraftBlock block) {
         return new StateMapperBase() {
             @Override
