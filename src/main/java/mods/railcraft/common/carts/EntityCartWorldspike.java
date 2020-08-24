@@ -333,7 +333,7 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     @Override
     protected void openRailcraftGui(EntityPlayer player) {
-        if (needsFuel())
+        if (usesFuel())
             super.openRailcraftGui(player);
     }
 
