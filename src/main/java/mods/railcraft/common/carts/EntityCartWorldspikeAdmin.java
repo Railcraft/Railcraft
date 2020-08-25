@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.WorldspikeVariant;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.world.World;
@@ -61,5 +62,9 @@ public class EntityCartWorldspikeAdmin extends EntityCartWorldspikeStandard {
     @Override
     public ItemStack[] getItemsDropped(EntityMinecart cart) {
         return new ItemStack[0]; // Prevent survival players from getting admin tools
+    }
+
+    @Override
+    protected void openRailcraftGui(EntityPlayer player) {
     }
 }

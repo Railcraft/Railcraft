@@ -79,11 +79,6 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     }
 
     @Override
-    public int getSizeInventory() {
-        return needsFuel() ? 1 : 0;
-    }
-
-    @Override
     public WorldspikeVariant getMachineType() {
         return WorldspikeVariant.STANDARD;
     }
@@ -132,7 +127,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        if (needsFuel()) {
+        if (usesFuel()) {
             GuiHandler.openGui(EnumGui.WORLDSPIKE, player, world, getPos());
             return true;
         }
@@ -203,15 +198,11 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         return !pointPos.equals(BlockPos.ORIGIN);
     }
 
-    public boolean hasFuel() {
-        return fuel > 0;
-    }
-
     @Override
     public List<ItemStack> getDrops(int fortune) {
         List<ItemStack> items = new ArrayList<>();
         ItemStack drop = getMachineType().getStack();
-        if (needsFuel() && hasFuel()) {
+        if (usesFuel() && hasFuel()) {
             NBTTagCompound nbt = new NBTTagCompound();
             nbt.setLong("fuel", fuel);
             drop.setTagCompound(nbt);
@@ -223,7 +214,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     @Override
     public void initFromItem(ItemStack stack) {
         super.initFromItem(stack);
-        if (needsFuel())
+        if (usesFuel())
             fuel = ItemCartWorldspike.getFuel(stack);
     }
 
@@ -252,7 +243,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         if (isTicketInvalid())
             releaseTicket();
 
-        if (needsFuel()) {
+        if (usesFuel()) {
             fuelCycle++;
             if (fuelCycle >= FUEL_CYCLE) {
                 fuelCycle = 0;
@@ -324,9 +315,6 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
         }
     }
 
-    public boolean needsFuel() {
-        return !getFuelMap().isEmpty();
-    }
 
     @Override
     public final Map<Ingredient, Float> getFuelMap() {
@@ -334,7 +322,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     }
 
     protected boolean meetsTicketRequirements() {
-        return !powered && (hasFuel() || !needsFuel());
+        return !powered && hasFuel();
     }
 
     protected @Nullable Ticket getTicketFromForge() {
@@ -468,7 +456,7 @@ public class TileWorldspike extends TileMachineItem implements IWorldspike, ISid
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        if (needsFuel())
+        if (usesFuel())
             fuel = data.getLong("fuel");
 
         powered = data.getBoolean("powered");

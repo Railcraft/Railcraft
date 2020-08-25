@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,6 +27,9 @@ public class ContainerWorldspike extends RailcraftContainer {
     public ContainerWorldspike(InventoryPlayer inventoryplayer, IWorldspike a) {
         super(a);
         this.worldspike = a;
+
+        worldspike.testGUI();
+
         addSlot(new SlotIngredientMap<>(worldspike.getFuelMap(), worldspike, 0, 60, 24).setStackLimit(16));
 
         addPlayerSlots(inventoryplayer, GUI_HEIGHT);

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,7 @@ public class TileWorldspikeAdmin extends TileWorldspike {
     }
 
     @Override
-    public boolean needsFuel() {
+    public boolean usesFuel() {
         return false;
     }
 }

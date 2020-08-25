@@ -24,8 +24,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -37,7 +38,6 @@ import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -72,10 +72,6 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
         super.initEntityFromItem(stack);
         long fuel = ItemCartWorldspike.getFuel(stack);
         setFuel(fuel);
-    }
-
-    private boolean hasFuel() {
-        return fuel > 0;
     }
 
     public boolean hasActiveTicket() {
@@ -158,23 +154,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
 
     protected abstract @Nullable Ticket getTicketFromForge();
 
-    public boolean usesFuel() {
-        return !getFuelMap().isEmpty();
-    }
-
-    @Override
-    public boolean needsFuel() {
-        if (!usesFuel())
-            return false;
-        ItemStack stack = getStackInSlot(0);
-        return InvTools.isEmpty(stack) || (stack.getMaxStackSize() > 1 && InvTools.sizeOf(stack) <= 1);
-    }
-
-    @Override
-    public abstract Map<Ingredient, Float> getFuelMap();
-
     protected boolean meetsTicketRequirements() {
-        return !isDead && !teleported && disabled <= 0 && (hasFuel() || !usesFuel());
+        return !isDead && !teleported && disabled <= 0 && hasFuel();
     }
 
     protected void releaseTicket() {
@@ -242,7 +223,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     protected void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
 
-        data.setLong("fuel", fuel);
+        if (usesFuel())
+            data.setLong("fuel", fuel);
     }
 
     @Override
@@ -294,11 +276,6 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     }
 
     @Override
-    public int getSizeInventory() {
-        return usesFuel() ? 1 : 0;
-    }
-
-    @Override
     public int getInventoryStackLimit() {
         return 16;
     }
@@ -340,5 +317,11 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     @Override
     protected EnumGui getGuiType() {
         return EnumGui.CART_WORLDSPIKE;
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
+        testGUI();
+        return super.createContainer(playerInventory, playerIn);
     }
 }
