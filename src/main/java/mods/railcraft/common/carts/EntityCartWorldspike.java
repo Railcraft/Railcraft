@@ -11,7 +11,6 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.gui.EnumGui;
@@ -41,7 +40,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart, INeedsFuel {
+public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart {
     private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
