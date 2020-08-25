@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,6 +16,7 @@ import mods.railcraft.api.tracks.TrackType;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.outfitted.BlockTrackOutfitted;
+import mods.railcraft.common.util.misc.Optionals;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.*;
@@ -186,21 +187,25 @@ public class OutfittedTrackModel implements IModel {
 
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-            TrackType trackType;
-            TrackKit trackKit;
-            BlockRailBase.EnumRailDirection shape;
-            int kitState;
-            if (state instanceof IExtendedBlockState) {
-                shape = state.getValue(BlockTrackOutfitted.SHAPE);
-                kitState = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.STATE);
-                trackType = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.TRACK_TYPE);
-                trackKit = ((IExtendedBlockState) state).getValue(BlockTrackOutfitted.TRACK_KIT);
-            } else {
-                shape = BlockRailBase.EnumRailDirection.NORTH_SOUTH;
-                kitState = 0;
-                trackType = TrackTypes.IRON.getTrackType();
-                trackKit = TrackRegistry.getMissingTrackKit();
-            }
+            Optional<IExtendedBlockState> stateOptional = Optional.ofNullable(state)
+                    .map(Optionals.toType(IExtendedBlockState.class));
+
+            BlockRailBase.EnumRailDirection shape = stateOptional
+                    .map(s -> s.getValue(BlockTrackOutfitted.SHAPE))
+                    .orElse(BlockRailBase.EnumRailDirection.NORTH_SOUTH);
+
+            int kitState = stateOptional
+                    .map(s -> s.getValue(BlockTrackOutfitted.STATE))
+                    .orElse(0);
+
+            TrackType trackType = stateOptional
+                    .map(s -> s.getValue(BlockTrackOutfitted.TRACK_TYPE))
+                    .orElse(TrackTypes.IRON.getTrackType());
+
+            TrackKit trackKit = stateOptional
+                    .map(s -> s.getValue(BlockTrackOutfitted.TRACK_KIT))
+                    .orElse(TrackRegistry.getMissingTrackKit());
+
             List<BakedQuad> quads = new ArrayList<>();
             switch (trackKit.getRenderer()) {
                 case COMPOSITE:
