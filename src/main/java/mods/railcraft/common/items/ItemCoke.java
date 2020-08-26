@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemCoke extends ItemRailcraft {
-    private static final int COKE_COOK_CREOSOTE = 500;
+    public static final int COKE_COOK_CREOSOTE = 500;
     public static final int COKE_HEAT = 3200;
 
     @Override

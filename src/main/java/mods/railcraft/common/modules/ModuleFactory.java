@@ -51,14 +51,13 @@ import java.util.List;
 
 @RailcraftModule(value = "railcraft:factory", description = "coke oven, blast furnace, rolling machine, rock crusher, etc...")
 public class ModuleFactory extends RailcraftModulePayload {
-    private static final int COKE_COOK_TIME = 1800;
-    private static final int COKE_COOK_CREOSOTE = 500;
 
     public ModuleFactory() {
         add(
                 RailcraftBlocks.ANVIL_STEEL,
                 RailcraftBlocks.EQUIPMENT,
                 RailcraftItems.COKE,
+                RailcraftBlocks.COKE_BLOCK,
                 RailcraftBlocks.COKE_OVEN,
                 RailcraftBlocks.COKE_OVEN_RED,
                 RailcraftBlocks.BLAST_FURNACE,
@@ -396,22 +395,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                     }
                 }
 
-                if (EnumGeneric.BLOCK_COKE.isEnabled()) {
-                    Crafters.cokeOven().newRecipe(Ingredients.from(Blocks.COAL_BLOCK))
-                            .name("railcraft:coke_block")
-                            .output(EnumGeneric.BLOCK_COKE.getStack())
-                            .fluid(Fluids.CREOSOTE.get(COKE_COOK_CREOSOTE * 9))
-                            .time(COKE_COOK_TIME * 9)
-                            .register();
-                    ItemStack stack = EnumGeneric.BLOCK_COKE.getStack();
-                    CraftingPlugin.addShapedRecipe(stack,
-                            "CCC",
-                            "CCC",
-                            "CCC",
-                            'C', RailcraftItems.COKE);
-                    CraftingPlugin.addShapelessRecipe(RailcraftItems.COKE.getStack(9), stack);
-                }
-
                 BlastFurnaceCrafter.INSTANCE.initFuel();
                 if (!RailcraftBlocks.BLAST_FURNACE.isEnabled() || RailcraftConfig.forceEnableSteelRecipe())
                     registerAltSteelFurnaceRecipe();
@@ -420,7 +403,6 @@ public class ModuleFactory extends RailcraftModulePayload {
                         .name("railcraft:logs")
                         .output(new ItemStack(Items.COAL, 1, 1))
                         .fluid(Fluids.CREOSOTE.get(250))
-                        .time(COKE_COOK_TIME)
                         .register();
 
                 if (Mod.FORESTRY.isLoaded()) {

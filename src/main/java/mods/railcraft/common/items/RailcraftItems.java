@@ -85,7 +85,7 @@ public enum RailcraftItems implements IRailcraftObjectContainer<IRailcraftItemSi
         conditions().add(ModuleSignals.class);
     }},
     BLEACHED_CLAY(ItemRailcraft::new, "bleached_clay", () -> Items.CLAY_BALL) {{
-        conditions().add(RailcraftBlocks.BRICK_BLEACHED_BONE);
+        conditions().add(RailcraftBlocks.BLEACHED_BONE_BRICK);
     }},
     BORE_HEAD_BRONZE(ItemBoreHeadBronze::new, "borehead_bronze") {{
         conditions().add(RailcraftCarts.BORE);

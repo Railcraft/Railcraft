@@ -212,6 +212,12 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
             case BLOCK_CONCRETE:
                 newState = RailcraftBlocks.REINFORCED_CONCRETE.getDefaultState();
                 break;
+            case BLOCK_COKE:
+                newState = RailcraftBlocks.COKE_BLOCK.getDefaultState();
+                break;
+            case BLOCK_CREOSOTE:
+                newState = RailcraftBlocks.CREOSOTE_BLOCK.getDefaultState();
+                break;
             case BLOCK_BRASS:
                 newState = RailcraftBlocks.METAL.getState(BLOCK_BRASS);
                 break;

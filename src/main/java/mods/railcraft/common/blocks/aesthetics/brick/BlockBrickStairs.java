@@ -10,11 +10,10 @@
 
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import mods.railcraft.common.blocks.IRailcraftBlock;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.blocks.BlockRailcraftStairs;
 import mods.railcraft.common.util.crafting.RockCrusherCrafter;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStairs;
+import net.minecraft.item.ItemStack;
 
 import java.util.Objects;
 
@@ -25,7 +24,7 @@ import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.BRICK;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class BlockBrickStairs extends BlockStairs implements IRailcraftBlock {
+public class BlockBrickStairs extends BlockRailcraftStairs {
     public final BrickTheme brickTheme;
     public final BrickVariant brickVariant;
 
@@ -37,17 +36,14 @@ public class BlockBrickStairs extends BlockStairs implements IRailcraftBlock {
 
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(getStack(8),
-                "I  ",
-                "II ",
-                "III",
-                'I', brickTheme, brickVariant);
-        CraftingPlugin.addShapedRecipe(brickTheme.getStack(3, brickVariant),
-                "II",
-                "II",
-                'I', getStack());
+        super.defineRecipes();
         RockCrusherCrafter.INSTANCE.makeRecipe(getStack())
                 .addOutput(brickTheme.getStack(BrickVariant.COBBLE), 0.75F).register();
+    }
+
+    @Override
+    public ItemStack getBaseStack(int size) {
+        return brickTheme.getStack(size, brickVariant);
     }
 
     @Override

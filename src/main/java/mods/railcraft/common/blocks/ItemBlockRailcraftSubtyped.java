@@ -54,7 +54,7 @@ public class ItemBlockRailcraftSubtyped<B extends Block & IRailcraftBlock> exten
     @Override
     public String getTranslationKey(ItemStack stack) {
         IVariantEnum variant = getVariant(stack);
-        if (variant == null)
+        if (variant == null || (getVariants() != null && getVariants().length <= 1))
             return getTranslationKey();
         String tag = getTranslationKey() + RailcraftConstants.SEPERATOR + variant.getResourcePathSuffix();
         return LocalizationPlugin.convertTag(tag);

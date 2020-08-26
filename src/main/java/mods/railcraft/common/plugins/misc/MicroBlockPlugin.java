@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,10 +13,13 @@ import mods.railcraft.common.plugins.multipart.MultiPartPlugin;
 import net.minecraft.block.Block;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class MicroBlockPlugin {
+
+    public static void addMicroBlockCandidate(Block block) {
+        addMicroBlockCandidate(block, 0);
+    }
 
     public static void addMicroBlockCandidate(Block block, int meta) {
         if (block == null) return;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -35,6 +35,10 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public interface IRailcraftBlock extends IRailcraftObject<Block> {
+
+    default IBlockState getState() {
+        return getState(null);
+    }
 
     default IBlockState getState(@Nullable IVariantEnum variant) {
         return ((Block) this).getDefaultState();

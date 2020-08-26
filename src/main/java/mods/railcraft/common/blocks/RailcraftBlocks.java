@@ -11,6 +11,8 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.aesthetics.BlockSimpleSlab;
+import mods.railcraft.common.blocks.aesthetics.ItemRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.brick.*;
 import mods.railcraft.common.blocks.aesthetics.concrete.BlockReinforcedConcrete;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
@@ -42,6 +44,10 @@ import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
 import mods.railcraft.common.blocks.ore.*;
+import mods.railcraft.common.blocks.simple.BlockCoke;
+import mods.railcraft.common.blocks.simple.BlockCreosote;
+import mods.railcraft.common.blocks.simple.ItemBlockCoke;
+import mods.railcraft.common.blocks.simple.ItemBlockCreosote;
 import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.blocks.structures.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
@@ -85,216 +91,234 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BATTERY_ZINC_CARBON(BlockDef.build("battery_zinc_carbon", BlockBatteryZincCarbon.class).item(ItemBattery::new)),
     BATTERY_ZINC_SILVER(BlockDef.build("battery_zinc_silver", BlockBatteryZincSilver.class).item(ItemBattery::new)),
 
+    CREOSOTE_BLOCK(BlockDef.build("creosote_block", BlockCreosote.class).item(ItemBlockCreosote::new)),
+    CREOSOTE_STAIRS(BlockDef.build("creosote_stairs", BlockRailcraftStairs.class)
+            .block(() -> new BlockRailcraftStairs(byTag("creosote_block").getDefaultState()))
+            .item(ItemBlockRailcraft::new)
+            .condition(CREOSOTE_BLOCK)
+    ),
+    CREOSOTE_DOUBLE_SLAB(BlockDef.build("creosote_double_slab", BlockSimpleSlab.class)
+            .block(() -> new BlockSimpleSlab.Double(CREOSOTE_BLOCK.getDefaultState()))
+            .condition(CREOSOTE_BLOCK)
+    ),
+    CREOSOTE_SLAB(BlockDef.build("creosote_slab", BlockSimpleSlab.class)
+            .block(() -> new BlockSimpleSlab.Half(CREOSOTE_BLOCK.getDefaultState()))
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("creosote_double_slab")))
+            .condition(CREOSOTE_BLOCK)
+    ),
+
+    COKE_BLOCK(BlockDef.build("coke_block", BlockCoke.class).item(ItemBlockCoke::new)),
+
     // Bricks
 
-    BRICK_ABYSSAL(BlockDef.build("brick_abyssal", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ABYSSAL)).item(ItemBrick::new)
+    ABYSSAL_BRICK(BlockDef.build("abyssal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ABYSSAL)).item(ItemBrick::new)
             .condition(EnumGeneric.STONE_ABYSSAL)
     ),
-    BRICK_BLEACHED_BONE(BlockDef.build("brick_bleachedbone", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLEACHEDBONE)).item(ItemBrick::new)),
-    BRICK_BLOOD_STAINED(BlockDef.build("brick_bloodstained", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).item(ItemBrick::new)),
-    BRICK_FROST_BOUND(BlockDef.build("brick_frostbound", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).item(ItemBrick::new)),
-    BRICK_INFERNAL(BlockDef.build("brick_infernal", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).item(ItemBrick::new)),
-    BRICK_PEARLIZED(BlockDef.build("brick_pearlized", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).item(ItemBrick::new)),
-    BRICK_QUARRIED(BlockDef.build("brick_quarried", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).item(ItemBrick::new)
+    BLEACHED_BONE_BRICK(BlockDef.build("bleachedbone_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLEACHEDBONE)).item(ItemBrick::new)),
+    BLOOD_STAINED_BRICK(BlockDef.build("bloodstained_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).item(ItemBrick::new)),
+    FROST_BOUND_BRICK(BlockDef.build("frostbound_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).item(ItemBrick::new)),
+    INFERNAL_BRICK(BlockDef.build("infernal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).item(ItemBrick::new)),
+    PEARLIZED_BRICK(BlockDef.build("pearlized_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).item(ItemBrick::new)),
+    QUARRIED_BRICK(BlockDef.build("quarried_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).item(ItemBrick::new)
             .condition(EnumGeneric.STONE_QUARRIED)
     ),
-    BRICK_BADLANDS(BlockDef.build("brick_badlands", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).item(ItemBrick::new)),
-    BRICK_SANDY(BlockDef.build("brick_sandy", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).item(ItemBrick::new)),
+    BADLANDS_BRICK(BlockDef.build("badlands_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).item(ItemBrick::new)),
+    SANDY_BRICK(BlockDef.build("sandy_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).item(ItemBrick::new)),
 
     // Vanilla Bricks
 
-    BRICK_ANDESITE(BlockDef.build("brick_andesite", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ANDESITE)).item(ItemBrick::new)),
-    BRICK_DIORITE(BlockDef.build("brick_diorite", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.DIORITE)).item(ItemBrick::new)),
-    BRICK_GRANITE(BlockDef.build("brick_granite", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.GRANITE)).item(ItemBrick::new)),
-    BRICK_NETHER(BlockDef.build("brick_nether", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.NETHER)).item(ItemBrick::new)),
-    BRICK_RED_NETHER(BlockDef.build("brick_red_nether", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.RED_NETHER)).item(ItemBrick::new)),
+    ANDESITE_BRICK(BlockDef.build("andesite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ANDESITE)).item(ItemBrick::new)),
+    DIORITE_BRICK(BlockDef.build("diorite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.DIORITE)).item(ItemBrick::new)),
+    GRANITE_BRICK(BlockDef.build("granite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.GRANITE)).item(ItemBrick::new)),
+    NETHER_BRICK(BlockDef.build("nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.NETHER)).item(ItemBrick::new)),
+    RED_NETHER_BRICK(BlockDef.build("red_nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.RED_NETHER)).item(ItemBrick::new)),
 
     // Slabs
-    SLAB_ABYSSAL_DOUBLE(BlockDef.build("slab_abyssal_double", BlockBrickSlab.Double.class)
+    ABYSSAL_DOUBLE_SLAB(BlockDef.build("abyssal_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.ABYSSAL))
-            .condition(BRICK_ABYSSAL)
+            .condition(ABYSSAL_BRICK)
     ),
-    SLAB_ABYSSAL(BlockDef.build("slab_abyssal", BlockBrickSlab.Half.class)
+    ABYSSAL_SLAB(BlockDef.build("abyssal_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.ABYSSAL))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_abyssal_double").block()))
-            .condition(BRICK_ABYSSAL)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("abyssal_double_slab")))
+            .condition(ABYSSAL_BRICK)
     ),
 
-    SLAB_BADLANDS_DOUBLE(BlockDef.build("slab_badlands_double", BlockBrickSlab.Double.class)
+    BADLANDS_DOUBLE_SLAB(BlockDef.build("badlands_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.BADLANDS))
-            .condition(BRICK_BADLANDS)
+            .condition(BADLANDS_BRICK)
     ),
-    SLAB_BADLANDS(BlockDef.build("slab_badlands", BlockBrickSlab.Half.class)
+    BADLANDS_SLAB(BlockDef.build("badlands_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.BADLANDS))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_badlands_double").block()))
-            .condition(BRICK_BADLANDS)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("badlands_double_slab")))
+            .condition(BADLANDS_BRICK)
     ),
 
-    SLAB_BLEACHED_BONE_DOUBLE(BlockDef.build("slab_bleachedbone_double", BlockBrickSlab.Double.class)
+    BLEACHED_BONE_DOUBLE_SLAB(BlockDef.build("bleachedbone_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.BLEACHEDBONE))
-            .condition(BRICK_BLEACHED_BONE)
+            .condition(BLEACHED_BONE_BRICK)
     ),
-    SLAB_BLEACHED_BONE(BlockDef.build("slab_bleachedbone", BlockBrickSlab.Half.class)
+    BLEACHED_BONE_SLAB(BlockDef.build("bleachedbone_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.BLEACHEDBONE))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_bleachedbone_double").block()))
-            .condition(BRICK_BLEACHED_BONE)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("bleachedbone_double_slab")))
+            .condition(BLEACHED_BONE_BRICK)
     ),
 
-    SLAB_BLOOD_STAINED_DOUBLE(BlockDef.build("slab_bloodstained_double", BlockBrickSlab.Double.class)
+    BLOOD_STAINED_DOUBLE_SLAB(BlockDef.build("bloodstained_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.BLOODSTAINED))
-            .condition(BRICK_BLOOD_STAINED)
+            .condition(BLOOD_STAINED_BRICK)
     ),
-    SLAB_BLOOD_STAINED(BlockDef.build("slab_bloodstained", BlockBrickSlab.Half.class)
+    BLOOD_STAINED_SLAB(BlockDef.build("bloodstained_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.BLOODSTAINED))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_bloodstained_double").block()))
-            .condition(BRICK_BLOOD_STAINED)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("bloodstained_double_slab")))
+            .condition(BLOOD_STAINED_BRICK)
     ),
 
-    SLAB_FROST_BOUND_DOUBLE(BlockDef.build("slab_frostbound_double", BlockBrickSlab.Double.class)
+    FROST_BOUND_DOUBLE_SLAB(BlockDef.build("frostbound_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.FROSTBOUND))
-            .condition(BRICK_FROST_BOUND)
+            .condition(FROST_BOUND_BRICK)
     ),
-    SLAB_FROST_BOUND(BlockDef.build("slab_frostbound", BlockBrickSlab.Half.class)
+    FROST_BOUND_SLAB(BlockDef.build("frostbound_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.FROSTBOUND))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_frostbound_double").block()))
-            .condition(BRICK_FROST_BOUND)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("frostbound_double_slab")))
+            .condition(FROST_BOUND_BRICK)
     ),
 
-    SLAB_INFERNAL_DOUBLE(BlockDef.build("slab_infernal_double", BlockBrickSlab.Double.class)
+    INFERNAL_DOUBLE_SLAB(BlockDef.build("infernal_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.INFERNAL))
-            .condition(BRICK_INFERNAL)
+            .condition(INFERNAL_BRICK)
     ),
-    SLAB_INFERNAL(BlockDef.build("slab_infernal", BlockBrickSlab.Half.class)
+    INFERNAL_SLAB(BlockDef.build("infernal_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.INFERNAL))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_infernal_double").block()))
-            .condition(BRICK_INFERNAL)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("infernal_double_slab")))
+            .condition(INFERNAL_BRICK)
     ),
 
-    SLAB_PEARLIZED_DOUBLE(BlockDef.build("slab_pearlized_double", BlockBrickSlab.Double.class)
+    PEARLIZED_DOUBLE_SLAB(BlockDef.build("pearlized_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.PEARLIZED))
-            .condition(BRICK_PEARLIZED)
+            .condition(PEARLIZED_BRICK)
     ),
-    SLAB_PEARLIZED(BlockDef.build("slab_pearlized", BlockBrickSlab.Half.class)
+    PEARLIZED_SLAB(BlockDef.build("pearlized_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.PEARLIZED))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_pearlized_double").block()))
-            .condition(BRICK_PEARLIZED)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("pearlized_double_slab")))
+            .condition(PEARLIZED_BRICK)
     ),
 
-    SLAB_QUARRIED_DOUBLE(BlockDef.build("slab_quarried_double", BlockBrickSlab.Double.class)
+    QUARRIED_DOUBLE_SLAB(BlockDef.build("quarried_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.QUARRIED))
-            .condition(BRICK_QUARRIED)
+            .condition(QUARRIED_BRICK)
     ),
-    SLAB_QUARRIED(BlockDef.build("slab_quarried", BlockBrickSlab.Half.class)
+    QUARRIED_SLAB(BlockDef.build("quarried_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.QUARRIED))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_quarried_double").block()))
-            .condition(BRICK_QUARRIED)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("quarried_double_slab")))
+            .condition(QUARRIED_BRICK)
     ),
 
-    SLAB_SANDY_DOUBLE(BlockDef.build("slab_sandy_double", BlockBrickSlab.Double.class)
+    SANDY_DOUBLE_SLAB(BlockDef.build("sandy_double_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Double(BrickTheme.SANDY))
-            .condition(BRICK_SANDY)
+            .condition(SANDY_BRICK)
     ),
-    SLAB_SANDY(BlockDef.build("slab_sandy", BlockBrickSlab.Half.class)
+    SANDY_SLAB(BlockDef.build("sandy_slab", BlockBrickSlab.class)
             .block(() -> new BlockBrickSlab.Half(BrickTheme.SANDY))
-            .item(block -> new ItemBrickSlab(block, block, (BlockBrickSlab.Double) byTag("slab_sandy_double").block()))
-            .condition(BRICK_SANDY)
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("sandy_double_slab")))
+            .condition(SANDY_BRICK)
     ),
 
     // Stairs
 
-    STAIR_ABYSSAL_BRICK(BlockDef.build("stair_abyssal_brick", BlockBrickStairs.class)
+    ABYSSAL_BRICK_STAIRS(BlockDef.build("abyssal_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.ABYSSAL, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
             .condition(EnumGeneric.STONE_ABYSSAL)
-            .condition(BRICK_ABYSSAL)
+            .condition(ABYSSAL_BRICK)
     ),
-    STAIR_ABYSSAL_PAVER(BlockDef.build("stair_abyssal_paver", BlockBrickStairs.class)
+    ABYSSAL_PAVER_STAIRS(BlockDef.build("abyssal_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.ABYSSAL, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
             .condition(EnumGeneric.STONE_ABYSSAL)
-            .condition(BRICK_ABYSSAL)
+            .condition(ABYSSAL_BRICK)
     ),
-    STAIR_BADLANDS_BRICK(BlockDef.build("stair_badlands_brick", BlockBrickStairs.class)
+    BADLANDS_BRICK_STAIRS(BlockDef.build("badlands_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BADLANDS, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_BADLANDS)
+            .condition(BADLANDS_BRICK)
     ),
-    STAIR_BADLANDS_PAVER(BlockDef.build("stair_badlands_paver", BlockBrickStairs.class)
+    BADLANDS_PAVER_STAIRS(BlockDef.build("badlands_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BADLANDS, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_BADLANDS)
+            .condition(BADLANDS_BRICK)
     ),
-    STAIR_BLEACHED_BONE_BRICK(BlockDef.build("stair_bleachedbone_brick", BlockBrickStairs.class)
+    BLEACHED_BONE_BRICK_STAIRS(BlockDef.build("bleachedbone_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLEACHEDBONE, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_BLEACHED_BONE)
+            .condition(BLEACHED_BONE_BRICK)
     ),
-    STAIR_BLEACHED_BONE_PAVER(BlockDef.build("stair_bleachedbone_paver", BlockBrickStairs.class)
+    BLEACHED_BONE_PAVER_STAIRS(BlockDef.build("bleachedbone_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLEACHEDBONE, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_BLEACHED_BONE)
+            .condition(BLEACHED_BONE_BRICK)
     ),
-    STAIR_BLOOD_STAINED_BRICK(BlockDef.build("stair_bloodstained_brick", BlockBrickStairs.class)
+    BLOOD_STAINED_BRICK_STAIRS(BlockDef.build("bloodstained_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLOODSTAINED, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_BLOOD_STAINED)
+            .condition(BLOOD_STAINED_BRICK)
     ),
-    STAIR_BLOOD_STAINED_PAVER(BlockDef.build("stair_bloodstained_paver", BlockBrickStairs.class)
+    BLOOD_STAINED_PAVER_STAIRS(BlockDef.build("bloodstained_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLOODSTAINED, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_BLOOD_STAINED)
+            .condition(BLOOD_STAINED_BRICK)
     ),
-    STAIR_FROST_BOUND_BRICK(BlockDef.build("stair_frostbound_brick", BlockBrickStairs.class)
+    FROST_BOUND_BRICK_STAIRS(BlockDef.build("frostbound_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.FROSTBOUND, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_FROST_BOUND)
+            .condition(FROST_BOUND_BRICK)
     ),
-    STAIR_FROST_BOUND_PAVER(BlockDef.build("stair_frostbound_paver", BlockBrickStairs.class)
+    FROST_BOUND_PAVER_STAIRS(BlockDef.build("frostbound_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.FROSTBOUND, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_FROST_BOUND)
+            .condition(FROST_BOUND_BRICK)
     ),
-    STAIR_INFERNAL_BRICK(BlockDef.build("stair_infernal_brick", BlockBrickStairs.class)
+    INFERNAL_BRICK_STAIRS(BlockDef.build("infernal_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.INFERNAL, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_INFERNAL)
+            .condition(INFERNAL_BRICK)
     ),
-    STAIR_INFERNAL_PAVER(BlockDef.build("stair_infernal_paver", BlockBrickStairs.class)
+    INFERNAL_PAVER_STAIRS(BlockDef.build("infernal_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.INFERNAL, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_INFERNAL)
+            .condition(INFERNAL_BRICK)
     ),
-    STAIR_PEARLIZED_BRICK(BlockDef.build("stair_pearlized_brick", BlockBrickStairs.class)
+    PEARLIZED_BRICK_STAIRS(BlockDef.build("pearlized_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.PEARLIZED, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_PEARLIZED)
+            .condition(PEARLIZED_BRICK)
     ),
-    STAIR_PEARLIZED_PAVER(BlockDef.build("stair_pearlized_paver", BlockBrickStairs.class)
+    PEARLIZED_PAVER_STAIRS(BlockDef.build("pearlized_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.PEARLIZED, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_PEARLIZED)
+            .condition(PEARLIZED_BRICK)
     ),
-    STAIR_QUARRIED_BRICK(BlockDef.build("stair_quarried_brick", BlockBrickStairs.class)
+    QUARRIED_BRICK_STAIRS(BlockDef.build("quarried_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.QUARRIED, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
             .condition(EnumGeneric.STONE_QUARRIED)
-            .condition(BRICK_QUARRIED)
+            .condition(QUARRIED_BRICK)
     ),
-    STAIR_QUARRIED_PAVER(BlockDef.build("stair_quarried_paver", BlockBrickStairs.class)
+    QUARRIED_PAVER_STAIRS(BlockDef.build("quarried_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.QUARRIED, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
             .condition(EnumGeneric.STONE_QUARRIED)
-            .condition(BRICK_QUARRIED)
+            .condition(QUARRIED_BRICK)
     ),
-    STAIR_SANDY_BRICK(BlockDef.build("stair_sandy_brick", BlockBrickStairs.class)
+    SANDY_BRICK_STAIRS(BlockDef.build("sandy_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.SANDY, BrickVariant.BRICK))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_SANDY)
+            .condition(SANDY_BRICK)
     ),
-    STAIR_SANDY_PAVER(BlockDef.build("stair_sandy_paver", BlockBrickStairs.class)
+    SANDY_PAVER_STAIRS(BlockDef.build("sandy_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.SANDY, BrickVariant.PAVER))
             .item(ItemBlockRailcraft::new)
-            .condition(BRICK_SANDY)
+            .condition(SANDY_BRICK)
     ),
 
     CHARGE_FEEDER(BlockDef.build("charge_feeder", BlockChargeFeeder.class).item(ItemMachine::new)),
@@ -380,8 +404,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     public static final RailcraftBlocks[] VALUES = values();
 
-    public static RailcraftBlocks byTag(String tag) {
-        return Arrays.stream(VALUES).filter(bc -> StringUtils.equals(tag, bc.getRegistryName().getPath())).findFirst()
+    public static <B extends Block & IRailcraftBlock> B byTag(String tag) {
+        return (B) Arrays.stream(VALUES)
+                .filter(bc -> StringUtils.equals(tag, bc.getRegistryName().getPath()))
+                .findFirst()
+                .flatMap(c -> c.def.block())
                 .orElseThrow(() -> new IllegalArgumentException(tag + " not a valid block"));
     }
 
@@ -510,12 +537,16 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     public boolean isEqual(IBlockState state) {
-        return def.block().isPresent() && def.block().get() == state.getBlock();
+        return def.block().isPresent() && def.block().get() == state;
     }
 
     @Override
     public IBlockState getState(@Nullable IVariantEnum variant) {
         return def.block().map(b -> b.getState(variant)).orElseGet(this::getDefaultState);
+    }
+
+    public @Nullable <B extends Block & IRailcraftBlock> B getBlock() {
+        return (B) def.block().orElse(null);
     }
 
     @Override

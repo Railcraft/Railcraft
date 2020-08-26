@@ -37,7 +37,9 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     BLOCK_STEEL(ModuleResources.class, "steel", new SimpleCube(), 5f, 15f),
     @Deprecated
     BLOCK_CONCRETE(ModuleBuilding.class, "concrete", new SimpleCube(), 3f, 15f),
+    @Deprecated
     BLOCK_CREOSOTE(ModuleBuilding.class, "creosote", new FlammableCube(5, 300), 3f, 10f),
+    @Deprecated
     BLOCK_COKE(ModuleFactory.class, "coke", new FlammableCube(5, 10), 2f, 10f),
     CRUSHED_OBSIDIAN(ModuleResources.class, "crushed_obsidian", new CrushedObsidian(), 2f, 45f),
     STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
@@ -59,8 +61,6 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     private static final List<EnumGeneric> creativeList = new ArrayList<>();
 
     static {
-        creativeList.add(BLOCK_CREOSOTE);
-        creativeList.add(BLOCK_COKE);
         creativeList.add(CRUSHED_OBSIDIAN);
         creativeList.add(STONE_ABYSSAL);
         creativeList.add(STONE_QUARRIED);
@@ -89,7 +89,7 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
 
     public static EnumGeneric fromOrdinal(int id) {
         if (id < 0 || id >= VALUES.length)
-            return BLOCK_CONCRETE;
+            return STONE_ABYSSAL;
         return VALUES[id];
     }
 

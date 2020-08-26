@@ -13,16 +13,11 @@ import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.post.EnumPost;
-import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.items.ItemTie;
 import mods.railcraft.common.items.RailcraftItems;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
 
 @RailcraftModule(value = "railcraft:building", description = "glass, posts, bricks, stairs, slabs, lanterns, walls")
 public class ModuleBuilding extends RailcraftModulePayload {
@@ -34,56 +29,62 @@ public class ModuleBuilding extends RailcraftModulePayload {
                 RailcraftItems.CONCRETE,
                 RailcraftBlocks.GLASS,
                 RailcraftBlocks.GENERIC,
+
+                RailcraftBlocks.CREOSOTE_BLOCK,
+                RailcraftBlocks.CREOSOTE_STAIRS,
+                RailcraftBlocks.CREOSOTE_DOUBLE_SLAB,
+                RailcraftBlocks.CREOSOTE_SLAB,
+
                 RailcraftBlocks.REINFORCED_CONCRETE,
                 RailcraftBlocks.POST_METAL,
                 RailcraftBlocks.POST_METAL_PLATFORM,
 
-                RailcraftBlocks.STAIR_ABYSSAL_BRICK,
-                RailcraftBlocks.STAIR_BLEACHED_BONE_BRICK,
-                RailcraftBlocks.STAIR_BLOOD_STAINED_BRICK,
-                RailcraftBlocks.STAIR_FROST_BOUND_BRICK,
-                RailcraftBlocks.STAIR_INFERNAL_BRICK,
-                RailcraftBlocks.STAIR_PEARLIZED_BRICK,
-                RailcraftBlocks.STAIR_QUARRIED_BRICK,
-                RailcraftBlocks.STAIR_BADLANDS_BRICK,
-                RailcraftBlocks.STAIR_SANDY_BRICK,
+                RailcraftBlocks.ABYSSAL_BRICK_STAIRS,
+                RailcraftBlocks.BLEACHED_BONE_BRICK_STAIRS,
+                RailcraftBlocks.BLOOD_STAINED_BRICK_STAIRS,
+                RailcraftBlocks.FROST_BOUND_BRICK_STAIRS,
+                RailcraftBlocks.INFERNAL_BRICK_STAIRS,
+                RailcraftBlocks.PEARLIZED_BRICK_STAIRS,
+                RailcraftBlocks.QUARRIED_BRICK_STAIRS,
+                RailcraftBlocks.BADLANDS_BRICK_STAIRS,
+                RailcraftBlocks.SANDY_BRICK_STAIRS,
 
-                RailcraftBlocks.STAIR_ABYSSAL_PAVER,
-                RailcraftBlocks.STAIR_BLEACHED_BONE_PAVER,
-                RailcraftBlocks.STAIR_BLOOD_STAINED_PAVER,
-                RailcraftBlocks.STAIR_FROST_BOUND_PAVER,
-                RailcraftBlocks.STAIR_INFERNAL_PAVER,
-                RailcraftBlocks.STAIR_PEARLIZED_PAVER,
-                RailcraftBlocks.STAIR_QUARRIED_PAVER,
-                RailcraftBlocks.STAIR_BADLANDS_PAVER,
-                RailcraftBlocks.STAIR_SANDY_PAVER,
+                RailcraftBlocks.ABYSSAL_PAVER_STAIRS,
+                RailcraftBlocks.BLEACHED_BONE_PAVER_STAIRS,
+                RailcraftBlocks.BLOOD_STAINED_PAVER_STAIRS,
+                RailcraftBlocks.FROST_BOUND_PAVER_STAIRS,
+                RailcraftBlocks.INFERNAL_PAVER_STAIRS,
+                RailcraftBlocks.PEARLIZED_PAVER_STAIRS,
+                RailcraftBlocks.QUARRIED_PAVER_STAIRS,
+                RailcraftBlocks.BADLANDS_PAVER_STAIRS,
+                RailcraftBlocks.SANDY_PAVER_STAIRS,
 
-                RailcraftBlocks.SLAB_ABYSSAL_DOUBLE,
-                RailcraftBlocks.SLAB_ABYSSAL,
+                RailcraftBlocks.ABYSSAL_DOUBLE_SLAB,
+                RailcraftBlocks.ABYSSAL_SLAB,
 
-                RailcraftBlocks.SLAB_BADLANDS_DOUBLE,
-                RailcraftBlocks.SLAB_BADLANDS,
+                RailcraftBlocks.BADLANDS_DOUBLE_SLAB,
+                RailcraftBlocks.BADLANDS_SLAB,
 
-                RailcraftBlocks.SLAB_BLEACHED_BONE_DOUBLE,
-                RailcraftBlocks.SLAB_BLEACHED_BONE,
+                RailcraftBlocks.BLEACHED_BONE_DOUBLE_SLAB,
+                RailcraftBlocks.BLEACHED_BONE_SLAB,
 
-                RailcraftBlocks.SLAB_BLOOD_STAINED_DOUBLE,
-                RailcraftBlocks.SLAB_BLOOD_STAINED,
+                RailcraftBlocks.BLOOD_STAINED_DOUBLE_SLAB,
+                RailcraftBlocks.BLOOD_STAINED_SLAB,
 
-                RailcraftBlocks.SLAB_FROST_BOUND_DOUBLE,
-                RailcraftBlocks.SLAB_FROST_BOUND,
+                RailcraftBlocks.FROST_BOUND_DOUBLE_SLAB,
+                RailcraftBlocks.FROST_BOUND_SLAB,
 
-                RailcraftBlocks.SLAB_INFERNAL_DOUBLE,
-                RailcraftBlocks.SLAB_INFERNAL,
+                RailcraftBlocks.INFERNAL_DOUBLE_SLAB,
+                RailcraftBlocks.INFERNAL_SLAB,
 
-                RailcraftBlocks.SLAB_PEARLIZED_DOUBLE,
-                RailcraftBlocks.SLAB_PEARLIZED,
+                RailcraftBlocks.PEARLIZED_DOUBLE_SLAB,
+                RailcraftBlocks.PEARLIZED_SLAB,
 
-                RailcraftBlocks.SLAB_QUARRIED_DOUBLE,
-                RailcraftBlocks.SLAB_QUARRIED,
+                RailcraftBlocks.QUARRIED_DOUBLE_SLAB,
+                RailcraftBlocks.QUARRIED_SLAB,
 
-                RailcraftBlocks.SLAB_SANDY_DOUBLE,
-                RailcraftBlocks.SLAB_SANDY
+                RailcraftBlocks.SANDY_DOUBLE_SLAB,
+                RailcraftBlocks.SANDY_SLAB
         );
 
         setEnabledEventHandler(new ModuleEventHandler() {
@@ -111,7 +112,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                     CraftingPlugin.addShapedRecipe(EnumPost.WOOD_PLATFORM.getStack(),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.SLAB_ABYSSAL, // FIXME
+                            'T', RailcraftBlocks.ABYSSAL_SLAB, // FIXME
                             'I', EnumPost.WOOD.getStack());
 
                     CraftingPlugin.addShapedRecipe(EnumPost.STONE.getStack(8),
@@ -123,7 +124,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                     CraftingPlugin.addShapedRecipe(EnumPost.STONE_PLATFORM.getStack(),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.SLAB_ABYSSAL, // FIXME
+                            'T', RailcraftBlocks.ABYSSAL_SLAB, // FIXME
                             'I', EnumPost.STONE.getStack());
 
                     ItemStack stack = EnumPost.METAL_UNPAINTED.getStack(16);
@@ -143,7 +144,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                     CraftingPlugin.addShapedRecipe(EnumPost.METAL_PLATFORM_UNPAINTED.getStack(4),
                             " T ",
                             " I ",
-                            'T', RailcraftBlocks.SLAB_ABYSSAL, // FIXME
+                            'T', RailcraftBlocks.ABYSSAL_SLAB, // FIXME
                             'I', EnumPost.METAL_UNPAINTED.getStack());
 
                     stack = EnumPost.METAL_UNPAINTED.getStack(32);
@@ -182,16 +183,6 @@ public class ModuleBuilding extends RailcraftModulePayload {
                             "III",
                             "I I",
                             'I', "ingotRefinedIron");
-                }
-
-                EnumGeneric cubeType = EnumGeneric.BLOCK_CREOSOTE;
-                if (cubeType.isEnabled()) {
-                    ItemStack stack = cubeType.getStack();
-                    FluidStack creosote = Fluids.CREOSOTE.get(FluidTools.BUCKET_VOLUME);
-                    CraftingPlugin.addShapelessRecipe("railcraft:block_creosote", stack,
-                            "logWood", creosote);
-                    ForestryPlugin.instance().addCarpenterRecipe("railcraft:block_creosote", 40,
-                            Fluids.CREOSOTE.get(750), ItemStack.EMPTY, stack, "L", 'L', "logWood");
                 }
             }
         });

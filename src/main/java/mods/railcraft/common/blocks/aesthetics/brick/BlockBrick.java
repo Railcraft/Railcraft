@@ -13,6 +13,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
@@ -24,9 +25,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import static mods.railcraft.common.blocks.aesthetics.brick.BrickVariant.*;
@@ -117,6 +121,12 @@ public class BlockBrick extends BlockRailcraftSubtyped<BrickVariant> {
         for (BrickVariant variant : BrickVariant.VALUES) {
             CreativePlugin.addToList(list, theme.getStack(1, variant));
         }
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public @Nullable ResourceLocation getBlockTexture() {
+        return new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN, "brick_" + getRegistryName().getPath().replace("_brick", ""));
     }
 
     @Override

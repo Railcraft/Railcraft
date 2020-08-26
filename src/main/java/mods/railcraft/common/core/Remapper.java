@@ -12,9 +12,11 @@ package mods.railcraft.common.core;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Optionals;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.event.RegistryEvent.MissingMappings;
+import net.minecraftforge.event.RegistryEvent.MissingMappings.Action;
 import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
@@ -32,12 +34,13 @@ import java.util.Optional;
 public class Remapper {
     private static final Map<String, RailcraftBlocks> blockRemaps = new HashMap<>();
     private static final Map<String, RailcraftBlocks> itemRemaps = new HashMap<>();
+    private static final Map<String, String> prefixToSuffix = new HashMap<>();
 
     static {
         itemRemaps.put("tank_iron_gauge", RailcraftBlocks.GLASS);
         itemRemaps.put("tank_steel_gauge", RailcraftBlocks.GLASS);
 
-        blockRemaps.put("brick_red_sandy", RailcraftBlocks.BRICK_BADLANDS);
+        blockRemaps.put("brick_red_sandy", RailcraftBlocks.BADLANDS_BRICK);
 
         blockRemaps.put("manipulator", RailcraftBlocks.MANIPULATOR);
 
@@ -54,11 +57,34 @@ public class Remapper {
         blockRemaps.put("track.high.speed.electric", RailcraftBlocks.TRACK_FLEX_HS_ELECTRIC);
         blockRemaps.put("track.reinforced", RailcraftBlocks.TRACK_FLEX_REINFORCED);
         blockRemaps.put("track.strap.iron", RailcraftBlocks.TRACK_FLEX_STRAP_IRON);
+
+        prefixToSuffix.put("brick_", "_brick");
+        prefixToSuffix.put("slab_", "_slab");
+        prefixToSuffix.put("stair_", "_stairs");
+    }
+
+    private static Optional<Block> prefix(String path) {
+        return prefixToSuffix.entrySet().stream()
+                .filter(entry -> path.startsWith(entry.getKey()))
+                .findFirst()
+                .map(entry -> path.replace(entry.getKey(), "") + entry.getValue())
+                .map(RailcraftBlocks::byTag)
+                .map(Optionals.toType(Block.class));
     }
 
     @SubscribeEvent
     public static void remapBlock(MissingMappings<Block> event) {
         for (Mapping<Block> mapping : event.getMappings()) {
+            if (!mapping.key.getNamespace().equals(RailcraftConstants.RESOURCE_DOMAIN)) continue;
+
+            try {
+                prefix(mapping.key.getPath())
+                        .ifPresent(mapping::remap);
+            } catch (Exception ignored) {
+            }
+
+            if (mapping.getAction() == Action.REMAP) continue;
+
             try {
                 Optional.ofNullable(blockRemaps.get(mapping.key.getPath())).ifPresent(v -> {
                     mapping.remap(v.block());
@@ -73,6 +99,14 @@ public class Remapper {
     @SubscribeEvent
     public static void remapItem(MissingMappings<Item> event) {
         for (Mapping<Item> mapping : event.getMappings()) {
+
+            try {
+                prefix(mapping.key.getPath())
+                        .map(Item::getItemFromBlock)
+                        .ifPresent(mapping::remap);
+            } catch (Exception ignored) {
+            }
+
             try {
                 Optional.ofNullable(itemRemaps.get(mapping.key.getPath())).ifPresent(v -> {
                     mapping.remap(Objects.requireNonNull(v.item()));

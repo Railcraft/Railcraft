@@ -8,7 +8,7 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks.aesthetics.brick;
+package mods.railcraft.common.blocks.aesthetics;
 
 import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,22 +21,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * Created by CovertJaguar on 8/6/2020 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemBrickSlab extends ItemBlockRailcraftSubtyped<BlockBrickSlab> {
-    private final BlockBrickSlab singleSlab;
-    private final BlockBrickSlab doubleSlab;
+public class ItemRailcraftSlab extends ItemBlockRailcraftSubtyped<BlockRailcraftSlab> {
     private final ItemSlab delegate;
 
-    public ItemBrickSlab(BlockBrickSlab block, BlockBrickSlab singleSlab, BlockBrickSlab doubleSlab) {
+    public ItemRailcraftSlab(BlockRailcraftSlab block, BlockRailcraftSlab singleSlab, @Nullable BlockRailcraftSlab doubleSlab) {
         super(block);
-        this.singleSlab = singleSlab;
-        this.doubleSlab = doubleSlab;
-        delegate = new ItemSlab(block, singleSlab, doubleSlab);
+        delegate = new ItemSlab(block, singleSlab, Objects.requireNonNull(doubleSlab));
     }
 
     @Override
@@ -51,7 +50,7 @@ public class ItemBrickSlab extends ItemBlockRailcraftSubtyped<BlockBrickSlab> {
     }
 
     @Override
-    public ItemBrickSlab getObject() {
+    public ItemRailcraftSlab getObject() {
         return this;
     }
 }

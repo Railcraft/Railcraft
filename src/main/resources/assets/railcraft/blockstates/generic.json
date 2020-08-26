@@ -8,11 +8,11 @@
     "normal": [{}],
     "inventory": [{"transform": "forge:default-block"}],
     "variant": {
-      "coke": {"textures": {"all": "railcraft:blocks/coke"}},
+      "coke": {"textures": {"all": "railcraft:blocks/coke_block"}},
       "crushed_obsidian": {"textures": {"all": "railcraft:blocks/crushed_obsidian"}},
       "stone_abyssal": {"textures": {"all": "railcraft:blocks/stone_abyssal"}},
       "stone_quarried": {"textures": {"all": "railcraft:blocks/stone_quarried"}},
-      "creosote": {"textures": {"all": "railcraft:blocks/creosote"}},
+      "creosote": {"textures": {"all": "railcraft:blocks/creosote_block"}},
       "concrete": {"textures": {"all": "railcraft:blocks/concrete"}},
       "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},
       "steel": {"textures": {"all": "railcraft:blocks/metal_steel"}},
