@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.plugins.color;
 import com.google.common.primitives.Ints;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
+import mods.railcraft.common.blocks.ItemBlockRailcraftColored;
 import mods.railcraft.common.blocks.interfaces.IBlockColored;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
@@ -144,14 +144,15 @@ public enum EnumColor implements IVariantEnum, IIngredientSource {
         NBTTagCompound nbt = stack.getTagCompound();
         if (nbt != null && nbt.hasKey(DEFAULT_COLOR_TAG))
             return EnumColor.readFromNBT(nbt, DEFAULT_COLOR_TAG);
+        if (stack.getItem() == Items.DYE)
+            return Optional.of(fromDye(EnumDyeColor.byDyeDamage(stack.getItemDamage())));
+        if (stack.getItem() instanceof ItemBlockRailcraftColored)
+            return Optional.of(fromOrdinal(stack.getItemDamage()));
         IBlockState state = InvTools.getBlockStateFromStack(stack);
         if (state.getBlock() instanceof BlockColored)
             return Optional.of(fromDye(state.getValue(BlockColored.COLOR)));
         if (state.getBlock() instanceof IBlockColored)
             return Optional.of(((IBlockColored) state.getBlock()).getColor(state));
-        if (state.getBlock() instanceof BlockRailcraftSubtyped)
-            if (stack.getItem() == Items.DYE)
-                return Optional.of(EnumColor.fromOrdinal(15 - stack.getItemDamage()));
         return dyeColorOf(stack);
     }
 

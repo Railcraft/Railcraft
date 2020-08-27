@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,7 @@ import mods.railcraft.common.plugins.color.ColorPlugin;
 import mods.railcraft.common.plugins.color.EnumColor;
 import net.minecraft.block.Block;
 
-public class ItemBlockRailcraftColored<B extends Block & IRailcraftBlock> extends ItemBlockRailcraftSubtyped<B> {
+public class ItemBlockRailcraftColored<B extends Block & IRailcraftBlock & ColorPlugin.IColorHandlerBlock> extends ItemBlockRailcraftSubtyped<B> {
 
     public ItemBlockRailcraftColored(B block) {
         super(block);

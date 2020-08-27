@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -39,6 +39,10 @@ public final class ColorPlugin {
     @FunctionalInterface
     public interface IColorHandlerBlock {
         IColorFunctionBlock colorHandler();
+
+        default EnumColor defaultColor() {
+            return EnumColor.WHITE;
+        }
     }
 
     @FunctionalInterface

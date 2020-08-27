@@ -11,10 +11,11 @@ package mods.railcraft.common.blocks.structures;
 
 import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.blocks.ItemBlockRailcraftColored;
+import mods.railcraft.common.plugins.color.ColorPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockMetalTank<B extends Block & IRailcraftBlock> extends ItemBlockRailcraftColored<B> {
+public class ItemBlockMetalTank<B extends Block & IRailcraftBlock & ColorPlugin.IColorHandlerBlock> extends ItemBlockRailcraftColored<B> {
 
     public ItemBlockMetalTank(B block) {
         super(block);

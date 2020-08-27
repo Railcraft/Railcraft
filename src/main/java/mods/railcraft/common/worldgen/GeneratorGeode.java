@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +29,7 @@ public class GeneratorGeode extends Generator {
     public static final int MIN_DEPTH = 16;
     public static final int MIN_Y = 12;
     public static final int MIN_FLOOR = 24;
-    private final WorldGenerator generator = new WorldGenGeode(EnumGeneric.STONE_ABYSSAL.getDefaultState());
+    private final WorldGenerator generator = new WorldGenGeode(RailcraftBlocks.ABYSSAL_STONE.getDefaultState());
 
     @Override
     public void generate(World world, Random rand, BlockPos targetPos, Biome biome) {

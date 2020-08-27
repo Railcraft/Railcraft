@@ -15,10 +15,12 @@ import mods.railcraft.common.plugins.color.EnumColor;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -73,6 +75,12 @@ public class GlassReplacer extends BlockStrengthGlass {
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
         super.randomTick(worldIn, pos, state, random);
         replace(worldIn, pos, state);
+        Arrays.stream(EnumFacing.VALUES).forEach(side -> {
+            try {
+                IBlockState neighbor = WorldPlugin.getBlockState(worldIn, pos.offset(side));
+                neighbor.getBlock().randomTick(worldIn, pos.offset(side), neighbor, random);
+            } catch (Exception ignored) {}
+        });
     }
 
     private void replace(World worldIn, BlockPos pos, IBlockState state) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -53,7 +53,12 @@ public class ItemBlockRailcraft<B extends Block & IRailcraftBlock> extends ItemB
 
     @Override
     public ColorPlugin.IColorFunctionItem colorHandler() {
-        return (stack, tintIndex) -> EnumColor.fromItemStack(stack).orElse(EnumColor.WHITE).getHexColor();
+        EnumColor defaultColor;
+        if (block instanceof ColorPlugin.IColorHandlerBlock)
+            defaultColor = ((ColorPlugin.IColorHandlerBlock) block).defaultColor();
+        else
+            defaultColor = EnumColor.WHITE;
+        return (stack, tintIndex) -> EnumColor.fromItemStack(stack).orElse(defaultColor).getHexColor();
     }
 
     @Override

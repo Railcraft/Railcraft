@@ -20,7 +20,6 @@ import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
-import mods.railcraft.common.blocks.aesthetics.materials.BlockRailcraftWall;
 import mods.railcraft.common.blocks.aesthetics.materials.ItemMaterial;
 import mods.railcraft.common.blocks.aesthetics.metals.BlockMetal;
 import mods.railcraft.common.blocks.aesthetics.metals.ItemBlockMetal;
@@ -44,10 +43,7 @@ import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspike;
 import mods.railcraft.common.blocks.machine.worldspike.BlockWorldspikePoint;
 import mods.railcraft.common.blocks.machine.worldspike.ItemWorldspike;
 import mods.railcraft.common.blocks.ore.*;
-import mods.railcraft.common.blocks.simple.BlockCoke;
-import mods.railcraft.common.blocks.simple.BlockCreosote;
-import mods.railcraft.common.blocks.simple.ItemBlockCoke;
-import mods.railcraft.common.blocks.simple.ItemBlockCreosote;
+import mods.railcraft.common.blocks.simple.*;
 import mods.railcraft.common.blocks.single.*;
 import mods.railcraft.common.blocks.structures.*;
 import mods.railcraft.common.blocks.tracks.ItemTrack;
@@ -67,6 +63,7 @@ import mods.railcraft.common.items.firestone.BlockRitual;
 import mods.railcraft.common.plugins.forge.RailcraftRegistry;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -94,7 +91,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     CREOSOTE_BLOCK(BlockDef.build("creosote_block", BlockCreosote.class).item(ItemBlockCreosote::new)),
     CREOSOTE_STAIRS(BlockDef.build("creosote_stairs", BlockRailcraftStairs.class)
             .block(() -> new BlockRailcraftStairs(byTag("creosote_block").getDefaultState()))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(CREOSOTE_BLOCK)
     ),
     CREOSOTE_DOUBLE_SLAB(BlockDef.build("creosote_double_slab", BlockSimpleSlab.class)
@@ -109,29 +106,33 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     COKE_BLOCK(BlockDef.build("coke_block", BlockCoke.class).item(ItemBlockCoke::new)),
 
+    ABYSSAL_STONE(BlockDef.build("abyssal_stone", BlockRailcraftStone.class)
+            .block(() -> new BlockRailcraftStone(MapColor.BLACK))
+    ),
+
     // Bricks
 
-    ABYSSAL_BRICK(BlockDef.build("abyssal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ABYSSAL)).item(ItemBrick::new)
-            .condition(EnumGeneric.STONE_ABYSSAL)
+    ABYSSAL_BRICK(BlockDef.build("abyssal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ABYSSAL)).defaultSubtypedItem()
+            .condition(ABYSSAL_STONE)
     ),
-    BLEACHED_BONE_BRICK(BlockDef.build("bleachedbone_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLEACHEDBONE)).item(ItemBrick::new)),
-    BLOOD_STAINED_BRICK(BlockDef.build("bloodstained_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).item(ItemBrick::new)),
-    FROST_BOUND_BRICK(BlockDef.build("frostbound_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).item(ItemBrick::new)),
-    INFERNAL_BRICK(BlockDef.build("infernal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).item(ItemBrick::new)),
-    PEARLIZED_BRICK(BlockDef.build("pearlized_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).item(ItemBrick::new)),
-    QUARRIED_BRICK(BlockDef.build("quarried_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).item(ItemBrick::new)
+    BLEACHED_BONE_BRICK(BlockDef.build("bleachedbone_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLEACHEDBONE)).defaultSubtypedItem()),
+    BLOOD_STAINED_BRICK(BlockDef.build("bloodstained_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).defaultSubtypedItem()),
+    FROST_BOUND_BRICK(BlockDef.build("frostbound_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).defaultSubtypedItem()),
+    INFERNAL_BRICK(BlockDef.build("infernal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).defaultSubtypedItem()),
+    PEARLIZED_BRICK(BlockDef.build("pearlized_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).defaultSubtypedItem()),
+    QUARRIED_BRICK(BlockDef.build("quarried_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).defaultSubtypedItem()
             .condition(EnumGeneric.STONE_QUARRIED)
     ),
-    BADLANDS_BRICK(BlockDef.build("badlands_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).item(ItemBrick::new)),
-    SANDY_BRICK(BlockDef.build("sandy_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).item(ItemBrick::new)),
+    BADLANDS_BRICK(BlockDef.build("badlands_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).defaultSubtypedItem()),
+    SANDY_BRICK(BlockDef.build("sandy_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).defaultSubtypedItem()),
 
     // Vanilla Bricks
 
-    ANDESITE_BRICK(BlockDef.build("andesite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ANDESITE)).item(ItemBrick::new)),
-    DIORITE_BRICK(BlockDef.build("diorite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.DIORITE)).item(ItemBrick::new)),
-    GRANITE_BRICK(BlockDef.build("granite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.GRANITE)).item(ItemBrick::new)),
-    NETHER_BRICK(BlockDef.build("nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.NETHER)).item(ItemBrick::new)),
-    RED_NETHER_BRICK(BlockDef.build("red_nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.RED_NETHER)).item(ItemBrick::new)),
+    ANDESITE_BRICK(BlockDef.build("andesite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ANDESITE)).defaultSubtypedItem()),
+    DIORITE_BRICK(BlockDef.build("diorite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.DIORITE)).defaultSubtypedItem()),
+    GRANITE_BRICK(BlockDef.build("granite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.GRANITE)).defaultSubtypedItem()),
+    NETHER_BRICK(BlockDef.build("nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.NETHER)).defaultSubtypedItem()),
+    RED_NETHER_BRICK(BlockDef.build("red_nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.RED_NETHER)).defaultSubtypedItem()),
 
     // Slabs
     ABYSSAL_DOUBLE_SLAB(BlockDef.build("abyssal_double_slab", BlockBrickSlab.class)
@@ -228,114 +229,114 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     ABYSSAL_BRICK_STAIRS(BlockDef.build("abyssal_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.ABYSSAL, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
-            .condition(EnumGeneric.STONE_ABYSSAL)
+            .defaultItem()
+            .condition(ABYSSAL_STONE)
             .condition(ABYSSAL_BRICK)
     ),
     ABYSSAL_PAVER_STAIRS(BlockDef.build("abyssal_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.ABYSSAL, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
-            .condition(EnumGeneric.STONE_ABYSSAL)
+            .defaultItem()
+            .condition(ABYSSAL_STONE)
             .condition(ABYSSAL_BRICK)
     ),
     BADLANDS_BRICK_STAIRS(BlockDef.build("badlands_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BADLANDS, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(BADLANDS_BRICK)
     ),
     BADLANDS_PAVER_STAIRS(BlockDef.build("badlands_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BADLANDS, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(BADLANDS_BRICK)
     ),
     BLEACHED_BONE_BRICK_STAIRS(BlockDef.build("bleachedbone_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLEACHEDBONE, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(BLEACHED_BONE_BRICK)
     ),
     BLEACHED_BONE_PAVER_STAIRS(BlockDef.build("bleachedbone_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLEACHEDBONE, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(BLEACHED_BONE_BRICK)
     ),
     BLOOD_STAINED_BRICK_STAIRS(BlockDef.build("bloodstained_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLOODSTAINED, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(BLOOD_STAINED_BRICK)
     ),
     BLOOD_STAINED_PAVER_STAIRS(BlockDef.build("bloodstained_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.BLOODSTAINED, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(BLOOD_STAINED_BRICK)
     ),
     FROST_BOUND_BRICK_STAIRS(BlockDef.build("frostbound_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.FROSTBOUND, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(FROST_BOUND_BRICK)
     ),
     FROST_BOUND_PAVER_STAIRS(BlockDef.build("frostbound_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.FROSTBOUND, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(FROST_BOUND_BRICK)
     ),
     INFERNAL_BRICK_STAIRS(BlockDef.build("infernal_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.INFERNAL, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(INFERNAL_BRICK)
     ),
     INFERNAL_PAVER_STAIRS(BlockDef.build("infernal_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.INFERNAL, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(INFERNAL_BRICK)
     ),
     PEARLIZED_BRICK_STAIRS(BlockDef.build("pearlized_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.PEARLIZED, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(PEARLIZED_BRICK)
     ),
     PEARLIZED_PAVER_STAIRS(BlockDef.build("pearlized_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.PEARLIZED, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(PEARLIZED_BRICK)
     ),
     QUARRIED_BRICK_STAIRS(BlockDef.build("quarried_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.QUARRIED, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(EnumGeneric.STONE_QUARRIED)
             .condition(QUARRIED_BRICK)
     ),
     QUARRIED_PAVER_STAIRS(BlockDef.build("quarried_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.QUARRIED, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(EnumGeneric.STONE_QUARRIED)
             .condition(QUARRIED_BRICK)
     ),
     SANDY_BRICK_STAIRS(BlockDef.build("sandy_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.SANDY, BrickVariant.BRICK))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(SANDY_BRICK)
     ),
     SANDY_PAVER_STAIRS(BlockDef.build("sandy_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.SANDY, BrickVariant.PAVER))
-            .item(ItemBlockRailcraft::new)
+            .defaultItem()
             .condition(SANDY_BRICK)
     ),
 
     CHARGE_FEEDER(BlockDef.build("charge_feeder", BlockChargeFeeder.class).item(ItemMachine::new)),
-    CHARGE_TRAP(BlockDef.build("charge_trap", BlockChargeTrap.class).item(ItemBlockRailcraft::new)),
+    CHARGE_TRAP(BlockDef.build("charge_trap", BlockChargeTrap.class).defaultItem()),
     DETECTOR(BlockDef.build("detector", BlockDetector.class).item(ItemDetector::new)),
     EQUIPMENT(BlockDef.build("equipment", BlockMachineEquipment.class).item(ItemMachine::new)),
-    FRAME(BlockDef.build("frame", BlockFrame.class).item(ItemBlockRailcraft::new)),
+    FRAME(BlockDef.build("frame", BlockFrame.class).defaultItem()),
     GENERIC(BlockDef.build("generic", BlockGeneric.class).item(ItemBlockGeneric::new)),
     METAL(BlockDef.build("metal", BlockMetal.class).item(ItemBlockMetal::new)),
     GLASS(BlockDef.build("glass", BlockStrengthGlass.class).item(ItemBlockRailcraftColored::new)),
     LANTERN(BlockDef.build("lantern", BlockLantern.class).item(ItemMaterial::new)),
-    LOGBOOK(BlockDef.build("logbook", BlockLogbook.class).item(ItemBlockRailcraft::new)),
+    LOGBOOK(BlockDef.build("logbook", BlockLogbook.class).defaultItem()),
     MANIPULATOR(BlockDef.build("manipulator", BlockMachineManipulator.class).item(ItemMachine::new)),
-    ORE(BlockDef.build("ore", BlockOre.class).item(ItemBlockRailcraftSubtyped::new)),
+    ORE(BlockDef.build("ore", BlockOre.class).defaultSubtypedItem()),
     ORE_MAGIC(BlockDef.build("ore_magic", BlockOreMagic.class).item(ItemOreMagic::new)),
-    ORE_METAL(BlockDef.build("ore_metal", BlockOreMetal.class).item(ItemBlockRailcraftSubtyped::new)),
-    ORE_METAL_POOR(BlockDef.build("ore_metal_poor", BlockOreMetalPoor.class).item(ItemBlockRailcraftSubtyped::new)),
+    ORE_METAL(BlockDef.build("ore_metal", BlockOreMetal.class).defaultSubtypedItem()),
+    ORE_METAL_POOR(BlockDef.build("ore_metal_poor", BlockOreMetalPoor.class).defaultSubtypedItem()),
     POST(BlockDef.build("post", BlockPost.class).item(ItemPost::new)),
     POST_METAL(BlockDef.build("post_metal", BlockPostMetal.class).item(ItemPostMetal::new)),
     POST_METAL_PLATFORM(BlockDef.build("post_metal_platform", BlockPostMetalPlatform.class).item(ItemPostMetal::new)),
@@ -369,36 +370,35 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     TRACK_FORCE(BlockDef.build("track_force", BlockTrackForce.class).item(ItemTrack::new)),
     TRACK_OUTFITTED(BlockDef.build("track_outfitted", BlockTrackOutfitted.class).item(ItemTrackOutfitted::new)),
-    WALL(BlockDef.build("wall", BlockRailcraftWall.class).item(ItemMaterial::new)),
     WIRE(BlockDef.build("wire", BlockWire.class).item(ItemWire::new)),
-    WORLD_LOGIC(BlockDef.build("worldlogic", BlockWorldLogic.class).item(ItemBlockRailcraft::new)),
+    WORLD_LOGIC(BlockDef.build("worldlogic", BlockWorldLogic.class).defaultItem()),
     WORLDSPIKE(BlockDef.build("worldspike", BlockWorldspike.class).item(ItemWorldspike::new)),
-    WORLDSPIKE_POINT(BlockDef.build("worldspike_point", BlockWorldspikePoint.class).item(ItemBlockRailcraft::new)),
+    WORLDSPIKE_POINT(BlockDef.build("worldspike_point", BlockWorldspikePoint.class).defaultItem()),
     // singles
-    TRADE_STATION(BlockDef.build("trade_station", BlockTradeStation.class).item(ItemBlockEntityDelegate::new)),
-    FORCE_TRACK_EMITTER(BlockDef.build("force_track_emitter", BlockForceTrackEmitter.class).item(ItemForceTrackEmitter::new)),
-    ADMIN_STEAM_PRODUCER(BlockDef.build("admin_steam_producer", BlockAdminSteamProducer.class).item(ItemBlockEntityDelegate::new)),
-    CHEST_METALS(BlockDef.build("chest_metals", BlockChestMetals.class).item(ItemBlockEntityDelegate::new)),
-    CHEST_VOID(BlockDef.build("chest_void", BlockChestVoid.class).item(ItemBlockEntityDelegate::new)),
+    TRADE_STATION(BlockDef.build("trade_station", BlockTradeStation.class).defaultItem()),
+    FORCE_TRACK_EMITTER(BlockDef.build("force_track_emitter", BlockForceTrackEmitter.class).defaultItem()),
+    ADMIN_STEAM_PRODUCER(BlockDef.build("admin_steam_producer", BlockAdminSteamProducer.class).defaultItem()),
+    CHEST_METALS(BlockDef.build("chest_metals", BlockChestMetals.class).defaultItem()),
+    CHEST_VOID(BlockDef.build("chest_void", BlockChestVoid.class).defaultItem()),
     // multiblocks
-    COKE_OVEN(BlockDef.build("coke_oven", BlockCokeOvenSandy.class).item(ItemBlockCustomModel::new)),
-    COKE_OVEN_RED(BlockDef.build("coke_oven_red", BlockCokeOvenRed.class).item(ItemBlockCustomModel::new)),
-    BLAST_FURNACE(BlockDef.build("blast_furnace", BlockBlastFurnace.class).item(ItemBlockCustomModel::new)),
-    ROCK_CRUSHER(BlockDef.build("rock_crusher", BlockRockCrusher.class).item(ItemBlockEntityDelegate::new)),
-    STEAM_OVEN(BlockDef.build("steam_oven", BlockSteamOven.class).item(ItemBlockCustomModel::new)),
+    COKE_OVEN(BlockDef.build("coke_oven", BlockCokeOvenSandy.class).defaultItem()),
+    COKE_OVEN_RED(BlockDef.build("coke_oven_red", BlockCokeOvenRed.class).defaultItem()),
+    BLAST_FURNACE(BlockDef.build("blast_furnace", BlockBlastFurnace.class).defaultItem()),
+    ROCK_CRUSHER(BlockDef.build("rock_crusher", BlockRockCrusher.class).defaultItem()),
+    STEAM_OVEN(BlockDef.build("steam_oven", BlockSteamOven.class).defaultItem()),
     TANK_IRON_GAUGE(BlockDef.build("tank_iron_gauge", GlassReplacer.class)),
     TANK_IRON_VALVE(BlockDef.build("tank_iron_valve", BlockTankIronValve.class).item(ItemBlockMetalTank::new)),
     TANK_IRON_WALL(BlockDef.build("tank_iron_wall", BlockTankIronWall.class).item(ItemBlockMetalTank::new)),
     TANK_STEEL_GAUGE(BlockDef.build("tank_steel_gauge", GlassReplacer.class)),
     TANK_STEEL_VALVE(BlockDef.build("tank_steel_valve", BlockTankSteelValve.class).item(ItemBlockMetalTank::new)),
     TANK_STEEL_WALL(BlockDef.build("tank_steel_wall", BlockTankSteelWall.class).item(ItemBlockMetalTank::new)),
-    TANK_WATER(BlockDef.build("tank_water", BlockTankWater.class).item(ItemBlockEntityDelegate::new)),
-    FLUX_TRANSFORMER(BlockDef.build("flux_transformer", BlockFluxTransformer.class).item(ItemBlockEntityDelegate::new)),
-    BOILER_FIREBOX_FLUID(BlockDef.build("boiler_firebox_fluid", BlockBoilerFireboxFluid.class).item(ItemBlockEntityDelegate::new)),
-    BOILER_FIREBOX_SOLID(BlockDef.build("boiler_firebox_solid", BlockBoilerFireboxSolid.class).item(ItemBlockEntityDelegate::new)),
-    BOILER_TANK_PRESSURE_HIGH(BlockDef.build("boiler_tank_pressure_high", BlockBoilerTankHigh.class).item(ItemBlockEntityDelegate::new)),
-    BOILER_TANK_PRESSURE_LOW(BlockDef.build("boiler_tank_pressure_low", BlockBoilerTankLow.class).item(ItemBlockEntityDelegate::new)),
-    STEAM_TURBINE(BlockDef.build("steam_turbine", BlockSteamTurbine.class).item(ItemBlockCustomModel::new)),
+    TANK_WATER(BlockDef.build("tank_water", BlockTankWater.class).defaultItem()),
+    FLUX_TRANSFORMER(BlockDef.build("flux_transformer", BlockFluxTransformer.class).defaultItem()),
+    BOILER_FIREBOX_FLUID(BlockDef.build("boiler_firebox_fluid", BlockBoilerFireboxFluid.class).defaultItem()),
+    BOILER_FIREBOX_SOLID(BlockDef.build("boiler_firebox_solid", BlockBoilerFireboxSolid.class).defaultItem()),
+    BOILER_TANK_PRESSURE_HIGH(BlockDef.build("boiler_tank_pressure_high", BlockBoilerTankHigh.class).defaultItem()),
+    BOILER_TANK_PRESSURE_LOW(BlockDef.build("boiler_tank_pressure_low", BlockBoilerTankLow.class).defaultItem()),
+    STEAM_TURBINE(BlockDef.build("steam_turbine", BlockSteamTurbine.class).defaultItem()),
     // others
     ;
 
@@ -449,6 +449,18 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
         private BlockDef<B, I> item(Function<B, I> itemSupplier) {
             this.itemSupplier = itemSupplier;
+            return this;
+        }
+
+        @SuppressWarnings("unchecked")
+        private BlockDef<B, I> defaultItem() {
+            this.itemSupplier = b -> (I) new ItemBlockRailcraft<>(b);
+            return this;
+        }
+
+        @SuppressWarnings("unchecked")
+        private BlockDef<B, I> defaultSubtypedItem() {
+            this.itemSupplier = b -> (I) new ItemBlockRailcraftSubtyped<>(b);
             return this;
         }
 

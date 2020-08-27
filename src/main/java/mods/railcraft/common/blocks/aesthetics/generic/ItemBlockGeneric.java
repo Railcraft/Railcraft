@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,21 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.aesthetics.generic;
 
-import mods.railcraft.common.blocks.ItemBlockRailcraft;
+import mods.railcraft.common.blocks.ItemBlockRailcraftSubtyped;
 import mods.railcraft.common.items.ItemCoke;
 import net.minecraft.item.ItemStack;
 
-public class ItemBlockGeneric extends ItemBlockRailcraft<BlockGeneric> {
+public class ItemBlockGeneric extends ItemBlockRailcraftSubtyped<BlockGeneric> {
 
     public ItemBlockGeneric(BlockGeneric block) {
         super(block);
-        setMaxDamage(0);
-        setHasSubtypes(true);
-    }
-
-    @Override
-    public int getMetadata(int meta) {
-        return meta;
     }
 
     @Override

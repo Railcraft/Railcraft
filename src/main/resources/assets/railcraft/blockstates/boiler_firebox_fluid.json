@@ -3,7 +3,8 @@
   "defaults": {
     "model": "cube_column",
     "textures": {
-      "end": "railcraft:blocks/boiler_firebox_fluid_0"
+      "end": "railcraft:blocks/boiler_firebox_fluid_0",
+      "side": "railcraft:blocks/boiler_firebox_fluid_1"
     }
   },
   "variants": {

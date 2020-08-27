@@ -11,7 +11,7 @@
 package mods.railcraft.common.blocks.anvil;
 
 import mods.railcraft.api.core.IVariantEnum;
-import mods.railcraft.common.blocks.IRailcraftItemBlock;
+import mods.railcraft.common.blocks.IRailcraftItemBlockSubtyped;
 import mods.railcraft.common.core.IRailcraftObject;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class ItemAnvil extends ItemAnvilBlock implements IRailcraftItemBlock {
+public class ItemAnvil extends ItemAnvilBlock implements IRailcraftItemBlockSubtyped {
     public ItemAnvil(Block block) {
         super(block);
     }

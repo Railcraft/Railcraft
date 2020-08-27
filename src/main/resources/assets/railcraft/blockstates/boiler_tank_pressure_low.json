@@ -1,5 +1,11 @@
 {
   "variants": {
+    "inventory": [
+      {
+        "transform": "forge:default-block",
+        "model": "railcraft:boiler/low/boiler_unconnected"
+      }
+    ],
     "east=true,north=false,south=false,west=false": {
       "model": "railcraft:boiler/low/boiler_east"
     },

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ItemBlockRailcraftSubtyped<B extends Block & IRailcraftBlock> extends ItemBlockRailcraft<B> {
+public class ItemBlockRailcraftSubtyped<B extends Block & IRailcraftBlock> extends ItemBlockRailcraft<B> implements IRailcraftItemBlockSubtyped {
 
     public ItemBlockRailcraftSubtyped(B block) {
         super(block);

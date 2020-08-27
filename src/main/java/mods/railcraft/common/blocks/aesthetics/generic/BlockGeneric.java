@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import static mods.railcraft.common.blocks.aesthetics.metals.EnumMetal.*;
@@ -58,20 +59,12 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public void initializeDefinition() {
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.BLOCK_COKE);
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_ABYSSAL);
         HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_QUARRIED);
 
-        HarvestPlugin.setStateHarvestLevel("axe", 0, EnumGeneric.BLOCK_CREOSOTE);
         HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
 
         EntityTunnelBore.addMineableBlock(this);
 
-        ForestryPlugin.addBackpackItem("forestry.miner", EnumGeneric.BLOCK_COKE.getStack());
-
-        ForestryPlugin.addBackpackItem("forestry.builder", EnumGeneric.BLOCK_CREOSOTE.getStack());
-
-        ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_ABYSSAL.getStack());
         ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_QUARRIED.getStack());
 
         for (EnumGeneric block : EnumGeneric.VALUES) {
@@ -193,12 +186,8 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     @Override
     public SoundType getSoundType(IBlockState state, World world, BlockPos pos, @Nullable Entity entity) {
         switch (getVariant(state)) {
-            case BLOCK_CREOSOTE:
-                return SoundType.WOOD;
             case CRUSHED_OBSIDIAN:
                 return SoundType.GROUND;
-            case BLOCK_COKE:
-                return SoundType.STONE;
         }
         return super.getSoundType(state, world, pos, entity);
     }
@@ -209,6 +198,9 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         EnumGeneric generic = getVariant(state);
         IBlockState newState = null;
         switch (generic) {
+            case STONE_ABYSSAL:
+                newState = RailcraftBlocks.ABYSSAL_STONE.getDefaultState();
+                break;
             case BLOCK_CONCRETE:
                 newState = RailcraftBlocks.REINFORCED_CONCRETE.getDefaultState();
                 break;
@@ -252,5 +244,12 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         }
         if (newState != null)
             WorldPlugin.setBlockState(worldIn, pos, newState);
+
+        Arrays.stream(EnumFacing.VALUES).forEach(side -> {
+            try {
+                IBlockState neighbor = WorldPlugin.getBlockState(worldIn, pos.offset(side));
+                neighbor.getBlock().randomTick(worldIn, pos.offset(side), neighbor, random);
+            } catch (Exception ignored) {}
+        });
     }
 }

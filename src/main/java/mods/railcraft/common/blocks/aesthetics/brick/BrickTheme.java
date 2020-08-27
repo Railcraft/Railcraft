@@ -41,10 +41,10 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
     ABYSSAL(RailcraftBlocks.ABYSSAL_BRICK, MapColor.BLACK) {
         @Override
         public void initRecipes(BlockBrick block) {
-            if (EnumGeneric.STONE_ABYSSAL.isEnabled()) {
-                CraftingPlugin.addFurnaceRecipe(EnumGeneric.STONE_ABYSSAL.getStack(), block.getStack(POLISHED), 0.05f);
+            if (RailcraftBlocks.ABYSSAL_STONE.isEnabled()) {
+                CraftingPlugin.addFurnaceRecipe(RailcraftBlocks.ABYSSAL_STONE.getStack(), block.getStack(POLISHED), 0.05f);
                 if (COBBLE.isEnabled()) {
-                    Crafters.rockCrusher().makeRecipe(EnumGeneric.STONE_ABYSSAL)
+                    Crafters.rockCrusher().makeRecipe(RailcraftBlocks.ABYSSAL_STONE)
                             .name("railcraft:stone_abyssal")
                             .addOutput(getStack(COBBLE))
                             .register();

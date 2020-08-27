@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -122,7 +122,12 @@ public class BlockForceTrackEmitter extends BlockContainerRailcraft<TileForceTra
     public ColorPlugin.IColorFunctionBlock colorHandler() {
         return (state, worldIn, pos, tintIndex) ->
                 getTileEntity(state, worldIn, pos)
-                        .map(TileForceTrackEmitter::getColor).orElse(DEFAULT_COLOR).getHexColor();
+                        .map(TileForceTrackEmitter::getColor).orElse(defaultColor()).getHexColor();
+    }
+
+    @Override
+    public EnumColor defaultColor() {
+        return DEFAULT_COLOR;
     }
 
     @Override

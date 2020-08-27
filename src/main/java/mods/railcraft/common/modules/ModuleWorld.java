@@ -57,6 +57,7 @@ public class ModuleWorld extends RailcraftModulePayload {
 
     public ModuleWorld() {
         add(
+                RailcraftBlocks.ABYSSAL_STONE,
                 RailcraftBlocks.GENERIC,
                 RailcraftBlocks.ORE,
                 RailcraftBlocks.ORE_METAL,
@@ -78,7 +79,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                     GameRegistry.registerWorldGenerator(new GeneratorSulfur(), 100);
                 if (RailcraftConfig.isWorldGenEnabled("firestone") && EnumOreMagic.FIRESTONE.isEnabled() && RailcraftModuleManager.isModuleEnabled(ModuleMagic.class))
                     GameRegistry.registerWorldGenerator(new GeneratorFirestone(), 100);
-                if (RailcraftConfig.isWorldGenEnabled("abyssal") && EnumGeneric.STONE_ABYSSAL.isEnabled())
+                if (RailcraftConfig.isWorldGenEnabled("abyssal") && RailcraftBlocks.ABYSSAL_STONE.isEnabled())
                     GameRegistry.registerWorldGenerator(new GeneratorGeode(), 0);
                 if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumGeneric.STONE_QUARRIED.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());

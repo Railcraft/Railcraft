@@ -1,10 +1,23 @@
 {
-  "variants": {
-    "powered=true": {
-      "model": "railcraft:admin_steam_producer_on"
-    },
-    "powered=false": {
-      "model": "railcraft:admin_steam_producer_off"
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {
+      "all": "railcraft:blocks/admin_steam_producer_1"
     }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{"transform": "forge:default-block"}],
+    "powered=false": [
+      {
+        "textures": {"all": "railcraft:blocks/admin_steam_producer_1"}
+      }
+    ],
+    "powered=true": [
+      {
+        "textures": {"all": "railcraft:blocks/admin_steam_producer_0"}
+      }
+    ]
   }
 }
