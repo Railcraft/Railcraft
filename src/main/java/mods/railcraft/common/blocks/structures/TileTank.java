@@ -93,7 +93,7 @@ public abstract class TileTank extends TileLogic {
         char[][] top = {
                 {'O', 'O', 'O', 'O', 'O'},
                 {'O', 'B', 'B', 'B', 'O'},
-                {'O', 'B', 'T', 'B', 'O'},
+                {'O', 'B', 'W', 'B', 'O'},
                 {'O', 'B', 'B', 'B', 'O'},
                 {'O', 'O', 'O', 'O', 'O'}
         };
@@ -140,7 +140,7 @@ public abstract class TileTank extends TileLogic {
                     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
                     {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'B', 'O'},
-                    {'O', 'B', 'W', 'T', 'W', 'B', 'O'},
+                    {'O', 'B', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'B', 'B', 'B', 'B', 'O'},
                     {'O', 'O', 'O', 'O', 'O', 'O', 'O'}
@@ -196,7 +196,7 @@ public abstract class TileTank extends TileLogic {
                     {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
-                    {'O', 'B', 'W', 'W', 'T', 'W', 'W', 'B', 'O'},
+                    {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'B', 'B', 'B', 'B', 'B', 'B', 'O'},
@@ -260,7 +260,7 @@ public abstract class TileTank extends TileLogic {
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
-                    {'O', 'B', 'W', 'W', 'W', 'T', 'W', 'W', 'W', 'B', 'O'},
+                    {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
                     {'O', 'B', 'W', 'W', 'W', 'W', 'W', 'W', 'W', 'B', 'O'},
@@ -351,10 +351,7 @@ public abstract class TileTank extends TileLogic {
                     case 'B': // Wall
                         return getTankDefinition().isWallBlock(state);
                     case 'M': // Master
-                        if (RailcraftBlocks.GLASS.isEqual(state))
-                            return false;
-                    case 'T': // Top Block
-                        if (!getTankDefinition().isTankBlock(state))
+                        if (!getTankDefinition().isTankBlock(state) || RailcraftBlocks.GLASS.isEqual(state))
                             return false;
                         TileEntity tile = world.getTileEntity(pos);
                         if (!(tile instanceof TileLogic)) {

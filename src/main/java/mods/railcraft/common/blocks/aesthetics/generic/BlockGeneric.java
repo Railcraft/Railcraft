@@ -126,11 +126,6 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        getVariant(state).getBlockDef().updateTick(world, pos, rand);
-    }
-
-    @Override
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         getVariant(stateIn).getBlockDef().randomDisplayTick(worldIn, pos, rand);
     }
@@ -187,9 +182,7 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         return super.getSoundType(state, world, pos, entity);
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
+    private void swapBlock(World world, BlockPos pos, IBlockState state) {
         EnumGeneric generic = getVariant(state);
         IBlockState newState = null;
         switch (generic) {
@@ -241,12 +234,17 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
         }
         if (newState != null)
-            WorldPlugin.setBlockState(worldIn, pos, newState);
+            WorldPlugin.setBlockState(world, pos, newState);
+    }
 
+    @Override
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        swapBlock(world, pos, state);
         Arrays.stream(EnumFacing.VALUES).forEach(side -> {
             try {
-                IBlockState neighbor = WorldPlugin.getBlockState(worldIn, pos.offset(side));
-                neighbor.getBlock().randomTick(worldIn, pos.offset(side), neighbor, random);
+                IBlockState neighbor = WorldPlugin.getBlockState(world, pos.offset(side));
+                if (neighbor.getBlock() == this)
+                    world.scheduleUpdate(pos.offset(side), neighbor.getBlock(), 1);
             } catch (Exception ignored) {}
         });
     }

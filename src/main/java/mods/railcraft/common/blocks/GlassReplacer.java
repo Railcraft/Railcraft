@@ -53,9 +53,16 @@ public class GlassReplacer extends BlockStrengthGlass {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        super.updateTick(worldIn, pos, state, rand);
-        replace(worldIn, pos, state);
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(world, pos, state, rand);
+        replace(world, pos, state);
+        Arrays.stream(EnumFacing.VALUES).forEach(side -> {
+            try {
+                IBlockState neighbor = WorldPlugin.getBlockState(world, pos.offset(side));
+                if (neighbor.getBlock() == this)
+                    world.scheduleUpdate(pos.offset(side), neighbor.getBlock(), 1);
+            } catch (Exception ignored) {}
+        });
     }
 
     @Override
@@ -69,18 +76,6 @@ public class GlassReplacer extends BlockStrengthGlass {
     public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
         super.onBlockAdded(worldIn, pos, state);
         replace(worldIn, pos, state);
-    }
-
-    @Override
-    public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
-        super.randomTick(worldIn, pos, state, random);
-        replace(worldIn, pos, state);
-        Arrays.stream(EnumFacing.VALUES).forEach(side -> {
-            try {
-                IBlockState neighbor = WorldPlugin.getBlockState(worldIn, pos.offset(side));
-                neighbor.getBlock().randomTick(worldIn, pos.offset(side), neighbor, random);
-            } catch (Exception ignored) {}
-        });
     }
 
     private void replace(World worldIn, BlockPos pos, IBlockState state) {

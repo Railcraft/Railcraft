@@ -553,7 +553,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     }
 
     public boolean isEqual(IBlockState state) {
-        return def.block().isPresent() && def.block().get() == state;
+        return def.block().isPresent() && def.block().get() == state.getBlock();
     }
 
     @Override
