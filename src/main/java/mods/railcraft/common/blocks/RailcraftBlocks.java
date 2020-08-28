@@ -16,7 +16,6 @@ import mods.railcraft.common.blocks.aesthetics.ItemRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.brick.*;
 import mods.railcraft.common.blocks.aesthetics.concrete.BlockReinforcedConcrete;
 import mods.railcraft.common.blocks.aesthetics.generic.BlockGeneric;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.aesthetics.generic.ItemBlockGeneric;
 import mods.railcraft.common.blocks.aesthetics.glass.BlockStrengthGlass;
 import mods.railcraft.common.blocks.aesthetics.materials.BlockLantern;
@@ -108,6 +107,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     ABYSSAL_STONE(BlockDef.build("abyssal_stone", BlockRailcraftStone.class)
             .block(() -> new BlockRailcraftStone(MapColor.BLACK))
+            .defaultItem()
+    ),
+    QUARRIED_STONE(BlockDef.build("quarried_stone", BlockRailcraftStone.class)
+            .block(() -> new BlockRailcraftStone(MapColor.SNOW))
+            .defaultItem()
     ),
 
     // Bricks
@@ -121,7 +125,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     INFERNAL_BRICK(BlockDef.build("infernal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).defaultSubtypedItem()),
     PEARLIZED_BRICK(BlockDef.build("pearlized_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).defaultSubtypedItem()),
     QUARRIED_BRICK(BlockDef.build("quarried_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).defaultSubtypedItem()
-            .condition(EnumGeneric.STONE_QUARRIED)
+            .condition(QUARRIED_STONE)
     ),
     BADLANDS_BRICK(BlockDef.build("badlands_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).defaultSubtypedItem()),
     SANDY_BRICK(BlockDef.build("sandy_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).defaultSubtypedItem()),
@@ -302,13 +306,13 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     QUARRIED_BRICK_STAIRS(BlockDef.build("quarried_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.QUARRIED, BrickVariant.BRICK))
             .defaultItem()
-            .condition(EnumGeneric.STONE_QUARRIED)
+            .condition(QUARRIED_STONE)
             .condition(QUARRIED_BRICK)
     ),
     QUARRIED_PAVER_STAIRS(BlockDef.build("quarried_paver_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.QUARRIED, BrickVariant.PAVER))
             .defaultItem()
-            .condition(EnumGeneric.STONE_QUARRIED)
+            .condition(QUARRIED_STONE)
             .condition(QUARRIED_BRICK)
     ),
     SANDY_BRICK_STAIRS(BlockDef.build("sandy_brick_stairs", BlockBrickStairs.class)

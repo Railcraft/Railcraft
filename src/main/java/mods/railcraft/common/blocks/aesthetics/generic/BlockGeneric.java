@@ -14,7 +14,6 @@ import mods.railcraft.common.blocks.BlockMeta;
 import mods.railcraft.common.blocks.BlockRailcraftSubtyped;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.carts.EntityTunnelBore;
-import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -59,13 +58,9 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
 
     @Override
     public void initializeDefinition() {
-        HarvestPlugin.setStateHarvestLevel("pickaxe", 1, EnumGeneric.STONE_QUARRIED);
-
         HarvestPlugin.setStateHarvestLevel("shovel", 3, EnumGeneric.CRUSHED_OBSIDIAN);
 
         EntityTunnelBore.addMineableBlock(this);
-
-        ForestryPlugin.addBackpackItem("forestry.digger", EnumGeneric.STONE_QUARRIED.getStack());
 
         for (EnumGeneric block : EnumGeneric.VALUES) {
             MicroBlockPlugin.addMicroBlockCandidate(this, block.ordinal());
@@ -200,6 +195,9 @@ public class BlockGeneric extends BlockRailcraftSubtyped<EnumGeneric> {
         switch (generic) {
             case STONE_ABYSSAL:
                 newState = RailcraftBlocks.ABYSSAL_STONE.getDefaultState();
+                break;
+            case STONE_QUARRIED:
+                newState = RailcraftBlocks.QUARRIED_STONE.getDefaultState();
                 break;
             case BLOCK_CONCRETE:
                 newState = RailcraftBlocks.REINFORCED_CONCRETE.getDefaultState();

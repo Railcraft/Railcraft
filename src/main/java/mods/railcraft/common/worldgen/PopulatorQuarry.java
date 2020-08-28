@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.worldgen;
 
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.math.BlockPos;
@@ -28,7 +28,7 @@ public final class PopulatorQuarry extends Populator {
     //    public static final EventType EVENT_TYPE = EnumHelper.addEnum(EventType.class, "RAILCRAFT_QUARRY", new Class[0]);
     public static final int GEN_HEIGHT = 50;
     private static PopulatorQuarry instance;
-    private final WorldGenQuarry quarry = new WorldGenQuarry(EnumGeneric.STONE_QUARRIED.getDefaultState());
+    private final WorldGenQuarry quarry = new WorldGenQuarry(RailcraftBlocks.QUARRIED_STONE.getDefaultState());
 
     public static PopulatorQuarry instance() {
         if (instance == null) {

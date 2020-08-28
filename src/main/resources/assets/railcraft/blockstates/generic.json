@@ -10,8 +10,8 @@
     "variant": {
       "coke": {"textures": {"all": "railcraft:blocks/coke_block"}},
       "crushed_obsidian": {"textures": {"all": "railcraft:blocks/crushed_obsidian"}},
-      "stone_abyssal": {"textures": {"all": "railcraft:blocks/stone_abyssal"}},
-      "stone_quarried": {"textures": {"all": "railcraft:blocks/stone_quarried"}},
+      "stone_abyssal": {"textures": {"all": "railcraft:blocks/abyssal_stone"}},
+      "stone_quarried": {"textures": {"all": "railcraft:blocks/quarried_stone"}},
       "creosote": {"textures": {"all": "railcraft:blocks/creosote_block"}},
       "concrete": {"textures": {"all": "railcraft:blocks/concrete"}},
       "copper": {"textures": {"all": "railcraft:blocks/metal_copper"}},

@@ -44,6 +44,7 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
     CRUSHED_OBSIDIAN(ModuleResources.class, "crushed_obsidian", new CrushedObsidian(), 2f, 45f),
     @Deprecated
     STONE_ABYSSAL(ModuleWorld.class, "stone_abyssal", new SimpleCube(), 2f, 10f),
+    @Deprecated
     STONE_QUARRIED(ModuleWorld.class, "stone_quarried", new SimpleCube(), 2f, 10f),
     @Deprecated
     BLOCK_SILVER(ModuleResources.class, "silver", new SimpleCube(), 3f, 10f),
@@ -63,7 +64,6 @@ public enum EnumGeneric implements IVariantEnumBlock<EnumGeneric> {
 
     static {
         creativeList.add(CRUSHED_OBSIDIAN);
-        creativeList.add(STONE_QUARRIED);
     }
 
     private final SimpleCube blockDef;

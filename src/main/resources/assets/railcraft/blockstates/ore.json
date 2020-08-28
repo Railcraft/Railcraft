@@ -9,9 +9,9 @@
     "variant": {
       "sulfur": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_sulfur"}},
       "saltpeter": {"textures": {"stone": "blocks/sandstone_bottom", "ore": "railcraft:blocks/ore_saltpeter"}},
-      "dark_diamond": {"textures": {"stone": "railcraft:blocks/stone_abyssal", "ore": "railcraft:blocks/ore_dark_diamond"}},
-      "dark_emerald": {"textures": {"stone": "railcraft:blocks/stone_abyssal", "ore": "railcraft:blocks/ore_dark_emerald"}},
-      "dark_lapis": {"textures": {"stone": "railcraft:blocks/stone_abyssal", "ore": "railcraft:blocks/ore_dark_lapis"}},
+      "dark_diamond": {"textures": {"stone": "railcraft:blocks/abyssal_stone", "ore": "railcraft:blocks/ore_dark_diamond"}},
+      "dark_emerald": {"textures": {"stone": "railcraft:blocks/abyssal_stone", "ore": "railcraft:blocks/ore_dark_emerald"}},
+      "dark_lapis": {"textures": {"stone": "railcraft:blocks/abyssal_stone", "ore": "railcraft:blocks/ore_dark_lapis"}},
       "poor_iron": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_iron"}},
       "poor_gold": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_gold"}},
       "poor_copper": {"textures": {"stone": "blocks/stone", "ore": "railcraft:blocks/ore_poor_copper"}},

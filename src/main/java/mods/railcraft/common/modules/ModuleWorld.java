@@ -11,7 +11,6 @@ package mods.railcraft.common.modules;
 
 import mods.railcraft.api.core.RailcraftModule;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.aesthetics.generic.EnumGeneric;
 import mods.railcraft.common.blocks.ore.EnumOre;
 import mods.railcraft.common.blocks.ore.EnumOreMagic;
 import mods.railcraft.common.core.Railcraft;
@@ -58,6 +57,7 @@ public class ModuleWorld extends RailcraftModulePayload {
     public ModuleWorld() {
         add(
                 RailcraftBlocks.ABYSSAL_STONE,
+                RailcraftBlocks.QUARRIED_STONE,
                 RailcraftBlocks.GENERIC,
                 RailcraftBlocks.ORE,
                 RailcraftBlocks.ORE_METAL,
@@ -81,7 +81,7 @@ public class ModuleWorld extends RailcraftModulePayload {
                     GameRegistry.registerWorldGenerator(new GeneratorFirestone(), 100);
                 if (RailcraftConfig.isWorldGenEnabled("abyssal") && RailcraftBlocks.ABYSSAL_STONE.isEnabled())
                     GameRegistry.registerWorldGenerator(new GeneratorGeode(), 0);
-                if (RailcraftConfig.isWorldGenEnabled("quarried") && EnumGeneric.STONE_QUARRIED.isEnabled())
+                if (RailcraftConfig.isWorldGenEnabled("quarried") && RailcraftBlocks.QUARRIED_STONE.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());
 
                 oreConfigFolder = new File(Railcraft.instance.getConfigFolder(), "ores");

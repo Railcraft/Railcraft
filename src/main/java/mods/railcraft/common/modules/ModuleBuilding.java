@@ -19,7 +19,9 @@ import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
 
-@RailcraftModule(value = "railcraft:building", description = "glass, posts, bricks, stairs, slabs, lanterns, walls")
+@RailcraftModule(value = "railcraft:building",
+        softDependencyClasses = ModuleWorld.class,
+        description = "glass, posts, bricks, stairs, slabs, lanterns, walls")
 public class ModuleBuilding extends RailcraftModulePayload {
 
     public ModuleBuilding() {
