@@ -128,7 +128,26 @@ public class StructureLogic extends Logic {
         return currentPattern;
     }
 
-    private void setPattern(@Nullable StructurePattern pattern, @Nullable BlockPos posInPattern) {
+    private void changePattern(@Nullable StructurePattern pattern, @Nullable BlockPos posInPattern) {
+        setPatternState(pattern, posInPattern);
+
+        updatingNeighbors = true;
+        sendUpdateToClient();
+        adapter.updateModels();
+        if (theWorld() == null || Game.isClient(theWorldAsserted())) return;
+        if (!isMaster) {
+            functionalLogic.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
+        }
+        boolean isComplete = getPattern() != null;
+        Object[] attachedData = isComplete ? getPattern().getAttachedData() : new Object[]{};
+        onStructureChanged(isComplete, isMaster, attachedData);
+        if (isMaster)
+            functionalLogic.onStructureChanged(isComplete, isMaster, attachedData);
+        tile.notifyBlocksOfNeighborChange();
+        updatingNeighbors = false;
+    }
+
+    private void setPatternState(@Nullable StructurePattern pattern, @Nullable BlockPos posInPattern) {
         this.currentPattern = pattern;
         if (!Objects.equals(this.posInPattern, posInPattern)) {
             this.posInPattern = posInPattern == null ? null : posInPattern.toImmutable();
@@ -147,25 +166,6 @@ public class StructureLogic extends Logic {
             state = StructureState.INVALID;
         else
             state = StructureState.VALID;
-
-        onPatternChanged();
-        sendUpdateToClient();
-    }
-
-    private void onPatternChanged() {
-        updatingNeighbors = true;
-        adapter.updateModels();
-        if (theWorld() == null || !Game.isHost(theWorldAsserted())) return;
-        if (!isMaster) {
-            functionalLogic.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
-        }
-        boolean isComplete = getPattern() != null;
-        Object[] attachedData = isComplete ? getPattern().getAttachedData() : new Object[]{};
-        onStructureChanged(isComplete, isMaster, attachedData);
-        if (isMaster)
-            functionalLogic.onStructureChanged(isComplete, isMaster, attachedData);
-        tile.notifyBlocksOfNeighborChange();
-        updatingNeighbors = false;
     }
 
     public boolean isUpdatingNeighbors() {
@@ -253,7 +253,7 @@ public class StructureLogic extends Logic {
                     }
                 }
             }
-            newComponents.forEach((pos, logic) -> logic.setPattern(pattern, pos));
+            newComponents.forEach((pos, logic) -> logic.changePattern(pattern, pos));
 
             MinecraftForge.EVENT_BUS.post(new MultiBlockEvent.Form(tile));
         } else if (patternStates.containsKey(StructurePattern.State.NOT_LOADED)) {
@@ -270,7 +270,7 @@ public class StructureLogic extends Logic {
 
         old.removeAll(components);
         old.stream().filter(t -> !t.isInvalid()).map(tileToLogic())
-                .flatMap(Streams.unwrap()).forEach(t -> t.setPattern(null, null));
+                .flatMap(Streams.unwrap()).forEach(t -> t.changePattern(null, null));
     }
 
     protected void onMasterReset() {
@@ -400,7 +400,7 @@ public class StructureLogic extends Logic {
             //NOOP
         }
         BlockPos pos = NBTPlugin.readBlockPos(data, "posInPattern");
-        setPattern(pat, pos);
+        setPatternState(pat, pos);
     }
 
     @Override
@@ -428,7 +428,7 @@ public class StructureLogic extends Logic {
             StructurePattern pat = patterns.get(patternIndex);
 
             BlockPos posInPattern = data.readBlockPos();
-            setPattern(pat, posInPattern);
+            changePattern(pat, posInPattern);
 
             isMaster = pat.isMasterPosition(posInPattern);
 
@@ -437,7 +437,7 @@ public class StructureLogic extends Logic {
                 requestPacket = true;
         } else {
             isMaster = false;
-            setPattern(null, null);
+            changePattern(null, null);
         }
 
         super.readPacketData(data);
