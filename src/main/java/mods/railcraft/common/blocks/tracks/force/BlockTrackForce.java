@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -54,7 +54,7 @@ public final class BlockTrackForce extends BlockTrackTile<TileTrackForce> implem
 
     @Override
     public TrackType getTrackType(IBlockAccess world, BlockPos pos) {
-        return TrackTypes.IRON.getTrackType();
+        return TrackTypes.HIGH_SPEED.getTrackType();
     }
 
     @Override
