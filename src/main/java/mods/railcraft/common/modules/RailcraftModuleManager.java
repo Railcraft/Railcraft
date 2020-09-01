@@ -36,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.Stream;
 
 public final class RailcraftModuleManager {
 
@@ -281,6 +282,15 @@ public final class RailcraftModuleManager {
                 + "\n"
                 + moduleName + "\n"
                 + "-- " + annotation.description() + "\n\n");
+        if (annotation.dependencies().length > 0 || annotation.dependencyClasses().length > 0) {
+            desc.append("depends on:\n");
+            Stream.concat(
+                    Arrays.stream(annotation.dependencies()),
+                    Arrays.stream(annotation.dependencyClasses()).map(RailcraftModuleManager::getModuleName)
+            )
+                    .forEach(name -> desc.append("--  ").append(name).append("\n"));
+            desc.append("\n");
+        }
         if (m instanceof RailcraftModulePayload) {
             desc.append("items/blocks/entities/etc added by this module:\n");
             for (IRailcraftObjectContainer<?> object : ((RailcraftModulePayload) m).getObjects())
