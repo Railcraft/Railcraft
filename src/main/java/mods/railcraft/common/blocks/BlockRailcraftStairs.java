@@ -43,7 +43,7 @@ public class BlockRailcraftStairs extends BlockStairs implements IRailcraftBlock
     }
 
     public final ItemStack getBaseStack() {
-        return getBaseStack(0);
+        return getBaseStack(1);
     }
 
     public ItemStack getBaseStack(int size) {

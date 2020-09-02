@@ -29,24 +29,13 @@ import java.util.Locale;
  */
 @BlockMeta.Variant(Variant.class)
 public abstract class BlockSimpleSlab extends BlockRailcraftSlab<Variant> {
-    private final BlockRailcraft baseBlock;
+    protected final BlockRailcraft baseBlock;
 
     protected BlockSimpleSlab(IBlockState baseState) {
         super(baseState);
         this.baseBlock = (BlockRailcraft) baseState.getBlock();
 
         setDefaultState(getDefaultState().withProperty(getVariantEnumProperty(), Variant.DEFAULT));
-    }
-
-    @Override
-    public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(getStack(6),
-                "III",
-                'I', baseBlock);
-        CraftingPlugin.addShapedRecipe(baseBlock.getStack(2),
-                "I",
-                "I",
-                'I', getStack());
     }
 
     @Override
@@ -73,6 +62,17 @@ public abstract class BlockSimpleSlab extends BlockRailcraftSlab<Variant> {
         @Override
         public boolean isDouble() {
             return false;
+        }
+
+        @Override
+        public void defineRecipes() {
+            CraftingPlugin.addShapedRecipe(getStack(6),
+                    "III",
+                    'I', baseBlock);
+            CraftingPlugin.addShapedRecipe(baseBlock.getStack(2),
+                    "I",
+                    "I",
+                    'I', getStack());
         }
     }
 

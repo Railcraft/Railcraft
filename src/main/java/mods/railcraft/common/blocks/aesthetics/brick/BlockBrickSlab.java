@@ -33,21 +33,6 @@ public abstract class BlockBrickSlab extends BlockRailcraftSlab<SlabVariant> {
         this.brickTheme = brickTheme;
     }
 
-    @Override
-    public void defineRecipes() {
-        for (SlabVariant variant : SlabVariant.VALUES) {
-            CraftingPlugin.addShapedRecipe(getStack(6, variant),
-                    "III",
-                    'I', brickTheme, variant.brickVariant);
-            CraftingPlugin.addShapedRecipe(brickTheme.getStack(2, variant.brickVariant),
-                    "I",
-                    "I",
-                    'I', getStack(variant));
-            RockCrusherCrafter.INSTANCE.makeRecipe(getStack(variant))
-                    .addOutput(brickTheme.getStack(BrickVariant.COBBLE), 0.5F).register();
-        }
-    }
-
     public static class Double extends BlockBrickSlab {
         public Double(BrickTheme brickTheme) {
             super(brickTheme);
@@ -67,6 +52,21 @@ public abstract class BlockBrickSlab extends BlockRailcraftSlab<SlabVariant> {
         @Override
         public boolean isDouble() {
             return false;
+        }
+
+        @Override
+        public void defineRecipes() {
+            for (SlabVariant variant : SlabVariant.VALUES) {
+                CraftingPlugin.addShapedRecipe(getStack(6, variant),
+                        "III",
+                        'I', brickTheme, variant.brickVariant);
+                CraftingPlugin.addShapedRecipe(brickTheme.getStack(2, variant.brickVariant),
+                        "I",
+                        "I",
+                        'I', getStack(variant));
+                RockCrusherCrafter.INSTANCE.makeRecipe(getStack(variant))
+                        .addOutput(brickTheme.getStack(BrickVariant.COBBLE), 0.5F).register();
+            }
         }
     }
 
