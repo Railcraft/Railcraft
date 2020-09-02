@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -63,6 +63,7 @@ public final class ContainerBlastFurnace extends ContainerCrafter {
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int data) {
+        super.updateProgressBar(id, data);
         switch (id) {
             case 0:
                 logic.burnTime = data;

@@ -269,6 +269,7 @@ public class RailcraftConfig {
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
         loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
         loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
+        loadRecipeProperty("railcraft.blastFurnace", "bucket", true, "change to '{t}=false' to disable the bucket to steel recipe");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
         loadRecipeProperty("railcraft.misc", "gunpowder", true, "change to '{t}=false' to disable the sulfur, saltpeter, charcoal dust recipe for gunpowder");
         creosoteTorchOutput = configMain.getInt("creosote.torches", CAT_RECIPES + ".railcraft.misc", 6, 0, 16, "set the output of the creosote and wool recipe for torches, setting to 0 will disable'\nmin=0, default=6, max=16");
@@ -465,6 +466,11 @@ public class RailcraftConfig {
         if (recipe == null)
             throw new IllegalArgumentException("Railcraft Recipe Config Entry does not exist: " + tag);
         return recipe;
+    }
+
+    public static void ifRecipeDefined(String tag, Runnable action) {
+        if (getRecipeConfig(tag))
+            action.run();
     }
 
     public static boolean vanillaTrackRecipes() {
