@@ -12,6 +12,30 @@
     <item name='net.minecraft.item.Item net.minecraftforge.common.capabilities.ICapabilityProvider initCapabilities(net.minecraft.item.ItemStack, net.minecraft.nbt.NBTTagCompound) 1'>
         <annotation name='org.jetbrains.annotations.Nullable'/>
     </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.block.Block) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.block.Block, int) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.block.Block, int, int) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.item.Item) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.item.Item, int) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.item.Item, int, int) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack ItemStack(net.minecraft.item.Item, int, int, net.minecraft.nbt.NBTTagCompound) 0'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
+    <item name='net.minecraft.item.ItemStack item'>
+        <annotation name='org.jetbrains.annotations.Nullable'/>
+    </item>
     <item name='net.minecraft.item.ItemStack net.minecraft.item.ItemStack loadItemStackFromNBT(net.minecraft.nbt.NBTTagCompound)'>
         <annotation name='javax.annotation.Nullable'/>
     </item>
