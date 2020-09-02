@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,10 +28,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.MessageFormatMessage;
-import org.apache.logging.log4j.message.SimpleMessage;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -152,27 +153,32 @@ public final class Game {
         }
 
         @Override
-        public void trace(Level level, Message message) {
-            trace(level, 5, message);
+        public void trace(Level level, Message message, Class<?>... ignore) {
+            trace(level, 5, message, ignore);
         }
 
         @Override
         public void trace(Level level, int lines, String msg, Object... args) {
-            msg(level, getMessage(msg, args));
-            trace(level, lines, 2, Thread.currentThread().getStackTrace());
+            trace(level, lines, getMessage(msg, args));
         }
 
         @Override
-        public void trace(Level level, int lines, Message message) {
+        public void trace(Level level, int lines, Message message, Class<?>... ignore) {
             msg(level, message);
-            trace(level, lines, 2, Thread.currentThread().getStackTrace());
+            trace(level, lines, Thread.currentThread().getStackTrace(), ignore);
         }
 
-        @Override
-        public void trace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {
-            for (int i = skipLines; i < stackTrace.length && i < skipLines + lines; i++) {
-                msg(level, stackTrace[i].toString());
+        private void trace(Level level, int lines, StackTraceElement[] stackTrace, Class<?>... ignore) {
+            Set<String> ignoredClasses = new HashSet<>();
+            ignoredClasses.add(getClass().getName());
+            ignoredClasses.add(Thread.class.getName());
+            for (Class<?> i : ignore) {
+                ignoredClasses.add(i.getName());
             }
+            Arrays.stream(stackTrace)
+                    .filter(line -> !ignoredClasses.contains(line.getClassName()))
+                    .limit(lines)
+                    .forEach(line -> msg(level, line.toString()));
         }
 
         @Override
@@ -188,8 +194,14 @@ public final class Game {
         @Override
         public void throwable(Level level, int lines, Throwable error, String msg, Object... args) {
             msg(level, msg, args);
-            msg(level, new SimpleMessage(error.toString()));
-            trace(level, lines, 0, error.getStackTrace());
+            msg(level, error.toString());
+            trace(level, lines, error.getStackTrace());
+        }
+
+        @Override
+        public void throwable(Level level, int lines, Throwable error, Class<?>... ignore) {
+            msg(level, error.getMessage());
+            trace(level, lines, error.getStackTrace(), ignore);
         }
 
         @Override
@@ -232,19 +244,19 @@ public final class Game {
 
         default void trace(Level level, String msg, Object... args) {}
 
-        default void trace(Level level, Message message) {}
+        default void trace(Level level, Message message, Class<?>... ignore) {}
 
         default void trace(Level level, int lines, String msg, Object... args) {}
 
-        default void trace(Level level, int lines, Message message) {}
-
-        default void trace(Level level, int lines, int skipLines, StackTraceElement[] stackTrace) {}
+        default void trace(Level level, int lines, Message message, Class<?>... ignore) {}
 
         default void throwable(String msg, Throwable error, Object... args) {}
 
         default void throwable(String msg, int lines, Throwable error, Object... args) {}
 
         default void throwable(Level level, int lines, Throwable error, String msg, Object... args) {}
+
+        default void throwable(Level level, int lines, Throwable error, Class<?>... ignore) {}
 
         default void debug(String msg, Object... args) {}
 

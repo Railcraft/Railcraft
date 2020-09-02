@@ -135,7 +135,7 @@ public class CraftingPlugin {
             name = checkName(name, output, recipeArray);
             recipe = makeShapedRecipe(name, group, output, recipeArray);
         } catch (InvalidRecipeException ex) {
-            Game.log().trace(Level.WARN, ex.getRawMessage());
+            Game.log().throwable(Level.WARN, 1, ex, CraftingPlugin.class);
             return;
         }
         addRecipe(name, recipe);
@@ -156,7 +156,7 @@ public class CraftingPlugin {
             name = checkName(name, output, recipeArray);
             recipe = makeShapelessRecipe(name, group, output, recipeArray);
         } catch (InvalidRecipeException ex) {
-            Game.log().msg(Level.WARN, ex.getRawMessage());
+            Game.log().throwable(Level.WARN, 1, ex, CraftingPlugin.class);
             return;
         }
         addRecipe(name, recipe);

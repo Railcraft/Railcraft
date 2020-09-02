@@ -8,17 +8,18 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.util.crafting;
+package mods.railcraft.common.util.misc;
 
-import mods.railcraft.common.util.misc.RailcraftException;
+import org.apache.logging.log4j.message.MessageFormatMessage;
 
 /**
- * Created by CovertJaguar on 4/7/2016 for Railcraft.
+ * Created by CovertJaguar on 9/2/2020 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InvalidRecipeException extends RailcraftException {
-    public InvalidRecipeException(String messagePattern, Object... arguments) {
-        super(messagePattern, arguments);
+public class RailcraftException extends Exception {
+
+    public RailcraftException(final String messagePattern, final Object... arguments) {
+        super(new MessageFormatMessage(messagePattern, arguments).getFormattedMessage());
     }
 }
