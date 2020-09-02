@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2020
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -67,9 +67,7 @@ public class ModelManager {
     public static void registerComplexItemModel(Item item, ItemMeshDefinition meshDefinition, ModelResourceLocation... locations) {
         Game.log("models").msg(Level.INFO, "Registering complex item model: {0} locations:{1}", item.getRegistryName(), Arrays.toString(locations));
         ModelLoader.setCustomMeshDefinition(item, meshDefinition);
-        for (ModelResourceLocation location : locations) {
-            ModelBakery.registerItemVariants(item, location);
-        }
+        ModelBakery.registerItemVariants(item, locations);
     }
 
     public static IModel getModel(ResourceLocation location) {
