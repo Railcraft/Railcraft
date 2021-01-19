@@ -23,6 +23,9 @@ public class ModuleSteam extends RailcraftModulePayload {
 
     public ModuleSteam() {
         add(
+                RailcraftBlocks.ENGINE_HOBBY,
+                RailcraftBlocks.ENGINE_LOW,
+                RailcraftBlocks.ENGINE_HIGH,
                 RailcraftBlocks.EQUIPMENT,
                 RailcraftBlocks.ADMIN_STEAM_PRODUCER,
                 RailcraftBlocks.BOILER_FIREBOX_FLUID,

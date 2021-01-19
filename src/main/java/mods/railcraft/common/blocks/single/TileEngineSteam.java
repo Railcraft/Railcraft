@@ -170,13 +170,13 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
 
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return (getOrientation() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) || super.hasCapability(capability, facing);
+        return getFacing() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (getOrientation() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+        if (getFacing() != facing && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
             return (T) getTankManager();
         return super.getCapability(capability, facing);
     }

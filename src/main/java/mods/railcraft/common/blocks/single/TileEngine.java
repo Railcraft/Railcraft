@@ -21,6 +21,7 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -44,8 +45,7 @@ import static net.minecraftforge.energy.CapabilityEnergy.ENERGY;
 public abstract class TileEngine extends TileRailcraftTicking implements ITileRotate, ITileNonSolid, ISmartTile {
     //TODO: Convert to MJ
     public float currentOutput;
-    private EnumFacing direction = EnumFacing.UP;
-    private float pistonProgress = 0.25F;
+    private float pistonProgress = 0;
     private int pistonStage;
     private boolean powered;
     private boolean isActive;
@@ -55,18 +55,15 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     protected final EnergyStorage storage = new EnergyStorage(maxEnergy(), maxEnergyReceived(), maxEnergyExtracted());
     public final FEEnergyIndicator rfIndicator = new FEEnergyIndicator(storage);
 
-    protected TileEngine() {
-    }
+    protected TileEngine() {}
 
     public float getCurrentOutput() {
         return currentOutput;
     }
 
-    protected void playSoundIn() {
-    }
+    protected void playSoundIn() {}
 
-    protected void playSoundOut() {
-    }
+    protected void playSoundOut() {}
 
     @Override
     public void update() {
@@ -97,6 +94,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
             if (storage.getEnergyStored() > 1)
                 storage.extractEnergy(1, false);
 
+        EnumFacing direction = getFacing();
         if (getEnergyStage() == EnergyStage.OVERHEAT)
             overheat();
         else if (pistonStage != 0) {
@@ -104,7 +102,6 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 
             if (pistonProgress > 0.5 && pistonStage == 1) {
                 pistonStage = 2;
-
                 TileEntity tile = tileCache.getTileOnSide(direction);
 
                 if (EnergyPlugin.canTileReceivePower(tile, direction.getOpposite())) {
@@ -213,13 +210,14 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     }
 
     public boolean switchOrientation() {
+        EnumFacing direction = getFacing();
         for (int i = direction.ordinal() + 1; i < direction.ordinal() + 6; ++i) {
             EnumFacing dir = EnumFacing.byIndex(i % 6);
 
             TileEntity tile = tileCache.getTileOnSide(dir);
 
             if (EnergyPlugin.canTileReceivePower(tile, dir.getOpposite())) {
-                direction = dir;
+                setFacing(dir);
                 notifyBlocksOfNeighborChange();
                 sendUpdateToClient();
                 if (Game.isClient(world))
@@ -230,13 +228,9 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
         return false;
     }
 
-    public EnumFacing getOrientation() {
-        return direction;
-    }
-
     @Override
     public BlockFaceShape getShape(EnumFacing side) {
-        return direction.getOpposite() == side ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+        return getFacing().getOpposite() == side ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
 
     public double getEnergyLevel() {
@@ -260,7 +254,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     }
 
     public final EnergyStage getEnergyStage() {
-        if (Game.isHost(world)) {
+        if (hasWorld() && Game.isHost(world)) {
             if (energyStage == EnergyStage.OVERHEAT)
                 return energyStage;
             EnergyStage newStage = computeEnergyStage();
@@ -322,7 +316,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 //        return extracted;
 //    }
     public float getProgress() {
-        return pistonProgress;
+        return hasWorld() ? pistonProgress : 0.25F;
     }
 
     public abstract int maxEnergy();
@@ -335,9 +329,8 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     public NBTTagCompound writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
 
-        data.setByte("direction", (byte) direction.ordinal());
         data.setBoolean("powered", powered);
-        data.setTag("energy", CapabilityEnergy.ENERGY.writeNBT(storage, direction));
+        data.setTag("energy", CapabilityEnergy.ENERGY.writeNBT(storage, getFacing()));
         data.setFloat("currentOutput", currentOutput);
         data.setByte("energyStage", (byte) energyStage.ordinal());
         return data;
@@ -347,10 +340,9 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
 
-        direction = EnumFacing.byIndex(data.getByte("direction"));
         powered = data.getBoolean("powered");
         if (data.hasKey("energy"))
-            CapabilityEnergy.ENERGY.readNBT(storage, direction, data.getTag("energy"));
+            CapabilityEnergy.ENERGY.readNBT(storage, getFacing(), data.getTag("energy"));
         currentOutput = data.getFloat("currentOutput");
         energyStage = EnergyStage.fromOrdinal(data.getByte("energyStage"));
     }
@@ -359,7 +351,6 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeByte(direction.ordinal());
         data.writeByte(getEnergyStage().ordinal());
         data.writeBoolean(isActive);
     }
@@ -368,19 +359,23 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     public void readPacketData(RailcraftInputStream data) throws IOException {
         super.readPacketData(data);
 
-        direction = EnumFacing.byIndex(data.readByte());
         energyStage = EnergyStage.fromOrdinal(data.readByte());
         isActive = data.readBoolean();
     }
 
     @Override
     public EnumFacing getFacing() {
-        return direction;
+        if (hasWorld()) {
+            IBlockState state = getBlockState();
+            if (state.getProperties().containsKey(BlockEngine.FACING)) return state.getValue(BlockEngine.FACING);
+        }
+        return EnumFacing.UP;
     }
 
     @Override
     public void setFacing(EnumFacing facing) {
-        direction = facing;
+        if (hasWorld())
+            world.setBlockState(pos, getBlockState().withProperty(BlockEngine.FACING, facing));
     }
 
     @Override
@@ -390,7 +385,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        return capability == ENERGY && facing == direction ? ENERGY.cast(EnergyPlugin.DUMMY_STORAGE) : super.getCapability(capability, facing);
+        return capability == ENERGY && facing == getFacing() ? ENERGY.cast(EnergyPlugin.DUMMY_STORAGE) : super.getCapability(capability, facing);
     }
 
     @Override

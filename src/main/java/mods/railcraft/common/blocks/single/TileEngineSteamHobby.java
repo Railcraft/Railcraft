@@ -221,7 +221,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        if (getOrientation() == side)
+        if (getFacing() == side)
             return NO_SLOTS;
         return SLOTS;
     }
