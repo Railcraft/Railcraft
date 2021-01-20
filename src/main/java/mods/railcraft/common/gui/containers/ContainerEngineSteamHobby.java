@@ -34,7 +34,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         addWidget(new FluidGaugeWidget(tile.getTankManager().get(1), 107, 23, 176, 0, 16, 47));
 
         addWidget(new IndicatorWidget(tile.boiler.heatIndicator, 40, 25, 176, 61, 6, 43));
-        addWidget(new IndicatorWidget(tile.rfIndicator, 94, 25, 182, 61, 6, 43));
+        addWidget(new IndicatorWidget(tile.mjIndicator, 94, 25, 182, 61, 6, 43));
 
         addSlot(new SlotRailcraft(tile, 0, 62, 39)); // Fuel
         addSlot(new SlotRailcraft(tile, 1, 143, 21)); // Water
@@ -48,7 +48,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         super.addListener(listener);
         listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
         listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        listener.sendWindowProperty(this, 12, Math.round(tile.currentOutput * 100));
+        listener.sendWindowProperty(this, 12, Math.round(tile.getCurrentOutput() * 100));
     }
 
     @Override
@@ -62,13 +62,13 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
             if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
                 crafter.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
-            if (lastOutput != tile.currentOutput)
-                crafter.sendWindowProperty(this, 12, Math.round(tile.currentOutput * 100));
+            if (lastOutput != tile.getCurrentOutput())
+                crafter.sendWindowProperty(this, 12, Math.round(tile.getCurrentOutput() * 100));
         }
 
         this.lastBurnTime = tile.boiler.burnTime;
         this.lastItemBurnTime = tile.boiler.currentItemBurnTime;
-        this.lastOutput = tile.currentOutput;
+        this.lastOutput = tile.getCurrentOutput();
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
                 tile.boiler.currentItemBurnTime = value;
                 break;
             case 12:
-                tile.currentOutput = value / 100f;
+                tile.currentOutput = value / 100D;
                 break;
         }
     }

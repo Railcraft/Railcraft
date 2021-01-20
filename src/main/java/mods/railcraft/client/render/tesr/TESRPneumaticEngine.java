@@ -49,8 +49,8 @@ public final class TESRPneumaticEngine extends TileEntitySpecialRenderer<TileEng
     }
 
     @Override
-    public void render(@Nullable TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        if (engine != null) render(engine.getEnergyStage(), engine.getProgress(), engine.getFacing(), x, y, z);
+    public void render(TileEngine engine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        render(engine.getEnergyStage(), engine.getProgress(), engine.getFacing(), x, y, z);
     }
 
     private void render(EnergyStage stage, float progress, EnumFacing orientation, double x, double y, double z) {

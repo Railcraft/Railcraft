@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2021
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -7,36 +7,30 @@
  permission unless otherwise specified on the
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
+
 package mods.railcraft.common.gui.widgets;
 
-import net.minecraftforge.energy.IEnergyStorage;
+import buildcraft.api.mj.MjAPI;
+import buildcraft.api.mj.MjBattery;
 
-/**
- * @author CovertJaguar <http://www.railcraft.info/>
- */
-public class FEEnergyIndicator extends IndicatorController {
+public class MJEnergyIndicator extends IndicatorController {
 
-    protected final IEnergyStorage energyStorage;
-    protected int energy;
+    protected final MjBattery energyStorage;
+    protected long energy;
 
-    public FEEnergyIndicator(IEnergyStorage energyStorage) {
+    public MJEnergyIndicator(MjBattery energyStorage) {
         this.energyStorage = energyStorage;
     }
 
     @Override
-    protected void refreshToolTip() {
-        tip.text = String.format("%,d / %,d FE", energy, energyStorage.getMaxEnergyStored());
-    }
-
-    @Override
     public double getMeasurement() {
-        double e = Math.min(energy, energyStorage.getMaxEnergyStored());
-        return e / energyStorage.getMaxEnergyStored();
+        double e = Math.min(energy, energyStorage.getCapacity());
+        return e / energyStorage.getCapacity();
     }
 
     @Override
     public void setClientValue(double value) {
-        energy = (int) value;
+        energy = Math.round(value);
     }
 
     @Override
@@ -46,6 +40,11 @@ public class FEEnergyIndicator extends IndicatorController {
 
     @Override
     public double getServerValue() {
-        return energyStorage.getEnergyStored();
+        return energyStorage.getStored();
+    }
+
+    @Override
+    protected void refreshToolTip() {
+        tip.text = String.format("%,d / %,d MJ", energy / MjAPI.MJ, energyStorage.getCapacity() / MjAPI.MJ);
     }
 }

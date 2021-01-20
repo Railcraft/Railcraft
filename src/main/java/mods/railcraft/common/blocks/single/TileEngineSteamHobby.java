@@ -105,7 +105,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public int getMaxOutputRF() {
+    public long getMaxOutputMJ() {
         return OUTPUT_RF;
     }
 
@@ -183,12 +183,12 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public int maxEnergy() {
+    public long maxEnergy() {
         return 100000;
     }
 
     @Override
-    public int maxEnergyReceived() {
+    public long maxEnergyReceived() {
         return 3000;
     }
 

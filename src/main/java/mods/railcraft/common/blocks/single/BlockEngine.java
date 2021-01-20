@@ -77,6 +77,11 @@ public class BlockEngine extends BlockAnimated<TileEngine> {
     }
 
     @Override
+    public int damageDropped(IBlockState state) {
+        return 0;
+    }
+
+    @Override
     @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));

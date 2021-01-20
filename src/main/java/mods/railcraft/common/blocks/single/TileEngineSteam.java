@@ -98,7 +98,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
 
     @Override
     public void burn() {
-        int output = 0;
+        long output = 0;
 
         if (getEnergyStage() != EnergyStage.OVERHEAT) {
             if (isPowered()) {
@@ -116,7 +116,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
             if (isPowered()) {
                 if (steamUsed >= steamUsedPerTick()) {
                     steamUsed -= steamUsedPerTick();
-                    output = getMaxOutputRF();
+                    output = getMaxOutputMJ();
                     addEnergy(output);
                 }
             } else {
@@ -125,7 +125,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
             }
         }
 
-        currentOutput = (currentOutput * 74 + output) / 75f;
+        currentOutput = (currentOutput * 74D + output) / 75D;
     }
 
     @Override
@@ -139,11 +139,11 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
     }
 
     @Override
-    public final int maxEnergyExtracted() {
-        return getMaxOutputRF() * 8;
+    public final long maxEnergyExtracted() {
+        return getMaxOutputMJ() * 8;
     }
 
-    public abstract int getMaxOutputRF();
+    public abstract long getMaxOutputMJ();
 
     public abstract int steamUsedPerTick();
 
