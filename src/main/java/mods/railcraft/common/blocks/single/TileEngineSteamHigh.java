@@ -11,7 +11,6 @@ package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.mj.MjAPI;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.steam.SteamConstants;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -19,6 +18,9 @@ import mods.railcraft.common.util.steam.SteamConstants;
 public class TileEngineSteamHigh extends TileEngineSteam {
 
     private static final long OUTPUT_MJ = 8 * MjAPI.MJ;
+    private static final long CAPACITY = 30000 * MjAPI.MJ;
+    private static final long RECEIVE = 1200 * MjAPI.MJ;
+    private static final long EXTRACT = 160 * MjAPI.MJ;
 
     @Override
     public EnumGui getGui() {
@@ -37,11 +39,16 @@ public class TileEngineSteamHigh extends TileEngineSteam {
 
     @Override
     public long maxEnergy() {
-        return 30000 * MjAPI.MJ;
+        return CAPACITY;
     }
 
     @Override
     public long maxEnergyReceived() {
-        return 1200 * MjAPI.MJ;
+        return RECEIVE;
+    }
+
+    @Override
+    public long maxEnergyExtracted() {
+        return EXTRACT;
     }
 }

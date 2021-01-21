@@ -12,13 +12,14 @@ package mods.railcraft.client.gui;
 import buildcraft.api.mj.MjAPI;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.gui.containers.ContainerEngineSteam;
+import mods.railcraft.common.plugins.buildcraft.MjPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
 import java.text.DecimalFormat;
 
 public class GuiEngineSteam extends GuiTitled {
 
-    private static final String OUTPUT = "%d MJ";
+    private static final String OUTPUT = "%s MJ";
     private final TileEngineSteam tile;
 
     public GuiEngineSteam(InventoryPlayer inv, TileEngineSteam tile) {
@@ -29,6 +30,6 @@ public class GuiEngineSteam extends GuiTitled {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(String.format(OUTPUT, tile.getCurrentOutput() / MjAPI.MJ), 120, 40, 0x404040);
+        fontRenderer.drawString(String.format(OUTPUT, MjPlugin.FORMAT.format(tile.currentOutput / (double) MjAPI.MJ)), 120, 40, 0x404040);
     }
 }

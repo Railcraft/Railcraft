@@ -23,7 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ContainerEngineSteam extends RailcraftContainer {
 
     private final TileEngineSteam tile;
-    private float lastOutput;
+    private double lastOutput;
 
     public ContainerEngineSteam(InventoryPlayer inventoryplayer, TileEngineSteam tile) {
         this.tile = tile;
@@ -47,7 +47,7 @@ public class ContainerEngineSteam extends RailcraftContainer {
     public void addListener(IContainerListener crafter) {
         super.addListener(crafter);
 
-        crafter.sendWindowProperty(this, 14, Math.round(tile.getCurrentOutput() * 100));
+        crafter.sendWindowProperty(this, 14, (int) Math.round(tile.currentOutput * 100));
     }
 
     @Override
@@ -55,11 +55,11 @@ public class ContainerEngineSteam extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener crafter : listeners) {
-            if (lastOutput != tile.getCurrentOutput())
-                crafter.sendWindowProperty(this, 14, Math.round(tile.getCurrentOutput() * 100));
+            if (lastOutput != tile.currentOutput)
+                crafter.sendWindowProperty(this, 14, (int) Math.round(tile.currentOutput * 100));
         }
 
-        this.lastOutput = tile.getCurrentOutput();
+        this.lastOutput = tile.currentOutput;
     }
 
     @Override

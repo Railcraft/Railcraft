@@ -17,7 +17,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
+
 public class MjPlugin {
+    public static final DecimalFormat FORMAT = new DecimalFormat("0.0");
+
     @SuppressWarnings("UnusedReturnValue")
     public static long pushToTile(TileEntity tile, EnumFacing side, long powerToTransfer) {
         if (canTileReceivePower(tile, side)) {

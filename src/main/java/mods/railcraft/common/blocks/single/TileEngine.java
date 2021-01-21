@@ -49,7 +49,7 @@ import java.io.IOException;
  */
 public abstract class TileEngine extends TileRailcraftTicking implements ITileRotate, ITileNonSolid, ISmartTile {
     public double currentOutput;
-    private float pistonProgress = 0;
+    private float pistonProgress;
     private int pistonStage;
     private boolean powered;
     private boolean isActive;
@@ -62,10 +62,6 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     public final MJEnergyIndicator mjIndicator = new MJEnergyIndicator(storage);
 
     protected TileEngine() {}
-
-    public long getCurrentOutput() {
-        return Math.round(currentOutput);
-    }
 
     protected void playSoundIn() {}
 

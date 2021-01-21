@@ -24,7 +24,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     private final TileEngineSteamHobby tile;
     private double lastBurnTime;
     private double lastItemBurnTime;
-    private float lastOutput;
+    private double lastOutput;
 
     public ContainerEngineSteamHobby(InventoryPlayer inventoryplayer, TileEngineSteamHobby tile) {
         super(tile);
@@ -48,7 +48,7 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         super.addListener(listener);
         listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
         listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
-        listener.sendWindowProperty(this, 12, Math.round(tile.getCurrentOutput() * 100));
+        listener.sendWindowProperty(this, 12, (int) Math.round(tile.currentOutput * 100));
     }
 
     @Override
@@ -62,13 +62,13 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
             if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
                 crafter.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
 
-            if (lastOutput != tile.getCurrentOutput())
-                crafter.sendWindowProperty(this, 12, Math.round(tile.getCurrentOutput() * 100));
+            if (lastOutput != tile.currentOutput)
+                crafter.sendWindowProperty(this, 12, (int) Math.round(tile.currentOutput * 100));
         }
 
         this.lastBurnTime = tile.boiler.burnTime;
         this.lastItemBurnTime = tile.boiler.currentItemBurnTime;
-        this.lastOutput = tile.getCurrentOutput();
+        this.lastOutput = tile.currentOutput;
     }
 
     @Override

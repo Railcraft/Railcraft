@@ -139,7 +139,7 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
     }
 
     @Override
-    public final long maxEnergyExtracted() {
+    public long maxEnergyExtracted() {
         return getMaxOutputMJ() * 8;
     }
 
