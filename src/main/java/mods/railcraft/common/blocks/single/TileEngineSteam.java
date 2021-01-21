@@ -138,11 +138,6 @@ public abstract class TileEngineSteam extends TileEngine implements ISteamUser, 
         getTankManager().drain(TANK_STEAM, 5, true);
     }
 
-    @Override
-    public long maxEnergyExtracted() {
-        return getMaxOutputMJ() * 8;
-    }
-
     public abstract long getMaxOutputMJ();
 
     public abstract int steamUsedPerTick();

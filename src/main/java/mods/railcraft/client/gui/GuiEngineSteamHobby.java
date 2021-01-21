@@ -12,10 +12,8 @@ package mods.railcraft.client.gui;
 import buildcraft.api.mj.MjAPI;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.gui.containers.ContainerEngineSteamHobby;
-import mods.railcraft.common.plugins.buildcraft.MjPlugin;
+import mods.railcraft.common.plugins.buildcraft.power.MjPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
-
-import java.text.DecimalFormat;
 
 public class GuiEngineSteamHobby extends GuiTitled {
     private static final String OUTPUT = "%s MJ";
@@ -29,7 +27,7 @@ public class GuiEngineSteamHobby extends GuiTitled {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString(String.format(OUTPUT, MjPlugin.FORMAT.format(tile.currentOutput / (double) MjAPI.MJ)), 55, 60, 0x404040);
+        fontRenderer.drawString(String.format(OUTPUT, MjPlugin.FORMAT.format(tile.currentOutput / (double) MjPlugin.MJ)), 55, 60, 0x404040);
     }
 
     @Override

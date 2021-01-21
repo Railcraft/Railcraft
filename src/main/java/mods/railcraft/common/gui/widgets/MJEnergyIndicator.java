@@ -10,15 +10,15 @@
 
 package mods.railcraft.common.gui.widgets;
 
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.mj.MjBattery;
+import mods.railcraft.common.plugins.buildcraft.power.IMjEnergyStorage;
+import mods.railcraft.common.plugins.buildcraft.power.MjPlugin;
 
 public class MJEnergyIndicator extends IndicatorController {
 
-    protected final MjBattery energyStorage;
+    protected final IMjEnergyStorage energyStorage;
     protected long energy;
 
-    public MJEnergyIndicator(MjBattery energyStorage) {
+    public MJEnergyIndicator(IMjEnergyStorage energyStorage) {
         this.energyStorage = energyStorage;
     }
 
@@ -45,6 +45,6 @@ public class MJEnergyIndicator extends IndicatorController {
 
     @Override
     protected void refreshToolTip() {
-        tip.text = String.format("%,d / %,d MJ", energy / MjAPI.MJ, energyStorage.getCapacity() / MjAPI.MJ);
+        tip.text = String.format("%,d / %,d MJ", energy / MjPlugin.MJ, energyStorage.getCapacity() / MjPlugin.MJ);
     }
 }

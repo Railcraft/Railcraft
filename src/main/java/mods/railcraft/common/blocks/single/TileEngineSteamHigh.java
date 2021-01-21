@@ -9,18 +9,18 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import buildcraft.api.mj.MjAPI;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.plugins.buildcraft.power.MjPlugin;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileEngineSteamHigh extends TileEngineSteam {
 
-    private static final long OUTPUT_MJ = 8 * MjAPI.MJ;
-    private static final long CAPACITY = 30000 * MjAPI.MJ;
-    private static final long RECEIVE = 1200 * MjAPI.MJ;
-    private static final long EXTRACT = 160 * MjAPI.MJ;
+    private static final long OUTPUT_MJ = 8 * MjPlugin.MJ;
+    private static final long CAPACITY = 30000 * MjPlugin.MJ;
+    private static final long RECEIVE = 1200 * MjPlugin.MJ;
+    private static final long EXTRACT = 160 * MjPlugin.MJ;
 
     @Override
     public EnumGui getGui() {

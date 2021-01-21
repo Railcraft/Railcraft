@@ -9,13 +9,13 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
-import buildcraft.api.mj.MjAPI;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.buildcraft.power.MjPlugin;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
@@ -45,10 +45,10 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInventory, IBoilerContainer {
-    private static final long OUTPUT_MJ = 2 * MjAPI.MJ;
-    private static final long CAPACITY = 10000 * MjAPI.MJ;
-    private static final long RECEIVE = 300 * MjAPI.MJ;
-    private static final long EXTRACT = 40 * MjAPI.MJ;
+    private static final long OUTPUT_MJ = 2 * MjPlugin.MJ;
+    private static final long CAPACITY = 10000 * MjPlugin.MJ;
+    private static final long RECEIVE = 300 * MjPlugin.MJ;
+    private static final long EXTRACT = 40 * MjPlugin.MJ;
 
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;

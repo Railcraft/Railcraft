@@ -8,11 +8,11 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.plugins.buildcraft;
+package mods.railcraft.common.plugins.buildcraft.power;
 
 import buildcraft.api.mj.MjBattery;
 
-public class MjEnergyStorage extends MjBattery {
+public class MjEnergyStorage extends MjBattery implements IMjEnergyStorage {
     protected long maxReceive;
     protected long maxExtract;
 

@@ -11,19 +11,15 @@ package mods.railcraft.common.blocks.single;
 
 import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.IMjReceiver;
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.mj.MjCapabilityHelper;
 import mods.railcraft.common.blocks.ISmartTile;
 import mods.railcraft.common.blocks.TileRailcraftTicking;
 import mods.railcraft.common.blocks.interfaces.ITileNonSolid;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.widgets.MJEnergyIndicator;
-import mods.railcraft.common.plugins.buildcraft.MjEnergyStorage;
-import mods.railcraft.common.plugins.buildcraft.MjPlugin;
-import mods.railcraft.common.plugins.forge.EnergyPlugin;
+import mods.railcraft.common.plugins.buildcraft.power.IMjEnergyStorage;
+import mods.railcraft.common.plugins.buildcraft.power.MjPlugin;
 import mods.railcraft.common.plugins.forge.PowerPlugin;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.Block;
@@ -37,8 +33,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.common.Optional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,9 +51,8 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     private boolean needsInit = true;
     //    public int outputDebug, genDebug, cycleTick;
     private EnergyStage energyStage = EnergyStage.BLUE;
-    protected final IMjConnector connector = new MjConnector();
-    protected final MjEnergyStorage storage = new MjEnergyStorage(maxEnergy(), maxEnergyReceived(), maxEnergyExtracted());
-    protected final MjCapabilityHelper mjCapabilities = new MjCapabilityHelper(connector);
+    protected final MjConnector connector = new MjConnector();
+    protected final IMjEnergyStorage storage = MjPlugin.getMjEnergyStorage(maxEnergy(), maxEnergyReceived(), maxEnergyExtracted());
     public final MJEnergyIndicator mjIndicator = new MJEnergyIndicator(storage);
 
     protected TileEngine() {}
@@ -69,6 +63,9 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 
     @Override
     public void update() {
+        if (!MjPlugin.LOADED)
+            return;
+
         super.update();
         if (Game.isClient(world)) {
             if (pistonStage != 0) {
@@ -94,7 +91,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 
         if (!powered)
             if (storage.getStored() > 1)
-                storage.extractPower(MjAPI.MJ);
+                storage.extractPower(MjPlugin.MJ);
 
         EnumFacing direction = getFacing();
         if (getEnergyStage() == EnergyStage.OVERHEAT)
@@ -135,7 +132,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
     }
 
     protected void overheat() {
-        subtractEnergy(5 * MjAPI.MJ);
+        subtractEnergy(5 * MjPlugin.MJ);
     }
 
     protected abstract void burn();
@@ -353,15 +350,12 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 
     @Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return facing == getFacing() && mjCapabilities.hasCapability(capability, facing) || super.hasCapability(capability, facing);
+        return facing == getFacing() && MjPlugin.CONNECTOR_CAPABILITY != null|| super.hasCapability(capability, facing);
     }
 
     @Override
     public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (facing == getFacing()) {
-            T cap = mjCapabilities.getCapability(capability, facing);
-            if (cap != null) return cap;
-        }
+        if (facing == getFacing() && capability == MjPlugin.CONNECTOR_CAPABILITY) return MjPlugin.CONNECTOR_CAPABILITY.cast(connector);
         return super.getCapability(capability, facing);
     }
 
@@ -383,6 +377,7 @@ public abstract class TileEngine extends TileRailcraftTicking implements ITileRo
 
     }
 
+    @Optional.Interface(iface = "buildcraft.api.mj.IMjConnector", modid = "buildcraftlib")
     private static class MjConnector implements IMjConnector {
         @Override
         public boolean canConnect(@NotNull IMjConnector other) {
