@@ -18,6 +18,7 @@ public class TranslationTest {
         ITextComponent textComponent = ChatPlugin.translateMessage("%s bought a one-way ticket to the afterlife", "CovertJaguar");
         LogManager.getLogger("NumberFormatter").log(Level.INFO, textComponent.toString());
         LogManager.getLogger("NumberFormatter").log(Level.INFO, textComponent.getFormattedText());
-        Assertions.assertEquals("CovertJaguar bought a one-way ticket to the afterlife", textComponent.getFormattedText().replace("§r", ""));
+        Assertions.assertEquals("CovertJaguar\u00A7r bought a one-way ticket to the afterlife\u00A7r", textComponent.getFormattedText());
+        Assertions.assertEquals("CovertJaguar bought a one-way ticket to the afterlife", textComponent.getUnformattedComponentText());
     }
 }
