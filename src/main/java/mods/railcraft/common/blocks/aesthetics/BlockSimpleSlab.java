@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2021
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,8 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
@@ -39,6 +41,7 @@ public abstract class BlockSimpleSlab extends BlockRailcraftSlab<Variant> {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public @Nullable StateMapperBase getStateMapper() {
         return new StateMap.Builder().ignore(getVariantEnumProperty()).build();
     }
