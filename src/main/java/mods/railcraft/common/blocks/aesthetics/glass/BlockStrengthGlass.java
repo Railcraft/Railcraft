@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2021
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -48,10 +48,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -145,8 +142,13 @@ public class BlockStrengthGlass extends BlockGlass implements IRailcraftBlock, C
     }
 
     @Override
+    public int quantityDropped(Random random) {
+        return 1;
+    }
+
+    @Override
     protected boolean canSilkHarvest() {
-        return true;
+        return false;
     }
 
     @Override
