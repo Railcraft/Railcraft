@@ -37,15 +37,13 @@ public class EntityTunnelBorePart extends Entity {
         this.partName = partName;
         this.forwardOffset = forwardOffset;
         this.sideOffset = sideOffset;
+        updatePosition();
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
-
-        double x = parent.getOffsetX(parent.posX, forwardOffset, sideOffset);
-        double z = parent.getOffsetZ(parent.posZ, forwardOffset, sideOffset);
-        setLocationAndAngles(x, parent.posY + 0.3F, z, 0.0F, 0.0F);
+        updatePosition();
     }
 
     @Override
@@ -93,5 +91,11 @@ public class EntityTunnelBorePart extends Entity {
     @Override
     public boolean isEntityEqual(Entity entity) {
         return this == entity || parent == entity;
+    }
+
+    private void updatePosition() {
+        double x = parent.getOffsetX(parent.posX, forwardOffset, sideOffset);
+        double z = parent.getOffsetZ(parent.posZ, forwardOffset, sideOffset);
+        setLocationAndAngles(x, parent.posY + 0.3F, z, 0.0F, 0.0F);
     }
 }
