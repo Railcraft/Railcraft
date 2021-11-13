@@ -55,6 +55,7 @@ public class ModuleManager {
         FORESTRY(ModuleForestry.class),
         THAUMCRAFT(ModuleThaumcraft.class),
         STEAM(ModuleSteam.class),
+        ADVTANKS(ModuleAdvancedTanks.class),
         WORLD(ModuleWorld.class),
         CHUNK_LOADING(ModuleChunkLoading.class),
         SEASONAL(ModuleSeasonal.class),

@@ -26,6 +26,7 @@ import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankWall;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.modules.ModuleAdvancedTanks;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -37,21 +38,21 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public enum EnumMachineZeta implements IEnumMachine {
 
     
-    TANK_ALUMINIUM_WALL(Module.TRANSPORT, "tank.aluminium.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_ALUMINIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_ALUMINIUM_GAUGE(Module.TRANSPORT, "tank.aluminium.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_ALUMINIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_ALUMINIUM_VALVE(Module.TRANSPORT, "tank.aluminium.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_ALUMINIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_STAINLESS_WALL(Module.TRANSPORT, "tank.stainless.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_STAINLESS, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_STAINLESS_GAUGE(Module.TRANSPORT, "tank.stainless.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_STAINLESS, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_STAINLESS_VALVE(Module.TRANSPORT, "tank.stainless.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_STAINLESS, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_TITANIUM_WALL(Module.TRANSPORT, "tank.titanium.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_TITANIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_TITANIUM_GAUGE(Module.TRANSPORT, "tank.titanium.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_TITANIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_TITANIUM_VALVE(Module.TRANSPORT, "tank.titanium.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_TITANIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_TUNGSTENSTEEL_WALL(Module.TRANSPORT, "tank.tungstensteel.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_TUNGSTENSTEEL_GAUGE(Module.TRANSPORT, "tank.tungstensteel.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_TUNGSTENSTEEL_VALVE(Module.TRANSPORT, "tank.tungstensteel.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_PALLADIUM_WALL(Module.TRANSPORT, "tank.palladium.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_PALLADIUM_GAUGE(Module.TRANSPORT, "tank.palladium.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_PALLADIUM_VALVE(Module.TRANSPORT, "tank.palladium.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
+    TANK_ALUMINIUM_WALL(Module.ADVTANKS, "tank.aluminium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_ALUMINIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_ALUMINIUM_GAUGE(Module.ADVTANKS, "tank.aluminium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_ALUMINIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_ALUMINIUM_VALVE(Module.ADVTANKS, "tank.aluminium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_ALUMINIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    TANK_STAINLESS_WALL(Module.ADVTANKS, "tank.stainless.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_STAINLESS, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_STAINLESS_GAUGE(Module.ADVTANKS, "tank.stainless.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_STAINLESS, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_STAINLESS_VALVE(Module.ADVTANKS, "tank.stainless.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_STAINLESS, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    TANK_TITANIUM_WALL(Module.ADVTANKS, "tank.titanium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TITANIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_TITANIUM_GAUGE(Module.ADVTANKS, "tank.titanium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TITANIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_TITANIUM_VALVE(Module.ADVTANKS, "tank.titanium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TITANIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    TANK_TUNGSTENSTEEL_WALL(Module.ADVTANKS, "tank.tungstensteel.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_TUNGSTENSTEEL_GAUGE(Module.ADVTANKS, "tank.tungstensteel.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_TUNGSTENSTEEL_VALVE(Module.ADVTANKS, "tank.tungstensteel.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    TANK_PALLADIUM_WALL(Module.ADVTANKS, "tank.palladium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_PALLADIUM_GAUGE(Module.ADVTANKS, "tank.palladium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_PALLADIUM_VALVE(Module.ADVTANKS, "tank.palladium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
 	
 	
 	
@@ -93,7 +94,7 @@ public enum EnumMachineZeta implements IEnumMachine {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineBeta();
+            RailcraftBlocks.registerBlockMachineZeta();
             return getBlock() != null;
         }
         return false;
@@ -184,7 +185,7 @@ public enum EnumMachineZeta implements IEnumMachine {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineBeta();
+        return RailcraftBlocks.getBlockMachineZeta();
     }
 
     public boolean isEnabled() {

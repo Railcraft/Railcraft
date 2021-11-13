@@ -1,7 +1,7 @@
 allprojects {
 	apply plugin: 'java'
-	sourceCompatibility = 1.6
-	targetCompatibility = 1.6
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 }
 
 evaluationDependsOn(':version')
@@ -29,13 +29,6 @@ apply plugin: 'forge'
 group = "mods.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Railcraft_" + project.mcversion
 
-ext.apiRailcraft = "./api/railcraft"
-ext.apiForestry = "./api/forestry"
-ext.apiRedstoneFlux = "./api/redstoneflux"
-ext.apiThaumcraft = "./api/thaumcraft"
-
-ext.dirLang = "./lang"
-
 ext.dirDest = './build/dist'
 
 minecraft {
@@ -46,28 +39,16 @@ minecraft {
 }
 
 sourceSets {
-	main {
-		java {
-			srcDir project.apiRailcraft
-			srcDir project.apiForestry
-			srcDir project.apiRedstoneFlux + "/src/main/java"
-			srcDir project.apiThaumcraft
-		}
-		resources {
-			srcDir project.dirLang
-            exclude '**/Thumbs.db'
-		}
-	}
+    main {
+        java { srcDirs = ["$projectDir/src/main/java"] }
+        resources { srcDirs = ["$projectDir/src/main/resources"] }
+    }
 }
 
 repositories {
 	maven {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
-	}
-	ivy {
-		name "BuildCraft"
-		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
 	}
 }
 
@@ -87,16 +68,13 @@ dependencies {
 	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
 	
-	//compile "com.enderio.core:EnderCore:1.7.10-0.2.0.39_beta:dev"
-	//compile "com.enderio:EnderIO:1.7.10-2.3.0.430_beta:dev"
-	
 	compile "cofh:CoFHCore:1.7.10R3.0.4:dev"
 	compile "cofh:CoFHLib:1.7.10R3.0.3:dev"
 	compile "com.mod-buildcraft:buildcraft:7.1.23:dev"
 	compile "net.sengir.forestry:forestry_1.7.10:4.2.16.64:dev"
 	
 	compile "thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev"	
-	//compile "com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf"	
+	compile "com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf"	
 }
 
 processResources {
@@ -117,21 +95,6 @@ processResources {
 		exclude 'mcmod.info'
 		exclude '**/*.md'
 		exclude '**/Thumbs.db'
-	}
-}
-
-runClient {
-	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
-		args "--username=${project.mcUsername}"
-		args "--password=${project.mcPassword}"
-	}
-
-}
-
-debugClient {
-	if( project.hasProperty('mcUsername') && project.hasProperty('mcPassword') ) {
-		args "--username=${project.mcUsername}"
-		args "--password=${project.mcPassword}"
 	}
 }
 
@@ -163,19 +126,6 @@ jar {
 				exclude '**/ic2/api/package-info.class'
 			}
 		}
-	}
-
-	into ('mods/railcraft/api') {
-		from project.apiRailcraft + "/LICENSE.md"
-	}
-	into ('forestry/api') {
-		from project.apiForestry + "/LICENSE.txt"
-	}
-	into ('thaumcraft/api') {
-		from project.apiThaumcraft + "/LICENSE"
-	}
-	into ('cofh/api') {
-		from project.apiRedstoneFlux + "/LICENSE - LGPLv3.txt"
 	}
 }
 
@@ -295,13 +245,6 @@ task devJar ( type: Zip, dependsOn: devJarSigned ) {
 	classifier = 'dev'
 }
 
-task apiZip ( type: Zip ) {
-	from project.apiRailcraft
-	destinationDir = file(dirDest)
-	classifier = 'api'
-	extension = 'zip'
-}
-
 task releaseInit << {
 	println '*************************************************************'
 	println 'This build will be version: ' +  rootProject.version
@@ -311,14 +254,13 @@ task releaseInit << {
 task release << {
 }
 
-release.dependsOn releaseInit, mainJar, devJar, apiZip
+release.dependsOn releaseInit, mainJar, devJar
 mainJar.shouldRunAfter releaseInit
 devJar.shouldRunAfter releaseInit
-apiZip.shouldRunAfter releaseInit
 release.shouldRunAfter uploadArchives
 
 artifacts {
-	archives mainJar, devJar, apiZip
+	archives mainJar, devJar
 }
 
 idea.module.inheritOutputDirs = true

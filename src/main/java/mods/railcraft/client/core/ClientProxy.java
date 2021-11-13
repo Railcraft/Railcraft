@@ -8,29 +8,53 @@
  */
 package mods.railcraft.client.core;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import mods.railcraft.client.render.carts.*;
-import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
-import mods.railcraft.common.blocks.signals.TileSignalFoundation;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import org.apache.logging.log4j.Level;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import mods.railcraft.api.carts.locomotive.LocomotiveRenderType;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
-import mods.railcraft.client.render.*;
+import mods.railcraft.client.render.BlockRenderer;
+import mods.railcraft.client.render.RenderBlockFrame;
+import mods.railcraft.client.render.RenderBlockLamp;
+import mods.railcraft.client.render.RenderBlockMachineBeta;
+import mods.railcraft.client.render.RenderBlockMachineDelta;
+import mods.railcraft.client.render.RenderBlockMachineEta;
+import mods.railcraft.client.render.RenderBlockMachineZeta;
+import mods.railcraft.client.render.RenderBlockOre;
+import mods.railcraft.client.render.RenderBlockPost;
+import mods.railcraft.client.render.RenderBlockPostMetal;
+import mods.railcraft.client.render.RenderBlockSignal;
+import mods.railcraft.client.render.RenderBlockStrengthGlass;
+import mods.railcraft.client.render.RenderCagedEntity;
+import mods.railcraft.client.render.RenderChest;
+import mods.railcraft.client.render.RenderElevator;
+import mods.railcraft.client.render.RenderFluidLoader;
+import mods.railcraft.client.render.RenderIronTank;
+import mods.railcraft.client.render.RenderPneumaticEngine;
+import mods.railcraft.client.render.RenderSlab;
+import mods.railcraft.client.render.RenderStair;
+import mods.railcraft.client.render.RenderTESRFirestone;
+import mods.railcraft.client.render.RenderTESRSignals;
+import mods.railcraft.client.render.RenderTrack;
+import mods.railcraft.client.render.RenderTrackBuffer;
+import mods.railcraft.client.render.RenderTurbineGauge;
+import mods.railcraft.client.render.RenderWall;
+import mods.railcraft.client.render.carts.CartContentRendererRedstoneFlux;
+import mods.railcraft.client.render.carts.LocomotiveRendererDefault;
+import mods.railcraft.client.render.carts.LocomotiveRendererElectric;
+import mods.railcraft.client.render.carts.RenderCart;
+import mods.railcraft.client.render.carts.RenderCartItemFiltered;
+import mods.railcraft.client.render.carts.RenderItemLocomotive;
+import mods.railcraft.client.render.carts.RenderTunnelBore;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamMagic;
 import mods.railcraft.client.render.models.locomotives.ModelLocomotiveSteamSolid;
 import mods.railcraft.client.sounds.RCSoundHandler;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.aesthetics.lantern.BlockLantern;
 import mods.railcraft.common.blocks.aesthetics.post.BlockPostMetal;
 import mods.railcraft.common.blocks.aesthetics.post.TilePostEmblem;
 import mods.railcraft.common.blocks.aesthetics.wall.BlockRailcraftWall;
@@ -49,6 +73,10 @@ import mods.railcraft.common.blocks.machine.beta.TileTankSteelWall;
 import mods.railcraft.common.blocks.machine.delta.TileCage;
 import mods.railcraft.common.blocks.machine.gamma.TileFluidLoader;
 import mods.railcraft.common.blocks.machine.gamma.TileFluidUnloader;
+import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankGauge;
+import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankValve;
+import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankWall;
+import mods.railcraft.common.blocks.signals.TileSignalFoundation;
 import mods.railcraft.common.blocks.tracks.TileTrackTESR;
 import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityTunnelBore;
@@ -61,7 +89,14 @@ import mods.railcraft.common.items.firestone.TileFirestoneRecharge;
 import mods.railcraft.common.modules.ModuleWorld;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 
 @SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
@@ -144,6 +179,11 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileTankSteelWall.class, new RenderIronTank());
         ClientRegistry.bindTileEntitySpecialRenderer(TileTankSteelValve.class, new RenderIronTank());
 
+        // Advanced tanks
+        ClientRegistry.bindTileEntitySpecialRenderer(TileGenericMultiTankGauge.class, new RenderIronTank());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileGenericMultiTankWall.class, new RenderIronTank());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileGenericMultiTankValve.class, new RenderIronTank());
+
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngineSteamHobby.class, RenderPneumaticEngine.renderHobby);
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngineSteamLow.class, RenderPneumaticEngine.renderLow);
         ClientRegistry.bindTileEntitySpecialRenderer(TileEngineSteamHigh.class, RenderPneumaticEngine.renderHigh);
@@ -172,6 +212,8 @@ public class ClientProxy extends CommonProxy {
 
         registerBlockRenderer(new RenderBlockMachineBeta());
         registerBlockRenderer(new RenderBlockMachineDelta());
+        registerBlockRenderer(new RenderBlockMachineEta());
+        registerBlockRenderer(new RenderBlockMachineZeta());
         registerBlockRenderer(new RenderBlockSignal());
         registerBlockRenderer(RenderBlockPost.make());
         registerBlockRenderer(RenderBlockPostMetal.make(BlockPostMetal.post));

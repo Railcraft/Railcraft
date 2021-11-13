@@ -13,7 +13,6 @@ import java.util.Set;
 
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.MetalTank;
-import mods.railcraft.common.blocks.machine.zeta.EnumMachineZeta;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.Entity;
 
@@ -27,9 +26,13 @@ public class GenericMultiTankBase extends MetalTank {
     
     private final int tankWallMeta;
     
-    private final String tankMaterial;
+    public final String tankMaterial;
     
     private final int capacity;
+
+    public final IEnumMachine TANK_WALL;
+    public final IEnumMachine TANK_VALVE;
+    public final IEnumMachine TANK_GAUGE;
 
     public GenericMultiTankBase(String tankMat, int tankCapacity, IEnumMachine tankWall, IEnumMachine tankValve, IEnumMachine tankGauge) {
     	tankMaterial = tankMat;
@@ -38,6 +41,9 @@ public class GenericMultiTankBase extends MetalTank {
         tankBlocks.add(tankWall.ordinal());
         tankBlocks.add(tankValve.ordinal());
         tankBlocks.add(tankGauge.ordinal());
+        TANK_WALL = tankWall;
+        TANK_VALVE = tankValve;
+        TANK_GAUGE = tankGauge;
     }
     
     public int getCapacity() {

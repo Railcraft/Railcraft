@@ -26,6 +26,7 @@ import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankWall;
 import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.modules.ModuleAdvancedTanks;
 import mods.railcraft.common.modules.ModuleManager;
 import mods.railcraft.common.modules.ModuleManager.Module;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -37,15 +38,15 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 public enum EnumMachineEta implements IEnumMachine {
 
     
-    TANK_IRIDIUM_WALL(Module.TRANSPORT, "tank.iridium.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_IRIDIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_IRIDIUM_GAUGE(Module.TRANSPORT, "tank.iridium.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_IRIDIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_IRIDIUM_VALVE(Module.TRANSPORT, "tank.iridium.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_IRIDIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_OSMIUM_WALL(Module.TRANSPORT, "tank.osmium.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_OSMIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_OSMIUM_GAUGE(Module.TRANSPORT, "tank.osmium.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_OSMIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_OSMIUM_VALVE(Module.TRANSPORT, "tank.osmium.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_OSMIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_NEUTRONIUM_WALL(Module.TRANSPORT, "tank.neutronium.wall", AdvancedMultiTanks.CAPACITY_PER_BLOCK_NEUTRONIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_NEUTRONIUM_GAUGE(Module.TRANSPORT, "tank.neutronium.gauge", AdvancedMultiTanks.CAPACITY_PER_BLOCK_NEUTRONIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_NEUTRONIUM_VALVE(Module.TRANSPORT, "tank.neutronium.valve", AdvancedMultiTanks.CAPACITY_PER_BLOCK_NEUTRONIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
+    TANK_IRIDIUM_WALL(Module.ADVTANKS, "tank.iridium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_IRIDIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_IRIDIUM_GAUGE(Module.ADVTANKS, "tank.iridium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_IRIDIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_IRIDIUM_VALVE(Module.ADVTANKS, "tank.iridium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_IRIDIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    TANK_OSMIUM_WALL(Module.ADVTANKS, "tank.osmium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_OSMIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_OSMIUM_GAUGE(Module.ADVTANKS, "tank.osmium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_OSMIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_OSMIUM_VALVE(Module.ADVTANKS, "tank.osmium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_OSMIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
+    TANK_NEUTRONIUM_WALL(Module.ADVTANKS, "tank.neutronium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_NEUTRONIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_NEUTRONIUM_GAUGE(Module.ADVTANKS, "tank.neutronium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_NEUTRONIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_NEUTRONIUM_VALVE(Module.ADVTANKS, "tank.neutronium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_NEUTRONIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
 	
     private final Module module;
     private final String tag;
@@ -79,7 +80,7 @@ public enum EnumMachineEta implements IEnumMachine {
 
     public boolean register() {
         if (RailcraftConfig.isSubBlockEnabled(getTag())) {
-            RailcraftBlocks.registerBlockMachineBeta();
+            RailcraftBlocks.registerBlockMachineEta();
             return getBlock() != null;
         }
         return false;
@@ -135,7 +136,7 @@ public enum EnumMachineEta implements IEnumMachine {
 
     @Override
     public String getTag() {
-        return "tile.railcraft.machine.zeta." + tag;
+        return "tile.railcraft.machine.eta." + tag;
     }
 
     @Override
@@ -170,7 +171,7 @@ public enum EnumMachineEta implements IEnumMachine {
 
     @Override
     public Block getBlock() {
-        return RailcraftBlocks.getBlockMachineBeta();
+        return RailcraftBlocks.getBlockMachineEta();
     }
 
     public boolean isEnabled() {
