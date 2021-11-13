@@ -50,9 +50,9 @@ public enum EnumMachineZeta implements IEnumMachine {
     TANK_TUNGSTENSTEEL_WALL(Module.ADVTANKS, "tank.tungstensteel.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
     TANK_TUNGSTENSTEEL_GAUGE(Module.ADVTANKS, "tank.tungstensteel.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
     TANK_TUNGSTENSTEEL_VALVE(Module.ADVTANKS, "tank.tungstensteel.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_TUNGSTENSTEEL, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3),
-    TANK_PALLADIUM_WALL(Module.ADVTANKS, "tank.palladium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
-    TANK_PALLADIUM_GAUGE(Module.ADVTANKS, "tank.palladium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
-    TANK_PALLADIUM_VALVE(Module.ADVTANKS, "tank.palladium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PAlLADIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
+    TANK_PALLADIUM_WALL(Module.ADVTANKS, "tank.palladium.wall", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PALLADIUM, TileGenericMultiTankWall.class, 2, 1, 0, 0, 1, 1, 1, 1),
+    TANK_PALLADIUM_GAUGE(Module.ADVTANKS, "tank.palladium.gauge", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PALLADIUM, TileGenericMultiTankGauge.class, 1, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4),
+    TANK_PALLADIUM_VALVE(Module.ADVTANKS, "tank.palladium.valve", ModuleAdvancedTanks.CAPACITY_PER_BLOCK_PALLADIUM, TileGenericMultiTankValve.class, 4, 1, 0, 0, 1, 1, 1, 1, 2, 3);
 	
 	
 	
