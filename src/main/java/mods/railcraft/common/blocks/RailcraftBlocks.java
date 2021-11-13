@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.machine.epsilon.EnumMachineEpsilon;
 import mods.railcraft.common.blocks.machine.epsilon.MachineProxyEpsilon;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.blocks.machine.gamma.MachineProxyGamma;
+import mods.railcraft.common.blocks.machine.zeta.EnumMachineZeta;
 import mods.railcraft.common.blocks.signals.BlockSignalRailcraft;
 import mods.railcraft.common.blocks.signals.ItemSignal;
 import mods.railcraft.common.blocks.tracks.BlockTrack;
@@ -48,6 +49,8 @@ public class RailcraftBlocks {
     private static Block blockTrack;
     private static Block blockRailElevator;
     private static Block blockSignal;
+    private static Block blockMachineZeta;
+    private static Block blockMachineEta;
 
     public static void registerBlockTrack() {
         if (blockTrack == null && RailcraftConfig.isBlockEnabled("track")) {
@@ -240,6 +243,56 @@ public class RailcraftBlocks {
 
     public static Block getBlockSignal() {
         return blockSignal;
+    }
+    
+    public static Block registerBlockMachineZeta() {
+        if (blockMachineZeta == null && RailcraftConfig.isBlockEnabled("machine.advtank")) {
+            int renderId = Railcraft.getProxy().getRenderId();
+            int[] lightOpacity = new int[16];
+            Arrays.fill(lightOpacity, 255);            
+            for (int i=0; i<EnumMachineZeta.values().length;i++) {
+                lightOpacity[i] = 0;            	
+            }
+            blockMachineZeta = new BlockMachine(renderId, new MachineProxyBeta(), false, lightOpacity).setBlockName("railcraft.machine.zeta");
+            RailcraftRegistry.register(blockMachineZeta, ItemMachine.class);
+
+            for (EnumMachineBeta type : EnumMachineBeta.values()) {
+                switch (type) {                    
+                    default:
+                        blockMachineZeta.setHarvestLevel("pickaxe", 3, type.ordinal());
+                }
+            }
+        }
+        return blockMachineBeta;
+    }
+
+    public static Block getBlockMachineZeta() {
+        return blockMachineZeta;
+    }
+    
+    public static Block registerBlockMachineEta() {
+        if (blockMachineEta == null && RailcraftConfig.isBlockEnabled("machine.advtank")) {
+            int renderId = Railcraft.getProxy().getRenderId();
+            int[] lightOpacity = new int[16];
+            Arrays.fill(lightOpacity, 255);            
+            for (int i=0; i<EnumMachineZeta.values().length;i++) {
+                lightOpacity[i] = 0;            	
+            }
+            blockMachineEta = new BlockMachine(renderId, new MachineProxyBeta(), false, lightOpacity).setBlockName("railcraft.machine.eta");
+            RailcraftRegistry.register(blockMachineEta, ItemMachine.class);
+
+            for (EnumMachineBeta type : EnumMachineBeta.values()) {
+                switch (type) {                    
+                    default:
+                    	blockMachineEta.setHarvestLevel("pickaxe", 4, type.ordinal());
+                }
+            }
+        }
+        return blockMachineBeta;
+    }
+
+    public static Block getBlockMachineEta() {
+        return blockMachineEta;
     }
 
 }

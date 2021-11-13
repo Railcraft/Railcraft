@@ -80,7 +80,7 @@ dependencies {
 
 	compile files('libs/Railcraft_1.7.10-9.12.2.1-API-deobf.jar')
 	compile 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
-	compile name: "buildcraft", version: "7.1.13", classifier: "dev"
+	compile name: "buildcraft", version: "7.1.23", classifier: "dev"
     
 	compile "mcp.mobius.waila:Waila:1.5.11-RC2-NONEI_1.7.10:dev"
 	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
