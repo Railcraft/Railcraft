@@ -26,12 +26,12 @@ public class ModuleAdvancedTanks extends RailcraftModule {
 
     public final static int CAPACITY_PER_BLOCK_ALUMINIUM = 64 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_STAINLESS = 128 * FluidHelper.BUCKET_VOLUME;
-    public final static int CAPACITY_PER_BLOCK_TITANIUM = 512 * FluidHelper.BUCKET_VOLUME;
-    public final static int CAPACITY_PER_BLOCK_TUNGSTENSTEEL = 2048 * FluidHelper.BUCKET_VOLUME;
-    public final static int CAPACITY_PER_BLOCK_PALLADIUM = 8192 * FluidHelper.BUCKET_VOLUME;
-    public final static int CAPACITY_PER_BLOCK_IRIDIUM = 32786 * FluidHelper.BUCKET_VOLUME;
-    public final static int CAPACITY_PER_BLOCK_OSMIUM = 131720 * FluidHelper.BUCKET_VOLUME;
-    public final static int CAPACITY_PER_BLOCK_NEUTRONIUM = 524288 * FluidHelper.BUCKET_VOLUME;
+    public final static int CAPACITY_PER_BLOCK_TITANIUM = 256 * FluidHelper.BUCKET_VOLUME;
+    public final static int CAPACITY_PER_BLOCK_TUNGSTENSTEEL = 512 * FluidHelper.BUCKET_VOLUME;
+    public final static int CAPACITY_PER_BLOCK_PALLADIUM = 1024 * FluidHelper.BUCKET_VOLUME;
+    public final static int CAPACITY_PER_BLOCK_IRIDIUM = 1536 * FluidHelper.BUCKET_VOLUME;
+    public final static int CAPACITY_PER_BLOCK_OSMIUM = 2048 * FluidHelper.BUCKET_VOLUME;
+    public final static int CAPACITY_PER_BLOCK_NEUTRONIUM = 3072 * FluidHelper.BUCKET_VOLUME;
 
     public static final HashMap<String, IEnumMachine> cacheTankType = new HashMap<String, IEnumMachine>();
     public static final HashMap<String, GenericMultiTankBase> cacheTankMaterial = new HashMap<String, GenericMultiTankBase>();
