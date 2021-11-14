@@ -68,7 +68,6 @@ configurations {
 
 dependencies {
 
-	compile files('libs/Railcraft_1.7.10-9.12.2.1-API-deobf.jar')
 	compile 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
 	compile "com.mod-buildcraft:buildcraft:7.1.23:dev"
     

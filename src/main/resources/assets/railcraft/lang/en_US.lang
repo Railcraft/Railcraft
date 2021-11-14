@@ -823,6 +823,12 @@ tile.railcraft.machine.gamma.unloader.item.tip=Unloads Items from Carts\n§o§c-
 tile.railcraft.machine.gamma.unloader.liquid.name=Fluid Unloader
 tile.railcraft.machine.gamma.unloader.liquid.tip=Unloads Fluids from Carts\n§o§c- Place under Track -
 
+railcraft.gui.tank.aluminium=Aluminium Tank
+railcraft.gui.tank.stainless=Stainless Steel Tank
+railcraft.gui.tank.titanium=Titanium Tank
+railcraft.gui.tank.tungstensteel=Tungstensteel Tank
+railcraft.gui.tank.palladium=Palladium Tank
+
 tile.railcraft.machine.zeta.tank.aluminium.gauge.name=Aluminium Tank Gauge
 tile.railcraft.machine.zeta.tank.aluminium.gauge.tip=Multi-Block: Variable Size, Hollow\n Heights: 4, 5, 6, 7, 8\n Diameters: 3, 5, 7, 9
 tile.railcraft.machine.zeta.tank.aluminium.valve.name=Aluminium Tank Valve
@@ -853,6 +859,10 @@ tile.railcraft.machine.zeta.tank.palladium.valve.name=Palladium Tank Valve
 tile.railcraft.machine.zeta.tank.palladium.valve.tip=Multi-Block: Must be in bottom\n two layers to output liquid.
 tile.railcraft.machine.zeta.tank.palladium.wall.name=Palladium Tank Wall
 tile.railcraft.machine.zeta.tank.palladium.wall.tip=Multi-Block: Variable Size, Hollow\n Heights: 4, 5, 6, 7, 8\n Diameters: 3, 5, 7, 9
+
+railcraft.gui.tank.iridium=Iridium Tank
+railcraft.gui.tank.osmium=Osmium Tank
+railcraft.gui.tank.neutronium=Neutronium Tank
 
 tile.railcraft.machine.eta.tank.iridium.gauge.name=Iridium Tank Gauge
 tile.railcraft.machine.eta.tank.iridium.gauge.tip=Multi-Block: Variable Size, Hollow\n Heights: 4, 5, 6, 7, 8\n Diameters: 3, 5, 7, 9

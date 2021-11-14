@@ -40,4 +40,5 @@ public class TileGenericMultiTankValve extends TileTankIronValve {
     public int getCapacityPerBlock() {
     	return valveType.getCapacity();
     }
+    
 }

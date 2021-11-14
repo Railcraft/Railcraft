@@ -10,6 +10,8 @@ package mods.railcraft.common.blocks.machine.zeta;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 import mods.railcraft.client.util.textures.TextureAtlasSheet;
@@ -20,6 +22,8 @@ import net.minecraft.util.IIcon;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.TileMachineBase;
+import mods.railcraft.common.blocks.machine.beta.MetalTank;
+import mods.railcraft.common.blocks.machine.tank.GenericMultiTankBase;
 import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankGauge;
 import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankValve;
 import mods.railcraft.common.blocks.machine.tank.TileGenericMultiTankWall;
@@ -51,6 +55,7 @@ public enum EnumMachineEta implements IEnumMachine {
     private final Module module;
     private final String tag;
     private final int capacity;
+    private GenericMultiTankBase tankType;
     private final Class<? extends TileMachineBase> tile;
     private IIcon[] texture = new IIcon[12];
     private final int[] textureInfo;
@@ -84,6 +89,10 @@ public enum EnumMachineEta implements IEnumMachine {
             return getBlock() != null;
         }
         return false;
+    }
+    
+    public void setTankType(GenericMultiTankBase tankMaterial) {
+    	tankType = tankMaterial;
     }
     
     public int getCapacity() {
@@ -146,8 +155,10 @@ public enum EnumMachineEta implements IEnumMachine {
 
     public TileMachineBase getTileEntity() {
         try {
-            return tile.newInstance();
+        	Constructor<? extends TileMachineBase> cons = tile.getDeclaredConstructor(MetalTank.class, IEnumMachine.class);        	
+            return (TileMachineBase) cons.newInstance(tankType, this);
         } catch (Exception ex) {
+        	ex.printStackTrace();
         }
         return null;
     }
