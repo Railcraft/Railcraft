@@ -274,5 +274,5 @@ artifacts {
 idea.module.inheritOutputDirs = true
 
 task wrapper(type: Wrapper) {
-	gradleVersion = "2.7"
+	gradleVersion = "3.0"
 }

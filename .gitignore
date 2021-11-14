@@ -25,3 +25,4 @@ classes/
 .settings
 .metadata
 .project
+*.bat
