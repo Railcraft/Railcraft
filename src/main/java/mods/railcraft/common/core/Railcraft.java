@@ -48,7 +48,7 @@ import java.io.File;
 
 @Mod(modid = Railcraft.MOD_ID, name = "Railcraft",
         version = Railcraft.VERSION,
-        acceptedMinecraftVersions = "[1.7.10)",
+        acceptedMinecraftVersions = "[1.7.10,1.8)",
         dependencies = "required-after:Forge@[10.13.4.1614,);"
                 + "after:BuildCraft|Core[6.1.7,);"
                 + "after:BuildCraft|Energy;"
