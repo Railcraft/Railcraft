@@ -17,6 +17,7 @@ import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.MetalTank;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineEta;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineZeta;
+import mods.railcraft.common.modules.ModuleAdvancedTanks;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.Entity;
 
@@ -51,6 +52,10 @@ public class GenericMultiTankBase extends MetalTank {
 		setTankType(tankWall);
 		setTankType(tankValve);
 		setTankType(tankGauge);
+		ModuleAdvancedTanks.cacheTankType.put(tankWall.getTag(), tankWall);
+		ModuleAdvancedTanks.cacheTankType.put(tankValve.getTag(), tankValve);
+		ModuleAdvancedTanks.cacheTankType.put(tankGauge.getTag(), tankGauge);
+		
 	}
 
 	public int getCapacity() {

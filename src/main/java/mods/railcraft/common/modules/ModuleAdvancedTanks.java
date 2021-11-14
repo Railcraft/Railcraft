@@ -1,5 +1,7 @@
 package mods.railcraft.common.modules;
 
+import java.util.HashMap;
+
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.tank.GenericMultiTankBase;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineEta;
@@ -30,6 +32,9 @@ public class ModuleAdvancedTanks extends RailcraftModule {
     public final static int CAPACITY_PER_BLOCK_IRIDIUM = 256 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_OSMIUM = 384 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_NEUTRONIUM = 512 * FluidHelper.BUCKET_VOLUME;
+
+    public static final HashMap<String, IEnumMachine> cacheTankType = new HashMap<String, IEnumMachine>();
+    public static final HashMap<String, GenericMultiTankBase> cacheTankMaterial = new HashMap<String, GenericMultiTankBase>();
 	
 	public static void initTanks() {
 		ALUMINIUM = createTank("aluminium", CAPACITY_PER_BLOCK_ALUMINIUM, EnumMachineZeta.TANK_ALUMINIUM_WALL, EnumMachineZeta.TANK_ALUMINIUM_GAUGE, EnumMachineZeta.TANK_ALUMINIUM_VALVE);
@@ -118,7 +123,11 @@ public class ModuleAdvancedTanks extends RailcraftModule {
     }
 	
 	private static GenericMultiTankBase createTank(String material, int capacity, IEnumMachine tankWall, IEnumMachine tankGauge, IEnumMachine tankValve) {
-		return new GenericMultiTankBase(material, capacity, tankWall, tankValve, tankGauge);   
+		GenericMultiTankBase tank = new GenericMultiTankBase(material, capacity, tankWall, tankValve, tankGauge);
+		cacheTankMaterial.put(tankWall.getTag(), tank);
+		cacheTankMaterial.put(tankGauge.getTag(), tank);
+		cacheTankMaterial.put(tankValve.getTag(), tank);
+		return tank;
 	}
 	
 }

@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.machine.tank;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.MetalTank;
 import mods.railcraft.common.blocks.machine.beta.TileTankIronGauge;
+import mods.railcraft.common.modules.ModuleAdvancedTanks;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  *
@@ -18,12 +20,18 @@ import mods.railcraft.common.blocks.machine.beta.TileTankIronGauge;
  */
 public class TileGenericMultiTankGauge extends TileTankIronGauge {
 
-	private final MetalTank tankType;
-	private final IEnumMachine gaugeType;
+	private MetalTank tankType;
+	private IEnumMachine gaugeType;
+
+
+	public TileGenericMultiTankGauge() {
+		
+	}
 	
 	public TileGenericMultiTankGauge(MetalTank thisTankType, IEnumMachine thisGaugeType) {
 		tankType = thisTankType;
 		gaugeType = thisGaugeType;
+		markDirty();
 	}
 	
     @Override
@@ -40,4 +48,18 @@ public class TileGenericMultiTankGauge extends TileTankIronGauge {
     public int getCapacityPerBlock() {
     	return gaugeType.getCapacity();
     }
+
+	@Override
+	public void writeToNBT(NBTTagCompound data) {
+		super.writeToNBT(data);
+		data.setString("Machine.Type", gaugeType.getTag());
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound data) {
+		gaugeType = ModuleAdvancedTanks.cacheTankType.get(data.getString("Machine.Type"));
+		tankType = ModuleAdvancedTanks.cacheTankMaterial.get(data.getString("Machine.Type"));
+		super.readFromNBT(data);
+	}
+	
 }

@@ -11,6 +11,8 @@ package mods.railcraft.common.blocks.machine.tank;
 import mods.railcraft.common.blocks.machine.IEnumMachine;
 import mods.railcraft.common.blocks.machine.beta.MetalTank;
 import mods.railcraft.common.blocks.machine.beta.TileTankIronValve;
+import mods.railcraft.common.modules.ModuleAdvancedTanks;
+import net.minecraft.nbt.NBTTagCompound;
 
 /**
  *
@@ -18,12 +20,18 @@ import mods.railcraft.common.blocks.machine.beta.TileTankIronValve;
  */
 public class TileGenericMultiTankValve extends TileTankIronValve {
 
-    private final MetalTank tankType;
-	private final IEnumMachine valveType;
+    private MetalTank tankType;
+	private IEnumMachine valveType;
+
+
+	public TileGenericMultiTankValve() {
+		
+	}
 
 	public TileGenericMultiTankValve(MetalTank thisTankType, IEnumMachine thisValveType) {
 		tankType = thisTankType;
 		valveType = thisValveType;
+		markDirty();
 	}
 	
     @Override
@@ -40,5 +48,18 @@ public class TileGenericMultiTankValve extends TileTankIronValve {
     public int getCapacityPerBlock() {
     	return valveType.getCapacity();
     }
+
+	@Override
+	public void writeToNBT(NBTTagCompound data) {
+		super.writeToNBT(data);
+		data.setString("Machine.Type", valveType.getTag());
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound data) {
+		valveType = ModuleAdvancedTanks.cacheTankType.get(data.getString("Machine.Type"));
+		tankType = ModuleAdvancedTanks.cacheTankMaterial.get(data.getString("Machine.Type"));
+		super.readFromNBT(data);
+	}
     
 }

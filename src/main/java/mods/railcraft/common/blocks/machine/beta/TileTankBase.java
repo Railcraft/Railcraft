@@ -524,6 +524,9 @@ public abstract class TileTankBase extends TileMultiBlock implements ITankTile {
 
     @Override
     protected boolean isMapPositionValid(int x, int y, int z, char mapPos) {
+    	if (getTankType() == null) {
+    		return false;
+    	}
         switch (mapPos) {
             case 'O': // Other
             {
