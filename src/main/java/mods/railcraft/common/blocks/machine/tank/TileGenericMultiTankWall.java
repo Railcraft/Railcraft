@@ -52,7 +52,9 @@ public class TileGenericMultiTankWall extends TileTankIronWall {
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
-		data.setString("Machine.Type", wallType.getTag());
+		if (wallType != null && !data.hasKey("Machine.Type")) {
+			data.setString("Machine.Type", wallType.getTag());
+		}
 	}
 
 	@Override

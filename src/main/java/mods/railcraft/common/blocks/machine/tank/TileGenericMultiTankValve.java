@@ -52,7 +52,9 @@ public class TileGenericMultiTankValve extends TileTankIronValve {
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
-		data.setString("Machine.Type", valveType.getTag());
+		if (valveType != null && !data.hasKey("Machine.Type")) {
+			data.setString("Machine.Type", valveType.getTag());
+		}
 	}
 
 	@Override

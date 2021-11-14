@@ -52,7 +52,9 @@ public class TileGenericMultiTankGauge extends TileTankIronGauge {
 	@Override
 	public void writeToNBT(NBTTagCompound data) {
 		super.writeToNBT(data);
-		data.setString("Machine.Type", gaugeType.getTag());
+		if (gaugeType != null && !data.hasKey("Machine.Type")) {
+			data.setString("Machine.Type", gaugeType.getTag());
+		}
 	}
 
 	@Override
