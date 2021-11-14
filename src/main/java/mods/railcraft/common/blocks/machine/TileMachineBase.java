@@ -41,7 +41,10 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
     }
 
     @Override
-    public final short getId() {
+    public final short getId() {    	
+    	if (getMachineType() == null) {
+    		return 0;
+    	}    	
         return (short) getMachineType().ordinal();
     }
 
@@ -111,37 +114,37 @@ public abstract class TileMachineBase extends RailcraftTileEntity {
 
     @Override
     public void updateEntity() {
-        super.updateEntity();
+    	super.updateEntity();
 
-        if (Game.isNotHost(worldObj))
-            return;
+    	if (Game.isNotHost(worldObj))
+    		return;
 
-        // Check and fix invalid block ids
-        if (!checkedBlock) {
-            checkedBlock = true;
+    	// Check and fix invalid block ids
+    	if (!checkedBlock) {
+    		checkedBlock = true;
 
-            if (!getMachineType().isAvaliable()) {
-                worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-                return;
-            }
-
-            if (getBlockType() != getMachineType().getBlock()) {
-                Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), getBlockType(), getMachineType().getBlock(), xCoord, yCoord, zCoord);
-                worldObj.setBlock(xCoord, yCoord, zCoord, getMachineType().getBlock(), getId(), 3);
-                validate();
-                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
-                updateContainingBlockInfo();
-            }
-
-            int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-            if (getBlockType() != null && getClass() != ((BlockMachine) getBlockType()).getMachineProxy().getMachine(meta).getTileClass()) {
-                worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getId(), 3);
-                validate();
-                worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
-                Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getId(), xCoord, yCoord, zCoord);
-                updateContainingBlockInfo();
-            }
-        }
+    		if (getBlockType() != null && getMachineType() != null) {
+    			if (!getMachineType().isAvaliable()) {
+    				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+    				return;
+    			}
+    			if (getBlockType() != getMachineType().getBlock()) {
+    				Game.log(Level.INFO, "Updating Machine Tile Block: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), getBlockType(), getMachineType().getBlock(), xCoord, yCoord, zCoord);
+    				worldObj.setBlock(xCoord, yCoord, zCoord, getMachineType().getBlock(), getId(), 3);
+    				validate();
+    				worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+    				updateContainingBlockInfo();
+    			}
+    			int meta = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+    			if (getBlockType() != null && getClass() != ((BlockMachine) getBlockType()).getMachineProxy().getMachine(meta).getTileClass()) {
+    				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, getId(), 3);
+    				validate();
+    				worldObj.setTileEntity(xCoord, yCoord, zCoord, this);
+    				Game.log(Level.INFO, "Updating Machine Tile Metadata: {0} {1}->{2}, [{3}, {4}, {5}]", getClass().getSimpleName(), meta, getId(), xCoord, yCoord, zCoord);
+    				updateContainingBlockInfo();
+    			}
+    		}
+    	}
     }
 
     public boolean openGui(EntityPlayer player) {

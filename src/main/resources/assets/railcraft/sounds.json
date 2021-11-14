@@ -1,0 +1,30 @@
+{
+  "locomotive.steam.whistle": {
+    "category": "neutral",
+    "sounds": [
+      "locomotive/steam/whistle1",
+      "locomotive/steam/whistle2",
+      "locomotive/steam/whistle3"
+    ]
+  },
+  "locomotive.electric.whistle": {
+    "category": "neutral",
+    "sounds": [
+      "locomotive/electric/whistle1",
+      "locomotive/electric/whistle2",
+      "locomotive/electric/whistle3"
+    ]
+  },
+  "machine.steamburst": {
+    "category": "block",
+    "sounds": [
+      "machine/steamburst"
+    ]
+  },
+  "machine.steamhiss": {
+    "category": "block",
+    "sounds": [
+      "machine/steamhiss"
+    ]
+  }
+}

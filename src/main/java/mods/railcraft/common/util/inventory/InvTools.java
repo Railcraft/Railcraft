@@ -936,4 +936,13 @@ public abstract class InvTools {
             return ((ItemBlock) stack.getItem()).field_150939_a;
         return null;
     }
+    
+    public static ItemStack getItemFromOreDict(String oreName, int quantity) {
+    	if (OreDictionary.doesOreNameExist(oreName)) {
+    		ItemStack stack = OreDictionary.getOres(oreName).get(0).copy();
+    		stack.stackSize = quantity;
+    		return stack;    		
+    	}
+    	return null;
+    }
 }

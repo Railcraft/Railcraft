@@ -43,4 +43,8 @@ public interface IEnumMachine {
 
     boolean isDepreciated();
 
+	default int getCapacity() {
+		return 0;
+	}
+
 }
