@@ -12,4 +12,4 @@
 url=https://github.com/GTNewHorizons/RedstoneFlux-1.12-Legacy.git
 [submodule "api/thaumcraft/thaumcraft/api"]
 	path = api/thaumcraft/thaumcraft/api
-	url = https://github.com/Azanor/thaumcraft-api.git
+url=https://github.com/GTNewHorizons/thaumcraft-api.git
