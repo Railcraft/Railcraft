@@ -69,6 +69,7 @@ public class CartFilterRecipe implements IRecipe {
         FilterType filterType = null;
         int cartSlot = -1;
         int itemCount = 0;
+        
         for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
             itemCount++;
             ItemStack stack = slot.getStackInSlot();
@@ -80,22 +81,35 @@ public class CartFilterRecipe implements IRecipe {
                 cartItem.stackSize = 1;
             }
         }
-        if (filterType == null || itemCount > 2)
-            return null;
+        if (filterType == null || itemCount > 2) {
+        	return null;
+        }
         for (IInvSlot slot : InventoryIterator.getIterable(grid).notNull()) {
-            if (slot.getIndex() == cartSlot)
-                continue;
+            if (slot.getIndex() == cartSlot) {
+            	continue;
+            }
             ItemStack stack = slot.getStackInSlot();
             if (filterType.isAllowedFilterItem(stack)) {
                 filterItem = stack.copy();
                 break;
             }
         }
-        if (cartItem == null || filterItem == null)
-            return null;
+        if (cartItem == null || filterItem == null) {
+        	return null;
+        }
 
-        filterItem.stackSize = 1;
-        return EntityCartFiltered.addFilterToCartItem(cartItem, filterItem);
+        if (filterItem.getItem().hasContainerItem(filterItem)) {
+			/*System.out.println("Has container item."); 
+			System.out.println("Does Container Item Leave Crafting Grid: "+filterItem.getItem().doesContainerItemLeaveCraftingGrid(filterItem)); 
+			ItemStack cont = filterItem.getItem().getContainerItem(filterItem);
+			System.out.println("Container item: "+cont.getDisplayName()+" x"+cont.stackSize); */
+            return null;
+        }
+        else {
+            filterItem.stackSize = 1;       	
+        }
+        ItemStack output = EntityCartFiltered.addFilterToCartItem(cartItem, filterItem);
+        return output;
     }
 
     @Override
