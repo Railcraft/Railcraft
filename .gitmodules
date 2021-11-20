@@ -3,10 +3,10 @@
 url=https://github.com/GTNewHorizons/Railcraft-Localization.git
 [submodule "api/railcraft"]
 	path = api/railcraft
-	url = https://github.com/CovertJaguar/Railcraft-API.git
+url=https://github.com/GTNewHorizons/Railcraft-API.git
 [submodule "api/forestry"]
 	path = api/forestry
-	url = https://github.com/ForestryMC/ForestryAPI.git
+url=https://github.com/GTNewHorizons/ForestryAPI.git
 [submodule "api/redstoneflux"]
 	path = api/redstoneflux
 url=https://github.com/GTNewHorizons/RedstoneFlux-1.12-Legacy.git
