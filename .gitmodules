@@ -9,7 +9,7 @@
 	url = https://github.com/ForestryMC/ForestryAPI.git
 [submodule "api/redstoneflux"]
 	path = api/redstoneflux
-	url = https://github.com/CoFH/RedstoneFlux-API.git
+url=https://github.com/GTNewHorizons/RedstoneFlux-1.12-Legacy.git
 [submodule "api/thaumcraft/thaumcraft/api"]
 	path = api/thaumcraft/thaumcraft/api
 	url = https://github.com/Azanor/thaumcraft-api.git
