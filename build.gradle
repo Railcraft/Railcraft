@@ -7,20 +7,24 @@ allprojects {
 evaluationDependsOn(':version')
 
 buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = "gt"
-			url = "https://gregtech.overminddl1.com/"
-		}
-		maven {
-			name = "sonatype"
-			url = "https://oss.sonatype.org/content/repositories/snapshots/"
-		}
-	}
-	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
-	}
+    repositories {
+        mavenCentral()
+        maven {
+            name = "gt"
+            url = "https://gregtech.overminddl1.com/"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+        maven {
+            name = "jitpack.io"
+            url = "https://jitpack.io"
+        }
+    }
+    dependencies {
+        classpath 'com.github.GTNewHorizons:ForgeGradle:stable-2021-11-20'
+    }
 }
 
 apply plugin: 'forge'
@@ -59,6 +63,10 @@ repositories {
 		name = "ic2"
 		url = "http://maven.ic2.player.to/"
 	}
+	    ivy {
+        name = 'gtnh_download_source'
+        artifactPattern("http://downloads.gtnewhorizons.com/Mods_for_Jenkins/[module]-[revision].[ext]")
+    }
 }
 
 configurations {
