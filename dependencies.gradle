@@ -1,0 +1,10 @@
+// Add your dependencies here
+
+dependencies {
+    compile("com.mod-buildcraft:buildcraft:7.1.23:dev")
+    compile("net.industrial-craft:industrialcraft-2:2.2.828-experimental:dev")
+    compile("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
+    runtime("com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf")
+
+    compileOnly("com.github.GTNewHorizons:ForestryMC:unified-build-script-SNAPSHOT:dev")
+}

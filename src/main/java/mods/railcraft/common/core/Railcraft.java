@@ -61,7 +61,7 @@ import java.io.File;
                 + "after:IC2@[2.2,)")
 public final class Railcraft {
     public static final String MOD_ID = "Railcraft";
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = "GRADLETOKEN_VERSION";
     public static final String MC_VERSION = "[1.7.10,1.8)";
     public static final RootCommand rootCommand = new RootCommand();
     @Instance("Railcraft")
