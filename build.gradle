@@ -1,281 +1,505 @@
-allprojects {
-    apply plugin: 'java'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-}
+//version: eb0b030ab9cb1d0f9a31f11e69e1ceed1dab2c89
+/*
+DO NOT CHANGE THIS FILE!
 
-evaluationDependsOn(':version')
+Also, you may replace this file at any time if there is an update available.
+Please check https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/build.gradle for updates.
+ */
+
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+import java.util.concurrent.TimeUnit
 
 buildscript {
     repositories {
-        mavenCentral()
         maven {
-            name = "gt"
-            url = "https://gregtech.overminddl1.com/"
+            name = "forge"
+            url = "https://maven.minecraftforge.net"
         }
         maven {
             name = "sonatype"
             url = "https://oss.sonatype.org/content/repositories/snapshots/"
         }
         maven {
-            name = "jitpack.io"
+            name = "Scala CI dependencies"
+            url = "https://repo1.maven.org/maven2/"
+        }
+        maven {
+            name = "jitpack"
             url = "https://jitpack.io"
         }
     }
     dependencies {
-        classpath 'com.github.GTNewHorizons:ForgeGradle:stable-2021-11-20'
+        classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.4'
     }
+}
+
+plugins {
+    id 'idea'
+    id 'scala'
+    id("org.ajoberstar.grgit") version("3.1.1")
+    id("com.github.johnrengelman.shadow") version("4.0.4")
+    id("com.palantir.git-version") version("0.12.3")
 }
 
 apply plugin: 'forge'
 
+def projectJavaVersion = JavaLanguageVersion.of(8)
 
-group = "mods.railcraft" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Railcraft_" + project.mcversion
-
-ext.apiRailcraft = "./api/railcraft"
-ext.apiForestry = "./api/forestry"
-ext.apiRedstoneFlux = "./api/redstoneflux"
-ext.apiThaumcraft = "./api/thaumcraft"
-
-ext.dirDest = './build/dist'
-
-//Java Version
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-//Compile against UTF-8
-compileTestJava.options.encoding = 'UTF-8'
-javadoc.options.encoding = 'UTF-8'
-compileJava.options.encoding = 'UTF-8'
-
-minecraft {
-    version = project.mcversion + "-" + project.forgeversion + "-" + project.forgebranch
-    runDir = "run"
-
-    replace '@VERSION@', project.version
+java {
+    toolchain {
+        languageVersion.set(projectJavaVersion)
+    }
 }
 
-sourceSets {
-    main {
-        java {
-            srcDir project.apiForestry
-            srcDir project.apiRedstoneFlux + "/src/main/java"
-            srcDir project.apiThaumcraft
-        }
-        resources { srcDirs = ["$projectDir/src/main/resources"] }
+idea {
+    module {
+        inheritOutputDirs = true
+        downloadJavadoc = true
+        downloadSources = true
     }
+}
+
+checkPropertyExists("modName")
+checkPropertyExists("modId")
+checkPropertyExists("modGroup")
+checkPropertyExists("autoUpdateBuildScript")
+checkPropertyExists("minecraftVersion")
+checkPropertyExists("forgeVersion")
+checkPropertyExists("replaceGradleTokenInFile")
+checkPropertyExists("gradleTokenModId")
+checkPropertyExists("gradleTokenModName")
+checkPropertyExists("gradleTokenVersion")
+checkPropertyExists("gradleTokenGroupName")
+checkPropertyExists("apiPackage")
+checkPropertyExists("accessTransformersFile")
+checkPropertyExists("usesMixins")
+checkPropertyExists("mixinPlugin")
+checkPropertyExists("mixinsPackage")
+checkPropertyExists("coreModClass")
+checkPropertyExists("containsMixinsAndOrCoreModOnly")
+checkPropertyExists("usesShadowedDependencies")
+checkPropertyExists("developmentEnvironmentUserName")
+
+def checkPropertyExists(String propertyName) {
+    if (project.hasProperty(propertyName) == false) {
+        throw new GradleException("This project requires a property \"" + propertyName + "\"! Please add it your \"gradle.properties\". You can find all properties and their description here: https://github.com/SinTh0r4s/ExampleMod1.7.10/blob/main/gradle.properties")
+    }
+}
+
+
+String javaSourceDir = "src/main/java/"
+String scalaSourceDir = "src/main/scala/"
+
+String targetPackageJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/")
+String targetPackageScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/")
+if((new File(targetPackageJava).exists() || new File(targetPackageScala).exists()) == false) {
+    throw new GradleException("Could not resolve \"modGroup\"! Could not find " + targetPackageJava + " or " + targetPackageScala)
+}
+
+if(apiPackage) {
+    targetPackageJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/")
+    targetPackageScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/")
+    if((new File(targetPackageJava).exists() || new File(targetPackageScala).exists()) == false) {
+        throw new GradleException("Could not resolve \"apiPackage\"! Could not find " + targetPackageJava + " or " + targetPackageScala)
+    }
+}
+
+if(accessTransformersFile) {
+    String targetFile = "src/main/resources/META-INF/" + accessTransformersFile
+    if(new File(targetFile).exists() == false) {
+        throw new GradleException("Could not resolve \"accessTransformersFile\"! Could not find " + targetFile)
+    }
+}
+
+if(usesMixins.toBoolean()) {
+    if(mixinsPackage.isEmpty() || mixinPlugin.isEmpty()) {
+        throw new GradleException("\"mixinPlugin\" requires \"mixinsPackage\" and \"mixinPlugin\" to be set!")
+    }
+
+    targetPackageJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinsPackage.toString().replaceAll("\\.", "/")
+    targetPackageScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinsPackage.toString().replaceAll("\\.", "/")
+    if((new File(targetPackageJava).exists() || new File(targetPackageScala).exists()) == false) {
+        throw new GradleException("Could not resolve \"mixinsPackage\"! Could not find " + targetPackageJava + " or " + targetPackageScala)
+    }
+
+    String targetFileJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".java"
+    String targetFileScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".scala"
+    String targetFileScalaJava = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + mixinPlugin.toString().replaceAll("\\.", "/") + ".java"
+    if((new File(targetFileJava).exists() || new File(targetFileScala).exists() || new File(targetFileScalaJava).exists()) == false) {
+        throw new GradleException("Could not resolve \"mixinPlugin\"! Could not find " + targetFileJava + " or " + targetFileScala + " or " + targetFileScalaJava)
+    }
+}
+
+if(coreModClass) {
+    String targetFileJava = javaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".java"
+    String targetFileScala = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".scala"
+    String targetFileScalaJava = scalaSourceDir + modGroup.toString().replaceAll("\\.", "/") + "/" + coreModClass.toString().replaceAll("\\.", "/") + ".java"
+    if((new File(targetFileJava).exists() || new File(targetFileScala).exists() || new File(targetFileScalaJava).exists()) == false) {
+        throw new GradleException("Could not resolve \"coreModClass\"! Could not find " + targetFileJava + " or " + targetFileScala + " or " + targetFileScalaJava)
+    }
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+
+    // Make sure GregTech build won't time out
+    System.setProperty("org.gradle.internal.http.connectionTimeout", 120000 as String)
+    System.setProperty("org.gradle.internal.http.socketTimeout", 120000 as String)
+}
+
+// Fix Jenkins' Git: chmod a file should not be detected as a change and append a '.dirty' to the version
+'git config core.fileMode false'.execute()
+// Pulls version from git tag
+version = minecraftVersion + "-" + gitVersion()
+group = modGroup
+archivesBaseName = modId
+
+minecraft {
+    version = minecraftVersion + "-" + forgeVersion + "-" + minecraftVersion
+    runDir = "run"
+
+    if (replaceGradleTokenInFile) {
+        replaceIn replaceGradleTokenInFile
+        if(gradleTokenModId) {
+            replace gradleTokenModId, modId
+        }
+        if(gradleTokenModName) {
+            replace gradleTokenModName, modName
+        }
+        if(gradleTokenVersion) {
+            replace gradleTokenVersion, versionDetails().lastTag
+        }
+        if(gradleTokenGroupName) {
+            replace gradleTokenGroupName, modGroup
+        }
+    }
+}
+
+if(file("addon.gradle").exists()) {
+    apply from: "addon.gradle"
+}
+
+apply from: 'repositories.gradle'
+
+configurations {
+    implementation.extendsFrom(shadowImplementation)
 }
 
 repositories {
     maven {
-        name = "ic2"
-        url = "http://maven.ic2.player.to/"
-    }
-    maven {
-        name = "GregTech"
+        name = "Overmind forge repo mirror"
         url = "https://gregtech.overminddl1.com/"
     }
-}
-
-configurations {
-    api
-    compile.extendsFrom api
+    if(usesMixins.toBoolean()) {
+        maven {
+            name = "sponge"
+            url = "https://repo.spongepowered.org/repository/maven-public"
+        }
+        maven {
+            url = "https://jitpack.io"
+        }
+    }
 }
 
 dependencies {
-    api 'net.industrial-craft:industrialcraft-2:2.2.780-experimental:api'
-    api "com.mod-buildcraft:buildcraft:7.1.23:api"
+    if(usesMixins.toBoolean()) {
+        annotationProcessor("org.ow2.asm:asm-debug-all:5.0.3")
+        annotationProcessor("com.google.guava:guava:24.1.1-jre")
+        annotationProcessor("com.google.code.gson:gson:2.8.6")
+        annotationProcessor("org.spongepowered:mixin:0.8-SNAPSHOT")
+        // using 0.8 to workaround a issue in 0.7 which fails mixin application
+        compile("org.spongepowered:mixin:0.7.11-SNAPSHOT") {
+            // Mixin includes a lot of dependencies that are too up-to-date
+            exclude module: "launchwrapper"
+            exclude module: "guava"
+            exclude module: "gson"
+            exclude module: "commons-io"
+            exclude module: "log4j-core"
+        }
+        compile("com.github.GTNewHorizons:SpongeMixins:1.3.3:dev")
+    }
 }
 
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+apply from: 'dependencies.gradle'
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
+def mixinConfigJson = "mixins." + modId + ".json"
+def mixingConfigRefMap = "mixins." + modId + ".refmap.json"
+def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + mixingConfigRefMap
+def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
 
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+task generateAssets {
+    if(usesMixins.toBoolean()) {
+        new File(projectDir.toString() + "/src/main/resources/", mixinConfigJson).text = """{
+  "required": true,
+  "minVersion": "0.7.11",
+  "package": "${modGroup}.${mixinsPackage}",
+  "plugin": "${modGroup}.${mixinPlugin}",
+  "refmap": "${mixingConfigRefMap}",
+  "target": "@env(DEFAULT)",
+  "compatibilityLevel": "JAVA_8"
+}
+
+"""
+    }
+}
+
+task relocateShadowJar(type: ConfigureShadowRelocation) {
+    target = tasks.shadowJar
+    prefix = modGroup + ".shadow"
+}
+
+shadowJar {
+    manifest {
+        attributes(getManifestAttributes())
     }
 
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-        exclude '**/*.md'
-        exclude '**/Thumbs.db'
-    }
+    minimize()  // This will only allow shading for actually used classes
+    configurations = [project.configurations.shadowImplementation]
+    dependsOn(relocateShadowJar)
 }
 
 jar {
-    destinationDir = file("build/tmp")
-    archiveName = "main.jar"
+    manifest {
+        attributes(getManifestAttributes())
+    }
 
-    exclude '**/Thumbs.db'
-    
-    from {
-        configurations.api.collect {
-            it.isDirectory() ? it : zipTree(it).matching {
-                include '**/api/**'
-                exclude '**/buildcraft/api/blueprints/**'
-                exclude '**/buildcraft/api/boards/**'
-                exclude '**/buildcraft/api/events/**'
-                exclude '**/buildcraft/api/facades/**'
-                exclude '**/buildcraft/api/filler/**'
-                exclude '**/buildcraft/api/fuels/**'
-                exclude '**/buildcraft/api/gates/**'
-                exclude '**/buildcraft/api/power/**'
-                exclude '**/buildcraft/api/recipes/**'
-                exclude '**/buildcraft/api/robots/**'
-                exclude '**/ic2/api/crops/**'
-                exclude '**/ic2/api/network/**'
-                exclude '**/ic2/api/event/**'
-                exclude '**/ic2/api/reactor/**'
-                exclude '**/ic2/api/package-info.java'
-                exclude '**/ic2/api/package-info.class'
+    if(usesShadowedDependencies.toBoolean()) {
+        dependsOn(shadowJar)
+        enabled = false
+    }
+}
+
+reobf {
+    if(usesMixins.toBoolean()) {
+        addExtraSrgFile mixinSrg
+    }
+}
+
+afterEvaluate {
+    if(usesMixins.toBoolean()) {
+        tasks.compileJava {
+            options.compilerArgs += [
+                    "-AreobfSrgFile=${tasks.reobf.srg}",
+                    "-AoutSrgFile=${mixinSrg}",
+                    "-AoutRefMapFile=${refMap}",
+                    // Elan: from what I understand they are just some linter configs so you get some warning on how to properly code
+                    "-XDenableSunApiLintControl",
+                    "-XDignore.symbol.file"
+            ]
+        }
+    }
+}
+
+runClient {
+    def arguments = []
+
+    if(usesMixins.toBoolean()) {
+        arguments += [
+                "--mods=../build/libs/$modId-${version}.jar",
+                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+        ]
+    }
+
+    if(developmentEnvironmentUserName) {
+        arguments += [
+                "--username",
+                developmentEnvironmentUserName
+        ]
+    }
+
+    args(arguments)
+}
+
+runServer {
+    def arguments = []
+
+    if (usesMixins.toBoolean()) {
+        arguments += [
+                "--mods=../build/libs/$modId-${version}.jar",
+                "--tweakClass org.spongepowered.asm.launch.MixinTweaker"
+        ]
+    }
+
+    args(arguments)
+}
+
+tasks.withType(JavaExec).configureEach {
+    javaLauncher.set(
+            javaToolchains.launcherFor {
+                languageVersion = projectJavaVersion
+            }
+    )
+}
+
+processResources
+        {
+            // this will ensure that this task is redone when the versions change.
+            inputs.property "version", project.version
+            inputs.property "mcversion", project.minecraft.version
+
+            // replace stuff in mcmod.info, nothing else
+            from(sourceSets.main.resources.srcDirs) {
+                include 'mcmod.info'
+
+                // replace version and mcversion
+                expand "minecraftVersion": project.minecraft.version,
+                        "modVersion": versionDetails().lastTag,
+                        "modId": modId,
+                        "modName": modName
+            }
+
+            // copy everything else, thats not the mcmod.info
+            from(sourceSets.main.resources.srcDirs) {
+                exclude 'mcmod.info'
             }
         }
+
+def getManifestAttributes() {
+    def manifestAttributes = [:]
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+        manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
+    }
+
+    if(accessTransformersFile) {
+        manifestAttributes += ["FMLAT" : accessTransformersFile.toString()]
+    }
+
+    if(coreModClass) {
+        manifestAttributes += ["FMLCorePlugin": modGroup + "." + coreModClass]
+    }
+
+    if(usesMixins.toBoolean()) {
+        manifestAttributes += [
+                "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
+                "MixinConfigs" : mixinConfigJson,
+                "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
+        ]
+    }
+    return manifestAttributes
+}
+
+task sourcesJar(type: Jar) {
+    from (sourceSets.main.allJava)
+    from (file("$projectDir/LICENSE"))
+    getArchiveClassifier().set('sources')
+}
+
+task shadowDevJar(type: ShadowJar) {
+    from sourceSets.main.output
+    getArchiveClassifier().set("dev")
+
+    manifest {
+        attributes(getManifestAttributes())
+    }
+
+    minimize()  // This will only allow shading for actually used classes
+    configurations = [project.configurations.shadowImplementation]
+}
+
+task relocateShadowDevJar(type: ConfigureShadowRelocation) {
+    target = tasks.shadowDevJar
+    prefix = modGroup + ".shadow"
+}
+
+task circularResolverJar(type: Jar) {
+    dependsOn(relocateShadowDevJar)
+    dependsOn(shadowDevJar)
+    enabled = false
+}
+
+task devJar(type: Jar) {
+    from sourceSets.main.output
+    getArchiveClassifier().set("dev")
+
+    manifest {
+        attributes(getManifestAttributes())
+    }
+
+    if(usesShadowedDependencies.toBoolean()) {
+        dependsOn(circularResolverJar)
+        enabled = false
     }
 }
 
-task mainJarSigned ( type: Jar, dependsOn: 'reobf' ) {
-    from (zipTree(jar.getArchivePath())) {
-        exclude '**/api/**'
+task apiJar(type: Jar) {
+    from (sourceSets.main.allJava) {
+        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString() + '/**'
     }
 
-    exclude '**/Thumbs.db'
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    destinationDir = file("build/tmp")
-    archiveName = "signed.jar"
-
-    doLast {
-        if (project.hasProperty('signingKeystore')) {
-            ant.signjar(jar: getArchivePath(),
-                alias: signingAlias,
-                keystore: signingKeystore,
-                storepass: signingStorepass)
-        } else if (project.hasProperty('signingAlias')) {
-            ant.signjar(jar: getArchivePath(),
-                alias: signingAlias,
-                storepass: signingStorepass)
-        } else {
-            println 'Signing disabled, gradle.properties is missing.'
-        }
+    from (sourceSets.main.output) {
+        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString() + '/**'
     }
+
+    from (sourceSets.main.resources.srcDirs) {
+        include("LICENSE")
+    }
+
+    getArchiveClassifier().set('api')
 }
-
-task mainJar ( type: Zip, dependsOn: mainJarSigned ) {
-    from (zipTree(mainJarSigned.getArchivePath())) {
-        include '**'
-    }
-
-    from (zipTree(jar.getArchivePath())) {
-        include '**'
-        exclude '**/forestry/api/**'
-        exclude '**/uristqwerty/**'
-    }
-
-    exclude '**/Thumbs.db'
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    destinationDir = file(dirDest)
-    includeEmptyDirs = false
-    extension = 'jar'
-}
-
-task devJarSigned ( type: Jar, dependsOn: 'classes' ) {
-    from(sourceSets.main.output) {
-        exclude '**/api/**'
-    }
-
-    exclude '**/Thumbs.db'
-
-    destinationDir = file("build/tmp")
-    archiveName = "signed-dev.jar"
-
-    doLast {
-        if (project.hasProperty('signingKeystore')) {
-            ant.signjar(jar: getArchivePath(),
-                alias: signingAlias,
-                keystore: signingKeystore,
-                storepass: signingStorepass)
-        } else if (project.hasProperty('signingAlias')) {
-            ant.signjar(jar: getArchivePath(),
-                alias: signingAlias,
-                storepass: signingStorepass)
-        } else {
-            println 'Signing disabled, gradle.properties is missing.'
-        }
-    }
-}
-
-task devJar ( type: Zip, dependsOn: devJarSigned ) {
-    from (zipTree(devJarSigned.getArchivePath())) {
-        include '**'
-    }
-
-    from(sourceSets.main.output) {
-        include '**'
-        exclude '**/forestry/api/**'
-        exclude '**/uristqwerty/**'
-    }
-
-    from {
-        configurations.api.collect {
-            it.isDirectory() ? it : zipTree(it).matching {
-                include '**/api/**'
-                exclude '**/buildcraft/api/blueprints/**'
-                exclude '**/buildcraft/api/boards/**'
-                exclude '**/buildcraft/api/events/**'
-                exclude '**/buildcraft/api/facades/**'
-                exclude '**/buildcraft/api/filler/**'
-                exclude '**/buildcraft/api/fuels/**'
-                exclude '**/buildcraft/api/gates/**'
-                exclude '**/buildcraft/api/power/**'
-                exclude '**/buildcraft/api/recipes/**'
-                exclude '**/buildcraft/api/robots/**'
-                exclude '**/ic2/api/crops/**'
-                exclude '**/ic2/api/network/**'
-                exclude '**/ic2/api/event/**'
-                exclude '**/ic2/api/reactor/**'
-                exclude '**/ic2/api/package-info.java'
-                exclude '**/ic2/api/package-info.class'
-            }
-        }
-    }
-
-    exclude '**/Thumbs.db'
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    destinationDir = file(dirDest)
-    extension = 'jar'
-
-    classifier = 'dev'
-}
-
-task releaseInit << {
-    println '*************************************************************'
-    println 'This build will be version: ' +  rootProject.version
-    println '*************************************************************'
-}
-
-task release << {
-}
-
-release.dependsOn releaseInit, mainJar, devJar
-mainJar.shouldRunAfter releaseInit
-devJar.shouldRunAfter releaseInit
-release.shouldRunAfter uploadArchives
 
 artifacts {
-    archives mainJar, devJar
+    archives sourcesJar
+    archives devJar
+    if(apiPackage) {
+        archives apiJar
+    }
 }
 
-idea.module.inheritOutputDirs = true
+// Updating
+task updateBuildScript {
+    doLast {
+        if (updateBuildScript()) return
 
-task wrapper(type: Wrapper) {
-    gradleVersion = "4.4.1"
+        print("Build script already up-to-date!")
+    }
+}
+
+if (isNewBuildScriptVersionAvailable()) {
+    if (autoUpdateBuildScript.toBoolean()) {
+        updateBuildScript()
+    } else {
+        println("Build script update available! Run 'gradle updateBuildScript'")
+    }
+}
+
+static URL availableBuildScriptUrl() {
+    new URL("https://raw.githubusercontent.com/SinTh0r4s/ExampleMod1.7.10/main/build.gradle")
+}
+
+static boolean updateBuildScript() {
+    if (isNewBuildScriptVersionAvailable()) {
+        def buildscriptFile = new File("build.gradle")
+        availableBuildScriptUrl().withInputStream { i -> buildscriptFile.withOutputStream { it << i } }
+        print("Build script updated. Please REIMPORT the project or RESTART your IDE!")
+        return true
+    }
+    return false
+}
+
+static boolean isNewBuildScriptVersionAvailable() {
+    Map parameters = ["connectTimeout": 2000, "readTimeout": 2000]
+
+    String currentBuildScript = new File("build.gradle").getText()
+    String currentBuildScriptHash = getVersionHash(currentBuildScript)
+    String availableBuildScript = availableBuildScriptUrl().newInputStream(parameters).getText()
+    String availableBuildScriptHash = getVersionHash(availableBuildScript)
+
+    boolean isUpToDate = currentBuildScriptHash.empty || availableBuildScriptHash.empty || currentBuildScriptHash == availableBuildScriptHash
+    return !isUpToDate
+}
+
+static String getVersionHash(String buildScriptContent) {
+    String versionLine = buildScriptContent.find("^//version: [a-z0-9]*")
+    if(versionLine != null) {
+        return versionLine.split(": ").last()
+    }
+    return ""
+}
+
+configure(updateBuildScript) {
+    group = 'forgegradle'
+    description = 'Updates the build script to the latest version'
 }
