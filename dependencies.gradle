@@ -6,6 +6,6 @@ dependencies {
     compile("thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev")
     runtime("com.azanor.baubles:Baubles:1.7.10-1.0.1.10:deobf")
 
-    compileOnly("com.github.GTNewHorizons:ForestryMC:unified-build-script-SNAPSHOT:dev")
+    compileOnly("com.github.GTNewHorizons:ForestryMC:master-SNAPSHOT:dev")
     compileOnly("curse.maven:craftguide-75557:2459320")
 }
