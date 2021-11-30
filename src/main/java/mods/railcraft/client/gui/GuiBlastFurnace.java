@@ -18,7 +18,7 @@ public class GuiBlastFurnace extends TileGui {
     private TileBlastFurnace tile;
 
     public GuiBlastFurnace(InventoryPlayer par1InventoryPlayer, TileBlastFurnace tile) {
-        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), "textures/gui/container/furnace.png");
+        super(tile, new ContainerBlastFurnace(par1InventoryPlayer, tile), "railcraft:textures/gui/gui_blast_furnace.png");
         this.tile = tile;
     }
 
