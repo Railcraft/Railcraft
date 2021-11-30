@@ -1,4 +1,4 @@
-//version: eb0b030ab9cb1d0f9a31f11e69e1ceed1dab2c89
+//version: ffe7b130f98fdfa1ac7c6ba4bd34722a55ab28d4
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -60,6 +60,10 @@ idea {
         downloadJavadoc = true
         downloadSources = true
     }
+}
+
+if(JavaVersion.current() != JavaVersion.VERSION_1_8) {
+    throw new GradleException("This project requires Java 8, but it's running on " + JavaVersion.current())
 }
 
 checkPropertyExists("modName")
@@ -153,7 +157,12 @@ configurations.all {
 // Fix Jenkins' Git: chmod a file should not be detected as a change and append a '.dirty' to the version
 'git config core.fileMode false'.execute()
 // Pulls version from git tag
-version = minecraftVersion + "-" + gitVersion()
+try {
+    version = minecraftVersion + "-" + gitVersion()
+}
+catch (Exception e) {
+    throw new IllegalStateException("This mod must be version controlled by Git AND the repository must provide at least one tag!");
+}
 group = modGroup
 archivesBaseName = modId
 
@@ -225,14 +234,13 @@ dependencies {
 
 apply from: 'dependencies.gradle'
 
-def mixinConfigJson = "mixins." + modId + ".json"
 def mixingConfigRefMap = "mixins." + modId + ".refmap.json"
 def refMap = "${tasks.compileJava.temporaryDir}" + File.separator + mixingConfigRefMap
 def mixinSrg = "${tasks.reobf.temporaryDir}" + File.separator + "mixins.srg"
 
 task generateAssets {
     if(usesMixins.toBoolean()) {
-        new File(projectDir.toString() + "/src/main/resources/", mixinConfigJson).text = """{
+        new File(projectDir.toString() + "/src/main/resources/", "mixins." + modId + ".json").text = """{
   "required": true,
   "minVersion": "0.7.11",
   "package": "${modGroup}.${mixinsPackage}",
@@ -351,6 +359,10 @@ processResources
                         "modName": modName
             }
 
+            if(usesMixins.toBoolean()) {
+                from refMap
+            }
+
             // copy everything else, thats not the mcmod.info
             from(sourceSets.main.resources.srcDirs) {
                 exclude 'mcmod.info'
@@ -359,7 +371,7 @@ processResources
 
 def getManifestAttributes() {
     def manifestAttributes = [:]
-    if(containsMixinsAndOrCoreModOnly.toBoolean() == false) {
+    if(containsMixinsAndOrCoreModOnly.toBoolean() == false && (usesMixins.toBoolean() || coreModClass)) {
         manifestAttributes += ["FMLCorePluginContainsFMLMod": true]
     }
 
@@ -374,7 +386,7 @@ def getManifestAttributes() {
     if(usesMixins.toBoolean()) {
         manifestAttributes += [
                 "TweakClass" : "org.spongepowered.asm.launch.MixinTweaker",
-                "MixinConfigs" : mixinConfigJson,
+                "MixinConfigs" : "mixins." + modId + ".json",
                 "ForceLoadAsMod" : containsMixinsAndOrCoreModOnly.toBoolean() == false
         ]
     }
