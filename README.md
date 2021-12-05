@@ -1,6 +1,6 @@
 # Railcraft - A Minecraft Mod
 
-Here you will find the source and issue tracker for the **Official Railcraft Project**.
+Here you will find the source  for the **GTNH fork of the Railcraft Project**.  See `covertjaguar_RC_permission.png` for permission.
 
 
 ## What is Railcraft?
@@ -24,14 +24,6 @@ In the words of **CovertJaguar**:
 * Patreon Page: http://www.patreon.com/CovertJaguar
 
 <a href="http://www.patreon.com/CovertJaguar"> ![Patreon](http://www.railcraft.info/wp-content/uploads/2014/05/Patreon.png)</a>
-
-## Issues
-
-Post only confirmed bugs [here](https://github.com/CovertJaguar/Railcraft/issues). Do not post crash logs, you can post pastebin links to FML logs, but no crash logs.
-
-You must have read and performed the proper support procedure outlined [here](http://railcraft.info/wiki/info:support) before posting.
-
-More information about issue Labels can be found [here](https://github.com/CovertJaguar/Railcraft/wiki/Issue-Labels).
 
 ## Contributing
 
