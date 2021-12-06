@@ -37,7 +37,7 @@ public class ItemFirestoneRaw extends ItemFirestoneBase {
     }
 
     public ItemFirestoneRaw() {
-        setMaxStackSize(1);
+        setMaxStackSize(9);
     }
 
 
