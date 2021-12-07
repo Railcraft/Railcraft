@@ -69,14 +69,12 @@ public class ModuleAdvancedTanks extends RailcraftModule {
     	if (type instanceof EnumMachineZeta) {
     		if (((EnumMachineZeta) type).register()) {
                 addColorRecipes(type);
-                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
                 return true;
             }
     	}
     	else if (type instanceof EnumMachineEta) {
     		if (((EnumMachineEta) type).register()) {
                 addColorRecipes(type);
-                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
                 return true;
             }
     	}       
