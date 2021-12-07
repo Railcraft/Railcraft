@@ -7,6 +7,10 @@ import mods.railcraft.common.blocks.machine.tank.GenericMultiTankBase;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineEta;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineZeta;
 import mods.railcraft.common.fluids.FluidHelper;
+import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.EnumColor;
+import net.minecraft.item.ItemStack;
 
 public class ModuleAdvancedTanks extends RailcraftModule {
 
@@ -28,8 +32,8 @@ public class ModuleAdvancedTanks extends RailcraftModule {
     public final static int CAPACITY_PER_BLOCK_OSMIUM = 2048 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_NEUTRONIUM = 3072 * FluidHelper.BUCKET_VOLUME;
 
-    public static final HashMap<String, IEnumMachine> cacheTankType = new HashMap<>();
-    public static final HashMap<String, GenericMultiTankBase> cacheTankMaterial = new HashMap<>();
+    public static final HashMap<String, IEnumMachine> cacheTankType = new HashMap<String, IEnumMachine>();
+    public static final HashMap<String, GenericMultiTankBase> cacheTankMaterial = new HashMap<String, GenericMultiTankBase>();
 	
 	public static void initTanks() {
 		ALUMINIUM = createTank("aluminium", CAPACITY_PER_BLOCK_ALUMINIUM, EnumMachineZeta.TANK_ALUMINIUM_WALL, EnumMachineZeta.TANK_ALUMINIUM_GAUGE, EnumMachineZeta.TANK_ALUMINIUM_VALVE);
@@ -61,15 +65,41 @@ public class ModuleAdvancedTanks extends RailcraftModule {
         defineTank(tankType.TANK_VALVE);
     }
     
-    private void defineTank(IEnumMachine type) {
+    private boolean defineTank(IEnumMachine type, Object... recipe) {    	
     	if (type instanceof EnumMachineZeta) {
-			((EnumMachineZeta) type).register();
-		}
+    		if (((EnumMachineZeta) type).register()) {
+                addColorRecipes(type);
+                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
+                return true;
+            }
+    	}
     	else if (type instanceof EnumMachineEta) {
-			((EnumMachineEta) type).register();
-		}
-	}
+    		if (((EnumMachineEta) type).register()) {
+                addColorRecipes(type);
+                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
+                return true;
+            }
+    	}       
+        return false;
+    }
+    
+    private void addColorRecipes(IEnumMachine type) {
+        for (EnumColor color : EnumColor.VALUES) {
+            ItemStack output = getColorTank(type, color, 8);
+            CraftingPlugin.addShapedRecipe(output,
+                    "OOO",
+                    "ODO",
+                    "OOO",
+                    'O', type.getItem(),
+                    'D', color.getDye());
+        }
+    }
 
+    private ItemStack getColorTank(IEnumMachine type, EnumColor color, int qty) {
+        ItemStack stack = type.getItem(qty);
+        return InvTools.setItemColor(stack, color);
+    }
+	
 	private static GenericMultiTankBase createTank(String material, int capacity, IEnumMachine tankWall, IEnumMachine tankGauge, IEnumMachine tankValve) {
 		GenericMultiTankBase tank = new GenericMultiTankBase(material, capacity, tankWall, tankValve, tankGauge);
 		cacheTankMaterial.put(tankWall.getTag(), tank);
