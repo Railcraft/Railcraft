@@ -7,11 +7,6 @@ import mods.railcraft.common.blocks.machine.tank.GenericMultiTankBase;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineEta;
 import mods.railcraft.common.blocks.machine.zeta.EnumMachineZeta;
 import mods.railcraft.common.fluids.FluidHelper;
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
-import mods.railcraft.common.util.inventory.InvTools;
-import mods.railcraft.common.util.misc.EnumColor;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 
 public class ModuleAdvancedTanks extends RailcraftModule {
 
@@ -33,8 +28,8 @@ public class ModuleAdvancedTanks extends RailcraftModule {
     public final static int CAPACITY_PER_BLOCK_OSMIUM = 2048 * FluidHelper.BUCKET_VOLUME;
     public final static int CAPACITY_PER_BLOCK_NEUTRONIUM = 3072 * FluidHelper.BUCKET_VOLUME;
 
-    public static final HashMap<String, IEnumMachine> cacheTankType = new HashMap<String, IEnumMachine>();
-    public static final HashMap<String, GenericMultiTankBase> cacheTankMaterial = new HashMap<String, GenericMultiTankBase>();
+    public static final HashMap<String, IEnumMachine> cacheTankType = new HashMap<>();
+    public static final HashMap<String, GenericMultiTankBase> cacheTankMaterial = new HashMap<>();
 	
 	public static void initTanks() {
 		ALUMINIUM = createTank("aluminium", CAPACITY_PER_BLOCK_ALUMINIUM, EnumMachineZeta.TANK_ALUMINIUM_WALL, EnumMachineZeta.TANK_ALUMINIUM_GAUGE, EnumMachineZeta.TANK_ALUMINIUM_VALVE);
@@ -60,68 +55,21 @@ public class ModuleAdvancedTanks extends RailcraftModule {
 		initTankOfType(NEUTRONIUM);
 	}
 	
-    private void initTankOfType(GenericMultiTankBase tankType) {    	
-    	// Try generate dynamic recipes
-    	String materialName = tankType.tankMaterial;
-    	String oredictName = "plate" + materialName.substring(0, 1).toUpperCase() + materialName.substring(1);
-    	ItemStack metalPlate = InvTools.getItemFromOreDict(oredictName, 1);
-    	
-        defineTank(tankType.TANK_WALL,
-                "PP",
-                "PP",
-                'P', metalPlate);
-
-        defineTank(tankType.TANK_GAUGE,
-                "GPG",
-                "PGP",
-                "GPG",
-                'P', metalPlate,
-                'G', "paneGlassColorless");
-
-        defineTank(tankType.TANK_VALVE,
-                "GPG",
-                "PLP",
-                "GPG",
-                'P', metalPlate,
-                'L', new ItemStack(Blocks.lever),
-                'G', new ItemStack(Blocks.iron_bars));
+    private void initTankOfType(GenericMultiTankBase tankType) {
+        defineTank(tankType.TANK_WALL);
+        defineTank(tankType.TANK_GAUGE);
+        defineTank(tankType.TANK_VALVE);
     }
     
-    private boolean defineTank(IEnumMachine type, Object... recipe) {    	
+    private void defineTank(IEnumMachine type) {
     	if (type instanceof EnumMachineZeta) {
-    		if (((EnumMachineZeta) type).register()) {
-                addColorRecipes(type);
-                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
-                return true;
-            }
-    	}
+			((EnumMachineZeta) type).register();
+		}
     	else if (type instanceof EnumMachineEta) {
-    		if (((EnumMachineEta) type).register()) {
-                addColorRecipes(type);
-                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
-                return true;
-            }
-    	}       
-        return false;
-    }
-    
-    private void addColorRecipes(IEnumMachine type) {
-        for (EnumColor color : EnumColor.VALUES) {
-            ItemStack output = getColorTank(type, color, 8);
-            CraftingPlugin.addShapedRecipe(output,
-                    "OOO",
-                    "ODO",
-                    "OOO",
-                    'O', type.getItem(),
-                    'D', color.getDye());
-        }
-    }
+			((EnumMachineEta) type).register();
+		}
+	}
 
-    private ItemStack getColorTank(IEnumMachine type, EnumColor color, int qty) {
-        ItemStack stack = type.getItem(qty);
-        return InvTools.setItemColor(stack, color);
-    }
-	
 	private static GenericMultiTankBase createTank(String material, int capacity, IEnumMachine tankWall, IEnumMachine tankGauge, IEnumMachine tankValve) {
 		GenericMultiTankBase tank = new GenericMultiTankBase(material, capacity, tankWall, tankValve, tankGauge);
 		cacheTankMaterial.put(tankWall.getTag(), tank);
@@ -129,5 +77,4 @@ public class ModuleAdvancedTanks extends RailcraftModule {
 		cacheTankMaterial.put(tankValve.getTag(), tank);
 		return tank;
 	}
-	
 }
