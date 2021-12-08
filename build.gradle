@@ -1,4 +1,4 @@
-//version: ffe7b130f98fdfa1ac7c6ba4bd34722a55ab28d4
+//version: aa8aff90655e0509464d4a8dc42c38d3614c1260
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -163,8 +163,14 @@ try {
 catch (Exception e) {
     throw new IllegalStateException("This mod must be version controlled by Git AND the repository must provide at least one tag!");
 }
+
 group = modGroup
-archivesBaseName = modId
+if(project.hasProperty("customArchiveBaseName") && customArchiveBaseName) {
+    archivesBaseName = customArchiveBaseName
+}
+else {
+    archivesBaseName = modId
+}
 
 minecraft {
     version = minecraftVersion + "-" + forgeVersion + "-" + minecraftVersion
@@ -438,11 +444,11 @@ task devJar(type: Jar) {
 
 task apiJar(type: Jar) {
     from (sourceSets.main.allJava) {
-        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString() + '/**'
+        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/") + '/**'
     }
 
     from (sourceSets.main.output) {
-        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString() + '/**'
+        include modGroup.toString().replaceAll("\\.", "/") + "/" + apiPackage.toString().replaceAll("\\.", "/") + '/**'
     }
 
     from (sourceSets.main.resources.srcDirs) {

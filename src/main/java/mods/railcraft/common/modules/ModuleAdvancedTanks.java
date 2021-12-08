@@ -10,7 +10,6 @@ import mods.railcraft.common.fluids.FluidHelper;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.EnumColor;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class ModuleAdvancedTanks extends RailcraftModule {
@@ -60,45 +59,22 @@ public class ModuleAdvancedTanks extends RailcraftModule {
 		initTankOfType(NEUTRONIUM);
 	}
 	
-    private void initTankOfType(GenericMultiTankBase tankType) {    	
-    	// Try generate dynamic recipes
-    	String materialName = tankType.tankMaterial;
-    	String oredictName = "plate" + materialName.substring(0, 1).toUpperCase() + materialName.substring(1);
-    	ItemStack metalPlate = InvTools.getItemFromOreDict(oredictName, 1);
-    	
-        defineTank(tankType.TANK_WALL,
-                "PP",
-                "PP",
-                'P', metalPlate);
-
-        defineTank(tankType.TANK_GAUGE,
-                "GPG",
-                "PGP",
-                "GPG",
-                'P', metalPlate,
-                'G', "paneGlassColorless");
-
-        defineTank(tankType.TANK_VALVE,
-                "GPG",
-                "PLP",
-                "GPG",
-                'P', metalPlate,
-                'L', new ItemStack(Blocks.lever),
-                'G', new ItemStack(Blocks.iron_bars));
+    private void initTankOfType(GenericMultiTankBase tankType) {
+        defineTank(tankType.TANK_WALL);
+        defineTank(tankType.TANK_GAUGE);
+        defineTank(tankType.TANK_VALVE);
     }
     
     private boolean defineTank(IEnumMachine type, Object... recipe) {    	
     	if (type instanceof EnumMachineZeta) {
     		if (((EnumMachineZeta) type).register()) {
                 addColorRecipes(type);
-                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
                 return true;
             }
     	}
     	else if (type instanceof EnumMachineEta) {
     		if (((EnumMachineEta) type).register()) {
                 addColorRecipes(type);
-                CraftingPlugin.addShapedRecipe(getColorTank(type, EnumColor.WHITE, 8), recipe);
                 return true;
             }
     	}       
@@ -129,5 +105,4 @@ public class ModuleAdvancedTanks extends RailcraftModule {
 		cacheTankMaterial.put(tankValve.getTag(), tank);
 		return tank;
 	}
-	
 }
