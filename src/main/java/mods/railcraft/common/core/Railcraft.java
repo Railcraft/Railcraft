@@ -125,15 +125,7 @@ public final class Railcraft {
                 FuelManager.addBoilerFuel(fluid, fuel);
                 Game.log(Level.DEBUG, String.format("Mod %s registered %s as a valid liquid Boiler fuel", mess.getSender(), mess.getStringValue()));
             } else if (mess.key.equals("rock-crusher")) {
-                NBTTagCompound nbt = mess.getNBTValue();
-                ItemStack input = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("input"));
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(input, nbt.getBoolean("matchMeta"), nbt.getBoolean("matchNBT"));
-                for (int i = 0; i < 9; i++) {
-                    if (nbt.hasKey("output" + i)) {
-                        NBTTagCompound outputNBT = nbt.getCompoundTag("output" + i);
-                        recipe.addOutput(ItemStack.loadItemStackFromNBT(outputNBT), outputNBT.getFloat("chance"));
-                    }
-                }
+                // Ignore it
             } else if (mess.key.equals("high-speed-explosion-excluded-entities")) {
                 NBTTagCompound nbt = mess.getNBTValue();
                 if (nbt.hasKey("entities")) {

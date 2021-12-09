@@ -210,93 +210,11 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     @Override
     public void updateEntity() {
         super.updateEntity();
-
-        if (Game.isHost(getWorld())) {
-
-            if (isStructureValid()) {
-                EntityItem item = TileEntityHopper.func_145897_a(worldObj, xCoord, yCoord + 1, zCoord);
-                if (item != null && useMasterEnergy(SUCKING_POWER_COST, false)) {
-                    ItemStack stack = item.getEntityItem().copy();
-                    if (InventoryManipulator.get(invInput).addStack(stack) != null)
-                        useMasterEnergy(SUCKING_POWER_COST, true);
-                    item.setDead();
-                }
-
-                EntityLivingBase entity = MiscTools.getEntityAt(worldObj, EntityLivingBase.class, xCoord, yCoord + 1, zCoord);
-                if (entity != null && useMasterEnergy(KILLING_POWER_COST, false))
-                    if (entity.attackEntityFrom(RailcraftDamageSource.CRUSHER, 10))
-                        useMasterEnergy(KILLING_POWER_COST, true);
-            }
-
-            if (isMaster()) {
-                if (clock % 16 == 0)
-                    processActions();
-
-                if (paused)
-                    return;
-
-                ItemStack input = null;
-                IRockCrusherRecipe recipe = null;
-                for (int i = 0; i < 9; i++) {
-                    input = invInput.getStackInSlot(i);
-                    if (input != null) {
-                        recipe = RailcraftCraftingManager.rockCrusher.getRecipe(input);
-                        if (recipe != null)
-                            break;
-                    }
-                }
-
-                if (recipe != null)
-                    if (processTime >= PROCESS_TIME) {
-                        isWorking = false;
-                        IInventory tempInv = new InventoryCopy(invOutput);
-                        boolean hasRoom = true;
-                        List<ItemStack> outputs = recipe.getRandomizedOuputs();
-                        for (ItemStack output : outputs) {
-                            output = InvTools.moveItemStack(output, tempInv);
-                            if (output != null) {
-                                hasRoom = false;
-                                break;
-                            }
-                        }
-
-                        if (hasRoom) {
-                            for (ItemStack output : outputs) {
-                                InvTools.moveItemStack(output, invOutput);
-                            }
-
-                            InvTools.removeOneItem(invInput, input);
-
-                            SoundHelper.playSound(worldObj, xCoord, yCoord, zCoord, "mob.irongolem.death", 1.0f, worldObj.rand.nextFloat() * 0.25F + 0.7F);
-
-                            processTime = 0;
-                        }
-                    } else {
-                        isWorking = true;
-                        if (energyStorage != null) {
-                            int energy = energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, true);
-                            if (energy >= CRUSHING_POWER_COST_PER_TICK) {
-                                processTime++;
-                                energyStorage.extractEnergy(CRUSHING_POWER_COST_PER_TICK, false);
-                            }
-                        } else
-                            processTime++;
-                    }
-                else {
-                    processTime = 0;
-                    isWorking = false;
-                }
-            }
-        }
+        // Do nothing
     }
 
     @Override
     public boolean openGui(EntityPlayer player) {
-        TileMultiBlock mBlock = getMasterBlock();
-        if (mBlock != null) {
-            GuiHandler.openGui(EnumGui.ROCK_CRUSHER, player, worldObj, mBlock.xCoord, mBlock.yCoord, mBlock.zCoord);
-            return true;
-        }
         return false;
     }
 
@@ -334,16 +252,11 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
     }
 
     public int getProcessTime() {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.processTime;
         return -1;
     }
 
     public void setProcessTime(int processTime) {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null)
-            mBlock.processTime = processTime;
+        // Do nothing
     }
 
     public int getProgressScaled(int i) {
@@ -352,32 +265,16 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     public boolean hasWork() {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.isWorking;
         return false;
     }
 
-    //    public void setPaused(boolean p) {
-//        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-//        if (mBlock != null) {
-//            mBlock.paused = p;
-//        }
-//    }
     private void processActions() {
-        paused = false;
-        for (IActionExternal action : actions) {
-            if (action == Actions.PAUSE)
-                paused = true;
-        }
         actions.clear();
     }
 
     @Override
     public void actionActivated(IActionExternal action) {
-        TileRockCrusher mBlock = (TileRockCrusher) getMasterBlock();
-        if (mBlock != null)
-            mBlock.actions.add(action);
+        // Do nothing
     }
 
     @Override
@@ -389,20 +286,16 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, int side) {
-        return isItemValidForSlot(slot, stack);
+        return false;
     }
 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, int side) {
-        return slot >= 9;
+        return false;
     }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (!super.isItemValidForSlot(slot, stack))
-            return false;
-        if (slot < 9)
-            return RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null;
         return false;
     }
 
@@ -415,9 +308,7 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().receiveEnergy(maxReceive, simulate);
+        return 0;
     }
 
     @Override
@@ -427,20 +318,16 @@ public class TileRockCrusher extends TileMultiBlockInventory implements IEnergyH
 
     @Override
     public int getEnergyStored(ForgeDirection from) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().getEnergyStored();
+        return 0;
     }
 
     @Override
     public int getMaxEnergyStored(ForgeDirection from) {
-        if (getEnergyStorage() == null)
-            return 0;
-        return getEnergyStorage().getMaxEnergyStored();
+        return 0;
     }
 
     @Override
     public boolean canConnectEnergy(ForgeDirection from) {
-        return RailcraftConfig.machinesRequirePower();
+        return false;
     }
 }

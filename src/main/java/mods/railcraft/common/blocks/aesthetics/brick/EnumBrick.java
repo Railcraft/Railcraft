@@ -37,8 +37,6 @@ public enum EnumBrick {
         public void initRecipes() {
             if (EnumCube.ABYSSAL_STONE.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumCube.ABYSSAL_STONE.getItem(), new ItemStack(getBlock(), 1, 2), 0.2F);
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumCube.ABYSSAL_STONE.getItem(), true, false);
-                recipe.addOutput(get(COBBLE, 1), 1.0F);
             }
         }
     },
@@ -93,8 +91,6 @@ public enum EnumBrick {
         public void initRecipes() {
             if (EnumCube.QUARRIED_STONE.isEnabled()) {
                 CraftingPlugin.addFurnaceRecipe(EnumCube.QUARRIED_STONE.getItem(), new ItemStack(getBlock(), 1, 2), 0.2F);
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumCube.QUARRIED_STONE.getItem(), true, false);
-                recipe.addOutput(get(COBBLE, 1), 1.0F);
             }
         }
     },
@@ -185,9 +181,6 @@ public enum EnumBrick {
                         "III",
                         'I', get(BLOCK, 1));
                 CraftingPlugin.addShapelessRecipe(get(ETCHED, 1), get(BLOCK, 1), new ItemStack(Items.gunpowder));
-
-                IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(new ItemStack(block), false, false);
-                recipe.addOutput(get(COBBLE, 1), 1.0F);
 
                 CraftingPlugin.addFurnaceRecipe(get(COBBLE, 1), get(BLOCK, 1), 0.0F);
                 EnumBrick.this.initRecipes();
