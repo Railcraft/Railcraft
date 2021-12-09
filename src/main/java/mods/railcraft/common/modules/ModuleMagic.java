@@ -44,9 +44,6 @@ public class ModuleMagic extends RailcraftModule {
         FMLCommonHandler.instance().bus().register(new FirestoneTickHandler());
 
         if (EnumOre.FIRESTONE.isEnabled() && ItemFirestoneRaw.item != null && ItemFirestoneCut.item != null) {
-            IRockCrusherRecipe recipe = RailcraftCraftingManager.rockCrusher.createNewRecipe(EnumOre.FIRESTONE.getItem(), true, false);
-            recipe.addOutput(ItemFirestoneRaw.getItem(), 1F);
-
             CraftingPlugin.addShapedRecipe(ItemFirestoneCut.getItem(),
                     " P ",
                     "PFP",

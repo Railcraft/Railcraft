@@ -44,26 +44,6 @@ public class RockCrusherPlugin implements RecipeProvider {
 
     @Override
     public void generateRecipes(RecipeGenerator generator) {
-        ItemStack crafter = EnumMachineAlpha.ROCK_CRUSHER.getItem();
-        if (crafter != null) {
-            RecipeTemplate template = generator.createRecipeTemplate(slots, crafter, RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_craft_guide.png", 1, 61, 82, 61);
-
-            for (IRockCrusherRecipe recipe : RailcraftCraftingManager.rockCrusher.getRecipes()) {
-                Object[] items = new Object[11];
-                items[0] = recipe.getInput();
-                List<Map.Entry<ItemStack, Float>> output = recipe.getOutputs();
-                int i = 1;
-                for (Entry<ItemStack, Float> e : output) {
-                    if (i > 9) {
-                        break;
-                    }
-                    items[i] = new Object[]{e.getKey(), e.getValue()};
-                    i++;
-                }
-
-                items[10] = crafter;
-                generator.addRecipe(template, items);
-            }
-        }
+        // Do nothing
     }
 }

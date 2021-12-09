@@ -9,7 +9,6 @@
 package mods.railcraft.common.gui.containers;
 
 import cofh.api.energy.EnergyStorage;
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.gui.widgets.RFEnergyIndicator;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ICrafting;
@@ -104,8 +103,7 @@ public class ContainerRockCrusher extends RailcraftContainer {
 
         @Override
         public boolean isItemValid(ItemStack stack) {
-            if (stack != null && RailcraftCraftingManager.rockCrusher.getRecipe(stack) != null)
-                return true;
+            // Nothing goes in here
             return false;
         }
 
