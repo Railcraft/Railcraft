@@ -53,8 +53,8 @@ public class ModuleTransport extends RailcraftModule {
                     'S', "slimeball",
                     'W', "plankWood");
 
-        initIronTank();
-        initSteelTank();
+        //initIronTank();
+        //initSteelTank();
 
         EnumMachineBeta voidChest = EnumMachineBeta.VOID_CHEST;
         if (voidChest.register())
@@ -226,7 +226,7 @@ public class ModuleTransport extends RailcraftModule {
         return false;
     }
 
-    private void initIronTank() {
+    /* private void initIronTank() {
         defineIronTank(EnumMachineBeta.TANK_IRON_WALL,
                 "PP",
                 "PP",
@@ -269,5 +269,5 @@ public class ModuleTransport extends RailcraftModule {
                 'L', new ItemStack(Blocks.lever),
                 'G', new ItemStack(Blocks.iron_bars));
     }
-
+*/
 }
