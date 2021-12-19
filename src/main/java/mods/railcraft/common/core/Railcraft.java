@@ -157,8 +157,6 @@ public final class Railcraft {
 
         PacketHandler.init();
 
-        StartupChecks.checkForNewVersion();
-
         StackFilter.initialize();
 
         ModuleManager.preInit();

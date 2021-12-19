@@ -138,8 +138,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void initClient() {
-        FMLCommonHandler.instance().bus().register(new LatestVersionMessage());
-
         SoundRegistry.setupBlockSounds();
 
         FMLCommonHandler.instance().bus().register(LocomotiveKeyHandler.INSTANCE);
