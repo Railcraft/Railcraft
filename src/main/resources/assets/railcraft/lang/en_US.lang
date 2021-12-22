@@ -345,7 +345,7 @@ railcraft.gui.aspect.yellow.name=Yellow
 railcraft.gui.aura.disable=@s Aura Off
 railcraft.gui.aura.enable=@s Aura On
 
-railcraft.gui.blast.furnace=Blast Furnace
+railcraft.gui.blast.furnace=§7 Blast Furnace
 
 railcraft.gui.bore.ballast=Ballast
 railcraft.gui.bore.fuel=Fuel
@@ -540,7 +540,7 @@ railcraft.gui.routing.type.private=Private Railway
 railcraft.gui.routing.type.public.tip=Will route any Locomotive.
 railcraft.gui.routing.type.public=Public Railway
 
-railcraft.gui.steam.boiler=Steam Boiler
+railcraft.gui.steam.boiler=§7 Steam Boiler
 railcraft.gui.steam.oven=Steam Oven
 
 railcraft.gui.surveyor.abandon=Signal Block Survey abandoned
