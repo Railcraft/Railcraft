@@ -231,7 +231,7 @@ railcraft.gui.aspect.yellow.name=Amarillo
 railcraft.gui.aura.disable=@s Aura Apagada
 railcraft.gui.aura.enable=@s Aura Encendida
 
-railcraft.gui.blast.furnace=Alto Horno
+railcraft.gui.blast.furnace=§7 Alto Horno
 
 railcraft.gui.bore.ballast=Lastre
 railcraft.gui.bore.fuel=Combustible
@@ -406,7 +406,7 @@ railcraft.gui.routing.type.private=Línea de Ferrocarril Privada
 railcraft.gui.routing.type.public.tip=Enrutará cualquier Locomotora.
 railcraft.gui.routing.type.public=Ferrocarril Público
 
-railcraft.gui.steam.boiler=Caldera de Vapor
+railcraft.gui.steam.boiler=§7 Caldera de Vapor
 railcraft.gui.steam.oven=Horno a Vapor
 
 railcraft.gui.surveyor.abandon=Inspección de Bloque de Señal abandonada

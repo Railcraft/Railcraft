@@ -65,7 +65,7 @@ railcraft.gates.trigger.engine=Estagio do Motor
 railcraft.gates.trigger.fuel=Combustivel baixo
 railcraft.gates.trigger.work=Tem Trabalho
 
-railcraft.gui.blast.furnace=Forno Infernal
+railcraft.gui.blast.furnace=§7 Forno Infernal
 railcraft.gui.bore.ballast=Cascalho
 railcraft.gui.bore.fuel=Combustivel
 railcraft.gui.bore.head=Cabeça da Broca

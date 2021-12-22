@@ -304,7 +304,7 @@ railcraft.gui.aspect.yellow.name=Жёлтый
 railcraft.gui.aura.enable=Аура "@s" включена
 railcraft.gui.aura.disable=Аура "@s" выключена
 
-railcraft.gui.blast.furnace=Доменная печь
+railcraft.gui.blast.furnace=§7 Доменная печь
 
 railcraft.gui.bore.ballast=Балласт
 railcraft.gui.bore.fuel=Топливо
@@ -498,7 +498,7 @@ railcraft.gui.routing.type.private=Частная железная дорога
 railcraft.gui.routing.type.public.tip=Будет направлять любой локомотив.
 railcraft.gui.routing.type.public=Общественная железная дорога
 
-railcraft.gui.steam.boiler=Паровой котёл
+railcraft.gui.steam.boiler=§7 Паровой котёл
 railcraft.gui.steam.oven=Паровая печь
 
 railcraft.gui.surveyor.abandon=Обследование сигнального блока остановлено

@@ -347,7 +347,7 @@ railcraft.gui.aspect.yellow.name=黃燈
 railcraft.gui.aura.disable=@s 監視關閉
 railcraft.gui.aura.enable=@s 開啟監視
 
-railcraft.gui.blast.furnace=鼓風爐
+railcraft.gui.blast.furnace=§7 鼓風爐
 
 railcraft.gui.bore.ballast=鋪路材料
 railcraft.gui.bore.fuel=燃料
@@ -542,7 +542,7 @@ railcraft.gui.routing.type.private=私有鐵路
 railcraft.gui.routing.type.public.tip=檢查任何經過的火車頭
 railcraft.gui.routing.type.public=公共鐵路
 
-railcraft.gui.steam.boiler=蒸氣鍋爐
+railcraft.gui.steam.boiler=§7 蒸氣鍋爐
 railcraft.gui.steam.oven=蒸氣爐
 
 railcraft.gui.surveyor.abandon=終止測量號誌區間

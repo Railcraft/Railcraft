@@ -65,8 +65,8 @@ railcraft.gates.trigger.engine=Estágio do Motor
 railcraft.gates.trigger.fuel=Combustível em Baixo
 railcraft.gates.trigger.work=Tem Trabalho
 
-railcraft.gui.blast.furnace=Alto-Forno
-railcraft.gui.steam.boiler=Caldeira
+railcraft.gui.blast.furnace=§7 Alto-Forno
+railcraft.gui.steam.boiler=§7 Caldeira
 railcraft.gui.bore.ballast=Balastro
 railcraft.gui.bore.fuel=Combustível
 railcraft.gui.bore.head=Broca

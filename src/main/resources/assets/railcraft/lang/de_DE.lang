@@ -345,7 +345,7 @@ railcraft.gui.aspect.yellow.name=Gelb
 railcraft.gui.aura.disable=Signal Aus: @s
 railcraft.gui.aura.enable=Signal An: @s
 
-railcraft.gui.blast.furnace=Hochofen
+railcraft.gui.blast.furnace=§7 Hochofen
 
 railcraft.gui.bore.ballast=Ballast
 railcraft.gui.bore.fuel=Treibstoff
@@ -540,7 +540,7 @@ railcraft.gui.routing.type.private=Privates Gleis
 railcraft.gui.routing.type.public.tip=Kann von jedem Zug benutzt werden.
 railcraft.gui.routing.type.public=Öffentliches Gleis
 
-railcraft.gui.steam.boiler=Dampfkessel
+railcraft.gui.steam.boiler=§7 Dampfkessel
 railcraft.gui.steam.oven=Dampfofen
 
 railcraft.gui.surveyor.abandon=Signalblock-Anfrage abgebrochen

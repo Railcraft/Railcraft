@@ -281,7 +281,7 @@ railcraft.gui.aspect.yellow.name=Sárga
 railcraft.gui.aura.disable=@s Aura kikapcsolva
 railcraft.gui.aura.enable=@s Aura bekapcsolva
 
-railcraft.gui.blast.furnace=Nagy olvasztókemence
+railcraft.gui.blast.furnace=§7 Nagy olvasztókemence
 
 railcraft.gui.bore.ballast=Ballaszt
 railcraft.gui.bore.fuel=Üzemanyag
@@ -463,7 +463,7 @@ railcraft.gui.routing.type.private=Magán vasút
 railcraft.gui.routing.type.public.tip=Minden mozdonyt képes irányítani.
 railcraft.gui.routing.type.public=Közforgalmi vasút
 
-railcraft.gui.steam.boiler=Gőzkazán
+railcraft.gui.steam.boiler=§7 Gőzkazán
 railcraft.gui.steam.oven=Gőzsütő
 
 railcraft.gui.surveyor.abandon=Félbehagyott jelzés-blokk áttekintés

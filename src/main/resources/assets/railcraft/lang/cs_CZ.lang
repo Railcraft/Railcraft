@@ -302,7 +302,7 @@ railcraft.gui.aspect.yellow.name=Žlutá
 railcraft.gui.aura.disable=@s Aura Off
 railcraft.gui.aura.enable=@s Aura On
 
-railcraft.gui.blast.furnace=Vysoká pec
+railcraft.gui.blast.furnace=§7 Vysoká pec
 
 railcraft.gui.bore.ballast=Balast
 railcraft.gui.bore.fuel=Palivo
@@ -496,7 +496,7 @@ railcraft.gui.routing.type.private=Privátní železnice
 railcraft.gui.routing.type.public.tip=Může na ní jezdit jakákoliv lokomotiva.
 railcraft.gui.routing.type.public=Veřejná železnice
 
-railcraft.gui.steam.boiler=Parní kotel
+railcraft.gui.steam.boiler=§7 Parní kotel
 railcraft.gui.steam.oven=Parní trouba
 
 railcraft.gui.surveyor.abandon=Signální blok Survey opuštěný

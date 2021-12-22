@@ -348,7 +348,7 @@ railcraft.gui.aspect.yellow.name=黄色
 railcraft.gui.aura.disable=@s监视效果关闭
 railcraft.gui.aura.enable=@s监视效果开启
 
-railcraft.gui.blast.furnace=高炉
+railcraft.gui.blast.furnace=§7 高炉
 
 railcraft.gui.bore.ballast=铺路材料
 railcraft.gui.bore.fuel=燃料
@@ -543,7 +543,7 @@ railcraft.gui.routing.type.private=私人铁路
 railcraft.gui.routing.type.public.tip=将导航任意列车.
 railcraft.gui.routing.type.public=公共铁路
 
-railcraft.gui.steam.boiler=蒸汽锅炉
+railcraft.gui.steam.boiler=§7 蒸汽锅炉
 railcraft.gui.steam.oven=蒸汽炉
 
 railcraft.gui.surveyor.abandon=信号勘测中止
