@@ -8,14 +8,14 @@
  */
 package mods.railcraft.common.modules;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.detector.EnumDetector;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
 import mods.railcraft.common.blocks.machine.gamma.EnumMachineGamma;
 import mods.railcraft.common.carts.EnumCart;
-import mods.railcraft.common.items.*;
-import mods.railcraft.common.items.ItemPlate.EnumPlate;
+import mods.railcraft.common.items.ItemMagnifyingGlass;
+import mods.railcraft.common.items.ItemNotepad;
+import mods.railcraft.common.items.RailcraftToolItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.CartFilterRecipe;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -218,7 +218,7 @@ public class ModuleTransport extends RailcraftModule {
         return false;
     }
 
-    private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
+       /* private boolean defineIronTank(EnumMachineBeta type, Object... recipe) {
         if (defineTank(type, recipe)) {
             RailcraftCraftingManager.blastFurnace.addRecipe(type.getItem(), true, false, 640, RailcraftItem.nugget.getStack(4, ItemNugget.EnumNugget.STEEL));
             return true;
@@ -226,7 +226,7 @@ public class ModuleTransport extends RailcraftModule {
         return false;
     }
 
-    /* private void initIronTank() {
+     private void initIronTank() {
         defineIronTank(EnumMachineBeta.TANK_IRON_WALL,
                 "PP",
                 "PP",

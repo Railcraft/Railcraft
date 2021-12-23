@@ -87,10 +87,14 @@ public class ModuleFactory extends RailcraftModule {
                     'F', new ItemStack(Blocks.furnace),
                     'S', RailcraftItem.plate.getRecipeObject(EnumPlate.STEEL));
 
-        alpha = EnumMachineAlpha.BLAST_FURNACE;
-        if (alpha.register()) {
-            ItemStack stack = alpha.getItem(4);
-            CraftingPlugin.addShapedRecipe(stack,
+
+        RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Items.coal), false, false, 20, RailcraftToolItems.getCoalCoke());
+        RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.coal_block), false, false, 180, EnumCube.COKE_BLOCK.getItem());
+
+      /*   alpha = EnumMachineAlpha.BLAST_FURNACE;
+         if (alpha.register()) {
+           ItemStack stack = alpha.getItem(4);
+           CraftingPlugin.addShapedRecipe(stack,
                     "MBM",
                     "BPB",
                     "MBM",
@@ -132,7 +136,7 @@ public class ModuleFactory extends RailcraftModule {
             RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelAxe(), false, false, recycleTime * 2, RailcraftItem.ingot.getStack(2, steel));
             RailcraftCraftingManager.blastFurnace.addRecipe(RailcraftToolItems.getSteelShears(), false, false, recycleTime * 1, RailcraftItem.ingot.getStack(1, steel));
         }
-
+*/
         alpha = EnumMachineAlpha.ROCK_CRUSHER;
         if (alpha.register()) {
             ItemStack stack = alpha.getItem(4);
@@ -175,9 +179,9 @@ public class ModuleFactory extends RailcraftModule {
 
                 LootPlugin.addLootTool(type.getItem(), 1, 1, "steel.block");
 
-                if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable())
+             /*   if (EnumMachineAlpha.BLAST_FURNACE.isAvaliable())
                     RailcraftCraftingManager.blastFurnace.addRecipe(new ItemStack(Blocks.iron_block), false, false, 11520, EnumCube.STEEL_BLOCK.getItem());
-            }
+            */}
 
             type = EnumCube.COPPER_BLOCK;
             if (RailcraftConfig.isSubBlockEnabled(type.getTag()))
@@ -296,6 +300,7 @@ public class ModuleFactory extends RailcraftModule {
         logs.addAll(OreDictionary.getOres("woodRubber"));
         for (ItemStack log : logs) {
             RailcraftCraftingManager.cokeOven.addRecipe(log, true, false, new ItemStack(Items.coal, 1, 1), Fluids.CREOSOTE.get(250), COKE_COOK_TIME);
+            RailcraftCraftingManager.blastFurnace.addRecipe(log, false, false, 20, new ItemStack(Items.coal, 1, 1));
         }
 
         if (IC2Plugin.isModInstalled()) {

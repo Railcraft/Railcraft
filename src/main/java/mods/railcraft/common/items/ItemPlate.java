@@ -121,7 +121,7 @@ public class ItemPlate extends ItemRailcraft {
                 'I', "ingotLead");
         RollingMachineCraftingManager.getInstance().getRecipeList().add(recipe);
 
-        RailcraftCraftingManager.blastFurnace.addRecipe(plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL));
+        //RailcraftCraftingManager.blastFurnace.addRecipe(plate.getStack(EnumPlate.IRON), true, false, 1280, RailcraftItem.ingot.getStack(ItemIngot.EnumIngot.STEEL));
     }
 
     @Override

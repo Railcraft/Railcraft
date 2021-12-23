@@ -345,7 +345,7 @@ railcraft.gui.aspect.yellow.name=Gelb
 railcraft.gui.aura.disable=Signal Aus: @s
 railcraft.gui.aura.enable=Signal An: @s
 
-railcraft.gui.blast.furnace=§7 Hochofen
+railcraft.gui.blast.furnace=Kokerei II
 
 railcraft.gui.bore.ballast=Ballast
 railcraft.gui.bore.fuel=Treibstoff
@@ -732,7 +732,7 @@ tile.railcraft.machine.alpha.anchor.admin.name=Admin-Anker
 tile.railcraft.machine.alpha.anchor.passive.name=Passivanker
 tile.railcraft.machine.alpha.anchor.personal.name=Persönlicher Anker
 tile.railcraft.machine.alpha.anchor.world.name=Weltanker
-tile.railcraft.machine.alpha.blast.furnace.name=Hochofenziegel
+tile.railcraft.machine.alpha.blast.furnace.name=Kokerei II Ziegel
 tile.railcraft.machine.alpha.blast.furnace.tip=Multiblock: 3x4x3 (Hohlraum)
 tile.railcraft.machine.alpha.coke.oven.name=Kokerei
 tile.railcraft.machine.alpha.coke.oven.tip=Multiblock: 3x3x3 (Hohlraum)

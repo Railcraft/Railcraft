@@ -8,7 +8,6 @@
  */
 package mods.railcraft.common.modules;
 
-import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.machine.alpha.EnumMachineAlpha;
 import mods.railcraft.common.blocks.machine.beta.EnumMachineBeta;
@@ -65,7 +64,7 @@ public class ModuleSteam extends RailcraftModule {
                         'C', "blockGlassColorless",
                         'G', "gearIron");
 
-                RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 15360, RailcraftItem.ingot.getStack(12, ItemIngot.EnumIngot.STEEL));
+                //RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 15360, RailcraftItem.ingot.getStack(12, ItemIngot.EnumIngot.STEEL));
             }
         }
 
@@ -131,7 +130,7 @@ public class ModuleSteam extends RailcraftModule {
                         "P",
                         'P', RailcraftItem.plate.getRecipeObject(EnumPlate.IRON));
 
-                RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 2560, RailcraftItem.ingot.getStack(2, ItemIngot.EnumIngot.STEEL));
+                //RailcraftCraftingManager.blastFurnace.addRecipe(stack, true, false, 2560, RailcraftItem.ingot.getStack(2, ItemIngot.EnumIngot.STEEL));
             }
         }
 

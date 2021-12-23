@@ -345,7 +345,7 @@ railcraft.gui.aspect.yellow.name=Yellow
 railcraft.gui.aura.disable=@s Aura Off
 railcraft.gui.aura.enable=@s Aura On
 
-railcraft.gui.blast.furnace=§7 Blast Furnace
+railcraft.gui.blast.furnace=Advanced Coke Oven
 
 railcraft.gui.bore.ballast=Ballast
 railcraft.gui.bore.fuel=Fuel
@@ -732,7 +732,7 @@ tile.railcraft.machine.alpha.anchor.admin.name=Admin Anchor
 tile.railcraft.machine.alpha.anchor.passive.name=Passive Anchor
 tile.railcraft.machine.alpha.anchor.personal.name=Personal Anchor
 tile.railcraft.machine.alpha.anchor.world.name=World Anchor
-tile.railcraft.machine.alpha.blast.furnace.name=Blast Furnace Brick
+tile.railcraft.machine.alpha.blast.furnace.name=Advanced Coke Oven Brick
 tile.railcraft.machine.alpha.blast.furnace.tip=Multi-Block: 3x4x3 (Hollow)
 tile.railcraft.machine.alpha.coke.oven.name=Coke Oven Brick
 tile.railcraft.machine.alpha.coke.oven.tip=Multi-Block: 3x3x3 (Hollow)

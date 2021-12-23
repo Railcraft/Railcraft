@@ -11,6 +11,8 @@ package mods.railcraft.common.util.crafting;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import mods.railcraft.api.crafting.IBlastFurnaceCraftingManager;
 import mods.railcraft.api.crafting.IBlastFurnaceRecipe;
@@ -48,7 +50,9 @@ public class BlastFurnaceCraftingManager implements IBlastFurnaceCraftingManager
             fuel.add(ThaumcraftPlugin.getItem("itemResource", 0));
             fuel.add(RailcraftToolItems.getCoalCoke());
             fuel.add(EnumCube.COKE_BLOCK.getItem());
+            fuel.add(new ItemStack(Items.coal, 1, 0));
             fuel.add(new ItemStack(Items.coal, 1, 1));
+            fuel.add(new ItemStack(Blocks.coal_block, 1, 0));
             fuel.add(InvTools.makeStack(ItemFirestoneRefined.item, 1, OreDictionary.WILDCARD_VALUE));
             fuel.add(InvTools.makeStack(ItemFirestoneCracked.item, 1, OreDictionary.WILDCARD_VALUE));
             fuels = Collections.unmodifiableList(fuel);
