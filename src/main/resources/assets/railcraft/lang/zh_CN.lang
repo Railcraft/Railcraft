@@ -11,22 +11,22 @@ command.railcraft.permlevel=权限级别: %s
 command.railcraft.noperms=你没有使用该命令的权限.
 
 command.railcraft.railcraft.help=Railcraft的可用命令
-command.railcraft.railcraft.format=格式: /%s &lt;子命令&gt;
+command.railcraft.railcraft.format=格式: /%s <sub-command>
 
 command.railcraft.railcraft.admin.desc=- %s : 管理员工具
-command.railcraft.railcraft.admin.help=管理用工具.
+command.railcraft.railcraft.admin.help=用于管理的工具.
 command.railcraft.railcraft.admin.format=格式: /%s
 
-command.railcraft.railcraft.admin.kill.desc=- %s : 清除实体
-command.railcraft.railcraft.admin.kill.help=清除某些实体.
+command.railcraft.railcraft.admin.kill.desc=- %s : 清除指令
+command.railcraft.railcraft.admin.kill.help=用于清除的工具.
 command.railcraft.railcraft.admin.kill.format=格式: /%s
 
-command.railcraft.railcraft.admin.kill.animals.desc=- %s : 杀死动物
-command.railcraft.railcraft.admin.kill.animals.help=清除命令发送者所在世界中所有动物.
+command.railcraft.railcraft.admin.kill.animals.desc=- %s : 清除动物
+command.railcraft.railcraft.admin.kill.animals.help=清除当前世界的所有动物.
 command.railcraft.railcraft.admin.kill.animals.format=格式: /%s
 
 command.railcraft.railcraft.admin.kill.minecarts.desc=- %s : 清除矿车
-command.railcraft.railcraft.admin.kill.minecarts.help=清除命令发送者所在世界中所有矿车.
+command.railcraft.railcraft.admin.kill.minecarts.help=清除当前世界的所有矿车.
 command.railcraft.railcraft.admin.kill.minecarts.format=格式: /%s
 
 command.railcraft.railcraft.debug.desc=-%s: 调试工具
@@ -103,7 +103,7 @@ entity.Railcraft.cart.loco.electric.name=电力机车
 entity.Railcraft.cart.loco.steam.solid.name=蒸汽机车
 entity.Railcraft.cart.loco.creative.name=永动机车
 entity.Railcraft.cart.pumpkin.name=南瓜车
-entity.Railcraft.cart.redstone.flux.name=红石通量储能车
+entity.Railcraft.cart.redstone.flux.name=RF储能车
 entity.Railcraft.cart.tank.name=蓄水槽车
 entity.Railcraft.cart.tnt.name=TNT车
 entity.Railcraft.cart.tnt.wood.name=木质TNT矿车
@@ -158,10 +158,10 @@ item.railcraft.cart.gift.tip=圣诞快乐
 item.railcraft.cart.loco.electric.name=电力机车
 item.railcraft.cart.loco.steam.solid.name=蒸汽机车
 item.railcraft.cart.loco.creative.name=永动机车
-item.railcraft.cart.loco.creative.tip=§o§9创造模式专用
+item.railcraft.cart.loco.creative.tip=§o§9仅限创造模式
 item.railcraft.cart.pumpkin.name=南瓜车
 item.railcraft.cart.pumpkin.tip=没礼物就捣蛋
-item.railcraft.cart.redstone.flux.name=红石通量储能车
+item.railcraft.cart.redstone.flux.name=RF储能车
 item.railcraft.cart.tank.name=蓄水槽车
 item.railcraft.cart.tnt.name=TNT车
 item.railcraft.cart.tnt.wood.name=木质TNT矿车
@@ -254,24 +254,24 @@ item.railcraft.tool.crowbar.tip=§o潜行时右键可链接车厢
 item.railcraft.tool.crowbar.void.name=虚空金属撬棍
 item.railcraft.tool.electric.meter.name=电表
 item.railcraft.tool.magnifying.glass.name=放大镜
-item.railcraft.tool.notepad.action.copy=已从%s复制设置
-item.railcraft.tool.notepad.action.copy.fail=无法复制设置: 无效对象.
-item.railcraft.tool.notepad.action.empty=无设置可以应用. 先潜行右击某对象复制设置.
-item.railcraft.tool.notepad.action.paste=已将设置应用于%s
-item.railcraft.tool.notepad.action.paste.fail=无法应用设置: 无效对象.
+item.railcraft.tool.notepad.action.copy=已从 %s 复制设置
+item.railcraft.tool.notepad.action.copy.fail=不可复制. 不是有效目标.
+item.railcraft.tool.notepad.action.empty=不可粘贴. Shift+单击目标以复制.
+item.railcraft.tool.notepad.action.paste=向 %s 粘贴设置
+item.railcraft.tool.notepad.action.paste.fail=不可粘贴. 不是有效目标.
 item.railcraft.tool.notepad.name=铁路工笔记本
-item.railcraft.tool.notepad.tip.contents=设置内容: @s
-item.railcraft.tool.notepad.tip.contents.filter.items=§2物品过滤
-item.railcraft.tool.notepad.tip.contents.filter.fluid=§b流体过滤
-item.railcraft.tool.notepad.tip.contents.filter.cart=§e矿车过滤
+item.railcraft.tool.notepad.tip.contents=内容: @s
+item.railcraft.tool.notepad.tip.contents.filter.items=§2物品过滤器
+item.railcraft.tool.notepad.tip.contents.filter.fluid=§b流体过滤器
+item.railcraft.tool.notepad.tip.contents.filter.cart=§e机车过滤器
 item.railcraft.tool.notepad.tip.contents.empty=§4空
 item.railcraft.tool.notepad.tip.mode.all=所有
-item.railcraft.tool.notepad.tip.mode.cart.filter=矿车过滤
-item.railcraft.tool.notepad.tip.mode.loader.filters=物品/流体过滤
-item.railcraft.tool.notepad.tip.mode=拷贝@s设置
-item.railcraft.tool.notepad.tip=§o右击应用设置, 潜行右击复制设置\n§o潜行右击空气清除设置
+item.railcraft.tool.notepad.tip.mode.cart.filter=机车过滤器
+item.railcraft.tool.notepad.tip.mode.loader.filters=物品/流体过滤器
+item.railcraft.tool.notepad.tip.mode=粘贴模式: @s
+item.railcraft.tool.notepad.tip=§o右击以粘贴, Shift+右击以复制 \n§oShift+右击空气以清除
 item.railcraft.tool.signal.label.name=信号标签
-item.railcraft.tool.signal.label.tip=§9- 在铁砧中重命名 -\n§o潜行时右击以\n§o命名信号盒或信号灯
+item.railcraft.tool.signal.label.tip=§9- 在铁砧中重命名 -\n§oShift+右击\n§o以命名信号或信号盒
 item.railcraft.tool.signal.tuner.name=信号调谐器
 item.railcraft.tool.signal.tuner.tip=用于连接控制器与接收器
 item.railcraft.tool.steel.axe.name=钢斧
@@ -284,6 +284,7 @@ item.railcraft.tool.surveyor.name=信号域监测仪
 item.railcraft.tool.surveyor.tip=用于连接信号方块
 item.railcraft.tool.whistle.tuner.name=鸣笛调谐器
 
+
 item.railcraft.upgrade.lapotron=兰波顿装载升级插件
 
 item.synthetic=合成物
@@ -294,8 +295,8 @@ railcraft.color.brown=棕色
 railcraft.color.cyan=青色
 railcraft.color.gray=灰色
 railcraft.color.green=绿色
-railcraft.color.light.blue=浅蓝色
-railcraft.color.light.gray=浅灰色
+railcraft.color.light.blue=淡蓝色
+railcraft.color.light.gray=淡灰色
 railcraft.color.lime=柠檬色
 railcraft.color.magenta=品红色
 railcraft.color.orange=桔色
@@ -348,7 +349,7 @@ railcraft.gui.aspect.yellow.name=黄色
 railcraft.gui.aura.disable=@s监视效果关闭
 railcraft.gui.aura.enable=@s监视效果开启
 
-railcraft.gui.blast.furnace=§7 高炉
+railcraft.gui.blast.furnace=高炉
 
 railcraft.gui.bore.ballast=铺路材料
 railcraft.gui.bore.fuel=燃料
@@ -513,18 +514,18 @@ railcraft.gui.routing.logic.regex.unsupported=未支持正则表达式
 railcraft.gui.routing.logic.unrecognized.keyword=未识别关键字
 railcraft.gui.routing.slot.label=路由表
 railcraft.gui.routing.table.editor=由@s最后编辑
-railcraft.gui.routing.table.manual.numPages=11
-railcraft.gui.routing.table.manual.page1=放入路由传感器或路由转辙马达中的列车时刻表定义了一组对过往机车进行匹配的规则.这些使用简单逻辑指令定义的脚本能够允许你任你所需创建出简单或复杂的控制规则.这种指令属于前缀符号脚本,指令需要放在操作数之后,每行限使用一个关键字.若没有写明指令,则默认使用OR指令.在工作台放置两个或更多列车时刻表可以复制其内容.
+railcraft.gui.routing.table.manual.numPages=10
+railcraft.gui.routing.table.manual.page1=放入路由探测器或转辙器中的列车时刻表定义了一组对过往机车进行匹配的规则.这些使用简单逻辑指令定义的脚本能够允许你任你所需创建出简单或复杂的控制规则.这种指令属于前缀符号脚本,指令需要放在操作数之后,每行限使用一个关键字.若没有写明指令,则默认使用OR指令.在工作台放置两个或更多列车时刻表可以复制其内容.
 railcraft.gui.routing.table.manual.page2=指令关键字:\n   AND - 两个操作数,必须都为真..\n   OR - 两个操作数,一个必须为真.\n   NOT - 反转下一条指令.
-railcraft.gui.routing.table.manual.page3=条件关键字:\n   Dest=&lt;字符串&gt;\n      如果机车目的地\n      字符串以这条字符串开头,\n      则条件为真.\n      "Dest=null" 将匹配那些没有\n      目的地的矿车.\n   Owner=&lt;用户名&gt;\n      机车属于对应名称玩家\n      则为真.
-railcraft.gui.routing.table.manual.page4=条件关键字:\n   Name=&lt;实体名&gt;\n      当与矿车在铁砧中命名的\n      名称相同则为真.\n      "Name=null"将匹配没有自定义名称\n      的矿车.\n   Type=&lt;modid:物品名称&gt;\n      当与矿车物品名称相同\n      则为真.
-railcraft.gui.routing.table.manual.page5=条件关键字:\n   Riding=&lt;乘客名&gt;\n      当列车被此玩家乘坐\n      则为真.\n   Ridden=&lt;true/false&gt;\n      当列车被玩家乘坐\n      则为真.
-railcraft.gui.routing.table.manual.page6=条件关键字:\n   Color=&lt;车身色&gt;,&lt;底盘色&gt;\n      如果机车的车身颜色与底盘颜色匹配\n      则为真.\n      可以使用"Any"作为通配符.\n      颜色(请键入英文): Black(黑色), Red(红色), Green(绿色), Brown(棕色), Blue(蓝色),\n      Purple(紫色), Cyan(青色), LightGray(浅灰色), Gray(灰色), Pink(粉色), Lime(柠檬色),\n      Yellow(黄色), LightBlue(浅蓝色), Magenta(品红色), Orange(橙色), White(白色)\n   NeedsRefuel=&lt;true/false&gt;\n      判断机车是否缺燃料或水.\n      匹配则触发它.
-railcraft.gui.routing.table.manual.page7=条件关键字:\n   Redstone=&lt;true/false&gt;\n      路由方块被红石充能\n      则为真.
-railcraft.gui.routing.table.manual.page8=条件关键字:\n   Loco=&lt;字符串&gt;\n      如果机车种类为该字符串则条件为真.\n      可用字符串: electric, steam, none.\n      分指电力机车, 蒸汽机车, 无机车.\n      "none";表示没有机车时条件为真.
-railcraft.gui.routing.table.manual.page9=脚本范例:\n   Dest=TheFarLands\n   Color=Black,Red\n   AND\n   NOT\n   Owner=RichardG\n   Dest=SecretHideout/OceanEntrance
-railcraft.gui.routing.table.manual.page10=结果:\n   上一页的示例会匹配\n   一个以"TheFarLands/Milliways"为目的地 \n   或车身为黑,底盘为红,\n   亦或是以\n   "SecretHideout/OceanEntrance"\n   为目的地且拥有者不是RichardG的火车头.
-railcraft.gui.routing.table.manual.page11=正则表达式:\n   某些条件关键字支持\n   使用正则表达式.\n   要使用正则表达,需要在'='前添加一个'?'.\n   语法参同标准的java正则表达式语法.\n支持的条件关键字:\n   Dest, Name\n范例:\n   Dest?=.*Hill
+railcraft.gui.routing.table.manual.page3=条件关键字:\n   Dest=<字符串>\n      如果机车目的地\n      字符串以这条字符串开头,\n      则条件为真.\n      "Dest=null" 将匹配那些没有\n      目的地的矿车.\n   Owner=<用户名>\n      机车属于对应名称玩家\n      则为真.
+railcraft.gui.routing.table.manual.page4=条件关键字:\n   Name=<实体名>\n      当与矿车在铁砧中命名的\n      名称相同则为真.\n      "Name=null"将匹配没有自定义名称\n      的矿车.\n   Type=<modid:物品名称>\n      当与矿车物品名称相同\n      则为真.
+railcraft.gui.routing.table.manual.page5=条件关键字:\n   Riding=<乘客名>\n      当列车被此玩家乘坐\n      则为真.\n   Ridden=<true/false>\n      当列车被玩家乘坐\n      则为真.
+railcraft.gui.routing.table.manual.page6=条件关键字:\n   Color=<车身色>,<底盘色>\n      如果机车的车身颜色与底盘颜色匹配\n      则为真.\n      可以使用"Any"作为通配符.\n      颜色(请键入英文): Black(黑色), Red(红色), Green(绿色), Brown(棕色), Blue(蓝色),\n      Purple(紫色), Cyan(青色), LightGray(淡灰色), Gray(灰色), Pink(粉色), Lime(柠檬色),\n      Yellow(黄色), LightBlue(淡蓝色), Magenta(品红色), Orange(橙色), White(白色)\n   NeedsRefuel=<true/false>\n      判断机车是否缺燃料或水.\n      匹配则触发它.
+railcraft.gui.routing.table.manual.page7=条件关键字:\n   Redstone=<true/false>\n      路由方块被红石充能\n      则为真.
+railcraft.gui.routing.table.manual.page8=脚本范例:\n   Dest=TheFarLands\n   Color=Black,Red\n   AND\n   NOT\n   Owner=RichardG\n   Dest=SecretHideout/OceanEntrance
+railcraft.gui.routing.table.manual.page9=结果:\n   上一页的示例会匹配\n   一个以"TheFarLands/Milliways"为目的地 \n   of 或车身色为黑,底盘色为红,\n   亦或是以\n   "SecretHideout/OceanEntrance",\n   为目的地且拥有者不是RichardG的火车头.
+railcraft.gui.routing.table.manual.page10=正则表达式:\n   某些条件关键字支持\n   使用正则表达式.\n   要使用正则表达,需要在'='前添加一个'?'.\n   语法参同标准的java正则表达式语法.\n支持的条件关键字:\n   Dest, Name\n范例:\n   Dest?=.*Hill
+railcraft.gui.routing.table.manual.page11=常用表达:\n   一些条件支持\n   常用表达.\n   要使用正则表达式, 添加一个 '?' 在 '='之前.\n   规则是标准Java模式.\n支持的条件关键字:\n   Dest, Name\n范例:\n   Dest?=.*Hill
 railcraft.gui.routing.table.manual.title=路由手册
 railcraft.gui.routing.table.name=名称
 railcraft.gui.routing.ticket.line1=车票有效
@@ -541,9 +542,9 @@ railcraft.gui.routing.track.tip.slot=插入黄金车票
 railcraft.gui.routing.type.private.tip=将只导航e\n属于{owner}的列车.
 railcraft.gui.routing.type.private=私人铁路
 railcraft.gui.routing.type.public.tip=将导航任意列车.
-railcraft.gui.routing.type.public=公共铁路
+railcraft.gui.routing.type.public=共用铁路
 
-railcraft.gui.steam.boiler=§7 蒸汽锅炉
+railcraft.gui.steam.boiler=蒸汽锅炉
 railcraft.gui.steam.oven=蒸汽炉
 
 railcraft.gui.surveyor.abandon=信号勘测中止
@@ -559,10 +560,10 @@ railcraft.gui.switch.motor.action=对应信号域来转辙轨道
 railcraft.gui.switch.motor.redstone=忽略红石信号
 
 railcraft.gui.tank.iron=铁质蓄水罐
-railcraft.gui.tank.steel=钢制蓄水罐
+railcraft.gui.tank.steel=钢质蓄水罐
 railcraft.gui.tank.water=蓄水罐
 
-railcraft.gui.ticks=刻
+railcraft.gui.ticks=ticks
 
 railcraft.gui.tip.button.lock.locked=该设备被\n{owner}绑定,\n它只接受其拥有者或op的操作.
 railcraft.gui.tip.button.lock.notowner=你不是这台设备\n的主人.它属于{owner}.
@@ -570,17 +571,17 @@ railcraft.gui.tip.button.lock.unlocked=点击来绑定设备.\n绑定后,它只�
 
 railcraft.gui.track.embarking.radius=半径
 railcraft.gui.track.mode.change=切换为@s模式
-railcraft.gui.track.coupler.mode.auto.coupler=自动耦合
-railcraft.gui.track.coupler.mode.coupler=耦合
-railcraft.gui.track.coupler.mode.decoupler=去耦
+railcraft.gui.track.coupler.mode.auto.coupler=自动耦合器
+railcraft.gui.track.coupler.mode.coupler=耦合器
+railcraft.gui.track.coupler.mode.decoupler=分离器
 railcraft.gui.track.locking.mode.boarding.train=登入列车
 railcraft.gui.track.locking.mode.boarding=登入
 railcraft.gui.track.locking.mode.holding.train=列车扣留
 railcraft.gui.track.locking.mode.holding=扣留
 railcraft.gui.track.locking.mode.lockdown.train=列车封锁
 railcraft.gui.track.locking.mode.lockdown=封锁
-railcraft.gui.track.priming.fuse=引爆延迟: @d刻
-railcraft.gui.track.launcher.force=发射力度: @d
+railcraft.gui.track.priming.fuse=引爆延迟 = @d ticks
+railcraft.gui.track.launcher.force=发射力度 = @d 
 
 railcraft.gui.trade.station.dice.tip=随机交易
 
@@ -595,7 +596,7 @@ railcraft.gui.turbine.output=输出:@d%%
 railcraft.gui.turbine.rotor=转子:
 railcraft.gui.turbine=蒸汽涡轮机
 
-railcraft.gui.update.message=Railcraft最新版本@s已经可用,欢迎前往&lt;http://railcraft.info&gt;下载.
+railcraft.gui.update.message=最新版本Railcraft @s已经可用,欢迎前往<http://railcraft.info>下载.
 
 railcraft.keybind.aura.anchor=锚光环
 railcraft.keybind.aura.surveying=检测光环
@@ -613,7 +614,7 @@ railcraft.locomotive.model.steam.solid.default.name=标准固态燃料
 railcraft.multiblock.state.invalid.entity=有实体拦住了路: %s
 railcraft.multiblock.state.invalid.pattern=未能匹配模版: %s
 railcraft.multiblock.state.unknown.unloaded=结构的一部分未能加载: %s
-railcraft.multiblock.state.valid=结构有效
+railcraft.multiblock.state.valid=结构无效
 
 tc.research_category.RAILCRAFT=神秘铁道工
 thaumcraft.research.RC_Crowbar.name=奥法撬棍
@@ -735,9 +736,9 @@ tile.railcraft.machine.alpha.anchor.admin.name=管理员锚
 tile.railcraft.machine.alpha.anchor.passive.name=被动锚
 tile.railcraft.machine.alpha.anchor.personal.name=个人锚
 tile.railcraft.machine.alpha.anchor.world.name=世界锚
-tile.railcraft.machine.alpha.blast.furnace.name=高炉砖
+tile.railcraft.machine.alpha.blast.furnace.name=高炉砖块
 tile.railcraft.machine.alpha.blast.furnace.tip=多方块结构:3x4x3(中空)        
-tile.railcraft.machine.alpha.coke.oven.name=焦炉砖
+tile.railcraft.machine.alpha.coke.oven.name=焦炉砖块
 tile.railcraft.machine.alpha.coke.oven.tip=多方块结构:3x3x3(中空)
 tile.railcraft.machine.alpha.feed.station.name=饲育站
 tile.railcraft.machine.alpha.rock.crusher.name=碎石机
@@ -760,9 +761,9 @@ tile.railcraft.machine.beta.boiler.firebox.liquid.tip=多方块结构:尺寸可�
 tile.railcraft.machine.beta.boiler.firebox.solid.name=固态燃料燃烧室
 tile.railcraft.machine.beta.boiler.firebox.solid.tip=多方块结构:尺寸可变\n底座规格可选:1x1, 2x2, 3x3        
 tile.railcraft.machine.beta.boiler.tank.pressure.high.name=高压锅炉
-tile.railcraft.machine.beta.boiler.tank.pressure.high.tip=多方块结构:尺寸可变\n燃烧室规格可选:1x1x1, 2x2x2, 2x3x2,\n 3x2x3, 3x3x3, 3x4x3\n 每tick产生10mB蒸汽       
+tile.railcraft.machine.beta.boiler.tank.pressure.high.tip=多方块结构:尺寸可变\n燃烧室规格可选:1x1x1, 2x2x2, 2x3x2,\n 3x2x3, 3x3x3, 3x4x3\n 每tick产生20mB蒸汽       
 tile.railcraft.machine.beta.boiler.tank.pressure.low.name=低压锅炉
-tile.railcraft.machine.beta.boiler.tank.pressure.low.tip=多方块结构:尺寸可变\n燃烧室规格可选:1x1x1, 2x2x2, 2x3x2,\n 3x2x3, 3x3x3, 3x4x3\n 每tick产生20mB蒸汽
+tile.railcraft.machine.beta.boiler.tank.pressure.low.tip=多方块结构:尺寸可变\n燃烧室规格可选:1x1x1, 2x2x2, 2x3x2,\n 3x2x3, 3x3x3, 3x4x3\n 每tick产生10mB蒸汽
 tile.railcraft.machine.beta.chest.metals.name=金属箱子
 tile.railcraft.machine.beta.chest.metals.tip=将金属浓缩成方块
 tile.railcraft.machine.beta.chest.void.name=虚空箱子
@@ -779,7 +780,7 @@ tile.railcraft.machine.beta.tank.iron.valve.name=铁质蓄水器阀门
 tile.railcraft.machine.beta.tank.iron.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9   
 tile.railcraft.machine.beta.tank.iron.wall.name=铁质蓄水器壁板
 tile.railcraft.machine.beta.tank.iron.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
-tile.railcraft.machine.beta.tank.steel.gauge.name=钢制蓄水器量计
+tile.railcraft.machine.beta.tank.steel.gauge.name=钢质蓄水器量计
 tile.railcraft.machine.beta.tank.steel.gauge.tip=多方块结构:尺寸可变\n必须在底部两层输出液体.
 tile.railcraft.machine.beta.tank.steel.valve.name=钢质蓄水器阀门
 tile.railcraft.machine.beta.tank.steel.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
@@ -806,25 +807,85 @@ tile.railcraft.machine.gamma.dispenser.cart.tip=向轨道分配矿车\n§o§9- �
 tile.railcraft.machine.gamma.dispenser.train.name=列车分车站
 tile.railcraft.machine.gamma.dispenser.train.tip=向轨道分配列车\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 通入红石信号来放出列车 -
 tile.railcraft.machine.gamma.loader.energy.name=能量装载机
-tile.railcraft.machine.gamma.loader.energy.tip=为IC2能量运输矿车装载电力\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限IC2电力
-tile.railcraft.machine.gamma.loader.rf.name=红石通量装载机
-tile.railcraft.machine.gamma.loader.rf.tip=为红石通量运输矿车转载红石通量\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限红石通量
+tile.railcraft.machine.gamma.loader.energy.tip=为IC2能量运输矿车装载电力\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限Ic2电力
+tile.railcraft.machine.gamma.loader.rf.name=RF能量装载机
+tile.railcraft.machine.gamma.loader.rf.tip=向RF储能车充能\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限RF能量
 tile.railcraft.machine.gamma.loader.item.advanced.name=高级物品装载机
 tile.railcraft.machine.gamma.loader.item.advanced.tip=为矿车装载物品\n§o§9- 用撬棍敲击以切换方向 -
 tile.railcraft.machine.gamma.loader.item.name=物品装载机
 tile.railcraft.machine.gamma.loader.item.tip=为矿车装载物品\n§o§c- 需要放置在轨道上方 -
 tile.railcraft.machine.gamma.loader.liquid.name=流体装载机
-tile.railcraft.machine.gamma.loader.liquid.tip=为矿车装载流体\n§o§c- 需要放置在轨道上方 -
+tile.railcraft.machine.gamma.loader.liquid.tip=为矿车装载流体\n§o§c- 需要放置在轨道上方1-2格 -
 tile.railcraft.machine.gamma.unloader.energy.name=能量卸载机
-tile.railcraft.machine.gamma.unloader.energy.tip=为IC2能量运输矿车卸载电力\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限IC2电力
-tile.railcraft.machine.gamma.unloader.rf.name=红石通量卸载机
-tile.railcraft.machine.gamma.unloader.rf.tip=为红石通量运输矿车卸载红石通量\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限红石通量
+tile.railcraft.machine.gamma.unloader.energy.tip=为IC2能量运输矿车卸载电力\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 仅限Ic2电力
+tile.railcraft.machine.gamma.unloader.rf.name=RF能量卸载机
+tile.railcraft.machine.gamma.unloader.rf.tip=从RF储能车卸载能量\n§o§9- 用撬棍敲击以切换方向 -\n§o§c- 只输出RF能量
 tile.railcraft.machine.gamma.unloader.item.advanced.name=高级物品卸载机
 tile.railcraft.machine.gamma.unloader.item.advanced.tip=为矿车卸载物品\n§o§9- 用撬棍敲击以切换方向 -
 tile.railcraft.machine.gamma.unloader.item.name=物品卸载机
 tile.railcraft.machine.gamma.unloader.item.tip=为矿车卸载物品\n§o§c- 需要放置在轨道下方 -
 tile.railcraft.machine.gamma.unloader.liquid.name=流体卸载机
 tile.railcraft.machine.gamma.unloader.liquid.tip=为矿车卸载流体\n§o§c- 需要放置在轨道下方 -
+
+railcraft.gui.tank.aluminium=铝质蓄水器
+railcraft.gui.tank.stainless=不锈钢蓄水器
+railcraft.gui.tank.titanium=钛质蓄水器
+railcraft.gui.tank.tungstensteel=钨钢蓄水器
+railcraft.gui.tank.palladium=钯质蓄水器
+
+tile.railcraft.machine.zeta.tank.aluminium.gauge.name=铝质蓄水器量计
+tile.railcraft.machine.zeta.tank.aluminium.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.aluminium.valve.name=铝质蓄水器阀门
+tile.railcraft.machine.zeta.tank.aluminium.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.aluminium.wall.name=铝质蓄水器壁板
+tile.railcraft.machine.zeta.tank.aluminium.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.stainless.gauge.name=不锈钢蓄水器量计
+tile.railcraft.machine.zeta.tank.stainless.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.stainless.valve.name=不锈钢蓄水器阀门
+tile.railcraft.machine.zeta.tank.stainless.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.stainless.wall.name=不锈钢蓄水器壁板
+tile.railcraft.machine.zeta.tank.stainless.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.titanium.gauge.name=钛质蓄水器量计
+tile.railcraft.machine.zeta.tank.titanium.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.titanium.valve.name=钛质蓄水器阀门
+tile.railcraft.machine.zeta.tank.titanium.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.titanium.wall.name=钛质蓄水器壁板
+tile.railcraft.machine.zeta.tank.titanium.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.tungstensteel.gauge.name=钨钢蓄水器量计
+tile.railcraft.machine.zeta.tank.tungstensteel.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.tungstensteel.valve.name=钨钢蓄水器阀门
+tile.railcraft.machine.zeta.tank.tungstensteel.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.tungstensteel.wall.name=钨钢蓄水器壁板
+tile.railcraft.machine.zeta.tank.tungstensteel.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.palladium.gauge.name=钯质蓄水器量计
+tile.railcraft.machine.zeta.tank.palladium.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.palladium.valve.name=钯质蓄水器阀门
+tile.railcraft.machine.zeta.tank.palladium.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.zeta.tank.palladium.wall.name=钯质蓄水器壁板
+tile.railcraft.machine.zeta.tank.palladium.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+
+railcraft.gui.tank.iridium=铱质蓄水器
+railcraft.gui.tank.osmium=锇质蓄水器
+railcraft.gui.tank.neutronium=中子蓄水器
+
+tile.railcraft.machine.eta.tank.iridium.gauge.name=铱质蓄水器量计
+tile.railcraft.machine.eta.tank.iridium.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.iridium.valve.name=铱质蓄水器阀门
+tile.railcraft.machine.eta.tank.iridium.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.iridium.wall.name=铱质蓄水器壁板
+tile.railcraft.machine.eta.tank.iridium.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.osmium.gauge.name=锇质蓄水器量计
+tile.railcraft.machine.eta.tank.osmium.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.osmium.valve.name=锇质蓄水器阀门
+tile.railcraft.machine.eta.tank.osmium.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.osmium.wall.name=锇质蓄水器壁板
+tile.railcraft.machine.eta.tank.osmium.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.neutronium.gauge.name=中子蓄水器量计
+tile.railcraft.machine.eta.tank.neutronium.gauge.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.neutronium.valve.name=中子蓄水器阀门
+tile.railcraft.machine.eta.tank.neutronium.valve.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
+tile.railcraft.machine.eta.tank.neutronium.wall.name=中子蓄水器壁板
+tile.railcraft.machine.eta.tank.neutronium.wall.tip=多方块结构:尺寸可变,中空\n高度可选: 4, 5, 6, 7, 8\n长宽可选: 3, 5, 7, 9
 
 tile.railcraft.ore.dark.diamond.name=暗黑钻石矿石
 tile.railcraft.ore.dark.emerald.name=暗黑绿宝石矿石
@@ -846,8 +907,8 @@ tile.railcraft.post.metal.brown.name=棕色金属桩
 tile.railcraft.post.metal.cyan.name=青色金属桩
 tile.railcraft.post.metal.gray.name=灰色金属桩
 tile.railcraft.post.metal.green.name=绿色金属桩
-tile.railcraft.post.metal.light.blue.name=浅蓝色金属桩
-tile.railcraft.post.metal.light.gray.name=浅灰色金属桩
+tile.railcraft.post.metal.light.blue.name=淡蓝色金属桩
+tile.railcraft.post.metal.light.gray.name=淡灰色金属桩
 tile.railcraft.post.metal.lime.name=柠檬色金属桩
 tile.railcraft.post.metal.magenta.name=品红色金属桩
 tile.railcraft.post.metal.unpainted.name=金属桩
@@ -859,8 +920,8 @@ tile.railcraft.post.metal.platform.brown.name=棕色金属平台
 tile.railcraft.post.metal.platform.cyan.name=青色金属平台
 tile.railcraft.post.metal.platform.gray.name=灰色金属平台
 tile.railcraft.post.metal.platform.green.name=绿色金属平台
-tile.railcraft.post.metal.platform.light.blue.name=浅蓝色金属平台
-tile.railcraft.post.metal.platform.light.gray.name=浅灰色金属平台
+tile.railcraft.post.metal.platform.light.blue.name=淡蓝色金属平台
+tile.railcraft.post.metal.platform.light.gray.name=淡灰色金属平台
 tile.railcraft.post.metal.platform.lime.name=柠檬色金属平台
 tile.railcraft.post.metal.platform.magenta.name=品红色金属平台
 tile.railcraft.post.metal.platform.unpainted.name=金属平台
@@ -881,34 +942,34 @@ tile.railcraft.post.wood.platform.name=木头平台
 
 tile.railcraft.residual.heat.name=残余热量
 
-tile.railcraft.signal.block.signal.dual.name=双头信号灯
-tile.railcraft.signal.block.signal.dual.tip=在信号区间中检测矿车\n显示连接的信号控制盒的信号\n§o§9远程连接:\n§o§9- 1x 信号灯s\n§o§9- 1x 控制盒\n§o§9- 1x 接收盒\n§o§c相关工具:\n§o§c-信号调谐器\n§o§c-信号域监测仪
-tile.railcraft.signal.block.signal.name=信号灯
-tile.railcraft.signal.block.signal.tip=在信号区间中检测矿车\n§o§9远程连接:\n§o§9- 1x 信号灯\n§o§9- 1x 控制盒\n§o§c相关工具:\n§o§c-信号域监测仪
+tile.railcraft.signal.block.signal.dual.name=双头信号盒
+tile.railcraft.signal.block.signal.dual.tip=检测信号盒中的机车\n显示连接的控制盒的信号域\n§o§9无线联动:\n§o§9- 1x信号盒\n§o§9- 1x控制盒\n§o§9- 1x接收盒\n§o§c相关工具:\n§o§c- 信号调谐器\n§o§c- 信号域监测仪
+tile.railcraft.signal.block.signal.name=信号盒
+tile.railcraft.signal.block.signal.tip=检测信号盒中的机车\n§o§9无线联动:\n§o§9- 1x信号盒\n§o§9- 1x控制盒\n§o§c相关工具:\n§o§c- 信号域监测仪
 tile.railcraft.signal.box.analog.name=模拟信号控制盒
-tile.railcraft.signal.box.analog.tip=向信号接收盒发送信号\n§o§9远程连接: 1x 控制盒\n§o§9邻格连接: 无\n§o§9红石连接:\n§o§9接收红石信号\n§o§c相关工具:\n§o§c-信号调谐器
+tile.railcraft.signal.box.analog.tip=发送信号至接收盒\n§o§9无线联动: 1x控制盒\n§o§9相邻联动: 无\n§o§9红石联动: 接收\n§o§c相关工具:\n§o§c- 信号调谐器
 tile.railcraft.signal.box.block.relay.name=信号中继盒
-tile.railcraft.signal.box.block.relay.tip=连接两个不在直线上的信号灯\n§o§9远程连接: 2x 信号灯\n§o§9邻格连接: 发出信号\n§o§9红石连接:\n§o§9发出红石信号\n§o§c相关工具:\n§o§c-信号域监测仪
+tile.railcraft.signal.box.block.relay.tip=创建信号盒链\n§o§9无线联动: 2x信号盒\n§o§9相邻联动: 发射\n§o§9红石联动: 发射\n§o§c相关工具:\n§o§c- 信号域监测仪
 tile.railcraft.signal.box.capacitor.name=信号计数盒
-tile.railcraft.signal.box.capacitor.tip=向信号接收盒发送信号\n§o§9远程连接: 无\n§o§9邻格连接: 接收信号, 发出信号\n§o§9红石连接:\n§o§9- 监听红石中继器, 发出红石信号
+tile.railcraft.signal.box.capacitor.tip=发送信号至接收盒\n§o§9无线联动: 无\n§o§9相邻联动: 接收, 发射\n§o§9红石联动: 接收中继盒, 发射
 tile.railcraft.signal.box.controller.name=信号控制盒
-tile.railcraft.signal.box.controller.tip=向信号接收盒发送信号\n§o§9远程连接: 1x 控制盒\n§o§9邻格连接: 接收信号\n§o§9红石连接:\n§o§9接收红石信号\n§o§c相关工具:\n§o§c-信号调谐器
+tile.railcraft.signal.box.controller.tip=发送信号至接收盒\n§o§9无线联动: 1x控制盒\n§o§9相邻联动: 接收\n§o§9红石联动: 接收\n§o§c相关工具:\n§o§c- 信号调谐器
 tile.railcraft.signal.box.interlock.name=信号互锁盒
-tile.railcraft.signal.box.interlock.tip=只允许一种信号通过\n§o§9远程连接:\n§o§9- 1x 控制盒\n§o§9- 1x 接收盒\n§o§9邻格连接:\n§o§9- 互锁盒\n§o§9- 接收信号 (限制输出)\n§o§c相关工具:\n§o§c-信号调谐器
+tile.railcraft.signal.box.interlock.tip=只允许单个信号通过\n§o§9无线联动:\n§o§9- 1x控制盒\n§o§9- 1x接收盒\n§o§9相邻联动:\n§o§9- 互锁盒\n§o§9- 接收 (限制输出)\n§o§c相关工具:\n§o§c- 信号调谐器
 tile.railcraft.signal.box.receiver.name=信号接收盒
-tile.railcraft.signal.box.receiver.tip=接收信号控制盒信号\n§o§9远程连接: 1x 接收盒\n§o§9邻格连接: 发出信号\n§o§9红石连接:\n§o§9发出红石信号\n§o§c相关工具:\n§o§c-信号调谐器
-tile.railcraft.signal.box.sequencer.name=信号记序盒
-tile.railcraft.signal.box.sequencer.tip=随计数接收不同邻格信号\n§o§9邻格连接:\n§o§9- 同步盒\n§o§9- 接收信号 (计数)\n§o§9- 发出信号\n§o§9红石连接:\n§o§9- 监听红石中继器 (计数)\n§o§9- 发出红石信号
-tile.railcraft.signal.distant.dual.name=双头远程信号灯
-tile.railcraft.signal.distant.dual.tip=显示连接的多个信号控制盒的信号\n§o§9远程连接: 2x 接收盒\n§o§c相关工具:\n§o§c-信号调谐器
-tile.railcraft.signal.distant.name=远程信号灯
-tile.railcraft.signal.distant.tip=显示连接的信号控制盒的信号\n§o§9远程连接: 1x 接收盒\n§o§c相关工具:\n§o§c-信号调谐器
+tile.railcraft.signal.box.receiver.tip=监听控制盒信号\n§o§9无线联动: 1x接收盒\n§o§9相邻联动: 发射\n§o§9红石联动: 发射\n§o§c相关工具:\n§o§c- 信号调谐器
+tile.railcraft.signal.box.sequencer.name=信号同步盒
+tile.railcraft.signal.box.sequencer.tip=循环通过相邻方块\n§o§9相邻联动:\n§o§9- 同步盒\n§o§9- 接收 (时钟)\n§o§9- 发射\n§o§9红石联动:\n§o§9- 接收中继盒 (时钟)\n§o§9- 发射
+tile.railcraft.signal.distant.dual.name=双头远程信号
+tile.railcraft.signal.distant.dual.tip=显示连接的控制盒的信号域\n§o§9无线联动: 2x接收盒\n§o§c相关工具:\n§o§c- 信号调谐器
+tile.railcraft.signal.distant.name=远程信号
+tile.railcraft.signal.distant.tip=显示连接的控制盒的信号域\n§o§9无线联动: 1x接收盒\n§o§c相关工具:\n§o§c- 信号调谐器
 tile.railcraft.signal.switch.lever.name=转辙拉杆
-tile.railcraft.signal.switch.lever.tip=控制旁边一格的转辙轨道\n§o§9手动
+tile.railcraft.signal.switch.lever.tip=控制相邻的转换轨道\n§o§9人工操作
 tile.railcraft.signal.switch.motor.name=转辙马达
-tile.railcraft.signal.switch.motor.tip=控制旁边一格的转辙轨道\n§o§9远程连接: 1x 接收盒\n§o§9红石连接:\n§o§9-接收红石信号\n§o§c相关工具:\n§o§c-信号调谐器
+tile.railcraft.signal.switch.motor.tip=控制相邻的转换轨道\n§o§9无线联动: 1x接收盒\n§o§9红石联动: 接收\n§o§c相关工具:\n§o§c- 信号调谐器
 tile.railcraft.signal.switch.routing.name=路由转辙马达
-tile.railcraft.signal.switch.routing.tip=控制旁边一格的转辙轨道\n§o§9实行由脚本控制的逻辑操作\n§o§c相关工具:\n§o§c-路由表
+tile.railcraft.signal.switch.routing.tip=控制相邻的转换轨道\n§o§9脚本逻辑操作\n§o§c相关工具:\n§o§c- 路由表
 
 tile.railcraft.slab.abyssal.block.name=深渊台阶
 tile.railcraft.slab.abyssal.brick.name=深渊砖台阶
@@ -1000,23 +1061,23 @@ tile.railcraft.stair.snow.name=雪楼梯
 tile.railcraft.stair.steel.name=钢楼梯
 tile.railcraft.stair.tin.name=锡楼梯
 
-tile.railcraft.lantern.metal.copper.name=铜灯
-tile.railcraft.lantern.metal.gold.name=金灯
-tile.railcraft.lantern.metal.iron.name=铁灯
-tile.railcraft.lantern.metal.lead.name=铅灯
-tile.railcraft.lantern.metal.steel.name=钢灯
-tile.railcraft.lantern.metal.tin.name=锡灯
+tile.railcraft.lantern.metal.copper.name=铜灯笼
+tile.railcraft.lantern.metal.gold.name=金灯笼
+tile.railcraft.lantern.metal.iron.name=铁灯笼
+tile.railcraft.lantern.metal.lead.name=铅灯笼
+tile.railcraft.lantern.metal.steel.name=钢灯笼
+tile.railcraft.lantern.metal.tin.name=锡灯笼
 
-tile.railcraft.lantern.stone.abyssal.name=深渊石灯
-tile.railcraft.lantern.stone.bleachedbone.name=白骨石灯
-tile.railcraft.lantern.stone.bloodstained.name=污血石灯
-tile.railcraft.lantern.stone.frostbound.name=霜冻石灯
-tile.railcraft.lantern.stone.infernal.name=地狱石灯
-tile.railcraft.lantern.stone.nether.name=下界石灯
-tile.railcraft.lantern.stone.quarried.name=采掘石灯
-tile.railcraft.lantern.stone.sandstone.name=沙石灯
-tile.railcraft.lantern.stone.sandy.name=沙岩石灯
-tile.railcraft.lantern.stone.stone.name=石灯
+tile.railcraft.lantern.stone.abyssal.name=深渊灯笼
+tile.railcraft.lantern.stone.bleachedbone.name=白骨灯笼
+tile.railcraft.lantern.stone.bloodstained.name=污血灯笼
+tile.railcraft.lantern.stone.frostbound.name=霜冻灯笼
+tile.railcraft.lantern.stone.infernal.name=地狱灯笼
+tile.railcraft.lantern.stone.nether.name=下界灯笼
+tile.railcraft.lantern.stone.quarried.name=采掘灯笼
+tile.railcraft.lantern.stone.sandstone.name=沙石灯笼
+tile.railcraft.lantern.stone.sandy.name=沙岩灯笼
+tile.railcraft.lantern.stone.stone.name=石灯笼
 
 tile.railcraft.track.boarding.name=寄宿轨道
 tile.railcraft.track.boarding.tip=已被封锁轨道取代
@@ -1112,8 +1173,8 @@ tile.railcraft.track.whistle.name=机车鸣笛轨道
 tile.railcraft.track.whistle.tip=经过的机车会鸣笛\n§o§c- 使用红石信号激活 -
 tile.railcraft.track.wye.name=Y型轨道
 tile.railcraft.track.wye.tip=§o§c- 需要转辙马达/开关来进行转辙 -
-tile.railcraft.track.autolococoupler.name=机车自动耦合轨道
-tile.railcraft.track.autolococoupler.tip=将经过的机车与同它\n碰撞的第一辆矿车连接\n并且自动切换至调车速度.\n§o§c- 通入红石信号以驱动 -
+tile.railcraft.track.autolococoupler.name=自动火车头耦合器
+tile.railcraft.track.autolococoupler.tip=设置经过的火车头\n链接到碰撞的\n第一辆机车然后自动\n切换至调度速度.\n§o§c- 使用红石信号激活 -
 
 tile.railcraft.wall.abyssal.brick.name=深渊砖墙
 tile.railcraft.wall.bleachedbone.brick.name=白骨砖墙
@@ -1144,3 +1205,4 @@ tile.railcraft.wall.stone.brick.name=石砖墙
 tile.railcraft.worldlogic.name=硝石刷新器
 
 tooltip.wawla.tooltype.crowbar=撬棍
+
