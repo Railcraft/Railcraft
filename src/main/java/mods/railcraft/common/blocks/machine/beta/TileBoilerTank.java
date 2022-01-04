@@ -28,9 +28,7 @@ public abstract class TileBoilerTank extends TileBoiler {
         public boolean matches(TileEntity tile) {
             if (tile instanceof TileBoiler)
                 return false;
-            else if (tile instanceof IFluidHandler)
-                return true;
-            return false;
+            else return tile instanceof IFluidHandler;
         }
 
     };

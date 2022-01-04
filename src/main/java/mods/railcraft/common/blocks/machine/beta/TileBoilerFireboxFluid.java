@@ -137,13 +137,11 @@ public class TileBoilerFireboxFluid extends TileBoilerFirebox {
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         if (!isStructureValid())
             return false;
-        switch (slot) {
-            case SLOT_LIQUID_INPUT:
-                Fluid fluid = FluidItemHelper.getFluidInContainer(stack);
-                if (fluid == null)
-                    return false;
-                if (Fluids.WATER.is(fluid) || FuelManager.getBoilerFuelValue(fluid) > 0)
-                    return true;
+        if (slot == SLOT_LIQUID_INPUT) {
+            Fluid fluid = FluidItemHelper.getFluidInContainer(stack);
+            if (fluid == null)
+                return false;
+            return Fluids.WATER.is(fluid) || FuelManager.getBoilerFuelValue(fluid) > 0;
         }
         return false;
     }

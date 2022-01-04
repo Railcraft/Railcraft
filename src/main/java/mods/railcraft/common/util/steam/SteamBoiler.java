@@ -92,7 +92,7 @@ public class SteamBoiler {
     }
 
     public double getHeatLevel() {
-        return heat / getMaxHeat();
+        return heat / Steam.MAX_HEAT_LOW;
     }
 
     public void increaseHeat(int numTanks) {
@@ -159,7 +159,7 @@ public class SteamBoiler {
     public double getFuelPerCycle(int numTanks) {
         double fuel = Steam.FUEL_PER_BOILER_CYCLE;
         fuel -= numTanks * Steam.FUEL_PER_BOILER_CYCLE * 0.0125F;
-        fuel += Steam.FUEL_HEAT_INEFFICIENCY * getHeatLevel();
+        fuel += Steam.FUEL_HEAT_INEFFICIENCY * Math.min(getHeatLevel(), 1);
         fuel += Steam.FUEL_PRESSURE_INEFFICIENCY * (getMaxHeat() / Steam.MAX_HEAT_HIGH);
         fuel *= numTanks;
         fuel *= efficiencyModifier;
