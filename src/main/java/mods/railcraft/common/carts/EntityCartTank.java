@@ -136,7 +136,7 @@ public class EntityCartTank extends EntityCartFiltered implements IFluidHandler,
             if (fluidStack.amount != getFluidQty())
                 setFluidQty(fluidStack.amount);
             if (tank.getColor() != getFluidColor())
-                setFluidQty(tank.getColor());
+                setFluidColor(tank.getColor());
         } else {
             if (getFluidId() != -1)
                 setFluidId(-1);
