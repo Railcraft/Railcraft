@@ -1,4 +1,4 @@
-//version: 8fa7883b6196c1765266f4e6ddf3118d5043aafb
+//version: 1641429628
 /*
 DO NOT CHANGE THIS FILE!
 
@@ -32,7 +32,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.4'
+        classpath 'com.github.GTNewHorizons:ForgeGradle:1.2.5'
     }
 }
 
