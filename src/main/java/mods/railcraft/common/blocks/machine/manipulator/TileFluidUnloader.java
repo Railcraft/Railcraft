@@ -23,7 +23,8 @@ import java.util.stream.Stream;
 
 public class TileFluidUnloader extends TileFluidManipulator {
 
-    private static final int TRANSFER_RATE = 80;
+    private static final int TRANSFER_RATE = 250;
+    private static final int TRANSFER_TIME = 3;
     private static final EnumFacing[] PUSH_TO = Stream.of(EnumFacing.VALUES).filter(f -> f != EnumFacing.UP).toArray(EnumFacing[]::new);
 
     @Override
@@ -43,7 +44,8 @@ public class TileFluidUnloader extends TileFluidManipulator {
         if (clock % FluidTools.BUCKET_FILL_TIME == 0)
             FluidTools.fillContainers(tankManager, this, SLOT_INPUT, SLOT_OUTPUT, tank.getFluidType());
 
-        tankManager.push(tileCache, Predicates.notInstanceOf(getClass()), 0, TRANSFER_RATE, PUSH_TO);
+        if (clock % TRANSFER_TIME == 0)
+            tankManager.push(tileCache, Predicates.notInstanceOf(getClass()), 0, TRANSFER_RATE, PUSH_TO);
     }
 
     @Override
