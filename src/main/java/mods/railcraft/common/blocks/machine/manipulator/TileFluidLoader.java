@@ -41,7 +41,8 @@ import java.util.stream.Stream;
 public class TileFluidLoader extends TileFluidManipulator {
 
     private static final int RESET_WAIT = 200;
-    private static final int TRANSFER_RATE = 20;
+    private static final int TRANSFER_RATE = 250;
+    private static final int TRANSFER_TIME = 12;
     private static final float MAX_PIPE_LENGTH = 0.96F;
     private static final float PIPE_INCREMENT = 0.01f;
     private static final EnumFacing[] PULL_FROM = Stream.of(EnumFacing.VALUES).filter(f -> f != EnumFacing.DOWN).toArray(EnumFacing[]::new);
@@ -113,7 +114,8 @@ public class TileFluidLoader extends TileFluidManipulator {
         it.slot(SLOT_PROCESSING).validate(world, getPos(), FluidItemHelper::isContainer);
         it.slot(SLOT_OUTPUT).validate(world, getPos(), FluidItemHelper::isContainer);
 
-        tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), 0, TRANSFER_RATE, PULL_FROM);
+        if (clock % TRANSFER_TIME == 0)
+            tankManager.pull(tileCache, Predicates.notInstanceOf(getClass()), 0, TRANSFER_RATE, PULL_FROM);
     }
 
     @Override
