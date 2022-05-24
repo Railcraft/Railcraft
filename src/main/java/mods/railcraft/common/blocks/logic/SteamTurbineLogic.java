@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -84,10 +84,9 @@ public class SteamTurbineLogic extends FluidLogic implements IChargeAccessorLogi
 
 //                System.out.println("output=" + output);
 //                System.out.println("addedEnergy=" + addedEnergy);
-        if (clock(4)) {
-            adapter.tile().map(TileEntity::getBlockType).ifPresent(block ->
-                    WorldPlugin.addBlockEvent(theWorldAsserted(), getPos(), block, 1, (byte) (operatingRatio * 100.0)));
-        }
+        clock().onInterval(4, () ->
+                adapter.tile().map(TileEntity::getBlockType).ifPresent(block ->
+                        WorldPlugin.addBlockEvent(theWorldAsserted(), getPos(), block, 1, (byte) (operatingRatio * 100.0))));
 
         getBattery().ifPresent(battery -> {
             if (battery.needsCharging()) {

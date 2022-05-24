@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,7 +55,7 @@ public class DetectorItem extends DetectorFilter {
                     case ANYTHING:
                         return FULL_POWER;
                     case EMPTY:
-                        if (cartInv.hasNoItems())
+                        if (cartInv.isEmptied())
                             return FULL_POWER;
                         continue;
                     case FULL:

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.particles.ParticleDrip;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.InvOp;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
@@ -112,7 +113,17 @@ public final class FluidTools {
     public enum ProcessState {
         FILLING,
         DRAINING,
-        RESET
+        RESET;
+
+        public static final ProcessState[] VALUES = values();
+
+        public boolean isFilling() {
+            return this == FILLING;
+        }
+
+        public boolean isDraining() {
+            return this == DRAINING;
+        }
     }
 
     private static void sendToProcessing(IInventory inv) {
@@ -123,31 +134,35 @@ public final class FluidTools {
         InventoryMapper.make(inv, 1, 1).moveOneItemTo(InventoryMapper.make(inv, 2, 1).ignoreItemChecks());
     }
 
-    private static ProcessState tryFill(IInventory inv, StandardTank tank, ItemStack container) {
-        FluidActionResult filled = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (!filled.isSuccess()) {
-            sendToOutput(inv);
-            return ProcessState.RESET;
+    private static ProcessState tryFill(IInventory inv, TankManager tanks, ItemStack container, InvOp op) {
+        for (StandardTank tank : tanks) {
+            FluidActionResult process = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, op == InvOp.EXECUTE);
+            if (process.isSuccess()) {
+                op.ifExecuting(() -> inv.setInventorySlotContents(1, InvTools.makeSafe(process.getResult())));
+                return ProcessState.DRAINING;
+            }
         }
-        inv.setInventorySlotContents(1, InvTools.makeSafe(filled.getResult()));
-        return ProcessState.FILLING;
+        op.ifExecuting(() -> sendToOutput(inv));
+        return ProcessState.RESET;
     }
 
-    private static ProcessState tryDrain(IInventory inv, StandardTank tank, ItemStack container) {
-        FluidActionResult drained = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
-        if (!drained.isSuccess()) {
-            sendToOutput(inv);
-            return ProcessState.RESET;
+    private static ProcessState tryDrain(IInventory inv, TankManager tanks, ItemStack container, InvOp op) {
+        for (StandardTank tank : tanks) {
+            FluidActionResult process = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, op == InvOp.EXECUTE);
+            if (process.isSuccess()) {
+                op.ifExecuting(() -> inv.setInventorySlotContents(1, InvTools.makeSafe(process.getResult())));
+                return ProcessState.DRAINING;
+            }
         }
-        inv.setInventorySlotContents(1, InvTools.makeSafe(drained.getResult()));
-        return ProcessState.DRAINING;
+        op.ifExecuting(() -> sendToOutput(inv));
+        return ProcessState.RESET;
     }
 
     /**
      * Expects a three slot inventory, with input as slot 0, processing as slot 1, and output as slot 2.
      * Will handle moving an item through all stages from input to output for either filling or draining.
      */
-    public static ProcessState processContainer(IInventory inv, StandardTank tank, ProcessType type, ProcessState state) {
+    public static ProcessState processContainer(IInventory inv, TankManager tanks, ProcessType type, ProcessState state) {
         ItemStack container = inv.getStackInSlot(1);
         if (InvTools.isEmpty(container) || FluidUtil.getFluidHandler(container) == null) {
             sendToProcessing(inv);
@@ -155,25 +170,25 @@ public final class FluidTools {
         }
         if (state == ProcessState.RESET) {
             if (type == ProcessType.FILL_ONLY) {
-                return tryFill(inv, tank, container);
+                return tryFill(inv, tanks, container, InvOp.EXECUTE);
             } else if (type == ProcessType.DRAIN_ONLY) {
-                return tryDrain(inv, tank, container);
+                return tryDrain(inv, tanks, container, InvOp.EXECUTE);
             } else if (type == ProcessType.FILL_THEN_DRAIN) {
-                if (FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, false).isSuccess())
-                    return tryFill(inv, tank, container);
+                if (tryFill(inv, tanks, container, InvOp.SIMULATE).isFilling())
+                    return tryFill(inv, tanks, container, InvOp.EXECUTE);
                 else
-                    return tryDrain(inv, tank, container);
+                    return tryDrain(inv, tanks, container, InvOp.EXECUTE);
             } else if (type == ProcessType.DRAIN_THEN_FILL) {
-                if (FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, false).isSuccess())
-                    return tryDrain(inv, tank, container);
+                if (tryDrain(inv, tanks, container, InvOp.SIMULATE).isDraining())
+                    return tryDrain(inv, tanks, container, InvOp.EXECUTE);
                 else
-                    return tryFill(inv, tank, container);
+                    return tryFill(inv, tanks, container, InvOp.EXECUTE);
             }
         }
         if (state == ProcessState.FILLING)
-            return tryFill(inv, tank, container);
+            return tryFill(inv, tanks, container, InvOp.EXECUTE);
         if (state == ProcessState.DRAINING)
-            return tryDrain(inv, tank, container);
+            return tryDrain(inv, tanks, container, InvOp.EXECUTE);
         return state;
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public abstract class CartBaseLogicChest extends CartBaseLogic implements IInventoryImplementor {
+public abstract class CartBaseLogicChest extends EntityRailcraftCart implements IInventoryImplementor {
 
     protected CartBaseLogicChest(World world) {
         super(world);

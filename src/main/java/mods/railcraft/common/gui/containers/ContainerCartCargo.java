@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,7 @@ public class ContainerCartCargo extends RailcraftContainer {
         super(cart);
 
         SlotRailcraft filter = new SlotStackFilter(StackFilters.CARGO, cart.getFilterInv(), 0, 26, 36)
-                .setPhantom().setStackLimit(1).setEnableCheck(cart::hasNoItems);
+                .setPhantom().setStackLimit(1).setEnableCheck(cart::isEmptied);
         addSlot(filter);
 
         for (int i = 0; i < 3; i++) {

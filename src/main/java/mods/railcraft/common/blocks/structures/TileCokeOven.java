@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.blocks.structures;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.TileFurnace;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public final class TileCokeOven extends TileCrafter {
+public final class TileCokeOven extends TileFurnace {
 
     private static final List<StructurePattern> patterns = new ArrayList<>();
 
@@ -291,9 +291,9 @@ public final class TileCokeOven extends TileCrafter {
     }
 
     public TileCokeOven() {
-        setLogic(new StructureLogic("coke_oven", this, patterns,
+        setRootLogic(new StructureLogic("coke_oven", this, patterns,
                 new CokeOvenLogic(Logic.Adapter.of(this))
-                        .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0))
+                        .addLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0))
         ) {
 
             @Override
@@ -348,8 +348,8 @@ public final class TileCokeOven extends TileCrafter {
         blockMapping.put('W', RailcraftBlocks.COKE_OVEN.getDefaultState());
         Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
         tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
-            structure.getFunctionalLogic(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(Fluids.CREOSOTE.get(creosote)));
-            structure.getFunctionalLogic(InventoryLogic.class).ifPresent(logic -> {
+            structure.getKernel(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(Fluids.CREOSOTE.get(creosote)));
+            structure.getKernel(InventoryLogic.class).ifPresent(logic -> {
                 logic.setInventorySlotContents(CokeOvenLogic.SLOT_INPUT, input);
                 logic.setInventorySlotContents(CokeOvenLogic.SLOT_OUTPUT, output);
             });
@@ -365,7 +365,7 @@ public final class TileCokeOven extends TileCrafter {
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(false)
+        return getLogic(StructureLogic.class).map(l -> l.getMarker() == 'W').orElse(false)
                 ? hasFlames()
                 ? base.withProperty(BlockCokeOven.ICON, 2)
                 : base.withProperty(BlockCokeOven.ICON, 1)

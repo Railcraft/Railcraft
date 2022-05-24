@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,14 +12,11 @@ package mods.railcraft.common.blocks.structures;
 import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.TileCrafter;
+import mods.railcraft.common.blocks.TileFurnace;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.aesthetics.brick.BlockBrickStairs;
 import mods.railcraft.common.blocks.aesthetics.brick.BrickTheme;
-import mods.railcraft.common.blocks.logic.BlastFurnaceLogic;
-import mods.railcraft.common.blocks.logic.ItemPullLogic;
-import mods.railcraft.common.blocks.logic.Logic;
-import mods.railcraft.common.blocks.logic.StructureLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -35,7 +32,7 @@ import java.util.Optional;
 
 import static mods.railcraft.common.blocks.structures.BlockBlastFurnace.ICON;
 
-public final class TileBlastFurnace extends TileCrafter {
+public final class TileBlastFurnace extends TileFurnace {
 
     private static final List<StructurePattern> patterns = new ArrayList<>();
 
@@ -94,7 +91,7 @@ public final class TileBlastFurnace extends TileCrafter {
         blockMapping.put('W', RailcraftBlocks.BLAST_FURNACE.getDefaultState());
         Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
 //        if (tile instanceof TileBlastFurnace) {
-            // FIXME this might not work if the structure isn't ready
+        // FIXME this might not work if the structure isn't ready
 //            TileBlastFurnace master = (TileBlastFurnace) tile;
 //            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_INPUT, input);
 //            master.inv.setInventorySlotContents(TileBlastFurnace.SLOT_OUTPUT, output);
@@ -104,7 +101,7 @@ public final class TileBlastFurnace extends TileCrafter {
     }
 
     {
-        setLogic(new StructureLogic("blast_furnace", this, patterns, new BlastFurnaceLogic(Logic.Adapter.of(this))) {
+        setRootLogic(new StructureLogic("blast_furnace", this, patterns, new BlastFurnaceLogic(Logic.Adapter.of(this))) {
 
             @Override
             public boolean isMapPositionValid(BlockPos pos, char mapPos) {
@@ -145,31 +142,31 @@ public final class TileBlastFurnace extends TileCrafter {
             @Override
             protected void onMasterReset() {
                 super.onMasterReset();
-                BlastFurnaceLogic furnace = (BlastFurnaceLogic) functionalLogic;
-                if (furnace.isBurning()) {
+                if (isBurning()) {
+                    BlastFurnaceLogic furnace = (BlastFurnaceLogic) kernel;
                     for (int ii = 0; ii < furnace.getInventory().getSizeInventory(); ii++)
                         furnace.getInventory().decrStackSize(ii, 1);
                     world.setBlockState(getPos().up(), Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
                     world.setBlockState(getPos().up(2), Blocks.FLOWING_LAVA.getStateFromMeta(1), 3);
                 }
             }
-        }.addSubLogic(new ItemPullLogic(Logic.Adapter.of(this), BlastFurnaceLogic.SLOT_FUEL, 1, 128, BlastFurnaceLogic.FUEL_FILTER)));
+        }.addLogic(new ItemPullLogic(Logic.Adapter.of(this), BlastFurnaceLogic.SLOT_FUEL, 1, 128, BlastFurnaceLogic.FUEL_FILTER)));
 
     }
 
     private boolean isBurning() {
-        return getLogic(BlastFurnaceLogic.class).map(BlastFurnaceLogic::isBurning).orElse(false);
+        return getLogic(FurnaceLogic.class).map(FurnaceLogic::isBurning).orElse(false);
     }
 
     @Override
     public boolean hasFlames() {
-        return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(true)
+        return getLogic(StructureLogic.class).map(l -> l.getMarker() == 'W').orElse(true)
                 && isBurning();
     }
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(false)
+        return getLogic(StructureLogic.class).map(l -> l.getMarker() == 'W').orElse(false)
                 ? hasFlames()
                 ? base.withProperty(ICON, 2)
                 : base.withProperty(ICON, 1)

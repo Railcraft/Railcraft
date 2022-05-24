@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -23,7 +23,6 @@ import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -37,12 +36,10 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
 /**
  * A simple Jukebox cart.
  */
-public final class EntityCartJukebox extends CartBase {
+public final class EntityCartJukebox extends EntityRailcraftCart {
 
+    public static final int RECORD_SLOT = 0;
     public static final String RECORD_DISPLAY_NAME = "record";
-    private static final String RECORD_ITEM_KEY = "RecordItem";
-
-    private ItemStack record = emptyStack();
 
     @SideOnly(Side.CLIENT)
     public @Nullable JukeboxSound music;
@@ -56,6 +53,15 @@ public final class EntityCartJukebox extends CartBase {
     }
 
     @Override
+    public int getSizeInventory() {
+        return 1;
+    }
+
+    public ItemStack record() {
+        return getStackInSlot(RECORD_SLOT);
+    }
+
+    @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.JUKEBOX;
     }
@@ -63,16 +69,16 @@ public final class EntityCartJukebox extends CartBase {
     @Override
     public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world)) {
-            if (!isEmpty(record)) {
-                entityDropItem(record.copy(), 0.5f);
-                record = emptyStack();
+            if (!InvTools.isEmpty(record())) {
+                entityDropItem(record().copy(), 0.5f);
+                setInventorySlotContents(RECORD_SLOT, emptyStack());
                 PacketBuilder.instance().stopRecord(this);
             }
             ItemStack heldItem = player.getHeldItem(hand);
-            if (isEmpty(heldItem) || !(heldItem.getItem() instanceof ItemRecord))
+            if (InvTools.isEmpty(heldItem) || !(heldItem.getItem() instanceof ItemRecord))
                 return true;
-            record = heldItem.copy();
-            InvTools.setSize(record, 1);
+            ItemStack record = copy(heldItem, 1);
+            setInventorySlotContents(RECORD_SLOT, record);
             if (!player.capabilities.isCreativeMode)
                 dec(heldItem);
             player.addStat(StatList.RECORD_PLAYED);
@@ -84,31 +90,11 @@ public final class EntityCartJukebox extends CartBase {
             PacketBuilder.instance().sendMovingSoundPacket(sound, SoundCategory.RECORDS, this, SoundHelper.MovingSoundType.RECORD, tag);
             RailcraftAdvancementTriggers.getInstance().onJukeboxCartPlay((EntityPlayerMP) player, this, sound.soundName);
         }
-        return true;
+        return super.doInteract(player, hand);
     }
 
     @Override
     public IBlockState getDefaultDisplayTile() {
         return Blocks.JUKEBOX.getDefaultState();
-    }
-
-    @Override
-    public void killMinecart(DamageSource par1DamageSource) {
-        super.killMinecart(par1DamageSource);
-        if (!isEmpty(record))
-            entityDropItem(record.copy(), 0);
-    }
-
-    @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {
-        super.readEntityFromNBT(compound);
-        record = new ItemStack(compound.getCompoundTag(RECORD_ITEM_KEY));
-    }
-
-    @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
-        super.writeEntityToNBT(compound);
-        NBTTagCompound tag = isEmpty(record) ? new NBTTagCompound() : record.writeToNBT(new NBTTagCompound());
-        compound.setTag(RECORD_ITEM_KEY, tag);
     }
 }

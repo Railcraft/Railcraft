@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,9 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.structures;
 
+import mods.railcraft.common.blocks.logic.FluidPushLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.util.misc.Predicates;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -32,30 +35,35 @@ public abstract class TileBoilerTank extends TileBoiler {
     private boolean isConnected;
 
     protected TileBoilerTank() {
+        getLogic(StructureLogic.class).ifPresent(logic -> logic.addLogic((
+                new FluidPushLogic(Logic.Adapter.of(this), TANK_STEAM, TRANSFER_RATE, OUTPUT_FILTER, EnumFacing.VALUES))
+        ));
     }
 
     @Override
-    public IBlockState getActualState(IBlockState state) {
-        if (!isStructureValid())
-            return state;
-        char marker = getPatternMarker();
-        if (marker == 'O')
-            return state;
-        BlockPos patternPos = getPatternPosition();
-        StructurePattern pattern = requireNonNull(getCurrentPattern());
-        state = state
-                .withProperty(BlockBoilerTank.NORTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
-                .withProperty(BlockBoilerTank.SOUTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
-                .withProperty(BlockBoilerTank.EAST, pattern.getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
-                .withProperty(BlockBoilerTank.WEST, pattern.getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
-        return state;
+    public IBlockState getActualState(final IBlockState state) {
+        return getLogic(StructureLogic.class).map(structureLogic -> {
+
+            if (!structureLogic.isStructureValid())
+                return state;
+            char marker = structureLogic.getMarker();
+            if (marker == 'O')
+                return state;
+            BlockPos patternPos = structureLogic.getPatternPosition();
+            StructurePattern pattern = requireNonNull(structureLogic.getPattern());
+            return state
+                    .withProperty(BlockBoilerTank.NORTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.NORTH)) == marker)
+                    .withProperty(BlockBoilerTank.SOUTH, pattern.getPatternMarker(patternPos.offset(EnumFacing.SOUTH)) == marker)
+                    .withProperty(BlockBoilerTank.EAST, pattern.getPatternMarker(patternPos.offset(EnumFacing.EAST)) == marker)
+                    .withProperty(BlockBoilerTank.WEST, pattern.getPatternMarker(patternPos.offset(EnumFacing.WEST)) == marker);
+        }).orElse(state);
     }
 
     @Override
     public void writePacketData(RailcraftOutputStream data) throws IOException {
         super.writePacketData(data);
 
-        data.writeBoolean(isStructureValid());
+        data.writeBoolean(getLogic(StructureLogic.class).map(StructureLogic::isStructureValid).orElse(false));
     }
 
     @Override
@@ -67,10 +75,5 @@ public abstract class TileBoilerTank extends TileBoiler {
 
     public boolean isConnected() {
         return isConnected;
-    }
-
-    @Override
-    public Predicate<TileEntity> getOutputFilter() {
-        return OUTPUT_FILTER;
     }
 }

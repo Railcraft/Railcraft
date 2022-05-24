@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,6 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public class EntityCartUndercutter extends CartBaseMaintenancePattern {
@@ -223,7 +224,7 @@ public class EntityCartUndercutter extends CartBaseMaintenancePattern {
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.CART_UNDERCUTTER;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CART_UNDERCUTTER.op();
     }
 }

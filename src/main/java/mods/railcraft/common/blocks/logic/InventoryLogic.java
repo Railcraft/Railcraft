@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,7 @@ public class InventoryLogic extends Logic implements IInventoryImplementor {
     protected final InventoryAdvanced inventory;
     protected final IInventoryComposite composite;
 
-    protected InventoryLogic(Adapter adapter, int sizeInv) {
+    public InventoryLogic(Adapter adapter, int sizeInv) {
         super(adapter);
         this.inventory = new InventoryAdvanced(sizeInv).callback(adapter.getContainer());
         this.composite = InventoryComposite.of(inventory);

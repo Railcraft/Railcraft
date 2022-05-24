@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,7 +31,7 @@ public class TriggerTemp extends Trigger {
     @Override
     public boolean isTriggerActive(EnumFacing side, TileEntity tile, IStatementParameter[] parameter) {
         if (tile instanceof ITemperature) {
-            float temp = ((ITemperature) tile).getTemperature();
+            double temp = ((ITemperature) tile).getTemp();
             return temp >= min && temp < max;
         }
         return false;

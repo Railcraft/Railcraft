@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,11 +13,14 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.logic.BoilerLogic;
+import mods.railcraft.common.blocks.logic.InventoryLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.AdjacentInventoryCache;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryComposite;
 import mods.railcraft.common.util.inventory.InventorySorter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
@@ -28,22 +31,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
 
-    private static final int SLOT_BURN = 2;
-    private static final int SLOT_FUEL_A = 3;
-    private static final int SLOT_FUEL_B = 4;
-    private static final int SLOT_FUEL_C = 5;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 6);
-    private static final Predicate<ItemStack> NOT_FUEL = StackFilters.FUEL.negate();
+    public static final int SLOT_FIREBOX = 3;
+    public static final int SLOT_BUNKER_A = 4;
+    public static final int SLOT_BUNKER_B = 5;
+    public static final int SLOT_BUNKER_C = 6;
     private final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> {
         if (tile instanceof TileSteamOven)
             return true;
@@ -53,14 +57,50 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
             return false;
         return InventoryComposite.of(tile).slotCount() >= 27;
     }, InventorySorter.SIZE_DESCENDING);
-    private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
-    private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
-    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
-    private boolean needsFuel;
 
     public TileBoilerFireboxSolid() {
-        super(6);
-        boiler.setFuelProvider(new SolidFuelProvider(this, SLOT_BURN));
+        getLogic(StructureLogic.class)
+                .flatMap(structureLogic -> structureLogic.getKernel(BoilerLogic.class))
+                .ifPresent(boilerLogic -> {
+                    InventoryLogic invLogic = new InventoryLogic(Logic.Adapter.of(this), 7) {
+                        @Override
+                        public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
+                            return new InvWrapper(this) {
+                                @Nonnull
+                                @Override
+                                public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                                    if (slot != SLOT_OUTPUT_FLUID)
+                                        return ItemStack.EMPTY;
+                                    return super.extractItem(slot, amount, simulate);
+                                }
+                            };
+                        }
+
+                        @Override
+                        public boolean isItemValidForSlot(int slot, ItemStack stack) {
+                            if (!super.isItemValidForSlot(slot, stack))
+                                return false;
+                            if (slot >= SLOT_FIREBOX)
+                                return FuelPlugin.getBurnTime(stack) > 0;
+                            else if (slot == SLOT_INPUT_FLUID)
+                                return Fluids.WATER.isContained(stack);
+                            return false;
+                        }
+                    };
+
+                    boilerLogic.addLogic(invLogic);
+                    InventoryMapper firebox = InventoryMapper.make(invLogic, SLOT_FIREBOX, 1);
+                    InventoryMapper bunker = InventoryMapper.make(invLogic, SLOT_BUNKER_A, 3);
+                    InventoryMapper output = InventoryMapper.make(invLogic, SLOT_OUTPUT_FLUID, 1);
+                    boilerLogic.setFuelProvider(new SolidFuelProvider(firebox, bunker, output) {
+                        @Override
+                        public void manageFuel() {
+                            super.manageFuel();
+                            if (needsFuel())
+                                invCache.getAdjacentInventories().moveOneItemTo(bunker, StackFilters.FUEL);
+                        }
+                    });
+                });
     }
 
     public static void placeSolidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, List<ItemStack> fuel) {
@@ -82,69 +122,6 @@ public final class TileBoilerFireboxSolid extends TileBoilerFirebox {
                 return;
             }
         }
-    }
-
-    @Override
-    protected void process() {
-        if (clock % 4 == 0) {
-            invStock.moveOneItemTo(invBurn);
-            invBurn.moveOneItemTo(invWaterOutput, NOT_FUEL);
-        }
-    }
-
-    @Override
-    public void update() {
-        super.update();
-
-        if (world.isRemote)
-            return;
-
-        if (isMaster && clock % 4 == 0)
-            needsFuel = invFuel.countItems() < 64;
-
-        if (needsFuel()) {
-            TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
-
-            if (mBlock != null)
-                invCache.getAdjacentInventories().moveOneItemTo(mBlock.invFuel, StackFilters.FUEL);
-        }
-    }
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return SLOTS;
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index == SLOT_LIQUID_OUTPUT;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (!isStructureValid())
-            return false;
-        if (slot >= SLOT_BURN)
-            return FuelPlugin.getBurnTime(stack) > 0;
-        else if (slot == SLOT_LIQUID_INPUT)
-            return Fluids.WATER.isContained(stack);
-        return false;
-    }
-
-    @Override
-    public boolean needsFuel() {
-        TileBoilerFireboxSolid mBlock = (TileBoilerFireboxSolid) getMasterBlock();
-        return mBlock != null && mBlock.needsFuel;
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
     }
 
     @Override

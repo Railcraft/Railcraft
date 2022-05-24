@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,14 +9,19 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.steam;
 
+import mods.railcraft.api.fuel.INeedsFuel;
+
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IFuelProvider {
+public interface IFuelProvider extends INeedsFuel {
 
-    double getMoreFuel();
+    default double burnFuelUnit() {return 0.0;}
 
-    double getHeatStep();
+    default void manageFuel() {}
 
+    default double getThermalEnergyLevel() {return 1.0;}
+
+    @Override
+    default boolean needsFuel() {return false;}
 }

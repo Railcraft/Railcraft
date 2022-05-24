@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -81,8 +81,12 @@ public class IC2EmitterLogic extends Logic implements ILocatable, IMetaDelegate,
     @Override
     public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
         super.onStructureChanged(isComplete, isMaster, data);
-        if (isMaster) addToNet();
-        else dropFromNet();
+        ifWorld(world -> {
+            if (Game.isHost(world)) {
+                if (isMaster) addToNet();
+                else dropFromNet();
+            }
+        });
     }
 
     public void addToNet() {

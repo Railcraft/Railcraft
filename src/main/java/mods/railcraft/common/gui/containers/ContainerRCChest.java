@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.gui.slots.SlotRailcraft;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -30,16 +31,16 @@ public class ContainerRCChest extends RailcraftContainer {
      */
     private final IInventory inv;
 
-    public ContainerRCChest(InventoryPlayer invPlayer, IInventory chest) {
+    public ContainerRCChest(InventoryPlayer invPlayer, IInventoryImplementor chest) {
         super(chest);
-        this.inv = chest;
-        int numRows = chest.getSizeInventory() / 9;
+        this.inv = chest.getInventory();
+        int numRows = inv.getSizeInventory() / 9;
         chest.openInventory(invPlayer.player);
         int i = (numRows - 4) * 18;
 
         for (int j = 0; j < numRows; ++j) {
             for (int k = 0; k < 9; ++k) {
-                addSlotToContainer(new SlotRailcraft(chest, k + j * 9, 8 + k * 18, 18 + j * 18));
+                addSlotToContainer(new SlotRailcraft(inv, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
         }
 

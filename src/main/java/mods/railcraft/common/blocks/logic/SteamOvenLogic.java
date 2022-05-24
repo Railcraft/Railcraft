@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,7 +55,7 @@ public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
     public SteamOvenLogic(Adapter adapter) {
         super(adapter, 18);
         tank = new FilteredTank(TANK_CAPACITY, adapter.tile().orElse(null)).setFilterFluid(Fluids.STEAM);
-        addSubLogic(new FluidLogic(adapter).addTank(tank));
+        addLogic(new FluidLogic(adapter).addTank(tank));
         setDuration(TOTAL_COOK_TIME);
     }
 

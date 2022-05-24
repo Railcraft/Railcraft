@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -111,7 +111,7 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
 
 
         if (clock % FluidTools.BUCKET_FILL_TIME == 0) {
-            processState = FluidTools.processContainer(this, tank, this instanceof TileFluidUnloader ? ProcessType.FILL_ONLY : ProcessType.DRAIN_ONLY, processState);
+            processState = FluidTools.processContainer(this, getTankManager(), this instanceof TileFluidUnloader ? ProcessType.FILL_ONLY : ProcessType.DRAIN_ONLY, processState);
         }
     }
 

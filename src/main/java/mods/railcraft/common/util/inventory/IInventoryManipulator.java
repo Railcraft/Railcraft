@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -220,11 +220,11 @@ public interface IInventoryManipulator {
     }
 
     default boolean hasItems() {
-        return streamStacks().findAny().isPresent();
+        return !isEmptied();
     }
 
-    default boolean hasNoItems() {
-        return !hasItems();
+    default boolean isEmptied() {
+        return streamStacks().allMatch(ItemStack::isEmpty);
     }
 
     default boolean isFull() {
@@ -257,6 +257,6 @@ public interface IInventoryManipulator {
     default int calcRedstone() {
         double average = InvTools.calculateFullness(this);
 
-        return MathHelper.floor(average * 14.0F) + (hasNoItems() ? 0 : 1);
+        return MathHelper.floor(average * 14.0F) + (isEmptied() ? 0 : 1);
     }
 }

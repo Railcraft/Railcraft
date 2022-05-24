@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ import net.minecraft.world.World;
 
 import java.io.IOException;
 
-public abstract class CartBaseExplosive extends CartBase implements IExplosiveCart, IGuiReturnHandler {
+public abstract class CartBaseExplosive extends EntityRailcraftCart implements IExplosiveCart, IGuiReturnHandler {
 
     private static final DataParameter<Integer> FUSE = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final DataParameter<Byte> BLAST = DataManagerPlugin.create(DataSerializers.BYTE);
@@ -162,7 +162,7 @@ public abstract class CartBaseExplosive extends CartBase implements IExplosiveCa
                 GuiHandler.openGui(EnumGui.CART_TNT_BLAST, player, world, this);
             }
         }
-        return true;
+        return super.doInteract(player, hand);
     }
 
     @Override

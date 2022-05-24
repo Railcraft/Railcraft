@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,18 +15,12 @@ import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
 
 @BlockMeta.Tile(TileBoilerFireboxSolid.class)
 public final class BlockBoilerFireboxSolid extends BlockBoilerFirebox<TileBoilerFireboxSolid> {
 
     public BlockBoilerFireboxSolid() {
         setHarvestLevel("pickaxe", 0);
-    }
-
-    @Override
-    public Tuple<Integer, Integer> getTextureDimensions() {
-        return new Tuple<>(3, 1);
     }
 
     @Override

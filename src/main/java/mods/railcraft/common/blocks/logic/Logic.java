@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,15 +15,15 @@ import mods.railcraft.api.carts.CartToolsAPI;
 import mods.railcraft.api.core.IWorldSupplier;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
-import mods.railcraft.common.carts.CartBaseLogic;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.collections.Streams;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.MiscTools;
+import mods.railcraft.common.util.misc.Clock;
+import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,18 +38,19 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * The basic logic class.
  */
-public class Logic implements ITickable, IWorldNameable, ILogicContainer {
+public class Logic implements ITickable, ILogicContainer {
+
     protected final Adapter adapter;
-    private int clock = MiscTools.RANDOM.nextInt();
-    private List<Logic> subLogics = new ArrayList<>();
-    private Optional<Logic> parentLogic = Optional.empty();
+    private final Clock clock = new Clock();
+    private final List<Logic> children = new ArrayList<>();
+    private Optional<Logic> parent = Optional.empty();
 
     /**
      * Helper function, for our ugly GUI factories mostly.
@@ -60,65 +61,52 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
      */
     public static <L extends Logic> L get(Class<L> logicClass, Object obj) {
         return ((ILogicContainer) obj).getLogic(logicClass)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new IllegalArgumentException("Logic Container does not contain specified Logic"));
     }
 
-    Logic(Adapter adapter) {
+    public Logic(Adapter adapter) {
         this.adapter = adapter;
     }
 
+    public final Logic root() {
+        return parent.map(Logic::root).orElse(this);
+    }
+
     @Override
-    public <L> Optional<L> getLogic(Class<L> logicClass) {
-        if (parentLogic.isPresent())
-            return parentLogic.get().getLogic(logicClass);
-        if (logicClass.isInstance(this))
-            return Optional.of(logicClass.cast(this));
-        if (!subLogics.isEmpty())
-            return subLogics().stream().flatMap(Streams.toType(logicClass)).findFirst();
-        return Optional.empty();
+    public final <L> Optional<L> getLogic(Class<L> logicClass) {
+        return root().logics().flatMap(Streams.toType(logicClass)).findFirst();
     }
 
-    private Collection<Logic> subLogics() {
-        List<Logic> logics = new ArrayList<>();
-        for (Logic sub : subLogics) {
-            logics.add(sub);
-            logics.addAll(sub.subLogics());
-        }
-        return logics;
+    public Stream<Logic> logics() {
+        return Stream.concat(Stream.of(this), children.stream().flatMap(Logic::logics));
     }
 
-    public Logic addSubLogic(Logic logic) {
-        subLogics.add(logic);
-        logic.parentLogic = Optional.of(this);
+    public Logic addLogic(Logic logic) {
+        children.add(logic);
+        logic.parent = Optional.of(this);
         return this;
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void update() {
-        clock++;
-        if (Game.isHost(theWorldAsserted()))
-            updateServer();
-        else
-            updateClient();
-        subLogics.forEach(Logic::update);
+        clock.tick();
+        ifHost(this::updateServer);
+        ifClient(this::updateClient);
+        children.forEach(Logic::update);
     }
 
-    protected void updateClient() { }
+    protected void updateClient() {}
 
-    protected void updateServer() { }
+    protected void updateServer() {}
 
-    protected int clock() {
+    protected Clock clock() {
         return clock;
-    }
-
-    protected boolean clock(int interval) {
-        return clock % interval == 0;
     }
 
     @OverridingMethodsMustInvokeSuper
     public void placed(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
-        subLogics.forEach(l -> l.placed(state, placer, stack));
+        children.forEach(l -> l.placed(state, placer, stack));
     }
 
     /**
@@ -126,12 +114,12 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
      */
     @OverridingMethodsMustInvokeSuper
     public boolean interact(EntityPlayer player, EnumHand hand) {
-        return subLogics.stream().map(l -> l.interact(player, hand)).filter(b -> b).findFirst().orElse(false);
+        return children.stream().map(l -> l.interact(player, hand)).filter(b -> b).findFirst().orElse(false);
     }
 
     @OverridingMethodsMustInvokeSuper
     public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
-        subLogics.forEach(subLogic -> subLogic.onStructureChanged(isComplete, isMaster, data));
+        children.forEach(subLogic -> subLogic.onStructureChanged(isComplete, isMaster, data));
     }
 
     @Override
@@ -181,26 +169,24 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
     }
 
     public void sendUpdateOrUpdateModels() {
-        if (Game.isHost(theWorldAsserted()))
-            adapter.sendUpdateToClient();
-        else
-            adapter.updateModels();
+        ifHost(adapter::sendUpdateToClient);
+        ifClient(adapter::updateModels);
     }
 
     @OverridingMethodsMustInvokeSuper
     public void writeToNBT(NBTTagCompound data) {
-        subLogics.forEach(l -> l.writeToNBT(data));
+        children.forEach(l -> l.writeToNBT(data));
     }
 
     @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
-        subLogics.forEach(l -> l.readFromNBT(data));
+        children.forEach(l -> l.readFromNBT(data));
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void writePacketData(RailcraftOutputStream data) throws IOException {
-        for (Logic l : subLogics) {
+        for (Logic l : children) {
             l.writePacketData(data);
         }
     }
@@ -208,7 +194,7 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void readPacketData(RailcraftInputStream data) throws IOException {
-        for (Logic l : subLogics) {
+        for (Logic l : children) {
             l.readPacketData(data);
         }
     }
@@ -216,7 +202,7 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void writeGuiData(RailcraftOutputStream data) throws IOException {
-        for (Logic l : subLogics) {
+        for (Logic l : children) {
             l.writeGuiData(data);
         }
     }
@@ -224,8 +210,24 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
     @Override
     @OverridingMethodsMustInvokeSuper
     public void readGuiData(RailcraftInputStream data, @Nullable EntityPlayer sender) throws IOException {
-        for (Logic l : subLogics) {
+        for (Logic l : children) {
             l.readGuiData(data, sender);
+        }
+    }
+
+    @Override
+    public WorldOperatorLogic fromWorld() {
+        return new WorldOperatorLogic(theWorld());
+    }
+
+    public static class WorldOperatorLogic extends WorldOperator {
+
+        public WorldOperatorLogic(@Nullable World world) {
+            super(world);
+        }
+
+        public <L> Optional<L> getLogic(@Nullable BlockPos pos, Class<L> logicClass) {
+            return getTile(pos, TileLogic.class).flatMap(tile -> tile.getLogic(logicClass));
         }
     }
 
@@ -255,7 +257,7 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
             return Optional.empty();
         }
 
-        abstract boolean isUsableByPlayer(EntityPlayer player);
+        public abstract boolean isUsableByPlayer(EntityPlayer player);
 
         public static class Tile extends Adapter {
             private final TileRailcraft tile;
@@ -334,7 +336,7 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
             }
 
             @Override
-            boolean isUsableByPlayer(EntityPlayer player) {
+            public boolean isUsableByPlayer(EntityPlayer player) {
                 return TileRailcraft.isUsableByPlayerHelper(tile, player);
             }
         }
@@ -344,14 +346,16 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
         }
 
         public static Adapter from(ILogicContainer logicContainer) {
-            if (logicContainer instanceof CartBaseLogic)
-                return of((CartBaseLogic) logicContainer);
+            if (logicContainer instanceof EntityMinecart)
+                return of((EntityMinecart) logicContainer);
             if (logicContainer instanceof TileLogic)
                 return of((TileLogic) logicContainer);
-            throw new IllegalArgumentException("Invalid Logic Container");
+            if (logicContainer instanceof Logic)
+                return ((Logic) logicContainer).adapter;
+            throw new IllegalArgumentException("Invalid Logic Container: " + logicContainer.getClass());
         }
 
-        public static Adapter of(CartBaseLogic cart) {
+        public static Adapter of(EntityMinecart cart) {
             return new Adapter() {
                 @Override
                 Object getContainer() {
@@ -400,11 +404,12 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
 
                 @Override
                 void sendUpdateToClient() {
-                    cart.sendUpdateToClient();
+                    if (cart.isAddedToWorld() && cart.isEntityAlive())
+                        PacketBuilder.instance().sendEntitySync(cart);
                 }
 
                 @Override
-                void updateModels() { }
+                void updateModels() {}
 
                 @Override
                 public @Nullable World theWorld() {
@@ -412,7 +417,7 @@ public class Logic implements ITickable, IWorldNameable, ILogicContainer {
                 }
 
                 @Override
-                boolean isUsableByPlayer(EntityPlayer player) {
+                public boolean isUsableByPlayer(EntityPlayer player) {
                     return !cart.isDead && player.getDistanceSq(cart) <= 64.0D;
                 }
             };

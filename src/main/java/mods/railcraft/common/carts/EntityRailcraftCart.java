@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,17 +9,31 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufInputStream;
+import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.api.carts.IItemCart;
+import mods.railcraft.api.fuel.INeedsFuel;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.InventoryLogic;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.blocks.logic.Logic.Adapter;
 import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.IExtInvSlot;
 import mods.railcraft.common.util.inventory.IInventoryComposite;
-import mods.railcraft.common.util.inventory.ItemHandlerFactory;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
+import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.Optionals;
+import mods.railcraft.common.util.network.PacketBuilder;
+import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -37,39 +51,56 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * It also contains some generic code that most carts will find useful.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartBaseContainer extends EntityMinecartContainer implements IRailcraftCart, IItemCart, IInventoryComposite {
+public abstract class EntityRailcraftCart extends EntityMinecartContainer implements IRailcraftCart, INeedsFuel, IItemCart, IInventoryComposite, ILogicContainer, IEntityAdditionalSpawnData {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected @Nullable EnumFacing travelDirection;
     protected @Nullable EnumFacing verticalTravelDirection;
     @SuppressWarnings("CanBeFinal")
     protected List<InventoryMapper> invMappers = new ArrayList<>();
+    protected Logic logic;
 
-    protected CartBaseContainer(World world) {
+    protected EntityRailcraftCart(World world) {
         super(world);
     }
 
-    protected CartBaseContainer(World world, double x, double y, double z) {
+    protected EntityRailcraftCart(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
     @Override
     protected void entityInit() {
         super.entityInit();
+        logic = new Logic(Adapter.of(this));
         cartInit();
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return 0;
+    }
+
+    @Override
+    public boolean needsFuel() {
+        return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
     }
 
     @Override
@@ -91,13 +122,14 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
 
     @Override
     public final boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        return (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand))) || doInteract(player, hand);
+        return MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, player, hand)) || doInteract(player, hand);
     }
 
     @OverridingMethodsMustInvokeSuper
     public boolean doInteract(EntityPlayer player, EnumHand hand) {
         if (Game.isHost(world)) {
-            openRailcraftGui(player);
+            if (!logic.interact(player, hand))
+                openRailcraftGui(player);
         }
         return true;
     }
@@ -107,17 +139,27 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
         return createCartItem(this);
     }
 
+    public void setLogic(Logic logic) {
+        this.logic = logic;
+    }
+
+    @Override
+    public <L> Optional<L> getLogic(Class<L> logicClass) {
+        return Optional.of(logic).map(Optionals.toType(logicClass));
+    }
+
     @Override
     public void setDead() {
-        if (Game.isClient(world))
-            for (int slot = 0; slot < getSizeInventory(); slot++) {
-                setInventorySlotContents(slot, ItemStack.EMPTY);
-            }
+        if (Game.isClient(world)) {
+            InventoryIterator.get(this).stream().forEach(IExtInvSlot::clear);
+            getLogic(IInventoryImplementor.class).ifPresent(inv ->
+                    InventoryIterator.get(inv).stream().forEach(IExtInvSlot::clear));
+        }
         super.setDead();
     }
 
     @Override
-    public final void killMinecart(DamageSource par1DamageSource) {
+    public void killMinecart(DamageSource damageSource) {
         killAndDrop(this);
     }
 
@@ -215,20 +257,23 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     protected void openRailcraftGui(EntityPlayer player) {
-        GuiHandler.openGui(getGuiType(), player, world, this);
+        if (getGuiType().isPresent())
+            GuiHandler.openGui(getGuiType().get(), player, world, this);
     }
 
     @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
-        return FactoryContainer.build(getGuiType(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
+        if (getGuiType().isPresent())
+            return FactoryContainer.build(getGuiType().get(), playerInventory, this, world, (int) posX, (int) posY, (int) posZ);
+        throw new UnsupportedOperationException("No GUI defined.");
     }
 
     /**
      * Gets the GUI type of the minecart.
-     *
-     * If there is no GUI, the cart must override {@link #openRailcraftGui(EntityPlayer)} to not open a GUI.
      */
-    protected abstract EnumGui getGuiType();
+    protected Optional<EnumGui> getGuiType() {
+        return Optional.of(logic).map(Logic::getGUI);
+    }
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
@@ -245,17 +290,103 @@ public abstract class CartBaseContainer extends EntityMinecartContainer implemen
     }
 
     @Override
-    public boolean hasCapability(Capability<?> capability, @javax.annotation.Nullable EnumFacing facing) {
-        return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    public void onUpdate() {
+        super.onUpdate();
+        logic.update();
     }
 
-    @javax.annotation.Nullable
     @Override
-    public <T> T getCapability(Capability<T> capability, @javax.annotation.Nullable EnumFacing facing) {
+    public NBTTagCompound writeToNBT(NBTTagCompound data) {
+        logic.writeToNBT(data);
+        return super.writeToNBT(data);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound data) {
+        super.readFromNBT(data);
+        logic.readFromNBT(data);
+    }
+
+    @Override
+    public void writePacketData(RailcraftOutputStream data) throws IOException {
+        logic.writePacketData(data);
+    }
+
+    @Override
+    public void readPacketData(RailcraftInputStream data) throws IOException {
+        logic.readPacketData(data);
+    }
+
+    @Override
+    public void writeGuiData(RailcraftOutputStream data) throws IOException {
+        logic.writeGuiData(data);
+    }
+
+    @Override
+    public void readGuiData(RailcraftInputStream data, EntityPlayer sender) throws IOException {
+        logic.readGuiData(data, sender);
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+        try {
+            writePacketData(new RailcraftOutputStream(new ByteBufOutputStream(buffer)));
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf buffer) {
+        try {
+            readPacketData(new RailcraftInputStream(new ByteBufInputStream(buffer)));
+        } catch (IOException ignored) {
+        }
+    }
+
+    @Override
+    public void sendUpdateToClient() {
+        if (isAddedToWorld() && isEntityAlive())
+            PacketBuilder.instance().sendEntitySync(this);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+                && getLogic(InventoryLogic.class).isPresent())
+            return true;
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
+                && getLogic(IFluidHandler.class).isPresent())
+            return true;
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ItemHandlerFactory.wrap(this, facing));
+            Optional<InventoryLogic> inv = getLogic(InventoryLogic.class);
+            if (inv.isPresent())
+                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inv.get().getItemHandler(facing));
+        }
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            Optional<IFluidHandler> tank = getLogic(IFluidHandler.class);
+            if (tank.isPresent())
+                return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(tank.get());
         }
         return super.getCapability(capability, facing);
     }
 
+    public List<String> getDebugOutput() {
+        List<String> debug = new ArrayList<>();
+        debug.add("Railcraft Entity Data Dump");
+        debug.add("Object: " + this);
+        debug.add(String.format("Coordinates: d=%d, %s", world.provider.getDimension(), getPositionVector()));
+        debug.add("Owner: " + CartTools.getCartOwnerEntity(this));
+        debug.add("LinkA: " + CartTools.getCartOwnerEntity(this));
+        return debug;
+    }
+
+    @Override
+    public @Nullable World theWorld() {
+        return world;
+    }
 }

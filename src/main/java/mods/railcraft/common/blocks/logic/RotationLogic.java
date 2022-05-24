@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ public class RotationLogic extends Logic {
         return container.getLogic(RotationLogic.class).orElseGet(() -> {
             // This is kind of ugly, but it works. Normally we can't access the functional logic tree directly, only through the master.
             return container.getLogic(StructureLogic.class)
-                    .flatMap(s -> s.functionalLogic.getLogic(RotationLogic.class))
+                    .flatMap(s -> s.kernel.getLogic(RotationLogic.class))
                     .orElseThrow(() -> new RuntimeException(container.getClass().getSimpleName()));
         });
     }

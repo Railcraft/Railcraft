@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,8 +50,8 @@ public class MetalsChestLogic extends InventoryLogic {
 
     @Override
     public void updateServer() {
-        if (clock(TICK_PER_CONDENSE))
-            target = target.evaluate(this);
+        clock().onInterval(TICK_PER_CONDENSE, () ->
+                target = target.evaluate(this));
     }
 
     enum Target {

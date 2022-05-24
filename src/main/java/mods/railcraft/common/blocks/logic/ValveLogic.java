@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,7 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
     public ValveLogic(Adapter.Tile adapter) {
         super(adapter);
         fillTank.setHidden(true);
-        addSubLogic(new FluidPushLogic(adapter, StorageTankLogic.TANK_INDEX, FLOW_RATE,
+        addLogic(new FluidPushLogic(adapter, StorageTankLogic.TANK_INDEX, FLOW_RATE,
                 FluidPushLogic.defaultTargets(adapter)
                         .or(tile -> {
                             if (tile instanceof TileTank) {
@@ -48,8 +48,8 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
                         })
                         .and(tile -> canDrain()),
                 EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH, EnumFacing.EAST, EnumFacing.WEST));
-        addSubLogic(new FluidComparatorLogic(adapter, StorageTankLogic.TANK_INDEX));
-        addSubLogic(new BucketInteractionLogic(adapter));
+        addLogic(new FluidComparatorLogic(adapter, StorageTankLogic.TANK_INDEX));
+        addLogic(new BucketInteractionLogic(adapter));
     }
 
     @Override
@@ -60,8 +60,7 @@ public class ValveLogic extends Logic implements IFluidHandlerImplementor {
 
     @Override
     public TankManager getTankManager() {
-        return getLogic(StructureLogic.class)
-                .flatMap(structure -> structure.getMasterLogic(FluidLogic.class))
+        return getLogic(FluidLogic.class)
                 .map(FluidLogic::getTankManager)
                 .orElse(TankManager.NIL);
     }

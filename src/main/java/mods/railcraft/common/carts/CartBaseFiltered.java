@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,7 +22,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CartBaseFiltered extends CartBaseContainer implements IMinecart {
+public abstract class CartBaseFiltered extends EntityRailcraftCart implements IMinecart {
     private static final DataParameter<ItemStack> FILTER = DataManagerPlugin.create(DataSerializers.ITEM_STACK);
     private final InventoryAdvanced invFilter = new InventoryAdvanced(1).callbackInv(this).phantom();
 

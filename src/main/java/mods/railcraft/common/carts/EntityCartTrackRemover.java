@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,6 +24,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class EntityCartTrackRemover extends CartBaseMaintenance {
@@ -82,7 +83,7 @@ public class EntityCartTrackRemover extends CartBaseMaintenance {
     }
 
     @Override
-    protected EnumGui getGuiType() {
+    protected Optional<EnumGui> getGuiType() {
         throw new UnsupportedOperationException("No GUI");
     }
 

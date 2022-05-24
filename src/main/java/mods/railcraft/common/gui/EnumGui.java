@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,8 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui;
 
+import java.util.Optional;
+
 /**
  * @author CovertJaguar
  */
@@ -16,7 +18,7 @@ public enum EnumGui {
 
     ANVIL(true),
     BLAST_FURNACE(true),
-    BOILER_LIQUID(true),
+    BOILER_FLUID(true),
     BOILER_SOLID(true),
     BOX_ANALOG_CONTROLLER(false),
     BOX_CAPACITOR(false),
@@ -93,6 +95,10 @@ public enum EnumGui {
 //        if (i < 0 || i >= VALUES.length)
 //            return null;
         return VALUES[i];
+    }
+
+    public Optional<EnumGui> op() {
+        return Optional.of(this);
     }
 
 }

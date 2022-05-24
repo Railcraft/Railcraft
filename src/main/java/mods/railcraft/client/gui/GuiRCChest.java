@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,8 +11,8 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.gui.containers.ContainerRCChest;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 
 public class GuiRCChest extends GuiTitled {
 
@@ -21,10 +21,10 @@ public class GuiRCChest extends GuiTitled {
      */
     private final int inventoryRows;
 
-    public GuiRCChest(InventoryPlayer playerInv, IInventory chest) {
+    public GuiRCChest(InventoryPlayer playerInv, IInventoryImplementor chest) {
         super(chest, new ContainerRCChest(playerInv, chest), "textures/gui/container/generic_54.png");
         this.allowUserInput = false;
-        this.inventoryRows = chest.getSizeInventory() / 9;
+        this.inventoryRows = chest.getInventory().getSizeInventory() / 9;
         this.ySize = 114 + inventoryRows * 18;
     }
 

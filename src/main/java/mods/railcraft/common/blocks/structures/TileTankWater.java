@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -120,14 +120,14 @@ public class TileTankWater extends TileLogic {
     }
 
     public TileTankWater() {
-        setLogic(new StructureLogic("water_tank", this, patterns,
-                new StorageTankLogic(Logic.Adapter.of(this), CAP_PER_BLOCK, Fluids.WATER)
-                                .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0))
+        setRootLogic(new StructureLogic("water_tank", this, patterns,
+                        new StorageTankLogic(Logic.Adapter.of(this), CAP_PER_BLOCK, Fluids.WATER)
+                                .addLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0))
                 )
-                        .addSubLogic(new WaterGeneratorLogic(Logic.Adapter.of(this)))
-                .addSubLogic(new FluidPushLogic(Logic.Adapter.of(this), 0, OUTPUT_RATE, OUTPUT_FACES))
-                .addSubLogic(new FluidComparatorLogic(Logic.Adapter.of(this), 0))
-                .addSubLogic(new BucketInteractionLogic(Logic.Adapter.of(this)))
+                        .addLogic(new WaterGeneratorLogic(Logic.Adapter.of(this)))
+                        .addLogic(new FluidPushLogic(Logic.Adapter.of(this), 0, OUTPUT_RATE, OUTPUT_FACES))
+                        .addLogic(new FluidComparatorLogic(Logic.Adapter.of(this), 0))
+                        .addLogic(new BucketInteractionLogic(Logic.Adapter.of(this)))
         );
     }
 
@@ -144,7 +144,7 @@ public class TileTankWater extends TileLogic {
         blockMapping.put('B', RailcraftBlocks.TANK_WATER.getDefaultState());
         Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
         tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
-            structure.getFunctionalLogic(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(Fluids.WATER.get(water)));
+            structure.getKernel(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(Fluids.WATER.get(water)));
         });
     }
 }

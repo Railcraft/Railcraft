@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,12 +16,12 @@ import mods.railcraft.common.gui.widgets.AnalogWidget;
 import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class ContainerRockCrusher extends ContainerCrafter {
+public class ContainerRockCrusher extends ContainerLogic {
     public static final int GUI_HEIGHT = 171;
 
     public ContainerRockCrusher(InventoryPlayer invPlayer, RockCrusherLogic crusher) {
         super(crusher);
-        addWidget(new AnalogWidget(new ChargeNetworkIndicator(logic.theWorldAsserted(), logic.getPos()), 74, 59, 28, 14, 99, 65));
+        addWidget(new AnalogWidget(new ChargeNetworkIndicator(root.theWorldAsserted(), root.getPos()), 74, 59, 28, 14, 99, 65));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 3; k++) {

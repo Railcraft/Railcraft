@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-public class EntityCartChest extends CartBaseContainer {
+import java.util.Optional;
+
+public class EntityCartChest extends EntityRailcraftCart {
     public EntityCartChest(World world) {
         super(world);
     }
@@ -79,8 +81,8 @@ public class EntityCartChest extends CartBaseContainer {
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.CHEST;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CHEST.op();
     }
 
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CartBaseEnergy extends CartBaseContainer implements IEnergyTransfer, IWeightedCart {
+import java.util.Optional;
+
+public abstract class CartBaseEnergy extends EntityRailcraftCart implements IEnergyTransfer, IWeightedCart {
 
     private final IBatteryCart cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 
@@ -185,7 +187,7 @@ public abstract class CartBaseEnergy extends CartBaseContainer implements IEnerg
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.CART_ENERGY;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CART_ENERGY.op();
     }
 }

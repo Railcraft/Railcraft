@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,6 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.core.RailcraftConfig;
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.IExtInvSlot;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -35,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class EntityCartHopper extends CartBaseContainer implements IHopper {
+public class EntityCartHopper extends EntityRailcraftCart implements IHopper {
     private boolean enabled = true;
     private int transferCooldown = -1;
     private @Nullable BlockPos lastPosition;
@@ -52,11 +51,6 @@ public class EntityCartHopper extends CartBaseContainer implements IHopper {
     @Override
     public IRailcraftCartContainer getCartType() {
         return RailcraftCarts.HOPPER;
-    }
-
-    @Override
-    protected EnumGui getGuiType() {
-        throw new UnsupportedOperationException("No GUI");
     }
 
     @Override

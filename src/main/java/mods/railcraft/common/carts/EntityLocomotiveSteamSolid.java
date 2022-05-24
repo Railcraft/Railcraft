@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,6 +29,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.Optional;
+
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
@@ -40,9 +42,9 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     private static final int SLOT_TICKET = 7;
     private static final int SLOT_DESTINATION = 8;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
-    private final InventoryMapper invBurn = InventoryMapper.make(this, SLOT_BURN, 1);
-    private final InventoryMapper invStock = InventoryMapper.make(this, SLOT_FUEL_A, 3);
-    private final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_BURN, 4);
+    private final InventoryMapper firebox = InventoryMapper.make(this, SLOT_BURN, 1);
+    private final InventoryMapper bunker = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private final InventoryMapper fuel = InventoryMapper.make(this, SLOT_BURN, 4);
     private final InventoryMapper invTicket = new InventoryMapper(this, SLOT_TICKET, 2).ignoreItemChecks();
 //    private boolean outOfWater = true;
 
@@ -65,12 +67,12 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     }
 
     {
-        boiler.setFuelProvider(new SolidFuelProvider(this, SLOT_BURN) {
+        boiler.setFuelProvider(new SolidFuelProvider(firebox, bunker, invWaterOutput) {
             @Override
-            public double getMoreFuel() {
+            public double burnFuelUnit() {
                 if (isShutdown())
                     return 0;
-                return super.getMoreFuel();
+                return super.burnFuelUnit();
             }
         });
     }
@@ -90,31 +92,17 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
         super.onUpdate();
 
         if (Game.isHost(world)) {
-            invStock.moveOneItemTo(invBurn);
-            invBurn.moveOneItemTo(invWaterOutput, StackFilters.FUEL.negate());
-            ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(invStock));
+            firebox.moveOneItemTo(invWaterOutput, StackFilters.FUEL.negate());
+            ItemStack stack = CartToolsAPI.transferHelper().pullStack(this, StackFilters.roomIn(bunker));
             if (!InvTools.isEmpty(stack))
-                invStock.addStack(stack);
-            if (isSafeToFill() && tankWater.getFluidAmount() < tankWater.getCapacity() / 2) {
+                bunker.addStack(stack);
+            if (isSafeToFill() && boiler.tankWater.getFluidAmount() < boiler.tankWater.getCapacity() / 2) {
                 FluidStack pulled = CartToolsAPI.transferHelper().pullFluid(this, Fluids.WATER.getB(1));
                 if (pulled != null) {
-                    tankWater.fill(pulled, true);
+                    boiler.tankWater.fill(pulled, true);
                 }
             }
         }
-    }
-
-    @Override
-    public boolean needsFuel() {
-        FluidStack water = tankWater.getFluid();
-        if (water == null || water.amount < tankWater.getCapacity() / 3)
-            return true;
-        int numItems = invFuel.countItems();
-        if (numItems == 0)
-            return true;
-        int maxItems = invFuel.countMaxItemStackSize();
-        // FIXME: This math is weird, it completely ignores empty slots
-        return (double) numItems / (double) maxItems < 0.25;
     }
 
     @Override
@@ -173,7 +161,7 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.LOCO_STEAM;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.LOCO_STEAM.op();
     }
 }

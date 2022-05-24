@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 
 /**
+ * Wraps a standard IInventory
+ *
  * Created by CovertJaguar on 11/18/2018 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -32,7 +32,7 @@ public class Streams {
     }
 
     /**
-     * Helper function to use when casting Streams.
+     * Helper function to use when streaming Optional values.
      *
      * Works as both a mapper and a filter.
      *

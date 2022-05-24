@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,8 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.TileWorker;
 import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
@@ -42,7 +42,7 @@ import static mods.railcraft.common.blocks.structures.BlockRockCrusher.ICON;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class TileRockCrusher extends TileCrafter {
+public final class TileRockCrusher extends TileWorker {
     private static final double SUCKING_POWER_COST = 1000;
     private static final double KILLING_POWER_COST = 5000;
 
@@ -111,7 +111,7 @@ public final class TileRockCrusher extends TileCrafter {
     }
 
     public TileRockCrusher() {
-        setLogic(new StructureLogic("rock_crusher", this, patterns, new RockCrusherLogic(Logic.Adapter.of(this))) {
+        setRootLogic(new StructureLogic("rock_crusher", this, patterns, new RockCrusherLogic(Logic.Adapter.of(this))) {
 
                     @Override
                     public boolean isMapPositionValid(BlockPos pos, char mapPos) {
@@ -143,7 +143,7 @@ public final class TileRockCrusher extends TileCrafter {
                         return false;
                     }
                 }
-                        .addSubLogic(new CrafterParticleEffectLogic(Logic.Adapter.of(this), () -> {
+                        .addLogic(new CrafterParticleEffectLogic(Logic.Adapter.of(this), () -> {
                             ItemStack crushed = getLogic(RockCrusherLogic.class).map(RockCrusherLogic::getCrushed).orElseGet(() -> new ItemStack(Blocks.COBBLESTONE));
                             IBlockState crushedState = InvTools.getBlockStateFromStack(crushed);
                             for (int i = 0; i < 8; i++)
@@ -175,7 +175,7 @@ public final class TileRockCrusher extends TileCrafter {
         blockMapping.put('h', state);
         Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
         tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
-            structure.getFunctionalLogic(InventoryLogic.class).ifPresent(logic -> {
+            structure.getKernel(InventoryLogic.class).ifPresent(logic -> {
                 for (int slot = 0; slot < 9; slot++) {
                     if (input != null && slot < input.size())
                         logic.setInventorySlotContents(RockCrusherLogic.SLOT_INPUT + slot, input.get(slot));
@@ -218,6 +218,6 @@ public final class TileRockCrusher extends TileCrafter {
 
     @Override
     public IBlockState getActualState(IBlockState base) {
-        return getLogic(StructureLogic.class).map(l -> base.withProperty(ICON, l.getPatternMarker())).orElse(base);
+        return getLogic(StructureLogic.class).map(l -> base.withProperty(ICON, l.getMarker())).orElse(base);
     }
 }

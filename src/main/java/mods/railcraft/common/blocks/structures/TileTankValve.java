@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,15 +18,13 @@ import net.minecraft.util.EnumFacing;
 
 import java.util.Arrays;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class TileTankValve extends TileTank {
 
     protected TileTankValve() {
-        getLogic(StructureLogic.class).ifPresent(logic -> logic.addSubLogic(new ValveLogic(Logic.Adapter.of(this))));
+        getLogic(StructureLogic.class).ifPresent(logic -> logic.addLogic(new ValveLogic(Logic.Adapter.of(this))));
     }
 
     @Override
@@ -35,7 +33,7 @@ public abstract class TileTankValve extends TileTank {
                 .filter(StructureLogic::isStructureValid)
                 .map(logic ->
                         Arrays.stream(EnumFacing.VALUES)
-                                .filter(facing -> logic.isMapPositionOtherBlock(requireNonNull(logic.getPattern()).getPatternMarkerChecked(logic.getPatternPosition().offset(facing))))
+                                .filter(facing -> logic.isMapPositionOtherBlock(logic.getMarker(facing)))
                                 .findFirst()
                                 .map(facing -> base.withProperty(BlockTankIronValve.OPTIONAL_AXIS, OptionalAxis.from(facing.getAxis())))
                                 .orElse(base)).orElse(base);

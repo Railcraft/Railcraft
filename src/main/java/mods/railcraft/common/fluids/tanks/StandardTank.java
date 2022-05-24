@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,7 +65,7 @@ public class StandardTank extends FluidTank {
     }
 
     public StandardTank canFill(boolean canFill) {
-        setCanFill(canDrain);
+        setCanFill(canFill);
         return this;
     }
 

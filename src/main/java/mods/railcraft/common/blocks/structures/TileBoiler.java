@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,34 +10,26 @@
 package mods.railcraft.common.blocks.structures;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.blocks.TileFurnace;
 import mods.railcraft.common.blocks.interfaces.ITileTank;
+import mods.railcraft.common.blocks.logic.BoilerLogic;
+import mods.railcraft.common.blocks.logic.FluidLogic;
+import mods.railcraft.common.blocks.logic.StructureLogic;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.StandardTank;
+import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.steam.IBoilerContainer;
-import mods.railcraft.common.util.steam.SteamBoiler;
 import mods.railcraft.common.util.steam.SteamConstants;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class TileBoiler extends TileMultiBlock implements IBoilerContainer, ITileTank {
+public abstract class TileBoiler extends TileFurnace implements ITemperature, ITileTank {
 
     public static final int TANK_WATER = 0;
     public static final int TANK_STEAM = 1;
@@ -46,12 +38,12 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     public static final int TICKS_HIGH = 8;
     public static final int STEAM_LOW = 16;
     public static final int STEAM_HIGH = 32;
+    public static final int WATER_CAPACITY = 4;
     public static final float HEAT_LOW = SteamConstants.MAX_HEAT_LOW;
     public static final float HEAT_HIGH = SteamConstants.MAX_HEAT_HIGH;
     protected static final List<StructurePattern> patterns = new ArrayList<>();
     private static final Set<IBlockState> boilerBlocks = new HashSet<>();
     private static final Set<IBlockState> fireboxBlocks = new HashSet<>();
-    private boolean explode;
 
     static {
         fireboxBlocks.add(RailcraftBlocks.BOILER_FIREBOX_SOLID.getDefaultState());
@@ -81,10 +73,52 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
     }
 
     protected TileBoiler() {
-        super(patterns);
+        setRootLogic(new StructureLogic("boiler", this, patterns) {
+//            @Override
+//            protected void onMasterReset() {
+//                super.onMasterReset();
+//                getFunctionalLogic(BoilerLogic.class).ifPresent(BoilerLogic::reset);
+//            }
+
+            @Override
+            public boolean isPart(Block block) {
+                return super.isPart(block)
+                        || RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.isEqual(block)
+                        || RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.isEqual(block);
+            }
+
+            @Override
+            public boolean isMapPositionValid(BlockPos pos, char mapPos) {
+                IBlockState state = WorldPlugin.getBlockState(world, pos);
+
+                switch (mapPos) {
+                    case 'O': // Other
+                        if (boilerBlocks.contains(state))
+                            return false;
+                        break;
+                    case 'L': // Tank
+                        if (!RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.isEqual(state))
+                            return false;
+                        break;
+                    case 'H': // Tank
+                        if (!RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.isEqual(state))
+                            return false;
+                        break;
+                    case 'F': // Firebox
+                        if (!fireboxBlocks.contains(state))
+                            return false;
+                        break;
+                    case 'A': // Air
+                        if (!state.getBlock().isAir(state, world, pos))
+                            return false;
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
-    private static StructurePattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int capacity) {
+    private static StructurePattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int steamCapacity) {
         StructurePattern.Builder builder = StructurePattern.builder();
         char[][] level = new char[width + 2][width + 2];
         for (int x = 0; x < width + 2; x++) {
@@ -120,146 +154,31 @@ public abstract class TileBoiler extends TileMultiBlock implements IBoilerContai
                 level[x][z] = StructurePattern.EMPTY_MARKER;
             }
         }
+        int numTanks = width * width * tankHeight;
         //noinspection UnnecessaryLocalVariable
         StructurePattern ret = builder
                 .level(level)
-                .attachedData(new BoilerData(width * width * tankHeight, ticks, heat, capacity))
+                .attachedData(new BoilerLogic.BoilerData(numTanks, ticks, 1.0, heat, numTanks * WATER_CAPACITY, numTanks * steamCapacity))
                 .master(offset, 1, offset)
                 .build();
         //Game.log(Game.DEBUG_REPORT, "============Boiler logging: \n{}\n=============", ret);
         return ret;
     }
 
-    @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        return (isStructureValid() && FluidUtil.interactWithFluidHandler(player, hand, getTankManager())) || super.blockActivated(player, hand, side, hitX, hitY, hitZ);
+    BoilerLogic.BoilerData boilerData() {
+        return getLogic(StructureLogic.class)
+                .map(logic -> Optional.ofNullable(logic.getPattern()).<BoilerLogic.BoilerData>map(p -> p.getAttachedData(0)).orElse(BoilerLogic.BoilerData.EMPTY))
+                .orElse(BoilerLogic.BoilerData.EMPTY);
     }
 
     @Override
-    public void steamExplosion(FluidStack resource) {
-        explode = true;
-    }
-
-    BoilerData boilerData() {
-        return Optional.ofNullable(getPattern()).<BoilerData>map(p -> p.getAttachedData(0)).orElse(BoilerData.EMPTY);
-    }
-
-    public int getNumTanks() {
-        return boilerData().numTanks;
-    }
-
-    public float getMaxHeat() {
-        return boilerData().maxHeat;
-    }
-
-    public int getTicksPerConversion() {
-        return boilerData().ticksPerCycle;
-    }
-
-    public int getSteamCapacityPerTank() {
-        return boilerData().steamCapacity;
-    }
-
-    @Override
-    public boolean needsFuel() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
-        return mBlock != null && mBlock.needsFuel();
-    }
-
-    @Override
-    public float getTemperature() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
-        if (mBlock != null)
-            return (float) mBlock.boiler.getHeat();
-        return SteamConstants.COLD_TEMP;
-    }
-
-    @Override
-    public SteamBoiler getBoiler() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.boiler;
-        return null;
+    public double getTemp() {
+        return getLogic(ITemperature.class).map(ITemperature::getTemp).orElse((double) SteamConstants.COLD_TEMP);
     }
 
     @Override
     public TankManager getTankManager() {
-        TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
-        if (mBlock != null)
-            return mBlock.tankManager;
-        return TankManager.NIL;
-    }
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-    }
-
-    @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(getTankManager());
-        return super.getCapability(capability, facing);
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        if (Game.isHost(world)) {
-            if (explode) {
-                world.createExplosion(null, getX(), getY(), getZ(), 5f + 0.1f * getNumTanks(), true);
-                explode = false;
-                return;
-            }
-            TileBoilerFirebox mBlock = (TileBoilerFirebox) getMasterBlock();
-            if (mBlock != null) {
-                StandardTank tank = mBlock.tankManager.get(TANK_STEAM);
-                FluidStack steam = tank.getFluid();
-                if (steam != null && (mBlock.boiler.isCold() || steam.amount >= tank.getCapacity() / 2))
-                    mBlock.tankManager.push(tileCache, getOutputFilter(), TANK_STEAM, TRANSFER_RATE, EnumFacing.VALUES);
-            }
-        }
-    }
-
-    public abstract Predicate<TileEntity> getOutputFilter();
-
-    @Override
-    protected int getMaxRecursionDepth() {
-        return 20;
-    }
-
-    @Override
-    protected boolean isMapPositionValid(BlockPos pos, char mapPos) {
-        IBlockState state = WorldPlugin.getBlockState(world, pos);
-
-        switch (mapPos) {
-            case 'O': // Other
-                if (boilerBlocks.contains(state))
-                    return false;
-                break;
-            case 'L': // Tank
-                if (!RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.isEqual(state))
-                    return false;
-                break;
-            case 'H': // Tank
-                if (!RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.isEqual(state))
-                    return false;
-                break;
-            case 'F': // Firebox
-                if (!fireboxBlocks.contains(state))
-                    return false;
-                break;
-            case 'A': // Air
-                if (!state.getBlock().isAir(state, world, pos))
-                    return false;
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    protected boolean isStructureTile(@Nullable TileEntity tile) {
-        return tile instanceof TileBoiler;
+        return getLogic(FluidLogic.class).map(FluidLogic::getTankManager).orElse(TankManager.NIL);
     }
 }
 

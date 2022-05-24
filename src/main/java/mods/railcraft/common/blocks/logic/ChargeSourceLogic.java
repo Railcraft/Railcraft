@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IBatteryBlock;
-import mods.railcraft.common.util.misc.Game;
 
 /**
  * This class exists to so that there is a ChargeLogic which is not assignable to ChargeComparatorLogic.
@@ -34,12 +33,13 @@ public class ChargeSourceLogic extends ChargeLogic {
     }
 
     public void enableSource(boolean enabled) {
-        if (Game.isHost(theWorldAsserted()))
+        ifHost(world -> {
             if (enabled) {
                 getBattery().setState(IBatteryBlock.State.SOURCE);
             } else {
                 getBattery().setState(IBatteryBlock.State.DISABLED);
             }
+        });
     }
 
 }

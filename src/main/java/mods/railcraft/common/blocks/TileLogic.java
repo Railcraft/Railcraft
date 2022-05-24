@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -55,8 +55,8 @@ import java.util.Optional;
 public abstract class TileLogic extends TileRailcraftTicking implements ISmartTile, IActionReceptor, ILogicContainer, ITileCompare {
     private Logic logic;
 
-    protected void setLogic(Logic logic) {
-        this.logic = logic;
+    protected void setRootLogic(Logic root) {
+        this.logic = root;
     }
 
     @Override

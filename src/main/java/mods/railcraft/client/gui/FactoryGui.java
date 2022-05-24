@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,21 +24,20 @@ import mods.railcraft.common.blocks.machine.wayobjects.boxes.TileBoxController;
 import mods.railcraft.common.blocks.machine.worldspike.TileWorldspike;
 import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
-import mods.railcraft.common.blocks.structures.TileBoilerFireboxFluid;
-import mods.railcraft.common.blocks.structures.TileBoilerFireboxSolid;
-import mods.railcraft.common.blocks.structures.TileMultiBlock;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
+import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldNameable;
 import net.minecraft.world.World;
@@ -55,13 +54,10 @@ public class FactoryGui {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
 
-        if (obj instanceof TileMultiBlock && !((TileMultiBlock) obj).isStructureValid())
-            return null;
-
         try {
             switch (gui) {
                 case CHEST:
-                    return new GuiRCChest(inv, ((IInventory) obj));
+                    return new GuiRCChest(inv, ((IInventoryImplementor) obj));
                 case MANIPULATOR_ITEM:
                     return new GuiManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
@@ -97,7 +93,7 @@ public class FactoryGui {
                 case COKE_OVEN:
                     return new GuiCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
                 case BLAST_FURNACE:
-                    return new GuiBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
+                    return new GuiBlastFurnace(inv, (ILogicContainer) obj);
                 case STEAM_OVEN:
                     return new GuiSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
                 case TANK:
@@ -119,9 +115,11 @@ public class FactoryGui {
                 case ENGINE_HOBBY:
                     return new GuiEngineSteamHobby(inv, (TileEngineSteamHobby) obj);
                 case BOILER_SOLID:
-                    return new GuiBoilerSolid(inv, (TileBoilerFireboxSolid) obj);
-                case BOILER_LIQUID:
-                    return new GuiBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
+                    return new GuiBoiler(inv, (ILogicContainer) obj,
+                            new ContainerBoilerSolid(inv, (ILogicContainer) obj), "gui_boiler_solid.png");
+                case BOILER_FLUID:
+                    return new GuiBoiler(inv, (ILogicContainer) obj,
+                            new ContainerBoilerFluid(inv, (ILogicContainer) obj), "gui_boiler_liquid.png");
                 case TURBINE:
                     return new GuiSteamTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:

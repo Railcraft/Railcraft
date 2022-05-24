@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -40,7 +40,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class EntityCartWorldspike extends CartBaseContainer implements IWorldspike, IMinecart {
+public abstract class EntityCartWorldspike extends EntityRailcraftCart implements IWorldspike, IMinecart {
     private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;
@@ -314,8 +314,8 @@ public abstract class EntityCartWorldspike extends CartBaseContainer implements 
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.CART_WORLDSPIKE;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CART_WORLDSPIKE.op();
     }
 
     @Override

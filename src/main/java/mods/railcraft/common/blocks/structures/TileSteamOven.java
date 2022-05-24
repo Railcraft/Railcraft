@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,8 +14,8 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.client.util.effects.ClientEffects;
 import mods.railcraft.common.blocks.RailcraftBlocks;
-import mods.railcraft.common.blocks.TileCrafter;
 import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.TileWorker;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -36,7 +36,7 @@ import java.util.Optional;
 import static mods.railcraft.common.blocks.structures.BlockSteamOven.FACING;
 import static mods.railcraft.common.blocks.structures.BlockSteamOven.ICON;
 
-public final class TileSteamOven extends TileCrafter implements ISteamUser, ITileRotate {
+public final class TileSteamOven extends TileWorker implements ISteamUser, ITileRotate {
 
     private static final List<StructurePattern> patterns = new ArrayList<>();
 
@@ -71,11 +71,11 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
     }
 
     public TileSteamOven() {
-        setLogic(new StructureLogic("steam_oven", this, patterns,
+        setRootLogic(new StructureLogic("steam_oven", this, patterns,
                         new SteamOvenLogic(Logic.Adapter.of(this))
-                                .addSubLogic(new RotationLogic(Logic.Adapter.of(this)))
+                                .addLogic(new RotationLogic(Logic.Adapter.of(this)))
                 )
-                        .addSubLogic(new CrafterParticleEffectLogic(Logic.Adapter.of(this), () -> {
+                        .addLogic(new CrafterParticleEffectLogic(Logic.Adapter.of(this), () -> {
                             for (int i = 0; i < 16; i++)
                                 ClientEffects.INSTANCE.steamEffect(theWorldAsserted(), this, +0.25);
                         }))
@@ -88,7 +88,7 @@ public final class TileSteamOven extends TileCrafter implements ISteamUser, ITil
         blockMapping.put('B', RailcraftBlocks.STEAM_OVEN.getDefaultState());
         Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
         tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
-            structure.getFunctionalLogic(InventoryLogic.class).ifPresent(logic -> {
+            structure.getKernel(InventoryLogic.class).ifPresent(logic -> {
                 for (int slot = 0; slot < 9; slot++) {
                     if (input != null && slot < input.size())
                         logic.setInventorySlotContents(RockCrusherLogic.SLOT_INPUT + slot, input.get(slot));

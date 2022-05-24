@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,12 +14,12 @@ import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import mods.railcraft.api.fuel.FluidFuelManager;
 import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.blocks.TileLogic;
+import mods.railcraft.common.blocks.logic.*;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.BoilerFuelTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.steam.FluidFuelProvider;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -27,7 +27,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
@@ -36,13 +40,50 @@ import java.util.Optional;
 public final class TileBoilerFireboxFluid extends TileBoilerFirebox {
 
     private static final int TANK_FUEL = 2;
-    private static final int[] SLOTS = InvTools.buildSlotArray(0, 2);
-    protected final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidTools.BUCKET_VOLUME * 16, this);
+    private final BoilerFuelTank tankFuel = new BoilerFuelTank(FluidTools.BUCKET_VOLUME * 16, this);
 
     public TileBoilerFireboxFluid() {
-        super(2);
-        tankManager.add(tankFuel);
-        boiler.setFuelProvider(new FluidFuelProvider(tankFuel));
+        getLogic(StructureLogic.class)
+                .ifPresent(structureLogic -> {
+                    structureLogic.getKernel(FluidLogic.class)
+                            .map(FluidLogic::getTankManager).ifPresent(tm -> tm.add(tankFuel));
+//                    structureLogic.addSubLogic(new StorageTankLogic(Logic.Adapter.of(this), FluidTools.BUCKET_VOLUME * 16,
+//                            fluid -> fluid != null
+//                                    && !Fluids.WATER.is(fluid)
+//                                    && FluidFuelManager.getFuelValue(fluid) > 0
+//                                    && super.matchesFilter(fluid)));
+                    structureLogic.getKernel(BoilerLogic.class)
+                            .ifPresent(boilerLogic -> {
+                                boilerLogic.setFuelProvider(new FluidFuelProvider(tankFuel));
+                                boilerLogic.addLogic(new InventoryLogic(Logic.Adapter.of(this), 2) {
+                                    @Override
+                                    public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
+                                        return new InvWrapper(this) {
+                                            @Nonnull
+                                            @Override
+                                            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                                                if (slot != SLOT_OUTPUT_FLUID)
+                                                    return ItemStack.EMPTY;
+                                                return super.extractItem(slot, amount, simulate);
+                                            }
+                                        };
+                                    }
+
+                                    @Override
+                                    public boolean isItemValidForSlot(int slot, ItemStack stack) {
+                                        if (!super.isItemValidForSlot(slot, stack))
+                                            return false;
+                                        if (slot == SLOT_INPUT_FLUID) {
+                                            FluidStack fluid = FluidItemHelper.getFluidStackInContainer(stack);
+                                            if (fluid == null)
+                                                return false;
+                                            return Fluids.WATER.is(fluid) || FluidFuelManager.getFuelValue(fluid) > 0;
+                                        }
+                                        return false;
+                                    }
+                                });
+                            });
+                });
     }
 
     public static void placeFluidBoiler(World world, BlockPos pos, int width, int height, boolean highPressure, int water, FluidStack fuel) {
@@ -64,58 +105,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox {
     }
 
     @Override
-    protected void process() {
-    }
-
-    @Override
-    protected void processBuckets() {
-        super.processBuckets();
-        FluidTools.drainContainers(tankFuel, inventory, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
-    }
-
-    @Override
-    public boolean hasCustomName() {
-        return false;
-    }
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        return SLOTS;
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index == SLOT_LIQUID_OUTPUT;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        if (!isStructureValid())
-            return false;
-        switch (slot) {
-            case SLOT_LIQUID_INPUT:
-                FluidStack fluid = FluidItemHelper.getFluidStackInContainer(stack);
-                if (fluid == null)
-                    return false;
-                if (Fluids.WATER.is(fluid) || FluidFuelManager.getFuelValue(fluid) > 0)
-                    return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean needsFuel() {
-        TileBoilerFireboxFluid mBlock = (TileBoilerFireboxFluid) getMasterBlock();
-        return mBlock != null && mBlock.tankFuel.getFluidAmount() < (mBlock.tankFuel.getCapacity() / 4);
-    }
-
-    @Override
     public EnumGui getGui() {
-        return EnumGui.BOILER_LIQUID;
+        return EnumGui.BOILER_FLUID;
     }
 }

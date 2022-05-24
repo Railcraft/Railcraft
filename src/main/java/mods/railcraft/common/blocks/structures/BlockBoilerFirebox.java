@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,17 +10,16 @@
 
 package mods.railcraft.common.blocks.structures;
 
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.Tuple;
 
 /**
  *
  */
-public abstract class BlockBoilerFirebox<T extends TileBoilerFirebox> extends BlockEntityDelegate<T> {
+public abstract class BlockBoilerFirebox<T extends TileBoilerFirebox> extends BlockStructure<T> {
 
     protected static final IProperty<Boolean> BURNING = PropertyBool.create("burning");
 
@@ -31,12 +30,12 @@ public abstract class BlockBoilerFirebox<T extends TileBoilerFirebox> extends Bl
     }
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, BURNING);
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(3, 1);
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, BURNING);
     }
 }

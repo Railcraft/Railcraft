@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,6 @@ import mods.railcraft.common.blocks.logic.VoidChestLogic;
 public class TileChestVoid extends TileChestRailcraft {
 
     {
-        setLogic(new VoidChestLogic(Logic.Adapter.of(this)));
+        setRootLogic(new VoidChestLogic(Logic.Adapter.of(this)));
     }
 }

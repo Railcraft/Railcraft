@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -187,7 +187,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
             case MANUAL:
                 return true;
             case PARTIAL:
-                if (cartInv.hasNoItems())
+                if (cartInv.isEmptied())
                     return true;
         }
         this.cart = cartInv;

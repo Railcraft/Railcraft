@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -123,10 +123,10 @@ public abstract class TradeStationLogic extends InventoryLogic {
         attemptTrade(villagers, 1);
         attemptTrade(villagers, 2);
 
-        if (clock(256)) {
+        clock().onInterval(256, () -> {
             modifyNearbyAI();
             absorbExperience();
-        }
+        });
     }
 
     protected abstract void modifyNearbyAI();

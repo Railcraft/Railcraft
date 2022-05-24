@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,6 @@ import mods.railcraft.common.blocks.machine.wayobjects.signals.IDualHeadSignal;
 import mods.railcraft.common.blocks.machine.wayobjects.signals.TileSignalBase;
 import mods.railcraft.common.blocks.structures.StructurePattern;
 import mods.railcraft.common.blocks.structures.StructurePattern.State;
-import mods.railcraft.common.blocks.structures.TileMultiBlock;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.client.util.ITooltipFlag;
@@ -144,22 +143,6 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
         if (t instanceof IOwnable) {
             IOwnable ownable = (IOwnable) t;
             ChatPlugin.sendLocalizedChatFromServer(player, "gui.railcraft.mag.glass.placedby", ownable.getDisplayName(), ownable.getOwner());
-            returnValue = EnumActionResult.SUCCESS;
-        }
-
-        if (t instanceof TileMultiBlock) {
-            TileMultiBlock tile = (TileMultiBlock) t;
-            if (tile.isStructureValid()) {
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.valid");
-                ChatPlugin.sendLocalizedChatFromServer(player, "railcraft.multiblock.state.master." + (tile.isValidMaster() ? "true" : "false"));
-            } else
-                for (State returnState : EnumSet.complementOf(EnumSet.of(State.VALID))) {
-                    List<StructurePattern> pats = tile.patternStates.get(returnState);
-                    if (!pats.isEmpty()) {
-                        List<Integer> indexList = pats.stream().map(map -> tile.getPatterns().indexOf(map)).collect(Collectors.toList());
-                        ChatPlugin.sendLocalizedChatFromServer(player, returnState.message, indexList.toString());
-                    }
-                }
             returnValue = EnumActionResult.SUCCESS;
         }
 

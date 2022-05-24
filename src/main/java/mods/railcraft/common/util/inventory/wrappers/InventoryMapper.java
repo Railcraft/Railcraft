@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.misc.Predicates;
 import net.minecraft.inventory.IInventory;
@@ -23,7 +24,7 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryMapper extends InvWrapperBase {
+public class InventoryMapper extends InvWrapperBase implements IInventoryImplementor {
 
     private final IInventory inv;
     private final int start;
@@ -52,6 +53,11 @@ public class InventoryMapper extends InvWrapperBase {
         this.inv = inv;
         this.start = start;
         this.size = size;
+    }
+
+    @Override
+    public IInventory getInventory() {
+        return this;
     }
 
     /**

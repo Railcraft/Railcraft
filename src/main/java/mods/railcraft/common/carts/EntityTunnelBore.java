@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,13 +65,10 @@ import net.minecraftforge.event.world.BlockEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
-public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart {
+public class EntityTunnelBore extends EntityRailcraftCart implements ILinkableCart {
     public static final float SPEED = 0.03F;
     public static final float LENGTH = 6.2f;
     public static final float WIDTH = 3f;
@@ -1167,7 +1164,7 @@ public class EntityTunnelBore extends CartBaseContainer implements ILinkableCart
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.CART_BORE;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CART_BORE.op();
     }
 }

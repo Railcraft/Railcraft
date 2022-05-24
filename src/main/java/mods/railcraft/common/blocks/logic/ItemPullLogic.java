@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -48,9 +48,8 @@ public class ItemPullLogic extends Logic {
     protected void updateServer() {
         super.updateServer();
 
-        if (clock(interval)) {
-            getLogic(InventoryLogic.class).map(inv -> InventoryMapper.make(inv, slot, size)).ifPresent(inv ->
-                    invCache.getAdjacentInventories().moveOneItemTo(inv, filter));
-        }
+        clock().onInterval(interval, () ->
+                getLogic(InventoryLogic.class).map(inv -> InventoryMapper.make(inv, slot, size)).ifPresent(inv ->
+                        invCache.getAdjacentInventories().moveOneItemTo(inv, filter)));
     }
 }

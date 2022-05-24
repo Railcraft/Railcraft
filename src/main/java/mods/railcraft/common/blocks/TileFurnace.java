@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,8 +13,8 @@ package mods.railcraft.common.blocks;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.interfaces.ITileLit;
 import mods.railcraft.common.blocks.logic.CrafterLogic;
+import mods.railcraft.common.blocks.logic.FurnaceLogic;
 import mods.railcraft.common.blocks.logic.StructureLogic;
-import mods.railcraft.common.plugins.buildcraft.triggers.IHasWork;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.Optional;
 import java.util.Random;
 
 import static net.minecraft.util.EnumParticleTypes.FLAME;
+import static net.minecraft.util.EnumParticleTypes.SMOKE_NORMAL;
 
 /**
  * Created by CovertJaguar on 12/27/2018 for Railcraft.
@@ -30,7 +31,7 @@ import static net.minecraft.util.EnumParticleTypes.FLAME;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 @Optional.Interface(iface = "mods.railcraft.common.plugins.buildcraft.triggers.IHasWork", modid = "buildcraftapi_statements")
-public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLit, INeedsFuel {
+public abstract class TileFurnace extends TileWorker implements ITileLit, INeedsFuel {
     private boolean wasBurning;
 
     @Override
@@ -53,7 +54,7 @@ public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLi
     @Override
     public void randomDisplayTick(Random random) {
         updateLighting();
-        if (hasFlames() && random.nextInt(100) < 20) {
+        if (hasFlames() && random.nextInt(100) < 50) {
             float x = getPos().getX() + 0.5F;
             float y = getPos().getY() + 0.4375F + (random.nextFloat() * 3F / 16F);
             float z = getPos().getZ() + 0.5F;
@@ -61,9 +62,13 @@ public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLi
             float randVal = random.nextFloat() * 0.6F - 0.3F;
             World world = theWorldAsserted();
             world.spawnParticle(FLAME, x - offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(SMOKE_NORMAL, x - offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
             world.spawnParticle(FLAME, x + offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(SMOKE_NORMAL, x + offset, y, z + randVal, 0.0D, 0.0D, 0.0D);
             world.spawnParticle(FLAME, x + randVal, y, z - offset, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(SMOKE_NORMAL, x + randVal, y, z - offset, 0.0D, 0.0D, 0.0D);
             world.spawnParticle(FLAME, x + randVal, y, z + offset, 0.0D, 0.0D, 0.0D);
+            world.spawnParticle(SMOKE_NORMAL, x + randVal, y, z + offset, 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -73,8 +78,9 @@ public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLi
     }
 
     public boolean hasFlames() {
-        return getLogic(StructureLogic.class).map(l -> l.getPatternMarker() == 'W').orElse(true)
-                && getLogic(CrafterLogic.class).map(CrafterLogic::isProcessing).orElse(false);
+        return getLogic(StructureLogic.class).map(l -> l.getMarker() == 'W' || l.getMarker() == 'F').orElse(true)
+                && getLogic(FurnaceLogic.class).map(FurnaceLogic::isBurning)
+                .orElseGet(() -> getLogic(CrafterLogic.class).map(CrafterLogic::isProcessing).orElse(false));
     }
 
     @Override
@@ -82,8 +88,4 @@ public abstract class TileCrafter extends TileLogic implements IHasWork, ITileLi
         return getLogic(INeedsFuel.class).map(INeedsFuel::needsFuel).orElse(false);
     }
 
-    @Override
-    public boolean hasWork() {
-        return getLogic(CrafterLogic.class).map(CrafterLogic::hasWork).orElse(false);
-    }
 }

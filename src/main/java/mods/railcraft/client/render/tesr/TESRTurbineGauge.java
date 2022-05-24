@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -26,7 +26,7 @@ public final class TESRTurbineGauge extends TileEntitySpecialRenderer<TileSteamT
     @Override
     public void render(TileSteamTurbine turbine, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         StructureLogic structure = turbine.getLogic(StructureLogic.class).orElse(null);
-        if (structure == null || structure.getPatternMarker() != 'W')
+        if (structure == null || structure.getMarker() != 'W')
             // not a gauge block
             return;
 

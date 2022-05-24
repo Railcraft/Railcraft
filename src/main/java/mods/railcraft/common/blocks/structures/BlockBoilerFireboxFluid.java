@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,7 +18,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
 
 @BlockMeta.Tile(TileBoilerFireboxFluid.class)
 public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox<TileBoilerFireboxFluid> {
@@ -26,11 +25,6 @@ public final class BlockBoilerFireboxFluid extends BlockBoilerFirebox<TileBoiler
     public BlockBoilerFireboxFluid() {
         setHarvestLevel("pickaxe", 1);
         setSoundType(SoundType.METAL);
-    }
-
-    @Override
-    public Tuple<Integer, Integer> getTextureDimensions() {
-        return new Tuple<>(3, 1);
     }
 
     @Override

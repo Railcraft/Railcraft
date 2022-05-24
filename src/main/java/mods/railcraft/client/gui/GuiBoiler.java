@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,19 +9,22 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.client.gui;
 
-import mods.railcraft.common.blocks.structures.TileBoilerFireboxFluid;
-import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
+import mods.railcraft.common.blocks.logic.BoilerLogic;
+import mods.railcraft.common.blocks.logic.ILogicContainer;
+import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.gui.containers.ContainerBoiler;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiBoilerFluid extends GuiTitled {
+public class GuiBoiler extends GuiTitled {
 
-    private final TileBoilerFireboxFluid tile;
+    private final BoilerLogic boilerLogic;
 
-    public GuiBoilerFluid(InventoryPlayer inv, TileBoilerFireboxFluid tile) {
-        super(tile, new ContainerBoilerFluid(inv, tile), "gui_boiler_liquid.png",
+    public GuiBoiler(InventoryPlayer inv, ILogicContainer logicContainer, ContainerBoiler container, String texture) {
+        super(logicContainer, container, texture,
                 LocalizationPlugin.translate("gui.railcraft.steam.boiler"));
-        this.tile = tile;
+
+        boilerLogic = Logic.get(BoilerLogic.class, logicContainer);
     }
 
     @Override
@@ -30,9 +33,9 @@ public class GuiBoilerFluid extends GuiTitled {
         int x = (width - xSize) / 2;
         int y = (height - ySize) / 2;
 
-        if (tile.boiler.isBurning()) {
-            int scale = tile.boiler.getBurnProgressScaled(12);
-            drawTexturedModalRect(x + 62, y + 50 - scale, 176, 59 - scale, 14, scale + 2);
+        if (boilerLogic.isBurning()) {
+            int scale = boilerLogic.getBurnProgressScaled(12);
+            drawTexturedModalRect(x + 62, y + 34 - scale, 176, 59 - scale, 14, scale + 2);
         }
     }
 

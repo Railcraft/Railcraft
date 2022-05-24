@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,6 +21,7 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraftforge.fluids.FluidStack;
@@ -88,18 +89,17 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTank> {
                 FluidStack fillStack = fillTank.getFluid();
                 if (fillStack != null && fillStack.amount > 0) {
                     OpenGL.glPushMatrix();
-                    if (structure.getPattern().getPatternMarkerChecked(structure.getPatternPosition().down()) == 'A') {
+                    if (structure.getMarker(EnumFacing.DOWN) == 'A') {
 
 //                    prepFillTexture(fillStack);
 
                         int height = getTankHeight(structure);
                         float yOffset = height / 2f;
-                        float vScale = height;
                         OpenGL.glTranslatef((float) x + 0.5F, (float) y + yOffset - height + 1, (float) z + 0.5F);
-                        OpenGL.glScalef(FILL_SCALE, vScale, FILL_SCALE);
+                        OpenGL.glScalef(FILL_SCALE, (float) height, FILL_SCALE);
 
                         draw(fillStack, tile.getPos().down());
-                    } else if (structure.getPattern().getPatternMarkerChecked(structure.getPatternPosition().west()) == 'A') {
+                    } else if (structure.getMarker(EnumFacing.WEST) == 'A') {
 
 //                    prepFillTexture(fillStack);
 
@@ -109,7 +109,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTank> {
                         OpenGL.glScalef(FILL_SCALE, vScale, FILL_SCALE);
 
                         draw(fillStack, tile.getPos().west());
-                    } else if (structure.getPattern().getPatternMarkerChecked(structure.getPatternPosition().east()) == 'A') {
+                    } else if (structure.getMarker(EnumFacing.EAST) == 'A') {
 
 //                    prepFillTexture(fillStack);
 
@@ -119,7 +119,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTank> {
                         OpenGL.glScalef(FILL_SCALE, vScale, FILL_SCALE);
 
                         draw(fillStack, tile.getPos().east());
-                    } else if (structure.getPattern().getPatternMarkerChecked(structure.getPatternPosition().north()) == 'A') {
+                    } else if (structure.getMarker(EnumFacing.NORTH) == 'A') {
 
 //                    prepFillTexture(fillStack);
 
@@ -129,7 +129,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTank> {
                         OpenGL.glScalef(FILL_SCALE, vScale, FILL_SCALE);
 
                         draw(fillStack, tile.getPos().north());
-                    } else if (structure.getPattern().getPatternMarkerChecked(structure.getPatternPosition().south()) == 'A') {
+                    } else if (structure.getMarker(EnumFacing.SOUTH) == 'A') {
 
 //                    prepFillTexture(fillStack);
 
@@ -151,7 +151,7 @@ public final class TESRHollowTank extends TileEntitySpecialRenderer<TileTank> {
             float vScale = height - 2;
             float hScale = structure.getPattern().getPatternWidthX() - 2;
 
-            structure.getFunctionalLogic(FluidLogic.class)
+            structure.getKernel(FluidLogic.class)
                     .map(fluidLogic -> fluidLogic.getTankManager().get(0))
                     .ifPresent(tank -> {
 

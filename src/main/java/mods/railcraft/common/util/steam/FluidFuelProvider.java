@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.common.fluids.tanks.StandardTank;
 import net.minecraftforge.fluids.FluidStack;
 
 /**
- *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
 public class FluidFuelProvider implements IFuelProvider {
@@ -27,12 +26,12 @@ public class FluidFuelProvider implements IFuelProvider {
     }
 
     @Override
-    public double getHeatStep() {
+    public double getThermalEnergyLevel() {
         return SteamConstants.HEAT_STEP;
     }
 
     @Override
-    public double getMoreFuel() {
+    public double burnFuelUnit() {
         FluidStack fuel = fuelTank.drain(FluidTools.BUCKET_VOLUME, false);
         if (fuel == null)
             return 0;
@@ -44,4 +43,8 @@ public class FluidFuelProvider implements IFuelProvider {
         return heatValue;
     }
 
+    @Override
+    public boolean needsFuel() {
+        return fuelTank.getFluidAmount() < (fuelTank.getCapacity() / 4);
+    }
 }

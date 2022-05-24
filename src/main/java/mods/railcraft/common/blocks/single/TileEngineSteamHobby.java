@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,21 +9,23 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.blocks.single;
 
+import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.blocks.TileRailcraft;
-import mods.railcraft.common.fluids.FluidTools;
+import mods.railcraft.common.blocks.logic.BoilerLogic;
+import mods.railcraft.common.blocks.logic.BoilerLogic.BoilerData;
+import mods.railcraft.common.blocks.logic.ExploderLogic;
+import mods.railcraft.common.blocks.logic.Logic;
 import mods.railcraft.common.fluids.Fluids;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
+import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
+import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.ItemHandlerFactory;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
-import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.steam.IBoilerContainer;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
-import mods.railcraft.common.util.steam.SteamBoiler;
 import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -32,7 +34,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.items.CapabilityItemHandler;
 
@@ -43,7 +44,7 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInventory, IBoilerContainer {
+public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInventory, ITemperature, INeedsFuel {
 
     public static final byte SLOT_FUEL = 0;
     public static final byte SLOT_LIQUID_INPUT = 1;
@@ -55,37 +56,32 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     private static final byte TANK_WATER = 1;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 3);
     private static final int[] NO_SLOTS = new int[0];
-    public final SteamBoiler boiler;
+    public final BoilerLogic boiler;
     private final InventoryAdvanced inv = new InventoryAdvanced(3).callbackInv(this);
     private final InventoryMapper invFuel = InventoryMapper.make(inv, SLOT_FUEL, 1);
     private final InventoryMapper invOutput = InventoryMapper.make(inv, SLOT_LIQUID_OUTPUT, 1);
-    private boolean explode;
 
     public TileEngineSteamHobby() {
-        FilteredTank tankWater = new FilteredTank(4 * FluidTools.BUCKET_VOLUME, this) {
-            @Override
-            public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
-                return super.fillInternal(onFillWater(resource), doFill);
-            }
-        }.setFilterFluid(Fluids.WATER);
-        tankManager.add(tankWater);
-        tankSteam.setCapacity(4 * FluidTools.BUCKET_VOLUME);
+        boiler = new BoilerLogic(Logic.Adapter.of(this));
+        boiler.setBoilerData(new BoilerData(1,
+                TICKS_PER_BOILER_CYCLE,
+                FUEL_PER_CONVERSION_MULTIPLIER,
+                SteamConstants.MAX_HEAT_LOW,
+                4, 4));
 
-        boiler = new SteamBoiler(tankWater, tankSteam);
-        boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
-        boiler.setEfficiencyModifier(FUEL_PER_CONVERSION_MULTIPLIER);
-        boiler.setFuelProvider(new SolidFuelProvider(inv, SLOT_FUEL) {
+        boiler.addLogic(new ExploderLogic(Logic.Adapter.of(this)) {
             @Override
-            public double getMoreFuel() {
-                if (getEnergyStage() == EnergyStage.OVERHEAT || !isPowered()) return 0;
-                return super.getMoreFuel();
+            protected void boom() {
+                world.createExplosion(null, getX(), getY(), getZ(), 2, true);
             }
         });
-    }
-
-    @Override
-    public SteamBoiler getBoiler() {
-        return boiler;
+        boiler.setFuelProvider(new SolidFuelProvider(invFuel, IInventoryComposite.ZERO_SIZE_INV, invOutput) {
+            @Override
+            public double burnFuelUnit() {
+                if (getEnergyStage() == EnergyStage.OVERHEAT || !isPowered()) return 0;
+                return super.burnFuelUnit();
+            }
+        });
     }
 
     @Override
@@ -115,24 +111,13 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public void update() {
-        super.update();
-        if (Game.isHost(world)) {
-            if (explode) {
-                world.createExplosion(null, getX(), getY(), getZ(), 2, true);
-                explode = false;
-            }
-        }
-    }
-
-    @Override
     public void burn() {
         super.burn();
         //FIXME
 //        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
 //            FluidTools.drainContainers(this, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
 
-        boiler.tick(1);
+        boiler.update();
 
         // FIXME the bucket filter is broken
 //        if (StackFilters.EMPTY_BUCKET.test(getStackInSlot(SLOT_FUEL)))
@@ -199,8 +184,8 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     }
 
     @Override
-    public float getTemperature() {
-        return (float) boiler.getHeat();
+    public double getTemp() {
+        return boiler.getTemp();
     }
 
     @Override
@@ -276,11 +261,6 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public boolean hasCustomName() {
         return false;
-    }
-
-    @Override
-    public void steamExplosion(FluidStack resource) {
-        explode = true;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -70,13 +69,6 @@ public class WorldPlugin {
             if (tileClass.isInstance(tileEntity))
                 return Optional.of(tileClass.cast(tileEntity));
         }
-        return Optional.empty();
-    }
-
-    public static <T, V> Optional<V> retrieveFromTile(IBlockAccess world, BlockPos pos, Class<T> tileClass, Function<T, V> function) {
-        TileEntity tileEntity = getBlockTile(world, pos);
-        if (tileClass.isInstance(tileEntity))
-            return Optional.of(tileClass.cast(tileEntity)).map(function);
         return Optional.empty();
     }
 

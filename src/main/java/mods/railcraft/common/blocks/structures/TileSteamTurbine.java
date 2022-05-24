@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -104,8 +104,8 @@ public final class TileSteamTurbine extends TileLogic implements INeedsMaintenan
     public double guageReadout;
 
     public TileSteamTurbine() {
-        setLogic(new StructureLogic("flux", this, patterns, new SteamTurbineLogic(Logic.Adapter.of(this))
-                        .addSubLogic(new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution))
+        setRootLogic(new StructureLogic("flux", this, patterns, new SteamTurbineLogic(Logic.Adapter.of(this))
+                        .addLogic(new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution))
                 ) {
                     @Override
                     protected void onMasterReset() {
@@ -117,11 +117,11 @@ public final class TileSteamTurbine extends TileLogic implements INeedsMaintenan
                         }
                     }
                 }
-                        .addSubLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution))
-                        .addSubLogic(new FluidPushLogic(Logic.Adapter.of(this), SteamTurbineLogic.TANK_WATER, WATER_OUTPUT, EnumFacing.HORIZONTALS))
-                        .addSubLogic(new EnergyPushLogic(Logic.Adapter.of(this), FE_OUTPUT, EnumFacing.VALUES))
-                        .addSubLogic(new ChargeToFEAdapterLogic(Logic.Adapter.of(this), FE_OUTPUT))
-                        .addSubLogic(new IC2EmitterLogic(Logic.Adapter.of(this), IC2_TIER, SteamTurbineLogic.CHARGE_OUTPUT))
+                        .addLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution))
+                        .addLogic(new FluidPushLogic(Logic.Adapter.of(this), SteamTurbineLogic.TANK_WATER, WATER_OUTPUT, EnumFacing.HORIZONTALS))
+                        .addLogic(new EnergyPushLogic(Logic.Adapter.of(this), FE_OUTPUT, EnumFacing.VALUES))
+                        .addLogic(new ChargeToFEAdapterLogic(Logic.Adapter.of(this), FE_OUTPUT))
+                        .addLogic(new IC2EmitterLogic(Logic.Adapter.of(this), IC2_TIER, SteamTurbineLogic.CHARGE_OUTPUT))
         );
     }
 
@@ -171,7 +171,7 @@ public final class TileSteamTurbine extends TileLogic implements INeedsMaintenan
                 .map(logic -> {
                     Axis axis = requireNonNull(logic.getPattern()).getAttachedDataOr(0, Axis.X);
                     IBlockState actualState = base
-                            .withProperty(BlockSteamTurbine.WINDOW, logic.getPatternMarker() == 'W')
+                            .withProperty(BlockSteamTurbine.WINDOW, logic.getMarker() == 'W')
                             .withProperty(BlockSteamTurbine.LONG_AXIS, axis);
                     BlockPos pos = logic.getPatternPosition();
                     final Texture texture;

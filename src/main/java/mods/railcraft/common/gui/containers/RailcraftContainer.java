@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,11 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.Widget;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
+import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -21,8 +26,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import static mods.railcraft.common.util.inventory.InvTools.*;
@@ -101,6 +108,20 @@ public abstract class RailcraftContainer extends Container {
     }
 
     public void updateString(byte id, String data) {
+    }
+
+    public void sendData(IContainerListener listener, byte id, Consumer<RailcraftOutputStream> writer) {
+        ByteBuf byteBuf = Unpooled.buffer();
+        try (ByteBufOutputStream out = new ByteBufOutputStream(byteBuf);
+             RailcraftOutputStream data = new RailcraftOutputStream(out)) {
+            data.writeByte(id);
+            writer.accept(data);
+            PacketBuilder.instance().sendGuiDataPacket(listener, windowId, id, byteBuf.array());
+        } catch (IOException e) {
+            Game.log().throwable("Error constructing packet: {0}", e, getClass());
+            if (Game.DEVELOPMENT_VERSION)
+                throw new RuntimeException(e);
+        }
     }
 
     @SuppressWarnings("EmptyMethod")

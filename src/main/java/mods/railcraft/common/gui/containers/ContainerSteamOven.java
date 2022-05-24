@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,7 @@ import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.SlotFurnaceOutput;
 
-public class ContainerSteamOven extends ContainerCrafter {
+public class ContainerSteamOven extends ContainerLogic {
 
     public ContainerSteamOven(InventoryPlayer invPlayer, SteamOvenLogic logic) {
         super(logic);

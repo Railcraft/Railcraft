@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 /**
  *
  */
-public class EntityCartTradeStation extends CartBaseLogic {
+public class EntityCartTradeStation extends EntityRailcraftCart {
 
     protected EntityCartTradeStation(World world) {
         super(world);

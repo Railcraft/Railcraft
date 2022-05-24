@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,8 +65,8 @@ public final class TileFluxTransformer extends TileLogic implements IEnergyStora
     }
 
     public TileFluxTransformer() {
-        setLogic(new StructureLogic("flux", this, patterns, new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution))
-                .addSubLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution)));
+        setRootLogic(new StructureLogic("flux", this, patterns, new ChargeSourceLogic(Logic.Adapter.of(this), Charge.distribution))
+                .addLogic(new ChargeComparatorLogic(Logic.Adapter.of(this), Charge.distribution)));
     }
 
     public static void placeFluxTransformer(World world, BlockPos pos) {

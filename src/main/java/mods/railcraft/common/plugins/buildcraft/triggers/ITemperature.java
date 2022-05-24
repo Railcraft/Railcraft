@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,5 +16,5 @@ package mods.railcraft.common.plugins.buildcraft.triggers;
  */
 public interface ITemperature
 {
-    float getTemperature();
+    double getTemp();
 }

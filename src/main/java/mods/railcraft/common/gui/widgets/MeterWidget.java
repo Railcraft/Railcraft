@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -27,7 +27,7 @@ public class MeterWidget extends Widget {
 
     public final IIndicatorController controller;
     protected final boolean vertical;
-    private Map<IContainerListener, Double> previousValues = new HashMap<>();
+    private final Map<IContainerListener, Double> previousValues = new HashMap<>();
     boolean first = true;
     private double measurement;
 

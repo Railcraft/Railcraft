@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,24 +56,24 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendWindowProperty(this, 20, (int) Math.round(loco.boiler.burnTime));
-        listener.sendWindowProperty(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
-        listener.sendWindowProperty(this, 22, (int) Math.round(loco.boiler.getHeat()));
+        listener.sendWindowProperty(this, 20, (int) Math.round(loco.boiler.getBurnTime()));
+        listener.sendWindowProperty(this, 21, (int) Math.round(loco.boiler.getCurrentItemBurnTime()));
+        listener.sendWindowProperty(this, 22, (int) Math.round(loco.boiler.getTemp()));
     }
 
     @Override
     public void sendUpdateToClient() {
         super.sendUpdateToClient();
         for (IContainerListener listener : listeners) {
-            if (lastBurnTime != loco.boiler.burnTime)
-                listener.sendWindowProperty(this, 20, (int) Math.round(loco.boiler.burnTime));
+            if (lastBurnTime != loco.boiler.getBurnTime())
+                listener.sendWindowProperty(this, 20, (int) Math.round(loco.boiler.getBurnTime()));
 
-            if (lastItemBurnTime != loco.boiler.currentItemBurnTime)
-                listener.sendWindowProperty(this, 21, (int) Math.round(loco.boiler.currentItemBurnTime));
+            if (lastItemBurnTime != loco.boiler.getCurrentItemBurnTime())
+                listener.sendWindowProperty(this, 21, (int) Math.round(loco.boiler.getCurrentItemBurnTime()));
         }
 
-        this.lastBurnTime = loco.boiler.burnTime;
-        this.lastItemBurnTime = loco.boiler.currentItemBurnTime;
+        this.lastBurnTime = loco.boiler.getBurnTime();
+        this.lastItemBurnTime = loco.boiler.getCurrentItemBurnTime();
     }
 
     @Override
@@ -83,10 +83,10 @@ public class ContainerLocomotiveSteamSolid extends ContainerLocomotive {
 
         switch (id) {
             case 20:
-                loco.boiler.burnTime = value;
+                loco.boiler.setBurnTime(value);
                 break;
             case 21:
-                loco.boiler.currentItemBurnTime = value;
+                loco.boiler.setCurrentItemBurnTime(value);
                 break;
         }
     }

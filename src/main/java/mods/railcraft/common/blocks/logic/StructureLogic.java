@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,6 @@ import mods.railcraft.common.blocks.structures.StructurePattern;
 import mods.railcraft.common.events.MultiBlockEvent;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
-import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.collections.Streams;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Optionals;
@@ -32,6 +31,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,7 +39,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,7 +46,7 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Created by CovertJaguar on 12/17/2018 for Railcraft.
@@ -59,7 +58,10 @@ public class StructureLogic extends Logic {
     private final Timer resetTimer = new Timer();
     private final TileLogic tile;
     private final String structureKey;
-    public final Logic functionalLogic;
+    /**
+     * The functional logic tree for the structure, aka those logics which are only active on the master block.
+     */
+    public Logic kernel = new Logic(adapter);
     private final List<? extends StructurePattern> patterns;
     private final int maxSize;
     private final List<TileLogic> components = new ArrayList<>();
@@ -74,54 +76,73 @@ public class StructureLogic extends Logic {
     private char marker = 'O';
     private boolean updatingNeighbors;
 
-    public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns, Logic functionalLogic) {
+    public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns) {
         super(Adapter.of(tile));
         this.structureKey = structureKey;
         this.tile = tile;
         this.patterns = patterns;
         this.maxSize = patterns.stream().mapToInt(StructurePattern::getPatternSize).max().orElse(7 * 7 * 7);
-
-        // Note we don't set the parent.
-        // So getLogic() calls from the functional logic can only see the functional logic tree.
-        this.functionalLogic = functionalLogic;
         components.add(tile);
     }
 
+    public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns, Logic kernel) {
+        this(structureKey, tile, patterns);
+
+        setKernel(kernel);
+    }
+
     @Override
-    public <L> Optional<L> getLogic(Class<L> logicClass) {
-        Optional<L> imp = super.getLogic(logicClass);
-        if (imp.isPresent())
-            return imp;
-        return getMasterLogic(logicClass);
+    public Stream<Logic> logics() {
+        return Stream.concat(super.logics(),
+                Stream.generate(this::getMaster)
+                        .limit(1)
+                        .flatMap(Streams.unwrap())
+                        .map(m -> m.kernel)
+                        .flatMap(Logic::logics));
     }
 
-    public <L> Optional<L> getMasterLogic(Class<L> logicClass) {
-        return getMasterLogic().map(m -> m.functionalLogic).flatMap(l -> l.getLogic(logicClass));
+    /**
+     * Finds and returns the master block, if one exists.
+     */
+    public final Optional<StructureLogic> getMaster() {
+        return getLogic(masterPos)
+                .filter(StructureLogic::isValidMaster);
     }
 
-    public final Optional<StructureLogic> getMasterLogic() {
-        if (masterPos != null) {
-            return WorldPlugin.getTileEntity(theWorldAsserted(), masterPos, ILogicContainer.class, true)
-                    .flatMap(t -> t.getLogic(StructureLogic.class))
-                    .filter(StructureLogic::isValidMaster);
-        }
-        return Optional.empty();
+    @SuppressWarnings("UnusedReturnValue")
+    public StructureLogic setKernel(Logic kernel) {
+        assert this.kernel.getClass() == Logic.class;
+
+        // Note we don't set the parent.
+        // So getLogic() calls from the acorn can only see the functional logic tree with the acorn as the root.
+        this.kernel = kernel;
+        return this;
     }
 
-    public final <L> Optional<L> getFunctionalLogic(Class<L> logicClass) {
-        return functionalLogic.getLogic(logicClass);
+    /**
+     * Returns the local instance of the requested functional logic object, via searching the functional logic tree.
+     * This function does not redirect to the master block or verify the structure.
+     */
+    public final <L> Optional<L> getKernel(Class<L> logicClass) {
+        return kernel.getLogic(logicClass);
     }
 
     public List<TileLogic> getComponents() {
-        return getMasterLogic().map(m -> m.componentsView).orElseGet(Collections::emptyList);
-    }
-
-    public final char getPatternMarker() {
-        return marker;
+        return getMaster().map(m -> m.componentsView).orElseGet(Collections::emptyList);
     }
 
     public final @Nullable BlockPos getPatternPosition() {
         return posInPattern;
+    }
+
+    public final char getMarker() {
+        return marker;
+    }
+
+    public final char getMarker(EnumFacing facing) {
+        if (getPattern() == null || getPatternPosition() == null)
+            return StructurePattern.EMPTY_MARKER;
+        return getPattern().getPatternMarker(getPatternPosition().offset(facing));
     }
 
     public final @Nullable StructurePattern getPattern() {
@@ -134,16 +155,17 @@ public class StructureLogic extends Logic {
         updatingNeighbors = true;
         sendUpdateToClient();
         adapter.updateModels();
-        if (theWorld() == null || Game.isClient(theWorldAsserted())) return;
-        if (!isMaster) {
-            functionalLogic.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
-        }
+        ifHost(world -> {
+            if (!isMaster) {
+                kernel.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(world, getPos()));
+            }
+        });
         boolean isComplete = getPattern() != null;
         Object[] attachedData = isComplete ? getPattern().getAttachedData() : new Object[]{};
         onStructureChanged(isComplete, isMaster, attachedData);
         if (isMaster)
-            functionalLogic.onStructureChanged(isComplete, isMaster, attachedData);
-        tile.notifyBlocksOfNeighborChange();
+            kernel.onStructureChanged(isComplete, true, attachedData);
+        ifHost(world -> tile.notifyBlocksOfNeighborChange());
         updatingNeighbors = false;
     }
 
@@ -188,7 +210,7 @@ public class StructureLogic extends Logic {
     public void update() {
         super.update();
         if (isValidMaster())
-            functionalLogic.update();
+            kernel.update();
     }
 
     @Override
@@ -244,8 +266,7 @@ public class StructureLogic extends Logic {
                         BlockPos patternPos = new BlockPos(px, py, pz);
                         BlockPos pos = patternPos.add(offset);
 
-                        WorldPlugin.getTileEntity(theWorldAsserted(), pos)
-                                .flatMap(tileToLogic())
+                        getLogic(pos)
                                 .ifPresent(l -> {
                                     components.add(l.tile);
                                     newComponents.put(patternPos, l);
@@ -260,7 +281,7 @@ public class StructureLogic extends Logic {
             state = StructureState.UNKNOWN;
         } else {
             state = StructureState.INVALID;
-            functionalLogic.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
+            kernel.getLogic(IDropsInv.class).ifPresent(i -> i.spewInventory(theWorldAsserted(), getPos()));
             if (isMaster) {
                 isMaster = false;
                 onMasterReset();
@@ -269,8 +290,10 @@ public class StructureLogic extends Logic {
         }
 
         old.removeAll(components);
-        old.stream().filter(t -> !t.isInvalid()).map(tileToLogic())
-                .flatMap(Streams.unwrap()).forEach(t -> t.changePattern(null, null));
+        old.stream()
+                .filter(t -> !t.isInvalid())
+                .flatMap(toLogicStream())
+                .forEach(t -> t.changePattern(null, null));
     }
 
     protected void onMasterReset() {
@@ -289,7 +312,7 @@ public class StructureLogic extends Logic {
 
     public boolean isMapPositionValid(BlockPos pos, char mapPos) {
         IBlockState self = tile.getBlockState();
-        IBlockState other = WorldPlugin.getBlockState(theWorldAsserted(), pos);
+        IBlockState other = fromWorld().getBlockState(pos).orElse(Blocks.AIR.getDefaultState());
         switch (mapPos) {
             case 'O': // Other
                 if (self == other)
@@ -321,26 +344,27 @@ public class StructureLogic extends Logic {
     }
 
     public void onBlockChange() {
-        Optional<StructureLogic> masterLogic = getMasterLogic();
-        spreadChange(theWorldAsserted(), new HashSet<>(maxSize), getPos(), this::isPart, maxSize);
-        masterLogic.ifPresent(master -> master.getComponents().forEach(t -> t.getLogic(StructureLogic.class).ifPresent(s -> s.state = StructureState.UNTESTED)));
+        Optional<StructureLogic> masterLogic = getMaster();
+        spreadChange(new HashSet<>(maxSize), getPos(), maxSize);
+        masterLogic.ifPresent(master -> master.getComponents()
+                .stream()
+                .flatMap(toLogicStream())
+                .forEach(s -> s.state = StructureState.UNTESTED));
     }
 
-    private static void spreadChange(World world, Set<BlockPos> visited, BlockPos pos, Predicate<Block> isPart, int max) {
+    private void spreadChange(final Set<BlockPos> visited, final BlockPos pos, final int max) {
         if (visited.size() > max || visited.contains(pos))
             return;
         visited.add(pos);
-        if (visited.size() == 1 || isPart.test(WorldPlugin.getBlock(world, pos))) {
-            WorldPlugin.getTileEntity(world, pos, TileLogic.class).ifPresent(tile -> {
-                tile.getLogic(StructureLogic.class).ifPresent(logic -> {
-                    if (logic.state != StructureState.UNTESTED) {
-                        logic.state = StructureState.UNTESTED;
-                        logic.getMasterLogic().ifPresent(master -> spreadChange(world, visited, master.getPos(), isPart, max));
-                    }
-                });
-            });
+        if (visited.size() == 1 || fromWorld().getBlock(pos).map(this::isPart).orElse(false)) {
+            getLogic(pos)
+                    .filter(l -> l.state != StructureState.UNTESTED)
+                    .ifPresent(l -> {
+                        l.state = StructureState.UNTESTED;
+                        l.getMaster().ifPresent(master -> spreadChange(visited, master.getPos(), max));
+                    });
             for (EnumFacing side : EnumFacing.VALUES) {
-                spreadChange(world, visited, pos.offset(side), isPart, max);
+                spreadChange(visited, pos.offset(side), max);
             }
         }
     }
@@ -349,34 +373,46 @@ public class StructureLogic extends Logic {
         return logic.structureKey.equals(structureKey);
     }
 
-    private Function<TileEntity, Optional<StructureLogic>> tileToLogic() {
+    private Function<TileEntity, Optional<StructureLogic>> toLogic() {
         return t -> Optional.of(t)
                 .map(Optionals.toType(ILogicContainer.class))
                 .flatMap(c -> c.getLogic(StructureLogic.class))
                 .filter(this::canMatch);
     }
 
+    private Function<TileEntity, Stream<StructureLogic>> toLogicStream() {
+        return t -> Stream.of(t)
+                .flatMap(Streams.toType(ILogicContainer.class))
+                .map(c -> c.getLogic(StructureLogic.class))
+                .flatMap(Streams.unwrap())
+                .filter(this::canMatch);
+    }
+
+    private Optional<StructureLogic> getLogic(@Nullable BlockPos pos) {
+        return fromWorld().getLogic(pos, StructureLogic.class).filter(this::canMatch);
+    }
+
     @Override
     public void placed(IBlockState state, @Nullable EntityLivingBase placer, ItemStack stack) {
         super.placed(state, placer, stack);
-        functionalLogic.placed(state, placer, stack);
+        kernel.placed(state, placer, stack);
     }
 
     @Override
     public boolean interact(EntityPlayer player, EnumHand hand) {
-        return getMasterLogic().map(m -> m.functionalLogic.interact(player, hand)).orElse(false) || super.interact(player, hand);
+        return getMaster().map(m -> m.kernel.interact(player, hand)).orElse(false) || super.interact(player, hand);
     }
 
     @Override
     public @Nullable EnumGui getGUI() {
-        return functionalLogic.getGUI();
+        return kernel.getGUI();
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
-        functionalLogic.writeToNBT(data);
+        kernel.writeToNBT(data);
         data.setBoolean("master", isMaster);
         data.setString("marker", String.valueOf(marker));
         data.setByte("pattern", getPatternIndex());
@@ -388,7 +424,7 @@ public class StructureLogic extends Logic {
     @OverridingMethodsMustInvokeSuper
     public void readFromNBT(NBTTagCompound data) {
         super.readFromNBT(data);
-        functionalLogic.readFromNBT(data);
+        kernel.readFromNBT(data);
         isMaster = data.getBoolean("master");
         if (data.hasKey("marker"))
             marker = data.getString("marker").charAt(0);
@@ -413,7 +449,7 @@ public class StructureLogic extends Logic {
             data.writeBlockPos(Objects.requireNonNull(posInPattern));
         }
         super.writePacketData(data);
-        functionalLogic.writePacketData(data);
+        kernel.writePacketData(data);
     }
 
     @Override
@@ -433,7 +469,7 @@ public class StructureLogic extends Logic {
             isMaster = pat.isMasterPosition(posInPattern);
 
             // TODO is this still necessary?
-            if (!getMasterLogic().isPresent())
+            if (!getMaster().isPresent())
                 requestPacket = true;
         } else {
             isMaster = false;
@@ -441,7 +477,7 @@ public class StructureLogic extends Logic {
         }
 
         super.readPacketData(data);
-        functionalLogic.readPacketData(data);
+        kernel.readPacketData(data);
     }
 
     public final boolean isValidMaster() {
@@ -451,11 +487,11 @@ public class StructureLogic extends Logic {
     public final void scheduleMasterRetest() {
         if (Game.isClient(theWorldAsserted()))
             return;
-        getMasterLogic().ifPresent(m -> m.state = StructureState.UNTESTED);
+        getMaster().ifPresent(m -> m.state = StructureState.UNTESTED);
     }
 
     public final boolean isStructureValid() {
-        return getMasterLogic().isPresent();
+        return getMaster().isPresent();
     }
 
     public List<? extends StructurePattern> getPatterns() {

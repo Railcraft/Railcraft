@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,6 +33,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
@@ -164,8 +165,8 @@ public class EntityLocomotiveElectric extends EntityLocomotive implements ISided
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.LOCO_ELECTRIC;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.LOCO_ELECTRIC.op();
     }
 
     @Override

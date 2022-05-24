@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.structures;
 
-import mods.railcraft.common.blocks.BlockEntityDelegate;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
@@ -19,18 +18,19 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Tuple;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
-public abstract class BlockBoilerTank<T extends TileBoilerTank> extends BlockEntityDelegate<T> {
+public abstract class BlockBoilerTank<T extends TileBoilerTank> extends BlockStructure<T> {
 
     public static final PropertyBool NORTH = PropertyBool.create("north");
     public static final PropertyBool SOUTH = PropertyBool.create("south");
     public static final PropertyBool EAST = PropertyBool.create("east");
     public static final PropertyBool WEST = PropertyBool.create("west");
 
-    public static final AxisAlignedBB CORE = new AxisAlignedBB(0.0625f,0,0.0625f, 0.9375f,1, 0.9375f);
+    public static final AxisAlignedBB CORE = new AxisAlignedBB(0.0625f, 0, 0.0625f, 0.9375f, 1, 0.9375f);
 
     protected BlockBoilerTank() {
         super(Material.IRON);
@@ -56,6 +56,11 @@ public abstract class BlockBoilerTank<T extends TileBoilerTank> extends BlockEnt
             return bb;
         }
         return CORE;
+    }
+
+    @Override
+    public Tuple<Integer, Integer> getTextureDimensions() {
+        return new Tuple<>(2, 1);
     }
 
     @SuppressWarnings("deprecation")
@@ -84,10 +89,5 @@ public abstract class BlockBoilerTank<T extends TileBoilerTank> extends BlockEnt
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return face == EnumFacing.UP ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
     }
 }

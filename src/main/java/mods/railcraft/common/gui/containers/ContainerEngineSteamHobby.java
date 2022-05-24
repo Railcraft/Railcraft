@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,8 +46,8 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
-        listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.getBurnTime()));
+        listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.getCurrentItemBurnTime()));
         listener.sendWindowProperty(this, 12, Math.round(tile.currentOutput * 100));
     }
 
@@ -56,18 +56,18 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener crafter : listeners) {
-            if (lastBurnTime != tile.boiler.burnTime)
-                crafter.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
+            if (lastBurnTime != tile.boiler.getBurnTime())
+                crafter.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.getBurnTime()));
 
-            if (lastItemBurnTime != tile.boiler.currentItemBurnTime)
-                crafter.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+            if (lastItemBurnTime != tile.boiler.getCurrentItemBurnTime())
+                crafter.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.getCurrentItemBurnTime()));
 
             if (lastOutput != tile.currentOutput)
                 crafter.sendWindowProperty(this, 12, Math.round(tile.currentOutput * 100));
         }
 
-        this.lastBurnTime = tile.boiler.burnTime;
-        this.lastItemBurnTime = tile.boiler.currentItemBurnTime;
+        this.lastBurnTime = tile.boiler.getBurnTime();
+        this.lastItemBurnTime = tile.boiler.getCurrentItemBurnTime();
         this.lastOutput = tile.currentOutput;
     }
 
@@ -77,10 +77,10 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
 
         switch (id) {
             case 10:
-                tile.boiler.burnTime = value;
+                tile.boiler.setBurnTime(value);
                 break;
             case 11:
-                tile.boiler.currentItemBurnTime = value;
+                tile.boiler.setCurrentItemBurnTime(value);
                 break;
             case 12:
                 tile.currentOutput = value / 100f;

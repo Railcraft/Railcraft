@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,10 +15,9 @@ import mods.railcraft.api.crafting.ICokeOvenCrafter;
 import mods.railcraft.api.fuel.INeedsFuel;
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools;
-import mods.railcraft.common.fluids.Fluids;
+import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -31,7 +30,6 @@ import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Optional;
 
-import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 
 /**
@@ -42,17 +40,19 @@ import static mods.railcraft.common.util.inventory.InvTools.sizeOf;
 public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafter.IRecipe> implements INeedsFuel {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_OUTPUT = 1;
-    public static final int SLOT_OUTPUT_FLUID = 2;
-    public static final int SLOT_LIQUID_INPUT = 3;
+    public static final int SLOT_INPUT_FLUID = 2;
+    public static final int SLOT_PROCESS_FLUID = 3;
+    public static final int SLOT_OUTPUT_FLUID = 4;
     public static final int TANK_CAPACITY = 64 * FluidTools.BUCKET_VOLUME;
     private final StandardTank tank;
     private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
     private int multiplier = 1;
 
     public CokeOvenLogic(Adapter adapter) {
-        super(adapter, 4, SLOT_INPUT);
+        super(adapter, 5, SLOT_INPUT);
         tank = new StandardTank(TANK_CAPACITY, adapter.tile().orElse(null));
-        addSubLogic(new FluidLogic(adapter).addTank(tank));
+        addLogic(new FluidLogic(adapter).addTank(tank));
+        addLogic(new BucketProcessorLogic(adapter, SLOT_INPUT_FLUID, ProcessType.FILL_ONLY));
     }
 
     @Override
@@ -84,26 +84,6 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
     }
 
     @Override
-    protected void updateServer() {
-        super.updateServer();
-
-        ItemStack topSlot = getStackInSlot(SLOT_LIQUID_INPUT);
-        if (!InvTools.isEmpty(topSlot) && !FluidItemHelper.isContainer(topSlot)) {
-            setInventorySlotContents(SLOT_LIQUID_INPUT, emptyStack());
-            dropItem(topSlot);
-        }
-
-        ItemStack bottomSlot = getStackInSlot(SLOT_OUTPUT_FLUID);
-        if (!InvTools.isEmpty(bottomSlot) && !FluidItemHelper.isContainer(bottomSlot)) {
-            setInventorySlotContents(SLOT_OUTPUT_FLUID, emptyStack());
-            dropItem(bottomSlot);
-        }
-
-        if (clock(FluidTools.BUCKET_FILL_TIME))
-            FluidTools.fillContainers(tank, this, SLOT_LIQUID_INPUT, SLOT_OUTPUT_FLUID, Fluids.CREOSOTE.get());
-    }
-
-    @Override
     public void onStructureChanged(boolean isComplete, boolean isMaster, Object[] data) {
         super.onStructureChanged(isComplete, isMaster, data);
         multiplier = (Integer) data[1];
@@ -126,7 +106,7 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
         switch (slot) {
             case SLOT_INPUT:
                 return Crafters.cokeOven().getRecipe(stack).isPresent();
-            case SLOT_LIQUID_INPUT:
+            case SLOT_INPUT_FLUID:
                 return FluidItemHelper.isRoomInContainer(stack);
             default:
                 return false;

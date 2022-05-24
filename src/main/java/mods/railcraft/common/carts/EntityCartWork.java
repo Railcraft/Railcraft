@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,18 +10,16 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import java.util.Optional;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartWork extends CartBase {
+public class EntityCartWork extends EntityRailcraftCart {
 
     public EntityCartWork(World world) {
         super(world);
@@ -37,11 +35,8 @@ public class EntityCartWork extends CartBase {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer entityplayer, EnumHand hand) {
-        if (Game.isHost(world)) {
-            GuiHandler.openGui(EnumGui.CART_WORK, entityplayer, world, this);
-        }
-        return true;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CART_WORK.op();
     }
 
     @Override

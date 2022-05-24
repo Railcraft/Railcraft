@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,18 +10,17 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.misc.Game;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public final class EntityCartRF extends CartBase implements IWeightedCart {
+import java.util.Optional;
+
+public final class EntityCartRF extends EntityRailcraftCart implements IWeightedCart {
     private static final DataParameter<Integer> FE = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final int CAPACITY = 2000000;
     private final CartStorage storage = new CartStorage();
@@ -61,10 +60,8 @@ public final class EntityCartRF extends CartBase implements IWeightedCart {
     }
 
     @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        if (Game.isHost(world))
-            GuiHandler.openGui(EnumGui.CART_FE, player, world, this);
-        return true;
+    protected Optional<EnumGui> getGuiType() {
+        return Optional.of(EnumGui.CART_FE);
     }
 
     @Override

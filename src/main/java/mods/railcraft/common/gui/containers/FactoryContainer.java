@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -21,18 +21,17 @@ import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.structures.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.structures.TileBoilerFireboxSolid;
-import mods.railcraft.common.blocks.structures.TileMultiBlock;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.modules.RailcraftModuleManager;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.routing.IRouter;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -47,13 +46,10 @@ public final class FactoryContainer {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
 
-        if (obj instanceof TileMultiBlock && !((TileMultiBlock) obj).isStructureValid())
-            return null;
-
         try {
             switch (gui) {
                 case CHEST:
-                    return new ContainerRCChest(inv, (IInventory) obj);
+                    return new ContainerRCChest(inv, (IInventoryImplementor) obj);
                 case MANIPULATOR_ITEM:
                     return new ContainerManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
@@ -106,7 +102,7 @@ public final class FactoryContainer {
                     return new ContainerEngineSteamHobby(inv, (TileEngineSteamHobby) obj);
                 case BOILER_SOLID:
                     return new ContainerBoilerSolid(inv, (TileBoilerFireboxSolid) obj);
-                case BOILER_LIQUID:
+                case BOILER_FLUID:
                     return new ContainerBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
                 case TURBINE:
                     return new ContainerTurbine(inv, (TileSteamTurbine) obj);

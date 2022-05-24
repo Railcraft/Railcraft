@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -22,6 +22,7 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.Game;
+import mods.railcraft.common.util.misc.IWorldSupplier;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -51,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class TileRailcraft extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, ITile {
+public abstract class TileRailcraft extends TileEntity implements INetworkedObject<RailcraftInputStream, RailcraftOutputStream>, ITile, IWorldSupplier {
 
     protected final AdjacentTileCache tileCache = new AdjacentTileCache(this);
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -86,7 +86,7 @@ public class WaterGeneratorLogic extends Logic {
     protected void updateServer() {
         super.updateServer();
         World world = theWorldAsserted();
-        if (clock(REFILL_INTERVAL)) {
+        clock().onInterval(REFILL_INTERVAL, () -> {
 
             BlockPos up = getPos().up();
             if (status.testSky(world, up)) {
@@ -109,6 +109,6 @@ public class WaterGeneratorLogic extends Logic {
                         tank.drain(Fluids.WATER.get(Math.abs(rateFinal)), true);
                 });
             }
-        }
+        });
     }
 }

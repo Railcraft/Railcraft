@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -30,7 +30,7 @@ import java.util.Set;
 public class FluidLogic extends Logic implements IFluidHandlerImplementor {
     private static final int NETWORK_UPDATE_INTERVAL = 64;
     protected final TankManager tankManager = new TankManager();
-    private Set<Integer> tanksToSync = new HashSet<>();
+    private final Set<Integer> tanksToSync = new HashSet<>();
     private boolean visible = true;
     private boolean changed = true;
 
@@ -68,7 +68,7 @@ public class FluidLogic extends Logic implements IFluidHandlerImplementor {
     protected void updateServer() {
         super.updateServer();
 
-        if (changed || clock(NETWORK_UPDATE_INTERVAL)) {
+        if (changed || clock().interval(NETWORK_UPDATE_INTERVAL)) {
             sendUpdateToClient();
             changed = false;
         }

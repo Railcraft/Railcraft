@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,14 +11,11 @@
 package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.common.fluids.FluidItemHelper;
-import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.plugins.forge.NBTPlugin;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -38,8 +35,6 @@ public class StorageTankLogic extends InventoryLogic {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_PROCESS = 1;
     public static final int SLOT_OUTPUT = 2;
-    private final FilteredTank tank;
-    private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
     public StorageTankLogic(Adapter adapter, int capacity) {
         this(adapter, capacity, null);
@@ -47,18 +42,11 @@ public class StorageTankLogic extends InventoryLogic {
 
     public StorageTankLogic(Adapter adapter, int capacity, @Nullable Supplier<@Nullable Fluid> filter) {
         super(adapter, 3);
-        tank = new FilteredTank(capacity, adapter.tile().orElse(null));
+        FilteredTank tank = new FilteredTank(capacity, adapter.tile().orElse(null));
         if (filter != null)
             tank.setFilterFluid(filter);
-        addSubLogic(new FluidLogic(adapter).addTank(tank));
-    }
-
-    @Override
-    protected void updateServer() {
-        super.updateServer();
-
-        if (clock(FluidTools.BUCKET_FILL_TIME))
-            processState = FluidTools.processContainer(this, tank, ProcessType.DRAIN_THEN_FILL, processState);
+        addLogic(new FluidLogic(adapter).addTank(tank));
+        addLogic(new BucketProcessorLogic(adapter, SLOT_INPUT, ProcessType.DRAIN_THEN_FILL));
     }
 
     @Override
@@ -87,17 +75,5 @@ public class StorageTankLogic extends InventoryLogic {
     @Override
     public @Nullable EnumGui getGUI() {
         return EnumGui.TANK;
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound data) {
-        super.writeToNBT(data);
-        NBTPlugin.writeEnumOrdinal(data, "processState", processState);
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound data) {
-        super.readFromNBT(data);
-        processState = NBTPlugin.readEnumOrdinal(data, "processState", FluidTools.ProcessState.values(), FluidTools.ProcessState.RESET);
     }
 }

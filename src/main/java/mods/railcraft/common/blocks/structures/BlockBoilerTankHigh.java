@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,15 +15,9 @@ import mods.railcraft.common.items.Metal;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Tuple;
 
 @BlockMeta.Tile(TileBoilerTankHigh.class)
 public final class BlockBoilerTankHigh extends BlockBoilerTank<TileBoilerTankHigh> {
-
-    @Override
-    public Tuple<Integer, Integer> getTextureDimensions() {
-        return new Tuple<>(2, 1);
-    }
 
     @Override
     public void defineRecipes() {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,40 +11,33 @@ package mods.railcraft.common.carts;
 
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.client.util.effects.ClientEffects;
+import mods.railcraft.common.blocks.logic.*;
+import mods.railcraft.common.blocks.logic.BoilerLogic.BoilerData;
 import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.TankManager;
-import mods.railcraft.common.fluids.tanks.FilteredTank;
-import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.modules.ModuleLocomotives;
+import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.NBTPlugin;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
-import mods.railcraft.common.util.steam.IBoilerContainer;
-import mods.railcraft.common.util.steam.SteamBoiler;
 import mods.railcraft.common.util.steam.SteamConstants;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidCart, IBoilerContainer {
+public abstract class EntityLocomotiveSteam extends EntityLocomotive implements IFluidCart, ITemperature {
     @SuppressWarnings("WeakerAccess")
     public static final int SLOT_WATER_INPUT = 0;
     @SuppressWarnings("WeakerAccess")
@@ -54,25 +47,12 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     private static final DataParameter<Boolean> STEAM = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte TICKS_PER_BOILER_CYCLE = 2;
     private static final int FUEL_PER_REQUEST = 3;
-    public final SteamBoiler boiler;
-    protected final StandardTank tankWater = new FilteredTank(FluidTools.BUCKET_VOLUME * 6) {
-        @Override
-        public int fillInternal(@Nullable FluidStack resource, boolean doFill) {
-            return super.fillInternal(onFillWater(resource), doFill);
-        }
-    }.setFilterFluid(Fluids.WATER);
-    @SuppressWarnings("WeakerAccess")
-    protected final StandardTank tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16)
-            .setFilterFluid(Fluids.STEAM)
-            .canDrain(false)
-            .canFill(false);
+    public final BoilerLogic boiler;
     @SuppressWarnings("WeakerAccess")
     protected final InventoryMapper invWaterInput;
     @SuppressWarnings("WeakerAccess")
     protected final InventoryMapper invWaterOutput = InventoryMapper.make(this, SLOT_WATER_OUTPUT, 1);
     protected final InventoryMapper invWaterContainers = InventoryMapper.make(this, SLOT_WATER_INPUT, 3);
-    private final TankManager tankManager = new TankManager();
-    private int update = rand.nextInt();
     private FluidTools.ProcessState processState = FluidTools.ProcessState.RESET;
 
     protected EntityLocomotiveSteam(World world) {
@@ -86,15 +66,27 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     {
         setMaxReverseSpeed(LocoSpeed.SLOWEST);
 
-        tankManager.add(tankWater);
-        tankManager.add(tankSteam);
-
         invWaterInput = InventoryMapper.make(this, SLOT_WATER_INPUT, 1);
         invWaterInput.withStackSizeLimit(4);
 
-        boiler = new SteamBoiler(tankWater, tankSteam);
-        boiler.setEfficiencyModifier(ModuleLocomotives.config.steamLocomotiveEfficiency);
-        boiler.setTicksPerCycle(TICKS_PER_BOILER_CYCLE);
+        Logic.Adapter adapter = Logic.Adapter.of(this);
+
+        boiler = new BoilerLogic(adapter);
+        logic = boiler;
+        boiler.setBoilerData(new BoilerData(1,
+                TICKS_PER_BOILER_CYCLE,
+                ModuleLocomotives.config.steamLocomotiveEfficiency,
+                SteamConstants.MAX_HEAT_LOW,
+                6, 16));
+
+        boiler.addLogic(new ExploderLogic(adapter) {
+            @Override
+            protected void boom() {
+                explode();
+            }
+        });
+
+        boiler.addLogic(new BucketProcessorLogic(adapter, SLOT_WATER_INPUT, ProcessType.DRAIN_ONLY));
     }
 
     @Override
@@ -115,26 +107,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         return RailcraftCarts.LOCO_STEAM_SOLID.getStack();
     }
 
-    @Override
-    public boolean doInteract(EntityPlayer player, EnumHand hand) {
-        return FluidTools.interactWithFluidHandler(player, hand, getTankManager()) || super.doInteract(player, hand);
-    }
-
     public TankManager getTankManager() {
-        return tankManager;
-    }
-
-    @Override
-    public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return (T) getTankManager();
-        return super.getCapability(capability, facing);
+        return boiler.getLogic(FluidLogic.class).map(FluidLogic::getTankManager).orElse(TankManager.NIL);
     }
 
     @Override
@@ -142,23 +116,14 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
         super.onUpdate();
 
         if (Game.isHost(world)) {
-            update++;
-
-            if (tankWater.isEmpty())
+            if (boiler.tankWater.isEmpty())
                 setMode(LocoMode.SHUTDOWN);
 
-            setSteaming(tankSteam.getFluidAmount() > 0);
-            if (tankSteam.getRemainingSpace() >= SteamConstants.STEAM_PER_UNIT_WATER || isShutdown()) {
-                boiler.tick(1);
+            setSteaming(boiler.tankSteam.getFluidAmount() > 0);
+            setSmoking(boiler.isBurning());
 
-                setSmoking(boiler.isBurning());
-
-                if (!boiler.isBurning())
-                    ventSteam();
-            }
-
-            if (update % FluidTools.BUCKET_FILL_TIME == 0)
-                processState = FluidTools.processContainer(invWaterContainers, tankWater, ProcessType.DRAIN_ONLY, processState);
+            if (isShutdown() && !boiler.isBurning())
+                ventSteam();
 
         } else {
             if (isSmoking()) {
@@ -190,24 +155,19 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     }
 
     private void ventSteam() {
-        tankSteam.drainInternal(4, true);
+        boiler.tankSteam.drainInternal(4, true);
     }
 
     @Override
-    public @Nullable SteamBoiler getBoiler() {
-        return boiler;
-    }
-
-    @Override
-    public float getTemperature() {
-        return (float) boiler.getHeat();
+    public double getTemp() {
+        return (float) boiler.getTemp();
     }
 
     @Override
     public int getMoreGoJuice() {
-        FluidStack steam = tankSteam.getFluid();
-        if (steam != null && steam.amount >= tankSteam.getCapacity() / 2) {
-            tankSteam.drainInternal(SteamConstants.STEAM_PER_UNIT_WATER, true);
+        FluidStack steam = boiler.tankSteam.getFluid();
+        if (steam != null && steam.amount >= boiler.tankSteam.getCapacity() / 2) {
+            boiler.tankSteam.drainInternal(SteamConstants.STEAM_PER_UNIT_WATER, true);
             return FUEL_PER_REQUEST;
         }
         return 0;
@@ -217,21 +177,17 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
     @Override
     public void writeEntityToNBT(NBTTagCompound data) {
         super.writeEntityToNBT(data);
-        tankManager.writeTanksToNBT(data);
-        boiler.writeToNBT(data);
         NBTPlugin.writeEnumOrdinal(data, "processState", processState);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound data) {
         super.readEntityFromNBT(data);
-        tankManager.readTanksFromNBT(data);
-        boiler.readFromNBT(data);
         processState = NBTPlugin.readEnumOrdinal(data, "processState", FluidTools.ProcessState.values(), FluidTools.ProcessState.RESET);
     }
 
     public boolean isSafeToFill() {
-        return !boiler.isSuperHeated() || !tankWater.isEmpty();
+        return !boiler.isSuperHeated() || !boiler.tankWater.isEmpty();
     }
 
     @Override
@@ -251,11 +207,6 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
 
     @Override
     public void setFilling(boolean filling) {
-    }
-
-    @Override
-    public void steamExplosion(FluidStack resource) {
-        explode();
     }
 }
 

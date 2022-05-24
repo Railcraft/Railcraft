@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -61,7 +61,7 @@ public abstract class TileTank extends TileLogic {
         blockMapping.put('W', RailcraftBlocks.GLASS.getDefaultState());
         Optional<TileLogic> tile = pattern.placeStructure(world, pos, blockMapping);
         tile.flatMap(t -> t.getLogic(StructureLogic.class)).ifPresent(structure -> {
-            structure.getFunctionalLogic(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(fluid));
+            structure.getKernel(FluidLogic.class).ifPresent(logic -> logic.getTankManager().get(0).setFluid(fluid));
         });
     }
 
@@ -329,12 +329,12 @@ public abstract class TileTank extends TileLogic {
     }
 
     protected TileTank() {
-        setLogic(new StructureLogic("metal_tank", this, patterns,
+        setRootLogic(new StructureLogic("metal_tank", this, patterns,
                 new StorageTankLogic(Logic.Adapter.of(this), getTankDefinition().getCapacityPerBlock())
-                        .addSubLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0, getTankDefinition().getCapacityPerBlock()))
+                        .addLogic(new DynamicTankCapacityLogic(Logic.Adapter.of(this), 0, 0, getTankDefinition().getCapacityPerBlock()))
         ) {
             {
-                getFunctionalLogic(FluidLogic.class).ifPresent(logic -> {
+                getKernel(FluidLogic.class).ifPresent(logic -> {
                     logic.setVisible(false);
                     logic.setTankSync(0);
                 });

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,5 +16,9 @@ package mods.railcraft.common.util.inventory;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum InvOp {
-    EXECUTE, SIMULATE
+    EXECUTE, SIMULATE;
+
+    public void ifExecuting(Runnable action) {
+        action.run();
+    }
 }

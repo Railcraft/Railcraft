@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,6 @@ import mods.railcraft.common.blocks.logic.MetalsChestLogic;
 public class TileChestMetals extends TileChestRailcraft {
 
     {
-        setLogic(new MetalsChestLogic(Logic.Adapter.of(this)));
+        setRootLogic(new MetalsChestLogic(Logic.Adapter.of(this)));
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -77,17 +77,17 @@ public final class StructurePattern {
         return entityCheckBounds.offset(masterPos.getX(), masterPos.getY(), masterPos.getZ());
     }
 
-    @Deprecated
-    public char getPatternMarkerChecked(BlockPos posInPattern) {
-        int x = posInPattern.getX();
-        int y = posInPattern.getY();
-        int z = posInPattern.getZ();
-        if (x < 0 || y < 0 || z < 0)
-            return EMPTY_MARKER;
-        if (x >= getPatternWidthX() || y >= getPatternHeight() || z >= getPatternWidthZ())
-            return EMPTY_MARKER;
-        return getPatternMarker(posInPattern);
-    }
+//    @Deprecated
+//    public char getPatternMarkerChecked(BlockPos posInPattern) {
+//        int x = posInPattern.getX();
+//        int y = posInPattern.getY();
+//        int z = posInPattern.getZ();
+//        if (x < 0 || y < 0 || z < 0)
+//            return EMPTY_MARKER;
+//        if (x >= getPatternWidthX() || y >= getPatternHeight() || z >= getPatternWidthZ())
+//            return EMPTY_MARKER;
+//        return getPatternMarker(posInPattern);
+//    }
 
     public char getPatternMarker(BlockPos posInPattern) {
         return getPatternMarker(posInPattern.getX(), posInPattern.getY(), posInPattern.getZ());
@@ -143,40 +143,6 @@ public final class StructurePattern {
     @SuppressWarnings("unchecked")
     public @Nullable <T> T getAttachedDataOr(int index, @Nullable T backup) {
         return attachedData.length <= index ? backup : (T) attachedData[index];
-    }
-
-    @Deprecated
-    public State testPattern(TileMultiBlock tile) {
-        int xWidth = getPatternWidthX();
-        int zWidth = getPatternWidthZ();
-        int height = getPatternHeight();
-
-        BlockPos offset = tile.getPos().subtract(getMasterOffset());
-
-        BlockPos.PooledMutableBlockPos now = BlockPos.PooledMutableBlockPos.retain();
-        for (int patX = 0; patX < xWidth; patX++) {
-            for (int patY = 0; patY < height; patY++) {
-                for (int patZ = 0; patZ < zWidth; patZ++) {
-                    int x = patX + offset.getX();
-                    int y = patY + offset.getY();
-                    int z = patZ + offset.getZ();
-                    now.setPos(x, y, z);
-                    if (!tile.getWorld().isBlockLoaded(now))
-                        return State.NOT_LOADED;
-                    if (!tile.isMapPositionValid(now, getPatternMarker(patX, patY, patZ)))
-                        return State.PATTERN_DOES_NOT_MATCH;
-                }
-            }
-        }
-        now.release();
-
-        AxisAlignedBB entityCheckBounds = getEntityCheckBounds(tile.getPos());
-//                if(entityCheckBounds != null) {
-//                    System.out.println("test entities: " + entityCheckBounds.toString());
-//                }
-        if (entityCheckBounds != null && !tile.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, entityCheckBounds).isEmpty())
-            return State.ENTITY_IN_WAY;
-        return State.VALID;
     }
 
     public State testPattern(StructureLogic logic) {
@@ -257,16 +223,14 @@ public final class StructurePattern {
 
     public enum State {
 
-        VALID(TileMultiBlock.MultiBlockState.VALID, "railcraft.multiblock.state.valid"),
+        VALID("railcraft.multiblock.state.valid"),
         // TODO map to untested?
-        ENTITY_IN_WAY(TileMultiBlock.MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.entity"),
-        PATTERN_DOES_NOT_MATCH(TileMultiBlock.MultiBlockState.INVALID, "railcraft.multiblock.state.invalid.pattern"),
-        NOT_LOADED(TileMultiBlock.MultiBlockState.UNKNOWN, "railcraft.multiblock.state.unknown.unloaded");
-        public final TileMultiBlock.MultiBlockState type;
+        ENTITY_IN_WAY("railcraft.multiblock.state.invalid.entity"),
+        PATTERN_DOES_NOT_MATCH("railcraft.multiblock.state.invalid.pattern"),
+        NOT_LOADED("railcraft.multiblock.state.unknown.unloaded");
         public final String message;
 
-        State(TileMultiBlock.MultiBlockState type, String msg) {
-            this.type = type;
+        State(String msg) {
             this.message = msg;
         }
 
@@ -279,7 +243,7 @@ public final class StructurePattern {
         private BlockPos masterOffset = new BlockPos(1, 1, 1);
         private final List<char[][]> levels = new ArrayList<>();
         private @Nullable AxisAlignedBB box;
-        private List<Object> attachedData = new ArrayList<>();
+        private final List<Object> attachedData = new ArrayList<>();
 
         Builder() {
         }

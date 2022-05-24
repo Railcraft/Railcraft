@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -82,7 +82,7 @@ import java.util.stream.StreamSupport;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotive extends CartBaseContainer implements IDirectionalCart, IGuiReturnHandler,
+public abstract class EntityLocomotive extends EntityRailcraftCart implements IDirectionalCart, IGuiReturnHandler,
         ILinkableCart, IMinecart, ISecureObject<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Byte> LOCOMOTIVE_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
@@ -103,6 +103,7 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
     public LocoMode clientMode = LocoMode.SHUTDOWN;
     public LocoSpeed clientSpeed = LocoSpeed.MAX;
     public boolean clientCanLock;
+    public boolean primedToExplode;
     protected float renderYaw;
     private String model = "";
     private int fuel;
@@ -391,6 +392,9 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
 
         if (update % WHISTLE_INTERVAL == 0 && isRunning() && rand.nextInt(WHISTLE_CHANCE) == 0)
             whistle();
+
+        if (primedToExplode)
+            explode();
     }
 
     @Override
@@ -573,7 +577,12 @@ public abstract class EntityLocomotive extends CartBaseContainer implements IDir
         super.setDead();
     }
 
+    public void primeToExplode() {
+        primedToExplode = true;
+    }
+
     public void explode() {
+        primedToExplode = false;
         CartTools.explodeCart(this);
         setDead();
     }

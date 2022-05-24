@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -33,6 +33,8 @@ import java.util.stream.StreamSupport;
  */
 // No iterable: some other mods may add iterable to minecarts or block entities!
 public interface IInventoryComposite extends /*Iterable<InventoryAdaptor>,*/ IInventoryManipulator {
+
+    public static final IInventoryComposite ZERO_SIZE_INV = InventoryAdvanced.ZERO_SIZE_INV;
 
     /**
      * Each IInventoryComposite is comprised of a collection of InventoryAdaptor objects.

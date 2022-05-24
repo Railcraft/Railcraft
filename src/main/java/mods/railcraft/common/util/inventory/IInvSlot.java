@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,8 @@ package mods.railcraft.common.util.inventory;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.function.Predicate;
 
@@ -65,5 +67,9 @@ public interface IInvSlot {
 
     default int getMaxStackSize() {
         return Math.min(maxSlotStackSize(), getStack().getMaxStackSize());
+    }
+
+    default void drop(World world, BlockPos pos) {
+        InvTools.dropItem(removeFromSlot(getMaxStackSize(), InvOp.EXECUTE), world, pos);
     }
 }

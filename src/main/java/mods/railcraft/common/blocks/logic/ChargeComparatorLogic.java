@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -31,12 +31,12 @@ public class ChargeComparatorLogic extends ChargeLogic implements ITileCompare {
     @Override
     protected void updateServer() {
         super.updateServer();
-        if (clock(16)) {
+        clock().onInterval(16, () -> {
             int newComparatorOutput = getComparatorInputOverride();
             if (prevComparatorOutput != newComparatorOutput)
                 theWorldAsserted().updateComparatorOutputLevel(getPos(), adapter.tile().map(TileEntity::getBlockType).orElse(Blocks.AIR));
             prevComparatorOutput = newComparatorOutput;
-        }
+        });
     }
 
     @Override

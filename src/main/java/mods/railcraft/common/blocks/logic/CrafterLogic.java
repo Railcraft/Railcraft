@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -29,7 +29,9 @@ import java.util.Set;
  */
 public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
     public static int PROGRESS_STEP = 16;
+    @SyncToGui
     protected int progress;
+    @SyncToGui
     protected int duration;
     private boolean processing;
     protected boolean paused;
@@ -42,10 +44,10 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
 
     @Override
     protected void updateServer() {
-        if (clock(PROGRESS_STEP)) {
+        clock().onInterval(PROGRESS_STEP, () -> {
             processActions();
             progressCrafting();
-        }
+        });
     }
 
     public final int getProgress() {
@@ -84,11 +86,11 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
     protected abstract int calculateDuration();
 
     protected final void setFinished() {
-        finishedAt = clock();
+        finishedAt = clock().value();
     }
 
     protected final boolean isFinished() {
-        return processing && clock() > finishedAt + PROGRESS_STEP + 5;
+        return processing && clock().value() > finishedAt + PROGRESS_STEP + 5;
     }
 
     public final double getProgressPercent() {
@@ -119,7 +121,12 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
         return false;
     }
 
-    protected boolean doProcessStep() {return true;}
+    protected boolean doProcessStep() {
+        return getLogic(FurnaceLogic.class).map(logic -> {
+            logic.loadFuel();
+            return logic.isHot();
+        }).orElse(true);
+    }
 
     protected final void progressCrafting() {
         if (isFinished()) setProcessing(false);
@@ -132,8 +139,8 @@ public abstract class CrafterLogic extends InventoryLogic implements IHasWork {
             return;
         }
 
-        setProcessing(true);
         if (doProcessStep()) {
+            setProcessing(true);
             progress += PROGRESS_STEP;
             duration = calculateDuration();
             if (progress < duration) return;

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,6 +37,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import static mods.railcraft.common.util.inventory.InvTools.emptyStack;
 
@@ -231,7 +232,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     }
 
     @Override
-    protected EnumGui getGuiType() {
-        return EnumGui.CART_TANK;
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CART_TANK.op();
     }
 }
