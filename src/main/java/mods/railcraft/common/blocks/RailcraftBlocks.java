@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -116,27 +116,27 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
 
     // Bricks
 
-    ABYSSAL_BRICK(BlockDef.build("abyssal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ABYSSAL)).defaultSubtypedItem()
+    ABYSSAL_BRICK(BlockDef.build("abyssal", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ABYSSAL)).defaultSubtypedItem()
             .condition(ABYSSAL_STONE)
     ),
-    BLEACHED_BONE_BRICK(BlockDef.build("bleachedbone_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLEACHEDBONE)).defaultSubtypedItem()),
-    BLOOD_STAINED_BRICK(BlockDef.build("bloodstained_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).defaultSubtypedItem()),
-    FROST_BOUND_BRICK(BlockDef.build("frostbound_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).defaultSubtypedItem()),
-    INFERNAL_BRICK(BlockDef.build("infernal_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).defaultSubtypedItem()),
-    PEARLIZED_BRICK(BlockDef.build("pearlized_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).defaultSubtypedItem()),
-    QUARRIED_BRICK(BlockDef.build("quarried_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).defaultSubtypedItem()
+    BLEACHED_BONE_BRICK(BlockDef.build("bleachedbone", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLEACHEDBONE)).defaultSubtypedItem()),
+    BLOOD_STAINED_BRICK(BlockDef.build("bloodstained", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).defaultSubtypedItem()),
+    FROST_BOUND_BRICK(BlockDef.build("frostbound", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).defaultSubtypedItem()),
+    INFERNAL_BRICK(BlockDef.build("infernal", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).defaultSubtypedItem()),
+    PEARLIZED_BRICK(BlockDef.build("pearlized", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).defaultSubtypedItem()),
+    QUARRIED_BRICK(BlockDef.build("quarried", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).defaultSubtypedItem()
             .condition(QUARRIED_STONE)
     ),
-    BADLANDS_BRICK(BlockDef.build("badlands_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).defaultSubtypedItem()),
-    SANDY_BRICK(BlockDef.build("sandy_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).defaultSubtypedItem()),
+    BADLANDS_BRICK(BlockDef.build("badlands", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BADLANDS)).defaultSubtypedItem()),
+    SANDY_BRICK(BlockDef.build("sandy", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.SANDY)).defaultSubtypedItem()),
 
     // Vanilla Bricks
 
-    ANDESITE_BRICK(BlockDef.build("andesite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ANDESITE)).defaultSubtypedItem()),
-    DIORITE_BRICK(BlockDef.build("diorite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.DIORITE)).defaultSubtypedItem()),
-    GRANITE_BRICK(BlockDef.build("granite_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.GRANITE)).defaultSubtypedItem()),
-    NETHER_BRICK(BlockDef.build("nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.NETHER)).defaultSubtypedItem()),
-    RED_NETHER_BRICK(BlockDef.build("red_nether_brick", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.RED_NETHER)).defaultSubtypedItem()),
+    ANDESITE_BRICK(BlockDef.build("andesite", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.ANDESITE)).defaultSubtypedItem()),
+    DIORITE_BRICK(BlockDef.build("diorite", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.DIORITE)).defaultSubtypedItem()),
+    GRANITE_BRICK(BlockDef.build("granite", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.GRANITE)).defaultSubtypedItem()),
+    NETHER_BRICK(BlockDef.build("nether", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.NETHER)).defaultSubtypedItem()),
+    RED_NETHER_BRICK(BlockDef.build("red_nether", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.RED_NETHER)).defaultSubtypedItem()),
 
     // Slabs
     ABYSSAL_DOUBLE_SLAB(BlockDef.build("abyssal_double_slab", BlockBrickSlab.class)

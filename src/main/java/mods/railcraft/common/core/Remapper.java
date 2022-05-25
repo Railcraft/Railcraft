@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class Remapper {
     private static final Map<String, RailcraftBlocks> blockRemaps = new HashMap<>();
     private static final Map<String, RailcraftBlocks> itemRemaps = new HashMap<>();
-    private static final Map<String, String> prefixToSuffix = new HashMap<>();
+    private static final Map<String, String> regex = new HashMap<>();
 
     static {
         itemRemaps.put("tank_iron_gauge", RailcraftBlocks.GLASS);
@@ -58,16 +58,21 @@ public class Remapper {
         blockRemaps.put("track.reinforced", RailcraftBlocks.TRACK_FLEX_REINFORCED);
         blockRemaps.put("track.strap.iron", RailcraftBlocks.TRACK_FLEX_STRAP_IRON);
 
-        prefixToSuffix.put("brick_", "_brick");
-        prefixToSuffix.put("slab_", "_slab");
-        prefixToSuffix.put("stair_", "_stairs");
+        regex.put("^brick_(.*)", "$1");
+        regex.put("^(.*)_brick$", "$1");
+        regex.put("^slab_(.*)", "$1_slab");
+        regex.put("^stair_(.*)", "$1_stairs");
     }
 
-    private static Optional<Block> prefix(String path) {
-        return prefixToSuffix.entrySet().stream()
-                .filter(entry -> path.startsWith(entry.getKey()))
+    public static Optional<String> regex(String path) {
+        return regex.entrySet().stream()
+                .filter(entry -> path.matches(entry.getKey()))
                 .findFirst()
-                .map(entry -> path.replace(entry.getKey(), "") + entry.getValue())
+                .map(entry -> path.replaceFirst(entry.getKey(), entry.getValue()));
+    }
+
+    public static Optional<Block> remap(String path) {
+        return regex(path)
                 .map(RailcraftBlocks::byTag)
                 .map(Optionals.toType(Block.class));
     }
@@ -78,7 +83,7 @@ public class Remapper {
             if (!mapping.key.getNamespace().equals(RailcraftConstants.RESOURCE_DOMAIN)) continue;
 
             try {
-                prefix(mapping.key.getPath())
+                remap(mapping.key.getPath())
                         .ifPresent(mapping::remap);
             } catch (Exception ignored) {
             }
@@ -101,7 +106,7 @@ public class Remapper {
         for (Mapping<Item> mapping : event.getMappings()) {
 
             try {
-                prefix(mapping.key.getPath())
+                remap(mapping.key.getPath())
                         .map(Item::getItemFromBlock)
                         .ifPresent(mapping::remap);
             } catch (Exception ignored) {
