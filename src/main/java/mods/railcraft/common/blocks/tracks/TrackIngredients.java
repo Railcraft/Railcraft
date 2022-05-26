@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,7 +56,9 @@ public enum TrackIngredients implements IIngredientSource {
 
     @Override
     public Ingredient getIngredient() {
-        return RailcraftConfig.vanillaTrackRecipes() ? ingredientSupplierVanilla.get() : itemContainer.getIngredient(variant);
+        return RailcraftConfig.vanillaStyleTrackRecipes() ?
+                Ingredients.from(ingredientSupplierVanilla.get(), itemContainer.getIngredient(variant))
+                : itemContainer.getIngredient(variant);
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.tracks.elevator;
 import mods.railcraft.common.blocks.BlockRailcraft;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.carts.CartConstants;
-import mods.railcraft.common.core.RailcraftConfig;
 import mods.railcraft.common.items.ItemRail;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -89,12 +88,19 @@ public class BlockTrackElevator extends BlockRailcraft {
 
     @Override
     public void defineRecipes() {
+        CraftingPlugin.addShapedRecipe(new ItemStack(this, 10),
+                "IRI",
+                "ISI",
+                "IRI",
+                'I', "ingotGold",
+                'S', "ingotIron",
+                'R', "dustRedstone");
         CraftingPlugin.addShapedRecipe(new ItemStack(this, 8),
                 "IRI",
                 "ISI",
                 "IRI",
-                'I', RailcraftConfig.vanillaTrackRecipes() ? "ingotGold" : RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
-                'S', RailcraftConfig.vanillaTrackRecipes() ? "ingotIron" : RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
+                'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
+                'S', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
                 'R', "dustRedstone");
     }
 

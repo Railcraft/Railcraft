@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -346,58 +346,57 @@ public class ModuleCore extends RailcraftModulePayload {
                 }
 
                 // Old rails
-                if (!RailcraftConfig.vanillaTrackRecipes()) {
-                    ItemStack stackRailNormal = new ItemStack(Blocks.RAIL, 32);
-                    ItemStack stackRailBooster = new ItemStack(Blocks.GOLDEN_RAIL, 16);
-                    ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
-                    ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
+                String recipe_suffix = RailcraftConfig.removeVanillaRecipes() ? "" : "_alt";
+                ItemStack stackRailNormal = new ItemStack(Blocks.RAIL, 32);
+                ItemStack stackRailBooster = new ItemStack(Blocks.GOLDEN_RAIL, 16);
+                ItemStack stackRailDetector = new ItemStack(Blocks.DETECTOR_RAIL, 16);
+                ItemStack stackRailActivator = new ItemStack(Blocks.ACTIVATOR_RAIL, 16);
 
-                    Object woodRailbed = RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.WOOD);
-                    CraftingPlugin.addShapedRecipe(
-                            "minecraft:rail",
-                            stackRailNormal,
-                            "I I",
-                            "I#I",
-                            "I I",
-                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
-                            '#', woodRailbed);
-                    CraftingPlugin.addShapedRecipe(
-                            "minecraft:golden_rail",
-                            stackRailBooster,
-                            "I I",
-                            "I#I",
-                            "IrI",
-                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
-                            '#', woodRailbed,
-                            'r', "dustRedstone");
-                    CraftingPlugin.addShapedRecipe(
-                            "minecraft:detector_rail",
-                            stackRailDetector,
-                            "IsI",
-                            "I#I",
-                            "IrI",
-                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
-                            '#', Blocks.STONE_PRESSURE_PLATE,
-                            'r', "dustRedstone",
-                            's', woodRailbed);
-                    CraftingPlugin.addShapedRecipe(
-                            "minecraft:activator_rail",
-                            stackRailActivator,
-                            "ItI",
-                            "I#I",
-                            "ItI",
-                            'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
-                            '#', woodRailbed,
-                            't', new ItemStack(Blocks.REDSTONE_TORCH));
+                Object woodRailbed = RailcraftItems.RAILBED.getIngredient(ItemRailbed.EnumRailbed.WOOD);
+                CraftingPlugin.addShapedRecipe(
+                        "minecraft:rail" + recipe_suffix,
+                        stackRailNormal,
+                        "I I",
+                        "I#I",
+                        "I I",
+                        'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
+                        '#', woodRailbed);
+                CraftingPlugin.addShapedRecipe(
+                        "minecraft:golden_rail" + recipe_suffix,
+                        stackRailBooster,
+                        "IrI",
+                        "I#I",
+                        "IrI",
+                        'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.ADVANCED),
+                        '#', woodRailbed,
+                        'r', "dustRedstone");
+                CraftingPlugin.addShapedRecipe(
+                        "minecraft:detector_rail" + recipe_suffix,
+                        stackRailDetector,
+                        "I#I",
+                        "IsI",
+                        "IrI",
+                        'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
+                        '#', Blocks.STONE_PRESSURE_PLATE,
+                        'r', "dustRedstone",
+                        's', woodRailbed);
+                CraftingPlugin.addShapedRecipe(
+                        "minecraft:activator_rail" + recipe_suffix,
+                        stackRailActivator,
+                        "ItI",
+                        "I#I",
+                        "ItI",
+                        'I', RailcraftItems.RAIL.getIngredient(ItemRail.EnumRail.STANDARD),
+                        '#', woodRailbed,
+                        't', new ItemStack(Blocks.REDSTONE_TORCH));
 
-                    CraftingPlugin.addShapelessRecipe(RailcraftItems.RAIL.getStack(1, ItemRail.EnumRail.STANDARD),
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL,
-                            Blocks.RAIL);
-                }
+                CraftingPlugin.addShapelessRecipe(RailcraftItems.RAIL.getStack(1, ItemRail.EnumRail.STANDARD),
+                        Blocks.RAIL,
+                        Blocks.RAIL,
+                        Blocks.RAIL,
+                        Blocks.RAIL,
+                        Blocks.RAIL,
+                        Blocks.RAIL);
 
                 InterModMessageRegistry.getInstance().register("fluid-fuel", mess -> {
                     FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(mess.getNBTValue());

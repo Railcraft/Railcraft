@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -200,7 +200,6 @@ public class RailcraftConfig {
                 "change to '{t}=false' to prevent railcraft from attaching capabilities to bottles, default=true");
     }
 
-
     private static void loadRoutingTweaks() {
         routingOpsOnly = get(CAT_TWEAKS_ROUTING, "ops.only", false, "change to '{t}=true' to limit the editing of Golden Tickets to server admins only");
     }
@@ -267,7 +266,8 @@ public class RailcraftConfig {
         configMain.addCustomCategoryComment(CAT_RECIPES, "You can add or remove various recipes here");
 
         loadRecipeProperty("minecraft.furnace", "creosote", false, "change to '{t}=true' to add smelting recipes for Creosote Oil to the vanilla furnace");
-        loadRecipeProperty("railcraft.track", "useAltRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
+        loadRecipeProperty("railcraft.track", "vanillaStyleRecipes", false, "change to '{t}=true' to use track recipes more similar to vanilla minecraft");
+        loadRecipeProperty("railcraft.track", "removeVanillaRecipes", false, "change to '{t}=true' to remove the vanilla minecraft track recipes");
         loadRecipeProperty("railcraft.alloy", "enableAltSteel", false, "change to '{t}=true' to forcibly enable a recipe to craft Steel Nuggets by smelting Iron Nuggets in a normal furnace, regardless of whether the Factory Module is enabled");
         loadRecipeProperty("railcraft.blastFurnace", "bucket", true, "change to '{t}=false' to disable the bucket to steel recipe");
         loadRecipeProperty("railcraft.rockCrusher", "ores", true, "change to '{t}=false' to prevent the game from crushing ores into dusts (only available if IC2 installed)");
@@ -473,8 +473,12 @@ public class RailcraftConfig {
             action.run();
     }
 
-    public static boolean vanillaTrackRecipes() {
-        return getRecipeConfig("railcraft.track.useAltRecipes");
+    public static boolean vanillaStyleTrackRecipes() {
+        return getRecipeConfig("railcraft.track.vanillaStyleRecipes");
+    }
+
+    public static boolean removeVanillaRecipes() {
+        return getRecipeConfig("railcraft.track.removeVanillaRecipes");
     }
 
     public static boolean canCrushOres() {
