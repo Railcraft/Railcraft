@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,6 @@ import mods.railcraft.client.gui.buttons.GuiMultiButton;
 import mods.railcraft.common.carts.CartBaseMaintenance.CartMode;
 import mods.railcraft.common.carts.CartBaseMaintenancePattern;
 import mods.railcraft.common.gui.containers.RailcraftContainer;
-import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.world.IWorldNameable;
@@ -23,35 +22,20 @@ import java.io.IOException;
 
 public abstract class GuiCartBaseMaintenance extends GuiTitled {
     private final CartBaseMaintenancePattern cart;
-    private GuiMultiButton modeButton;
-    private ToolTip serviceToolTip;
-    private ToolTip transportToolTip;
 
     protected GuiCartBaseMaintenance(IWorldNameable nameable, RailcraftContainer container, String texture, CartBaseMaintenancePattern cart) {
         super(nameable, container, texture);
         this.cart = cart;
-        serviceToolTip = ToolTip.buildToolTip("gui.railcraft.cart.maintenance.tips.mode.service");
-        transportToolTip = ToolTip.buildToolTip("gui.railcraft.cart.maintenance.tips.mode.transport");
     }
 
     @Override
     public void initGui() {
         super.initGui();
-        if(cart == null) return;
+        if (cart == null) return;
         int h = (height - ySize) / 2;
-        modeButton = GuiMultiButton.create(1, 200, h + ySize - 100, 90, cart.getModeController());
-        modeButton.setToolTip(ToolTip.buildToolTip("gui.railcraft.cart.maintenance.tips.mode."+cart.getMode().getName()));
-        modeButton.setClickConsumer(n -> cart.setMode(cart.getOtherMode()));
+        GuiMultiButton<CartMode> modeButton = GuiMultiButton.create(1, 220, h + ySize - 100, 60, cart.getModeController());
+        modeButton.setClickConsumer(n -> cart.setMode(cart.nextMode()));
         buttonList.add(modeButton);
-    }
-    @Override
-    public void updateScreen() {
-        super.updateScreen();
-        update();
-    }
-
-    private void update() {
-        modeButton.setToolTip((cart.getMode() == CartMode.SERVICE) ? serviceToolTip : (cart.getMode() == CartMode.TRANSPORT) ? transportToolTip : null);
     }
 
     @Override
@@ -59,7 +43,6 @@ public abstract class GuiCartBaseMaintenance extends GuiTitled {
         if (cart == null)
             return;
         super.actionPerformed(guibutton);
-        update();
         sendUpdatePacket();
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,6 +65,11 @@ public class MultiButtonController<T extends IMultiButtonState> {
         }
         currentState = newState;
         return currentState;
+    }
+
+    public T next() {
+        incrementState();
+        return getButtonState();
     }
 
     public void setCurrentState(int state) {

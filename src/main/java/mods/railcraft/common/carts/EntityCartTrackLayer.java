@@ -63,7 +63,7 @@ public class EntityCartTrackLayer extends CartBaseMaintenancePattern {
     }
 
     private void placeTrack(BlockPos pos) {
-        if(getMode() == CartMode.TRANSPORT) return;
+        if (getMode() == CartMode.OFF) return;
         pos = pos.offset(travelDirection);
 
         BlockRailBase.EnumRailDirection trackShape = NORTH_SOUTH;

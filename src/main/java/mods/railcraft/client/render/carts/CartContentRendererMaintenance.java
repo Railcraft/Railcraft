@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -38,7 +38,7 @@ public class CartContentRendererMaintenance extends CartContentRenderer<CartBase
         if (bright) {
             RenderTools.setBrightness(1F);
             renderer.bindTex(LAMP_ON_TEX);
-        } else if (cart.getMode() == CartMode.TRANSPORT){
+        } else if (cart.getMode() == CartMode.OFF) {
             renderer.bindTex(LAMP_DISABLED_TEX);
         } else {
             renderer.bindTex(LAMP_OFF_TEX);

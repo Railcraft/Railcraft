@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -152,7 +152,7 @@ public class DataManagerPlugin {
 
     public static <T> DataParameter<T> create(DataSerializer<T> serializer) {
         DataParameter<T> dataParameter = EntityDataManager.createKey(Reflection.getCallerClass(1), serializer);
-        Logger.INSTANCE.msg(Level.WARN, "This is NOT an error. Its just Forge being nosy.");
+        Logger.INSTANCE.msg(Level.WARN, "This is NOT an error. It's just Forge being nosy.");
         return dataParameter;
     }
 

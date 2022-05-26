@@ -21,6 +21,7 @@ import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.misc.EnumTools;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -30,6 +31,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.IStringSerializable;
@@ -50,21 +52,22 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
     private static final DataParameter<Byte> BLINK = DataManagerPlugin.create(DataSerializers.BYTE);
     protected static final double DRAG_FACTOR = 0.9;
     private static final int BLINK_DURATION = 3;
-    private static final int DATA_ID_BLINK = 25;
     public static final DataParameter<Byte> CART_MODE = DataManagerPlugin.create(DataSerializers.BYTE);
-    private final MultiButtonController<CartModeButtonState> modeController = MultiButtonController.create(0, CartModeButtonState.VALUES);
+    private final MultiButtonController<CartMode> modeController = MultiButtonController.create(0, CartMode.VALUES);
+    private int onActivator;
 
     @Override
     public float getMaxCartSpeedOnRail() {
         return getMode().speed;
     }
 
-    public enum CartMode implements IStringSerializable {
+    public enum CartMode implements IStringSerializable, IMultiButtonState {
 
-        SERVICE(0.1f),
-        TRANSPORT(0.4f);
+        ON(0.1f),
+        OFF(0.4f);
         public static final EntityCartTrackLayer.CartMode[] VALUES = values();
         public final float speed;
+        public final ToolTip tip = ToolTip.buildToolTip(getTag() + ".tip");
 
         CartMode(float speed) {
             this.speed = speed;
@@ -74,22 +77,14 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
         public String getName() {
             return name().toLowerCase(Locale.ROOT);
         }
-    }
-
-    public MultiButtonController<CartModeButtonState> getModeController() {
-        return modeController;
-    }
-
-    public enum CartModeButtonState implements IMultiButtonState {
-        SERVICE,
-        TRANSPORT;
-
-        public static final CartModeButtonState[] VALUES = values();
-
 
         @Override
         public String getLabel() {
-            return LocalizationPlugin.translate("gui.railcraft.cart.maintenance.mode."+name().toLowerCase());
+            return LocalizationPlugin.translate(getTag());
+        }
+
+        public String getTag() {
+            return "gui.railcraft.cart.maintenance.mode." + getName();
         }
 
         @Override
@@ -99,8 +94,12 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
 
         @Override
         public @Nullable ToolTip getToolTip() {
-            return null;
+            return tip;
         }
+    }
+
+    public MultiButtonController<CartMode> getModeController() {
+        return modeController;
     }
 
     public CartMode getMode() {
@@ -108,13 +107,14 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
     }
 
     public void setMode(CartMode mode) {
-        if (getMode() != mode) DataManagerPlugin.writeEnum(dataManager, CART_MODE, mode);
+        if (getMode() != mode) {
+            DataManagerPlugin.writeEnum(dataManager, CART_MODE, mode);
+        }
+        modeController.setCurrentState(mode);
     }
 
-    public CartMode getOtherMode() {
-        if(getMode() == CartMode.SERVICE) return CartMode.TRANSPORT;
-        else if(getMode() == CartMode.TRANSPORT) return CartMode.SERVICE;
-        return CartMode.SERVICE;
+    public CartMode nextMode() {
+        return EnumTools.next(getMode(), CartMode.VALUES);
     }
 
     protected CartBaseMaintenance(World world) {
@@ -129,7 +129,7 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
     protected void entityInit() {
         super.entityInit();
         dataManager.register(BLINK, (byte) 0);
-        dataManager.register(CART_MODE, (byte) CartMode.SERVICE.ordinal());
+        dataManager.register(CART_MODE, (byte) CartMode.ON.ordinal());
     }
 
     @Override
@@ -149,14 +149,43 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
         return dataManager.get(BLINK);
     }
 
+    protected void setOnActivator(boolean onActivator) {
+        setOnActivator(onActivator ? 32 : 0);
+    }
+
+    protected void setOnActivator(int onActivator) {
+        this.onActivator = onActivator;
+    }
+
+    protected boolean onActivator() {
+        return onActivator > 0;
+    }
+
+    protected int getOnActivator() {
+        return onActivator;
+    }
+
     @Override
     public void onUpdate() {
         super.onUpdate();
+        getModeController().setCurrentState(getMode());
+
         if (Game.isClient(world))
             return;
 
         if (isBlinking())
             setBlink((byte) (getBlink() - 1));
+
+        if (onActivator())
+            setOnActivator(getOnActivator() - 1);
+    }
+
+    @Override
+    public void onActivatorRailPass(int x, int y, int z, boolean receivingPower) {
+        if (!onActivator()) {
+            setMode(nextMode());
+        }
+        setOnActivator(true);
     }
 
     @Override
@@ -197,6 +226,18 @@ public abstract class CartBaseMaintenance extends EntityRailcraftCart implements
         BlockRailBase.EnumRailDirection trackShape = TrackTools.getTrackDirectionRaw(state);
         getEntityWorld().setBlockToAir(pos);
         return trackShape;
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound data) {
+        super.writeEntityToNBT(data);
+        data.setByte("onActivator", (byte) getOnActivator());
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound data) {
+        super.readEntityFromNBT(data);
+        setOnActivator(data.getByte("onActivator"));
     }
 
     @Override

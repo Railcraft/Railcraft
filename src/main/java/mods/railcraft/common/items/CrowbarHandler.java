@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -119,26 +119,23 @@ public class CrowbarHandler {
         if (player.getRidingEntity() != null) {
             // NOOP
         } else if (cart instanceof EntityTunnelBore) {
-                // NOOP
-            } else if (cart instanceof IDirectionalCart)
-                ((IDirectionalCart) cart).reverse();
-                else if(cart instanceof EntityCartTrackRemover) {
-                    ((EntityCartTrackRemover) cart).setMode(((EntityCartTrackRemover) cart).getOtherMode());
-                }
-                else {
-                    int lvl = RailcraftEnchantments.SMACK.getLevel(stack);
-                    if (lvl == 0) {
-                        CartTools.smackCart(cart, player, SMACK_VELOCITY);
-                    }
+            // NOOP
+        } else if (cart instanceof IDirectionalCart)
+            ((IDirectionalCart) cart).reverse();
+        else {
+            int lvl = RailcraftEnchantments.SMACK.getLevel(stack);
+            if (lvl == 0) {
+                CartTools.smackCart(cart, player, SMACK_VELOCITY);
+            }
 
-                    Train.get(cart).ifPresent(train -> {
-                        float smackVelocity = SMACK_VELOCITY * (float) Math.pow(1.7, lvl);
-                        smackVelocity /= (float) Math.pow(train.size(), 1D / (1 + lvl));
-                        for (EntityMinecart each : train) {
-                            CartTools.smackCart(cart, each, player, smackVelocity);
-                        }
-                    });
+            Train.get(cart).ifPresent(train -> {
+                float smackVelocity = SMACK_VELOCITY * (float) Math.pow(1.7, lvl);
+                smackVelocity /= (float) Math.pow(train.size(), 1D / (1 + lvl));
+                for (EntityMinecart each : train) {
+                    CartTools.smackCart(cart, each, player, smackVelocity);
                 }
+            });
+        }
         crowbar.onBoost(player, hand, stack, cart);
     }
 }
