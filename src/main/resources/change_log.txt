@@ -1,3 +1,89 @@
+12.1.0-beta-1:
+    NEW:
+        New Metal Ore textures!
+        New Metal textures!
+        More Coke Oven patterns! 3x3x7 & 5x5x5
+        Water Tanks can now be built either 3 or 4 blocks tall.
+        Slabs & Stairs!
+        Add default diffuse generators for all ores in addition to the mines.
+        Add modes for maintenance carts.
+        Add support for Thermal Expansion & Buildcraft fuels
+    CHANGES:
+        Rework how track recipe configs are handled. Vanilla recipes are no longer replaced by default (config), instead new recipes are added alongside the old ones.
+        Enabling vanilla style recipe config (defaults off) no longer removes Railcraft style recipes, allowing both to exist.
+        Refactor Multiblocks to new Structure Logic.
+        Refactor carts to support Logic universally.
+        Change Void chests to only delete items if more than half full, in order, from left to right.
+        Tweak Fluid (Un)loader's transfer rate to be more compatible with Charm's Cauldrons
+        Remove Silk Touch requirement from Strengthened Glass
+        Make Force tracks High Speed
+        Tweak Worldspikes fuel defaults
+        Closes #1701 Add Strap Iron speed config
+        New Module configuration system
+        Remove Frostbound Brick ice recipe
+        Removed Tank Gauge, use Strength Glass instead.
+        Tweak Bricks to align better with Vanilla standards.
+        Add "Post" to Platform names, consider removing colors in future.
+        May be potential bugs, lots of changes.
+    FIXES:
+        Fix Elevator Track name
+        Fix Maintenance Cart GUIs Maintenance Carts now respond to Activator Tracks
+        Fix Maintance Cart GUIs
+        Fix stone names
+        Fix bug where tunnel bore entity immediately despawns after placing in some seeds
+        Attempt to fix fluid issues *again*
+        Fix #1850 and clean up blast furnace recipes
+        Fix stack overflow in structure readNBT on old worlds.
+        Fix some issues with structures and replacer blocks
+        Flatten Quarried Stone and fix a few issues.
+        Flatten out Abyssal Stone and clean up item classes/inventory models.
+        Flatten Creosote/Coke Blocks. Add Creosote Slab/Stairs. Rename Slabs/Stairs.
+        Fixes #1802 Make Outfitted Track Model NPE proof
+        Clean up Worldspike code a bit and add fail-fast tests for GUI. See #1962
+        Using wrong function in Worldspike GUI function. See #1808, #1962. Not believed to be a solution.
+        Fix crash when Firestone drops
+        Closes #1809 Return ONE instance of source to NBTCopyRecipe
+        Closes #1550 Change Charge Trap to a Carpet like block
+        Closes #1609 Add alternate Ender dust Ore tag
+        Closes #1702 Move Water Tank to Transport Module
+        Closes #1819 Loco GUI and Throttle/Loco Kits now operate on entire train
+        Close #1834 Move Alloy recipes to JSON
+        Fix flow between stacked tanks. Closes #1918
+        Use the same definition of "natural" stone that vanilla uses for generation.
+        Fixes #1967 Unlimited Furnace Cart fuel.
+        Fixed the last of the issues with the Tanks.
+        Fixes #1871
+        Revert some HS code that Liach removed which broke everything. Closes #1845
+        Set default state for Outfitted Track. Closes #1802
+        Properly register sound events with Forge. Fixes #1866
+        Use a thread safe Train get for entityRemoved. Fixes #1905
+        Clean up Fluid definitions Closes #1915
+        Change default ore gen weights Fixes #1811?
+        Fix Tank GUIs
+        Improve region protection integration. Closes #1963
+        Fix Trade Station GUI Fixes #1853
+        Fix IC2 structures by informing members AFTER the master list is built.
+        Fix water tank input slot rules. See #1793
+        Closes #1964 Allow enchantments on items that implement IToolCrowbar
+        Add water tank gen logic to fluid gauge tooltip.
+        Closes #1943 Restore removed Water Tank GUI and fix bucket interactions.
+        Closes #1862 Fail a bit more gracefully on list parsing
+        Closes #1928 Use correct title for Locking Track GUI
+        Closes #1830 Cargo Cart is now crafted with a Comparator
+        Closes #1820 Add correct ore tag for gate
+        Tame the spam Closes #1803
+        Closes #1854 "blockCoke" -> "blockFuelCoke"
+        Closes #1872 Closes #1846 Don't call clearBlock() from client
+        Don't trust vanilla inventory code. Closes #1959
+        Closes #1954 Closes #1955 We don't even need the state to get the block
+        Fix inventory crashes with other mods
+        Fixed #1804
+        Fixed Switch Actuator Motor GUI issue. Axelandre42 7/31/2019 6:58 AM
+        Fix packet errors on switch placement.
+        Fix Maul target cycling and add sneak reverse.
+        Disable Admin Worldspike GUI
+        Fix post/platform painting recipes
+
 12.0.0:
     INFO: Stable release, as promised. Even ahead of schedule.
     CHANGE: Carts are now invulnerable to mob projectiles. (liach)
