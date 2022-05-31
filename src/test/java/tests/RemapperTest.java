@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class RemapperTest {
     @Test
     void remap() {
-        Assertions.assertEquals("abyssal", Remapper.remap("brick_abyssal").get());
-        Assertions.assertEquals("abyssal", Remapper.remap("abyssal_brick").get());
+        Assertions.assertEquals("abyssal", Remapper.regex("brick_abyssal").get());
+        Assertions.assertEquals("abyssal", Remapper.regex("abyssal_brick").get());
     }
 }
