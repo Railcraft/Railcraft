@@ -19,6 +19,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "com.matthewprenger.cursegradle" version "1.4.0"
+}
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'idea'
 apply from: 'api-railcraft/gradle.properties', to: project.ext
@@ -419,9 +423,28 @@ if (project.hasProperty("ftpUsername"))
         }
     }
 
+String jarPath = project.configurations.archives.artifacts.find {it.classifier == ""}.file
+println "Output Jar: " + jarPath
+
+println "Railcraft $project.version - MC $project.version_minecraft"
+
+curseforge {
+    apiKey = project.curseAPI
+    project {
+        id = '51195'
+        changelog = new File("src/main/resources/change_log.txt")
+        releaseType = project.version.contains('beta') ? 'beta' : 'release'
+        addGameVersion '1.12.2'
+
+        mainArtifact(jar) {
+            displayName = "Railcraft $project.version - MC $project.version_minecraft"
+        }
+    }
+}
+
 artifacts {
-    archives apiSourceJar
-    archives apiJar
-    archives devJar
     archives jar
+    archives devJar
+    archives apiJar
+    archives apiSourceJar
 }
