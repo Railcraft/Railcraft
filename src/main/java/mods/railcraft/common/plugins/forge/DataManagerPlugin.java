@@ -15,9 +15,9 @@ import io.netty.buffer.ByteBufOutputStream;
 import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.fluids.OptionalFluidStack;
 import mods.railcraft.common.plugins.color.EnumColor;
+import mods.railcraft.common.util.misc.Code;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.Game.Logger;
-import mods.railcraft.common.util.misc.Reflection;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.network.PacketBuffer;
@@ -151,7 +151,7 @@ public class DataManagerPlugin {
     }
 
     public static <T> DataParameter<T> create(DataSerializer<T> serializer) {
-        DataParameter<T> dataParameter = EntityDataManager.createKey(Reflection.getCallerClass(1), serializer);
+        DataParameter<T> dataParameter = EntityDataManager.createKey(Code.getCallerClass(1), serializer);
         Logger.INSTANCE.msg(Level.WARN, "This is NOT an error. It's just Forge being nosy.");
         return dataParameter;
     }

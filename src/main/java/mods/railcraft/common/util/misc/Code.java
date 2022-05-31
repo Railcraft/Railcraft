@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,6 +34,26 @@ public class Code {
     public static void assertInstance(Class<?> clazz, Object obj) {
         if (!clazz.isInstance(obj))
             throw new AssertionError("Object not instance of " + clazz.getSimpleName());
+    }
+
+    public static <T> Class<T> getCallerClass() {
+        return getCallerClass(0);
+    }
+
+    /**
+     * Calling this with a depth of 0 should return the class that called this function.
+     *
+     * @param depth the depth of the call stack to return
+     * @param <T>   The class to cast to
+     * @return The class
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> getCallerClass(int depth) {
+        try {
+            return (Class<T>) Class.forName(Thread.currentThread().getStackTrace()[depth + 2].getClassName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Something went wrong when finding calling class.", e);
+        }
     }
 
     public static <T, E> void setValue(Class<? super T> classToAccess, @Nullable T instance, @Nullable E value, String srgName) {
