@@ -20,7 +20,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 import java.util.Optional;
 
-public final class EntityCartRF extends EntityRailcraftCart implements IWeightedCart {
+public final class EntityCartRF extends CartBase implements IWeightedCart {
     private static final DataParameter<Integer> FE = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final int CAPACITY = 2000000;
     private final CartStorage storage = new CartStorage();

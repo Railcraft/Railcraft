@@ -68,7 +68,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
-public class EntityTunnelBore extends EntityRailcraftCart implements ILinkableCart {
+public class EntityTunnelBore extends CartBase implements ILinkableCart {
     public static final float SPEED = 0.03F;
     public static final float LENGTH = 6.2f;
     public static final float WIDTH = 3f;

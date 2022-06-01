@@ -70,7 +70,7 @@ import java.util.Optional;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityRailcraftCart extends EntityMinecartContainer implements IRailcraftCart, INeedsFuel, IItemCart, IInventoryComposite, ILogicContainer, IEntityAdditionalSpawnData {
+public abstract class CartBase extends EntityMinecartContainer implements IRailcraftCart, INeedsFuel, IItemCart, IInventoryComposite, ILogicContainer, IEntityAdditionalSpawnData {
     private final EnumFacing[] travelDirectionHistory = new EnumFacing[2];
     protected @Nullable EnumFacing travelDirection;
     protected @Nullable EnumFacing verticalTravelDirection;
@@ -78,11 +78,11 @@ public abstract class EntityRailcraftCart extends EntityMinecartContainer implem
     protected List<InventoryMapper> invMappers = new ArrayList<>();
     protected Logic logic;
 
-    protected EntityRailcraftCart(World world) {
+    protected CartBase(World world) {
         super(world);
     }
 
-    protected EntityRailcraftCart(World world, double x, double y, double z) {
+    protected CartBase(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 

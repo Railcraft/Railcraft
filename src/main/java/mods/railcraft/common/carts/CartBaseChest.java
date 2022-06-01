@@ -11,6 +11,7 @@
 package mods.railcraft.common.carts;
 
 import mods.railcraft.common.blocks.logic.InventoryLogic;
+import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
@@ -19,24 +20,26 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public abstract class CartBaseLogicChest extends EntityRailcraftCart implements IInventoryImplementor {
+import java.util.Optional;
 
-    protected CartBaseLogicChest(World world) {
+public abstract class CartBaseChest extends CartBase implements IInventoryImplementor {
+
+    protected CartBaseChest(World world) {
         super(world);
     }
 
-    protected CartBaseLogicChest(World world, double x, double y, double z) {
+    protected CartBaseChest(World world, double x, double y, double z) {
         super(world, x, y, z);
     }
 
     @Override
     public IInventory getInventory() {
-        return getLogic(IInventory.class).orElseThrow(IllegalArgumentException::new);
+        return getLogic(IInventory.class).orElse(this);
     }
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player) {
-        return getLogic(InventoryLogic.class).map(logic -> logic.isUsableByPlayer(player)).orElse(false);
+        return super.isUsableByPlayer(player) && getLogic(InventoryLogic.class).map(logic -> logic.isUsableByPlayer(player)).orElse(true);
     }
 
     @Override
@@ -60,5 +63,10 @@ public abstract class CartBaseLogicChest extends EntityRailcraftCart implements 
     @Override
     public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    protected Optional<EnumGui> getGuiType() {
+        return EnumGui.CHEST.op();
     }
 }

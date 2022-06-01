@@ -34,7 +34,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class EntityCartHopper extends EntityRailcraftCart implements IHopper {
+public class EntityCartHopper extends CartBase implements IHopper {
     private boolean enabled = true;
     private int transferCooldown = -1;
     private @Nullable BlockPos lastPosition;

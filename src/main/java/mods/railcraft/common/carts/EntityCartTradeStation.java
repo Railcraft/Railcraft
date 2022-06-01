@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 /**
  *
  */
-public class EntityCartTradeStation extends EntityRailcraftCart {
+public class EntityCartTradeStation extends CartBase {
 
     protected EntityCartTradeStation(World world) {
         super(world);

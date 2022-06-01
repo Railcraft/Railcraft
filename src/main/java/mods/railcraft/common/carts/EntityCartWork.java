@@ -19,7 +19,7 @@ import java.util.Optional;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class EntityCartWork extends EntityRailcraftCart {
+public class EntityCartWork extends CartBase {
 
     public EntityCartWork(World world) {
         super(world);

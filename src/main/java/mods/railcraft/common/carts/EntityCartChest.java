@@ -9,19 +9,15 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.carts;
 
-import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
-import java.util.Optional;
-
-public class EntityCartChest extends EntityRailcraftCart {
+public class EntityCartChest extends CartBaseChest {
     public EntityCartChest(World world) {
         super(world);
     }
@@ -46,16 +42,6 @@ public class EntityCartChest extends EntityRailcraftCart {
     }
 
     @Override
-    public int getDefaultDisplayTileOffset() {
-        return 8;
-    }
-
-    @Override
-    public boolean canBeRidden() {
-        return false;
-    }
-
-    @Override
     public int getSizeInventory() {
         return 27;
     }
@@ -65,24 +51,5 @@ public class EntityCartChest extends EntityRailcraftCart {
         return StackFilters.CARGO.test(stack);
     }
 
-    @Override
-    public boolean canPassItemRequests(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    protected Optional<EnumGui> getGuiType() {
-        return EnumGui.CHEST.op();
-    }
 
 }

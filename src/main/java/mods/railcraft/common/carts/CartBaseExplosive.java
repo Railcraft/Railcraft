@@ -37,7 +37,7 @@ import net.minecraft.world.World;
 
 import java.io.IOException;
 
-public abstract class CartBaseExplosive extends EntityRailcraftCart implements IExplosiveCart, IGuiReturnHandler {
+public abstract class CartBaseExplosive extends CartBase implements IExplosiveCart, IGuiReturnHandler {
 
     private static final DataParameter<Integer> FUSE = DataManagerPlugin.create(DataSerializers.VARINT);
     private static final DataParameter<Byte> BLAST = DataManagerPlugin.create(DataSerializers.BYTE);

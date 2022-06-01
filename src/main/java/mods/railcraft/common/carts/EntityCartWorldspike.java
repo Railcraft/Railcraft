@@ -40,7 +40,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class EntityCartWorldspike extends EntityRailcraftCart implements IWorldspike, IMinecart {
+public abstract class EntityCartWorldspike extends CartBase implements IWorldspike, IMinecart {
     private static final DataParameter<Boolean> TICKET = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final byte CHUNK_RADIUS = 2;
     private static final byte MAX_CHUNKS = 25;

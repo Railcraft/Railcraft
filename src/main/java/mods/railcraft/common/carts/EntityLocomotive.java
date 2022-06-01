@@ -82,7 +82,7 @@ import java.util.stream.StreamSupport;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class EntityLocomotive extends EntityRailcraftCart implements IDirectionalCart, IGuiReturnHandler,
+public abstract class EntityLocomotive extends CartBase implements IDirectionalCart, IGuiReturnHandler,
         ILinkableCart, IMinecart, ISecureObject<LocoLockButtonState>, IPaintedCart, IRoutableCart, IEntityAdditionalSpawnData {
     private static final DataParameter<Boolean> HAS_FUEL = DataManagerPlugin.create(DataSerializers.BOOLEAN);
     private static final DataParameter<Byte> LOCOMOTIVE_MODE = DataManagerPlugin.create(DataSerializers.BYTE);

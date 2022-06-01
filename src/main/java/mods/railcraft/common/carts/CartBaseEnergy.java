@@ -29,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
-public abstract class CartBaseEnergy extends EntityRailcraftCart implements IEnergyTransfer, IWeightedCart {
+public abstract class CartBaseEnergy extends CartBase implements IEnergyTransfer, IWeightedCart {
 
     private final IBatteryCart cartBattery = new CartBattery(CartBattery.Type.STORAGE, getCapacity());
 

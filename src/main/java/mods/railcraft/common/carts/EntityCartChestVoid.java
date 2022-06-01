@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -16,7 +16,7 @@ import mods.railcraft.common.blocks.logic.VoidChestLogic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
 
-public class EntityCartChestVoid extends CartBaseLogicChest {
+public class EntityCartChestVoid extends CartBaseChest {
 
     public EntityCartChestVoid(World world) {
         super(world);

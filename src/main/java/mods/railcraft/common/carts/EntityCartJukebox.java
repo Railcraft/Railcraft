@@ -36,7 +36,7 @@ import static mods.railcraft.common.util.inventory.InvTools.*;
 /**
  * A simple Jukebox cart.
  */
-public final class EntityCartJukebox extends EntityRailcraftCart {
+public final class EntityCartJukebox extends CartBase {
 
     public static final int RECORD_SLOT = 0;
     public static final String RECORD_DISPLAY_NAME = "record";

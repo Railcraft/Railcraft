@@ -47,7 +47,7 @@ import java.util.Locale;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class CartBaseMaintenance extends EntityRailcraftCart implements IGuiReturnHandler {
+public abstract class CartBaseMaintenance extends CartBase implements IGuiReturnHandler {
 
     private static final DataParameter<Byte> BLINK = DataManagerPlugin.create(DataSerializers.BYTE);
     protected static final double DRAG_FACTOR = 0.9;
