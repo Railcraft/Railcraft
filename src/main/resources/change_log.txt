@@ -1,3 +1,11 @@
+12.1.0-beta-2:
+    CHANGES:
+        Closes #2028 Add steel turbine blade recipe and move both recipes to the Rolling Machine.
+    FIX:
+        Fix #2039 Remove calls to log4j getCaller() method. Fixes crash on most recent Forge.
+        Fixed issue with opening Chest Cart gui.
+        FIxed issue with getting Locomotive fluid container.
+
 12.1.0-beta-1:
     NEW:
         New Metal Ore textures!
