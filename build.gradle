@@ -434,7 +434,7 @@ curseforge {
         id = '51195'
         changelog = new File("src/main/resources/change_log.txt")
         releaseType = project.version.contains('beta') ? 'beta' : 'release'
-        addGameVersion '1.12.2'
+        addGameVersion project.version_minecraft
 
         mainArtifact(jar) {
             displayName = "Railcraft $project.version - MC $project.version_minecraft"
