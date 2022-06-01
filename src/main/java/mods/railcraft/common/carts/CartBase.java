@@ -30,7 +30,6 @@ import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
 import mods.railcraft.common.util.misc.Game;
-import mods.railcraft.common.util.misc.Optionals;
 import mods.railcraft.common.util.network.PacketBuilder;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
@@ -145,7 +144,7 @@ public abstract class CartBase extends EntityMinecartContainer implements IRailc
 
     @Override
     public <L> Optional<L> getLogic(Class<L> logicClass) {
-        return Optional.of(logic).map(Optionals.toType(logicClass));
+        return logic.getLogic(logicClass);
     }
 
     @Override
