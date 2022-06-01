@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,21 +10,27 @@
 
 package mods.railcraft.common.items;
 
-import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.api.crafting.Crafters;
 import net.minecraft.item.ItemStack;
 
 /**
  * Created by CovertJaguar on 5/19/2016 for Railcraft.
- *e
+ * e
+ *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public class ItemTurbineBlade extends ItemRailcraft {
     @Override
     public void defineRecipes() {
-        CraftingPlugin.addShapedRecipe(new ItemStack(this),
-                "I",
-                "I",
-                "I",
+        Crafters.rollingMachine().newRecipe(new ItemStack(this)).shaped(
+                "  I",
+                " I ",
+                "I  ",
                 'I', "plateNickel");
+        Crafters.rollingMachine().newRecipe(new ItemStack(this)).shaped(
+                "  I",
+                " I ",
+                "I  ",
+                'I', "plateSteel");
     }
 }
