@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -180,17 +180,6 @@ public class RailcraftJEIPlugin implements IModPlugin {
         Item trackOutfitted = RailcraftBlocks.TRACK_OUTFITTED.item();
         if (trackOutfitted != null)
             subtypeRegistry.registerSubtypeInterpreter(trackOutfitted, stack -> ((ItemTrackOutfitted) stack.getItem()).getSuffix(stack));
-    }
-
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        IRecipeRegistry recipeRegistry = jeiRuntime.getRecipeRegistry();
-
-        for (IRecipeCategory<?> category : categories) {
-            if (recipeRegistry.getRecipeCatalysts(category).isEmpty()) {
-                recipeRegistry.hideRecipeCategory(category.getUid());
-            }
-        }
     }
 
     private class DefaultRecipeWrapper implements IRecipeWrapper {
