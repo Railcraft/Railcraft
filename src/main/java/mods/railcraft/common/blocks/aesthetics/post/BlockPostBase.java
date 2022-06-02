@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.sounds.RailcraftSoundTypes;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.EnumFacing;
@@ -106,7 +107,6 @@ public abstract class BlockPostBase extends BlockRailcraft {
         return COLLISION_BOX;
     }
 
-
     @Override
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
         if (isPlatform(state))
@@ -122,6 +122,12 @@ public abstract class BlockPostBase extends BlockRailcraft {
     @Override
     public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
         return side == DOWN || (isPlatform(state) && side == UP);
+    }
+
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return face != EnumFacing.UP && face != EnumFacing.DOWN ? BlockFaceShape.MIDDLE_POLE :
+                (isPlatform(state) ? BlockFaceShape.SOLID : BlockFaceShape.CENTER);
     }
 
     @Override
