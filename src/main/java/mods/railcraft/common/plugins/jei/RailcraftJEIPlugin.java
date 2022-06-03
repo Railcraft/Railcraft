@@ -28,6 +28,8 @@ import mods.railcraft.common.blocks.tracks.outfitted.ItemTrackOutfitted;
 import mods.railcraft.common.core.RailcraftObjects;
 import mods.railcraft.common.gui.containers.*;
 import mods.railcraft.common.items.RailcraftItems;
+import mods.railcraft.common.modules.ModuleFactory;
+import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.plugins.jei.blastfurnace.BlastFurnaceMachineCategory;
 import mods.railcraft.common.plugins.jei.blastfurnace.BlastFurnaceRecipeProvider;
@@ -111,7 +113,10 @@ public class RailcraftJEIPlugin implements IModPlugin {
                 new DefaultRecipeWrapper(registry, recipe), ROLLING);
 
         registry.addRecipes(CokeOvenRecipeProvider.get(registry).getRecipes(), COKE);
-        registry.addRecipes(RollingMachineCrafter.INSTANCE.getValidRecipes(), ROLLING);
+        if ((EquipmentVariant.ROLLING_MACHINE_MANUAL.isAvailable() || EquipmentVariant.ROLLING_MACHINE_POWERED.isAvailable())
+                && RailcraftModuleManager.isModuleEnabled(ModuleFactory.class))
+            registry.addRecipes(RollingMachineCrafter.INSTANCE.getValidRecipes(), ROLLING);
+
         registry.addRecipes(RockCrusherRecipeProvider.get(registry).getRecipes(), ROCK_CRUSHER);
         registry.addRecipes(BlastFurnaceRecipeProvider.get(registry).getRecipes(), BLAST_FURNACE);
 

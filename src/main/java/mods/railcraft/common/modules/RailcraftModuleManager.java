@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -119,6 +119,7 @@ public final class RailcraftModuleManager {
             String moduleName = getModuleName(module);
             if (!isConfigured(moduleFolder, module)) {
                 Game.log().msg(Level.INFO, "Module disabled: {0}", module);
+                toDisable.add(module.getClass());
                 continue;
             }
             try {
@@ -285,9 +286,9 @@ public final class RailcraftModuleManager {
         if (annotation.dependencies().length > 0 || annotation.dependencyClasses().length > 0) {
             desc.append("depends on:\n");
             Stream.concat(
-                    Arrays.stream(annotation.dependencies()),
-                    Arrays.stream(annotation.dependencyClasses()).map(RailcraftModuleManager::getModuleName)
-            )
+                            Arrays.stream(annotation.dependencies()),
+                            Arrays.stream(annotation.dependencyClasses()).map(RailcraftModuleManager::getModuleName)
+                    )
                     .forEach(name -> desc.append("--  ").append(name).append("\n"));
             desc.append("\n");
         }
