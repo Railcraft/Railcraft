@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,6 +10,7 @@
 package mods.railcraft.common.worldgen;
 
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.modules.ModuleWorld;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
@@ -44,7 +45,7 @@ public class GeneratorGeode extends Generator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos pos, Biome biome) {
-        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= 0.1;
+        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.OCEAN) && rand.nextDouble() <= ModuleWorld.config.geodeChance;
     }
 
     private OceanFloor scanOceanFloor(World world, BlockPos pos) {

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,6 +46,7 @@ import static mods.railcraft.common.util.inventory.InvTools.setSize;
 @RailcraftModule(value = "railcraft:world", description = "world gen, ores, villages")
 public class ModuleWorld extends RailcraftModulePayload {
 
+    public static Config config;
     @ObjectHolder("minecraft:smith")
     static VillagerRegistry.VillagerProfession smith;
     public static final String VILLAGER_TEXTURE = RailcraftConstants.ENTITY_TEXTURE_FOLDER + "villager/trackman.png";
@@ -202,5 +203,20 @@ public class ModuleWorld extends RailcraftModulePayload {
                 }
             }
         });
+    }
+
+    @Override
+    public void loadConfig(Configuration config) {
+        ModuleWorld.config = new ModuleWorld.Config(config);
+    }
+
+    public static class Config {
+        public final float geodeChance;
+
+        public Config(Configuration config) {
+            geodeChance = config.getFloat("geodeChance", CAT_CONFIG,
+                    0.05F, 0.0F, 1.0F,
+                    "how often Geodes succeed a spawn check under the ocean, 0 = never, 1 = every time");
+        }
     }
 }
