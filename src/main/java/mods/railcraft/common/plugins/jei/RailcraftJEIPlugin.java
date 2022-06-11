@@ -64,7 +64,7 @@ public class RailcraftJEIPlugin implements IModPlugin {
     public static final String ROCK_CRUSHER = "railcraft.rock.crusher";
     public static final String COKE = "railcraft.coke";
 
-    private final List<IRecipeCategory<?>> categories = new ArrayList<>();
+
 
     @Override
     public void registerIngredients(IModIngredientRegistration registry) {
@@ -161,6 +161,8 @@ public class RailcraftJEIPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registry) {
+        List<IRecipeCategory<?>> categories = new ArrayList<>();
+
         IJeiHelpers jeiHelpers = registry.getJeiHelpers();
         IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
