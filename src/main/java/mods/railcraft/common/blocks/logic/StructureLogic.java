@@ -75,6 +75,7 @@ public class StructureLogic extends Logic {
     private @Nullable BlockPos posInPattern;
     private char marker = 'O';
     private boolean updatingNeighbors;
+    private boolean isPotentialMaster = true;
 
     public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns) {
         super(Adapter.of(tile));
@@ -223,11 +224,13 @@ public class StructureLogic extends Logic {
 
     @Override
     protected void updateServer() {
-        if (state == StructureState.UNKNOWN && resetTimer.hasTriggered(theWorldAsserted(), RECHECK)) {
-            state = StructureState.UNTESTED;
+        if (isPotentialMaster) {
+            if (state == StructureState.UNKNOWN && resetTimer.hasTriggered(theWorldAsserted(), RECHECK)) {
+                state = StructureState.UNTESTED;
+            }
+            if (state == StructureState.UNTESTED)
+                testIfMasterBlock();
         }
-        if (state == StructureState.UNTESTED)
-            testIfMasterBlock();
         //                ClientProxy.getMod().totalMultiBlockUpdates++;
     }
 
@@ -496,6 +499,10 @@ public class StructureLogic extends Logic {
 
     public List<? extends StructurePattern> getPatterns() {
         return patterns;
+    }
+
+    public void setPotentialMaster(boolean potentialMaster) {
+        isPotentialMaster = potentialMaster;
     }
 
     public enum StructureState {

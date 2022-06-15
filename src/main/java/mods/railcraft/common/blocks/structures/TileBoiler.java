@@ -89,27 +89,28 @@ public abstract class TileBoiler extends TileFurnace implements ITemperature, IT
 
             @Override
             public boolean isMapPositionValid(BlockPos pos, char mapPos) {
-                IBlockState state = WorldPlugin.getBlockState(world, pos);
+                IBlockState other = WorldPlugin.getBlockState(world, pos);
+                IBlockState self = tile().getBlockState();
 
                 switch (mapPos) {
                     case 'O': // Other
-                        if (boilerBlocks.contains(state))
+                        if (boilerBlocks.contains(other))
                             return false;
                         break;
                     case 'L': // Tank
-                        if (!RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.isEqual(state))
+                        if (!RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.isEqual(other))
                             return false;
                         break;
                     case 'H': // Tank
-                        if (!RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.isEqual(state))
+                        if (!RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.isEqual(other))
                             return false;
                         break;
                     case 'F': // Firebox
-                        if (!fireboxBlocks.contains(state))
+                        if (!fireboxBlocks.contains(other) || other != self)
                             return false;
                         break;
                     case 'A': // Air
-                        if (!state.getBlock().isAir(state, world, pos))
+                        if (!other.getBlock().isAir(other, world, pos))
                             return false;
                         break;
                 }

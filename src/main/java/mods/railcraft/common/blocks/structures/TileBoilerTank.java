@@ -36,9 +36,10 @@ public abstract class TileBoilerTank extends TileBoiler {
     private boolean isConnected;
 
     protected TileBoilerTank() {
-        getLogic(StructureLogic.class).ifPresent(logic -> logic.addLogic((
-                new FluidPushLogic(Logic.Adapter.of(this), TANK_STEAM, TRANSFER_RATE, OUTPUT_FILTER, OUTPUT_FACES))
-        ));
+        getLogic(StructureLogic.class).ifPresent(logic -> {
+            logic.addLogic((new FluidPushLogic(Logic.Adapter.of(this), TANK_STEAM, TRANSFER_RATE, OUTPUT_FILTER, OUTPUT_FACES)));
+            logic.setPotentialMaster(false);
+        });
     }
 
     @Override
