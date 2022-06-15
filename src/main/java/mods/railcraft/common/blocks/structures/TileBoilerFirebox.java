@@ -25,6 +25,7 @@ public abstract class TileBoilerFirebox extends TileBoiler {
     public static final int SLOT_INPUT_FLUID = 0;
     public static final int SLOT_PROCESS_FLUID = 1;
     public static final int SLOT_OUTPUT_FLUID = 2;
+    private static final EnumFacing[] OUTPUT_FACES = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
 
     protected TileBoilerFirebox() {
         getLogic(StructureLogic.class).ifPresent(logic -> {
@@ -37,7 +38,7 @@ public abstract class TileBoilerFirebox extends TileBoiler {
                     })
             );
             Logic.Adapter adapter = Logic.Adapter.of(this);
-            logic.addLogic(new FluidPushLogic(adapter, TANK_STEAM, TRANSFER_RATE, ISteamUser.FILTER, EnumFacing.VALUES));
+            logic.addLogic(new FluidPushLogic(adapter, TANK_STEAM, TRANSFER_RATE, ISteamUser.FILTER, OUTPUT_FACES));
             logic.getKernel(Logic.class).ifPresent(sucker ->
                     sucker.addLogic(new BucketProcessorLogic(adapter, SLOT_INPUT_FLUID, ProcessType.DRAIN_THEN_FILL)));
         });

@@ -79,6 +79,8 @@ public abstract class EntityLocomotiveSteam extends EntityLocomotive implements 
                 SteamConstants.MAX_HEAT_LOW,
                 6, 16));
 
+        boiler.tankSteam.setCanDrain(false);
+
         boiler.addLogic(new ExploderLogic(adapter) {
             @Override
             protected void boom() {

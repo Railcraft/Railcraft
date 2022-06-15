@@ -31,12 +31,13 @@ import static java.util.Objects.requireNonNull;
 public abstract class TileBoilerTank extends TileBoiler {
 
     private static final Predicate<TileEntity> OUTPUT_FILTER = Predicates.notInstanceOf(TileBoiler.class);
+    private static final EnumFacing[] OUTPUT_FACES = {EnumFacing.UP, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
 
     private boolean isConnected;
 
     protected TileBoilerTank() {
         getLogic(StructureLogic.class).ifPresent(logic -> logic.addLogic((
-                new FluidPushLogic(Logic.Adapter.of(this), TANK_STEAM, TRANSFER_RATE, OUTPUT_FILTER, EnumFacing.VALUES))
+                new FluidPushLogic(Logic.Adapter.of(this), TANK_STEAM, TRANSFER_RATE, OUTPUT_FILTER, OUTPUT_FACES))
         ));
     }
 

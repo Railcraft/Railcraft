@@ -64,7 +64,6 @@ public class BoilerLogic extends FurnaceLogic implements ITemperature {
         }.setFilterFluid(Fluids.WATER);
         tankSteam = new FilteredTank(FluidTools.BUCKET_VOLUME * 16)
                 .setFilterFluid(Fluids.STEAM)
-                .canDrain(false)
                 .canFill(false);
 
         addLogic(new FluidLogic(adapter)
