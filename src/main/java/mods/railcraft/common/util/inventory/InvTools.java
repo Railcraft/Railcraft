@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -112,6 +112,9 @@ public abstract class InvTools {
         return stack.toString();
     }
 
+    /**
+     * Wraps a potentially null ItemStack.
+     */
     public static ItemStack makeSafe(@Nullable ItemStack stack) {
         if (isEmpty(stack))
             return emptyStack();

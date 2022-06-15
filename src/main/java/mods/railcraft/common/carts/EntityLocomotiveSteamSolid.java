@@ -19,6 +19,7 @@ import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.steam.SolidFuelProvider;
 import net.minecraft.entity.item.EntityMinecart;
@@ -42,10 +43,10 @@ public class EntityLocomotiveSteamSolid extends EntityLocomotiveSteam implements
     private static final int SLOT_TICKET = 7;
     private static final int SLOT_DESTINATION = 8;
     private static final int[] SLOTS = InvTools.buildSlotArray(0, 7);
-    private final InventoryMapper firebox = InventoryMapper.make(this, SLOT_BURN, 1);
-    private final InventoryMapper bunker = InventoryMapper.make(this, SLOT_FUEL_A, 3);
-    private final InventoryMapper fuel = InventoryMapper.make(this, SLOT_BURN, 4);
-    private final InventoryMapper invTicket = new InventoryMapper(this, SLOT_TICKET, 2).ignoreItemChecks();
+    private final InventoryWrapper firebox = InventoryMapper.make(this, SLOT_BURN, 1);
+    private final InventoryWrapper bunker = InventoryMapper.make(this, SLOT_FUEL_A, 3);
+    private final InventoryWrapper fuel = InventoryMapper.make(this, SLOT_BURN, 4);
+    private final InventoryWrapper invTicket = new InventoryMapper(this, SLOT_TICKET, 2).ignoreItemChecks();
 //    private boolean outOfWater = true;
 
     public EntityLocomotiveSteamSolid(World world) {

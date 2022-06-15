@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryMapper extends InvWrapperBase implements IInventoryImplementor {
+public class InventoryMapper extends InventoryWrapper implements IInventoryImplementor {
 
     private final IInventory inv;
     private final int start;
@@ -57,14 +57,6 @@ public class InventoryMapper extends InvWrapperBase implements IInventoryImpleme
 
     @Override
     public IInventory getInventory() {
-        return this;
-    }
-
-    /**
-     * If called the inventory will ignore isItemValidForSlot checks.
-     */
-    public InventoryMapper ignoreItemChecks() {
-        checkItems = false;
         return this;
     }
 

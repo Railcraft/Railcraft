@@ -18,6 +18,7 @@ import mods.railcraft.common.util.entity.EntitySearcher;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
@@ -68,8 +69,8 @@ public abstract class TradeStationLogic extends InventoryLogic {
     private VillagerRegistry.VillagerProfession profession = VillagerRegistry.FARMER;
     private VillagerRegistry.VillagerCareer career = profession.getCareer(0);
     private final InventoryAdvanced recipeSlots = new InventoryAdvanced(9).callbackInv(inventory).phantom();
-    private final InventoryMapper invInput = InventoryMapper.make(inventory, 0, 10);
-    private final InventoryMapper invOutput = InventoryMapper.make(inventory, 10, 6).ignoreItemChecks();
+    private final InventoryWrapper invInput = InventoryMapper.make(inventory, 0, 10);
+    private final InventoryWrapper invOutput = InventoryMapper.make(inventory, 10, 6).ignoreItemChecks();
     private int xpCollected;
 
     protected TradeStationLogic(Adapter adapter) {

@@ -16,6 +16,7 @@ import mods.railcraft.common.util.collections.StackKey;
 import mods.railcraft.common.util.inventory.*;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
@@ -87,7 +88,7 @@ public abstract class TileItemManipulator extends TileManipulatorCart {
 
     protected final InventoryComposite chests = InventoryComposite.create();
     protected final Multiset<StackKey> transferredItems = HashMultiset.create();
-    protected final InventoryMapper invBuffer;
+    protected final InventoryWrapper invBuffer;
     private final InventoryAdvanced invFilters = new InventoryAdvanced(9).callbackInv(this).phantom();
     private final MultiButtonController<EnumTransferMode> transferModeController = MultiButtonController.create(EnumTransferMode.ALL.ordinal(), EnumTransferMode.values());
     protected final AdjacentInventoryCache invCache = new AdjacentInventoryCache(tileCache, tile -> !getClass().isInstance(tile), InventorySorter.SIZE_DESCENDING);

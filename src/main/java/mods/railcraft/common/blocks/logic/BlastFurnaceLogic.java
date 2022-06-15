@@ -17,6 +17,7 @@ import mods.railcraft.common.items.ItemDust;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -44,8 +45,8 @@ public class BlastFurnaceLogic extends SingleInputRecipeCrafterLogic<IBlastFurna
     public static final int SLOT_SLAG = 3;
     public final InventoryMapper invFuel = InventoryMapper.make(this, SLOT_FUEL, 1);
     //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1);
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
-    private final InventoryMapper invSlag = new InventoryMapper(this, SLOT_SLAG, 1).ignoreItemChecks();
+    private final InventoryWrapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
+    private final InventoryWrapper invSlag = new InventoryMapper(this, SLOT_SLAG, 1).ignoreItemChecks();
 
     public BlastFurnaceLogic(Adapter adapter) {
         super(adapter, 4, SLOT_INPUT);

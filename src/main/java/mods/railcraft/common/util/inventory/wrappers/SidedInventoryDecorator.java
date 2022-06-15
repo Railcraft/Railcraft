@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.util.inventory.wrappers;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -19,7 +20,7 @@ import net.minecraft.util.EnumFacing;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class SidedInventoryDecorator extends InvWrapperBase implements ISidedInventory {
+public class SidedInventoryDecorator extends InventoryWrapper implements ISidedInventory {
 
     private final ISidedInventory inv;
     private final EnumFacing side;
@@ -32,6 +33,11 @@ public class SidedInventoryDecorator extends InvWrapperBase implements ISidedInv
         super(inv, checkItems);
         this.inv = inv;
         this.side = side;
+    }
+
+    @Override
+    public IInventory getInventory() {
+        return this;
     }
 
     @Override

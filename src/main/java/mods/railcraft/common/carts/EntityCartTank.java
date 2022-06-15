@@ -18,6 +18,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.DataManagerPlugin;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.misc.MiscTools;
 import net.minecraft.entity.item.EntityMinecart;
@@ -51,7 +52,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     private final StandardTank tank = new FilteredTank(RailcraftConfig.getTankCartCapacity())
             .setFilterFluidStack(this::getFilterFluid)
             .setUpdateCallback(tank -> setFluidStack(tank.getFluid()));
-    private final InventoryMapper invLiquids = InventoryMapper.make(this).ignoreItemChecks();
+    private final InventoryWrapper invLiquids = InventoryMapper.make(this).ignoreItemChecks();
     //    private final InventoryMapper invInput = new InventoryMapper(this, SLOT_INPUT, 1).ignoreItemChecks();
 //    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
     private int update = MiscTools.RANDOM.nextInt();

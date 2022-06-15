@@ -19,6 +19,7 @@ import mods.railcraft.common.fluids.FluidTools.ProcessType;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidStack;
@@ -45,7 +46,7 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
     public static final int SLOT_OUTPUT_FLUID = 4;
     public static final int TANK_CAPACITY = 64 * FluidTools.BUCKET_VOLUME;
     private final StandardTank tank;
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
+    private final InventoryWrapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 1).ignoreItemChecks();
     private int multiplier = 1;
 
     public CokeOvenLogic(Adapter adapter) {

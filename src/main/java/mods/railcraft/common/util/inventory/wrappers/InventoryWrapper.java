@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.util.inventory.wrappers;
 
-import mods.railcraft.common.util.inventory.IInventoryComposite;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -21,22 +21,30 @@ import net.minecraft.util.text.ITextComponent;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class InvWrapperBase implements IInventory, IInventoryComposite {
+public abstract class InventoryWrapper implements IInventoryImplementor {
 
     private final IInventory inv;
     protected boolean checkItems;
 
-    protected InvWrapperBase(IInventory inv) {
+    protected InventoryWrapper(IInventory inv) {
         this(inv, true);
     }
 
-    protected InvWrapperBase(IInventory inv, boolean checkItems) {
+    protected InventoryWrapper(IInventory inv, boolean checkItems) {
         this.inv = inv;
         this.checkItems = checkItems;
     }
 
     public IInventory getBaseInventory() {
         return inv;
+    }
+
+    /**
+     * If called the inventory will ignore isItemValidForSlot checks.
+     */
+    public InventoryWrapper ignoreItemChecks() {
+        checkItems = false;
+        return this;
     }
 
     @Override

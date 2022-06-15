@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,6 +20,7 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryCopy;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -80,8 +81,8 @@ public class RockCrusherLogic extends CrafterLogic {
             return IRockCrusherCrafter.PROCESS_TIME;
         }
     });
-    public final InventoryMapper invInput = new InventoryMapper(this, 0, 9).ignoreItemChecks();
-    public final InventoryMapper invOutput = new InventoryMapper(this, 9, 9).ignoreItemChecks();
+    public final InventoryWrapper invInput = new InventoryMapper(this, 0, 9).ignoreItemChecks();
+    public final InventoryWrapper invOutput = new InventoryMapper(this, 9, 9).ignoreItemChecks();
     private Optional<IRockCrusherCrafter.IRecipe> currentRecipe = Optional.empty();
     private final Random random = new Random();
     private int currentSlot;

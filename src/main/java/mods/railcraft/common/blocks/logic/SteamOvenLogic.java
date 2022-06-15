@@ -20,6 +20,7 @@ import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryIterator;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.misc.MiscTools;
 import mods.railcraft.common.util.sounds.RailcraftSoundEvents;
 import mods.railcraft.common.util.sounds.SoundHelper;
@@ -49,8 +50,8 @@ public class SteamOvenLogic extends CrafterLogic implements INeedsFuel {
     private static final int TANK_CAPACITY = 8 * FluidTools.BUCKET_VOLUME;
     private final TankManager tankManager = new TankManager();
     private final FilteredTank tank;
-    private final InventoryMapper invInput = InventoryMapper.make(this, SLOT_INPUT, 9);
-    private final InventoryMapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9).ignoreItemChecks();
+    private final InventoryWrapper invInput = InventoryMapper.make(this, SLOT_INPUT, 9);
+    private final InventoryWrapper invOutput = new InventoryMapper(this, SLOT_OUTPUT, 9).ignoreItemChecks();
 
     public SteamOvenLogic(Adapter adapter) {
         super(adapter, 18);

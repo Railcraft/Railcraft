@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -24,7 +24,7 @@ import net.minecraft.item.ItemStack;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class InventoryCopy extends InvWrapperBase {
+public class InventoryCopy extends InventoryWrapper {
 
     private final InventoryAdvanced copy;
 
@@ -37,6 +37,11 @@ public class InventoryCopy extends InvWrapperBase {
                 copy.setInventorySlotContents(slot.getIndex(), stack.copy());
             }
         }
+    }
+
+    @Override
+    public IInventory getInventory() {
+        return this;
     }
 
     @Override

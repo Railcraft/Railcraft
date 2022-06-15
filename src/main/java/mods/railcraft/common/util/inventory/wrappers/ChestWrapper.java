@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public class ChestWrapper extends InvWrapperBase {
+public class ChestWrapper extends InventoryWrapper {
 
     /**
      * Inventory object corresponding to double chest upper part
@@ -34,6 +34,11 @@ public class ChestWrapper extends InvWrapperBase {
         super(tile, false);
         this.firstChest = tile;
         this.secondChest = findSecondChest();
+    }
+
+    @Override
+    public IInventory getInventory() {
+        return this;
     }
 
     private void checkChest() {

@@ -16,9 +16,12 @@ package mods.railcraft.common.util.inventory;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public enum InvOp {
-    EXECUTE, SIMULATE;
+    EXECUTE {
+        @Override
+        public void ifExecuting(Runnable action) {
+            action.run();
+        }
+    }, SIMULATE;
 
-    public void ifExecuting(Runnable action) {
-        action.run();
-    }
+    public void ifExecuting(Runnable action) {}
 }
