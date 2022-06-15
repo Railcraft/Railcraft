@@ -1,3 +1,12 @@
+12.1.0-beta-3:
+    NEW:
+        Close #1986 Geode spawn change added to config
+    FIX:
+        Fix fluid container handling in GUIs
+        Fix #1992 Properly handle disabled modules and hide Rolling Machine recipes when disabled.
+        Fix #2042 Not sure what JEI is doing here, but apparently this fixes it. (Maybe)
+        Fix #1796 No more snow on posts.
+
 12.1.0-beta-2:
     CHANGES:
         Closes #2028 Add steel turbine blade recipe and move both recipes to the Rolling Machine.
