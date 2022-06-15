@@ -12,7 +12,6 @@ package mods.railcraft.common.blocks.logic;
 
 import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.FluidTools.ProcessType;
-import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.fluids.tanks.FilteredTank;
 import mods.railcraft.common.gui.EnumGui;
 import net.minecraft.item.ItemStack;
@@ -35,6 +34,7 @@ public class StorageTankLogic extends InventoryLogic {
     public static final int SLOT_INPUT = 0;
     public static final int SLOT_PROCESS = 1;
     public static final int SLOT_OUTPUT = 2;
+    private final FilteredTank tank;
 
     public StorageTankLogic(Adapter adapter, int capacity) {
         this(adapter, capacity, null);
@@ -42,11 +42,11 @@ public class StorageTankLogic extends InventoryLogic {
 
     public StorageTankLogic(Adapter adapter, int capacity, @Nullable Supplier<@Nullable Fluid> filter) {
         super(adapter, 3);
-        FilteredTank tank = new FilteredTank(capacity, adapter.tile().orElse(null));
+        tank = new FilteredTank(capacity, adapter.tile().orElse(null));
         if (filter != null)
             tank.setFilterFluid(filter);
         addLogic(new FluidLogic(adapter).addTank(tank));
-        addLogic(new BucketProcessorLogic(adapter, SLOT_INPUT, ProcessType.DRAIN_THEN_FILL));
+        addLogic(new BucketProcessorLogic(adapter, SLOT_INPUT, ProcessType.FILL_THEN_DRAIN));
     }
 
     @Override
@@ -54,7 +54,11 @@ public class StorageTankLogic extends InventoryLogic {
         if (!super.isItemValidForSlot(slot, stack))
             return false;
         if (slot == SLOT_INPUT) {
-            return FluidItemHelper.isRoomInContainer(stack, Fluids.WATER.get()) || FluidItemHelper.containsFluid(stack, Fluids.WATER.get());
+            Fluid tankFluid = tank.getFluidType();
+            if (tankFluid == null) {
+                return FluidItemHelper.isContainer(stack);
+            }
+            return FluidItemHelper.isRoomInContainer(stack, tankFluid) || FluidItemHelper.containsFluid(stack, tankFluid);
         }
         return false;
     }

@@ -84,6 +84,10 @@ public class StandardTank extends FluidTank {
         return f.getColor(getFluid());
     }
 
+    public boolean isLessThanBucket() {
+        return getFluid() == null || getFluid().amount < Fluid.BUCKET_VOLUME;
+    }
+
     public boolean isEmpty() {
         return getFluid() == null || getFluid().amount <= 0;
     }
@@ -97,7 +101,7 @@ public class StandardTank extends FluidTank {
     }
 
     public @Nullable Fluid getFluidType() {
-        return getFluid() != null ? getFluid().getFluid() : null;
+        return getFluid() != null ? getFluid().getFluid() : filter != null ? filter.get().getFluid() : null;
     }
 
     @Override

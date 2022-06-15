@@ -13,9 +13,9 @@ import mods.railcraft.api.core.RailcraftConstantsAPI;
 import mods.railcraft.client.particles.ParticleDrip;
 import mods.railcraft.common.fluids.tanks.StandardTank;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
-import mods.railcraft.common.util.inventory.InvOp;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.wrappers.InventoryMapper;
+import mods.railcraft.common.util.inventory.wrappers.InventoryWrapper;
 import mods.railcraft.common.util.misc.AdjacentTileCache;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.Block;
@@ -111,11 +111,82 @@ public final class FluidTools {
     }
 
     public enum ProcessState {
-        FILLING,
-        DRAINING,
-        RESET;
+        FILLING {
+            @Override
+            public ProcessState process(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+                if (fill(inv, tanks, type, container) == FILLED) return FILLED;
+                if (type == ProcessType.FILL_THEN_DRAIN) return DRAINING;
+
+                if (tanks.stream().allMatch(StandardTank::isLessThanBucket))
+                    return FILLING;
+
+                return FILLING;
+            }
+        },
+        FILLED {
+            @Override
+            public ProcessState process(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+                if (fill(inv, tanks, type, container) == FILLED) return FILLED;
+                if (tanks.stream().allMatch(StandardTank::isLessThanBucket))
+                    return FILLED;
+
+                if (sendToOutput(inv)) return RESET;
+                return FILLED;
+            }
+        },
+        DRAINING {
+            @Override
+            public ProcessState process(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+                if (drain(inv, tanks, type, container) == DRAINED) return DRAINED;
+                if (type == ProcessType.DRAIN_THEN_FILL) return FILLING;
+                if (tanks.stream().allMatch(StandardTank::isFull))
+                    return DRAINING;
+                return FILLING;
+            }
+        },
+        DRAINED {
+            @Override
+            public ProcessState process(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+                if (drain(inv, tanks, type, container) == DRAINED) return DRAINED;
+                if (tanks.stream().allMatch(StandardTank::isFull))
+                    return DRAINING;
+                if (sendToOutput(inv)) return RESET;
+                return FILLING;
+            }
+        },
+        RESET {
+            @Override
+            public ProcessState process(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+                if (type == ProcessType.DRAIN_ONLY || type == ProcessType.DRAIN_THEN_FILL) return DRAINING;
+                return FILLING;
+            }
+        };
 
         public static final ProcessState[] VALUES = values();
+
+        public abstract ProcessState process(IInventory inv, TankManager tanks, ProcessType type, ItemStack container);
+
+        public ProcessState fill(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+            for (StandardTank tank : tanks) {
+                FluidActionResult process = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
+                if (process.isSuccess()) {
+                    inv.setInventorySlotContents(1, InvTools.makeSafe(process.getResult()));
+                    return FILLED;
+                }
+            }
+            return FILLING;
+        }
+
+        public ProcessState drain(IInventory inv, TankManager tanks, ProcessType type, ItemStack container) {
+            for (StandardTank tank : tanks) {
+                FluidActionResult process = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, true);
+                if (process.isSuccess()) {
+                    inv.setInventorySlotContents(1, InvTools.makeSafe(process.getResult()));
+                    return DRAINED;
+                }
+            }
+            return DRAINING;
+        }
 
         public boolean isFilling() {
             return this == FILLING;
@@ -126,36 +197,23 @@ public final class FluidTools {
         }
     }
 
-    private static void sendToProcessing(IInventory inv) {
-        InventoryMapper.make(inv, 0, 1).moveOneItemTo(InventoryMapper.make(inv, 1, 1).ignoreItemChecks());
-    }
-
-    private static void sendToOutput(IInventory inv) {
-        InventoryMapper.make(inv, 1, 1).moveOneItemTo(InventoryMapper.make(inv, 2, 1).ignoreItemChecks());
-    }
-
-    private static ProcessState tryFill(IInventory inv, TankManager tanks, ItemStack container, InvOp op) {
-        for (StandardTank tank : tanks) {
-            FluidActionResult process = FluidUtil.tryFillContainer(container, tank, Fluid.BUCKET_VOLUME, null, op == InvOp.EXECUTE);
-            if (process.isSuccess()) {
-                op.ifExecuting(() -> inv.setInventorySlotContents(1, InvTools.makeSafe(process.getResult())));
-                return ProcessState.DRAINING;
-            }
+    private static ItemStack prepareProcessing(IInventory inv) {
+        ItemStack container = inv.getStackInSlot(1);
+        if (InvTools.isEmpty(container)) {
+            InventoryMapper.make(inv, 0, 1).moveOneItemTo(InventoryMapper.make(inv, 1, 1).ignoreItemChecks());
+            return InvTools.emptyStack();
+        } else if (FluidUtil.getFluidHandler(container) == null || InvTools.isItem(container, Items.GLASS_BOTTLE)) {
+            sendToOutput(inv);
+            return InvTools.emptyStack();
         }
-        op.ifExecuting(() -> sendToOutput(inv));
-        return ProcessState.RESET;
+        return container;
     }
 
-    private static ProcessState tryDrain(IInventory inv, TankManager tanks, ItemStack container, InvOp op) {
-        for (StandardTank tank : tanks) {
-            FluidActionResult process = FluidUtil.tryEmptyContainer(container, tank, Fluid.BUCKET_VOLUME, null, op == InvOp.EXECUTE);
-            if (process.isSuccess()) {
-                op.ifExecuting(() -> inv.setInventorySlotContents(1, InvTools.makeSafe(process.getResult())));
-                return ProcessState.DRAINING;
-            }
-        }
-        op.ifExecuting(() -> sendToOutput(inv));
-        return ProcessState.RESET;
+    private static boolean sendToOutput(IInventory inv) {
+        InventoryWrapper source = InventoryMapper.make(inv, 1, 1);
+        InventoryWrapper dest = InventoryMapper.make(inv, 2, 1).ignoreItemChecks();
+        ItemStack result = source.moveOneItemTo(dest);
+        return !result.isEmpty();
     }
 
     /**
@@ -163,33 +221,11 @@ public final class FluidTools {
      * Will handle moving an item through all stages from input to output for either filling or draining.
      */
     public static ProcessState processContainer(IInventory inv, TankManager tanks, ProcessType type, ProcessState state) {
-        ItemStack container = inv.getStackInSlot(1);
-        if (InvTools.isEmpty(container) || FluidUtil.getFluidHandler(container) == null) {
-            sendToProcessing(inv);
+        ItemStack container = prepareProcessing(inv);
+        if (container.isEmpty()) {
             return ProcessState.RESET;
         }
-        if (state == ProcessState.RESET) {
-            if (type == ProcessType.FILL_ONLY) {
-                return tryFill(inv, tanks, container, InvOp.EXECUTE);
-            } else if (type == ProcessType.DRAIN_ONLY) {
-                return tryDrain(inv, tanks, container, InvOp.EXECUTE);
-            } else if (type == ProcessType.FILL_THEN_DRAIN) {
-                if (tryFill(inv, tanks, container, InvOp.SIMULATE).isFilling())
-                    return tryFill(inv, tanks, container, InvOp.EXECUTE);
-                else
-                    return tryDrain(inv, tanks, container, InvOp.EXECUTE);
-            } else if (type == ProcessType.DRAIN_THEN_FILL) {
-                if (tryDrain(inv, tanks, container, InvOp.SIMULATE).isDraining())
-                    return tryDrain(inv, tanks, container, InvOp.EXECUTE);
-                else
-                    return tryFill(inv, tanks, container, InvOp.EXECUTE);
-            }
-        }
-        if (state == ProcessState.FILLING)
-            return tryFill(inv, tanks, container, InvOp.EXECUTE);
-        if (state == ProcessState.DRAINING)
-            return tryDrain(inv, tanks, container, InvOp.EXECUTE);
-        return state;
+        return state.process(inv, tanks, type, container);
     }
 
     /**
