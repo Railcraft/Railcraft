@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -49,6 +49,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public final class FluidModelRenderer {
     public static final FluidModelRenderer INSTANCE = new FluidModelRenderer();
+    public static final IExtendedBlockState FLUID_STATE = (IExtendedBlockState) new ExtendedBlockState(Blocks.WATER, new IProperty[]{BlockFluidBase.LEVEL}, BlockFluidBase.FLUID_RENDER_PROPS.toArray(new IUnlistedProperty<?>[0])).getBaseState();
 
     private FluidModelRenderer() {
     }
@@ -83,14 +84,14 @@ public final class FluidModelRenderer {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder buffer = tess.getBuffer();
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.ITEM);
-        IExtendedBlockState state = (IExtendedBlockState) new ExtendedBlockState(Blocks.WATER, new IProperty[]{BlockFluidBase.LEVEL}, BlockFluidBase.FLUID_RENDER_PROPS.toArray(new IUnlistedProperty<?>[0])).getBaseState();
+        IExtendedBlockState renderState = FLUID_STATE;
         for (int i = 0; i < 4; i++)
-            state = state.withProperty(BlockFluidBase.LEVEL_CORNERS[i], level / 16F);
-        state = (IExtendedBlockState) state.withProperty(BlockFluidBase.LEVEL, level - 1);
-        state = state.withProperty(BlockFluidBase.FLOW_DIRECTION, -1000F);
-        putQuads(buffer, bakedModel.getQuads(state, null, 1234));
+            renderState = renderState.withProperty(BlockFluidBase.LEVEL_CORNERS[i], level / 16F);
+        renderState = (IExtendedBlockState) renderState.withProperty(BlockFluidBase.LEVEL, level - 1);
+        renderState = renderState.withProperty(BlockFluidBase.FLOW_DIRECTION, -1000F);
+        putQuads(buffer, bakedModel.getQuads(renderState, null, 1234));
         for (EnumFacing side : EnumFacing.VALUES) {
-            putQuads(buffer, bakedModel.getQuads(state, side, 1234));
+            putQuads(buffer, bakedModel.getQuads(renderState, side, 1234));
         }
 
         tess.draw();
