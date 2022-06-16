@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -126,19 +126,22 @@ public class PacketHandler {
                 default:
                     return;
             }
-            readPacket(pkt, data, listener);
+            readPacket(pkt, byteBuf, data, listener);
         } catch (IOException e) {
             Game.log().throwable("Exception in PacketHandler.onPacketData", e);
         }
     }
 
-    private static void readPacket(final RailcraftPacket packet, final RailcraftInputStream data, @Nullable IThreadListener threadListener) {
+    private static void readPacket(final RailcraftPacket packet, final ByteBuf byteBuf, final RailcraftInputStream data, @Nullable IThreadListener threadListener) {
         if (threadListener != null && !threadListener.isCallingFromMinecraftThread()) {
+            byteBuf.retain();
             threadListener.addScheduledTask(() -> {
                 try {
                     packet.readData(data);
                 } catch (IOException e) {
                     Game.log().throwable("Exception in PacketHandler.readPacket", 10, e);
+                } finally {
+                    byteBuf.release();
                 }
             });
         }
