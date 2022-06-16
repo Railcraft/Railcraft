@@ -1,3 +1,11 @@
+12.1.0-beta-4:
+    FIX:
+        Fixes #1893 Bottle handler shouldn't give free beer
+        Fix #2019 Release ByteBuf on packets, I think. (Copied Forestry)
+        Fix #1797 Add a check for same kind of Fireboxes.
+        Added a means for structure blocks that can't be masters to bypass master checks.
+        Fix #2048 Allow Boilers to drain steam from their tanks.
+
 12.1.0-beta-3:
     NEW:
         Close #1986 Geode spawn change added to config
