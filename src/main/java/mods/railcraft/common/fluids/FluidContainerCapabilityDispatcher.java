@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,7 @@
 package mods.railcraft.common.fluids;
 
 import mods.railcraft.common.modules.ModuleResources;
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -33,12 +34,34 @@ final class FluidContainerCapabilityDispatcher extends FluidBucketWrapper {
 
     @Override
     public FluidStack getFluid() {
+        if (isEmpty())
+            return null;
         return item.fluid.get(Fluid.BUCKET_VOLUME);
+    }
+
+    private boolean isEmpty() {
+        return InvTools.isEmpty(container) || InvTools.isItem(container, item.empty);
     }
 
     @Override
     public int fill(FluidStack resource, boolean doFill) {
         return 0;
+    }
+
+    @Nullable
+    @Override
+    public FluidStack drain(FluidStack resource, boolean doDrain) {
+        if (isEmpty())
+            return null;
+        return super.drain(resource, doDrain);
+    }
+
+    @Nullable
+    @Override
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        if (isEmpty())
+            return null;
+        return super.drain(maxDrain, doDrain);
     }
 
     @Override
