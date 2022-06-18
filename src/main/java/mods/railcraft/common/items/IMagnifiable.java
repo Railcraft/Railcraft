@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,10 +11,12 @@
 package mods.railcraft.common.items;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  *
  */
 public interface IMagnifiable {
-    void onMagnify(EntityPlayer viewer);
+    void onMagnify(EntityPlayer viewer, World world, BlockPos pos);
 }

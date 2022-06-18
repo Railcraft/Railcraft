@@ -86,6 +86,8 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BATTERY_NICKEL_ZINC(BlockDef.build("battery_nickel_zinc", BlockBatteryNickelZinc.class).item(ItemBattery::new)),
     BATTERY_ZINC_CARBON(BlockDef.build("battery_zinc_carbon", BlockBatteryZincCarbon.class).item(ItemBattery::new)),
     BATTERY_ZINC_SILVER(BlockDef.build("battery_zinc_silver", BlockBatteryZincSilver.class).item(ItemBattery::new)),
+    BATTERY_ZINC_CARBON_EMPTY(BlockDef.build("battery_zinc_carbon_empty", BlockBatteryEmpty.class).defaultItem()),
+    BATTERY_ZINC_SILVER_EMPTY(BlockDef.build("battery_zinc_silver_empty", BlockBatteryEmpty.class).defaultItem()),
 
     CREOSOTE_BLOCK(BlockDef.build("creosote_block", BlockCreosote.class).item(ItemBlockCreosote::new)),
     CREOSOTE_STAIRS(BlockDef.build("creosote_stairs", BlockRailcraftStairs.class)

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,10 +13,14 @@ package mods.railcraft.common.blocks.charge;
 import mods.railcraft.api.charge.Charge;
 import mods.railcraft.api.charge.IChargeBlock;
 import mods.railcraft.common.blocks.BlockRailcraft;
+import mods.railcraft.common.items.IMagnifiable;
+import mods.railcraft.common.plugins.forge.ChatPlugin;
+import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,7 +33,7 @@ import java.util.Random;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockCharge extends BlockRailcraft implements IChargeBlock {
+public abstract class BlockCharge extends BlockRailcraft implements IChargeBlock, IMagnifiable {
 
     protected BlockCharge(Material material) {
         super(material);
@@ -42,6 +46,15 @@ public abstract class BlockCharge extends BlockRailcraft implements IChargeBlock
     {
         setSoundType(SoundType.METAL);
         setTickRandomly(true);
+    }
+
+    @Override
+    public void onMagnify(EntityPlayer viewer, World world, BlockPos pos) {
+        Charge.distribution.network(world).access(pos).getBattery().ifPresent(bat ->
+                ChatPlugin.sendLocalizedChatFromServer(viewer, "gui.railcraft.mag.glass.battery",
+                        HumanReadableNumberFormatter.format(bat.getCharge()),
+                        HumanReadableNumberFormatter.format(bat.getCapacity()))
+        );
     }
 
     @SuppressWarnings("SameReturnValue")

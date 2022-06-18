@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -41,6 +41,7 @@ public class ItemBattery<B extends BlockBattery> extends ItemBlockRailcraft<B> {
     public ToolTip getToolTip(ItemStack stack, @Nullable World world, ITooltipFlag adv) {
         ToolTip tips = super.getToolTip(stack, world, adv);
         IChargeBlock.ChargeSpec chargeSpec = getBlock().getChargeSpec(InvTools.getBlockStateFromStack(stack));
+        assert chargeSpec != null;
         IBatteryBlock.Spec batterySpec = chargeSpec.getBatterySpec();
         assert batterySpec != null;
 

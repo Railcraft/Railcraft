@@ -3,10 +3,10 @@
   "defaults": {
     "model": "railcraft:battery",
     "textures": {
-      "top": "railcraft:blocks/battery_zinc_carbon_top",
+      "top": "railcraft:blocks/battery_zinc_carbon_top_burned",
       "bottom": "railcraft:blocks/battery_zinc_carbon_bottom",
-      "side_a": "railcraft:blocks/battery_zinc_carbon_side_a",
-      "side_b": "railcraft:blocks/battery_zinc_carbon_side_b"
+      "side_a": "railcraft:blocks/battery_zinc_carbon_side_a_burned",
+      "side_b": "railcraft:blocks/battery_zinc_carbon_side_b_burned"
     }
   },
   "variants": {

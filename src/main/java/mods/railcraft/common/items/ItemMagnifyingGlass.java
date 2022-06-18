@@ -22,6 +22,7 @@ import mods.railcraft.common.blocks.structures.StructurePattern;
 import mods.railcraft.common.blocks.structures.StructurePattern.State;
 import mods.railcraft.common.plugins.forge.*;
 import mods.railcraft.common.util.misc.Game;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -118,7 +119,7 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
                 event.setCanceled(true);
             }
             if (entity instanceof IMagnifiable) {
-                ((IMagnifiable) entity).onMagnify(thePlayer);
+                ((IMagnifiable) entity).onMagnify(thePlayer, entity.world, event.getPos());
             }
         }
     }
@@ -138,6 +139,11 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
     public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
         if (Game.isClient(world))
             return EnumActionResult.PASS;
+        Block block = WorldPlugin.getBlock(world, pos);
+        if (block instanceof IMagnifiable) {
+            ((IMagnifiable) block).onMagnify(player, world, pos);
+            return EnumActionResult.SUCCESS;
+        }
         TileEntity t = WorldPlugin.getBlockTile(world, pos);
         EnumActionResult returnValue = EnumActionResult.PASS;
         if (t instanceof IOwnable) {
@@ -176,7 +182,8 @@ public class ItemMagnifyingGlass extends ItemRailcraft {
             returnValue = EnumActionResult.SUCCESS;
         }
         if (t instanceof IMagnifiable) {
-            ((IMagnifiable) t).onMagnify(player);
+            ((IMagnifiable) t).onMagnify(player, world, pos);
+            returnValue = EnumActionResult.SUCCESS;
         }
         return returnValue;
     }

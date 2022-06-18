@@ -11,22 +11,18 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.Charge;
-import mods.railcraft.api.charge.IChargeBlock;
+import mods.railcraft.api.crafting.Crafters;
+import mods.railcraft.common.items.ItemCharge.EnumCharge;
+import mods.railcraft.common.items.ItemDust.EnumDust;
+import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forestry.ForestryPlugin;
 import mods.railcraft.common.plugins.forge.HarvestPlugin;
-import mods.railcraft.common.util.misc.AABBFactory;
-import mods.railcraft.common.util.misc.Game;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -34,14 +30,24 @@ import java.util.Map;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public abstract class BlockBattery extends BlockCharge {
-    public static final String RECHARGEABLE_BATTERY_ORE_TAG = "blockChargeBatteryRechargeable";
-    public static final AxisAlignedBB COLLISION_BOX = AABBFactory.start().box().raiseCeiling(-0.0625D).build();
+public class BlockBatteryEmpty extends BlockCharge {
+    private static final Map<Charge, ChargeSpec> CHARGE_SPECS = ChargeSpec.make(Charge.distribution, ConnectType.BLOCK, 0.4);
 
-    protected BlockBattery() {
+    public BlockBatteryEmpty() {
         super(Material.CIRCUITS);
         setResistance(10F);
         setHardness(5F);
+    }
+
+    @Override
+    public void defineRecipes() {
+        super.defineRecipes();
+        Crafters.rockCrusher().makeRecipe(getStack())
+                .addOutput(RailcraftItems.CHARGE.getStack(2, EnumCharge.TERMINAL))
+                .addOutput(RailcraftItems.CHARGE.getStack(1, EnumCharge.SPOOL_MEDIUM))
+                .addOutput(RailcraftItems.DUST.getStack(4, EnumDust.SLAG))
+                .addOutput(RailcraftItems.DUST.getStack(2, EnumDust.SLAG), 0.5F)
+                .register();
     }
 
     @Override
@@ -51,27 +57,8 @@ public abstract class BlockBattery extends BlockCharge {
         ForestryPlugin.addBackpackItem("forestry.builder", this);
     }
 
-    /**
-     * Called When an Entity Collided with the Block
-     */
-    @Override
-    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-        super.onEntityCollision(world, pos, state, entity);
-        if (Game.isHost(world))
-            Charge.distribution.network(world).access(pos).zap(entity, Charge.DamageOrigin.BLOCK, 1F);
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public @Nullable AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return COLLISION_BOX;
-    }
-
-    @Nullable
-    protected abstract IChargeBlock.ChargeSpec getChargeSpec(IBlockState state);
-
     @Override
     public Map<Charge, ChargeSpec> getChargeSpecs(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return Collections.singletonMap(Charge.distribution, getChargeSpec(state));
+        return CHARGE_SPECS;
     }
 }

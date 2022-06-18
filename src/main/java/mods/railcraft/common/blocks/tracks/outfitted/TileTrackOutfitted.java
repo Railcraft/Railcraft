@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,6 +18,8 @@ import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.io.IOException;
 
@@ -125,9 +127,9 @@ public class TileTrackOutfitted extends TileRailcraft implements IOutfittedTrack
     }
 
     @Override
-    public void onMagnify(EntityPlayer viewer) {
+    public void onMagnify(EntityPlayer viewer, World world, BlockPos pos) {
         if (trackKitInstance instanceof IMagnifiable) {
-            ((IMagnifiable) trackKitInstance).onMagnify(viewer);
+            ((IMagnifiable) trackKitInstance).onMagnify(viewer, world, pos);
         }
     }
 }

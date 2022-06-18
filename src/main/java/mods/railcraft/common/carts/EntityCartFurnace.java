@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -126,7 +126,7 @@ public class EntityCartFurnace extends EntityMinecartFurnace implements IRailcra
     }
 
     @Override
-    public void onMagnify(EntityPlayer viewer) {
+    public void onMagnify(EntityPlayer viewer, World world, BlockPos pos) {
         viewer.sendMessage(ChatPlugin.translateMessage("gui.railcraft.mag.glass.cart.furnace", fuel));
     }
 

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -28,7 +28,9 @@ public class ModuleCharge extends RailcraftModulePayload {
                 RailcraftBlocks.BATTERY_NICKEL_IRON,
                 RailcraftBlocks.BATTERY_NICKEL_ZINC,
                 RailcraftBlocks.BATTERY_ZINC_CARBON,
+                RailcraftBlocks.BATTERY_ZINC_CARBON_EMPTY,
                 RailcraftBlocks.BATTERY_ZINC_SILVER,
+                RailcraftBlocks.BATTERY_ZINC_SILVER_EMPTY,
                 RailcraftBlocks.CHARGE_FEEDER,
                 RailcraftBlocks.CHARGE_TRAP,
                 RailcraftBlocks.FRAME,

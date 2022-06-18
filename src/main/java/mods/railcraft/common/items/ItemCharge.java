@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.crafting.Crafters;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
 import mods.railcraft.common.util.crafting.Ingredients;
+import net.minecraft.init.Items;
 import net.minecraft.item.crafting.Ingredient;
 
 import java.util.Locale;
@@ -106,7 +107,7 @@ public class ItemCharge extends ItemRailcraftSubtyped {
                 " P ",
                 " P ",
                 " P ",
-                'P', "coal");
+                'P', Items.COAL);
 
         Crafters.rollingMachine().newRecipe(
                 getStack(ELECTRODE_SILVER)).shaped(
@@ -127,7 +128,7 @@ public class ItemCharge extends ItemRailcraftSubtyped {
         ELECTRODE_NICKEL("plateNickel"),
         ELECTRODE_IRON("plateIron"),
         ELECTRODE_ZINC("plateZinc"),
-        ELECTRODE_CARBON("coal"),
+        ELECTRODE_CARBON(Items.COAL),
         ELECTRODE_SILVER("plateSilver"),
         ;
         public static EnumCharge[] VALUES = values();

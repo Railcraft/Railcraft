@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,35 +10,38 @@
 
 package mods.railcraft.common.blocks.charge;
 
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
+import mods.railcraft.api.charge.Charge;
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
+import mods.railcraft.common.plugins.forge.WorldPlugin;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+import java.util.Optional;
+import java.util.Random;
 
 /**
- * Created by CovertJaguar on 11/8/2018 for Railcraft.
+ * Created by CovertJaguar on 6/16/2022 for Railcraft.
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public abstract class BlockBatteryDisposable extends BlockBattery {
-    public static final PropertyBool EXPENDED = PropertyBool.create("expended");
+
+    protected abstract IRailcraftBlockContainer getEmpty();
 
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, EXPENDED);
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(world, pos, state, rand);
+        Charge.distribution.network(world).access(pos).getBattery().ifPresent(bat -> {
+            if (bat.getCharge() <= 0)
+                WorldPlugin.setBlockState(world, pos, getEmpty().getDefaultState());
+        });
     }
 
     @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(EXPENDED) ? 1 : 0;
-    }
-
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(EXPENDED, meta == 1);
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return 1;
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Optional.ofNullable((Item) getEmpty().item()).orElse(Items.AIR);
     }
 }

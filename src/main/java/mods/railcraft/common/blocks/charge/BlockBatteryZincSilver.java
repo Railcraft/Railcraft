@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,6 +11,8 @@
 package mods.railcraft.common.blocks.charge;
 
 import mods.railcraft.api.charge.IBatteryBlock;
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
+import mods.railcraft.common.blocks.RailcraftBlocks;
 import mods.railcraft.common.items.ItemCharge;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
@@ -38,6 +40,11 @@ public class BlockBatteryZincSilver extends BlockBatteryDisposable {
                 'W', RailcraftItems.CHARGE, ItemCharge.EnumCharge.SPOOL_MEDIUM,
                 'S', "dustSaltpeter",
                 'B', Items.WATER_BUCKET);
+    }
+
+    @Override
+    protected IRailcraftBlockContainer getEmpty() {
+        return RailcraftBlocks.BATTERY_ZINC_SILVER_EMPTY;
     }
 
     @Override
