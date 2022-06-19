@@ -52,6 +52,7 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
     public CokeOvenLogic(Adapter adapter) {
         super(adapter, 5, SLOT_INPUT);
         tank = new StandardTank(TANK_CAPACITY, adapter.tile().orElse(null));
+        tank.canFill(false);
         addLogic(new FluidLogic(adapter).addTank(tank));
         addLogic(new BucketProcessorLogic(adapter, SLOT_INPUT_FLUID, ProcessType.FILL_ONLY));
     }
@@ -75,10 +76,10 @@ public class CokeOvenLogic extends SingleInputRecipeCrafterLogic<ICokeOvenCrafte
         ItemStack output = recipe.getOutput();
         FluidStack fluidOutput = recipe.getFluidOutput();
         if (invOutput.canFit(output)
-                && (fluidOutput == null || tank.fill(fluidOutput, false) >= fluidOutput.amount)) {
+                && (fluidOutput == null || tank.fillInternal(fluidOutput, false) >= fluidOutput.amount)) {
             decrStackSize(SLOT_INPUT, 1);
             invOutput.addStack(output);
-            tank.fill(fluidOutput, true);
+            tank.fillInternal(fluidOutput, true);
             return true;
         }
         return false;
