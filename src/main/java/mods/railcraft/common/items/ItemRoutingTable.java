@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -37,7 +37,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Predicate;
 
 /**
@@ -150,15 +153,7 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
     }
 
     private static void cleanEmptyPages(List<List<String>> pages) {
-        ListIterator<List<String>> pageIt = pages.listIterator(pages.size() - 1);
-        while (pageIt.hasPrevious()) {
-            List<String> page = pageIt.previous();
-            for (String line : page) {
-                if (!line.isEmpty())
-                    return;
-            }
-            pageIt.remove();
-        }
+        pages.removeIf(page -> page.stream().allMatch(String::isEmpty));
     }
 
 //    @SuppressWarnings("unused")
@@ -204,8 +199,6 @@ public class ItemRoutingTable extends ItemRailcraft implements IEditableItem {
                 list.add(TextFormatting.GRAY + String.format(LocalizationPlugin.translate("gui.railcraft.routing.table.editor"), author.getString()));
         }
     }
-
-
 
     @SideOnly(Side.CLIENT)
     @Override

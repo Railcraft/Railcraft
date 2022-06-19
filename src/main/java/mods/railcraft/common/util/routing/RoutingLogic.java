@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -77,7 +77,7 @@ public final class RoutingLogic {
         Iterator<String> it = data.descendingIterator();
         while (it.hasNext()) {
             String line = it.next().trim();
-            if (line.startsWith("//") || line.startsWith("#"))
+            if (line.startsWith("//") || line.startsWith("#") || line.isEmpty())
                 continue;
             stack.push(parseLine(line, stack));
         }
