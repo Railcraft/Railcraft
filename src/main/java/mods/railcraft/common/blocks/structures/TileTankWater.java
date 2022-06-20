@@ -31,7 +31,7 @@ import java.util.Optional;
  */
 public class TileTankWater extends TileLogic {
 
-    private static final int CAP_PER_BLOCK = 16 * FluidTools.BUCKET_VOLUME;
+    private static final int CAP_PER_BLOCK = RailcraftConfig.tankPerBlockCapacity() * FluidTools.BUCKET_VOLUME;
     private static final int OUTPUT_RATE = 40;
     private static final EnumFacing[] OUTPUT_FACES = {EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH};
     private static final List<StructurePattern> patterns = new ArrayList<>();
