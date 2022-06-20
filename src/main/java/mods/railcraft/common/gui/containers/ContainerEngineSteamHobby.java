@@ -46,8 +46,8 @@ public class ContainerEngineSteamHobby extends RailcraftContainer {
     @Override
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
-        listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.burnTime));
-        listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.currentItemBurnTime));
+        listener.sendWindowProperty(this, 10, (int) Math.round(tile.boiler.getBurnTime()));
+        listener.sendWindowProperty(this, 11, (int) Math.round(tile.boiler.getCurrentItemBurnTime()));
         listener.sendWindowProperty(this, 12, (int) Math.round(tile.currentOutput * 100));
     }
 

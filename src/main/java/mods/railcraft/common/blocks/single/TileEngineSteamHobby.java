@@ -15,11 +15,12 @@ import mods.railcraft.common.blocks.logic.BoilerLogic;
 import mods.railcraft.common.blocks.logic.BoilerLogic.BoilerData;
 import mods.railcraft.common.blocks.logic.ExploderLogic;
 import mods.railcraft.common.blocks.logic.Logic;
+import mods.railcraft.common.fluids.FluidTools;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.buildcraft.power.MjPlugin;
+import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.FuelPlugin;
 import mods.railcraft.common.util.inventory.IInventoryComposite;
 import mods.railcraft.common.util.inventory.InvTools;
@@ -116,7 +117,7 @@ public class TileEngineSteamHobby extends TileEngineSteam implements ISidedInven
     @Override
     public void burn() {
         super.burn();
-        if(clock % FluidTools.BUCKET_FILL_TIME == 0)
+        if (clock % FluidTools.BUCKET_FILL_TIME == 0)
             FluidTools.drainContainers(tankManager, inv, SLOT_LIQUID_INPUT, SLOT_LIQUID_OUTPUT);
 
         boiler.update();

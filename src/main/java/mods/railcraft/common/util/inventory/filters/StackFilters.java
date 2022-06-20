@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -77,7 +77,7 @@ public enum StackFilters implements Predicate<ItemStack> {
         protected boolean testType(ItemStack stack) {
             if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
                 return true;
-           if (InvTools.isItem(stack, Items.BUCKET))
+            if (InvTools.isItem(stack, Items.BUCKET))
                 return true;
             UniversalBucket uBucket = ForgeModContainer.getInstance().universalBucket;
             FluidStack fluidStack;
@@ -271,7 +271,7 @@ public enum StackFilters implements Predicate<ItemStack> {
     }
 
     @Override
-    public boolean test(ItemStack stack) {
+    public final boolean test(ItemStack stack) {
         return !InvTools.isEmpty(stack) && testType(stack);
     }
 }
