@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -90,17 +90,17 @@ public final class ShapedRailcraftRecipe extends ShapedRecipes {
      * Checks if the region of a crafting inventory is match for the recipe.
      */
     @Override
-    protected boolean checkMatch(InventoryCrafting p_77573_1_, int p_77573_2_, int p_77573_3_, boolean p_77573_4_) {
+    protected boolean checkMatch(InventoryCrafting inv, int xStart, int yStart, boolean p_77573_4_) {
         requireNonNull(bySlots);
         Arrays.fill(bySlots, null);
-        for (int i = 0; i < p_77573_1_.getWidth(); ++i) {
-            for (int j = 0; j < p_77573_1_.getHeight(); ++j) {
-                int k = i - p_77573_2_;
-                int l = j - p_77573_3_;
+        for (int x = 0; x < inv.getWidth(); ++x) {
+            for (int y = 0; y < inv.getHeight(); ++y) {
+                int xx = x - xStart;
+                int yy = y - yStart;
                 Ingredient ingredient = Ingredient.EMPTY;
 
-                if (k >= 0 && l >= 0 && k < this.recipeWidth && l < this.recipeHeight) {
-                    int index = p_77573_4_ ? this.recipeWidth - k - 1 + l * this.recipeWidth : k + l * this.recipeWidth;
+                if (xx >= 0 && yy >= 0 && xx < this.recipeWidth && yy < this.recipeHeight) {
+                    int index = p_77573_4_ ? this.recipeWidth - xx - 1 + yy * this.recipeWidth : xx + yy * this.recipeWidth;
                     ingredient = this.recipeItems.get(index);
 
                     if (ingredient instanceof RailcraftIngredient) {
@@ -108,7 +108,7 @@ public final class ShapedRailcraftRecipe extends ShapedRecipes {
                     }
                 }
 
-                if (!ingredient.apply(p_77573_1_.getStackInRowAndColumn(i, j))) {
+                if (!ingredient.apply(inv.getStackInRowAndColumn(x, y))) {
                     Arrays.fill(bySlots, null);
                     return false;
                 }
