@@ -428,24 +428,25 @@ if (project.hasProperty("ftpUsername"))
         }
     }
 
-String jarPath = project.configurations.archives.artifacts.find {it.classifier == ""}.file
+String jarPath = project.configurations.archives.artifacts.find { it.classifier == "" }.file
 println "Output Jar: " + jarPath
 
 println "Railcraft $project.version - MC $project.version_minecraft"
 
-curseforge {
-    apiKey = project.curseAPI
-    project {
-        id = '51195'
-        changelog = new File("src/main/resources/change_log.txt")
-        releaseType = project.version.contains('beta') ? 'beta' : 'release'
-        addGameVersion project.version_minecraft
+if (project.hasProperty("curseAPI"))
+    curseforge {
+        apiKey = project.curseAPI
+        project {
+            id = '51195'
+            changelog = new File("src/main/resources/change_log.txt")
+            releaseType = project.version.contains('beta') ? 'beta' : 'release'
+            addGameVersion project.version_minecraft
 
-        mainArtifact(jar) {
-            displayName = "Railcraft $project.version - MC $project.version_minecraft"
+            mainArtifact(jar) {
+                displayName = "Railcraft $project.version - MC $project.version_minecraft"
+            }
         }
     }
-}
 
 artifacts {
     archives jar
