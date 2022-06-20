@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,6 +14,7 @@ import mods.railcraft.common.blocks.interfaces.ITileInventory;
 import mods.railcraft.common.blocks.interfaces.ITileRotate;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
+import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.misc.AABBFactory;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.entity.passive.EntityOcelot;
@@ -44,7 +45,7 @@ public abstract class TileChestRailcraft extends TileLogic implements ITileRotat
     @Override
     public IInventory getInventory() {
         //noinspection OptionalGetWithoutIsPresent
-        return getLogic(IInventory.class).get();
+        return getLogic(IInventoryImplementor.class).get().getInventory();
     }
 
     @Override
@@ -128,13 +129,20 @@ public abstract class TileChestRailcraft extends TileLogic implements ITileRotat
 
     @Override
     public void openInventory(EntityPlayer player) {
-        ++this.numUsingPlayers;
-        WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
+        if (!player.isSpectator()) {
+            if (this.numUsingPlayers < 0) {
+                this.numUsingPlayers = 0;
+            }
+            ++this.numUsingPlayers;
+            WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
+        }
     }
 
     @Override
     public void closeInventory(EntityPlayer player) {
-        --this.numUsingPlayers;
-        WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
+        if (!player.isSpectator()) {
+            --this.numUsingPlayers;
+            WorldPlugin.addBlockEvent(world, getPos(), getBlockType(), 1, numUsingPlayers);
+        }
     }
 }
