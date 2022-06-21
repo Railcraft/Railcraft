@@ -1,3 +1,15 @@
+12.1.0-beta-5:
+    NEW:
+        Restore Steam Engines using Builcraft MJ.
+    CHANGE:
+        Add new Water Tank dimensions.
+    FIX:
+        Fix #2005 Delete blank routing table pages, or in other words, learn to count properly.
+        Fix #2003 Don't drown the Coke Oven with water
+        Fix #1865 Sort out various issues with the incomplete implementation of disposable batteries.
+        Fix #2015 Make the Extended Block State definition in the Fluid renderer static final to prevent excessive object creation.
+        Oil metal/void chest hinges.
+
 12.1.0-beta-4:
     FIX:
         Fixes #1893 Bottle handler shouldn't give free beer
