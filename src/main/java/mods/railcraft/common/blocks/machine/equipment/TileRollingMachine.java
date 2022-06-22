@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -202,7 +202,7 @@ public abstract class TileRollingMachine extends TileMachineBase {
             return true;
         return InventoryIterator.get(craftMatrix).streamStacks()
                 .filter(InvTools::nonEmpty)
-                .anyMatch(s -> sizeOf(s) > 1);
+                .allMatch(s -> sizeOf(s) > 1);
     }
 
     @Override
