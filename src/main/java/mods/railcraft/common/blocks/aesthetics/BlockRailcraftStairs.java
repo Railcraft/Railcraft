@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -8,9 +8,11 @@
  license page at http://railcraft.info/wiki/info:license.
  -----------------------------------------------------------------------------*/
 
-package mods.railcraft.common.blocks;
+package mods.railcraft.common.blocks.aesthetics;
 
+import mods.railcraft.common.blocks.IRailcraftBlock;
 import mods.railcraft.common.plugins.forge.CraftingPlugin;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -27,6 +29,8 @@ public class BlockRailcraftStairs extends BlockStairs implements IRailcraftBlock
     public BlockRailcraftStairs(IBlockState baseState) {
         super(baseState);
         this.baseBlock = (IRailcraftBlock) baseState.getBlock();
+
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
     }
 
     @Override

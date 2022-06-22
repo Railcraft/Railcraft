@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,7 @@
 
 package mods.railcraft.common.blocks.aesthetics.brick;
 
-import mods.railcraft.common.blocks.BlockRailcraftStairs;
+import mods.railcraft.common.blocks.aesthetics.BlockRailcraftStairs;
 import mods.railcraft.common.util.crafting.RockCrusherCrafter;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;

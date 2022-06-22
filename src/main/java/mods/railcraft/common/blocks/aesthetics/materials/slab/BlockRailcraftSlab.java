@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -71,7 +71,7 @@ public class BlockRailcraftSlab extends BlockContainerRailcraft<TileSlab> implem
     public BlockRailcraftSlab() {
         super(Material.ROCK);
         setSoundType(RailcraftSoundTypes.OVERRIDE);
-        setCreativeTab(CreativePlugin.RAILCRAFT_TAB);
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
         useNeighborBrightness = true;
         RailcraftRegistry.register(TileSlab.class, "RCSlabTile");
     }

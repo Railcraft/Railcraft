@@ -11,6 +11,7 @@
 package mods.railcraft.common.blocks;
 
 import mods.railcraft.api.core.IVariantEnum;
+import mods.railcraft.common.blocks.aesthetics.BlockRailcraftStairs;
 import mods.railcraft.common.blocks.aesthetics.BlockSimpleSlab;
 import mods.railcraft.common.blocks.aesthetics.ItemRailcraftSlab;
 import mods.railcraft.common.blocks.aesthetics.brick.*;
@@ -115,6 +116,11 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             .block(() -> new BlockRailcraftStone(MapColor.SNOW))
             .defaultItem()
     ),
+    JADED_STONE(BlockDef.build("jaded_stone", BlockRailcraftStone.class)
+            .block(() -> new BlockRailcraftStone(MapColor.GREEN))
+            .defaultItem()
+    ),
+
 
     // Bricks
 
@@ -125,6 +131,7 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
     BLOOD_STAINED_BRICK(BlockDef.build("bloodstained", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.BLOODSTAINED)).defaultSubtypedItem()),
     FROST_BOUND_BRICK(BlockDef.build("frostbound", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.FROSTBOUND)).defaultSubtypedItem()),
     INFERNAL_BRICK(BlockDef.build("infernal", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.INFERNAL)).defaultSubtypedItem()),
+    JADED_BRICK(BlockDef.build("jaded", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.JADED)).defaultSubtypedItem()),
     PEARLIZED_BRICK(BlockDef.build("pearlized", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.PEARLIZED)).defaultSubtypedItem()),
     QUARRIED_BRICK(BlockDef.build("quarried", BlockBrick.class).block(() -> new BlockBrick(BrickTheme.QUARRIED)).defaultSubtypedItem()
             .condition(QUARRIED_STONE)
@@ -199,6 +206,16 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             .block(() -> new BlockBrickSlab.Half(BrickTheme.INFERNAL))
             .item(block -> new ItemRailcraftSlab(block, block, byTag("infernal_double_slab")))
             .condition(INFERNAL_BRICK)
+    ),
+
+    JADED_DOUBLE_SLAB(BlockDef.build("jaded_double_slab", BlockBrickSlab.class)
+            .block(() -> new BlockBrickSlab.Double(BrickTheme.JADED))
+            .condition(JADED_BRICK)
+    ),
+    JADED_SLAB(BlockDef.build("jaded_slab", BlockBrickSlab.class)
+            .block(() -> new BlockBrickSlab.Half(BrickTheme.JADED))
+            .item(block -> new ItemRailcraftSlab(block, block, byTag("jaded_double_slab")))
+            .condition(JADED_BRICK)
     ),
 
     PEARLIZED_DOUBLE_SLAB(BlockDef.build("pearlized_double_slab", BlockBrickSlab.class)
@@ -294,6 +311,16 @@ public enum RailcraftBlocks implements IRailcraftBlockContainer {
             .block(() -> new BlockBrickStairs(BrickTheme.INFERNAL, BrickVariant.PAVER))
             .defaultItem()
             .condition(INFERNAL_BRICK)
+    ),
+    JADED_BRICK_STAIRS(BlockDef.build("jaded_brick_stairs", BlockBrickStairs.class)
+            .block(() -> new BlockBrickStairs(BrickTheme.JADED, BrickVariant.BRICK))
+            .defaultItem()
+            .condition(JADED_BRICK)
+    ),
+    JADED_PAVER_STAIRS(BlockDef.build("jaded_paver_stairs", BlockBrickStairs.class)
+            .block(() -> new BlockBrickStairs(BrickTheme.JADED, BrickVariant.PAVER))
+            .defaultItem()
+            .condition(JADED_BRICK)
     ),
     PEARLIZED_BRICK_STAIRS(BlockDef.build("pearlized_brick_stairs", BlockBrickStairs.class)
             .block(() -> new BlockBrickStairs(BrickTheme.PEARLIZED, BrickVariant.BRICK))

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -84,6 +84,20 @@ public enum BrickTheme implements IRailcraftObjectContainer<IRailcraftBlock> {
                     'B', new ItemStack(Blocks.NETHER_BRICK),
                     'M', new ItemStack(Blocks.SOUL_SAND)
             );
+        }
+    },
+    JADED(RailcraftBlocks.JADED_BRICK, MapColor.GREEN) {
+        @Override
+        public void initRecipes(BlockBrick block) {
+            if (RailcraftBlocks.JADED_STONE.isEnabled()) {
+                CraftingPlugin.addFurnaceRecipe(RailcraftBlocks.JADED_STONE.getStack(), block.getStack(POLISHED), 0.05f);
+                if (COBBLE.isEnabled()) {
+                    Crafters.rockCrusher().makeRecipe(RailcraftBlocks.JADED_STONE)
+                            .name("railcraft:jade")
+                            .addOutput(getStack(COBBLE))
+                            .register();
+                }
+            }
         }
     },
     QUARRIED(RailcraftBlocks.QUARRIED_BRICK, MapColor.SNOW) {

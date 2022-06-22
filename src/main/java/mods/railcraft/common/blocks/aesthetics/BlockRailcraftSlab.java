@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,6 +13,7 @@ package mods.railcraft.common.blocks.aesthetics;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.common.blocks.ISubtypedBlock;
 import mods.railcraft.common.blocks.RailcraftBlocks;
+import mods.railcraft.common.plugins.forge.CreativePlugin;
 import mods.railcraft.common.util.misc.EnumTools;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
@@ -39,6 +40,7 @@ public abstract class BlockRailcraftSlab<V extends Enum<V> & IVariantEnum> exten
 
     protected BlockRailcraftSlab(IBlockState baseBlock) {
         super(baseBlock.getMaterial());
+        setCreativeTab(CreativePlugin.STRUCTURE_TAB);
 
         IBlockState state = blockState.getBaseState();
         if (!isDouble()) {

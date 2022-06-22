@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -46,6 +46,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                 RailcraftBlocks.BLOOD_STAINED_BRICK_STAIRS,
                 RailcraftBlocks.FROST_BOUND_BRICK_STAIRS,
                 RailcraftBlocks.INFERNAL_BRICK_STAIRS,
+                RailcraftBlocks.JADED_BRICK_STAIRS,
                 RailcraftBlocks.PEARLIZED_BRICK_STAIRS,
                 RailcraftBlocks.QUARRIED_BRICK_STAIRS,
                 RailcraftBlocks.BADLANDS_BRICK_STAIRS,
@@ -56,6 +57,7 @@ public class ModuleBuilding extends RailcraftModulePayload {
                 RailcraftBlocks.BLOOD_STAINED_PAVER_STAIRS,
                 RailcraftBlocks.FROST_BOUND_PAVER_STAIRS,
                 RailcraftBlocks.INFERNAL_PAVER_STAIRS,
+                RailcraftBlocks.JADED_PAVER_STAIRS,
                 RailcraftBlocks.PEARLIZED_PAVER_STAIRS,
                 RailcraftBlocks.QUARRIED_PAVER_STAIRS,
                 RailcraftBlocks.BADLANDS_PAVER_STAIRS,
@@ -78,6 +80,9 @@ public class ModuleBuilding extends RailcraftModulePayload {
 
                 RailcraftBlocks.INFERNAL_DOUBLE_SLAB,
                 RailcraftBlocks.INFERNAL_SLAB,
+
+                RailcraftBlocks.JADED_DOUBLE_SLAB,
+                RailcraftBlocks.JADED_SLAB,
 
                 RailcraftBlocks.PEARLIZED_DOUBLE_SLAB,
                 RailcraftBlocks.PEARLIZED_SLAB,

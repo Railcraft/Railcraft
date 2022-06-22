@@ -58,6 +58,7 @@ public class ModuleWorld extends RailcraftModulePayload {
     public ModuleWorld() {
         add(
                 RailcraftBlocks.ABYSSAL_STONE,
+                RailcraftBlocks.JADED_STONE,
                 RailcraftBlocks.QUARRIED_STONE,
                 RailcraftBlocks.GENERIC,
                 RailcraftBlocks.ORE,
