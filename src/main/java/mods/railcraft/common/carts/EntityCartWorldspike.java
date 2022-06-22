@@ -73,6 +73,11 @@ public abstract class EntityCartWorldspike extends CartBase implements IWorldspi
         setFuel(fuel);
     }
 
+    @Override
+    public int getSizeInventory() {
+        return usesFuel() ? 1 : 0;
+    }
+
     public boolean hasActiveTicket() {
         return ticket != null || (Game.isClient(world) && hasTicketFlag());
     }
