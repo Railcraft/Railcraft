@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -60,6 +60,7 @@ public class BlockMachineActuator extends BlockMachine<ActuatorVariant> {
                 .withProperty(THROWN, false)
         );
         setCreativeTab(CreativeTabs.TRANSPORTATION);
+        setHarvestLevel("crowbar", 0);
         setSoundType(SoundType.METAL);
         setResistance(50);
     }
