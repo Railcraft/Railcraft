@@ -77,6 +77,7 @@ public enum EnumGui {
     TRADE_STATION(true),
     TRAIN_DISPENSER(true),
     TURBINE(true),
+    TRACK_DUMPING(true),
     UNLOADER_ENERGY(true),
     WORLDSPIKE(true),
     ;

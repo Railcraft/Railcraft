@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -103,8 +103,9 @@ public class InventoryAdvanced extends InventoryBasic implements IInventoryCompo
         return super.getName();
     }
 
-    public void setInventoryStackLimit(int inventoryStackLimit) {
+    public InventoryAdvanced setInventoryStackLimit(int inventoryStackLimit) {
         this.inventoryStackLimit = inventoryStackLimit;
+        return this;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -80,7 +80,7 @@ public class TrackKitEmbarking extends TrackKitPowered implements IGuiReturnHand
         ItemStack heldItem = player.getHeldItem(hand);
         if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-            GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
+            GuiHandler.openGui(EnumGui.TRACK_EMBARKING, player, theWorldAsserted(), getPos());
             crowbar.onWhack(player, hand, heldItem, getPos());
             return true;
         }

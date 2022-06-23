@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -80,6 +80,7 @@ public enum TrackKits implements IRailcraftObjectContainer<IRailcraftObject<Trac
         TRACK_KITS.add(TrackRegistry.getMissingTrackKit());
 
         DETECTOR.requiresTicks = true;
+        DUMPING.requiresTicks = true;
         LOCKING.requiresTicks = true;
         DELAYED.requiresTicks = true;
         TURNOUT.requiresTicks = true;

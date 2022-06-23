@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -73,6 +73,11 @@ public final class InventoryComposite extends ForwardingList<InventoryAdaptor> i
 
     public static InventoryComposite of(InventoryAdaptor inv) {
         Objects.requireNonNull(inv);
+        return new InventoryComposite(inv);
+    }
+
+    public static InventoryComposite ofNullable(@Nullable InventoryAdaptor inv) {
+        if (inv == null) return create();
         return new InventoryComposite(inv);
     }
 

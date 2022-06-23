@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,6 +15,7 @@ import mods.railcraft.common.carts.CartConstants;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.modules.ModuleExtras;
+import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.SafeNBTWrapper;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
@@ -51,10 +52,10 @@ public class TrackKitLauncher extends TrackKitPowered implements IGuiReturnHandl
     @Override
     public boolean blockActivated(EntityPlayer player, EnumHand hand) {
         ItemStack heldItem = player.getHeldItem(hand);
-        if (heldItem.getItem() instanceof IToolCrowbar) {
+        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
             IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
             if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, theWorldAsserted(), getPos().getX(), getPos().getY(), getPos().getZ());
+                GuiHandler.openGui(EnumGui.TRACK_LAUNCHER, player, theWorldAsserted(), getPos());
                 crowbar.onWhack(player, hand, heldItem, getPos());
                 return true;
             }

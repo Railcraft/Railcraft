@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,13 +10,18 @@
 package mods.railcraft.common.plugins.forge;
 
 import mods.railcraft.api.core.ILocalizedObject;
+import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.Map;
 
@@ -102,5 +107,15 @@ public final class LocalizationPlugin {
         }
 
         return "entity." + s + ".name";
+    }
+
+    public static ITextComponent localize(TrackKit trackKit) {
+        String kitTag = "item.railcraft.track_kit.";
+        String locTag = kitTag + trackKit.getResourcePathSuffix() + ".name";
+        if (LocalizationPlugin.hasTag(locTag))
+            return new TextComponentTranslation(locTag);
+        Map<String, ILocalizedObject> args = new HashMap<>();
+        args.put("track_kit", trackKit);
+        return new TextComponentString(LocalizationPlugin.translateArgs(kitTag + "name", args));
     }
 }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -56,7 +56,7 @@ public final class AdjacentInventoryCache {
         this.sorter = sorter;
     }
 
-    public InventoryComposite getAdjacentInventories() {
+    private void refresh() {
         cache.refresh();
         if (changed) {
             changed = false;
@@ -66,8 +66,15 @@ public final class AdjacentInventoryCache {
             if (sorter != null)
                 sortedInvs.sort(sorter);
         }
+    }
 
+    public InventoryComposite getAdjacentInventories() {
+        refresh();
         return sortedInvs;
     }
 
+    public InventoryComposite getInventoryOnSide(EnumFacing face) {
+        refresh();
+        return InventoryComposite.ofNullable(invs.get(face));
+    }
 }
