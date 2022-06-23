@@ -31,6 +31,8 @@ import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
 import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
 import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
+import mods.railcraft.common.gui.containers.ContainerTrackDumping;
+import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.inventory.IInventoryImplementor;
@@ -176,6 +178,8 @@ public class FactoryGui {
                     return new GuiLocomotiveElectric(inv, (EntityLocomotiveElectric) obj);
                 case LOCO_CREATIVE:
                     return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
+                case TRACK_DUMPING:
+                    return new GuiTrackDumping((ContainerTrackDumping) FactoryContainer.build(gui, inv, obj, world, x, y, z));
                 default:
                     return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }

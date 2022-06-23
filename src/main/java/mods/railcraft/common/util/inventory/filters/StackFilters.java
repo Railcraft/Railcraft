@@ -169,6 +169,14 @@ public enum StackFilters implements Predicate<ItemStack> {
     }
 
     /**
+     * Matches against the provided Inventory. If the Item class extends IFilterItem then it will pass the check to the item.
+     * However, when the filter is empty, everything is allowed.
+     */
+    public static Predicate<ItemStack> filterMatch(final IInventoryComposite inv) {
+        return stack -> inv.isEmptied() || inv.streamStacks().anyMatch(filter -> InvTools.matchesFilter(filter, stack));
+    }
+
+    /**
      * Matches against the provided ItemStacks.
      *
      * If no ItemStacks are provided to match against, it returns true.

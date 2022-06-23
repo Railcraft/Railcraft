@@ -23,6 +23,7 @@ import mods.railcraft.common.blocks.structures.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.structures.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitDumping;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
@@ -144,6 +145,8 @@ public final class FactoryContainer {
                     return new ContainerRouting(inv, (IRouter) obj);
                 case TRACK_ROUTING:
                     return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
+                case TRACK_DUMPING:
+                    return new ContainerTrackDumping(inv, (TrackKitDumping) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 default:
                     return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
             }

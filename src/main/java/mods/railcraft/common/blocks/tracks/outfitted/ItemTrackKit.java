@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -10,7 +10,6 @@
 
 package mods.railcraft.common.blocks.tracks.outfitted;
 
-import mods.railcraft.api.core.ILocalizedObject;
 import mods.railcraft.api.core.IVariantEnum;
 import mods.railcraft.api.tracks.TrackKit;
 import mods.railcraft.api.tracks.TrackRegistry;
@@ -44,9 +43,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;
 
@@ -105,12 +101,7 @@ public class ItemTrackKit extends ItemRailcraft {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        String locTag = getTranslationKey(stack) + ".name";
-        if (LocalizationPlugin.hasTag(locTag))
-            return LocalizationPlugin.translateFast(locTag);
-        Map<String, ILocalizedObject> args = new HashMap<>();
-        args.put("track_kit", TrackRegistry.TRACK_KIT.get(stack));
-        return LocalizationPlugin.translateArgs(getTranslationKey() + ".name", args);
+        return LocalizationPlugin.localize(TrackRegistry.TRACK_KIT.get(stack)).getFormattedText();
     }
 
     @Override
