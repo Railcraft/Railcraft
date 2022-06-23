@@ -1,3 +1,12 @@
+12.1.0-beta-6:
+        NEW:
+            Added Jaded Stone and Brick. Currently no way to obtain in survival.
+            Closes #1328 Add advanced Dumping behaviors (PR by liach)
+        FIX:
+            Fix #2052 Restore the inventory slot to Worldspike carts
+            Fix #1835 Don't craft with the rolling machine template
+            Fix #1671 Switches are broken by Crowbars now
+
 12.1.0-beta-5:
     NEW:
         Restore Steam Engines using Builcraft MJ.
