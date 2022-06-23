@@ -55,7 +55,7 @@ public final class TileBoilerFireboxFluid extends TileBoilerFirebox {
                     structureLogic.getKernel(BoilerLogic.class)
                             .ifPresent(boilerLogic -> {
                                 boilerLogic.setFuelProvider(new FluidFuelProvider(tankFuel));
-                                boilerLogic.addLogic(new InventoryLogic(Logic.Adapter.of(this), 2) {
+                                boilerLogic.addLogic(new InventoryLogic(Logic.Adapter.of(this), 3) {
                                     @Override
                                     public IItemHandlerModifiable getItemHandler(@Nullable EnumFacing side) {
                                         return new InvWrapper(this) {
