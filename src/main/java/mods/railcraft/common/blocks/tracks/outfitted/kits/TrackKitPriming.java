@@ -10,19 +10,14 @@
 package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import mods.railcraft.api.carts.IExplosiveCart;
-import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
-import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.network.IGuiReturnHandler;
 import mods.railcraft.common.util.network.RailcraftInputStream;
 import mods.railcraft.common.util.network.RailcraftOutputStream;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,17 +42,8 @@ public class TrackKitPriming extends TrackKitPowered implements IGuiReturnHandle
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand) {
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                GuiHandler.openGui(EnumGui.TRACK_PRIMING, player, theWorldAsserted(), getPos());
-                crowbar.onWhack(player, hand, heldItem, getPos());
-                return true;
-            }
-        }
-        return false;
+    protected EnumGui getGUI() {
+        return EnumGui.TRACK_PRIMING;
     }
 
     @Override

@@ -11,22 +11,18 @@ package mods.railcraft.common.blocks.tracks.outfitted.kits;
 
 import com.mojang.authlib.GameProfile;
 import mods.railcraft.api.carts.IRoutableCart;
-import mods.railcraft.api.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackKitPowered;
 import mods.railcraft.api.tracks.ITrackKitRouting;
 import mods.railcraft.common.blocks.tracks.outfitted.TrackKits;
 import mods.railcraft.common.gui.EnumGui;
-import mods.railcraft.common.gui.GuiHandler;
 import mods.railcraft.common.items.ItemTicket;
 import mods.railcraft.common.items.RailcraftItems;
 import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.inventory.InventoryAdvanced;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -52,17 +48,8 @@ public class TrackKitRouting extends TrackKitSecured implements ITrackKitPowered
     }
 
     @Override
-    public boolean blockActivated(EntityPlayer player, EnumHand hand) {
-        ItemStack heldItem = player.getHeldItem(hand);
-        if (!InvTools.isEmpty(heldItem) && heldItem.getItem() instanceof IToolCrowbar) {
-            IToolCrowbar crowbar = (IToolCrowbar) heldItem.getItem();
-            if (crowbar.canWhack(player, hand, heldItem, getPos())) {
-                GuiHandler.openGui(EnumGui.TRACK_ROUTING, player, theWorldAsserted(), getPos());
-                crowbar.onWhack(player, hand, heldItem, getPos());
-                return true;
-            }
-        }
-        return false;
+    protected EnumGui getGUI() {
+        return EnumGui.TRACK_ROUTING;
     }
 
     @Override
