@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,8 +18,7 @@ public class GuiDispenserCart extends GuiTitled {
     private final InventoryPlayer inv;
 
     public GuiDispenserCart(InventoryPlayer inv, TileDispenserCart tile) {
-        super(tile, new ContainerDispenserCart(inv, tile), "gui_dispenser_cart.png");
-        xSize = 176;
+        super(tile, new ContainerDispenserCart(inv, tile), "gui_cart_slots.png");
         ySize = 140;
         this.inv = inv;
     }

@@ -11,28 +11,23 @@
 package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitDumping;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitActivator;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import net.minecraft.entity.player.InventoryPlayer;
 
 /**
  *
  */
-public class ContainerTrackDumping extends ContainerTrackKit<TrackKitDumping> {
+public class ContainerTrackActivator extends ContainerTrackKit<TrackKitActivator> {
 
-    protected ContainerTrackDumping(InventoryPlayer playerInv, TileTrackOutfitted tile) {
+    protected ContainerTrackActivator(InventoryPlayer playerInv, TileTrackOutfitted tile) {
         super(tile);
 
         for (int i = 0; i < 3; i++) {
-            addSlot(SlotRailcraft.singleItemPhantom(kit.getCartFilter(), i, 25 + i * 18, 45));
+            addSlot(SlotRailcraft.singleItemPhantom(kit.getCartFilter(), i, 62 + i * 18, 24));
         }
 
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 3; j++) {
-                addSlot(SlotRailcraft.singleItemPhantom(kit.getItemFilter(), i * 3 + j, 98 + j * 18, 36 + i * 18));
-            }
-        }
-
-        addPlayerSlots(playerInv);
+        addPlayerSlots(playerInv, 140);
     }
+
 }

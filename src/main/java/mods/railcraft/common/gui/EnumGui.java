@@ -70,6 +70,8 @@ public enum EnumGui {
     SWITCH_MOTOR(true),
     TANK(true),
     TRACK_DELAYED(false),
+    TRACK_ACTIVATOR(true),
+    TRACK_DUMPING(true),
     TRACK_EMBARKING(false),
     TRACK_LAUNCHER(false),
     TRACK_PRIMING(false),
@@ -77,7 +79,6 @@ public enum EnumGui {
     TRADE_STATION(true),
     TRAIN_DISPENSER(true),
     TURBINE(true),
-    TRACK_DUMPING(true),
     UNLOADER_ENERGY(true),
     WORLDSPIKE(true),
     ;

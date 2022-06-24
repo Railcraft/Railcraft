@@ -23,10 +23,9 @@ import mods.railcraft.common.blocks.structures.TileBoilerFireboxFluid;
 import mods.railcraft.common.blocks.structures.TileBoilerFireboxSolid;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitDumping;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GUIParams;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import mods.railcraft.common.util.misc.Game;
@@ -42,113 +41,119 @@ import org.apache.logging.log4j.Level;
  */
 public final class FactoryContainer {
 
-    @SuppressWarnings("ConstantConditions")
-    public static Container build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
+    public static <C extends Container> C build(GUIParams params) {
+        return build(params.getGui(), params.getInv(), params.getObj(), params.getWorld(), params.getPos().getX(), params.getPos().getY(), params.getPos().getZ());
+    }
+
+    @SuppressWarnings({"ConstantConditions", "unchecked"})
+    public static <C extends Container> C build(EnumGui gui, InventoryPlayer inv, Object obj, World world, int x, int y, int z) {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
 
         try {
             switch (gui) {
                 case CHEST:
-                    return new ContainerRCChest(inv, (IInventoryImplementor) obj);
+                    return (C) new ContainerRCChest(inv, (IInventoryImplementor) obj);
                 case MANIPULATOR_ITEM:
-                    return new ContainerManipulatorCartItem(inv, (TileItemManipulator) obj);
+                    return (C) new ContainerManipulatorCartItem(inv, (TileItemManipulator) obj);
                 case MANIPULATOR_FLUID:
-                    return new ContainerManipulatorCartFluid(inv, (TileFluidManipulator) obj);
+                    return (C) new ContainerManipulatorCartFluid(inv, (TileFluidManipulator) obj);
                 case LOADER_ENERGY:
-                    return new ContainerManipulatorCartIC2(inv, (TileIC2Loader) obj);
+                    return (C) new ContainerManipulatorCartIC2(inv, (TileIC2Loader) obj);
                 case UNLOADER_ENERGY:
-                    return new ContainerManipulatorCartIC2(inv, (TileIC2Unloader) obj);
+                    return (C) new ContainerManipulatorCartIC2(inv, (TileIC2Unloader) obj);
                 case MANIPULATOR_RF:
-                    return new ContainerManipulatorCartRF((TileRFManipulator) obj);
+                    return (C) new ContainerManipulatorCartRF((TileRFManipulator) obj);
                 case DETECTOR_ITEM:
-                    return new ContainerDetectorItem(inv, (TileDetector) obj);
+                    return (C) new ContainerDetectorItem(inv, (TileDetector) obj);
                 case DETECTOR_TANK:
-                    return new ContainerDetectorTank(inv, (TileDetector) obj);
+                    return (C) new ContainerDetectorTank(inv, (TileDetector) obj);
                 case DETECTOR_SHEEP:
-                    return new ContainerDetectorSheep(inv, (TileDetector) obj);
+                    return (C) new ContainerDetectorSheep(inv, (TileDetector) obj);
                 case DETECTOR_ADVANCED:
-                    return new ContainerDetectorAdvanced(inv, (TileDetector) obj);
+                    return (C) new ContainerDetectorAdvanced(inv, (TileDetector) obj);
                 case DETECTOR_LOCOMOTIVE:
-                    return new ContainerDetectorLocomotive(inv, (TileDetector) obj);
+                    return (C) new ContainerDetectorLocomotive(inv, (TileDetector) obj);
                 case DETECTOR_ROUTING:
-                    return new ContainerRouting(inv, (IRouter) ((TileDetector) obj).getDetector());
+                    return (C) new ContainerRouting(inv, (IRouter) ((TileDetector) obj).getDetector());
                 case CART_DISPENSER:
-                    return new ContainerDispenserCart(inv, (TileDispenserCart) obj);
+                    return (C) new ContainerDispenserCart(inv, (TileDispenserCart) obj);
                 case TRAIN_DISPENSER:
-                    return new ContainerDispenserTrain(inv, (TileDispenserTrain) obj);
+                    return (C) new ContainerDispenserTrain(inv, (TileDispenserTrain) obj);
                 case COKE_OVEN:
-                    return new ContainerCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
+                    return (C) new ContainerCokeOven(inv, Logic.get(CokeOvenLogic.class, obj));
                 case BLAST_FURNACE:
-                    return new ContainerBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
+                    return (C) new ContainerBlastFurnace(inv, Logic.get(BlastFurnaceLogic.class, obj));
                 case STEAM_OVEN:
-                    return new ContainerSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
+                    return (C) new ContainerSteamOven(inv, Logic.get(SteamOvenLogic.class, obj));
                 case ROCK_CRUSHER:
-                    return new ContainerRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
+                    return (C) new ContainerRockCrusher(inv, Logic.get(RockCrusherLogic.class, obj));
                 case TANK:
-                    return new ContainerTank(inv, (ILogicContainer) obj);
+                    return (C) new ContainerTank(inv, (ILogicContainer) obj);
                 case ROLLING_MACHINE_MANUAL:
-                    return new ContainerRollingMachine(inv, (TileRollingMachine) obj);
+                    return (C) new ContainerRollingMachine(inv, (TileRollingMachine) obj);
                 case ROLLING_MACHINE_POWERED:
-                    return new ContainerRollingMachinePowered(inv, (TileRollingMachinePowered) obj);
+                    return (C) new ContainerRollingMachinePowered(inv, (TileRollingMachinePowered) obj);
                 case FEED_STATION:
-                    return new ContainerFeedStation(inv, (TileFeedStation) obj);
+                    return (C) new ContainerFeedStation(inv, (TileFeedStation) obj);
                 case TRADE_STATION:
-                    return new ContainerTradeStation(inv, Logic.get(TradeStationLogic.class, obj));
+                    return (C) new ContainerTradeStation(inv, Logic.get(TradeStationLogic.class, obj));
                 case WORLDSPIKE:
-                    return new ContainerWorldspike(inv, (TileWorldspike) obj);
+                    return (C) new ContainerWorldspike(inv, (TileWorldspike) obj);
                 case ENGINE_STEAM:
-                    return new ContainerEngineSteam(inv, (TileEngineSteam) obj);
+                    return (C) new ContainerEngineSteam(inv, (TileEngineSteam) obj);
                 case ENGINE_HOBBY:
-                    return new ContainerEngineSteamHobby(inv, (TileEngineSteamHobby) obj);
+                    return (C) new ContainerEngineSteamHobby(inv, (TileEngineSteamHobby) obj);
                 case BOILER_SOLID:
-                    return new ContainerBoilerSolid(inv, (TileBoilerFireboxSolid) obj);
+                    return (C) new ContainerBoilerSolid(inv, (TileBoilerFireboxSolid) obj);
                 case BOILER_FLUID:
-                    return new ContainerBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
+                    return (C) new ContainerBoilerFluid(inv, (TileBoilerFireboxFluid) obj);
                 case TURBINE:
-                    return new ContainerTurbine(inv, (TileSteamTurbine) obj);
+                    return (C) new ContainerTurbine(inv, (TileSteamTurbine) obj);
                 case ANVIL:
-                    return new ContainerAnvil(inv, world, new BlockPos(x, y, z), inv.player);
+                    return (C) new ContainerAnvil(inv, world, new BlockPos(x, y, z), inv.player);
                 case CART_BORE:
-                    return new ContainerBore(inv, (EntityTunnelBore) obj);
+                    return (C) new ContainerBore(inv, (EntityTunnelBore) obj);
                 case CART_ENERGY:
-                    return new ContainerCartEnergy(inv, (CartBaseEnergy) obj);
+                    return (C) new ContainerCartEnergy(inv, (CartBaseEnergy) obj);
                 case CART_FE:
-                    return new ContainerCartRF((EntityCartRF) obj);
+                    return (C) new ContainerCartRF((EntityCartRF) obj);
                 case CART_TANK:
-                    return new ContainerCartTank(inv, (EntityCartTank) obj);
+                    return (C) new ContainerCartTank(inv, (EntityCartTank) obj);
                 case CART_CARGO:
-                    return new ContainerCartCargo(inv, (EntityCartCargo) obj);
+                    return (C) new ContainerCartCargo(inv, (EntityCartCargo) obj);
                 case CART_WORLDSPIKE:
-                    return new ContainerWorldspike(inv, (EntityCartWorldspike) obj);
+                    return (C) new ContainerWorldspike(inv, (EntityCartWorldspike) obj);
                 case CART_WORK:
-                    return new ContainerCartWork(inv, (EntityCartWork) obj);
+                    return (C) new ContainerCartWork(inv, (EntityCartWork) obj);
                 case CART_TRACK_LAYER:
-                    return new ContainerCartTrackLayer(inv, (EntityCartTrackLayer) obj);
+                    return (C) new ContainerCartTrackLayer(inv, (EntityCartTrackLayer) obj);
                 case CART_TRACK_RELAYER:
-                    return new ContainerCartTrackRelayer(inv, (EntityCartTrackRelayer) obj);
+                    return (C) new ContainerCartTrackRelayer(inv, (EntityCartTrackRelayer) obj);
                 case CART_UNDERCUTTER:
-                    return new ContainerCartUndercutter(inv, (EntityCartUndercutter) obj);
+                    return (C) new ContainerCartUndercutter(inv, (EntityCartUndercutter) obj);
                 case LOCO_STEAM:
-                    return ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
+                    return (C) ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
                 case LOCO_ELECTRIC:
-                    return ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
+                    return (C) ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
                 case LOCO_CREATIVE:
-                    return ContainerLocomotive.make(inv, (EntityLocomotiveCreative) obj);
+                    return (C) ContainerLocomotive.make(inv, (EntityLocomotiveCreative) obj);
                 case SWITCH_MOTOR:
-                    return new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
+                    return (C) new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
                 case BOX_RECEIVER:
-                    return new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
+                    return (C) new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
                 case BOX_RELAY:
-                    return new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
+                    return (C) new ContainerAspectAction(inv.player, (ITileAspectResponder) obj);
                 case ROUTING:
-                    return new ContainerRouting(inv, (IRouter) obj);
+                    return (C) new ContainerRouting(inv, (IRouter) obj);
+                case TRACK_ACTIVATOR:
+                    return (C) new ContainerTrackActivator(inv, (TileTrackOutfitted) obj);
                 case TRACK_ROUTING:
-                    return new ContainerTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
+                    return (C) new ContainerTrackRouting(inv, (TileTrackOutfitted) obj);
                 case TRACK_DUMPING:
-                    return new ContainerTrackDumping(inv, (TrackKitDumping) ((TileTrackOutfitted) obj).getTrackKitInstance());
+                    return (C) new ContainerTrackDumping(inv, (TileTrackOutfitted) obj);
                 default:
-                    return RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
+                    return (C) RailcraftModuleManager.getGuiContainer(gui, inv, obj, world, x, y, z);
             }
         } catch (Exception ex) {
             Game.log().msg(Level.WARN, "Error when attempting to build gui container {0}: {1}", gui, ex);

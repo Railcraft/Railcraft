@@ -26,12 +26,15 @@ import mods.railcraft.common.blocks.single.TileEngineSteam;
 import mods.railcraft.common.blocks.single.TileEngineSteamHobby;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
 import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
-import mods.railcraft.common.blocks.tracks.outfitted.kits.*;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitDelayedLocking;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitEmbarking;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitLauncher;
+import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitPriming;
 import mods.railcraft.common.carts.*;
 import mods.railcraft.common.gui.EnumGui;
+import mods.railcraft.common.gui.GUIParams;
 import mods.railcraft.common.gui.containers.ContainerBoilerFluid;
 import mods.railcraft.common.gui.containers.ContainerBoilerSolid;
-import mods.railcraft.common.gui.containers.ContainerTrackDumping;
 import mods.railcraft.common.gui.containers.FactoryContainer;
 import mods.railcraft.common.modules.RailcraftModuleManager;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -55,6 +58,8 @@ public class FactoryGui {
     public static @Nullable GuiScreen build(EnumGui gui, InventoryPlayer inv, @Nullable Object obj, World world, int x, int y, int z) {
         if (gui != EnumGui.ANVIL && obj == null)
             return null;
+
+        GUIParams params = new GUIParams(gui, inv, obj, world, x, y, z);
 
         try {
             switch (gui) {
@@ -128,8 +133,6 @@ public class FactoryGui {
                     return new GuiAnvil(inv, world, new BlockPos(x, y, z));
                 case ROUTING:
                     return new GuiRouting(inv, (TileRailcraft) obj, (IRouter) obj);
-                case TRACK_ROUTING:
-                    return new GuiTrackRouting(inv, (TrackKitRouting) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case SWITCH_MOTOR:
                     return new GuiActuatorMotor(inv.player, (TileActuatorMotor) obj, LocalizationPlugin.translate("gui.railcraft.actuator.motor.action"));
                 case BOX_RECEIVER:
@@ -142,6 +145,12 @@ public class FactoryGui {
                     return new GuiBoxAnalogController((TileBoxAnalog) obj);
                 case BOX_CAPACITOR:
                     return new GuiBoxCapacitor((TileBoxCapacitor) obj);
+                case TRACK_ACTIVATOR:
+                    return new GuiTrackActivator(FactoryContainer.build(params));
+                case TRACK_DUMPING:
+                    return new GuiTrackDumping(FactoryContainer.build(params));
+                case TRACK_ROUTING:
+                    return new GuiTrackRouting(FactoryContainer.build(params));
                 case TRACK_LAUNCHER:
                     return new GuiTrackLauncher((TrackKitLauncher) ((TileTrackOutfitted) obj).getTrackKitInstance());
                 case TRACK_PRIMING:
@@ -178,8 +187,6 @@ public class FactoryGui {
                     return new GuiLocomotiveElectric(inv, (EntityLocomotiveElectric) obj);
                 case LOCO_CREATIVE:
                     return new GuiLocomotiveCreative(inv, (EntityLocomotiveCreative) obj);
-                case TRACK_DUMPING:
-                    return new GuiTrackDumping((ContainerTrackDumping) FactoryContainer.build(gui, inv, obj, world, x, y, z));
                 default:
                     return RailcraftModuleManager.getGuiScreen(gui, inv, obj, world, x, y, z);
             }

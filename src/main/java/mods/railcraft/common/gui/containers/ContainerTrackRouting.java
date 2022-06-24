@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.containers;
 
+import mods.railcraft.common.blocks.tracks.outfitted.TileTrackOutfitted;
 import mods.railcraft.common.blocks.tracks.outfitted.kits.TrackKitRouting;
 import mods.railcraft.common.gui.slots.SlotSecure;
 import mods.railcraft.common.gui.tooltips.ToolTip;
@@ -20,21 +21,19 @@ import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerTrackRouting extends RailcraftContainer {
+public class ContainerTrackRouting extends ContainerTrackKit<TrackKitRouting> {
 
-    private final TrackKitRouting track;
     private final InventoryPlayer playerInv;
     private int lastLockState;
     public String ownerName;
     public boolean canLock;
     private final SlotSecure slotTicket;
 
-    public ContainerTrackRouting(InventoryPlayer playerInv, TrackKitRouting track) {
-        super(track.getInventory());
-        this.track = track;
+    public ContainerTrackRouting(InventoryPlayer playerInv, TileTrackOutfitted tile) {
+        super(tile);
         this.playerInv = playerInv;
 
-        slotTicket = new SlotSecure(track.getInventory(), 0, 44, 24);
+        slotTicket = new SlotSecure(kit.getInventory(), 0, 44, 24);
         slotTicket.setFilter(ItemTicketGold.FILTER);
         slotTicket.setToolTips(ToolTip.buildToolTip("routing.track.tips.slot"));
         addSlot(slotTicket);
@@ -46,13 +45,13 @@ public class ContainerTrackRouting extends RailcraftContainer {
     public void addListener(IContainerListener listener) {
         super.addListener(listener);
 
-        listener.sendWindowProperty(this, 0, track.getLockController().getCurrentState());
+        listener.sendWindowProperty(this, 0, kit.getLockController().getCurrentState());
 
-        canLock = PlayerPlugin.isOwnerOrOp(track.getOwner(), playerInv.player.getGameProfile());
-        slotTicket.locked = track.isSecure() && !canLock;
+        canLock = PlayerPlugin.isOwnerOrOp(kit.getOwner(), playerInv.player.getGameProfile());
+        slotTicket.locked = kit.isSecure() && !canLock;
         listener.sendWindowProperty(this, 2, canLock ? 1 : 0);
 
-        String username = track.getOwner().getName();
+        String username = kit.getOwner().getName();
         if (username != null)
             PacketBuilder.instance().sendGuiStringPacket(listener, windowId, 0, username);
     }
@@ -62,12 +61,12 @@ public class ContainerTrackRouting extends RailcraftContainer {
         super.sendUpdateToClient();
 
         for (IContainerListener var2 : listeners) {
-            int lock = track.getLockController().getCurrentState();
+            int lock = kit.getLockController().getCurrentState();
             if (lastLockState != lock)
                 var2.sendWindowProperty(this, 0, lock);
         }
 
-        this.lastLockState = track.getLockController().getCurrentState();
+        this.lastLockState = kit.getLockController().getCurrentState();
     }
 
     @Override
@@ -76,13 +75,13 @@ public class ContainerTrackRouting extends RailcraftContainer {
 
         switch (id) {
             case 0:
-                track.getLockController().setCurrentState(value);
+                kit.getLockController().setCurrentState(value);
                 break;
             case 2:
                 canLock = value == 1;
                 break;
         }
-        slotTicket.locked = track.isSecure() && !canLock;
+        slotTicket.locked = kit.isSecure() && !canLock;
     }
 
     @Override

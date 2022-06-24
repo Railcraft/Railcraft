@@ -11,7 +11,7 @@
 package mods.railcraft.client.gui;
 
 import mods.railcraft.common.core.RailcraftConstants;
-import mods.railcraft.common.gui.containers.ContainerTrackDumping;
+import mods.railcraft.common.gui.containers.ContainerTrackActivator;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,20 +20,19 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * GUI for dumping track kit.
  */
 @SideOnly(Side.CLIENT)
-public class GuiTrackDumping extends GuiTitled {
+public class GuiTrackActivator extends GuiTitled {
 
-    private static final String LOCATION = RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_track_dumping.png";
-    private final String FILTER_LABEL = LocalizationPlugin.translate("gui.railcraft.filters");
+    private static final String LOCATION = RailcraftConstants.GUI_TEXTURE_FOLDER + "gui_cart_slots.png";
     private final String CART_FILTER_LABEL = LocalizationPlugin.translate("gui.railcraft.filters.carts");
 
-    public GuiTrackDumping(ContainerTrackDumping container) {
+    public GuiTrackActivator(ContainerTrackActivator container) {
         super(container.kit.getTile(), container, LOCATION, LocalizationPlugin.localize(container.kit.getTrackKit()));
+        ySize = 140;
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        GuiTools.drawStringCenteredAtPos(fontRenderer, FILTER_LABEL, 123, 26);
-        GuiTools.drawStringCenteredAtPos(fontRenderer, CART_FILTER_LABEL, 51, 35);
+        GuiTools.drawStringCenteredAtPos(fontRenderer, CART_FILTER_LABEL, 8, 88);
     }
 }

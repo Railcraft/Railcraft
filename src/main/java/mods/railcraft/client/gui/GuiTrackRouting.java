@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -18,21 +18,20 @@ import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiTrackRouting extends GuiTitled {
 
     private GuiMultiButton lockButton;
-    private final TrackKitRouting track;
+    private final TrackKitRouting kit;
     private ToolTip lockedToolTips;
     private ToolTip unlockedToolTips;
     private ToolTip notOwnedToolTips;
     private String ownerName = RailcraftConstantsAPI.UNKNOWN_PLAYER;
 
-    public GuiTrackRouting(InventoryPlayer inv, TrackKitRouting track) {
-        super(track.getTile(), new ContainerTrackRouting(inv, track), "gui_track_routing.png");
+    public GuiTrackRouting(ContainerTrackRouting container) {
+        super(container.kit.getTile(), container, "gui_track_routing.png");
         ySize = 140;
-        this.track = track;
+        this.kit = container.kit;
         lockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.locked", "{owner}=" + ownerName);
         unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + ownerName);
         notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + ownerName);
@@ -41,19 +40,19 @@ public class GuiTrackRouting extends GuiTitled {
     @Override
     public void initGui() {
         super.initGui();
-        if (track == null)
+        if (kit == null)
             return;
         buttonList.clear();
         int w = (width - xSize) / 2;
         int h = (height - ySize) / 2;
 
-        buttonList.add(lockButton = GuiMultiButton.create(8, w + 152, h + 8, 16, track.getLockController()));
+        buttonList.add(lockButton = GuiMultiButton.create(8, w + 152, h + 8, 16, kit.getLockController()));
         lockButton.enabled = ((ContainerTrackRouting) container).canLock;
     }
 
     @Override
     protected void actionPerformed(GuiButton guibutton) {
-        if (track == null)
+        if (kit == null)
             return;
         updateButtons();
 //        sendUpdatePacket();
@@ -74,7 +73,7 @@ public class GuiTrackRouting extends GuiTitled {
             unlockedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.unlocked", "{owner}=" + username);
             notOwnedToolTips = ToolTip.buildToolTip("gui.railcraft.tips.button.lock.notowner", "{owner}=" + username);
         }
-        lockButton.setToolTip(track.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
+        lockButton.setToolTip(kit.getLockController().getButtonState() == LockButtonState.LOCKED ? lockedToolTips : lockButton.enabled ? unlockedToolTips : notOwnedToolTips);
     }
 
     @Override
@@ -83,7 +82,7 @@ public class GuiTrackRouting extends GuiTitled {
     }
 
     private void sendUpdatePacket() {
-        PacketBuilder.instance().sendGuiReturnPacket(track.getTile());
+        PacketBuilder.instance().sendGuiReturnPacket(kit.getTile());
     }
 
     @Override
