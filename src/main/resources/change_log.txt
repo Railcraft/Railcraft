@@ -1,3 +1,10 @@
+12.1.0-beta-7:
+        NEW:
+            Closes #2053 Add a cart filter to the Activator Track Kit
+        FIX:
+            Fix #2054 Fluid boilers need three inventory slots
+            Fix Track Kit item not dynamically choosing the correct texture
+
 12.1.0-beta-6:
         NEW:
             Added Jaded Stone and Brick. Currently no way to obtain in survival.
