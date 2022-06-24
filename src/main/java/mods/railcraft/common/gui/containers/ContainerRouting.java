@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -50,7 +50,7 @@ public class ContainerRouting extends RailcraftContainer {
         errorElement.hidden = true;
         addWidget(errorElement);
 
-        slotTicket = new SlotSecure(ItemRoutingTable.FILTER, route.getInventory(), 0, 35, 24) {
+        slotTicket = new SlotSecure(route.getInventory(), 0, 35, 24) {
             @Override
             public void onSlotChanged() {
                 super.onSlotChanged();
@@ -58,6 +58,7 @@ public class ContainerRouting extends RailcraftContainer {
             }
 
         };
+        slotTicket.setFilter(ItemRoutingTable.FILTER);
         slotTicket.setToolTips(ToolTip.buildToolTip("routing.tips.slot"));
         addSlot(slotTicket);
 

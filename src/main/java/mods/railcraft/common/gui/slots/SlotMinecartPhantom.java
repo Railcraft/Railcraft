@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,10 +12,11 @@ package mods.railcraft.common.gui.slots;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
 
-public class SlotMinecartPhantom extends SlotStackFilter {
+public class SlotMinecartPhantom extends SlotRailcraft {
 
     public SlotMinecartPhantom(IInventory iinventory, int slotIndex, int posX, int posY) {
-        super(StackFilters.MINECART, iinventory, slotIndex, posX, posY);
+        super(iinventory, slotIndex, posX, posY);
+        setFilter(StackFilters.MINECART);
         setPhantom();
         setStackLimit(1);
     }

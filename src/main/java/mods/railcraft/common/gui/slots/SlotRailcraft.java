@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Predicate;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -29,6 +30,7 @@ public class SlotRailcraft extends Slot {
     protected boolean canShift = true;
     protected int stackLimit = -1;
     public BooleanSupplier isEnabled = () -> true;
+    private Predicate<ItemStack> filter;
 
     public SlotRailcraft(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
@@ -36,7 +38,8 @@ public class SlotRailcraft extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack stack) {
-        return isEnabled.getAsBoolean() && inventory.isItemValidForSlot(getSlotIndex(), stack);
+        return isEnabled.getAsBoolean() && inventory.isItemValidForSlot(getSlotIndex(), stack)
+                && (filter == null || filter.test(stack));
     }
 
     public SlotRailcraft setEnableCheck(BooleanSupplier isEnabled) {
@@ -56,6 +59,11 @@ public class SlotRailcraft extends Slot {
      */
     public void setToolTips(@Nullable ToolTip toolTips) {
         this.toolTips = toolTips;
+    }
+
+    public SlotRailcraft setFilter(Predicate<ItemStack> filter) {
+        this.filter = filter;
+        return this;
     }
 
     public SlotRailcraft setPhantom() {
@@ -104,6 +112,10 @@ public class SlotRailcraft extends Slot {
 
     public boolean canShift() {
         return canShift;
+    }
+
+    public static SlotRailcraft singleItemPhantom(IInventory iinventory, int slotIndex, int posX, int posY) {
+        return new SlotRailcraft(iinventory, slotIndex, posX, posY).setPhantom().setStackLimit(1);
     }
 
 }

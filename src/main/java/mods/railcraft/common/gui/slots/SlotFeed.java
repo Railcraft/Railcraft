@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,31 +11,11 @@ package mods.railcraft.common.gui.slots;
 
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
-public class SlotFeed extends Slot
-{
+public class SlotFeed extends SlotRailcraft {
 
-    public SlotFeed(IInventory iinventory, int slotIndex, int posX, int posY)
-    {
+    public SlotFeed(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
-    }
-
-    @Override
-    public int getSlotStackLimit()
-    {
-        return 64;
-    }
-
-    @Override
-    public boolean isItemValid(ItemStack stack)
-    {
-        return canPlaceItem(stack);
-    }
-
-    public static boolean canPlaceItem(ItemStack stack)
-    {
-        return StackFilters.FEED.test(stack);
+        setFilter(StackFilters.FEED);
     }
 }

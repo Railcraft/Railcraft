@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,7 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.carts.EntityCartTank;
 import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -26,7 +26,7 @@ public class ContainerCartTank extends RailcraftContainer {
         addWidget(new FluidGaugeWidget(cart.getTankManager().get(0), 35, 23, 176, 0, 16, 47));
 
         addSlot(new SlotFluidFilter(cart.getFilterInv(), 0, 71, 39));
-        addSlot(new SlotStackFilter(StackFilters.FLUID_CONTAINER, cart.getInvLiquids(), 0, 116, 21));
+        addSlot(new SlotRailcraft(cart.getInvLiquids(), 0, 116, 21).setFilter(StackFilters.FLUID_CONTAINER));
         addSlot(new SlotOutput(cart.getInvLiquids(), 1, 116, 56));
 
         for (int i = 0; i < 3; i++) {

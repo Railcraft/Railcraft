@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.detector.TileDetector;
 import mods.railcraft.common.blocks.detector.types.DetectorSheep;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -22,8 +22,8 @@ public class ContainerDetectorSheep extends RailcraftContainer {
     public ContainerDetectorSheep(InventoryPlayer inventoryplayer, TileDetector tile) {
         super(((DetectorSheep) tile.getDetector()).getFilters());
         DetectorSheep detector = (DetectorSheep) tile.getDetector();
-        addSlot(new SlotStackFilter(StackFilters.of(Blocks.WOOL), detector.getFilters(), 0, 60, 24)
-                .setPhantom().setStackLimit(1));
+        addSlot(SlotRailcraft.singleItemPhantom(detector.getFilters(), 0, 60, 24)
+                .setFilter(StackFilters.of(Blocks.WOOL)));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {

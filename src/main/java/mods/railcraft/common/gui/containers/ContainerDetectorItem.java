@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -15,7 +15,6 @@ import mods.railcraft.common.blocks.detector.types.DetectorItem;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 
 public class ContainerDetectorItem extends RailcraftContainer {
 
@@ -30,15 +29,7 @@ public class ContainerDetectorItem extends RailcraftContainer {
                     .setPhantom().setEnableCheck(() -> detector.getPrimaryMode() == DetectorItem.PrimaryMode.FILTERED));
         }
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(playerInv, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-            }
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(playerInv, j, 8 + j * 18, 142));
-        }
+        addPlayerSlots(playerInv);
     }
 
     @Override

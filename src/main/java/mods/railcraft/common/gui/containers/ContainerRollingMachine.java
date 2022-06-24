@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -20,7 +20,10 @@ import mods.railcraft.common.util.inventory.InvTools;
 import mods.railcraft.common.util.misc.Game;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 
 public class ContainerRollingMachine extends RailcraftContainer {
@@ -57,15 +60,7 @@ public class ContainerRollingMachine extends RailcraftContainer {
             }
         }
 
-        for (int i1 = 0; i1 < 3; i1++) {
-            for (int l1 = 0; l1 < 9; l1++) {
-                addSlot(new Slot(inventoryplayer, l1 + i1 * 9 + 9, 8 + l1 * 18, 84 + i1 * 18));
-            }
-        }
-
-        for (int j1 = 0; j1 < 9; j1++) {
-            addSlot(new Slot(inventoryplayer, j1, 8 + j1 * 18, 142));
-        }
+        addPlayerSlots(inventoryplayer);
 
         onCraftMatrixChanged(craftMatrix);
     }

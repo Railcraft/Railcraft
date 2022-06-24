@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.blocks.machine.manipulator.TileManipulatorCart;
 import mods.railcraft.common.gui.slots.SlotMinecartPhantom;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -41,17 +40,7 @@ public abstract class ContainerManipulatorCart<T extends TileManipulatorCart> ex
             addSlot(new SlotMinecartPhantom(this.tile.getCartFilters(), 1, 89, 26));
         }
 
-        if (inventoryplayer != null) {
-            for (int i = 0; i < 3; i++) {
-                for (int k = 0; k < 9; k++) {
-                    addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-                }
-            }
-
-            for (int j = 0; j < 9; j++) {
-                addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 142));
-            }
-        }
+        addPlayerSlots(inventoryplayer);
     }
 
     protected void addSlots(T tile) {

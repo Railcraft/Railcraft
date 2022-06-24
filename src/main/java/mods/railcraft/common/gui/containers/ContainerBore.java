@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -12,7 +12,6 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.api.carts.IBoreHead;
 import mods.railcraft.common.carts.EntityTunnelBore;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
@@ -30,7 +29,7 @@ public class ContainerBore extends RailcraftContainer {
         super(bore);
         this.bore = bore;
 
-        addSlot(new SlotStackFilter(StackFilters.of(IBoreHead.class), bore, 0, 17, 36).setStackLimit(1));
+        addSlot(new SlotRailcraft(bore, 0, 17, 36).setFilter(StackFilters.of(IBoreHead.class)).setStackLimit(1));
 
         // Fuel
         for (int i = 0; i < 6; i++) {

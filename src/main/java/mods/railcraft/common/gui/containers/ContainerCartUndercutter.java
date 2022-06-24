@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -34,16 +34,7 @@ public class ContainerCartUndercutter extends RailcraftContainer {
         addSlot(new SlotLinked(cart, 0, 131, 36, under));
         addSlot(new SlotLinked(cart, 1, 131, 78, side));
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 123 + i * 18));
-            }
-
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(inventoryplayer, j, 8 + j * 18, 181));
-        }
+        addPlayerSlots(inventoryplayer, 205);
     }
 
     private class SlotUndercutterFilter extends SlotBlockFilter {

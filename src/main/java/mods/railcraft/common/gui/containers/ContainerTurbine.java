@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -11,7 +11,7 @@ package mods.railcraft.common.gui.containers;
 
 import mods.railcraft.common.blocks.logic.SteamTurbineLogic;
 import mods.railcraft.common.blocks.structures.TileSteamTurbine;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
+import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.widgets.AnalogWidget;
 import mods.railcraft.common.gui.widgets.ChargeNetworkIndicator;
@@ -58,8 +58,8 @@ public class ContainerTurbine extends RailcraftContainer {
         }, 137, 19, 28, 14, 99, 65));
         addWidget(new AnalogWidget(new ChargeNetworkIndicator(tile.getWorld(), tile.getPos()), 137, 38, 28, 14, 99, 65));
 
-        addSlot(new SlotStackFilter(StackFilters.of(RailcraftItems.TURBINE_ROTOR), inv, 0, 60, 24)
-                .setStackLimit(1));
+        addSlot(new SlotRailcraft(inv, 0, 60, 24)
+                .setFilter(StackFilters.of(RailcraftItems.TURBINE_ROTOR)).setStackLimit(1));
 
         addPlayerSlots(inventoryplayer, GUI_HEIGHT);
     }

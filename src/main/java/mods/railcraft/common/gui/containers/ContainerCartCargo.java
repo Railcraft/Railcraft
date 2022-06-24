@@ -12,7 +12,6 @@ package mods.railcraft.common.gui.containers;
 import mods.railcraft.common.carts.EntityCartCargo;
 import mods.railcraft.common.gui.slots.SlotLinked;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 
@@ -21,8 +20,8 @@ public class ContainerCartCargo extends RailcraftContainer {
     public ContainerCartCargo(InventoryPlayer inventoryplayer, EntityCartCargo cart) {
         super(cart);
 
-        SlotRailcraft filter = new SlotStackFilter(StackFilters.CARGO, cart.getFilterInv(), 0, 26, 36)
-                .setPhantom().setStackLimit(1).setEnableCheck(cart::isEmptied);
+        SlotRailcraft filter = SlotRailcraft.singleItemPhantom(cart.getFilterInv(), 0, 26, 36)
+                .setFilter(StackFilters.CARGO).setEnableCheck(cart::isEmptied);
         addSlot(filter);
 
         for (int i = 0; i < 3; i++) {

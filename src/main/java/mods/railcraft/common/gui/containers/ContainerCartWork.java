@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,7 +14,10 @@ import mods.railcraft.common.gui.slots.SlotUnshiftable;
 import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
@@ -39,15 +42,7 @@ public final class ContainerCartWork extends RailcraftContainer {
             }
         }
 
-        for (var6 = 0; var6 < 3; ++var6) {
-            for (var7 = 0; var7 < 9; ++var7) {
-                addSlot(new Slot(inv, var7 + var6 * 9 + 9, 8 + var7 * 18, 84 + var6 * 18));
-            }
-        }
-
-        for (var6 = 0; var6 < 9; ++var6) {
-            addSlot(new Slot(inv, var6, 8 + var6 * 18, 142));
-        }
+        addPlayerSlots(inv);
 
         onCraftMatrixChanged(craftMatrix);
     }

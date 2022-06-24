@@ -44,6 +44,12 @@ import java.util.stream.Stream;
 public enum StackFilters implements Predicate<ItemStack> {
 
     ALL,
+    BLOCK {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return stack.getItem() instanceof ItemBlock;
+        }
+    },
     FUEL {
         @Override
         protected boolean testType(ItemStack stack) {
@@ -89,6 +95,12 @@ public enum StackFilters implements Predicate<ItemStack> {
         @Override
         protected boolean testType(ItemStack stack) {
             return stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        }
+    },
+    FLUID_CONTAINER_FILLED {
+        @Override
+        protected boolean testType(ItemStack stack) {
+            return FluidItemHelper.isFluidInContainer(stack);
         }
     },
     FEED {

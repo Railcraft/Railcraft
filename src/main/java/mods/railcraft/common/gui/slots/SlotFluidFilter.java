@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,20 +9,14 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.common.fluids.FluidItemHelper;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 public class SlotFluidFilter extends SlotRailcraft {
     public SlotFluidFilter(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
+        setFilter(StackFilters.FLUID_CONTAINER_FILLED);
         setPhantom();
         setStackLimit(1);
-    }
-
-    @Override
-    public boolean isItemValid(@Nullable ItemStack itemstack) {
-        return FluidItemHelper.isFluidInContainer(itemstack);
     }
 }

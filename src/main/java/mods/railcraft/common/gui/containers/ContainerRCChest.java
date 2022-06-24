@@ -15,7 +15,6 @@ import mods.railcraft.common.util.inventory.IInventoryImplementor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 
 /**
  * Created by CovertJaguar on 1/15/2019 for Railcraft.
@@ -40,19 +39,11 @@ public class ContainerRCChest extends RailcraftContainer {
 
         for (int j = 0; j < numRows; ++j) {
             for (int k = 0; k < 9; ++k) {
-                addSlotToContainer(new SlotRailcraft(inv, k + j * 9, 8 + k * 18, 18 + j * 18));
+                addSlot(new SlotRailcraft(inv, k + j * 9, 8 + k * 18, 18 + j * 18));
             }
         }
 
-        for (int l = 0; l < 3; ++l) {
-            for (int j1 = 0; j1 < 9; ++j1) {
-                addSlotToContainer(new Slot(invPlayer, j1 + l * 9 + 9, 8 + j1 * 18, 103 + l * 18 + i));
-            }
-        }
-
-        for (int i1 = 0; i1 < 9; ++i1) {
-            addSlotToContainer(new Slot(invPlayer, i1, 8 + i1 * 18, 161 + i));
-        }
+        addPlayerSlots(invPlayer, 185 + i);
     }
 
     /**

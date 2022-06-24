@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,14 +13,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-import java.util.function.Predicate;
-
-public class SlotSecure extends SlotStackFilter {
+public class SlotSecure extends SlotRailcraft {
 
     public boolean locked = true;
 
-    public SlotSecure(Predicate<ItemStack> filter, IInventory contents, int id, int x, int y) {
-        super(filter, contents, id, x, y);
+    public SlotSecure(IInventory contents, int id, int x, int y) {
+        super(contents, id, x, y);
         setStackLimit(1);
     }
 

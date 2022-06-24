@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -13,7 +13,6 @@ import mods.railcraft.common.carts.EntityLocomotive;
 import mods.railcraft.common.carts.EntityLocomotive.LocoMode;
 import mods.railcraft.common.carts.EntityLocomotive.LocoSpeed;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
-import mods.railcraft.common.gui.slots.SlotStackFilter;
 import mods.railcraft.common.gui.slots.SlotUntouchable;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.items.ItemTicket;
@@ -50,7 +49,8 @@ public class ContainerLocomotive extends RailcraftContainer {
     public final void init() {
         defineSlotsAndWidgets();
 
-        SlotRailcraft slotTicket = new SlotStackFilter(ItemTicket.FILTER, loco, loco.getSizeInventory() - 2, 116, guiHeight - 111).setStackLimit(1);
+        SlotRailcraft slotTicket = new SlotRailcraft(loco, loco.getSizeInventory() - 2, 116, guiHeight - 111)
+                .setFilter(ItemTicket.FILTER).setStackLimit(1);
         slotTicket.setToolTips(ToolTip.buildToolTip("gui.locomotive.tips.slot.ticket"));
         addSlot(slotTicket);
         // TODO: make some way to clear this?

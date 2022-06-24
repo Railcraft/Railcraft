@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -17,7 +17,6 @@ import mods.railcraft.common.plugins.forge.PlayerPlugin;
 import mods.railcraft.common.util.network.PacketBuilder;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,19 +34,12 @@ public class ContainerTrackRouting extends RailcraftContainer {
         this.track = track;
         this.playerInv = playerInv;
 
-        slotTicket = new SlotSecure(ItemTicketGold.FILTER, track.getInventory(), 0, 44, 24);
+        slotTicket = new SlotSecure(track.getInventory(), 0, 44, 24);
+        slotTicket.setFilter(ItemTicketGold.FILTER);
         slotTicket.setToolTips(ToolTip.buildToolTip("routing.track.tips.slot"));
         addSlot(slotTicket);
 
-        for (int i = 0; i < 3; i++) {
-            for (int k = 0; k < 9; k++) {
-                addSlot(new Slot(playerInv, k + i * 9 + 9, 8 + k * 18, 58 + i * 18));
-            }
-        }
-
-        for (int j = 0; j < 9; j++) {
-            addSlot(new Slot(playerInv, j, 8 + j * 18, 116));
-        }
+        addPlayerSlots(playerInv, 140);
     }
 
     @Override

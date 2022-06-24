@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -38,15 +38,7 @@ public class ContainerTradeStation extends RailcraftContainer {
             }
         }
 
-        for (int y = 0; y < 3; y++) {
-            for (int x = 0; x < 9; x++) {
-                addSlot(new Slot(inventoryplayer, x + y * 9 + 9, 8 + x * 18, 132 + y * 18));
-            }
-        }
-
-        for (int x = 0; x < 9; x++) {
-            addSlot(new Slot(inventoryplayer, x, 8 + x * 18, 190));
-        }
+        addPlayerSlots(inventoryplayer, 214);
     }
 
 }

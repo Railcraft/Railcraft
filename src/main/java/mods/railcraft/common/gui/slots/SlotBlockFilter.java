@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,22 +9,16 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.gui.slots;
 
-import mods.railcraft.common.util.inventory.InvTools;
+import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 
 public class SlotBlockFilter extends SlotRailcraft {
 
     public SlotBlockFilter(IInventory iinventory, int slotIndex, int posX, int posY) {
         super(iinventory, slotIndex, posX, posY);
+        setFilter(StackFilters.BLOCK);
         setPhantom();
         setStackLimit(1);
-    }
-
-    @Override
-    public boolean isItemValid(ItemStack stack) {
-        return !InvTools.isEmpty(stack) && stack.getItem() instanceof ItemBlock;
     }
 
 }
