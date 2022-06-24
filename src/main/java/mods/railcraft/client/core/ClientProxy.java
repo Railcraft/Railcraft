@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -14,10 +14,7 @@ import mods.railcraft.client.particles.ParticlePumpkin;
 import mods.railcraft.client.particles.ParticleSpark;
 import mods.railcraft.client.render.carts.*;
 import mods.railcraft.client.render.models.programmatic.locomotives.ModelLocomotiveSteamSolid;
-import mods.railcraft.client.render.models.resource.FluidModelRenderer;
-import mods.railcraft.client.render.models.resource.JSONModelRenderer;
-import mods.railcraft.client.render.models.resource.OutfittedTrackItemModel;
-import mods.railcraft.client.render.models.resource.OutfittedTrackModel;
+import mods.railcraft.client.render.models.resource.*;
 import mods.railcraft.client.render.tesr.*;
 import mods.railcraft.client.render.world.GoggleAuraWorldRenderer;
 import mods.railcraft.client.util.effects.ClientEffects;
@@ -102,6 +99,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     public void initializeClient() {
         ModelLoaderRegistry.registerLoader(OutfittedTrackModel.Loader.INSTANCE);
         ModelLoaderRegistry.registerLoader(OutfittedTrackItemModel.Loader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(TrackKitItemModel.Loader.INSTANCE);
 
         MinecraftForge.EVENT_BUS.register(RCSoundHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(JSONModelRenderer.INSTANCE);

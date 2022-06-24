@@ -20,6 +20,7 @@ import mods.railcraft.common.blocks.tracks.TrackShapeHelper;
 import mods.railcraft.common.blocks.tracks.TrackTools;
 import mods.railcraft.common.blocks.tracks.behaivor.TrackTypes;
 import mods.railcraft.common.blocks.tracks.flex.BlockTrackFlex;
+import mods.railcraft.common.core.RailcraftConstants;
 import mods.railcraft.common.items.ItemRailcraft;
 import mods.railcraft.common.plugins.forge.ChatPlugin;
 import mods.railcraft.common.plugins.forge.LocalizationPlugin;
@@ -28,21 +29,22 @@ import mods.railcraft.common.util.misc.Game;
 import mods.railcraft.common.util.sounds.SoundHelper;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static mods.railcraft.common.util.inventory.InvTools.dec;
 
@@ -56,6 +58,8 @@ import static mods.railcraft.common.util.inventory.InvTools.dec;
  * Gives a buffer stop track kit.
  */
 public class ItemTrackKit extends ItemRailcraft {
+    public static final String MODEL_PREFIX = "track_kit.";
+
     @Override
     public void initializeDefinition() {
         TrackKit.itemKit = this;
@@ -119,8 +123,17 @@ public class ItemTrackKit extends ItemRailcraft {
     @Override
     @SideOnly(Side.CLIENT)
     public void initializeClient() {
-        TrackRegistry.TRACK_KIT.stream().filter(TrackKit::isVisible).forEach(trackKit -> ModelManager.registerItemModel(this, trackKit.ordinal(),
-                trackKit.getRegistryName().getNamespace(), "track_kits/" + trackKit.getRegistryName().getPath()));
+        List<ModelResourceLocation> textures = new ArrayList<>();
+        for (TrackKit trackKit : TrackRegistry.TRACK_KIT) {
+            if (trackKit.isVisible())
+                textures.add(new ModelResourceLocation(
+                        new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN,
+                                MODEL_PREFIX + trackKit.getName()), "inventory"));
+        }
+        ModelManager.registerComplexItemModel(this, (stack -> new ModelResourceLocation(
+                        new ResourceLocation(RailcraftConstants.RESOURCE_DOMAIN,
+                                MODEL_PREFIX + TrackRegistry.TRACK_KIT.get(stack).getName()), "inventory")),
+                textures.toArray(new ModelResourceLocation[0]));
     }
 
     @Override
