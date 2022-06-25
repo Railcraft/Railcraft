@@ -11,7 +11,9 @@
 package mods.railcraft.common.blocks.logic;
 
 import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimaps;
+import mods.railcraft.common.blocks.IRailcraftBlockContainer;
 import mods.railcraft.common.blocks.TileLogic;
 import mods.railcraft.common.blocks.TileRailcraft;
 import mods.railcraft.common.blocks.interfaces.IDropsInv;
@@ -76,6 +78,7 @@ public class StructureLogic extends Logic {
     private char marker = 'O';
     private boolean updatingNeighbors;
     private boolean isPotentialMaster = true;
+    private Set<Block> parts = new HashSet<>();
 
     public StructureLogic(String structureKey, TileLogic tile, List<? extends StructurePattern> patterns) {
         super(Adapter.of(tile));
@@ -108,6 +111,21 @@ public class StructureLogic extends Logic {
     public final Optional<StructureLogic> getMaster() {
         return getLogic(masterPos)
                 .filter(StructureLogic::isValidMaster);
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public StructureLogic addParts(IRailcraftBlockContainer... blocks) {
+        Arrays.stream(blocks)
+                .map(IRailcraftBlockContainer::block)
+                .filter(b -> b != Blocks.AIR)
+                .forEach(b -> parts.add(b));
+        return this;
+    }
+
+    @SuppressWarnings("UnusedReturnValue")
+    public StructureLogic addParts(Block... blocks) {
+        parts.addAll(Lists.newArrayList(blocks));
+        return this;
     }
 
     @SuppressWarnings("UnusedReturnValue")
@@ -337,7 +355,7 @@ public class StructureLogic extends Logic {
     }
 
     public boolean isPart(Block block) {
-        return block == tile.getBlockType();
+        return block == tile.getBlockType() || parts.contains(block);
     }
 
     private void testPatterns() {

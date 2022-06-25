@@ -20,7 +20,6 @@ import mods.railcraft.common.fluids.TankManager;
 import mods.railcraft.common.plugins.buildcraft.triggers.ITemperature;
 import mods.railcraft.common.plugins.forge.WorldPlugin;
 import mods.railcraft.common.util.steam.SteamConstants;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 
@@ -81,13 +80,6 @@ public abstract class TileBoiler extends TileFurnace implements ITemperature, IT
 //            }
 
             @Override
-            public boolean isPart(Block block) {
-                return super.isPart(block)
-                        || RailcraftBlocks.BOILER_TANK_PRESSURE_LOW.isEqual(block)
-                        || RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH.isEqual(block);
-            }
-
-            @Override
             public boolean isMapPositionValid(BlockPos pos, char mapPos) {
                 IBlockState other = WorldPlugin.getBlockState(world, pos);
                 IBlockState self = tile().getBlockState();
@@ -116,7 +108,10 @@ public abstract class TileBoiler extends TileFurnace implements ITemperature, IT
                 }
                 return true;
             }
-        });
+        }.addParts(RailcraftBlocks.BOILER_FIREBOX_SOLID,
+                RailcraftBlocks.BOILER_FIREBOX_FLUID,
+                RailcraftBlocks.BOILER_TANK_PRESSURE_LOW,
+                RailcraftBlocks.BOILER_TANK_PRESSURE_HIGH));
     }
 
     private static StructurePattern buildMap(int width, int tankHeight, int offset, char tank, int ticks, float heat, int steamCapacity) {
