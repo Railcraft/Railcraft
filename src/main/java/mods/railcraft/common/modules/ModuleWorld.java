@@ -85,6 +85,8 @@ public class ModuleWorld extends RailcraftModulePayload {
                     GameRegistry.registerWorldGenerator(new GeneratorGeode(), 0);
                 if (RailcraftConfig.isWorldGenEnabled("quarried") && RailcraftBlocks.QUARRIED_STONE.isEnabled())
                     MinecraftForge.EVENT_BUS.register(PopulatorQuarry.instance());
+                if (RailcraftConfig.isWorldGenEnabled("jaded") && RailcraftBlocks.JADED_STONE.isEnabled())
+                    MinecraftForge.EVENT_BUS.register(PopulatorJaded.instance());
 
                 oreConfigFolder = new File(Railcraft.instance.getConfigFolder(), "ores");
                 if (!oreConfigFolder.exists())
@@ -213,11 +215,19 @@ public class ModuleWorld extends RailcraftModulePayload {
 
     public static class Config {
         public final float geodeChance;
+        public final float monolithChance;
+        public final float quarryChance;
 
         public Config(Configuration config) {
             geodeChance = config.getFloat("geodeChance", CAT_CONFIG,
                     0.05F, 0.0F, 1.0F,
-                    "how often Geodes succeed a spawn check under the ocean, 0 = never, 1 = every time");
+                    "how often a Geode succeeds a spawn check under the ocean, 0 = never, 1 = every time");
+            monolithChance = config.getFloat("monolithChance", CAT_CONFIG,
+                    0.005F, 0.0F, 1.0F,
+                    "how often a Monolith succeeds a spawn check in the plains, 0 = never, 1 = every time");
+            quarryChance = config.getFloat("quarryChance", CAT_CONFIG,
+                    0.025F, 0.0F, 1.0F,
+                    "how often a Quarry succeeds a spawn check in a forest, 0 = never, 1 = every time");
         }
     }
 }

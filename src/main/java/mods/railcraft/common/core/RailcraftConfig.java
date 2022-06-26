@@ -315,6 +315,7 @@ public class RailcraftConfig {
         worldGen.put("firestone", get(configMain, CAT_WORLD_GEN + ".generate", "firestone", true, "spawns on lava sea floor in Nether"));
         worldGen.put("abyssal", get(configMain, CAT_WORLD_GEN + ".generate", "abyssal.geodes", true, "spawns beneath the sea in spheres"));
         worldGen.put("quarried", get(configMain, CAT_WORLD_GEN + ".generate", "quarried.stone", true, "spawns on the surface in forests"));
+        worldGen.put("jaded", get(configMain, CAT_WORLD_GEN + ".generate", "jaded.stone", true, "spawns on the surface in plains"));
 
         worldGen.put("workshop", get(configMain, CAT_WORLD_GEN + ".generate", "village.workshop", true, "village building"));
         worldGen.put("villager", get(configMain, CAT_WORLD_GEN + ".generate", "village.villager", true, "villager careers and professions"));

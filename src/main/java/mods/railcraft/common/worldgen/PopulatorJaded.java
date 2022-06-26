@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 
 import java.util.Random;
@@ -24,20 +25,20 @@ import java.util.Random;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public final class PopulatorQuarry extends Populator {
+public final class PopulatorJaded extends Populator {
 
     public static final int GEN_HEIGHT = 50;
-    private static PopulatorQuarry instance;
-    private final WorldGenQuarry gen = new WorldGenQuarry(RailcraftBlocks.QUARRIED_STONE.getDefaultState());
+    private static PopulatorJaded instance;
+    private final WorldGenJaded gen = new WorldGenJaded(RailcraftBlocks.JADED_STONE.getDefaultState());
 
-    public static PopulatorQuarry instance() {
+    public static PopulatorJaded instance() {
         if (instance == null) {
-            instance = new PopulatorQuarry();
+            instance = new PopulatorJaded();
         }
         return instance;
     }
 
-    private PopulatorQuarry() {
+    private PopulatorJaded() {
         super(EventType.CUSTOM, GEN_HEIGHT);
     }
 
@@ -51,7 +52,7 @@ public final class PopulatorQuarry extends Populator {
 
     @Override
     public boolean canGen(World world, Random rand, BlockPos chunkCenterPos, Biome biome) {
-        return BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY) && rand.nextDouble() <= ModuleWorld.config.quarryChance;
+        return BiomeDictionary.hasType(biome, Type.PLAINS) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SNOWY) && rand.nextDouble() <= ModuleWorld.config.monolithChance;
     }
 
 }
