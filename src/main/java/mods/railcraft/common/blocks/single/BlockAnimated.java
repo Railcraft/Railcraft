@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2021
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -51,6 +51,7 @@ public abstract class BlockAnimated<T extends TileRailcraft & ISmartTile> extend
         super(materialIn);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void initializeClient() {
         super.initializeClient();
@@ -136,7 +137,7 @@ public abstract class BlockAnimated<T extends TileRailcraft & ISmartTile> extend
         final ResourceLocation oldId = Objects.requireNonNull(getRegistryName());
         final String id = oldId.getNamespace() + ":blocks/" + oldId.getPath();
         final Vec3d velocity = new Vec3d(-entity.motionX * 4.0D, 1.5D, -entity.motionZ * 4.0D);
-        final Vec3d position = new Vec3d(entity.posX + ((double) MathTools.nextFloat() - 0.5D) * (double)entity.width, entity.getEntityBoundingBox().minY + 0.1D, entity.posZ + ((double)MathTools.nextFloat() - 0.5D) * (double)entity.width);
+        final Vec3d position = new Vec3d(entity.posX + ((double) MathTools.nextFloat() - 0.5D) * (double) entity.width, entity.getEntityBoundingBox().minY + 0.1D, entity.posZ + ((double) MathTools.nextFloat() - 0.5D) * (double) entity.width);
         HostEffects.INSTANCE.blockCrack(world, pos, position, velocity, state, id);
         return true;
     }
