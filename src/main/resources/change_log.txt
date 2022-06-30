@@ -1,3 +1,13 @@
+12.1.0-beta-8:
+        NEW:
+            Add Jade Monoliths to plains biomes
+        FIX:
+            Fix #2045 Fix Boilers not always forming on completion
+            Fix #2060 Handle filter fluids using optionals to prevent incorrect null checks
+            Fix #2057 BlockAnimated no longer crashes server
+            Fix #2058 Restore super behaviors when hitting tracks with a crowbar
+
+
 12.1.0-beta-7:
         NEW:
             Closes #2053 Add a cart filter to the Activator Track Kit
