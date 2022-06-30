@@ -39,6 +39,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public abstract class TileFluidManipulator extends TileManipulatorCart implements ISidedInventory, ITileTank {
 
@@ -69,18 +70,15 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
         return invFilter;
     }
 
-    public @Nullable FluidStack getFilterFluid() {
+    public Optional<FluidStack> getFilterFluid() {
         if (!invFilter.getStackInSlot(0).isEmpty()) {
-            return FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0));
+            return Optional.ofNullable(FluidItemHelper.getFluidStackInContainer(invFilter.getStackInSlot(0)));
         }
-        return null;
+        return Optional.empty();
     }
 
     public @Nullable FluidStack getFluidHandled() {
-        FluidStack fluid = getFilterFluid();
-        if (fluid != null)
-            return fluid;
-        return tank.getFluid();
+        return getFilterFluid().orElse(tank.getFluid());
     }
 
     protected @Nullable AdvancedFluidHandler getFluidHandler(EntityMinecart cart, EnumFacing facing) {
@@ -127,8 +125,9 @@ public abstract class TileFluidManipulator extends TileManipulatorCart implement
                 return false;
             if (FluidItemHelper.isEmptyContainer(stack))
                 return true;
-            FluidStack filter = getFilterFluid();
-            return filter == null || FluidItemHelper.containsFluid(stack, filter);
+            return getFilterFluid()
+                    .map(filterFluid -> FluidItemHelper.containsFluid(stack, filterFluid))
+                    .orElse(false);
         }
         return false;
     }

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2019
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,7 +9,6 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
-import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -28,10 +27,35 @@ import java.util.function.Supplier;
 /**
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public enum Fluids implements Supplier<@Nullable Fluid> {
+public enum Fluids implements Supplier<Optional<Fluid>> {
 
-    WATER, LAVA, FUEL, BIOFUEL, IC2BIOGAS, CREOSOTE, STEAM, BIOETHANOL("bio.ethanol"), COAL, PYROTHEUM, FRESHWATER, BIODIESEL, DIESEL, GASOLINE,
-    OIL_HEAVY, OIL_DENSE, OIL_DISTILLED, FUEL_DENSE, FUEL_MIXED_HEAVY, FUEL_LIGHT, FUEL_MIXED_LIGHT, FUEL_GASEOUS, REFINED_OIL, REFINED_FUEL, REFINED_BIOFUEL, TREE_OIL, SEED_OIL;
+    WATER,
+    LAVA,
+    FUEL,
+    BIOFUEL,
+    IC2BIOGAS,
+    CREOSOTE,
+    STEAM,
+    BIOETHANOL("bio.ethanol"),
+    COAL,
+    PYROTHEUM,
+    FRESHWATER,
+    BIODIESEL,
+    DIESEL,
+    GASOLINE,
+    OIL_HEAVY,
+    OIL_DENSE,
+    OIL_DISTILLED,
+    FUEL_DENSE,
+    FUEL_MIXED_HEAVY,
+    FUEL_LIGHT,
+    FUEL_MIXED_LIGHT,
+    FUEL_GASEOUS,
+    REFINED_OIL,
+    REFINED_FUEL,
+    REFINED_BIOFUEL,
+    TREE_OIL,
+    SEED_OIL;
     private final String tag;
 
     Fluids() {
@@ -77,31 +101,21 @@ public enum Fluids implements Supplier<@Nullable Fluid> {
     }
 
     @Override
-    public @Nullable Fluid get() {
-        return FluidRegistry.getFluid(tag);
-    }
-
-    public Optional<Fluid> object() {
-        return Optional.ofNullable(get());
+    public Optional<Fluid> get() {
+        return Optional.ofNullable(FluidRegistry.getFluid(tag));
     }
 
     public boolean isPresent() {
-        return get() != null;
+        return get().isPresent();
     }
 
     public void ifPresent(Consumer<Fluid> consumer) {
-        Fluid fluid = get();
-        if (fluid != null)
-            consumer.accept(fluid);
+        get().ifPresent(consumer);
     }
 
     public <U> Optional<U> map(Function<Fluid, ? extends U> mapper) {
         Objects.requireNonNull(mapper);
-        if (!isPresent())
-            return Optional.empty();
-        else {
-            return Optional.ofNullable(mapper.apply(get()));
-        }
+        return get().map(mapper);
     }
 
     /**
@@ -126,7 +140,7 @@ public enum Fluids implements Supplier<@Nullable Fluid> {
     }
 
     public boolean is(@Nullable Fluid fluid) {
-        return fluid != null && get() == fluid;
+        return fluid != null && get().map(f -> f == fluid).orElse(false);
     }
 
     public boolean is(@Nullable FluidStack fluidStack) {
@@ -138,8 +152,9 @@ public enum Fluids implements Supplier<@Nullable Fluid> {
     }
 
     public boolean isContained(ItemStack containerStack) {
-        Fluid fluid = get();
-        return fluid != null && !InvTools.isEmpty(containerStack) && FluidItemHelper.containsFluid(containerStack, fluid);
+        return get()
+                .map(fluid -> FluidItemHelper.containsFluid(containerStack, fluid))
+                .orElse(false);
     }
 
 }

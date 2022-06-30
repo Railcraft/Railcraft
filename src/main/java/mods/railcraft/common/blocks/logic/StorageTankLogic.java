@@ -22,6 +22,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -40,7 +41,7 @@ public class StorageTankLogic extends InventoryLogic {
         this(adapter, capacity, null);
     }
 
-    public StorageTankLogic(Adapter adapter, int capacity, @Nullable Supplier<@Nullable Fluid> filter) {
+    public StorageTankLogic(Adapter adapter, int capacity, @Nullable Supplier<Optional<Fluid>> filter) {
         super(adapter, 3);
         tank = new FilteredTank(capacity, adapter.tile().orElse(null));
         if (filter != null)
@@ -58,7 +59,7 @@ public class StorageTankLogic extends InventoryLogic {
             if (tankFluid == null) {
                 return FluidItemHelper.isContainer(stack);
             }
-            return FluidItemHelper.isRoomInContainer(stack, tankFluid) || FluidItemHelper.containsFluid(stack, tankFluid);
+            return FluidItemHelper.handlesFluid(stack, tankFluid);
         }
         return false;
     }

@@ -14,7 +14,6 @@ import mods.railcraft.common.gui.slots.SlotFluidFilter;
 import mods.railcraft.common.gui.slots.SlotOutput;
 import mods.railcraft.common.gui.slots.SlotRailcraft;
 import mods.railcraft.common.gui.widgets.FluidGaugeWidget;
-import mods.railcraft.common.util.inventory.filters.StackFilters;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 
@@ -26,8 +25,8 @@ public class ContainerCartTank extends RailcraftContainer {
         addWidget(new FluidGaugeWidget(cart.getTankManager().get(0), 35, 23, 176, 0, 16, 47));
 
         addSlot(new SlotFluidFilter(cart.getFilterInv(), 0, 71, 39));
-        addSlot(new SlotRailcraft(cart.getInvLiquids(), 0, 116, 21).setFilter(StackFilters.FLUID_CONTAINER));
-        addSlot(new SlotOutput(cart.getInvLiquids(), 1, 116, 56));
+        addSlot(new SlotRailcraft(cart, 0, 116, 21));
+        addSlot(new SlotOutput(cart, 1, 116, 56));
 
         for (int i = 0; i < 3; i++) {
             for (int k = 0; k < 9; k++) {

@@ -184,11 +184,10 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
         dataManager.set(FILLING, fill);
     }
 
-    public @Nullable FluidStack getFilterFluid() {
-        ItemStack filter = getFilterItem();
-        if (InvTools.isEmpty(filter))
-            return null;
-        return FluidItemHelper.getFluidStackInContainer(filter);
+    public Optional<FluidStack> getFilterFluid() {
+        return Optional.ofNullable(getFilterItem())
+                .filter(InvTools::nonEmpty)
+                .map(FluidItemHelper::getFluidStackInContainer);
     }
 
     public IInventory getInvLiquids() {
@@ -197,7 +196,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
-        return slot == SLOT_INPUT && FluidItemHelper.isContainer(stack);
+        return slot == SLOT_INPUT && tank.matchesFilter(stack);
     }
 
     @Override
@@ -218,7 +217,7 @@ public class EntityCartTank extends CartBaseFiltered implements ISidedInventory,
     @Override
     public boolean canPassFluidRequests(FluidStack fluid) {
         if (hasFilter())
-            return FluidTools.matches(getFilterFluid(), fluid);
+            return getFilterFluid().map(filterFluid -> FluidTools.matches(filterFluid, fluid)).orElse(false);
         return tank.isEmpty() && FluidTools.matches(tank.getFluid(), fluid);
     }
 

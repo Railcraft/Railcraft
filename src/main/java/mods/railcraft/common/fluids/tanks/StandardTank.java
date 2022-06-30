@@ -10,17 +10,19 @@
 package mods.railcraft.common.fluids.tanks;
 
 import mods.railcraft.common.blocks.TileRailcraft;
+import mods.railcraft.common.fluids.FluidItemHelper;
 import mods.railcraft.common.fluids.Fluids;
 import mods.railcraft.common.gui.tooltips.ToolTip;
 import mods.railcraft.common.gui.tooltips.ToolTipLine;
-import mods.railcraft.common.util.misc.Conditions;
 import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -35,7 +37,7 @@ public class StandardTank extends FluidTank {
             refreshTooltip();
         }
     };
-    protected @Nullable Supplier<@Nullable FluidStack> filter;
+    protected Optional<Supplier<Optional<FluidStack>>> filter = Optional.empty();
     private int tankIndex;
     private boolean hidden;
     private @Nullable Consumer<StandardTank> updateCallback;
@@ -101,7 +103,13 @@ public class StandardTank extends FluidTank {
     }
 
     public @Nullable Fluid getFluidType() {
-        return getFluid() != null ? getFluid().getFluid() : filter != null ? filter.get().getFluid() : null;
+        return getFluid() != null ? getFluid().getFluid() : getFilterFluidType().orElse(null);
+    }
+
+    public Optional<Fluid> getFilterFluidType() {
+        return filter
+                .flatMap(Supplier::get)
+                .map(FluidStack::getFluid);
     }
 
     @Override
@@ -112,10 +120,15 @@ public class StandardTank extends FluidTank {
     public boolean matchesFilter(@Nullable FluidStack fluidStack) {
         if (fluidStack == null)
             return true;
-        if (filter != null) {
-            return Conditions.check(filter.get(), fluidStack, Fluids::areEqual);
-        }
-        return true;
+        return filter.flatMap(Supplier<Optional<FluidStack>>::get)
+                .map(fs -> Fluids.areEqual(fs, fluidStack))
+                .orElse(true);
+    }
+
+    public boolean matchesFilter(@Nullable ItemStack itemStack) {
+        return filter.flatMap(Supplier<Optional<FluidStack>>::get)
+                .map(fs -> FluidItemHelper.handlesFluid(itemStack, fs))
+                .orElse(true);
     }
 
     @Override
@@ -168,8 +181,8 @@ public class StandardTank extends FluidTank {
         int amount = getFluidAmount();
         FluidStack fluidStack = getFluid();
 
-        if (Fluids.isEmpty(fluidStack) && filter != null)
-            fluidStack = filter.get();
+        if (Fluids.isEmpty(fluidStack) && filter.isPresent())
+            fluidStack = filter.flatMap(Supplier::get).orElse(null);
 
         if (!Fluids.isEmpty(fluidStack))
             toolTip.add(getFluidNameToolTip(fluidStack));

@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -9,6 +9,7 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.common.fluids;
 
+import mods.railcraft.common.util.inventory.InvTools;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -33,6 +34,7 @@ public final class FluidItemHelper {
     }
 
     public static boolean testContainerProperties(boolean all, ItemStack stack, Predicate<IFluidTankProperties> test) {
+        if (InvTools.isEmpty(stack)) return false;
         IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
         return FluidTools.testProperties(all, fluidHandler, test);
     }
@@ -71,6 +73,21 @@ public final class FluidItemHelper {
         stack.setCount(1);
         IFluidHandler fluidHandler = FluidUtil.getFluidHandler(stack);
         return fluidHandler != null && fluidHandler.fill(new FluidStack(fluid, FluidTools.BUCKET_VOLUME), false) > 0;
+    }
+
+    public static boolean isRoomInContainer(ItemStack stack, @Nullable FluidStack fluid) {
+        if (fluid == null) return false;
+        return isRoomInContainer(stack, fluid.getFluid());
+    }
+
+    public static boolean handlesFluid(ItemStack stack, @Nullable FluidStack fluid) {
+        if (fluid == null) return false;
+        return handlesFluid(stack, fluid.getFluid());
+    }
+
+    public static boolean handlesFluid(ItemStack stack, @Nullable Fluid fluid) {
+        if (fluid == null) return false;
+        return containsFluid(stack, fluid) || isRoomInContainer(stack, fluid);
     }
 
     public static boolean containsFluid(ItemStack stack, @Nullable Fluid fluid) {

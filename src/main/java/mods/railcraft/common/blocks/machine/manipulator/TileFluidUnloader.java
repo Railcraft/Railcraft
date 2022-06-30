@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
- Copyright (c) CovertJaguar, 2011-2020
+ Copyright (c) CovertJaguar, 2011-2022
  http://railcraft.info
 
  This code is the property of CovertJaguar
@@ -65,7 +65,7 @@ public class TileFluidUnloader extends TileFluidManipulator {
             return false;
         if (redstoneController().is(EnumRedstoneMode.IMMEDIATE))
             return false;
-        if (getFilterFluid() != null && tankCart.isTankEmpty(getFilterFluid()))
+        if (getFilterFluid().map(tankCart::isTankEmpty).orElse(false))
             return false;
         return !tankCart.areTanksEmpty();
     }
