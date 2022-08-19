@@ -61,6 +61,12 @@ public enum RailcraftFluids implements IRailcraftBlockContainer {
             }
         }.setFlammable(true).setFlammability(10).setParticleColor(0xcc / 255f, 0xa3 / 255f, 0x00 / 255f);
     }),
+    DIESEL(Fluids.DIESEL, 800, 320, 1300, false, f -> 
+        new BlockRailcraftFluid(f, Material.WATER)
+            .setFlammable(true)
+            .setFlammability(10)
+            .setParticleColor(0xcc / 255f, 0xa3 / 255f, 0x00 / 255f)
+    ),
     STEAM(Fluids.STEAM, -1000, 400, 500, true,
             f -> new BlockRailcraftFluidFinite(f, new MaterialLiquid(MapColor.AIR)).setParticleColor(0xf2 / 255f, 0xf2 / 255f, 0xf2 / 255f)
     );

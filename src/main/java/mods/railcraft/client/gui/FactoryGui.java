@@ -183,6 +183,8 @@ public class FactoryGui {
                     return new GuiCartUndercutter(inv, (EntityCartUndercutter) obj);
                 case LOCO_STEAM:
                     return new GuiLocomotiveSteamSolid(inv, (EntityLocomotiveSteamSolid) obj);
+                case LOCO_DIESEL:
+                    return new GuiLocomotiveDiesel(inv, (EntityLocomotiveDiesel) obj);
                 case LOCO_ELECTRIC:
                     return new GuiLocomotiveElectric(inv, (EntityLocomotiveElectric) obj);
                 case LOCO_CREATIVE:

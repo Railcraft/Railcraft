@@ -134,6 +134,8 @@ public final class FactoryContainer {
                     return (C) new ContainerCartUndercutter(inv, (EntityCartUndercutter) obj);
                 case LOCO_STEAM:
                     return (C) ContainerLocomotiveSteamSolid.make(inv, (EntityLocomotiveSteamSolid) obj);
+                case LOCO_DIESEL:
+                    return (C) ContainerLocomotiveDiesel.make(inv, (EntityLocomotiveDiesel) obj);
                 case LOCO_ELECTRIC:
                     return (C) ContainerLocomotiveElectric.make(inv, (EntityLocomotiveElectric) obj);
                 case LOCO_CREATIVE:

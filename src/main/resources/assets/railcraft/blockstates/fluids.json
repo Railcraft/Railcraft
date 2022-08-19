@@ -12,6 +12,13 @@
         }
       }
     ],
+    "diesel": [
+        {
+            "custom": {
+                "fluid": "diesel"
+            }
+        }
+    ],
     "steam": [
       {
         "custom": {
