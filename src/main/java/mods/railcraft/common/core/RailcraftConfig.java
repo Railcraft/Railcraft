@@ -334,6 +334,7 @@ public class RailcraftConfig {
 
         fluids.put("steam", get(configMain, CAT_FLUIDS, "steam", true));
         fluids.put("creosote", get(configMain, CAT_FLUIDS, "creosote", true));
+        fluids.put("diesel", get(configMain, CAT_FLUIDS, "diesel", true));
     }
 
     private static void loadCarts() {
@@ -377,6 +378,7 @@ public class RailcraftConfig {
         }
 
         loadBlockProperty("fluid.creosote");
+        loadBlockProperty("fluid.diesel");
         loadBlockProperty("fluid.steam");
 
         // moTODO: Move to own file?

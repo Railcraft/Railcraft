@@ -122,6 +122,7 @@ public class ModuleCore extends RailcraftModulePayload {
                 RailcraftCarts.SPAWNER,
 
                 RailcraftFluids.CREOSOTE,
+                RailcraftFluids.DIESEL,
                 RailcraftFluids.STEAM
         );
 
