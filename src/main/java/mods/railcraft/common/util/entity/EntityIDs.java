@@ -44,6 +44,7 @@ public class EntityIDs {
     public static final int LOCOMOTIVE_STEAM_MAGIC = 41;
     public static final int LOCOMOTIVE_ELECTRIC = 42;
     public static final int LOCOMOTIVE_CREATIVE = 43;
+    public static final int LOCOMOTIVE_DIESEL = 44;
 
     public static final int BORE = 50;
 

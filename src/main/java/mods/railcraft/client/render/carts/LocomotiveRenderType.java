@@ -33,6 +33,7 @@ public enum LocomotiveRenderType {
 
     STEAM_SOLID("cart.loco.steam.solid"),
     STEAM_MAGIC("cart.loco.steam.magic"),
+    DIESEL("cart.loco.diesel"),
     ELECTRIC("cart.loco.electric"),
     CREATIVE("cart.loco.electric");
     private final Map<String, LocomotiveModelRenderer> renderers = new HashMap<>();

@@ -262,6 +262,12 @@ public class ClientEffects implements IPairEffectRenderer, Charge.IZapEffectRend
             spawnParticle(new ParticleLocomotive(world, new Vec3d(x, y, z)));
     }
 
+    public void dieselSmokeEffect(World world, double x, double y, double z) {
+        if (thinParticles(false))
+            return;
+        spawnParticle(new ParticleLocomotive(world, new Vec3d(x, y, z), new Vec3d(0, 0, 0), 0.5f));
+    }
+
     @Override
     public void zapEffectPoint(World world, Object source) {
         if (thinParticles(false))

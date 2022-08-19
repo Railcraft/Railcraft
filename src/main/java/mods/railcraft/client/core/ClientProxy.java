@@ -169,6 +169,7 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:magic", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
 //        LocomotiveRenderType.STEAM_SOLID.registerRenderer(new LocomotiveRendererDefault("railcraft:electric", "locomotive.model.electric.default", new ModelLocomotiveElectric()));
 //        LocomotiveRenderType.STEAM_MAGIC.registerRenderer(new LocomotiveRendererDefault("railcraft:default", "locomotive.model.steam.magic.default", new ModelLocomotiveSteamMagic()));
+        LocomotiveRenderType.DIESEL.registerRenderer(new LocomotiveRendererDiesel());
         LocomotiveRenderType.ELECTRIC.registerRenderer(new LocomotiveRendererElectric());
 
 //        ItemStack stack = LocomotiveRenderType.STEAM_SOLID.getItemWithRenderer("railcraft:default");
