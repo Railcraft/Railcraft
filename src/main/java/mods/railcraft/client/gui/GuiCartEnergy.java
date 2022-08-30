@@ -13,6 +13,7 @@ import mods.railcraft.common.carts.CartBaseEnergy;
 import mods.railcraft.common.gui.containers.ContainerCartEnergy;
 import mods.railcraft.common.gui.widgets.IndicatorWidget;
 import mods.railcraft.common.util.misc.HumanReadableNumberFormatter;
+import mods.railcraft.common.plugins.forge.LocalizationPlugin;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiCartEnergy extends GuiTitled {
@@ -27,7 +28,7 @@ public class GuiCartEnergy extends GuiTitled {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRenderer.drawString("Power Level:", 80, 25, 0x404040);
+        fontRenderer.drawString(LocalizationPlugin.translate("gui.railcraft.ic2.energy.level"), 80, 25, 0x404040);
 
         double charge = ((IndicatorWidget) container.getWidgets().get(0)).controller.getClientValue();
         fontRenderer.drawString(HumanReadableNumberFormatter.format(charge), 115, 35, 0x404040);
