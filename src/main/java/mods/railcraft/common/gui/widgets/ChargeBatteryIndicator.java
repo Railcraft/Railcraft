@@ -34,8 +34,10 @@ public class ChargeBatteryIndicator extends IndicatorController {
         double chargeLevel = capacity <= 0.0 ? 0.0 : (current / capacity) * 100.0;
         tips.clear();
         tips.add(String.format("%.0f%%", chargeLevel));
-        tips.add(HumanReadableNumberFormatter.format(current));
-        tips.add("/ " + HumanReadableNumberFormatter.format(capacity));
+
+        if (chargeLevel > 0.0) {
+            tips.add(HumanReadableNumberFormatter.format(current) + " / " + HumanReadableNumberFormatter.format(capacity));
+        }
     }
 
     @Override
