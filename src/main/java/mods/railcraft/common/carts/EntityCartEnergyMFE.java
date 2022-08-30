@@ -18,9 +18,9 @@ import net.minecraft.world.World;
  * @author CovertJaguar <http://www.railcraft.info>
  */
 public final class EntityCartEnergyMFE extends CartBaseEnergy {
-    private final int TIER = Mod.IC2_CLASSIC.isLoaded() ? 2 : 3;
-    private final int CAPACITY = Mod.IC2_CLASSIC.isLoaded() ? 600000 : 4000000;
-    private final int TRANSFER = Mod.IC2_CLASSIC.isLoaded() ? 128 : 512;
+    private static final int TIER = Mod.IC2_CLASSIC.isLoaded() ? 2 : 3;
+    private static final int CAPACITY = Mod.IC2_CLASSIC.isLoaded() ? 600000 : 4000000;
+    private static final int TRANSFER = Mod.IC2_CLASSIC.isLoaded() ? 128 : 512;
 
     public EntityCartEnergyMFE(World world) {
         super(world);
