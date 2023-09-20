@@ -24,7 +24,7 @@ public final class EntityCartEnergyMFSU extends EntityCartEnergy {
 
     @Override
     public int getTier() {
-        return 3;
+        return 1;
     }
 
     @Override
