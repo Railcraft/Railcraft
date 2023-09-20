@@ -40,7 +40,7 @@ public final class EntityCartEnergyCESU extends EntityCartEnergy {
 
     @Override
     public int getTier() {
-        return 2;
+        return 1;
     }
 
     @Override
